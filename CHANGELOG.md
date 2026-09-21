@@ -2,6 +2,13 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-21 — TASK-002 local Supabase foundation
+
+- Added reproducible identity/profile/university/platform-role migration and local UNC seed without an invented enrollment/domain policy.
+- Enforced owner-only profile RLS, client escalation prevention, independent email/campus/profile/status state and email-bound verification evidence.
+- Added real local pgTAP permission checks, repeated reset verification, schema lint, database CI configuration and backend-target validation.
+- Established a temporary local Lima/Docker runtime; no hosted staging, production, DNS or deployment was used. Staging verification and Proposed ADR-0009 remain pending.
+
 ## 2026-09-21 — TASK-001 monorepo bootstrap
 
 - Added runnable Next.js web/admin development placeholders and the reserved mobile workspace.

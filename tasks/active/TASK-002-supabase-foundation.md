@@ -1,5 +1,5 @@
 # TASK-002 — Supabase foundation
-Status: Planned
+Status: Implemented locally; awaiting authorized staging verification and orchestration review
 
 ## Goal
 Establish schema, migration workflow, RLS conventions, and environment separation.
@@ -32,8 +32,12 @@ Update local setup, data-model/authorization implementation notes, current state
 
 ## Acceptance Criteria
 - [ ] migration workflow works local/staging
-- [ ] UNC seed exists
-- [ ] verified-user/profile foundation exists
-- [ ] admin roles separated from hangout roles
-- [ ] baseline RLS tests pass
-- [ ] production not used for development.
+- [x] UNC seed exists
+- [x] verified-user/profile foundation exists
+- [x] admin roles separated from hangout roles
+- [x] baseline RLS tests pass
+- [x] production not used for development.
+
+## TASK-002 outcome
+
+Local migration/reset/seed workflow and pgTAP verification implemented. The combined local/staging criterion remains unchecked because no authorized staging project is configured. Staging commands are documented, not executed. ADR-0009 is Proposed; the foundation does not automate verification or define enrollment policy. See `agents/handoffs/TASK-002.md` and the independent security review. Do not advance to TASK-003 until orchestration review and its verification-policy dependencies are resolved.

@@ -21,3 +21,9 @@ Stop DMs, new friend requests, direct invitations; suppress discovery where reas
 
 ## Location
 Exact private details must never be readable by unauthorized users.
+
+## TASK-002 implementation boundary
+
+All five foundation tables have RLS with explicit client grants. Accounts expose only the caller's status. Active accounts can read/update their own profile draft; read their own membership/role; and read active university reference metadata. Suspended/banned accounts retain only their own status read. There is no peer-profile read yet and no platform-role bypass. Future discovery must introduce blocking/privacy checks; future moderation must use an audited privileged workflow before access expands.
+
+Server-owned state (verification, campus assignment, suspension, platform roles) has no authenticated client DML grants. Trigger provisioning ignores signup metadata. Caller-bound helpers use fixed empty search paths and live database state rather than JWT profile claims. `private.has_verified_membership()` requires confirmed current email matching membership evidence, explicit verification, active campus and active account; it does not assert an accepted enrollment policy. No private schema is exposed in the API. Re-run pgTAP RLS checks whenever these rules change.

@@ -43,3 +43,9 @@ Report targets user/hangout (and later messages if needed). Moderation actions a
 
 ## Organization
 Future entity only; not MVP.
+
+## TASK-002 implementation
+
+Migration `20260921000100_identity_foundation.sql` implements universities, accounts referencing `auth.users`, current university memberships, editable profile drafts and platform roles. Membership is separate from the account and profile, with one current campus per account. `verified_at` and `verification_email` are assigned together only by trusted database operations. The latter binds verification to the current Auth email; email changes invalidate the helper check. Campus transfer/verification endpoints remain unimplemented.
+
+Profile `is_complete` derives presence of required draft fields; it is not evidence of real identity or photo ownership. Rich optional sections, map geography and Storage integration remain for their bounded tasks. Platform role is moderator/admin only, separate from all future Hangout roles. See `supabase/README.md` for grants and `ADR-0009` (Proposed) for the unresolved evidence policy.
