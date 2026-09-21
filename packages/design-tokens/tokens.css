@@ -1,0 +1,30 @@
+:root {
+  color-scheme: light dark;
+  --pals-canvas: #ffffff;
+  --pals-surface: #edf5fb;
+  --pals-ink: #19364b;
+  --pals-muted: #486176;
+  --pals-accent: #35698e;
+  --pals-line: #c9dce9;
+  --pals-font: "Nunito Variable", ui-rounded, system-ui, sans-serif;
+  --pals-space-1: 0.25rem;
+  --pals-space-2: 0.5rem;
+  --pals-space-3: 0.75rem;
+  --pals-space-4: 1rem;
+  --pals-space-6: 1.5rem;
+  --pals-space-8: 2rem;
+  --pals-space-12: 3rem;
+  --pals-space-16: 4rem;
+  --pals-radius: 1.5rem;
+  --pals-content-width: 70rem;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --pals-canvas: #142631;
+    --pals-surface: #1d3748;
+    --pals-ink: #eef6fc;
+    --pals-muted: #b5cbdb;
+    --pals-accent: #9ac8e9;
+    --pals-line: #426074;
+  }
+}

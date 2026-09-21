@@ -1,0 +1,15 @@
+pnpm-lock.yaml
+node_modules/
+.next/
+*.tsbuildinfo
+# Existing specifications keep their authored formatting.
+AGENTS.md
+TREE.md
+decisions/
+docs/
+agents/
+tasks/
+experiments/
+supabase/
+.github/PULL_REQUEST_TEMPLATE.md
+**/next-env.d.ts

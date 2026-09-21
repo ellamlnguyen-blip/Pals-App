@@ -1,5 +1,5 @@
 # TASK-001 — Bootstrap monorepo
-Status: Planned
+Status: Complete (local validation; hosted CI pending repository hosting)
 
 ## Goal
 Create clean repository structure and development conventions.
@@ -26,13 +26,13 @@ None. Initialize Git for this existing specification-only folder and use branch 
 Create runnable Next.js/TypeScript web and admin placeholders, mobile placeholder only, and the six specified shared packages. Choose minimal workspace tooling; document routine tooling choices. Establish initial shared design tokens without claiming a final product design. Include safe environment examples and consistent local/CI validation commands. Do not implement authentication, database schema, product navigation flows, or map features.
 
 ## Acceptance Criteria
-- [ ] web/admin run locally
-- [ ] workspace scripts consistent
-- [ ] package boundaries established
-- [ ] env template safe; no secrets committed
-- [ ] CI baseline passes.
-- [ ] Taste availability and initial shared design-token usage documented.
-- [ ] web/admin placeholder pages inspected at desktop/mobile sizes.
+- [x] web/admin run locally
+- [x] workspace scripts consistent
+- [x] package boundaries established
+- [x] env template safe; no secrets committed
+- [x] CI baseline passes.
+- [x] Taste availability and initial shared design-token usage documented.
+- [x] web/admin placeholder pages inspected at desktop/mobile sizes.
 
 ## Tests / Verification
 Run frozen-lockfile install, formatting, lint, typecheck, baseline meaningful tests, and production builds. Start both apps and verify local responses. Distinguish locally reproduced CI checks from an actual hosted CI run. Record exact blockers rather than claiming unrun checks passed.

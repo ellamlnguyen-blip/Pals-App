@@ -1,3 +1,3 @@
 # Done
-No clean-rebuild implementation tasks are complete yet.
-When complete, record task ID, date, one-line outcome, and handoff path.
+
+- TASK-001 | 2026-09-21 | Bootstrapped runnable web/admin, shared packages, safe environment conventions and locally verified CI baseline. Handoff: `agents/handoffs/TASK-001.md`.

@@ -4,10 +4,11 @@
 
 Do these in order unless dependencies allow safe parallel work.
 
-1. `active/TASK-001-monorepo-bootstrap.md`
-2. `active/TASK-002-supabase-foundation.md`
-3. `active/TASK-003-auth-onboarding.md`
-4. `active/TASK-004-map-shell.md`
+Completed: TASK-001. See `DONE.md` and `agents/handoffs/TASK-001.md`.
+
+1. `active/TASK-002-supabase-foundation.md`
+2. `active/TASK-003-auth-onboarding.md`
+3. `active/TASK-004-map-shell.md`
 
 Parallelization after TASK-001:
 - Supabase foundation

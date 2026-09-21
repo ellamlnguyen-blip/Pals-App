@@ -1,0 +1,13 @@
+{
+  "name": "@pals/config",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./tsconfig.base.json": "./tsconfig.base.json"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit"
+  }
+}
