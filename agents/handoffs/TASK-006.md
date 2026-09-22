@@ -2,7 +2,7 @@
 Date: 2026-09-22
 Agent: fresh TASK-006 implementation agent; independent security and coordinator UI review
 Branch/worktree: `agent/TASK-006-profile-enrichment`, `/Users/ellanguyen/.codex/worktrees/107c/Pals App`
-Task branch and pushed commit SHA: pending final commit/publication below.
+Task implementation + handoff pushed commit SHA: `588279402b400701ccb9eaf6502b1403cb0589c9` (verified against origin before this documentation-only verification update).
 Integrated `main` commit SHA: pending coordinator integration; implementation agent does not merge main.
 Main status-record path: `tasks/active/TASK-006-profile-enrichment.md`; accepted contract baseline `fedf42c6a34fbf520f8823c675f99e4aa2ab42c3`; coordinator dispatch status `baac697`.
 Outstanding review/integration blockers: coordinator final acceptance, shared state/queue updates and verified main publication. Task remains incomplete until those steps.
@@ -48,3 +48,6 @@ No automatic dispatch. Ready for coordinator final acceptance/integration when f
 
 ## Final verification before publication
 Final `pnpm check` and serialized `pnpm test:auth:web` both passed after the final upload-response-loss cleanup and focus fixes. Upload-after-commit transport loss was tested with both successful cleanup (no object-count increase) and failed cleanup (honest retry flag, successful retry). Final `git diff --check` passed. Two clean database resets/112 assertions and schema lint already passed with the unchanged final migration.
+
+## Remote publication evidence
+`git push -u origin agent/TASK-006-profile-enrichment` succeeded to canonical `ellamlnguyen-blip/Pals-App`. `git ls-remote origin refs/heads/agent/TASK-006-profile-enrichment refs/heads/main` returned task `588279402b400701ccb9eaf6502b1403cb0589c9` and current main `bef9714acc891e4bf3eb9450fb8239d54f1b752d`. That main is the coordinator status record, not TASK-006 code integration. This follow-up documentation commit records the verification; its pushed tip is supplied to the coordinator, who must record both the final task tip and integrated main SHA before completion.
