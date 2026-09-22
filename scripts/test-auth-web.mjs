@@ -55,6 +55,7 @@ try {
       "--test-concurrency=1",
       "supabase/tests/auth-storage.integration.mjs",
       "supabase/tests/profile-concurrency.integration.mjs",
+      "supabase/tests/hangout-concurrency.integration.mjs",
     ],
     { env, stdio: "inherit" },
   );

@@ -4,6 +4,7 @@ import { createRequire } from "node:module";
 import test from "node:test";
 import { profileChecks } from "./profile-http-checks.mjs";
 import { actionChecks } from "./profile-action-checks.mjs";
+import { hangoutHttpChecks } from "./hangout-http-checks.mjs";
 
 // Deliberately local only. Never accept a hosted URL or privileged key.
 if (process.env.APP_ENV && process.env.APP_ENV !== "local")
@@ -292,6 +293,7 @@ test("real confirmation, SSR callback, RLS and private photo ownership", async (
         200,
       );
     }
+    await hangoutHttpChecks(owner, peer, a, b, sql, png, url, key);
     await profileChecks(owner, peer, a, sql, png);
     path = (await actionChecks(owner, a, png)) ?? path;
     sql(`update public.accounts set status='suspended' where id='${a.id}'`);
