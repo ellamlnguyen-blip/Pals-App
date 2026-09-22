@@ -4,8 +4,8 @@ Date: 2026-09-22
 Agent: TASK-006 coordinator
 Branch/worktree: `agent/TASK-006-planning`, `/Users/ellanguyen/.codex/worktrees/107c/Pals App`
 Starting verified origin/main: `49ea252d27ed4780097d99a0c9327cccab5ca6ab`
-Task branch and pushed commit SHA: pending publication
-Integrated main commit SHA: pending publication
+Task branch and pushed planning commit SHA: `2fa2d17e767a5379496308d6940b8992084e21a0`
+Integrated planning main commit SHA: `71699ee6be9e0ed00b0767268d6f46d7e2075bc5`
 Main status-record path: tasks/NOW.md and docs/operations/CURRENT_STATE.md
 Outstanding implementation blocker: explicit user acceptance of Proposed ADR-0011
 
@@ -22,4 +22,7 @@ No implemented behavior change. Proposal preserves profile draft active-owner RL
 Read control plane, queues, TASK-003 contract/handoff, current state, accepted profile/product/engineering/UX specs and relevant ADRs; inspected actual profile schema/grants/triggers, validation, web access/actions/photo route and avatar menu. Documentation-only whitespace/path checks and `git diff --check` passed. Fresh read-only security/scope reviewer found no blocking findings. Review emphasized that a Storage NOT EXISTS policy alone cannot prove assignment/deletion race safety and serial row writes alone cannot resolve stale editors; both remain explicit implementation/test requirements. Coordinator reviewed the six-file documentation-only scope and accepted planning for publication, not ADR-0011 policy acceptance. Runtime tests are not applicable to planning-only changes.
 
 ## Ready for implementation?
-No. Publish reviewed planning records to main, then obtain explicit acceptance of ADR-0011 before fresh implementation dispatch. Approval of planning publication is not ADR acceptance. Coordinator owns later review/integration and shared records.
+No. Reviewed planning records are published and integrated on main; obtain explicit acceptance of ADR-0011 before fresh implementation dispatch. Approval of planning publication is not ADR acceptance. Coordinator owns later review/integration and shared records.
+
+## Verified publication receipt
+`git ls-remote origin refs/heads/main refs/heads/agent/TASK-006-planning` verified task planning SHA `2fa2d17e767a5379496308d6940b8992084e21a0` and integration SHA `71699ee6be9e0ed00b0767268d6f46d7e2075bc5` after successful pushes to the canonical `ellamlnguyen-blip/Pals-App` repository. This subsequent documentation receipt records those immutable planning milestones. Planning publication is complete; TASK-006 implementation remains explicitly incomplete pending ADR-0011 acceptance. No implementation agent, migration, hosted operation or deployment was started.
