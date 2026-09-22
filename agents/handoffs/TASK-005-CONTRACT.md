@@ -4,7 +4,7 @@ Date: 2026-09-22
 Agent: delegated TASK-005 planning task
 Branch/worktree: `agent/TASK-005-contract`, `/Users/ellanguyen/.codex/worktrees/5153/Pals App`
 Starting baseline: fetched `origin/main` at `ed106e33aa53791f7ddeac3c8926ddc978baba83`; HEAD matched before branching.
-Task branch: `agent/TASK-005-contract`; planning commit `fb3fed9`. Remote task SHA: unavailable — push failed; no remote publication claimed.
+Task branch: `agent/TASK-005-contract`; planning commit `fb3fed9`. Remote task SHA verified after authentication repair: `1cb6540330817af01d97202be245342b66a76a95` (planning and original blocker handoff). See recovery addendum below.
 Integrated main commit SHA: pending coordinator review/integration; TASK-005 implementation is not complete.
 
 ## Outcome
@@ -32,3 +32,8 @@ Ready for coordinator review of planning documents only. Do not dispatch migrati
 `git diff --check` passed. Repository Prettier ignores tasks/decisions/agents by policy, so the direct formatter invocation skipped these files; manual Markdown/scope review completed. Initial `pnpm exec` attempted automatic dependency bootstrap and encountered registry DNS failures; no tracked dependency or lockfile changes resulted. No application/SQL tests ran for this documentation-only assignment.
 
 Commit `fb3fed9` contains all five scoped planning files. `git push -u origin agent/TASK-005-contract` failed with `failed to get: -128` and `fatal: could not read Username for 'https://github.com': Device not configured`. Use the local Git credential manager to restore authentication; never place a token in chat or source. Publication/integration is explicitly incomplete. Latest successfully fetched main baseline was `ed106e33aa53791f7ddeac3c8926ddc978baba83`; it is not a main integration of this task. Coordinator must push/verify the task branch, review it and integrate/verify main before recording planning publication complete. TASK-005 implementation remains blocked independently on ADR acceptance.
+
+## GitHub authentication recovery — 2026-09-22
+The user completed GitHub CLI browser authorization as `ellamlnguyen-blip`. Authentication is stored in the macOS keyring; the user-level Git credential helper references `/Users/ellanguyen/.local/bin/gh` and is shared by Pals worktrees. No credentials are stored in this repository.
+
+`git push -u origin agent/TASK-005-contract` succeeded to `https://github.com/ellamlnguyen-blip/Pals-App.git`. `git ls-remote` verified task SHA `1cb6540330817af01d97202be245342b66a76a95` and unchanged main SHA `ed106e33aa53791f7ddeac3c8926ddc978baba83`. The earlier authentication/publication blocker is resolved. This addendum is published as a subsequent documentation commit. Coordinator review/main integration remains pending; ADR-0010 is still Proposed and no TASK-005 implementation is authorized.
