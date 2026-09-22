@@ -1,5 +1,5 @@
 # TASK-003 — Verified student auth and onboarding
-Status: Planned
+Status: Implemented, locally verified and reviewed by the coordinator. Deployed HTTPS callback remains pending a frontend deployment and SMTP, so the full task is not closed.
 
 ## Goal
 UNC student can sign up, verify email, complete required profile, and enter Pals.
@@ -27,9 +27,11 @@ Update auth/setup/authorization docs, current state, changelog and task queue. W
 name, verified university email, university, graduation year, major, short bio, primary photo.
 
 ## Acceptance Criteria
-- [ ] unverified users blocked from verified experience
-- [ ] verified UNC users onboard successfully
-- [ ] verified badge state exists
-- [ ] suspended user denied
+- [x] unverified users blocked from verified experience
+- [x] verified UNC users onboard successfully (local Auth/Storage integration)
+- [x] verified badge state exists (“UNC email verified”)
+- [x] suspended user denied
 - [ ] auth callbacks work local/staging
-- [ ] critical auth/RLS tests pass.
+- [x] critical auth/RLS tests pass.
+
+Local callback is verified through the actual Next route. Combined local/staging callback criterion remains open because no deployed HTTPS frontend or SMTP delivery setup exists. Hosted migration/catalog/lint checks pass separately; see handoff and hosted environment inventory.

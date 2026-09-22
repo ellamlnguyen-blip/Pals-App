@@ -1,5 +1,5 @@
 # TASK-002 — Supabase foundation
-Status: Implemented locally; awaiting authorized staging verification and orchestration review
+Status: Complete — local and hosted foundation reviewed on 2026-09-22
 
 ## Goal
 Establish schema, migration workflow, RLS conventions, and environment separation.
@@ -31,7 +31,7 @@ Rebuild the local database from migrations/seed and run meaningful RLS tests for
 Update local setup, data-model/authorization implementation notes, current state, changelog and task queue. Write `agents/handoffs/TASK-002.md` using the template. Include migration/reset/test results and unresolved decisions. Stop after this task; request a fresh security reviewer through the orchestrator.
 
 ## Acceptance Criteria
-- [ ] migration workflow works local/staging
+- [x] migration workflow works local/staging
 - [x] UNC seed exists
 - [x] verified-user/profile foundation exists
 - [x] admin roles separated from hangout roles
@@ -40,4 +40,4 @@ Update local setup, data-model/authorization implementation notes, current state
 
 ## TASK-002 outcome
 
-Local migration/reset/seed workflow and pgTAP verification implemented. The combined local/staging criterion remains unchecked because no authorized staging project is configured. Staging commands are documented, not executed. ADR-0009 is Proposed; the foundation does not automate verification or define enrollment policy. See `agents/handoffs/TASK-002.md` and the independent security review. Do not advance to TASK-003 until orchestration review and its verification-policy dependencies are resolved.
+Local migration/reset/seed workflow and pgTAP verification passed. Following explicit user authorization, migration `20260921000100` was applied to hosted project `plqhsyhdfgqygauntsts`. On 2026-09-22, the coordinator verified matching local/remote migration versions, clean hosted lint for public/private schemas, and RLS/client grant catalog checks on all five foundation tables. Hosted checks did not run the local fixture suite or claim end-to-end Auth coverage. This project is the current hosted integration target; it is not a public production launch. No local seed/test identities were pushed. Independent security review had no actionable findings. ADR-0009 is now Accepted by explicit user choices; TASK-003 may proceed. See the dated addendum in `agents/handoffs/TASK-002.md`.

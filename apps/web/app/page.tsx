@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 export default function Home() {
   return (
     <div className="page">
@@ -10,16 +12,22 @@ export default function Home() {
       </header>
       <main id="main" tabIndex={-1}>
         <section aria-labelledby="page-heading">
-          <p className="status">Coming together</p>
+          <p className="status">Meet your campus</p>
           <h1 id="page-heading">Good plans start with people.</h1>
           <p className="intro">
-            Pals is taking shape at UNC. A place to find a Hangout and make time
-            for each other.
+            Find your people at UNC. Start with your campus email and a little
+            about yourself.
           </p>
+          <div className="actions">
+            <Link className="button" href="/signup">
+              Join Pals
+            </Link>
+            <Link href="/signin">Already here? Sign in</Link>
+          </div>
         </section>
         <p className="notice">
-          This is a development preview. Hangouts and sign-in are not available
-          yet.
+          Pals is taking shape. Account setup is ready; Hangouts are coming
+          next.
         </p>
       </main>
     </div>

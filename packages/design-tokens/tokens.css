@@ -16,6 +16,9 @@
   --pals-space-12: 3rem;
   --pals-space-16: 4rem;
   --pals-radius: 1.5rem;
+  --pals-input-radius: 0.75rem;
+  --pals-button-ink: #ffffff;
+  --pals-error: #a22832;
   --pals-content-width: 70rem;
 }
 @media (prefers-color-scheme: dark) {
@@ -26,5 +29,7 @@
     --pals-muted: #b5cbdb;
     --pals-accent: #9ac8e9;
     --pals-line: #426074;
+    --pals-button-ink: #142631;
+    --pals-error: #ffb4ba;
   }
 }

@@ -4,6 +4,9 @@ packages:
 
 saveExact: true
 strictPeerDependencies: true
+supportedArchitectures:
+  os: [current]
+  cpu: [x64, arm64]
 allowBuilds:
   sharp: true
   unrs-resolver: true

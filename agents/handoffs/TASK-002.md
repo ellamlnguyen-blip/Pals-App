@@ -1,4 +1,12 @@
 # Handoff — TASK-002
+
+## Coordinator addendum — 2026-09-22
+This addendum supersedes the original pending-hosted/pending-policy status below; original implementation evidence is preserved.
+
+The user authorized GitHub storage and direct hosted Supabase setup. GitHub now contains `53de3ad` on `agent/TASK-002-supabase` in `ellamlnguyen-blip/Pals-App`. Hosted migration `20260921000100` was successfully applied to project `plqhsyhdfgqygauntsts` in the subsequent setup session. Coordinator verification on 2026-09-22 confirmed matching local/remote migration versions, hosted public/private schema lint with no warnings/errors, RLS enabled on all five tables, no anonymous SELECT grants and no authenticated INSERT grants on foundation tables. These are hosted schema checks, not end-to-end Auth or delivery tests. No local seed or test users were applied.
+
+The user explicitly accepted Option A and the exact five-domain allowlist recorded in Accepted ADR-0009. The hosted project serves as the current non-production integration target; no public launch or frontend deployment is claimed. TASK-002 is reviewed and complete for foundation scope; fresh TASK-003 is authorized. Hosted callback/email delivery/Auth integration remains TASK-003 work. Run remote CLI verification sequentially: parallel commands can race when provisioning the temporary CLI login.
+
 Date: 2026-09-21
 Agent: fresh TASK-002 implementation task; independent read-only security reviewer
 Branch/worktree: `agent/TASK-002-supabase`, `/Users/ellanguyen/.codex/worktrees/4445/Pals App`

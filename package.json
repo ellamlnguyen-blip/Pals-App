@@ -19,8 +19,10 @@
     "check": "pnpm format:check && pnpm lint && pnpm typecheck && pnpm test && pnpm build",
     "db:start": "supabase start --network-id pals-local-network",
     "db:stop": "supabase stop",
-    "db:reset": "supabase db reset --local",
-    "db:test": "supabase test db --local",
+    "db:reset": "supabase db reset --local --network-id pals-local-network",
+    "db:test": "supabase test db --local --network-id pals-local-network",
+    "test:auth": "node --test supabase/tests/auth-storage.integration.mjs",
+    "test:auth:web": "node scripts/test-auth-web.mjs",
     "db:lint": "supabase db lint --local --schema public,private --level warning --fail-on warning",
     "db:verify": "pnpm db:reset && pnpm db:test && pnpm db:reset && pnpm db:test && pnpm db:lint"
   },

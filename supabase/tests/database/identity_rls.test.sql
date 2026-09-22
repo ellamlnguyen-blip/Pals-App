@@ -2,6 +2,8 @@ begin;
 create extension if not exists pgtap with schema extensions;
 set search_path = public, extensions;
 select no_plan();
+-- Synthetic trusted policy fixture for the original foundation matrix.
+update public.universities set allowed_email_domains=array['example.invalid'];
 
 insert into public.universities(id, slug, name, active) values
  ('00000000-0000-4000-8000-000000000002', 'test-campus', 'Synthetic second campus', true),
@@ -14,10 +16,14 @@ select ('10000000-0000-4000-8000-' || lpad(n::text, 12, '0'))::uuid,
   case when n = 4 then null else now() end,
   '{"role":"admin","verified":true,"university_id":"00000000-0000-4000-8000-000000000001"}'::jsonb
 from generate_series(1, 11) n;
+-- Isolate foundation provisioning from the accepted TASK-003 confirmation trigger.
+select is((select count(*) from public.university_memberships where user_id='10000000-0000-4000-8000-000000000004'),0::bigint,'forged metadata cannot verify the unconfirmed account');
+delete from public.university_memberships;
+insert into storage.objects(bucket_id,name,owner_id)
+values ('profile-photos','10000000-0000-4000-8000-000000000001/fixture.jpg','10000000-0000-4000-8000-000000000001');
 select is((select count(*) from public.accounts), 11::bigint, 'Auth trigger provisions all fixture accounts');
 select is((select count(*) from public.profiles), 11::bigint, 'Auth trigger provisions empty profiles');
 select is((select count(*) from public.platform_roles), 0::bigint, 'malicious metadata grants no roles');
-select is((select count(*) from public.university_memberships), 0::bigint, 'malicious metadata grants no membership');
 select is((select count(*) from public.profiles where is_complete), 0::bigint, 'profiles start incomplete');
 
 insert into public.university_memberships(user_id, university_id, verified_at, verification_email)
@@ -50,7 +56,7 @@ select is((select count(*) from public.profiles where user_id = '10000000-0000-4
 select is((select count(*) from public.university_memberships), 1::bigint, 'membership details are owner-only');
 select is((select count(*) from public.platform_roles), 0::bigint, 'ordinary user cannot enumerate operator assignments');
 select is((select count(*) from public.universities), 2::bigint, 'active university reference rows readable; inactive campus hidden');
-select lives_ok($$update public.profiles set real_name='Test Student', graduation_year=2028, major='Biology', bio='Synthetic fixture', primary_photo_path='fixture/photo' where user_id=auth.uid()$$, 'owner edits own profile fields');
+select lives_ok($$update public.profiles set real_name='Test Student', graduation_year=2028, major='Biology', bio='Synthetic fixture', primary_photo_path='10000000-0000-4000-8000-000000000001/fixture.jpg' where user_id=auth.uid()$$, 'owner edits own profile fields with owned photo');
 select ok((select is_complete from public.profiles), 'structural completion is derived');
 select throws_ok('update public.profiles set is_complete=false', '428C9', null, 'generated completion cannot be forged');
 select throws_ok($$update public.profiles set user_id='10000000-0000-4000-8000-000000000002'$$, '42501', null, 'ownership column is not writable');
@@ -66,7 +72,7 @@ select throws_ok($$update public.profiles set real_name=' '$$, '23514', null, 'b
 
 -- Changing account email invalidates the evidence binding, even after reconfirmation.
 reset role;
-update auth.users set email='changed@example.invalid' where id='10000000-0000-4000-8000-000000000001';
+update auth.users set email='changed@unapproved.invalid' where id='10000000-0000-4000-8000-000000000001';
 set local role authenticated;
 select ok(not private.has_verified_membership(), 'changed email cannot inherit previous campus verification');
 reset role;
@@ -78,7 +84,7 @@ select ok(not private.has_verified_membership(), 'unconfirmed email denied despi
 select is((select count(*) from public.profiles), 1::bigint, 'unconfirmed account may read its own onboarding draft');
 select set_config('request.jwt.claims', '{"sub":"10000000-0000-4000-8000-000000000005","role":"authenticated","user_metadata":{"verified":true,"role":"admin"}}', true);
 select ok(not private.has_verified_membership(), 'confirmed email and forged claims cannot replace campus verification');
-select lives_ok($$update public.profiles set real_name='Draft Student', graduation_year=2027, major='Math', bio='Fixture', primary_photo_path='fixture/photo'$$, 'unverified user may complete own draft');
+select lives_ok($$update public.profiles set real_name='Draft Student', graduation_year=2027, major='Math', bio='Fixture'$$, 'unverified user may edit own draft');
 select ok(not private.has_verified_membership(), 'profile completion never grants verification');
 select set_config('request.jwt.claims', '{"sub":"10000000-0000-4000-8000-000000000011","role":"authenticated"}', true);
 select ok(not private.has_verified_membership(), 'missing membership fails closed');
@@ -112,6 +118,6 @@ select is((select count(*) from public.profiles), 0::bigint, 'missing subject fa
 select ok(not private.has_verified_membership(), 'missing subject is never verified');
 
 reset role;
-select is((select count(*) from public.universities where slug='unc-chapel-hill' and cardinality(allowed_email_domains)=0), 1::bigint, 'UNC seed contains no invented domain policy');
+select is((select count(*) from public.universities where slug='unc-chapel-hill'), 1::bigint, 'UNC campus remains unique');
 select * from finish();
 rollback;
