@@ -5,7 +5,7 @@ Agent: delegated TASK-005 planning task
 Branch/worktree: `agent/TASK-005-contract`, `/Users/ellanguyen/.codex/worktrees/5153/Pals App`
 Starting baseline: fetched `origin/main` at `ed106e33aa53791f7ddeac3c8926ddc978baba83`; HEAD matched before branching.
 Task branch: `agent/TASK-005-contract`; planning commit `fb3fed9`. Remote task SHA verified after authentication repair: `1cb6540330817af01d97202be245342b66a76a95` (planning and original blocker handoff). See recovery addendum below.
-Integrated main commit SHA: pending coordinator review/integration; TASK-005 implementation is not complete.
+Integrated main commit SHA: `fd1174f5facc65a499999453cf05ab3fca2412ef`, verified on origin/main; planning is integrated, TASK-005 implementation remains blocked.
 
 ## Outcome
 Prepared the bounded backend-only TASK-005 contract, updated NOW/BACKLOG, and proposed ADR-0010. No product code, schema migration, runtime, hosted Supabase/Vercel, accepted product/architecture specification or TASK-003 status changed. Planning deliverables are ready for coordinator review; implementation is blocked on explicit acceptance of resolved ADR choices.
@@ -40,3 +40,6 @@ The user completed GitHub CLI browser authorization as `ellamlnguyen-blip`. Auth
 
 ## Coordinator review and main-record workflow
 Reviewed the planning diff against the delegated scope: backend-only contract and Proposed ADR, no code/schema/hosted operations, restricted modes disabled, automated RLS/privacy criteria included, and TASK-003 hosted acceptance kept open. Accepted the planning documents for integration; this does not accept ADR-0010. The user additionally requested main as the whole-app reference. Updated AGENTS, task/handoff templates, NOW and CURRENT_STATE so active/blocked work is recorded on main before dispatch and at material milestones, with accepted code integrated after review. Verification: documentation-only scope review and `git diff --check`; no runtime tests required. Integration SHA will be recorded after the remote push.
+
+## Verified integration outcome
+Coordinator reviewed and integrated task commit `38cc61edb6970f63a70259b3b1954ad3119075b6` into main as `fd1174f5facc65a499999453cf05ab3fca2412ef`. Both were pushed to `ellamlnguyen-blip/Pals-App` and verified with `git ls-remote`. This supersedes earlier pending planning-review/integration statements. Planning publication is complete. TASK-005 implementation remains blocked on explicit ADR-0010 acceptance; TASK-003 hosted callback/UNC delivery remains open. This verification receipt is a subsequent documentation-only update.
