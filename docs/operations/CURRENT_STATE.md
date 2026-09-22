@@ -26,7 +26,10 @@ Web first; Next.js/TypeScript; Expo later; Supabase; Mapbox; Vercel; PostHog; mo
 5. Supabase CLI is pinned and workspace CPU support includes x64/arm64. The host's Lima/Docker runtime is temporary; reset/start/test scripts must keep the same named Docker network.
 
 ## Next Milestone
-TASK-004 is complete. Establish the missing TASK-005 contract before its implementation. TASK-003 deployed HTTPS callback and public UNC email delivery remain open. Do not auto-dispatch the next implementation task.
+TASK-004 is complete. TASK-005 now has a backend-only contract in `tasks/active/TASK-005-hangout-foundation.md`; implementation is blocked on explicit acceptance and resolution of Proposed ADR-0010. No Hangout schema or live flows have been implemented. TASK-003 deployed HTTPS callback and public UNC email delivery remain open. Do not auto-dispatch the next implementation task.
 
 ## TASK-004 outcome
 Responsive map shell on `agent/TASK-004-map`: UNC viewport, pan/zoom, keyboard-accessible clustered mock pins, preview/list, local example filters, no-publish Create shell, and optional one-shot coarse location. Existing live Supabase access gate is preserved. No schema, hosted environment, production or deployment changes. Full repository checks (11 Node tests and both builds) and real local Auth/Storage/web gate regression pass. Implementer inspected desktop/tablet/phone UI, offline Mapbox interactions and final real provider basemap on authenticated desktop/phone routes; independent static review findings were fixed and re-reviewed. No console errors/warnings during live checks. Rendered dark mode, Lighthouse and independent rendered review remain unverified; these are recorded limitations rather than live-basemap blockers. See `agents/handoffs/TASK-004.md`.
+
+## Shared task reference
+`main` contains reviewed app work and durable records for active/blocked tasks. The coordinator publishes contracts/status before dispatch, updates material milestones/blockers, and integrates accepted task work with its handoff before completion. Shared GitHub authentication is configured through GitHub CLI and macOS Keychain; no credentials are stored in the repository.

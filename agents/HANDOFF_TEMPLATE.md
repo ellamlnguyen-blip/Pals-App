@@ -4,6 +4,8 @@ Agent:
 Branch/worktree:
 Task branch and pushed commit SHA:
 Integrated `main` commit SHA:
+Main status-record path and last published milestone:
+Outstanding review/integration blockers:
 
 ## Outcome
 ## Files Changed

@@ -3,6 +3,8 @@
 ## Shared Code Baseline
 `main` is the canonical integration branch. Start each new task branch from the latest `origin/main`. After task review, integrate accepted changes into `main` and verify both remote refs; see `AGENTS.md`.
 
+Every active task must have its contract/status recorded on `main` before dispatch and updated there at meaningful milestones or blockers. Task branches hold work in progress; reviewed code, handoffs and state changes are integrated into `main` before completion. The coordinator owns shared queue updates.
+
 ## Current Milestone — Foundation
 
 Do these in order unless dependencies allow safe parallel work.
