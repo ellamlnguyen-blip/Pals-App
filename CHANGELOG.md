@@ -2,6 +2,13 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-22 — TASK-005 local Hangout backend
+
+- Added campus-only Hangout, participant and separate private-instruction records under Accepted ADR-0010, behind a default-disabled database gate.
+- Added live-ready campus permissions, host transitions, current-ready rosters, atomic public/private saves, retry-safe creation and stale-revision rejection.
+- Verified database permissions, revocation, transaction rollback, real HTTP/private embeds and concurrency alongside existing auth/profile safeguards.
+- Backend only; no hosted migration/deployment or live user-facing flow. Blocking and remaining safety gates still precede hosted enablement.
+
 ## 2026-09-22 — TASK-006 owner profile enrichment and photos
 
 - Added the owner profile editor from the avatar menu, with required-detail edits and optional interests, activities, favorites, fact, prompts and Instagram handle.

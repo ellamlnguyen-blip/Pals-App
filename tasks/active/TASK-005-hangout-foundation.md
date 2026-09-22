@@ -1,6 +1,6 @@
 # TASK-005 — Hangout data and authorization foundation
 
-Status: In progress — ADR-0010 explicitly accepted; implementation authorized
+Status: Backend implemented and locally verified — security review and main integration pending
 Date: 2026-09-22
 
 ## Goal
@@ -43,15 +43,15 @@ UI of any kind; map queries, viewport/geospatial discovery and ranking; connecti
 Do not introduce blanket operator access, peer profile/photo access or unrelated architecture changes. If a safety dependency is necessary, stop and split/revise the contract rather than silently implementing a new feature. Full block/report/moderation safety remains a launch gate.
 
 ## Eventual Implementation Acceptance Criteria
-- [ ] ADR-0010 choices explicitly accepted and recorded before migrations; all material conflicts resolved or excluded with a fail-closed boundary.
-- [ ] Fresh local resets reproduce the schema from committed migrations; no dashboard-only changes or hosted operations.
-- [ ] Constraints enforce ownership, campus consistency, valid coordinates/time bounds, permitted status transitions and one participant record per Hangout/account. No default capacity requirement.
-- [ ] RLS and grants independently require live ready access: active account/campus, current confirmed approved email membership, required profile and existing owned photo. Web/JWT claims alone cannot authorize access.
-- [ ] Same-campus eligible readers can access only accepted public Hangout/participation fields; anonymous, cross-campus, incomplete, unverified, suspended/banned and stale-evidence callers cannot. Peer profile/photo access stays unchanged.
-- [ ] Host/participant writes follow the accepted authorization matrix. Clients cannot forge host/campus/account IDs, roles, timestamps or membership states, resurrect removals, bypass closed joining/cancellation, or promote themselves. Atomic operations prevent races from bypassing authorization.
-- [ ] Private exact details are separately protected under the accepted read/revocation policy. Public reads, joins/embeds, views, RPC return values and error payloads do not disclose them. No device location is persisted or broadcast.
-- [ ] Restricted visibility/eligibility inputs fail closed at the database/API boundary, including direct authenticated writes and mutation of existing records; unsupported modes cannot be read as campus Hangouts.
-- [ ] Real database permission/privacy tests pass for every allowed and denied operation, including immediate revocation and concurrency-sensitive transitions; existing identity/onboarding tests remain passing.
+- [x] ADR-0010 choices explicitly accepted and recorded before migrations; all material conflicts resolved or excluded with a fail-closed boundary.
+- [x] Fresh local resets reproduce the schema from committed migrations; no dashboard-only changes or hosted operations.
+- [x] Constraints enforce ownership, campus consistency, valid coordinates/time bounds, permitted status transitions and one participant record per Hangout/account. No default capacity requirement.
+- [x] RLS and grants independently require live ready access: active account/campus, current confirmed approved email membership, required profile and existing owned photo. Web/JWT claims alone cannot authorize access.
+- [x] Same-campus eligible readers can access only accepted public Hangout/participation fields; anonymous, cross-campus, incomplete, unverified, suspended/banned and stale-evidence callers cannot. Peer profile/photo access stays unchanged.
+- [x] Host/participant writes follow the accepted authorization matrix. Clients cannot forge host/campus/account IDs, roles, timestamps or membership states, resurrect removals, bypass closed joining/cancellation, or promote themselves. Atomic operations prevent races from bypassing authorization.
+- [x] Private exact details are separately protected under the accepted read/revocation policy. Public reads, joins/embeds, views, RPC return values and error payloads do not disclose them. No device location is persisted or broadcast.
+- [x] Restricted visibility/eligibility inputs fail closed at the database/API boundary, including direct authenticated writes and mutation of existing records; unsupported modes cannot be read as campus Hangouts.
+- [x] Real database permission/privacy tests pass for every allowed and denied operation, including immediate revocation and concurrency-sensitive transitions; existing identity/onboarding tests remain passing.
 - [ ] Scoped implementation and fresh security review findings resolved; relevant repository checks pass; docs, task state and handoff synchronized without marking TASK-003 hosted acceptance complete.
 - [ ] Task branch pushed and remote SHA verified; coordinator reviews/integrates into main and records verified main SHA before TASK-005 is marked complete.
 

@@ -1,6 +1,6 @@
 # Backlog
 ## Product Build
-- TASK-005 Hangout data and authorization foundation — contract in `active/TASK-005-hangout-foundation.md`; ADR-0010 approved; local implementation resumed. Backend only.
+- TASK-005 Hangout data and authorization foundation — contract in `active/TASK-005-hangout-foundation.md`; reviewed local backend passed verification; main publication verification pending. Backend only.
 - TASK-007 create/edit Hangouts — contract in `active/TASK-007-create-edit-hangouts.md`; revised ADR-0010 explicitly accepted. Await separately reviewed/integrated TASK-005 backend against the latest accepted revision. Local only; no TASK-007 implementation dispatched.
 - TASK-008 map discovery/detail/joining
 - TASK-009 calendar
