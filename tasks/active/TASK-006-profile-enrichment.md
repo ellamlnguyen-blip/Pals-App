@@ -1,6 +1,6 @@
 # TASK-006 — Owner profile enrichment and photos
 
-Status: Contract prepared; implementation blocked on explicit ADR-0011 acceptance
+Status: Accepted for implementation; fresh implementation dispatch authorized
 Date: 2026-09-22
 
 ## Goal
@@ -9,7 +9,7 @@ A verified, onboarded UNC owner can review/edit their profile, add optional pers
 ## Dependencies and decision gate
 TASK-001/002 foundation and TASK-003 locally implemented identity/onboarding/photo permissions are prerequisites already on main. TASK-004 supplies the header entry point. No TASK-005 dependency: this task neither reads nor changes Hangout data, participation or eligibility. ADR-0010 remains Proposed. TASK-003 hosted HTTPS callback and real UNC delivery remain independently incomplete.
 
-Read and obtain explicit acceptance of Proposed `decisions/ADR-0011-owner-profile-enrichment.md` before schema/UI implementation. Do not silently choose other field/privacy policies. Coordinator publishes this contract and status on main first. After acceptance, dispatch a fresh implementation agent on `agent/TASK-006-profile-enrichment` from latest origin/main; provide only this task and relevant context. Split work if it exceeds this bounded contract.
+ADR-0011 was explicitly accepted by the user on 2026-09-22 (“i accept”); read `decisions/ADR-0011-owner-profile-enrichment.md` and its acceptance evidence before implementation. Do not silently choose other field/privacy policies. Coordinator publishes this contract and status on main first. After acceptance, dispatch a fresh implementation agent on `agent/TASK-006-profile-enrichment` from latest origin/main; provide only this task and relevant context. Split work if it exceeds this bounded contract.
 
 ## Required context
 - AGENTS.md, this contract, ADR-0011 and recorded acceptance, NOW/BACKLOG.
@@ -30,7 +30,7 @@ Read and obtain explicit acceptance of Proposed `decisions/ADR-0011-owner-profil
 Peer profiles/photos, people discovery, friendship, messaging, Hangout schema/flows/eligibility, blocking/moderation implementation, arbitrary extensible sections, new identity attributes, campus/email changes, account deletion, password recovery, external integrations, image processing/EXIF removal, photo reordering/promotion UI, storage quota/garbage-collection service, hosted Supabase/Vercel changes, deployment, analytics and unrelated architecture changes.
 
 ## Acceptance criteria
-- [ ] ADR-0011 explicitly accepted and evidence recorded before implementation.
+- [x] ADR-0011 explicitly accepted and evidence recorded before implementation.
 - [ ] Required edits and optional round trips/clearing work; optional values never gate readiness. Existing required-field constraints, identity fields and primary ownership remain authoritative.
 - [ ] Primary replacement and 0–4 extra photos work, with ordered distinct owned references and database-enforced limits. Missing/foreign/duplicate/fifth-extra references and client overwrite are denied.
 - [ ] Failed save/upload/cleanup and competing replacement/removal cannot delete a currently referenced photo, silently restore removed references, expose another user's data or bypass readiness. Detached private leftovers are honestly reported/retryable.
