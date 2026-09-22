@@ -1,5 +1,6 @@
 # Backlog
 ## Product Build
+- TASK-005 Hangout data and authorization foundation — contract in `active/TASK-005-hangout-foundation.md`; implementation gated on explicit ADR-0010 acceptance. Backend only.
 - TASK-006 profile enrichment/photos
 - TASK-007 create/edit hangout
 - TASK-008 map discovery/detail/joining
@@ -22,3 +23,8 @@
 Expo mobile; native release pipeline; organization accounts; polls; optional capacity/waitlists; multi-campus.
 
 Unrelated technical debt discovered during work becomes a separate task here.
+
+## Hangout access dependencies
+Friends-only, invite-only and eligibility-restricted Hangouts remain disabled until accepted, tested access rules use authoritative friendship, invitation and deliberately supplied profile attributes. TASK-012 supplies friendship; invitation/eligibility enforcement still needs separately bounded contracts. TASK-016 block precedence/private-access rules and TASK-017 audited moderation remain safety dependencies before launch. TASK-005 must resolve its local-foundation versus block-prerequisite gate in ADR-0010; do not infer access policy from absent data.
+
+TASK-003 deployed HTTPS callback and real UNC email delivery acceptance remains independently open in NOW.
