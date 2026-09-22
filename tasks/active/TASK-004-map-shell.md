@@ -1,5 +1,5 @@
 # TASK-004 — Hangouts map shell
-Status: Implemented and locally verified; live Mapbox basemap acceptance pending project token
+Status: Complete (2026-09-22)
 
 ## Goal
 Create the primary Hangouts tab as a polished Mapbox surface before full hangout CRUD.
@@ -38,4 +38,4 @@ Update shared design guidance, current state, changelog and task queue. Write `a
 - [x] no user location broadcast.
 
 ## Verification outcome (2026-09-22)
-All listed shell criteria are implemented. Real Mapbox renderer/worker clustering, pin selection, keyboard pan/zoom, filters and simulated location-denial behavior passed in a temporary offline-style harness. Authenticated route passed missing-token desktop/tablet/phone checks and actual local access-gate regression. Live provider styles/tiles require a project-owned public token and remain unverified; do not treat this as launch-ready map delivery. Independent static findings were resolved. Handoff: `agents/handoffs/TASK-004.md`. No next task dispatched.
+All listed shell criteria are implemented. Real Mapbox renderer/worker clustering, pin selection, keyboard pan/zoom, filters and simulated location-denial behavior passed in a temporary offline-style harness. Authenticated route passed missing-token desktop/tablet/phone checks and actual local access-gate regression. Final live verification used the user-authorized existing public token from the palsapp Mapbox account. Real provider tiles and attribution rendered on the authenticated route at desktop and phone sizes; cluster expansion, preview focus, filters and no-publish creation passed. This completes the bounded map-shell task, not a production launch. Independent static findings were resolved. Handoff: `agents/handoffs/TASK-004.md`. No next task dispatched.

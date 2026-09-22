@@ -4,7 +4,7 @@ Branch/worktree: `agent/TASK-004-map`, `/Users/ellanguyen/.codex/worktrees/3df5/
 Starting point: `7dc50cc` (TASK-003 coordinator status, including implementation `daebb67`), isolated worktree. Required branch created before edits.
 
 ## Outcome
-Bounded map shell implemented and locally verified. Live Mapbox basemap acceptance remains pending a project-owned public token. This is not a launch-ready or deployed map claim. No next task, merge, push, production or hosted database operation occurred.
+TASK-004 is complete, including final live Mapbox basemap verification on the authenticated local route. This is not a production launch or deployment claim. No next implementation task, merge, push, production or hosted database operation occurred. The original offline verification below is supplemented by the final live acceptance addendum.
 
 Read AGENTS, task and prerequisite handoffs; all required product/map/security/architecture/UX sources; accepted Mapbox/Hangout/trust/campus ADRs; Leon Taste; existing components/tokens; directly inspected live usepals.com in the browser. Used React best-practices review. Wrote `docs/ux/TASK-004-INTERACTION-PLAN.md` before UI implementation.
 
@@ -34,17 +34,29 @@ Fresh independent design/privacy reviewer found modal opening before its accessi
 Actual renderer testing caught Mapbox assigning `role=img` to custom button markers and its stylesheet overriding map container positioning. Restored `role=button` after marker construction and increased CSS selector specificity; retested visible pins/controls, nonzero canvas dimensions, cluster/pin keyboard behavior and responsive layouts. Shared design guidance records these integration details.
 
 ## Runtime/configuration limitations
-Set `NEXT_PUBLIC_MAPBOX_TOKEN` in `apps/web/.env.local` to the project's public `pk.` token, with minimal map read scopes and local/staging URL restrictions, then restart/rebuild. The requested project token was unavailable; no third-party token was borrowed or committed. Invalid/non-public values render the fallback, and only `pk.` values pass from the server page to the client. Live light-v11/dark-v11 delivery and provider authorization must be checked before closing final map acceptance.
+Set `NEXT_PUBLIC_MAPBOX_TOKEN` in `apps/web/.env.local` to the project's public `pk.` token, with minimal map read scopes and local/staging URL restrictions, then restart/rebuild. The token was unavailable during initial verification; after explicit user authorization and user-completed sign-in, the existing palsapp default public token was saved in ignored `apps/web/.env.local` (mode 0600). No third-party token was borrowed or token committed. Invalid/non-public values render the fallback, and only `pk.` values pass from the server page to the client. Live light-v11 delivery/provider authorization now pass. The existing default public token is usage-limited and has no URL restrictions; account/billing/token settings were not changed. Use appropriately restricted environment tokens when deploying. Dark-v11 rendered verification remains unrun.
 
 Local Supabase restore initially produced a Storage 42P10 index mismatch with its restarted provider image. A normal local `pnpm db:reset` reapplied committed migrations and resolved it; public API fixture upload and full auth regression then passed. No migration/policy was changed to work around it. Reset removed only previously documented disposable local test data. Runtime startup/reset output was kept local; application clients continue using publishable keys only.
 
 TASK-003 hosted HTTPS callback and arbitrary UNC SMTP delivery remain pending, unchanged. No hosted acceptance was inferred from local tests. Full CRUD/joining/ranking/backend discovery and remaining navigation are outside scope.
 
 ## Documentation/state
-Updated map environment/setup notes, web and token READMEs, shared design guidance, current state, changelog, task contract and NOW queue. Task remains implemented/locally verified with live basemap acceptance pending; not silently promoted to launch-ready DONE. No unrelated backlog task or architectural redesign.
+Updated map environment/setup notes, web and token READMEs, shared design guidance, current state, changelog, task contract and NOW queue. Task is now recorded in DONE after final real basemap acceptance, with production launch and hosted-auth gaps preserved. No unrelated backlog task or architectural redesign.
 
 ## Cleanup / Coordinator next step
-Temporary runtime/harness and synthetic account cleanup is recorded below after shutdown. Review this branch's scoped changes and supply/configure the project public Mapbox token for final live basemap verification. Do not auto-start TASK-005.
+Temporary runtime/harness and synthetic account cleanup is recorded below after shutdown. Review this branch's scoped changes and completed final live verification addendum. Do not auto-start TASK-005.
 
 Cleanup: disposable TASK-004 local account and its private photo removed successfully using the local public API plus a fixture-ID-scoped local Auth deletion. Web/harness processes stopped; Supabase stopped cleanly with backup. Browser test tabs closed and final viewport override reset. Temporary harness/logs remain under `/private/tmp` as non-repository evidence; no test-only route or bypass is shipped.
 Lima VM also stopped cleanly after Supabase shutdown. All task changes are saved in the local TASK-004 branch; no remote publication.
+
+
+## Final live acceptance addendum (2026-09-22)
+The user explicitly authorized retrieving the existing public token from their Mapbox console and completed sign-in. Verified account: `palsapp`; existing Default public token, usage-limited, no URL restrictions. Stored only in ignored `apps/web/.env.local`; token values are omitted from repository documentation. No token creation/refresh, billing change, production deployment or provider account mutation.
+
+Actual `/hangouts` route behind the unchanged Supabase ready gate was tested using a disposable local account. **Real Mapbox light-v11 streets/campus tiles, glyphs, controls and Mapbox/OpenStreetMap attribution rendered successfully.** Desktop 1280×900 and phone 390×844 screenshots inspected in conversation; document width matched viewport width. Phone map container was 356×378 CSS pixels, with visible controls, pins/clusters and attribution. This was the shipped map component, without the offline test style or an auth bypass.
+
+Keyboard activation expanded a three-Hangout cluster into an individual picnic pin and a two-Hangout cluster, returning focus to the map canvas. Activating the picnic pin opened its matching preview and focused its heading. Closing restored interaction, Back to UNC reset the map, category/time filters cleared all markers for the empty combination, and reset restored examples. Create opened the explicit nothing-saved-or-published modal and Escape closed it. Live browser console error/warning log was empty. Prior tested failure, denial and gate behaviors remain covered; no app code changed during this acceptance pass.
+
+TASK-004 moved to Complete/DONE; current state, queue and changelog synchronized. The earlier full repository check (11 tests/both production builds) and auth regression remain valid because this final pass changed only ignored configuration and task documentation. Final documentation formatting/diff checks recorded below. Hosted HTTPS callback, public UNC SMTP delivery and deployment remain outside this completion.
+
+Final cleanup: disposable live-map test account and photo removed; Next, Supabase and Lima stopped cleanly; verification tabs closed and viewport override reset. `pnpm format:check` and `git diff --check` pass. Public token configuration remains only in the ignored local environment for future local runs. No app code changed in the final acceptance pass.
