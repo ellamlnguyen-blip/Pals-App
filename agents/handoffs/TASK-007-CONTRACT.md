@@ -3,7 +3,7 @@ Date: 2026-09-22
 Agent: coordinator; fresh read-only scope/security reviewer `task007_contract_review`
 Branch/worktree: `agent/TASK-007-planning`, `/Users/ellanguyen/.codex/worktrees/3556/Pals App`
 Starting refreshed canonical main: `d4894e8d64db6e143a56cd51ef41010010beac80`
-Task/main publication: user explicitly approved publication; acceptance/reconciliation update prepared against main `895923b`. Verified publication receipt follows push/integration.
+Task/main publication: reviewed planning/acceptance tip `f1bc16c42dd4b46123843e40e39742fff0fa83b9` integrated on main `d5485f9cf6d45acea72856cc0f807be1fdcf5eff`; both remote SHAs verified.
 Status: planning reviewed and ADR accepted; TASK-007 awaits separately completed TASK-005.
 
 ## Outcome / files
@@ -26,3 +26,6 @@ Automatic approval review rejected the branch commit/push command before executi
 The user replied “1. yes / 2. yes” to canonical public repository publication/main integration and revised ADR-0010 acceptance. This resolves the historical approval blockers above. Refresh found TASK-005 already dispatched under earlier main `895923b`; coordinator notified that task and preserved its ownership. The latest accepted revision supersedes conflicting earlier roster/field/time rules and adds explicit database gating and retry/revision requirements. No duplicate implementation agent or local runtime was started here. TASK-007 remains blocked on reviewed/integrated backend; no UI/migration/hosted changes in this documentation milestone.
 
 Fresh read-only reconciliation reviewer confirmed the numbered accepted policy matches `f049184`, earlier approval history is preserved and backend ownership is unchanged. Its stale roster/dispatch-summary findings were corrected before publication. TASK-005 coordinator confirmed no scope objection and that the draft migration had not been applied or committed; it awaits the published main SHA to resume conflicting work.
+
+## Verified publication receipt
+Canonical branch push and main integration succeeded. `git ls-remote origin refs/heads/main refs/heads/agent/TASK-007-planning` returned planning `f1bc16c42dd4b46123843e40e39742fff0fa83b9` and integrated main `d5485f9cf6d45acea72856cc0f807be1fdcf5eff`. Canonical main checkout was clean before merge and now includes all seven reviewed documentation files. This subsequent receipt records those immutable milestones. Planning publication/ADR acceptance are complete; TASK-007 implementation remains awaiting TASK-005, which retains its separate coordinator and agents. User requested GPT-6 Sol medium for subsequent work. No application or hosted change was made.
