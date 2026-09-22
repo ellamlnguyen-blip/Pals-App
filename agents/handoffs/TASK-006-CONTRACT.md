@@ -26,3 +26,6 @@ No. Reviewed planning records are published and integrated on main; obtain expli
 
 ## Verified publication receipt
 `git ls-remote origin refs/heads/main refs/heads/agent/TASK-006-planning` verified task planning SHA `2fa2d17e767a5379496308d6940b8992084e21a0` and integration SHA `71699ee6be9e0ed00b0767268d6f46d7e2075bc5` after successful pushes to the canonical `ellamlnguyen-blip/Pals-App` repository. This subsequent documentation receipt records those immutable planning milestones. Planning publication is complete; TASK-006 implementation remains explicitly incomplete pending ADR-0011 acceptance. No implementation agent, migration, hosted operation or deployment was started.
+
+## Acceptance milestone — 2026-09-22
+The user explicitly replied “i accept” to the request to accept ADR-0011 as written. The schema/field/photo lifecycle decision gate is resolved; historical planning-blocker statements above describe the pre-acceptance state. Coordinator recorded the decision and authorized fresh implementation on `agent/TASK-006-profile-enrichment` after this documentation update is integrated and verified on main. No TASK-005 or hosted operations are authorized. Implementation, security review, runtime/rendered verification and final integration remain outstanding.
