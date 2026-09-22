@@ -4,9 +4,12 @@ import { requireAccess } from "../../lib/access";
 import { signOut } from "../actions";
 import { HangoutsShell } from "./shell";
 import "./map.css";
+import { localHangoutsAvailable } from "../../lib/hangouts";
+import { OwnedHangouts } from "./owned-list";
 
 export default async function Hangouts() {
   const { client, user } = await requireAccess("ready");
+  const localCreate = localHangoutsAvailable();
   const { data: profile } = await client
     .from("profiles")
     .select("real_name")
@@ -42,7 +45,9 @@ export default async function Hangouts() {
           </div>
         </details>
       </header>
+      {localCreate && <OwnedHangouts />}
       <HangoutsShell
+        createEnabled={localCreate}
         token={
           process.env.NEXT_PUBLIC_MAPBOX_TOKEN?.startsWith("pk.")
             ? process.env.NEXT_PUBLIC_MAPBOX_TOKEN

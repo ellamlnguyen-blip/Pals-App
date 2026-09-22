@@ -1,0 +1,167 @@
+.hangout-page-heading {
+  padding: 1.5rem 0 2rem;
+  max-width: 52rem;
+}
+.hangout-page-heading > a {
+  display: inline-block;
+  margin-bottom: 1rem;
+}
+.hangout-page-heading .badge {
+  display: block;
+  margin: 0 0 0.5rem;
+}
+.hangout-page-heading h1 {
+  max-width: none;
+  font-size: clamp(2.25rem, 5vw, 3.4rem);
+}
+.hangout-page-heading > p:last-child {
+  color: var(--pals-muted);
+  margin-top: 1rem;
+}
+.hangout-editor {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(300px, 0.9fr);
+  gap: 2rem;
+  padding-bottom: 4rem;
+}
+.hangout-editor-main,
+.hangout-editor-area {
+  min-width: 0;
+  align-self: start;
+  padding: 1.5rem;
+  border: 1px solid var(--pals-line);
+  border-radius: var(--pals-radius);
+  background: var(--pals-surface);
+}
+.hangout-editor .form-stack > label,
+.hangout-private label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-weight: 750;
+}
+.hangout-editor .form-stack > .help {
+  margin: -0.6rem 0 0;
+}
+.hangout-private {
+  border-top: 1px solid var(--pals-line);
+  padding-top: 1.5rem;
+  margin-top: 0.5rem;
+}
+.hangout-private h2,
+.hangout-editor-area h2 {
+  margin-bottom: 0.5rem;
+}
+.hangout-private .help {
+  margin: 0.4rem 0 1rem;
+}
+.area-map-wrap {
+  min-width: 0;
+}
+.area-map {
+  height: 290px;
+  border: 1px solid var(--pals-line);
+  border-radius: var(--pals-input-radius);
+  overflow: hidden;
+  background: var(--pals-canvas);
+}
+.area-map-state {
+  margin: -12rem 1rem 8rem;
+  position: relative;
+  background: var(--pals-canvas);
+  padding: 1rem;
+  border-radius: var(--pals-input-radius);
+  color: var(--pals-muted);
+}
+.area-map-wrap .help {
+  margin: 0.75rem 0 0;
+}
+.hangout-editor-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  border-top: 1px solid var(--pals-line);
+  padding-top: 1.5rem;
+}
+.hangout-editor-actions > div {
+  flex-basis: 100%;
+}
+.hangout-editor-actions .quiet-button {
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+}
+.hangout-confirmation {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  padding-bottom: 4rem;
+}
+.hangout-confirmation section {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.hangout-confirmation dt {
+  font-weight: 800;
+  margin-top: 1rem;
+}
+.hangout-confirmation dd {
+  margin: 0;
+}
+.hangout-confirmation > .button {
+  justify-self: start;
+}
+.owned-hangouts {
+  max-width: 1440px;
+  margin: 1rem auto 0;
+  padding: 1rem 2rem;
+  border: 1px solid var(--pals-line);
+  background: var(--pals-surface);
+}
+.owned-hangouts h2 {
+  font-size: 1.15rem;
+  margin-bottom: 0.5rem;
+}
+.owned-hangouts ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.5rem;
+}
+.owned-hangouts li {
+  display: flex;
+  flex-direction: column;
+  min-width: 11rem;
+}
+.owned-hangouts li span {
+  color: var(--pals-muted);
+  font-size: 0.8rem;
+}
+@media (max-width: 850px) {
+  .hangout-editor {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .hangout-confirmation {
+    grid-template-columns: 1fr;
+  }
+}
+@media (max-width: 599px) {
+  .hangout-editor-main,
+  .hangout-editor-area {
+    padding: 1.25rem;
+  }
+  .hangout-editor-actions .button,
+  .hangout-editor-actions .quiet-button {
+    width: 100%;
+    justify-content: center;
+  }
+  .owned-hangouts {
+    margin: 1rem;
+    padding: 1rem;
+  }
+}

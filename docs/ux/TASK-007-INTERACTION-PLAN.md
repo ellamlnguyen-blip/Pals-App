@@ -1,0 +1,9 @@
+# TASK-007 interaction plan
+
+Reading this as: a focused college Hangout form for a verified UNC host, with Pals' friendly blue and white product language. The live `https://usepals.com/` reference was attempted on 2026-09-22 but DNS was unavailable in this environment; `DESIGN_DIRECTION.md` records the prior direct inspection. Existing shared tokens, map shell, accessibility and safety rules lead the design.
+
+- Entry: a ready host opens Create from the mock map. A separate route labels this local-only flow, shows campus visibility and a plain public/private explanation. Recent owned Hangouts provide a small return path, separate from mock discovery.
+- Form: title and America/New_York campus start time lead. Optional description/end and private meeting instructions follow. The public area is chosen by clicking the existing Mapbox surface or by typing a broad label and approximate coordinates. The map never uses device location or private text; a manual alternative remains available when tiles/token fail.
+- Save: disable repeat submit while a request is pending. Keep one creation UUID and normalized payload after an uncertain response so retry cannot duplicate a Hangout. Verify the returned record before showing a confirmation. Navigation away discards the form; no draft is stored.
+- Owner view: show saved public details and a private instruction section only after a fresh owner read. Edit opens the latest revision. A stale save keeps the entered fields and offers reload/review; an uncertain edit asks the host to check the saved record. No discovery pin/chat/join promise.
+- Layout: on desktop, form and location picker sit in two columns; on phone, one column with large controls and visible save/cancel. Use shared tokens and high contrast focus states; status messages receive focus after outcomes. Loading, empty recent list, missing map, validation and denied states have explicit copy.
