@@ -35,6 +35,7 @@ export default async function Hangouts() {
           <div className="account-panel">
             <strong>{profile?.real_name ?? "Your account"}</strong>
             <p>UNC email verified</p>
+            <Link href="/profile">Your profile</Link>
             <form action={signOut}>
               <button className="text-button">Sign out</button>
             </form>
