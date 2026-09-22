@@ -13,9 +13,9 @@ Hangouts are the core coordination object. Their database permissions must prote
 - TASK-001 tooling and TASK-002 identity/RLS foundation are complete.
 - TASK-003 local verified-membership and live profile/photo readiness behavior is available. Its deployed HTTPS callback and hosted delivery to real UNC addresses remain a separate open acceptance gap; TASK-005 cannot close or imply completion of it.
 - TASK-004 map shell is complete but uses synthetic fixtures; do not connect it to this backend in TASK-005.
-- Read Accepted `decisions/ADR-0010-hangout-foundation.md`, including the direct acceptance evidence and joined-state roster rule.
+- Read Accepted `decisions/ADR-0010-hangout-foundation.md`, including both acceptance milestones and the latest TASK-007-approved current-ready roster, field/time, gate and atomic-write rules.
 - TASK-006 is complete under Accepted ADR-0011. Preserve owner-only enrichment, profile revision/CAS and Storage assignment/deletion locks.
-- After acceptance, dispatch a fresh bounded implementation agent from latest `origin/main` on `agent/TASK-005-hangout-foundation`. Review its handoff before downstream work. Use a fresh security reviewer where practical.
+- The existing bounded implementation agent owns `agent/TASK-005-hangout-foundation`; reconcile its contract with latest `origin/main` without overwriting its work. Do not duplicate dispatch. Review its handoff and fresh security review before downstream work.
 
 ## Required Context
 - `AGENTS.md`, this contract, `tasks/NOW.md`, `tasks/BACKLOG.md`
@@ -32,6 +32,7 @@ Hangouts are the core coordination object. Their database permissions must prote
 - Lifecycle: published → cancelled; joining open/closed independently; time passing does not assert attendance or successful completion. No persisted drafts or restore operation in this increment unless explicitly accepted in the ADR.
 - Membership: unique Hangout/account record with joined/left/removed state and transition timestamps; host ownership separate from ordinary participation. Host is a joined participant; no co-host privileges/assignment in this increment.
 - Separate optional private exact meeting details, protected independently from public approximate location. Public means permitted campus readers, never anonymous internet access.
+- Local feature gate (default disabled), atomic public/private create/edit, server revision conflicts and owner-scoped creation retry identity as explicitly accepted in the revised ADR-0010; reconcile the active implementation with this revision before review/integration.
 - Minimal database operations needed to enforce/test accepted transitions atomically. SQL/RPC primitives may be tested directly; no application create/edit/join workflow or client wiring.
 - Minimal shared domain types/validation/data-access contracts only where needed for this backend boundary; no unused future-feature framework.
 - Campus-only, unrestricted Hangouts in this increment. Reject friends-only, invite-only and eligibility-restricted creation/updates through every write path. Do not expose these modes until friendship, invitations and deliberately supplied profile attributes support accepted, tested access rules. No permissive fallback to campus visibility.
@@ -62,3 +63,6 @@ Implementation updates relevant data-model/authorization docs, current state, ch
 
 ## Follow-ups
 TASK-007 owns application create/edit; TASK-008 discovery/detail/join; TASK-010 co-host management; TASK-012 friendship; TASK-016 blocking/reporting; TASK-017 audited moderation; TASK-018 attendance. Invitation and eligibility enforcement need separate bounded contracts/data dependencies before restricted Hangouts can ship. Do not auto-dispatch these tasks.
+
+## Revised acceptance milestone — TASK-007 prerequisite
+The user explicitly accepted the revised ADR-0010 linked from TASK-007 planning commit `f049184` and approved publication. The latest rules supersede the concurrent earlier ADR constraints; the existing TASK-005 coordinator/implementation agent retains ownership. TASK-005 validates supplied timestamptz instants and accepted database time bounds; America/New_York input/display and ambiguous/nonexistent local-time handling belong to the later TASK-007 UI, not backend UI work. Required tests include feature-gate-off denial on every public operation, current-ready roster filtering without peer profile exposure, field/time bounds, atomic create/edit rollback, owner-scoped retry identities and stale revisions. No duplicate dispatch, TASK-007 migration work or hosted operation.
