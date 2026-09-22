@@ -9,14 +9,13 @@ Every active task must have its contract/status recorded on `main` before dispat
 
 Do these in order unless dependencies allow safe parallel work.
 
-Completed: TASK-001, TASK-002, TASK-004 and TASK-006. See `DONE.md` and their handoffs.
+Completed: TASK-001, TASK-002, TASK-004, TASK-005 and TASK-006. See `DONE.md` and their handoffs.
 
 1. `active/TASK-003-auth-onboarding.md` — implemented and locally verified; independent security review clear, anonymous design review plus authenticated implementer visual check passed. Accepted ADR-0009 is implemented. Deployed HTTPS callback and hosted email delivery remain pending deployment/SMTP. Handoff: `agents/handoffs/TASK-003.md`.
 2. `active/TASK-004-map-shell.md` — complete on `agent/TASK-004-map`, including final real Mapbox basemap and authenticated desktop/phone interaction checks. Token is configured only in ignored local environment; no production deployment. Handoff: `agents/handoffs/TASK-004.md`. No live Hangout backend is connected.
 
-3. `active/TASK-005-hangout-foundation.md` — backend implementation and fresh Sol security review complete; local repository, two-reset 226-assertion SQL/lint and full HTTP/concurrency checks pass. Verified task tip `a59b4a6900e5bc50f47a0beb0ff7fdd6e79741cd`; main integration verification pending. Default-disabled gate, no UI/hosted changes. Handoffs: `agents/handoffs/TASK-005.md`, `TASK-005-REVIEW.md`.
 
-4. `active/TASK-007-create-edit-hangouts.md` — contract approved; revised ADR-0010 explicitly accepted by user. Blocked on separately completed TASK-005 under that latest revision. Accepted decision covers local-only safety gating, field/time limits, host/roster/private access and atomic retry/conflict semantics. Planning branch `agent/TASK-007-planning`; handoff `agents/handoffs/TASK-007-CONTRACT.md`. No implementation or hosted changes dispatched. Reviewed planning/acceptance integrated on main `d5485f9`; planning tip `f1bc16c` and main remote SHAs verified.
+3. `active/TASK-007-create-edit-hangouts.md` — contract approved; revised ADR-0010 explicitly accepted by user. TASK-005 backend prerequisite is complete at verified main `aa9fb884397c4d2bc728a8532b1cb0d2737959f0`; coordinator must read its handoff/API before separately dispatching UI implementation. Accepted decision covers local-only safety gating, field/time limits, host/roster/private access and atomic retry/conflict semantics. Planning branch `agent/TASK-007-planning`; handoff `agents/handoffs/TASK-007-CONTRACT.md`. No implementation or hosted changes dispatched. Reviewed planning/acceptance integrated on main `d5485f9`; planning tip `f1bc16c` and main remote SHAs verified.
 
 Parallelization after TASK-001:
 - Supabase foundation

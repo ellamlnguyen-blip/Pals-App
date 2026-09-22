@@ -24,3 +24,6 @@ Public/private create and edit are transactional. A local test-only trigger forc
 
 ## Limits
 Blocking precedence, reporting/moderation, peer profiles/photos, hosted enabling/deployment and user-facing Hangout flows remain outside this task. Database snapshot checks cannot recall previously received data. Public location validation cannot prove host-supplied text or coordinates are nonsensitive; the later UI must guide safe approximate-area selection. No production data-retention policy or launch-readiness claim. TASK-003 hosted HTTPS callback/real UNC mail acceptance remains open.
+
+## Final evidence
+Reviewer confirmed the final cancelled-state and campus-transfer retry regressions are present. Coordinator reviewed the final published task `a59b4a6900e5bc50f47a0beb0ff7fdd6e79741cd`; local 226×2 SQL/lint, three HTTP/concurrency suites and full workspace checks passed. [Task-tip GitHub CI](https://github.com/ellamlnguyen-blip/Pals-App/actions/runs/35797256841) passed both jobs. Main integration `aa9fb884397c4d2bc728a8532b1cb0d2737959f0` was remote verified. Runtime evidence remains local/CI, with no hosted verification claim.

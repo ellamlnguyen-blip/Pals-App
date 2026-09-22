@@ -5,9 +5,9 @@ Agent: GPT-6 Sol implementation agent
 Branch/worktree: `agent/TASK-005-hangout-foundation`, `/Users/ellanguyen/.codex/worktrees/5153/Pals App`
 Task implementation commit: `57f4164679409b86d37e990fe45927de3d503726`, pushed and verified at `origin/agent/TASK-005-hangout-foundation` before this handoff receipt
 Starting authoritative main: `90500306ff634999939a112e52e71a80bd2dcfdd`
-Integrated main SHA: pending coordinator review/integration
+Integrated main SHA: `aa9fb884397c4d2bc728a8532b1cb0d2737959f0`, pushed and independently remote verified
 Main status-record path: `tasks/NOW.md`, `docs/operations/CURRENT_STATE.md`, `CHANGELOG.md` (coordinator owned)
-Outstanding blocker: main integration and remote verification, not backend verification
+Outstanding blocker: none for bounded TASK-005; complete. Hosted safety/auth gaps remain separate.
 
 ## Outcome
 
@@ -43,7 +43,7 @@ Accepted ADR-0010 is the authority; its latest TASK-007 revision supersedes the 
 
 ## Ready for next task?
 
-Ready for coordinator review and integration of this backend branch into main; **TASK-005 is not complete until main is pushed and its remote SHA verified.** Do not dispatch TASK-007 before that receipt. No follow-up code task is authorized by this handoff.
+TASK-005 complete after coordinator review, main integration and remote verification. TASK-007 may consume this API under its own accepted local contract; no later task is automatically dispatched here. No follow-up code task is authorized by this handoff.
 
 ## Remote verification
 
@@ -51,3 +51,8 @@ Ready for coordinator review and integration of this backend branch into main; *
 
 ## Coordinator acceptance
 Reviewed final task tip `a59b4a6900e5bc50f47a0beb0ff7fdd6e79741cd` and independently verified it on origin. Reviewed the scoped 12-file implementation/handoff diff against the latest Accepted ADR-0010, fresh Sol review and actual local test logs. No unrelated app/provider/profile changes found. Parent ran `pnpm check`; actual SQL226×2/lint and HTTP/concurrency logs pass. Accepted for main integration with shared records; final remote main SHA is recorded after successful publication. Task-tip GitHub CI is still running and is not yet claimed passed.
+
+## Verified completion receipt
+Coordinator integrated reviewed task tip `a59b4a6900e5bc50f47a0beb0ff7fdd6e79741cd` into main `aa9fb884397c4d2bc728a8532b1cb0d2737959f0` and verified both via `git ls-remote`. [GitHub CI](https://github.com/ellamlnguyen-blip/Pals-App/actions/runs/35797256841) for that exact task tip passed validate and database jobs, including clean resets, all 226 SQL checks and the real HTTP/concurrency runner. This supersedes earlier integration/CI-pending statements.
+
+Final cleanup verified disabled feature gate, zero Hangouts and zero Auth users in the disposable local stack. Supabase and Lima stopped cleanly. The canonical local main checkout was synchronized. No hosted provider or live user data changed. This documentation receipt follows the immutable implementation integration milestone. TASK-003 hosted callback/real UNC email and later blocking/report/moderation remain independent.
