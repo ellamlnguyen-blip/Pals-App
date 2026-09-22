@@ -106,6 +106,9 @@ Before substantial UI work, read the installed `design-taste-frontend` (Leon's T
 One bounded branch/worktree per task: `agent/TASK-###-short-name`.
 Avoid concurrent agents editing the same files whenever possible.
 
+## GitHub Publishing
+`origin` is the canonical GitHub repository. Each implementation task must commit its completed, in-scope work and handoff to its task branch, then push that branch to `origin` and verify that the remote ref points to the expected commit before reporting the task complete. Record the branch, pushed commit SHA, and push verification in the handoff. Do not push task work directly to the default branch or force-push shared history. If GitHub authentication or repository permission prevents the push, report the exact blocker and leave the task explicitly incomplete until it is pushed. Never request or place a personal access token in chat, source files, or shell arguments; use the user's local Git credential manager.
+
 ## ADR Policy
 Use ADRs for major dependencies/services, schema/domain changes, auth/authorization strategy, deployment topology, permissions/privacy changes, replacing core providers, or major product behavior.
 

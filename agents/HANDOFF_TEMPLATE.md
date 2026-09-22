@@ -2,6 +2,7 @@
 Date:
 Agent:
 Branch/worktree:
+Remote branch and pushed commit SHA:
 
 ## Outcome
 ## Files Changed
@@ -13,3 +14,4 @@ Branch/worktree:
 ## Documentation Updated
 ## Ready for Next Task?
 Yes / No — explain blockers.
+Remote verification: command/result, or reason push is blocked.
