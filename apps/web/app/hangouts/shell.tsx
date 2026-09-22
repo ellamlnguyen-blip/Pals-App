@@ -1,10 +1,17 @@
 "use client";
 
+import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { HangoutsMap } from "./map";
 import { filterMockHangouts, MOCK_HANGOUTS } from "./fixtures";
 
-export function HangoutsShell({ token }: { token: string }) {
+export function HangoutsShell({
+  token,
+  createEnabled,
+}: {
+  token: string;
+  createEnabled: boolean;
+}) {
   const [category, setCategory] = useState("All");
   const [time, setTime] = useState("Any time");
   const [selected, setSelected] = useState<string | null>(null);
@@ -64,12 +71,18 @@ export function HangoutsShell({ token }: { token: string }) {
             <h1>Hangouts around UNC</h1>
             <p>Start around campus. See what sounds like you.</p>
           </div>
-          <button
-            className="button create-button"
-            onClick={() => showShell("Create Hangout")}
-          >
-            + Create Hangout
-          </button>
+          {createEnabled ? (
+            <Link className="button create-button" href="/hangouts/new">
+              + Create Hangout
+            </Link>
+          ) : (
+            <button
+              className="button create-button"
+              onClick={() => showShell("Create Hangout")}
+            >
+              + Create Hangout
+            </button>
+          )}
         </div>
         <p className="fixture-notice">
           <strong>Mock Hangouts</strong> · These are development examples, not
