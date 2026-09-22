@@ -11,3 +11,8 @@ Maintain visual constants in `packages/design-tokens/`. Bootstrap establishes pr
 
 ## Required frontend workflow
 Read the installed Leon Taste skill (`design-taste-frontend`), relevant task and UX specifications, existing tokens/components, and inspect the current live reference before substantial UI work. Product behavior, accessibility, safety and mobile usability take priority over generic skill rules. Plan desktop/tablet/mobile behavior before coding; inspect rendered desktop/mobile states and record findings in the handoff.
+
+## Map shell (TASK-004)
+The map utility keeps a compact heading and primary create action, rounded map frame, blue/white numbered pins, and a narrow preview/example rail at 900px and above. Smaller viewports stack the preview below the map; phone controls wrap without horizontal overflow. The mock-data notice stays above the map and every preview repeats its status. Keyboard users can select native button pins/clusters or the matching example list. Preview focus moves to its heading and returns on close; native modal shells restore their trigger. Shared marker contrast and overlay layering live in design tokens.
+
+Mapbox's marker constructor assigns `role=img`, so restore `role=button` after construction. Scope the map container positioning more specifically than `.mapboxgl-map` to prevent its stylesheet from collapsing the container. These were found during real offline-renderer testing, not inferred from types. See `TASK-004-INTERACTION-PLAN.md` and the handoff for evidence and live-token limitations.

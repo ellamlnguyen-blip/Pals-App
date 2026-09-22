@@ -1,5 +1,5 @@
 # TASK-004 — Hangouts map shell
-Status: Planned
+Status: Implemented and locally verified; live Mapbox basemap acceptance pending project token
 
 ## Goal
 Create the primary Hangouts tab as a polished Mapbox surface before full hangout CRUD.
@@ -30,9 +30,12 @@ Run relevant automated checks and inspect rendered desktop/mobile map interactio
 Update shared design guidance, current state, changelog and task queue. Write `agents/handoffs/TASK-004.md` with visual/test evidence and Mapbox configuration limitations. Stop after this task.
 
 ## Acceptance Criteria
-- [ ] Hangouts is primary nav item
-- [ ] map responsive desktop/mobile web
-- [ ] pins/clusters work
-- [ ] pin selection opens preview
-- [ ] create action visible
-- [ ] no user location broadcast.
+- [x] Hangouts is primary nav item
+- [x] map responsive desktop/mobile web
+- [x] pins/clusters work
+- [x] pin selection opens preview
+- [x] create action visible
+- [x] no user location broadcast.
+
+## Verification outcome (2026-09-22)
+All listed shell criteria are implemented. Real Mapbox renderer/worker clustering, pin selection, keyboard pan/zoom, filters and simulated location-denial behavior passed in a temporary offline-style harness. Authenticated route passed missing-token desktop/tablet/phone checks and actual local access-gate regression. Live provider styles/tiles require a project-owned public token and remain unverified; do not treat this as launch-ready map delivery. Independent static findings were resolved. Handoff: `agents/handoffs/TASK-004.md`. No next task dispatched.

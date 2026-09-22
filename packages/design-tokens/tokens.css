@@ -20,6 +20,12 @@
   --pals-button-ink: #ffffff;
   --pals-error: #a22832;
   --pals-content-width: 70rem;
+  --pals-layer-menu: 10;
+  --pals-overlay-shadow: 0 8px 24px rgb(25 54 75 / 0.16);
+  /* Map markers retain high contrast against either basemap. */
+  --pals-pin-fill: #35698e;
+  --pals-pin-ink: #ffffff;
+  --pals-pin-edge: #ffffff;
 }
 @media (prefers-color-scheme: dark) {
   :root {

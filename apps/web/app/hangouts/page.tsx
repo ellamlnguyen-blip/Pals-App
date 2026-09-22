@@ -1,6 +1,10 @@
 import Image from "next/image";
+import Link from "next/link";
 import { requireAccess } from "../../lib/access";
-import { Frame, Intro } from "../components";
+import { signOut } from "../actions";
+import { HangoutsShell } from "./shell";
+import "./map.css";
+
 export default async function Hangouts() {
   const { client, user } = await requireAccess("ready");
   const { data: profile } = await client
@@ -9,25 +13,41 @@ export default async function Hangouts() {
     .eq("user_id", user!.id)
     .single();
   return (
-    <Frame signedIn>
-      <section className="welcome">
-        <Image
-          className="profile-photo"
-          src="/profile/photo"
-          alt="Your profile photo"
-          width={88}
-          height={88}
-          unoptimized
-        />
-        <p className="badge">UNC email verified</p>
-        <Intro title={`You’re in, ${profile?.real_name ?? "pal"}.`}>
-          Your profile is ready. Hangouts at UNC are coming next.
-        </Intro>
-      </section>
-      <p className="notice">
-        Email verification confirms access to an approved UNC email. It does not
-        independently verify current enrollment.
-      </p>
-    </Frame>
+    <div className="hangouts-page">
+      <a className="skip-link" href="#main">
+        Skip to content
+      </a>
+      <header className="hangouts-header">
+        <Link className="wordmark" href="/hangouts">
+          Pals
+        </Link>
+        <span className="campus">UNC Chapel Hill</span>
+        <details className="account-menu">
+          <summary aria-label="Your account">
+            <Image
+              src="/profile/photo"
+              alt="Your profile photo"
+              width={40}
+              height={40}
+              unoptimized
+            />
+          </summary>
+          <div className="account-panel">
+            <strong>{profile?.real_name ?? "Your account"}</strong>
+            <p>UNC email verified</p>
+            <form action={signOut}>
+              <button className="text-button">Sign out</button>
+            </form>
+          </div>
+        </details>
+      </header>
+      <HangoutsShell
+        token={
+          process.env.NEXT_PUBLIC_MAPBOX_TOKEN?.startsWith("pk.")
+            ? process.env.NEXT_PUBLIC_MAPBOX_TOKEN
+            : ""
+        }
+      />
+    </div>
   );
 }

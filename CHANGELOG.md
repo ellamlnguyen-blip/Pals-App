@@ -2,6 +2,13 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-22 — TASK-004 Hangouts map shell
+
+- Replaced the authenticated readiness screen with a responsive Mapbox shell while retaining the live verified/profile-complete access gate.
+- Added clearly labeled approximate public-campus mock Hangouts, accessible pins/clusters and previews, example filters, and a no-publish Create shell.
+- Added optional one-shot local-only coarse location, map loading/token-missing/error/retry states, and shared map design tokens.
+- Verified repository checks, local Auth/Storage/web gates and actual offline Mapbox renderer interactions. Live Mapbox basemap validation awaits a project-owned public token. No hosted auth, SMTP, database or production changes.
+
 ## 2026-09-22 — TASK-003 auth and required onboarding
 
 - Implemented signup/signin/signout, PKCE email confirmation/resend, secure SSR sessions and server-side live account gates.

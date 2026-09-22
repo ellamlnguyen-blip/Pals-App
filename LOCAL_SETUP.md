@@ -13,7 +13,7 @@ Web runs at http://127.0.0.1:3000 and admin at http://127.0.0.1:3001. Use `pnpm 
 
 Web auth requires local Supabase. Copy `apps/web/.env.example` to `apps/web/.env.local` and set `SUPABASE_PUBLISHABLE_KEY` to the local publishable (or legacy anon) key from `pnpm exec supabase status`. Never commit local env files. `APP_ENV` defaults to `local`, independently of Next.js `NODE_ENV`. Set staging/production explicitly only for those deployments, with a matching project reference and HTTPS `APP_ORIGIN`. Every provider client validates its target before connecting.
 
-Do not put privileged credentials in `NEXT_PUBLIC_` variables. The auth app rejects service-role/secret keys entirely and uses public keys with user sessions/RLS. Mapbox, PostHog and web hosting are not connected yet. Admin remains a placeholder.
+Do not put privileged credentials in `NEXT_PUBLIC_` variables. The auth app rejects service-role/secret keys entirely and uses public keys with user sessions/RLS. The Hangouts Mapbox shell is implemented; its basemap requires a public URL-restricted `NEXT_PUBLIC_MAPBOX_TOKEN` in the web environment. No project token is committed. PostHog and web hosting are not connected yet. Admin remains a placeholder.
 
 ## Validation
 

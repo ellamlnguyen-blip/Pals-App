@@ -35,7 +35,7 @@ async function assertGate(response, path) {
       `streamed response redirects to ${path}`,
     );
     assert.ok(
-      !html.includes("Your profile is ready."),
+      !html.includes("These are development examples"),
       "protected page content withheld",
     );
   }
@@ -273,15 +273,14 @@ test("real confirmation, SSR callback, RLS and private photo ownership", async (
       "active primary photo cannot be deleted",
     );
     if (process.env.WEB_TEST_ORIGIN) {
-      assert.equal(
-        (
-          await fetch("http://127.0.0.1:3000/hangouts", {
-            headers: { Cookie: owner.header() },
-            redirect: "manual",
-          })
-        ).status,
-        200,
-      );
+      const mapResponse = await fetch("http://127.0.0.1:3000/hangouts", {
+        headers: { Cookie: owner.header() },
+        redirect: "manual",
+      });
+      assert.equal(mapResponse.status, 200);
+      const mapHtml = await mapResponse.text();
+      assert.ok(mapHtml.includes("Hangouts around UNC"));
+      assert.ok(mapHtml.includes("These are development examples"));
       assert.equal(
         (
           await fetch("http://127.0.0.1:3000/profile/photo", {
