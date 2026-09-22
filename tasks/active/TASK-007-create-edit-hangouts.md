@@ -1,9 +1,9 @@
 # TASK-007 — Create/edit Hangouts
 
-Status: Contract approved; ADR-0010 explicitly accepted; awaiting separately completed TASK-005 backend
+Status: Ready for bounded implementation — ADR-0010 accepted; TASK-005 integrated and verified
 Date: 2026-09-22
 Planning branch: `agent/TASK-007-planning`
-Implementation branch after prerequisites: `agent/TASK-007-create-edit-hangouts`
+Implementation branch: `agent/TASK-007-create-edit-hangouts`
 
 ## Goal
 A live-ready UNC host can create a casual campus Hangout and edit its public details and optional private meeting instructions, with honest persistence, conflict and privacy feedback. This is a local development increment, not a public release.
@@ -14,7 +14,7 @@ TASK-004 currently opens an explicitly unsaved Create shell over mock Hangouts. 
 ## Dependencies / stop gates
 - TASK-001/002 foundation, TASK-003 local identity/readiness, TASK-004 map shell and TASK-006 owner profile are integrated on main. TASK-003 hosted HTTPS callback/real UNC delivery remains independently open.
 - The user explicitly accepted revised ADR-0010 on 2026-09-22 (“1. yes / 2. yes”), including the local-only safety sequence and concrete schema/write semantics. Read its acceptance/reconciliation evidence; the existing TASK-005 implementation must use this latest revision.
-- TASK-005 must separately implement, test, pass fresh security review, integrate and remote-verify the accepted backend. Required interface: caller-derived host/campus; atomic public/private create plus host membership; owner-scoped retry identity; host read/edit with revision conflict rejection; accepted field/time/location validation; feature gate; restricted-mode rejection; live RLS/private-field isolation. Coordinator records its actual operations/types and verified SHA here before dispatch. Do not invent RPC names or write migrations in TASK-007.
+- TASK-005 must separately implement, test, pass fresh security review, integrate and remote-verify the accepted backend. Required interface: caller-derived host/campus; atomic public/private create plus host membership; owner-scoped retry identity; host read/edit with revision conflict rejection; accepted field/time/location validation; feature gate; restricted-mode rejection; live RLS/private-field isolation. The prerequisite evidence and actual API are recorded below. Do not invent RPC names or write migrations in TASK-007.
 - Under the accepted sequence, blocking does not prevent disposable local tests; it does prevent hosted/live use. Later hosted enablement requires separately accepted/tested block precedence plus the remaining safety/deployment prerequisites.
 - Coordinator publishes reviewed contract/status to main before any implementation dispatch. Fresh implementation agent starts from latest origin/main only after these gates; TASK-005 is already active in its separate task; do not duplicate dispatch.
 
@@ -49,3 +49,10 @@ Run relevant `pnpm check`, `pnpm db:verify`, `pnpm test:auth:web` plus meaningfu
 
 ## Documentation / handoff
 Use agents/HANDOFF_TEMPLATE.md. Implementation agent supplies outcomes, tests, visual evidence, limitations, actual branch/pushed SHA and suggested shared updates; coordinator owns shared records/integration. Publish material blockers on main. Planning handoff: `agents/handoffs/TASK-007-CONTRACT.md`. Do not auto-dispatch later tasks.
+
+## Prerequisite completion and dispatch baseline — 2026-09-22
+TASK-005 reviewed tip `a59b4a6900e5bc50f47a0beb0ff7fdd6e79741cd` was integrated at verified main `aa9fb884397c4d2bc728a8532b1cb0d2737959f0`; its final documentation receipt is on current main `bd70a18263fd6d743094c30f023e27f0420202b5`. Fresh security review was clear. The TASK-005 handoff records two clean resets with 226 SQL assertions each, real HTTP/concurrency tests, full workspace checks and passed task-tip GitHub CI at https://github.com/ellamlnguyen-blip/Pals-App/actions/runs/35797256841. This satisfies TASK-007's backend prerequisite without implying hosted readiness.
+
+The committed API is migration `20260922000300_hangout_foundation.sql`. `create_hangout(p_request_id uuid, p_title text, p_starts_at timestamptz, p_public_place text, p_public_latitude double precision, p_public_longitude double precision, ...)` returns the ID. `edit_hangout(p_hangout_id uuid, p_expected_revision bigint,` corresponding required and optional fields`)` returns the new revision. Optional parameters include description, end, zone, private instructions, visibility, precision and eligibility; omit/clear optional private data deliberately on edit. Select public `hangouts` with `revision` and separately RLS-protected `hangout_private_locations.instructions`. No direct client DML. Preserve one request UUID and normalized payload through uncertain create retries; `40001` is a stale revision. Both RPCs require the default-disabled database feature gate, live ready same-campus access and READ COMMITTED. Other lifecycle/membership RPCs belong to later UI tasks. Read `supabase/README.md` and TASK-005 handoffs for the exact local gate procedure; never enable it in a migration/seed or hosted target.
+
+Coordinator publishes this dispatch record to main before the fresh TASK-007 agent starts from latest origin/main. The implementation agent owns only its branch, code, task interaction plan and handoff; coordinator owns shared state/queue/integration. User requested GPT-6 Sol medium.
