@@ -104,10 +104,10 @@ Before substantial UI work, read the installed `design-taste-frontend` (Leon's T
 
 ## Branch / Worktree Convention
 One bounded branch/worktree per task: `agent/TASK-###-short-name`.
-Avoid concurrent agents editing the same files whenever possible.
+Start each task branch from the latest `origin/main`, after checking task dependencies. `main` is the canonical integration branch and shared reference point; it contains completed, reviewed task work. Avoid concurrent agents editing the same files whenever possible.
 
 ## GitHub Publishing
-`origin` is the canonical GitHub repository. Each implementation task must commit its completed, in-scope work and handoff to its task branch, then push that branch to `origin` and verify that the remote ref points to the expected commit before reporting the task complete. Record the branch, pushed commit SHA, and push verification in the handoff. Do not push task work directly to the default branch or force-push shared history. If GitHub authentication or repository permission prevents the push, report the exact blocker and leave the task explicitly incomplete until it is pushed. Never request or place a personal access token in chat, source files, or shell arguments; use the user's local Git credential manager.
+`origin` is the canonical GitHub repository. Each implementation task commits its completed, in-scope work and handoff to its task branch, then pushes that branch to `origin` and verifies the remote SHA. The orchestrator reviews the handoff and implementation, then integrates accepted work into `main` and pushes it. Verify and record both task and `main` remote SHAs in the handoff before marking the task complete. Do not push task work directly to `main`, force-push, or rewrite shared history. If GitHub authentication, review, or repository permission prevents a push or integration, report the exact blocker and leave the task explicitly incomplete. Never request or place a personal access token in chat, source files, or shell arguments; use the user's local Git credential manager.
 
 ## ADR Policy
 Use ADRs for major dependencies/services, schema/domain changes, auth/authorization strategy, deployment topology, permissions/privacy changes, replacing core providers, or major product behavior.

@@ -2,7 +2,8 @@
 Date:
 Agent:
 Branch/worktree:
-Remote branch and pushed commit SHA:
+Task branch and pushed commit SHA:
+Integrated `main` commit SHA:
 
 ## Outcome
 ## Files Changed
@@ -14,4 +15,4 @@ Remote branch and pushed commit SHA:
 ## Documentation Updated
 ## Ready for Next Task?
 Yes / No — explain blockers.
-Remote verification: command/result, or reason push is blocked.
+Remote verification for both refs: command/result, or reason push/integration is blocked.

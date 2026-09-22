@@ -18,6 +18,6 @@ Product/architecture reason.
 ## Documentation Updates
 ## Handoff Requirements
 Use `agents/HANDOFF_TEMPLATE.md`.
-Push the task branch to `origin` after committing verified implementation and handoff. Verify the remote commit and record its SHA. A failed push leaves the task incomplete and must be recorded as a blocker; never force-push.
+Start from the latest `origin/main`. After committing verified implementation and handoff, push the task branch and verify its remote SHA. The orchestrator reviews and integrates accepted work into `main`, then verifies that remote SHA too. Record both refs and SHAs in the handoff. A failed push or integration leaves the task incomplete and must be recorded as a blocker; never force-push.
 ## Follow-ups
 Record unrelated work; do not expand scope.

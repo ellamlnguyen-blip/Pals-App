@@ -1,5 +1,8 @@
 # NOW
 
+## Shared Code Baseline
+`main` is the canonical integration branch. Start each new task branch from the latest `origin/main`. After task review, integrate accepted changes into `main` and verify both remote refs; see `AGENTS.md`.
+
 ## Current Milestone — Foundation
 
 Do these in order unless dependencies allow safe parallel work.
