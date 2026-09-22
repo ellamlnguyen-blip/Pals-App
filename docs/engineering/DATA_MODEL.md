@@ -51,3 +51,9 @@ Migration `20260921000100_identity_foundation.sql` implements universities, acco
 Profile `is_complete` derives presence of required draft fields; it is not evidence of real identity. TASK-003 adds actual private Storage object ownership validation and a live gate that requires the object still exist. Rich optional sections and map geography remain for their bounded tasks. Platform role is moderator/admin only, separate from all future Hangout roles. See `supabase/README.md` for grants and Accepted `ADR-0009` for the confirmed-email evidence policy.
 
 Migration `20260922000100_verified_onboarding.sql` installs the approved UNC allowlist, a trusted Auth-confirmation membership trigger, private photo bucket/policies, profile-photo ownership trigger, and caller-bound access state RPC. It reconciles existing confirmed accounts against current email evidence. Server-owned state remains non-writable by clients.
+
+## TASK-006 owner enrichment (ADR-0011)
+
+Migration `20260922000200_owner_profile_enrichment.sql` adds typed owner-only optional fields: interests/down-to-do (ordered unique arrays, up to ten trimmed 1–80 character entries), nullable favorite music/foods/weird fact (1–500 characters), Instagram handle (1–30 ASCII letters/digits/periods/underscores) and up to three exact question/answer prompt objects (120/500 characters). Blank inputs normalize in the app to null/empty arrays; direct writes must meet the same database shape/bounds/whitespace constraints. No arbitrary extensible JSON or new identity attributes.
+
+`additional_photo_paths` holds zero to four ordered distinct owned private objects, distinct from primary. A server-owned monotonically increasing `revision` supports compare-and-swap editor saves. Optional fields and extras do not participate in `is_complete`. Direct owner draft writes can still revoke readiness by clearing required data; the ready editor does not permit this.

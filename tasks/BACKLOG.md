@@ -1,7 +1,7 @@
 # Backlog
 ## Product Build
 - TASK-005 Hangout data and authorization foundation — contract in `active/TASK-005-hangout-foundation.md`; implementation gated on explicit ADR-0010 acceptance. Backend only.
-- TASK-006 owner profile enrichment/photos — contract in `active/TASK-006-profile-enrichment.md`; ADR-0011 accepted 2026-09-22; implementation authorized on `agent/TASK-006-profile-enrichment`. Independent of TASK-005; owner-only.
+- TASK-006 owner profile enrichment/photos — implementation reviewed and locally verified on `agent/TASK-006-profile-enrichment` at `2ac7ea9a52057ac14eb730544f219db37e444760`; final main publication verification pending. See active contract/handoff.
 - TASK-007 create/edit hangout
 - TASK-008 map discovery/detail/joining
 - TASK-009 calendar

@@ -2,6 +2,8 @@ import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { createRequire } from "node:module";
 import test from "node:test";
+import { profileChecks } from "./profile-http-checks.mjs";
+import { actionChecks } from "./profile-action-checks.mjs";
 
 // Deliberately local only. Never accept a hosted URL or privileged key.
 if (process.env.APP_ENV && process.env.APP_ENV !== "local")
@@ -207,7 +209,7 @@ test("real confirmation, SSR callback, RLS and private photo ownership", async (
       ).error,
       null,
     );
-    const path = `${a.id}/${crypto.randomUUID()}.png`;
+    let path = `${a.id}/${crypto.randomUUID()}.png`;
     assert.equal(
       (
         await owner.auth.storage
@@ -290,6 +292,8 @@ test("real confirmation, SSR callback, RLS and private photo ownership", async (
         200,
       );
     }
+    await profileChecks(owner, peer, a, sql, png);
+    path = (await actionChecks(owner, a, png)) ?? path;
     sql(`update public.accounts set status='suspended' where id='${a.id}'`);
     assert.equal((await owner.auth.rpc("get_access_state")).data, "restricted");
     assert.ok(

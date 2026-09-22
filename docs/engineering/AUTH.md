@@ -20,3 +20,7 @@ Photos use an immutable random object name under the user's UUID, with a 5 MB bu
 ## Configuration and limits
 
 See `LOCAL_SETUP.md`, `apps/web/.env.example`, and `docs/operations/HOSTED_ENVIRONMENT.md`. Hosted email delivery needs a configured SMTP provider for arbitrary UNC recipients. A local mail-catcher success is not hosted delivery evidence. No deployed staging frontend exists yet, so HTTPS staging callback validation remains pending deployment and SMTP. Password recovery, optional profile editing, peer visibility and account moderation UI are outside TASK-003.
+
+## Owner profile editor
+
+TASK-006 adds `/profile` from the Hangouts header avatar. Ready owners can edit required details, clear optional enrichment, replace primary, and add/replace/remove up to four extra private photos. University/email are read-only and the product explains current owner-only visibility. Optional data never gates readiness. Existing onboarding remains for incomplete owners. Live app access checks, signature validation, immutable upload paths and original private image metadata behavior remain unchanged. This local increment does not close TASK-003 hosted HTTPS callback or real UNC delivery acceptance.

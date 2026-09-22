@@ -1,6 +1,6 @@
 # TASK-006 — Owner profile enrichment and photos
 
-Status: Accepted for implementation; fresh implementation dispatch authorized
+Status: Implementation reviewed and locally verified; remote main integration verification pending
 Date: 2026-09-22
 
 ## Goal
@@ -31,14 +31,14 @@ Peer profiles/photos, people discovery, friendship, messaging, Hangout schema/fl
 
 ## Acceptance criteria
 - [x] ADR-0011 explicitly accepted and evidence recorded before implementation.
-- [ ] Required edits and optional round trips/clearing work; optional values never gate readiness. Existing required-field constraints, identity fields and primary ownership remain authoritative.
-- [ ] Primary replacement and 0–4 extra photos work, with ordered distinct owned references and database-enforced limits. Missing/foreign/duplicate/fifth-extra references and client overwrite are denied.
-- [ ] Failed save/upload/cleanup and competing replacement/removal cannot delete a currently referenced photo, silently restore removed references, expose another user's data or bypass readiness. Detached private leftovers are honestly reported/retryable.
-- [ ] Owner-only profile and verified-owner Storage policies remain enforced through direct API paths, not just UI. App pages/actions/photo routes recheck live access and never emit signed/public URLs or accept arbitrary photo paths.
-- [ ] Anonymous, other-owner, operator, unconfirmed/changed-email, inactive-campus, suspended/banned and stale-session access matrix passes. Incomplete users retain onboarding; loss of primary or required completeness still revokes ready access.
-- [ ] Existing auth/onboarding/map regressions pass alongside new database/HTTP permission and meaningful validation tests. Two clean local resets reproduce migrations; schema lint and relevant repository checks pass.
-- [ ] Rendered desktop/mobile and keyboard flows verified for edit, save, cancellation/navigation, photo management, optional empty, loading and error recovery states; record actual evidence and unverified cases.
-- [ ] Fresh security review resolves findings; coordinator reviews implementation and handoff. Docs/state/queue/changelog synchronized; task branch and integrated main pushed and remote SHAs verified before task completion.
+- [x] Required edits and optional round trips/clearing work; optional values never gate readiness. Existing required-field constraints, identity fields and primary ownership remain authoritative.
+- [x] Primary replacement and 0–4 extra photos work, with ordered distinct owned references and database-enforced limits. Missing/foreign/duplicate/fifth-extra references and client overwrite are denied.
+- [x] Failed save/upload/cleanup and competing replacement/removal cannot delete a currently referenced photo, silently restore removed references, expose another user's data or bypass readiness. Detached private leftovers are honestly reported/retryable.
+- [x] Owner-only profile and verified-owner Storage policies remain enforced through direct API paths, not just UI. App pages/actions/photo routes recheck live access and never emit signed/public URLs or accept arbitrary photo paths.
+- [x] Anonymous, other-owner, operator, unconfirmed/changed-email, inactive-campus, suspended/banned and stale-session access matrix passes. Incomplete users retain onboarding; loss of primary or required completeness still revokes ready access.
+- [x] Existing auth/onboarding/map regressions pass alongside new database/HTTP permission and meaningful validation tests. Two clean local resets reproduce migrations; schema lint and relevant repository checks pass.
+- [x] Rendered desktop/mobile and keyboard flows verified for edit, save, cancellation/navigation, photo management, optional empty, loading and error recovery states; record actual evidence and unverified cases.
+- [ ] Fresh security review and coordinator implementation/handoff review are complete; shared records synchronized. Task branch is pushed/verified. Complete this final criterion only after integrated main is pushed and its SHA recorded.
 
 ## Tests / verification
 Use `pnpm check`, `pnpm db:verify`, `pnpm test:auth:web` and bounded new profile tests against disposable local accounts. Exercise actual anon/authenticated SQL roles, PostgREST, Storage, web actions/routes and concurrent reference/deletion mutations. Test no identity/role escalation, direct malformed optional data, no peer reads/embeds, referenced-photo delete denial, stale editor conflicts and failure cleanup. A successful privileged SQL setup is not RLS evidence. No hosted fixtures or hosted delivery claims.

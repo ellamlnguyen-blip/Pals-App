@@ -1,5 +1,9 @@
 import { execFileSync, spawn } from "node:child_process";
 import { once } from "node:events";
+import { mkdtempSync, writeFileSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 
 // CI/local helper: no credentials written to disk or printed. Local target only.
 const cli = process.env.SUPABASE_CLI ?? "supabase";
@@ -11,6 +15,9 @@ const status = JSON.parse(
 );
 if (status.API_URL !== "http://127.0.0.1:54321")
   throw new Error("Local Supabase required");
+const faultDir = mkdtempSync(join(tmpdir(), "pals-profile-test-"));
+const faultFile = join(faultDir, "faults.json");
+writeFileSync(faultFile, "[]", { mode: 0o600 });
 const env = {
   ...process.env,
   APP_ENV: "local",
@@ -19,6 +26,8 @@ const env = {
   SUPABASE_PUBLISHABLE_KEY: status.PUBLISHABLE_KEY ?? status.ANON_KEY,
   NEXT_TELEMETRY_DISABLED: "1",
   WEB_TEST_ORIGIN: "http://127.0.0.1:3000",
+  PALS_PROFILE_FAULT_FILE: faultFile,
+  NODE_OPTIONS: `${process.env.NODE_OPTIONS ?? ""} --import ${JSON.stringify(fileURLToPath(new URL("./profile-fault-injection.mjs", import.meta.url)))}`,
 };
 const server = spawn("pnpm", ["dev:web"], {
   env,
@@ -41,11 +50,17 @@ try {
   if (!ready) throw new Error("Local Next server did not become ready");
   const tests = spawn(
     process.execPath,
-    ["--test", "supabase/tests/auth-storage.integration.mjs"],
+    [
+      "--test",
+      "--test-concurrency=1",
+      "supabase/tests/auth-storage.integration.mjs",
+      "supabase/tests/profile-concurrency.integration.mjs",
+    ],
     { env, stdio: "inherit" },
   );
   const [code] = await once(tests, "exit");
   process.exitCode = code ?? 1;
 } finally {
   process.kill(-server.pid, "SIGTERM");
+  rmSync(faultDir, { recursive: true, force: true });
 }

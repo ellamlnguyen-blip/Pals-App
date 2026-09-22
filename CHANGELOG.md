@@ -2,6 +2,13 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-22 — TASK-006 owner profile enrichment and photos
+
+- Added the owner profile editor from the avatar menu, with required-detail edits and optional interests, activities, favorites, fact, prompts and Instagram handle.
+- Added primary replacement and up to four additional private photos, database-enforced ownership/limits, concurrent assignment/deletion protection and stale-editor rejection.
+- Added honest failure recovery and protected cleanup for upload/save response loss, responsive forms, keyboard focus and visible per-photo feedback.
+- Verified local workspace, database permissions, real HTTP/actions/failures/concurrency and rendered desktop/mobile flows. No peer access, hosted migration or deployment.
+
 ## 2026-09-22 — TASK-004 Hangouts map shell
 
 - Replaced the authenticated readiness screen with a responsive Mapbox shell while retaining the live verified/profile-complete access gate.
