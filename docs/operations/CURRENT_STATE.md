@@ -33,3 +33,6 @@ Responsive map shell on `agent/TASK-004-map`: UNC viewport, pan/zoom, keyboard-a
 
 ## Shared task reference
 `main` contains reviewed app work and durable records for active/blocked tasks. The coordinator publishes contracts/status before dispatch, updates material milestones/blockers, and integrates accepted task work with its handoff before completion. Shared GitHub authentication is configured through GitHub CLI and macOS Keychain; no credentials are stored in the repository.
+
+## TASK-006 planning
+Owner profile enrichment/photos has a bounded contract in `tasks/active/TASK-006-profile-enrichment.md` and Proposed ADR-0011. Implementation has not started; explicit ADR acceptance is required. It can proceed independently of TASK-005 using the existing identity/photo foundation. Owner-only access, TASK-003 hosted gaps and the ADR-0010 gate remain unchanged. No hosted operations are authorized. See `agents/handoffs/TASK-006-CONTRACT.md` for publication evidence.
