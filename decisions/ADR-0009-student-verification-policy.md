@@ -1,14 +1,22 @@
 # ADR-0009 — Student verification evidence
-Status: Proposed
-Date: 2026-09-21
+Status: Accepted
+Date: 2026-09-22
 
-## Decision requiring explicit acceptance
-The product requires verified UNC students. Confirmed university email does not establish current enrollment. Choose whether MVP campus verification requires confirmed email plus a completed student profile, or separately checked enrollment evidence. Approve the exact deliverable email-domain allowlist and what the badge communicates alongside that choice. Research: `docs/research/UNC_EMAIL_VERIFICATION.md`.
+## Decision
+The user explicitly selected Option A: MVP access requires confirmed approved UNC email plus a completed required profile. No separate enrollment evidence workflow is required for MVP. On 2026-09-22 the user approved these exact domains:
 
-## Pending recommendation
-Keep email confirmation (Supabase Auth), campus verification (server-controlled membership), structural profile completeness, and account suspension independent. TASK-002 implements these separations already required by its contract but does not automate campus verification or populate a domain allowlist. Local tests set synthetic membership explicitly as the database owner.
+- `live.unc.edu`
+- `unc.edu`
+- `ad.unc.edu`
+- `business.unc.edu`
+- `kenan-flagler.unc.edu`
 
-## Consequences while pending
-No production eligibility policy, verified badge semantics, membership-granting endpoint, or enrollment evidence storage is implemented. `allowed_email_domains` is empty. The foundation helper requires both confirmed email and explicit verified membership, and rejects suspended/banned accounts and inactive campuses. Completing a profile never grants verification.
+Compare normalized domains by equality, never arbitrary subdomains or suffix matches. Every user must actually confirm email ownership. Approval of a domain does not assert that every address receives mail. Research: `docs/research/UNC_EMAIL_VERIFICATION.md`.
 
-No decision in this proposal has been accepted by the implementation agent.
+## Implementation
+Keep email confirmation (Supabase Auth), campus verification (server-controlled membership), profile completeness, and account suspension independent. TASK-003 may implement trusted membership assignment from current confirmed Auth email and the approved server-controlled allowlist. Clients cannot supply trusted confirmation state, verification or platform roles. Email changes must invalidate old evidence. Suspended/banned accounts and inactive campuses fail closed. Required profile completion includes a permitted primary photo.
+
+## Consequences
+Verification means confirmed approved UNC email, not independently proven current enrollment. User-facing verification wording must reflect this. Some approved domains may also be used by non-students; this is the accepted MVP email-based model. No enrollment document collection/review is introduced. Profile completion by itself never grants campus verification.
+
+This record reflects the user's explicit acceptance of Option A and the exact allowlist.
