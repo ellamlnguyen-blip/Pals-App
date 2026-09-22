@@ -1,6 +1,6 @@
 # TASK-007 — Create/edit Hangouts
 
-Status: Contract prepared; implementation blocked on ADR-0010 acceptance and completed TASK-005 backend
+Status: Contract approved; ADR-0010 explicitly accepted; awaiting separately completed TASK-005 backend
 Date: 2026-09-22
 Planning branch: `agent/TASK-007-planning`
 Implementation branch after prerequisites: `agent/TASK-007-create-edit-hangouts`
@@ -13,10 +13,10 @@ TASK-004 currently opens an explicitly unsaved Create shell over mock Hangouts. 
 
 ## Dependencies / stop gates
 - TASK-001/002 foundation, TASK-003 local identity/readiness, TASK-004 map shell and TASK-006 owner profile are integrated on main. TASK-003 hosted HTTPS callback/real UNC delivery remains independently open.
-- ADR-0010 is Proposed. Its revised numbered decisions require explicit acceptance, including the local-only safety sequence and concrete schema/write semantics. No TASK-006 acceptance transfers to it.
+- The user explicitly accepted revised ADR-0010 on 2026-09-22 (“1. yes / 2. yes”), including the local-only safety sequence and concrete schema/write semantics. Read its acceptance/reconciliation evidence; the existing TASK-005 implementation must use this latest revision.
 - TASK-005 must separately implement, test, pass fresh security review, integrate and remote-verify the accepted backend. Required interface: caller-derived host/campus; atomic public/private create plus host membership; owner-scoped retry identity; host read/edit with revision conflict rejection; accepted field/time/location validation; feature gate; restricted-mode rejection; live RLS/private-field isolation. Coordinator records its actual operations/types and verified SHA here before dispatch. Do not invent RPC names or write migrations in TASK-007.
-- Under the proposed sequence, blocking does not prevent disposable local tests; it does prevent hosted/live use. If this sequence is not accepted, implementation stays blocked. Later hosted enablement requires separately accepted/tested block precedence plus the remaining safety/deployment prerequisites.
-- Coordinator publishes reviewed contract/status to main before any implementation dispatch. Fresh implementation agent starts from latest origin/main only after these gates; no automatic TASK-005 dispatch in this planning assignment.
+- Under the accepted sequence, blocking does not prevent disposable local tests; it does prevent hosted/live use. Later hosted enablement requires separately accepted/tested block precedence plus the remaining safety/deployment prerequisites.
+- Coordinator publishes reviewed contract/status to main before any implementation dispatch. Fresh implementation agent starts from latest origin/main only after these gates; TASK-005 is already active in its separate task; do not duplicate dispatch.
 
 ## Required context
 AGENTS.md; this contract; NOW/BACKLOG; accepted ADR-0010 and actual TASK-005 contract/handoff/API evidence; TASK-003/004/006 handoffs; MVP/PRINCIPLES; ARCHITECTURE, DATA_MODEL, AUTH, AUTHORIZATION, SECURITY_AND_SAFETY, LOCATION_AND_MAPS, TESTING; UX USER_FLOWS, INFORMATION_ARCHITECTURE, SCREEN_INVENTORY, UX_PRINCIPLES and DESIGN_DIRECTION; accepted ADRs 0002–0009; existing access/actions/config, map shell, shared tokens and validation.

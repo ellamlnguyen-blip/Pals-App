@@ -1,10 +1,10 @@
 # TASK-005 — Hangout data and authorization foundation
 
-Status: Contract prepared; implementation blocked on explicit ADR-0010 acceptance
+Status: In progress — ADR-0010 explicitly accepted; implementation authorized
 Date: 2026-09-22
 
 ## Goal
-Establish a locally verified backend foundation for Hangout records, ownership, participation and private meeting details. This contract authorizes planning only until its decision gate is resolved; it does not authorize migrations now.
+Establish a locally verified backend foundation for Hangout records, ownership, participation and private meeting details. The user explicitly approved ADR-0010 on 2026-09-22. Local backend implementation is authorized under the accepted rules.
 
 ## Why
 Hangouts are the core coordination object. Their database permissions must protect campus boundaries and private meeting places before create/discovery/join interfaces consume them.
@@ -13,8 +13,9 @@ Hangouts are the core coordination object. Their database permissions must prote
 - TASK-001 tooling and TASK-002 identity/RLS foundation are complete.
 - TASK-003 local verified-membership and live profile/photo readiness behavior is available. Its deployed HTTPS callback and hosted delivery to real UNC addresses remain a separate open acceptance gap; TASK-005 cannot close or imply completion of it.
 - TASK-004 map shell is complete but uses synthetic fixtures; do not connect it to this backend in TASK-005.
-- Read Proposed `decisions/ADR-0010-hangout-foundation.md`. Obtain and record explicit user acceptance of its resolved schema/authorization choices before any implementation or migration. Contract approval alone is not ADR acceptance. Unresolved material choices remain blockers, never implementation-agent defaults.
-- After acceptance, dispatch a fresh bounded implementation agent from latest `origin/main` on `agent/TASK-005-hangout-foundation`. Review its handoff before downstream work. Use a fresh security reviewer where practical.
+- Read Accepted `decisions/ADR-0010-hangout-foundation.md`, including both acceptance milestones and the latest TASK-007-approved current-ready roster, field/time, gate and atomic-write rules.
+- TASK-006 is complete under Accepted ADR-0011. Preserve owner-only enrichment, profile revision/CAS and Storage assignment/deletion locks.
+- The existing bounded implementation agent owns `agent/TASK-005-hangout-foundation`; reconcile its contract with latest `origin/main` without overwriting its work. Do not duplicate dispatch. Review its handoff and fresh security review before downstream work.
 
 ## Required Context
 - `AGENTS.md`, this contract, `tasks/NOW.md`, `tasks/BACKLOG.md`
@@ -22,16 +23,16 @@ Hangouts are the core coordination object. Their database permissions must prote
 - `docs/product/MVP.md`, `docs/product/PRINCIPLES.md`
 - `docs/engineering/ARCHITECTURE.md`, `DATA_MODEL.md`, `AUTHORIZATION.md`, `SECURITY_AND_SAFETY.md`, `LOCATION_AND_MAPS.md`, `TESTING.md`
 - `docs/ux/USER_FLOWS.md`
-- Accepted ADR-0001 through ADR-0009 and explicitly accepted successor to Proposed ADR-0010
+- Accepted ADR-0001 through ADR-0009 and Accepted ADR-0010/ADR-0011, TASK-006 handoff and review
 - Existing migrations, live readiness helpers, grants, SQL tests and Supabase setup instructions
 
 ## Allowed Scope after decision acceptance
 - Committed local migrations for core Hangout, participant and separate private-location records, with constraints and RLS; server-derived host/campus identity and timestamps.
-- Proposed core fields: ID, university ID, immutable host ID, title, optional description, start time, optional end time, lifecycle status, joining state, campus visibility, public place label/coordinates/zone/precision, created/updated timestamps. Exact types, bounds and lifecycle follow the accepted ADR.
-- Proposed lifecycle: published → cancelled; joining open/closed independently; time passing does not assert attendance or successful completion. No persisted drafts or restore operation in this increment unless explicitly accepted in the ADR.
-- Proposed membership: unique Hangout/account record with joined/left/removed state and transition timestamps; host ownership separate from ordinary participation. Resolve co-host representation and host membership invariants in the ADR.
+- Core fields: ID, university ID, immutable host ID, title, optional description, start time, optional end time, lifecycle status, joining state, campus visibility, public place label/coordinates/zone/precision, created/updated timestamps. Exact types, bounds and lifecycle follow the accepted ADR.
+- Lifecycle: published → cancelled; joining open/closed independently; time passing does not assert attendance or successful completion. No persisted drafts or restore operation in this increment unless explicitly accepted in the ADR.
+- Membership: unique Hangout/account record with joined/left/removed state and transition timestamps; host ownership separate from ordinary participation. Host is a joined participant; no co-host privileges/assignment in this increment.
 - Separate optional private exact meeting details, protected independently from public approximate location. Public means permitted campus readers, never anonymous internet access.
-- Local feature gate (default disabled), atomic public/private create/edit, server revision conflicts and owner-scoped creation retry identity as concretely proposed in ADR-0010; these remain blocked until explicit acceptance.
+- Local feature gate (default disabled), atomic public/private create/edit, server revision conflicts and owner-scoped creation retry identity as explicitly accepted in the revised ADR-0010; reconcile the active implementation with this revision before review/integration.
 - Minimal database operations needed to enforce/test accepted transitions atomically. SQL/RPC primitives may be tested directly; no application create/edit/join workflow or client wiring.
 - Minimal shared domain types/validation/data-access contracts only where needed for this backend boundary; no unused future-feature framework.
 - Campus-only, unrestricted Hangouts in this increment. Reject friends-only, invite-only and eligibility-restricted creation/updates through every write path. Do not expose these modes until friendship, invitations and deliberately supplied profile attributes support accepted, tested access rules. No permissive fallback to campus visibility.
@@ -62,3 +63,6 @@ Implementation updates relevant data-model/authorization docs, current state, ch
 
 ## Follow-ups
 TASK-007 owns application create/edit; TASK-008 discovery/detail/join; TASK-010 co-host management; TASK-012 friendship; TASK-016 blocking/reporting; TASK-017 audited moderation; TASK-018 attendance. Invitation and eligibility enforcement need separate bounded contracts/data dependencies before restricted Hangouts can ship. Do not auto-dispatch these tasks.
+
+## Revised acceptance milestone — TASK-007 prerequisite
+The user explicitly accepted the revised ADR-0010 linked from TASK-007 planning commit `f049184` and approved publication. The latest rules supersede the concurrent earlier ADR constraints; the existing TASK-005 coordinator/implementation agent retains ownership. TASK-005 validates supplied timestamptz instants and accepted database time bounds; America/New_York input/display and ambiguous/nonexistent local-time handling belong to the later TASK-007 UI, not backend UI work. Required tests include feature-gate-off denial on every public operation, current-ready roster filtering without peer profile exposure, field/time bounds, atomic create/edit rollback, owner-scoped retry identities and stale revisions. No duplicate dispatch, TASK-007 migration work or hosted operation.

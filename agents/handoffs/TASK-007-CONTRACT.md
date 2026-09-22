@@ -3,8 +3,8 @@ Date: 2026-09-22
 Agent: coordinator; fresh read-only scope/security reviewer `task007_contract_review`
 Branch/worktree: `agent/TASK-007-planning`, `/Users/ellanguyen/.codex/worktrees/3556/Pals App`
 Starting refreshed canonical main: `d4894e8d64db6e143a56cd51ef41010010beac80`
-Task/main publication: blocked by automatic approval review; no push or integration occurred. Latest fetched main remains `d4894e8d64db6e143a56cd51ef41010010beac80`.
-Status: planning prepared; TASK-007 implementation blocked.
+Task/main publication: user explicitly approved publication; acceptance/reconciliation update prepared against main `895923b`. Verified publication receipt follows push/integration.
+Status: planning reviewed and ADR accepted; TASK-007 awaits separately completed TASK-005.
 
 ## Outcome / files
 Prepared bounded create/edit contract, NOW/BACKLOG/CURRENT_STATE blocker records, this handoff and a concrete revision of Proposed ADR-0010. TASK-005 contract now explicitly names the prerequisite feature gate and atomic create/edit/retry/revision primitives. No application, migration, runtime or hosted changes.
@@ -21,3 +21,8 @@ Documentation whitespace/source-path checks and `git diff --check` passed. Fresh
 
 ## Publication blocker
 Automatic approval review rejected the branch commit/push command before execution because external publication authorization was not accepted as trusted evidence. Read-only GitHub verification confirmed signed-in user `ellamlnguyen-blip`, repository `ellamlnguyen-blip/Pals-App`, public visibility and ADMIN permission. A retry with this evidence was also rejected, explicitly requiring direct user approval to export the planning documents. No push/integration was performed and no alternate publication method was attempted. Reviewed files are saved locally; explicit approval to publish these seven documentation files to the canonical public repository is required. This publication blocker is independent of ADR-0010 acceptance and missing TASK-005 implementation.
+
+## Explicit approval and concurrent TASK-005 reconciliation
+The user replied “1. yes / 2. yes” to canonical public repository publication/main integration and revised ADR-0010 acceptance. This resolves the historical approval blockers above. Refresh found TASK-005 already dispatched under earlier main `895923b`; coordinator notified that task and preserved its ownership. The latest accepted revision supersedes conflicting earlier roster/field/time rules and adds explicit database gating and retry/revision requirements. No duplicate implementation agent or local runtime was started here. TASK-007 remains blocked on reviewed/integrated backend; no UI/migration/hosted changes in this documentation milestone.
+
+Fresh read-only reconciliation reviewer confirmed the numbered accepted policy matches `f049184`, earlier approval history is preserved and backend ownership is unchanged. Its stale roster/dispatch-summary findings were corrected before publication. TASK-005 coordinator confirmed no scope objection and that the draft migration had not been applied or committed; it awaits the published main SHA to resume conflicting work.
