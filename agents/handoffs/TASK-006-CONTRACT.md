@@ -29,3 +29,6 @@ No. Reviewed planning records are published and integrated on main; obtain expli
 
 ## Acceptance milestone — 2026-09-22
 The user explicitly replied “i accept” to the request to accept ADR-0011 as written. The schema/field/photo lifecycle decision gate is resolved; historical planning-blocker statements above describe the pre-acceptance state. Coordinator recorded the decision and authorized fresh implementation on `agent/TASK-006-profile-enrichment` after this documentation update is integrated and verified on main. No TASK-005 or hosted operations are authorized. Implementation, security review, runtime/rendered verification and final integration remain outstanding.
+
+## Implementation dispatch
+Acceptance documentation branch `agent/TASK-006-acceptance` was pushed at `acc36417cbd24d515a2f17fa9c4037645dcbab22` and integrated on main `fedf42c6a34fbf520f8823c675f99e4aa2ab42c3`; both were verified with `git ls-remote`. Fresh agent `task006_implementation` was dispatched on `agent/TASK-006-profile-enrichment` from that main baseline. Implementation remains incomplete with no pushed implementation SHA yet. Coordinator manages runtime readiness and shared records separately; review and final integration remain mandatory.
