@@ -109,6 +109,13 @@ Start each task branch from the latest `origin/main`, after checking task depend
 ## GitHub Publishing
 `origin` is the canonical GitHub repository. Each implementation task commits its completed, in-scope work and handoff to its task branch, then pushes that branch to `origin` and verifies the remote SHA. The orchestrator reviews the handoff and implementation, then integrates accepted work into `main` and pushes it. Verify and record both task and `main` remote SHAs in the handoff before marking the task complete. Do not push task work directly to `main`, force-push, or rewrite shared history. If GitHub authentication, review, or repository permission prevents a push or integration, report the exact blocker and leave the task explicitly incomplete. Never request or place a personal access token in chat, source files, or shell arguments; use the user's local Git credential manager.
 
+## Main as the Whole-App Reference
+`main` must contain the durable record of every task, including work that is active, blocked or not yet accepted. The coordinator publishes each bounded contract and its NOW/BACKLOG entry to `main` before implementation dispatch. At meaningful milestones, blockers, scope changes and handoff, publish a reviewed documentation update with task status, branch, latest verified pushed SHA, outcome, evidence and remaining work. Keep unfinished code on its task branch; its status must still be visible from `main`. Record outcomes, not every command or keystroke.
+
+After review, integrate accepted code together with its handoff and relevant CURRENT_STATE/CHANGELOG/queue updates into `main`, push and verify the remote SHA. A task-branch push alone does not finish the workflow. If review or integration is blocked, record the reason on `main` where possible and leave the task incomplete. Declined or abandoned work also gets a short outcome and branch reference. Publishing an ADR as Proposed does not accept it.
+
+The coordinator owns these shared records to avoid concurrent queue edits. Use a bounded documentation branch for status-only updates when the implementation branch contains unreviewed code. Do not require the user to request routine authorized publication/integration separately for every task. At each new task, read the latest `origin/main` records before proceeding.
+
 ## ADR Policy
 Use ADRs for major dependencies/services, schema/domain changes, auth/authorization strategy, deployment topology, permissions/privacy changes, replacing core providers, or major product behavior.
 
