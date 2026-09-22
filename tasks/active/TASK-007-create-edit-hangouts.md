@@ -1,6 +1,6 @@
 # TASK-007 — Create/edit Hangouts
 
-Status: Ready for bounded implementation — ADR-0010 accepted; TASK-005 integrated and verified
+Status: In progress — fresh local-only UI implementation dispatched after verified TASK-005
 Date: 2026-09-22
 Planning branch: `agent/TASK-007-planning`
 Implementation branch: `agent/TASK-007-create-edit-hangouts`
@@ -56,3 +56,6 @@ TASK-005 reviewed tip `a59b4a6900e5bc50f47a0beb0ff7fdd6e79741cd` was integrated 
 The committed API is migration `20260922000300_hangout_foundation.sql`. `create_hangout(p_request_id uuid, p_title text, p_starts_at timestamptz, p_public_place text, p_public_latitude double precision, p_public_longitude double precision, ...)` returns the ID. `edit_hangout(p_hangout_id uuid, p_expected_revision bigint,` corresponding required and optional fields`)` returns the new revision. Optional parameters include description, end, zone, private instructions, visibility, precision and eligibility; omit/clear optional private data deliberately on edit. Select public `hangouts` with `revision` and separately RLS-protected `hangout_private_locations.instructions`. No direct client DML. Preserve one request UUID and normalized payload through uncertain create retries; `40001` is a stale revision. Both RPCs require the default-disabled database feature gate, live ready same-campus access and READ COMMITTED. Other lifecycle/membership RPCs belong to later UI tasks. Read `supabase/README.md` and TASK-005 handoffs for the exact local gate procedure; never enable it in a migration/seed or hosted target.
 
 Coordinator publishes this dispatch record to main before the fresh TASK-007 agent starts from latest origin/main. The implementation agent owns only its branch, code, task interaction plan and handoff; coordinator owns shared state/queue/integration. User requested GPT-6 Sol medium.
+
+## Implementation dispatch
+The reviewed prerequisite/actual API record was published on main `bebef7045175dfd5d0513c5f3192c2180e2ffa3a` before dispatch. Fresh GPT-6 Sol / medium task agent `task007_impl` started in `/private/tmp/pals-task-007-create-edit` on `agent/TASK-007-create-edit-hangouts` from that exact baseline. It owns bounded UI/tests/interaction plan/handoff; the coordinator owns shared status, review and integration. No implementation SHA exists yet. Local-only safety and hosted blockers remain unchanged.
