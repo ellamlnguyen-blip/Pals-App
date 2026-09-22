@@ -3,9 +3,9 @@ Date: 2026-09-22
 Agent: fresh TASK-006 implementation agent; independent security and coordinator UI review
 Branch/worktree: `agent/TASK-006-profile-enrichment`, `/Users/ellanguyen/.codex/worktrees/107c/Pals App`
 Task implementation + handoff pushed commit SHA: `588279402b400701ccb9eaf6502b1403cb0589c9` (verified against origin before this documentation-only verification update).
-Integrated `main` commit SHA: pending coordinator integration; implementation agent does not merge main.
+Verified implementation integration `main` SHA: `870cf449032787dc4ec9dfe22a71aa947fe669af` (subsequent documentation-only completion receipt follows this immutable milestone).
 Main status-record path: `tasks/active/TASK-006-profile-enrichment.md`; accepted contract baseline `fedf42c6a34fbf520f8823c675f99e4aa2ab42c3`; coordinator dispatch status `baac697`.
-Outstanding integration step: coordinator accepted implementation and handoff; shared records synchronized. Verify published main and record its SHA before completion.
+Outstanding review/integration blockers: none for TASK-006. Complete; separate hosted/peer/TASK-005 limitations below remain.
 
 ## Outcome
 Implemented accepted ADR-0011 locally: owner profile view/edit from avatar, optional enrichment, required-field edits, primary replacement and zero-to-four extra private photos. No TASK-005 work, peer access, hosted migration, Vercel change or deployment. Existing verified-owner Storage versus active-owner draft distinctions remain intact. TASK-003 hosted HTTPS callback and actual UNC delivery remain independently incomplete.
@@ -38,13 +38,13 @@ Read required contracts/specs, accepted ADRs and Leon Taste; inspected live usep
 ## Known Limitations
 Owner-only access; no peer profile/photos, social features, new identity attributes, reorder/promotion UI or metadata processing. Originals keep private metadata. Five displayed references are not an object quota. Deadlock/serialization/transport failures fail closed and may need reload/retry. Cleanup is bounded and manual retry may be needed for old private leftovers. Required fields can still be made incomplete by existing authorized direct draft writes, which revokes ready access as designed.
 
-Local synthetic visual account and its Storage photos were removed after verification; no real student data was used. Temporary browser tabs closed; web test helper stops its server. Coordinator owns local Supabase/Lima shutdown. Nothing was applied to hosted Supabase.
+Local synthetic visual account and its Storage photos were removed after verification; no real student data was used. Temporary browser tabs closed; web test helper stops its server. Coordinator stopped local Supabase and Lima after verification. Nothing was applied to hosted Supabase.
 
 ## Documentation Updated
 AUTH, AUTHORIZATION, DATA_MODEL, TESTING, LOCAL_SETUP, Supabase test notes and TASK-006 interaction plan. Coordinator owns CURRENT_STATE/CHANGELOG/NOW/BACKLOG/status updates and main integration. Suggested record: owner enrichment/photo editing implemented and locally verified under accepted ADR-0011; preserve TASK-003 hosted readiness gap and TASK-005 Proposed gate.
 
 ## Ready for Next Task?
-No automatic dispatch. Ready for coordinator final acceptance/integration when final checks and task publication below are verified. Task is not complete until integrated main is pushed and its remote SHA recorded.
+TASK-006 complete; no automatic next-task dispatch. Review the relevant contract and independent decision/dependency gates before any further implementation.
 
 ## Final verification before publication
 Final `pnpm check` and serialized `pnpm test:auth:web` both passed after the final upload-response-loss cleanup and focus fixes. Upload-after-commit transport loss was tested with both successful cleanup (no object-count increase) and failed cleanup (honest retry flag, successful retry). Final `git diff --check` passed. Two clean database resets/112 assertions and schema lint already passed with the unchanged final migration.
@@ -54,3 +54,8 @@ Final `pnpm check` and serialized `pnpm test:auth:web` both passed after the fin
 
 ## Coordinator acceptance
 Coordinator reviewed the final task tip, scoped 30-file diff, failure/concurrency tests, handoff and fresh security re-review; independently verified task remote SHA with `git ls-remote`. Independent rendered evidence is in TASK-006-REVIEW. Accepted the bounded implementation for integration, preserving owner-only access and all separate hosted/peer/TASK-005 gates. `git diff --check` passed; no unrelated code or dependency changes found. Final shared records accompany the integration merge. GitHub CI is running; local passes are not a GitHub CI success claim.
+
+## Verified integration and completion
+Coordinator integrated reviewed task tip `2ac7ea9a52057ac14eb730544f219db37e444760` together with shared state/queue/changelog records into main `870cf449032787dc4ec9dfe22a71aa947fe669af`. Both remote values were independently confirmed with `git ls-remote origin refs/heads/main refs/heads/agent/TASK-006-profile-enrichment` after successful pushes. The canonical clean local main checkout was fast-forwarded to the integrated implementation. This subsequent documentation receipt marks the task complete only after that verification.
+
+Task-tip [GitHub CI](https://github.com/ellamlnguyen-blip/Pals-App/actions/runs/35794111143) completed successfully with validate and database jobs; queried head SHA exactly matches `2ac7ea9a52057ac14eb730544f219db37e444760`. The database job includes clean resets/permissions/lint and real auth/profile/action/failure/concurrency tests. This supersedes earlier CI-running and integration-pending statements. CI emitted nonblocking action-runtime/runner migration notices; separate maintenance follow-up is in BACKLOG. No hosted application or Supabase migration was performed. Local synthetic visual data was removed, web processes stopped, and local Supabase/Lima cleanly stopped.

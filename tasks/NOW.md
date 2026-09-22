@@ -9,14 +9,13 @@ Every active task must have its contract/status recorded on `main` before dispat
 
 Do these in order unless dependencies allow safe parallel work.
 
-Completed: TASK-001, TASK-002 and TASK-004. See `DONE.md` and their handoffs.
+Completed: TASK-001, TASK-002, TASK-004 and TASK-006. See `DONE.md` and their handoffs.
 
 1. `active/TASK-003-auth-onboarding.md` — implemented and locally verified; independent security review clear, anonymous design review plus authenticated implementer visual check passed. Accepted ADR-0009 is implemented. Deployed HTTPS callback and hosted email delivery remain pending deployment/SMTP. Handoff: `agents/handoffs/TASK-003.md`.
 2. `active/TASK-004-map-shell.md` — complete on `agent/TASK-004-map`, including final real Mapbox basemap and authenticated desktop/phone interaction checks. Token is configured only in ignored local environment; no production deployment. Handoff: `agents/handoffs/TASK-004.md`. No live Hangout backend is connected.
 
 3. `active/TASK-005-hangout-foundation.md` — backend-only contract prepared. Implementation is blocked on explicit acceptance of Proposed `decisions/ADR-0010-hangout-foundation.md` and resolution of its material authorization/schema questions. No migrations, UI or hosted changes authorized by this planning step. Restricted visibility/eligibility modes must fail closed until their data and access rules exist and are tested. Planning handoff: `agents/handoffs/TASK-005-CONTRACT.md`. Do not auto-dispatch implementation.
 
-4. `active/TASK-006-profile-enrichment.md` — implementation reviewed under Accepted ADR-0011. Task branch `agent/TASK-006-profile-enrichment` verified at `2ac7ea9a52057ac14eb730544f219db37e444760`. Final local workspace, 112×2 SQL, HTTP/action/failure/concurrency and desktop/mobile checks passed. Main integration verification remains the final completion step. Handoffs: `agents/handoffs/TASK-006.md`, `TASK-006-REVIEW.md`. Independent of TASK-005; no hosted operations.
 
 Parallelization after TASK-001:
 - Supabase foundation

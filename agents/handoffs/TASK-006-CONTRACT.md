@@ -7,7 +7,7 @@ Starting verified origin/main: `49ea252d27ed4780097d99a0c9327cccab5ca6ab`
 Task branch and pushed planning commit SHA: `2fa2d17e767a5379496308d6940b8992084e21a0`
 Integrated planning main commit SHA: `71699ee6be9e0ed00b0767268d6f46d7e2075bc5`
 Main status-record path: tasks/NOW.md and docs/operations/CURRENT_STATE.md
-Outstanding implementation blocker: none; ADR-0011 accepted and implementation reviewed. Final main publication verification tracked in TASK-006.md.
+Outstanding implementation blocker: none; TASK-006 complete. Accepted decision, implementation, review and verified integration are recorded in TASK-006.md.
 
 ## Outcome
 Prepared a bounded owner-only profile enrichment/photo contract and concrete schema/lifecycle proposal. Existing required-profile and primary-photo implementation inspected. TASK-006 can proceed without TASK-005: it uses profiles, private Storage, live membership/readiness and the existing header, with no Hangout dependency. No implementation dispatched before decision acceptance.

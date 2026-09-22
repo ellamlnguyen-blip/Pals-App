@@ -1,7 +1,6 @@
 # Backlog
 ## Product Build
 - TASK-005 Hangout data and authorization foundation — contract in `active/TASK-005-hangout-foundation.md`; implementation gated on explicit ADR-0010 acceptance. Backend only.
-- TASK-006 owner profile enrichment/photos — implementation reviewed and locally verified on `agent/TASK-006-profile-enrichment` at `2ac7ea9a52057ac14eb730544f219db37e444760`; final main publication verification pending. See active contract/handoff.
 - TASK-007 create/edit hangout
 - TASK-008 map discovery/detail/joining
 - TASK-009 calendar
@@ -28,3 +27,6 @@ Unrelated technical debt discovered during work becomes a separate task here.
 Friends-only, invite-only and eligibility-restricted Hangouts remain disabled until accepted, tested access rules use authoritative friendship, invitation and deliberately supplied profile attributes. TASK-012 supplies friendship; invitation/eligibility enforcement still needs separately bounded contracts. TASK-016 block precedence/private-access rules and TASK-017 audited moderation remain safety dependencies before launch. TASK-005 must resolve its local-foundation versus block-prerequisite gate in ADR-0010; do not infer access policy from absent data.
 
 TASK-003 deployed HTTPS callback and real UNC email delivery acceptance remains independently open in NOW.
+
+## Engineering follow-ups
+- CI maintenance: review Node 20 runtime deprecation annotations for checkout/setup-node/pnpm actions and the announced ubuntu-latest runner migration. TASK-006 CI passes; update action/runtime pins in a separate bounded maintenance task, not profile scope.

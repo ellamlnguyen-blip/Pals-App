@@ -1,6 +1,6 @@
 # TASK-006 — Owner profile enrichment and photos
 
-Status: Implementation reviewed and locally verified; remote main integration verification pending
+Status: Complete — reviewed implementation integrated/pushed and remote SHAs verified
 Date: 2026-09-22
 
 ## Goal
@@ -38,7 +38,7 @@ Peer profiles/photos, people discovery, friendship, messaging, Hangout schema/fl
 - [x] Anonymous, other-owner, operator, unconfirmed/changed-email, inactive-campus, suspended/banned and stale-session access matrix passes. Incomplete users retain onboarding; loss of primary or required completeness still revokes ready access.
 - [x] Existing auth/onboarding/map regressions pass alongside new database/HTTP permission and meaningful validation tests. Two clean local resets reproduce migrations; schema lint and relevant repository checks pass.
 - [x] Rendered desktop/mobile and keyboard flows verified for edit, save, cancellation/navigation, photo management, optional empty, loading and error recovery states; record actual evidence and unverified cases.
-- [ ] Fresh security review and coordinator implementation/handoff review are complete; shared records synchronized. Task branch is pushed/verified. Complete this final criterion only after integrated main is pushed and its SHA recorded.
+- [x] Fresh security review and coordinator implementation/handoff review complete; shared records synchronized. Task branch and integrated main pushed and remote SHAs verified; see TASK-006 handoff.
 
 ## Tests / verification
 Use `pnpm check`, `pnpm db:verify`, `pnpm test:auth:web` and bounded new profile tests against disposable local accounts. Exercise actual anon/authenticated SQL roles, PostgREST, Storage, web actions/routes and concurrent reference/deletion mutations. Test no identity/role escalation, direct malformed optional data, no peer reads/embeds, referenced-photo delete denial, stale editor conflicts and failure cleanup. A successful privileged SQL setup is not RLS evidence. No hosted fixtures or hosted delivery claims.
@@ -48,3 +48,6 @@ Update relevant AUTH/DATA_MODEL/AUTHORIZATION and local test/setup docs only for
 
 ## Follow-ups
 Peer visibility/blocking and photo metadata handling need separate explicit decisions before exposure. TASK-003 hosted acceptance, TASK-005 and other product flows remain separate.
+
+## Completion evidence
+Verified task tip `2ac7ea9a52057ac14eb730544f219db37e444760` integrated into main `870cf449032787dc4ec9dfe22a71aa947fe669af`, both confirmed with `git ls-remote`. Task-branch [GitHub CI](https://github.com/ellamlnguyen-blip/Pals-App/actions/runs/35794111143) passed validate and database jobs; local and rendered verification is recorded in `agents/handoffs/TASK-006.md` and `TASK-006-REVIEW.md`. No hosted migration or deployment.
