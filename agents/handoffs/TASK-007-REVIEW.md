@@ -1,0 +1,16 @@
+# TASK-007 — Independent security and rendered review
+
+Date: 2026-09-22
+Reviewers: fresh GPT-6 Sol / medium read-only security agent `task007_security_review`; coordinator independent browser inspection.
+Scope: Accepted ADR-0010 and bounded local-only TASK-007 create/edit UI; TASK-005 backend and TASK-004 map are preserved.
+
+## Security and scope review
+The fresh reviewer reports no remaining actionable finding in the final draft it inspected. Its findings were fixed before handoff: manual coordinate precision now matches the map's three-decimal public approximation; ambiguous/lost create responses retain the request UUID and payload across retries, including denial after readiness/gate revocation; map selection is disabled while an uncertain request is locked; owner reads recheck live readiness and public status/revision after the separate private read; and the existing `/hangouts` map remains available outside the local TASK-007 flow. Direct create/edit/owned routes and actions remain local-target gated. The reviewer checked caller-session actions, database RLS boundaries, private data handling, CAS, and no peer/profile-photo reader expansion. It inspected real Next action assertions for peer/forged edit and readiness revocation. Static review is separate from implementer-run local test results.
+
+## Independent rendered inspection
+Coordinator opened the actual signed-in local `/hangouts/new` route in the Codex in-app browser, using the disposable synthetic account already active there. Desktop screenshot showed a coherent two-column form with existing Pals blue/white/Nunito language, public/private explanations and map-missing fallback. At 390×844 the form stacked to one column; document client and scroll widths were both 390px. The public-area fallback, coordinate fields and full-width Create/Cancel controls were readable. Empty submit invoked native required-field validation, moved focus to the title and showed a visible focus ring. No save was attempted in this independent browser pass. Browser viewport was reset and the coordinator-created tab closed.
+
+Implementer separately reports rendered desktop create → persisted confirmation → reopen/edit/private clear; phone layout/fallback; and an actual Mapbox basemap/picker check using the existing public token only in local server environment. A map click produced three-decimal public coordinates and a marker, and manual changes moved that marker. No provider setting or hosted environment changed. See final TASK-007 handoff for the implementer's exact runtime evidence.
+
+## Verification status
+The implementer reports `pnpm check`, two clean `pnpm db:verify` resets with 226 pgTAP assertions each plus clean lint, and `pnpm test:auth:web` with three passing suites. Coordinator independently inspected the database and authweb result logs under `/private/tmp`; both match those counts. The scoped task tip `b6f338e314f1eca489cea0592acd5abc069a8884` and remote ref were verified; `git diff --check` passed. The implementer confirmed cleanup: gate false, zero Hangouts/Auth users/photo objects and Supabase/Lima stopped. GitHub CI for the exact task tip was in progress at integration review; its outcome is recorded separately if available. No hosted or production verification is claimed.

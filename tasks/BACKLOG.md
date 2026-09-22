@@ -1,6 +1,6 @@
 # Backlog
 ## Product Build
-- TASK-007 create/edit Hangouts — contract in `active/TASK-007-create-edit-hangouts.md`; revised ADR-0010 explicitly accepted. TASK-005 backend is reviewed/integrated; read its API/handoff before separately scoped UI implementation. Local only; no TASK-007 implementation dispatched.
+- TASK-007 create/edit Hangouts — complete locally; see `DONE.md`, its contract and handoffs. Hosted enablement remains gated on separate safety/deployment work.
 - TASK-008 map discovery/detail/joining
 - TASK-009 calendar
 - TASK-010 host/co-host management
@@ -23,7 +23,7 @@ Expo mobile; native release pipeline; organization accounts; polls; optional cap
 Unrelated technical debt discovered during work becomes a separate task here.
 
 ## Hangout access dependencies
-Friends-only, invite-only and eligibility-restricted Hangouts remain disabled until accepted, tested access rules use authoritative friendship, invitation and deliberately supplied profile attributes. TASK-012 supplies friendship; invitation/eligibility enforcement still needs separately bounded contracts. TASK-016 block precedence/private-access rules and TASK-017 audited moderation remain safety dependencies before launch. TASK-005 must resolve its local-foundation versus block-prerequisite gate in ADR-0010; do not infer access policy from absent data.
+Friends-only, invite-only and eligibility-restricted Hangouts remain disabled until accepted, tested access rules use authoritative friendship, invitation and deliberately supplied profile attributes. TASK-012 supplies friendship; invitation/eligibility enforcement still needs separately bounded contracts. TASK-016 block precedence/private-access rules and TASK-017 audited moderation remain safety dependencies before launch. Accepted ADR-0010 permits only disposable local Hangout work until those hosted-use gates are resolved; do not infer access policy from absent data.
 
 TASK-003 deployed HTTPS callback and real UNC email delivery acceptance remains independently open in NOW.
 

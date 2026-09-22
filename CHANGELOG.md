@@ -2,6 +2,12 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-22 — TASK-007 local Hangout create/edit
+
+- Replaced the unsaved Create entry with a ready-only local form that saves through the TASK-005 backend, then confirms and reopens the owner's Hangout for editing.
+- Added explicit approximate public area selection with a Mapbox picker and manual fallback; private instructions remain separate and can be cleared.
+- Added same-request recovery after uncertain creation, stale-revision feedback, recent owner access, and real action/privacy regressions. Verified rendered desktop/phone flows. No hosted migration or deployment; map discovery, chat and launch safety remain separate.
+
 ## 2026-09-22 — TASK-005 local Hangout backend
 
 - Added campus-only Hangout, participant and separate private-instruction records under Accepted ADR-0010, behind a default-disabled database gate.

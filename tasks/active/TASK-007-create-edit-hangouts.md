@@ -1,6 +1,6 @@
 # TASK-007 — Create/edit Hangouts
 
-Status: In progress — fresh local-only UI implementation dispatched after verified TASK-005
+Status: Complete — reviewed local-only implementation integrated; hosted release gates remain open
 Date: 2026-09-22
 Planning branch: `agent/TASK-007-planning`
 Implementation branch: `agent/TASK-007-create-edit-hangouts`
@@ -35,14 +35,14 @@ Before substantial UI, read installed Leon Taste, inspect current https://usepal
 TASK-005 implementation/migrations; general discovery/detail/join/leave; public attendee UI; cancelling/open-close/removal/co-host management UI (TASK-010 contract must cover these); chat creation (TASK-013); notifications (TASK-015); calendar, friendship, invitations, eligibility, blocking/report/moderation implementation; analytics, capacity/waitlists, persisted drafts, photo upload for Hangouts; hosted Supabase/Vercel changes/deployment. The accepted full Create → pin + chat journey remains incomplete until its separate tasks land; never claim those effects on save.
 
 ## Acceptance criteria
-- [ ] ADR acceptance and TASK-005 reviewed integrated SHA/API evidence recorded before dispatch; local-only safety boundary accepted and enforced.
-- [ ] Create persists one Hangout, host membership and optional private instructions atomically through the actual backend. Double submission, concurrent retry and committed-but-lost response do not create duplicates or report false success/failure.
-- [ ] Owner can reopen/edit persisted public/private fields. Stale tabs cannot overwrite newer revisions; errors retain safe form input and recovery is clear. Cancelled records are not editable and revoked private instructions never reach the page/action response.
-- [ ] Public area is explicit; public/private fields remain separate; time zone, daylight-saving ambiguity, limits and optional clearing follow accepted backend rules.
-- [ ] Direct page/action/API access cannot bypass ownership, live readiness, campus boundary, local environment restriction, disabled database feature gate or unsupported-mode denial. Existing profile/photo readers remain unchanged.
-- [ ] Rendered desktop and phone create → save → reopen → edit verified against disposable local backend; keyboard/focus, loading, empty, missing-map, denied, validation, conflict and transport recovery verified with evidence. Mock map labels remain truthful.
-- [ ] Appropriate workspace, actual HTTP/action/database regressions and privacy tests pass; fresh security/design review findings resolved and coordinator reviews handoff.
-- [ ] Task branch and accepted integration pushed, remote SHAs verified, state/queue/changelog/handoff synchronized. TASK-007 is not complete at contract publication.
+- [x] ADR acceptance and TASK-005 reviewed integrated SHA/API evidence recorded before dispatch; local-only safety boundary accepted and enforced.
+- [x] Create persists one Hangout, host membership and optional private instructions atomically through the actual backend. Double submission, concurrent retry and committed-but-lost response do not create duplicates or report false success/failure.
+- [x] Owner can reopen/edit persisted public/private fields. Stale tabs cannot overwrite newer revisions; errors retain safe form input and recovery is clear. Cancelled records are not editable and revoked private instructions never reach the page/action response.
+- [x] Public area is explicit; public/private fields remain separate; time zone, daylight-saving ambiguity, limits and optional clearing follow accepted backend rules.
+- [x] Direct page/action/API access cannot bypass ownership, live readiness, campus boundary, local environment restriction, disabled database feature gate or unsupported-mode denial. Existing profile/photo readers remain unchanged.
+- [x] Rendered desktop and phone create → save → reopen → edit verified against disposable local backend; keyboard/focus, loading, empty, missing-map, denied, validation, conflict and transport recovery verified with evidence. Mock map labels remain truthful.
+- [x] Appropriate workspace, actual HTTP/action/database regressions and privacy tests pass; fresh security/design review findings resolved and coordinator reviews handoff.
+- [x] Task branch and accepted integration pushed, remote SHAs verified, state/queue/changelog/handoff synchronized. TASK-007 was not complete at contract publication.
 
 ## Tests / verification
 Run relevant `pnpm check`, `pnpm db:verify`, `pnpm test:auth:web` plus meaningful create/edit HTTP/action tests using disposable data. Test host versus peer, forged IDs/revisions/retry identities, anonymous/unverified/incomplete/suspended/changed-email/inactive-campus callers, feature gate off, nonlocal server path denial, forbidden restricted inputs, stale edits, cancellation/readiness revocation between load and save, public/private atomic rollback and lost-response retry. Inspect direct reads/embeds and uncached errors for private-field leaks. Reuse TASK-005 database matrix; do not substitute privileged fixtures for caller authorization evidence. Preserve loopback forwarding and read-only SQL-test mounts if local runtime is started.
@@ -58,4 +58,4 @@ The committed API is migration `20260922000300_hangout_foundation.sql`. `create_
 Coordinator publishes this dispatch record to main before the fresh TASK-007 agent starts from latest origin/main. The implementation agent owns only its branch, code, task interaction plan and handoff; coordinator owns shared state/queue/integration. User requested GPT-6 Sol medium.
 
 ## Implementation dispatch
-The reviewed prerequisite/actual API record was published on main `bebef7045175dfd5d0513c5f3192c2180e2ffa3a` before dispatch. Fresh GPT-6 Sol / medium task agent `task007_impl` started in `/private/tmp/pals-task-007-create-edit` on `agent/TASK-007-create-edit-hangouts` from that exact baseline. It owns bounded UI/tests/interaction plan/handoff; the coordinator owns shared status, review and integration. No implementation SHA exists yet. Local-only safety and hosted blockers remain unchanged.
+The reviewed prerequisite/actual API record was published on main `bebef7045175dfd5d0513c5f3192c2180e2ffa3a` before dispatch. Fresh GPT-6 Sol / medium task agent `task007_impl` started in `/private/tmp/pals-task-007-create-edit` on `agent/TASK-007-create-edit-hangouts` from that exact baseline. Its pushed tip is `b6f338e314f1eca489cea0592acd5abc069a8884`. Coordinator review and integration are recorded in the final handoff/review and shared status. Local-only safety and hosted blockers remain unchanged.

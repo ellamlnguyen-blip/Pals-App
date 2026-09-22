@@ -1,5 +1,7 @@
 # Done
 
+- TASK-007 | 2026-09-22 | Local ready-only Hangout create/edit, approximate public area picker and manual fallback, owner confirmation/reopen, retry-safe server actions and revision conflict recovery under Accepted ADR-0010. Reviewed task `b6f338e314f1eca489cea0592acd5abc069a8884` integrated; local workspace, database, HTTP/action and rendered desktop/phone checks pass. No hosted changes; gate disabled. Handoffs: `agents/handoffs/TASK-007.md`, `TASK-007-REVIEW.md`.
+
 - TASK-005 | 2026-09-22 | Local gated Hangout backend, RLS/private location, current-ready rosters, atomic retry/CAS writes and host/member transitions. Reviewed task `a59b4a6900e5bc50f47a0beb0ff7fdd6e79741cd` integrated and remote main verified at `aa9fb884397c4d2bc728a8532b1cb0d2737959f0`. Local permission/race/HTTP/workspace checks and task-tip CI passed. No hosted changes; gate disabled. Handoffs: `agents/handoffs/TASK-005.md`, `TASK-005-REVIEW.md`.
 
 - TASK-006 | 2026-09-22 | Owner profile editing/enrichment, primary replacement and four extra private photos under Accepted ADR-0011. SQL permissions/concurrency, HTTP/action/failure recovery, workspace and desktop/mobile checks pass; task-branch GitHub CI passes. Reviewed task `2ac7ea9a52057ac14eb730544f219db37e444760` integrated and remote main verified at `870cf449032787dc4ec9dfe22a71aa947fe669af`. No hosted changes. Handoffs: `agents/handoffs/TASK-006.md`, `TASK-006-REVIEW.md`.
