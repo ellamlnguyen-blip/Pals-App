@@ -16,6 +16,7 @@ Completed: TASK-001, TASK-002, TASK-004 and TASK-006. See `DONE.md` and their ha
 
 3. `active/TASK-005-hangout-foundation.md` — backend-only contract prepared. Implementation is blocked on explicit acceptance of Proposed `decisions/ADR-0010-hangout-foundation.md` and resolution of its material authorization/schema questions. No migrations, UI or hosted changes authorized by this planning step. Restricted visibility/eligibility modes must fail closed until their data and access rules exist and are tested. Planning handoff: `agents/handoffs/TASK-005-CONTRACT.md`. Do not auto-dispatch implementation.
 
+4. `active/TASK-007-create-edit-hangouts.md` — contract prepared; blocked on explicit acceptance of revised Proposed ADR-0010 and separately completed TASK-005. Concrete proposal covers local-only safety gating, field/time limits, host/roster/private access and atomic retry/conflict semantics. Planning branch `agent/TASK-007-planning`; handoff `agents/handoffs/TASK-007-CONTRACT.md`. No implementation or hosted changes dispatched. Planning publication is blocked by automatic approval review pending direct user approval to publish the documents to the canonical public GitHub repository.
 
 Parallelization after TASK-001:
 - Supabase foundation
