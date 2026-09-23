@@ -123,7 +123,8 @@ export default async function PrivacyPage({
         <section className="people-panel">
           <h2>Blocked account IDs</h2>
           <p>
-            These are only blocks you made in People. Incoming blocks are never
+            These are outbound blocks you made. A confirmed block affects
+            People, direct chat and Hangout access. Incoming blocks are never
             shown. This local tool shows IDs, not names, so copy the full ID and
             confirm it exactly before unblocking.
           </p>
@@ -134,9 +135,9 @@ export default async function PrivacyPage({
             </p>
           ) : !blocks || blocks.error ? (
             <p role="status">
-              Block management is unavailable while People is off or your
-              connection has changed. Your sharing choice above is still
-              available.
+              Block management is unavailable while the local safety gate is off
+              or your account access has changed. Your sharing choice above is
+              still available.
             </p>
           ) : ids.length ? (
             <>
@@ -155,7 +156,7 @@ export default async function PrivacyPage({
               )}
             </>
           ) : (
-            <p>No outbound People blocks on this page.</p>
+            <p>No outbound blocks on this page.</p>
           )}
         </section>
       </div>

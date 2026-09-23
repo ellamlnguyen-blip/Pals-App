@@ -365,7 +365,7 @@ export function DirectThread({
       if (data.kind !== "ok") {
         setNote(
           action === "block"
-            ? "Block outcome uncertain. Check outbound blocked IDs before another action. Any confirmed block ends this direct chat; existing Hangout access and chat are unchanged."
+            ? "Block outcome uncertain. Check outbound blocked IDs before another action. Any confirmed block ends this direct chat; confirmed blocks now affect Hangout access and may end shared attendance."
             : item
               ? "Outcome uncertain. Retry the same message after a fresh check."
               : "Outcome uncertain. Reload to check before another action.",
@@ -382,7 +382,7 @@ export function DirectThread({
         deny("unavailable");
         if (action === "block")
           setNote(
-            "Block confirmed. People discovery, friendship and this direct chat ended. Existing Hangout access and chat are unchanged.",
+            "Block confirmed. People discovery, friendship and this direct chat ended. Confirmed blocks now affect Hangout access and may end shared attendance.",
           );
         return;
       }
@@ -393,7 +393,7 @@ export function DirectThread({
       if (now === ticket.current)
         setNote(
           action === "block"
-            ? "Block outcome uncertain. Check outbound blocked IDs before another action. Any confirmed block ends this direct chat; existing Hangout access and chat are unchanged."
+            ? "Block outcome uncertain. Check outbound blocked IDs before another action. Any confirmed block ends this direct chat; confirmed blocks now affect Hangout access and may end shared attendance."
             : item
               ? "Outcome uncertain. Retry the same message after a fresh check."
               : "Outcome uncertain. Reload to check before another action.",
@@ -478,17 +478,17 @@ export function DirectThread({
                 {ready && (
                   <button
                     className="text-button"
-                    disabled={busy}
+                    disabled
                     onClick={() => {
                       if (
                         window.confirm(
-                          "Block this ID in People? This ends People discovery, friendship and this direct chat. Existing Hangout access and chat are unchanged.",
+                          "Block this ID in People? This ends People discovery, friendship and this direct chat. Confirmed blocks now affect Hangout access and may end shared attendance.",
                         )
                       )
                         void mutate("block");
                     }}
                   >
-                    Block in People
+                    New blocking temporarily unavailable
                   </button>
                 )}
               </div>
@@ -612,17 +612,17 @@ export function DirectThread({
                   )}
                   <button
                     className="text-button"
-                    disabled={busy || !ready}
+                    disabled
                     onClick={() => {
                       if (
                         window.confirm(
-                          "Block this ID in People? This ends People discovery, friendship and this direct chat. Existing Hangout access and chat are unchanged.",
+                          "Block this ID in People? This ends People discovery, friendship and this direct chat. Confirmed blocks now affect Hangout access and may end shared attendance.",
                         )
                       )
                         void mutate("block");
                     }}
                   >
-                    Block in People
+                    New blocking temporarily unavailable
                   </button>
                 </div>
               </>

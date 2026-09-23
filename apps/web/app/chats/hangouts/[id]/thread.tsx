@@ -478,8 +478,9 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
               </button>
             </div>
             <p id="chat-disclosure" className="help">
-              Future eligible joiners can read the full chat history. People
-              blocking does not mute this local Hangout chat.
+              Future eligible joiners can read chat history. Confirmed blocks
+              can end shared Hangout attendance and hide messages from blocked
+              peers. Creating a new block is temporarily unavailable.
             </p>
             {pending && (
               <p className="help">

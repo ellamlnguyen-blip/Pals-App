@@ -38,6 +38,7 @@ select throws_ok($$select * from private.people_blocks$$,'42501',null,'block row
 select throws_ok($$select private.people_visible('11000000-0000-4000-8000-000000000002','00000000-0000-4000-8000-000000000001')$$,'42501',null,'internal visibility is not a subject oracle');
 reset role;
 update private.people_feature_gate set enabled=true;
+update private.safety_feature_gate set enabled=true;
 set local role authenticated;
 select set_config('request.jwt.claims','{"sub":"11000000-0000-4000-8000-000000000002","role":"authenticated"}',true);
 select is(public.set_people_preference(true),true,'ready owner opts in');
@@ -221,7 +222,7 @@ update private.people_feature_gate set enabled=false;
 set local role authenticated;
 select set_config('request.jwt.claims','{"sub":"11000000-0000-4000-8000-000000000002","role":"authenticated"}',true);
 select is(public.set_people_preference(false),false,'gate off and unready owner can opt out');
-select throws_ok($$select * from public.list_people_blocked_ids()$$,'42501',null,'gate off denies block management');
+select is((select count(*) from public.list_people_blocked_ids()),0::bigint,'People gate off preserves safety block management');
 set local role anon;
 select throws_ok($$select * from public.browse_people()$$,'42501',null,'anonymous browse denied');
 select * from finish();

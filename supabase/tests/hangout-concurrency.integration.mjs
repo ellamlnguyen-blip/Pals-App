@@ -90,7 +90,7 @@ test("Hangout create, join, removal, cancellation and revision races", async () 
         await reader.done;
         assert.match(reader.output(), /public=0/);
         assert.match(reader.output(), /private=0/);
-        assert.match(reader.output(), /Hangout operation not permitted/);
+        assert.match(reader.output(), /Hangout operation not permitted|Safety operation unavailable/);
       } finally { reader.child.kill(); }
     }
     await overlap(`${auth(host)} select public.edit_hangout('${id}',1,'Edited',now()+interval '2 hours','Area',35,-79);`, `${auth(host)} select public.edit_hangout('${id}',1,'Stale',now()+interval '3 hours','Area',35,-79);`, "task005_stale", /Stale Hangout revision/);

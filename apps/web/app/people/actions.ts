@@ -62,55 +62,14 @@ export async function setPeopleVisibility(
 }
 
 export async function blockPerson(id: string): Promise<PeopleActionResult> {
-  requireLocalPeople();
   if (!peopleId.test(id))
     return { state: "unknown", message: "That person is unavailable." };
-  const { client, state } = await access();
-  if (state !== "ready")
-    return {
-      state: "unknown",
-      message: "People access changed. Return to People.",
-    };
-  let writeError = false;
-  try {
-    writeError = !!(
-      await client.rpc("set_people_block", {
-        p_account_id: id,
-        p_blocked: true,
-      })
-    ).error;
-  } catch {
-    writeError = true;
-  }
-  // A matching outbound ID proves this caller owns the block. Traverse bounded pages;
-  // absence from only the first page cannot establish an outcome.
-  let after: string | null = null;
-  for (let page = 0; page < 100; page++) {
-    const { data, error } = await client.rpc("list_people_blocked_ids", {
-      p_after_id: after,
-      p_limit: 24,
-    });
-    if (error)
-      return {
-        state: "unknown",
-        message:
-          "We could not confirm the block. Reload your outbound blocked IDs before another action.",
-      };
-    const ids = (data ?? []) as { account_id: string }[];
-    if (ids.some((row) => row.account_id === id))
-      return {
-        state: "hidden",
-        message: writeError
-          ? "The block response was uncertain, but this ID is on your outbound block list. Any current direct request or chat ended; friendship status should be rechecked when available. Existing Hangout access and chat are unchanged."
-          : "This ID is on your outbound block list. Any current friend request, friendship, direct request or chat ended. Existing Hangout access, chat and private instructions are unchanged.",
-      };
-    if (ids.length < 24 || ids[23].account_id > id) break;
-    after = ids[23].account_id;
-  }
+  // TASK-016A: old confirmation copy does not describe global Hangout teardown.
+  // Reject stale server-action submissions until the reviewed safety UI ships.
   return {
     state: "unknown",
     message:
-      "We could not confirm an outbound block for this ID. Reload blocked IDs before another action.",
+      "Creating a block is temporarily unavailable in this local build. A confirmed block now affects Hangout access and may end shared attendance; the new confirmation flow is being added.",
   };
 }
 

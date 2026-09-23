@@ -89,7 +89,7 @@ test("Hangout chat send serializes against committed revocation and holds readin
         await waiting("chat_profile_waiter");
         holder.send("commit;"); holder.child.stdin.end(); waiter.child.stdin.end();
         await holder.done; await waiter.done;
-        assert.match(waiter.output(), /Hangout chat unavailable/);
+        assert.match(waiter.output(), /Hangout chat unavailable|Hangout operation not permitted/);
         assert.equal(sql("select count(*) from private.hangout_messages"), "1");
       } finally { holder.child.kill(); waiter.child.kill(); }
     }
@@ -210,7 +210,7 @@ test("Hangout chat send serializes against committed revocation and holds readin
     sql("update private.hangout_chat_feature_gate set enabled=true");
     for (const isolation of ["repeatable read", "serializable"]) {
       assert.throws(() => sql(`begin isolation level ${isolation}; ${claims(peer)} select * from public.read_hangout_messages('${hangout}'); rollback;`), /Hangout chat unavailable/);
-      assert.throws(() => sql(`begin isolation level ${isolation}; ${claims(peer)} select * from public.send_hangout_message('${hangout}','51310000-0000-4000-8001-000000000006','Race'); rollback;`), /Hangout chat unavailable/);
+      assert.throws(() => sql(`begin isolation level ${isolation}; ${claims(peer)} select * from public.send_hangout_message('${hangout}','51310000-0000-4000-8001-000000000006','Race'); rollback;`), /Hangout chat unavailable|Safety operation unavailable/);
     }
   } finally {
     sql(`update private.hangout_chat_feature_gate set enabled=false;

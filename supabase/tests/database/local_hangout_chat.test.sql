@@ -99,11 +99,12 @@ select set_config('request.jwt.claims','{"sub":"51300000-0000-4000-8000-00000000
 select lives_ok($$select public.join_hangout(pg_temp.hid())$$,'second peer joins');
 select is((select count(*) from public.read_hangout_messages(pg_temp.hid())),2::bigint,'second late join sees history');
 reset role;
-insert into private.people_blocks(blocker_id,blocked_id)
-  values ('51300000-0000-4000-8000-000000000001','51300000-0000-4000-8000-000000000003');
+update private.safety_feature_gate set enabled=true;
 set local role authenticated;
+select set_config('request.jwt.claims','{"sub":"51300000-0000-4000-8000-000000000001","role":"authenticated"}',true);
+select is(public.set_safety_block('51300000-0000-4000-8000-000000000003',true),true,'host safety block removes joined target');
 select set_config('request.jwt.claims','{"sub":"51300000-0000-4000-8000-000000000003","role":"authenticated"}',true);
-select is((select count(*) from public.read_hangout_messages(pg_temp.hid())),2::bigint,'People block does not change local chat');
+select throws_ok($$select public.read_hangout_messages(pg_temp.hid())$$,'42501',null,'host block revokes target chat');
 select set_config('request.jwt.claims','{"sub":"51300000-0000-4000-8000-000000000004","role":"authenticated"}',true);
 select throws_ok($$select public.read_hangout_messages(pg_temp.hid())$$,'42501',null,'platform admin has no bypass');
 select set_config('request.jwt.claims','{"sub":"51300000-0000-4000-8000-000000000005","role":"authenticated"}',true);

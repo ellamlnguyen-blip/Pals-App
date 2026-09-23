@@ -115,8 +115,10 @@ test("local web DM routes bind original sessions and preserve request consent", 
     assert.equal((await web(`/api/dm/${c.id}`, a)).body.kind, "unavailable");
     const blocked = await web("/api/dm", b, "POST", { peer: c.id, key: crypto.randomUUID(), body: "Block me" });
     assert.equal(blocked.body.kind, "ok");
-    assert.equal((await web(`/api/dm/${c.id}`, b, "POST", { action: "block", generation: blocked.body.generation })).body.kind, "ok");
-    assert.equal((await web(`/api/dm/${c.id}`, b)).body.kind, "unavailable");
+    const unavailableBlock = await web(`/api/dm/${c.id}`, b, "POST", { action: "block", generation: blocked.body.generation });
+    assert.equal(unavailableBlock.status, 403, "stale direct-thread block writes are disabled");
+    assert.equal(unavailableBlock.body.kind, "unavailable");
+    assert.equal((await web(`/api/dm/${c.id}`, b)).body.kind, "ok", "disabled block leaves DM state unchanged");
   } finally {
     sql(`update private.dm_feature_gate set enabled=false; update private.people_feature_gate set enabled=false;
       set dm.allow_fixture_cleanup='true';

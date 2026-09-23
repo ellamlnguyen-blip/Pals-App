@@ -77,8 +77,9 @@ export function Unblock({ id }: { id: string }) {
           <code>{id}</code>
         </p>
         <p>
-          This affects People discovery only. It does not change existing
-          Hangout participation or private instructions.
+          Removing your block may allow future People and Hangout access under
+          the usual rules. It does not restore past friendship, direct chat or
+          Hangout attendance.
         </p>
         <label>
           Type the full ID to confirm

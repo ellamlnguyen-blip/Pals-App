@@ -28,6 +28,7 @@ select throws_ok($$update private.friendship_feature_gate set enabled=true$$,'42
 reset role;
 update private.friendship_feature_gate set enabled=true;
 update private.people_feature_gate set enabled=true;
+update private.safety_feature_gate set enabled=true;
 
 set local role authenticated;
 select set_config('request.jwt.claims','{"sub":"13000000-0000-4000-8000-000000000001","role":"authenticated"}',true);
@@ -110,8 +111,8 @@ select throws_ok($$select public.create_friend_request('13000000-0000-4000-8000-
 reset role;
 update public.profiles set primary_photo_path=null where user_id='13000000-0000-4000-8000-000000000001';
 set local role authenticated;
-select throws_ok($$select public.set_people_block('13000000-0000-4000-8000-000000000002',true)$$,
-  '42501',null,'unready caller cannot set People block');
+select is(public.set_people_block('13000000-0000-4000-8000-000000000002',true),true,
+  'unready active caller can block using retained friendship evidence');
 select throws_ok($$select public.create_friend_request('13000000-0000-4000-8000-000000000002','13000000-0000-4000-8000-000000000089')$$,
   '42501',null,'unready caller cannot request');
 reset role;

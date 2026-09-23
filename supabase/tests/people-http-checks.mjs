@@ -14,7 +14,7 @@ export async function peopleHttpChecks(owner, peer, a, b, sql, png, url, key) {
     const rawPeerName = `${" ".repeat(100)}\u00a0Peer\u00a0`;
     assert.equal((await peerApi.from("profiles").update({ real_name: rawPeerName, major: "Science", graduation_year: 2028, bio: "Local", primary_photo_path: peerPath }).eq("user_id", b.id)).error, null);
     assert.equal((await peerApi.rpc("get_access_state")).data, "ready");
-    sql("update private.people_feature_gate set enabled=true");
+    sql("update private.people_feature_gate set enabled=true; update private.safety_feature_gate set enabled=true");
     assert.equal((await peerApi.rpc("set_people_preference", { p_opted_in: true })).error, null);
     const card = await ownerApi.rpc("browse_people", { p_search: "peer" });
     assert.equal(card.error, null, card.error?.message);
@@ -40,6 +40,10 @@ export async function peopleHttpChecks(owner, peer, a, b, sql, png, url, key) {
     assert.deepEqual(Object.keys(detail.data[0]).sort(), [
       "account_id", "bio", "campus_name", "down_to_do", "graduation_year", "interests", "major", "real_name",
     ]);
+    sql("update private.people_feature_gate set enabled=false");
+    assert.equal((await ownerApi.rpc("set_safety_block", { p_account_id: b.id, p_blocked: true })).error?.code, "42501",
+      "People gate off cannot target a guessed peer without retained evidence");
+    sql("update private.people_feature_gate set enabled=true");
     if (process.env.WEB_TEST_ORIGIN) {
       const web = process.env.WEB_TEST_ORIGIN;
       const headers = { Cookie: owner.header() };
@@ -88,7 +92,7 @@ export async function peopleHttpChecks(owner, peer, a, b, sql, png, url, key) {
       sql("update private.people_feature_gate set enabled=false");
       try {
         const uncertain = await action("blockPerson", [b.id], `/people/${b.id}`, owner.header());
-        assert.match(uncertain, /could not confirm the block/);
+        assert.match(uncertain, /temporarily unavailable/);
         assert.ok(!uncertain.includes(rawPeerName), "uncertain action does not return peer text");
       } finally {
         sql("update private.people_feature_gate set enabled=true");
@@ -130,6 +134,7 @@ export async function peopleHttpChecks(owner, peer, a, b, sql, png, url, key) {
     assert.equal((await ownerApi.rpc("browse_people")).error?.code, "42501");
   } finally {
     sql(`update private.people_feature_gate set enabled=false;
+      update private.safety_feature_gate set enabled=false;
       delete from private.people_blocks where blocker_id in ('${a.id}','${b.id}') or blocked_id in ('${a.id}','${b.id}');
       delete from private.people_preferences where account_id in ('${a.id}','${b.id}');
       update auth.users set email='${b.email}' where id='${b.id}';`);

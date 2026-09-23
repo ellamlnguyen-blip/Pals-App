@@ -26,6 +26,7 @@ select throws_ok($$select * from private.dm_suppression$$,'42501',null,'suppress
 select throws_ok($$update private.dm_feature_gate set enabled=true$$,'42501',null,'gate private');
 reset role;
 update private.people_feature_gate set enabled=true;
+update private.safety_feature_gate set enabled=true;
 update private.dm_feature_gate set enabled=true;
 
 set local role authenticated;
