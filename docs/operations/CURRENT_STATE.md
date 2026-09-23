@@ -5,7 +5,9 @@ Last updated: 2026-09-23
 Decision tree resolved through product purpose, loop, profile/hangout/social model, safety, map/calendar navigation, MVP boundary, technical architecture, and agent operating model.
 
 ## Build State
-TASK-015 notification inbox/preferences has a bounded disposable-local planning contract and Accepted ADR-0017, explicitly accepted by the user on 2026-09-23 after independent review and canonical publication. No notification schema, event hook, inbox UI, push, Realtime or hosted access exists yet. A narrower TASK-015A ledger/social-source contract was independently reviewed and published before fresh backend dispatch; Hangout/chat source hooks and UI follow in separate stages. TASK-010/ADR-0012 and TASK-016 global blocking/reporting remain open; existing local gates remain disabled by default.
+TASK-015 is complete for its bounded disposable-local scope under Accepted ADR-0017. Reviewed A/B backend stages provide the owner-only notification ledger, preferences and authoritative friendship, DM, Hangout and Hangout-chat events; reviewed C provides the local-only Notifications inbox and preferences UI. SQL/Auth/HTTP/race/workspace and rendered desktop/tablet/phone/keyboard/failure checks passed within the handoff limits. All notification and related local gates are false, disposable fixtures gone and local services stopped. No hosted delivery, Realtime, push/email or global blocking/reporting readiness is claimed; TASK-010/ADR-0012 and TASK-016 remain open. See `agents/handoffs/TASK-015.md` and stage/review handoffs.
+
+### TASK-015 progress history
 
 TASK-015A's independently reviewed ledger/social-source contract and accepted ADR were published on remotely verified main `3cf7bfccf89749d4ff5b4dcdae61588b5341d8ec`. A fresh bounded backend agent implemented the disposable-local stage in isolated `agent/TASK-015A-notification-ledger`; the reviewed outcome follows. Hangout/chat events and Notifications UI await separate stages. No hosted, Realtime or TASK-016 change is authorized.
 

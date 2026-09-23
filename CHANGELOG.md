@@ -2,6 +2,11 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-23 — TASK-015 local Notifications inbox and preferences
+
+- Added a local-only private Notifications tab with bounded pages, read state, four optional-category preferences, neutral revoked-source rows and explicit destination reauthorization. The earlier A/B stages supply authoritative social, Hangout and chat items.
+- Verified responsive and keyboard states, owner-bound/no-store HTTP, account-switch masking, source revocation, gate denial, refresh failure and uncertain writes. Independent final review cleared the exact UI tip. Gates and fixtures were cleared; hosted delivery, Realtime, push/email and global safety remain separate.
+
 ## 2026-09-23 — TASK-015B local Hangout notification events
 
 - Added source-owned inbox items for material Hangout edits, essential cancellations, actual host-relevant joins/leaves and Hangout-chat messages. A fresh review found and drove a source-gate race correction before integration. Local reset, authorization, concurrency and workspace checks passed. UI and hosted delivery remain separate.

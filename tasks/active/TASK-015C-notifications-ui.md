@@ -1,6 +1,6 @@
 # TASK-015C — Local Notifications inbox and preferences UI
 
-Status: Contract under independent security/design review; no implementation dispatched
+Status: Complete for bounded disposable-local UI stage; reviewed and integrated
 Date: 2026-09-23
 Parent: `TASK-015-notification-inbox-preferences.md`
 Policy: Accepted ADR-0017
@@ -24,10 +24,10 @@ Read `AGENTS.md`, parent TASK-015, ADR-0017, A/B contracts/handoffs/reviews, MVP
 Schema/migration/RLS/RPC or source-hook changes; push/email/Realtime, background reminders, badge counts, unread reversal, friend-activity or marketing notices, message excerpts, arbitrary profile/photo projections, global block/reporting or co-host policy, hosted deployment and production retention; unrelated app-wide redesign or CI repair.
 
 ## Acceptance checks
-- [ ] Current active owner alone can load their bounded inbox/preferences and mark owned items read; local/loopback and no-store boundaries hold for success and denial. Hosted routes remain unavailable.
-- [ ] All A/B event types have clear generic labels and only currently authorized allowlisted destinations; neutral unavailable rows never link or identify hidden sources. Preferences control future optional items only, while cancellation remains essential.
-- [ ] Sensitive rows clear on denial, signout/account change and overlapping transitions; stale responses cannot repopulate them, and settled transitions eventually reauthorize. Keyboard, desktop/tablet/phone, empty/loading/error states pass rendered review.
-- [ ] No backend/hosted/Realtime scope change; gates false, fixtures/services cleared. Fresh independent security/design exact-tip review, handoff review, canonical main integration and verified task/main remote SHAs complete TASK-015.
+- [x] Current active owner alone can load their bounded inbox/preferences and mark owned items read; local/loopback and no-store boundaries hold for success and denial. Hosted routes remain unavailable.
+- [x] All A/B event types have clear generic labels and only currently authorized allowlisted destinations; neutral unavailable rows never link or identify hidden sources. Preferences control future optional items only, while cancellation remains essential.
+- [x] Sensitive rows clear on denial, signout/account change and overlapping transitions; stale responses cannot repopulate them, and settled transitions eventually reauthorize. Keyboard, desktop/tablet/phone, empty/loading/error states pass rendered review.
+- [x] No backend/hosted/Realtime scope change; gates false, fixtures/services cleared. Fresh independent security/design exact-tip review, handoff review, canonical main integration and verified task/main remote SHAs complete TASK-015.
 
 ## Handoff
 Work only in an isolated `agent/TASK-015C-notifications-ui` branch/worktree from the verified published baseline. Commit in-scope work and handoff, push and verify task remote SHA, then stop. Coordinator owns shared queue/state/changelog and main integration. Use GPT-6 Sol medium and the app's Standard speed preference where selectable; dispatch tooling may not expose speed.
