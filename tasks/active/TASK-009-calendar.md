@@ -1,6 +1,6 @@
 # TASK-009 — Local saved Hangout Calendar
 
-Status: Planned — contract publication and implementation dispatch pending
+Status: Active — contract published; implementation and review pending
 Date: 2026-09-22
 Planning branch: `agent/TASK-009-planning`
 Implementation branch: `agent/TASK-009-calendar`
@@ -34,7 +34,7 @@ Before substantial UI read installed Leon Taste (`design-taste-frontend`), inspe
 Schema/RPC/RLS expansion; friend context/graph; restricted modes/invitations/eligibility; peer profiles/photos; external calendar sync/export, reminders, recurring Hangouts, drag/drop editing, general scheduling tooling; host lifecycle/co-host UI; messaging, notifications, analytics, block/report/moderation implementation; hosted environments/deployment; unrelated dev-helper repair.
 
 ## Acceptance criteria
-- [ ] Contract/gates published on main and fresh implementation branch starts from verified latest origin/main.
+- [x] Contract/gates published on main and fresh implementation branch starts from verified latest origin/main.
 - [ ] Today/day and Week display saved records using campus dates with DST-safe exclusive boundaries; cross-midnight/endless records and date navigation behave as documented.
 - [ ] Discoverable, Joined and Hosting filters match actual caller-visible rows, including host membership, left/removed exclusion and authorized cancelled labels; limits are honest and deterministic.
 - [ ] Every route/read fails closed for nonlocal, anonymous/unready/revoked, other-campus and disabled-gate access under existing policies. No private/peer/historical data enters Calendar payloads.
@@ -47,3 +47,6 @@ Run `pnpm check`, focused time/date tests, `pnpm db:verify`, and actual local Au
 
 ## Handoff and ownership
 Implementation agent owns bounded app/test code, interaction plan and `agents/handoffs/TASK-009.md`, with exact verification evidence/limitations and pushed task SHA. Coordinator owns NOW/BACKLOG/DONE/CURRENT_STATE/CHANGELOG, contract status, review and main integration. Use `agents/HANDOFF_TEMPLATE.md`. Publish meaningful blockers/status on main while unfinished code stays on the task branch. Do not auto-dispatch TASK-010 or other follow-ups.
+
+## Dispatch receipt
+Planning branch and canonical main were pushed and independently verified at `29c9343edc560dd0731804b3b9624f8329ad6d4c`. Fresh implementation agent `calendar_implementation` dispatched on `agent/TASK-009-calendar` from that baseline. No implementation SHA published yet; review, checks and integration remain pending.

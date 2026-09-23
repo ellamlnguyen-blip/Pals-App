@@ -12,3 +12,6 @@ Today/day and Monday–Sunday Week use America/New_York boundaries. Public-only 
 
 ## Next
 Publish/verify planning branch and canonical main, then dispatch a fresh bounded implementation agent from that main. Require interaction plan, actual local permission/temporal tests, rendered desktop/phone checks, independent review and handoff. Coordinator retains shared records and integration ownership. Known dev-helper regression remains a separate maintenance task; built-loopback verification is available.
+
+## Publication and dispatch receipt
+`git ls-remote` independently verified planning and canonical main at `29c9343edc560dd0731804b3b9624f8329ad6d4c`. A fresh implementation agent was then dispatched on `agent/TASK-009-calendar` from that exact origin/main baseline. Coordinator API review confirmed cancelled participant rows are hidden by roster RLS; personal cancelled results must use existing authorized public-row access, not broaden roster policy. No additional prerequisite or permission change is needed.
