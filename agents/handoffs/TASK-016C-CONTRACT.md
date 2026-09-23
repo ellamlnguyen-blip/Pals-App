@@ -8,3 +8,7 @@ Coordinator read Leon's Taste skill and relevant product/UX/tokens, then directl
 A separate fresh Sol medium security/design reviewer required retirement of the unmarked old unblock action and correct host-report authority: visible public host ID alone does not authorize user reports. Both were corrected. After B integration, final independent review checked actual signature, receipt fields, trim/count semantics and neutral errors, and approved the contract/visual plan with no remaining material conflict. Review was read-only; implementation and rendered checks have not happened. Standard speed is the app preference and cannot be selected or verified by dispatch tooling.
 
 Documents pass `git diff --check`. Canonical publication precedes fresh C implementation. Final exact-tip security and rendered review plus cleanup/main integration are required before parent completion. No new schema, reader permission, hosted operation or report-review promise is authorized.
+
+## Publication and dispatch
+
+Reviewed C contract/plan and B completion receipt were published on planning/main, both independently remote-verified at `fd2d88504d8195d54c4319fa55fd12c6124d3091`. A fresh GPT-6 Sol medium agent was dispatched into `/private/tmp/pals-task016c-safety-ui`, branch `agent/TASK-016C-safety-ui`, from that exact baseline. The agent owns disposable runtime and UI verification until explicit review handoff. Final code/security and rendered review, cleanup and canonical integration remain.
