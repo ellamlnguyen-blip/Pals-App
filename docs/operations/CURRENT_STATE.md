@@ -19,6 +19,8 @@ TASK-015B first pushed backend tip `c54650a3cc52c71e683907952b0ebd1cc60e9ad1` pa
 
 TASK-015B corrected tip `1152540222c121dcfb1b41dfad5952e19ceef921` passed two new clean resets, ten SQL suites, fourteen real HTTP/race suites, schema lint and workspace checks. Observed both-order Hangout/chat source-gate races and mixed social/Hangout cursor now pass; a fresh exact-tip security review is clear. All six gates false, fixtures zero and local services stopped. Reviewed canonical integration is recorded in NOW. TASK-015C UI remains separate; no hosted, Realtime or global safety claim.
 
+TASK-015B reviewed integration is on remotely verified canonical main `b902b9168543e15b78e3eca5f21281eb83563782`. TASK-015C's Notifications UI contract and interaction/visual plan are under independent security/design review before publication and fresh implementation dispatch. No UI or hosted delivery exists yet.
+
 TASK-001 complete: pnpm monorepo with Next.js 16.3.5/React 19.3 TypeScript web/admin, reserved mobile workspace and six shared packages. Apps use shared light/dark design tokens and self-hosted Nunito. Local-first configuration, formatting, lint, strict typechecks, tests and production builds pass. TASK-006 task-branch GitHub CI now passes workspace checks plus local database/auth/profile verification (see TASK-006 outcome); hosted callback/email acceptance remains separate.
 
 TASK-002 complete: universities, accounts, separate campus verification, profile drafts, platform roles, owner-only RLS, synthetic tests, migration/seed scripts and target validation. Local Postgres and the authorized hosted development/staging project are verified. See `agents/handoffs/TASK-002.md` and `docs/operations/HOSTED_ENVIRONMENT.md`.
