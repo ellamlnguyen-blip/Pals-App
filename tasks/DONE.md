@@ -15,3 +15,5 @@
 - TASK-002 | 2026-09-22 | Identity/RLS foundation verified locally and in the authorized hosted development target; hosted baseline CI passed. Handoff: `agents/handoffs/TASK-002.md`, including hosted verification addendum.
 
 - TASK-001 | 2026-09-21 | Bootstrapped runnable web/admin, shared packages, safe environment conventions and locally verified CI baseline. Handoff: `agents/handoffs/TASK-001.md`.
+
+TASK-009 final receipt: reviewed task `777d4b875bedd26ea925a4982433809d3b048cc2` integrated into canonical main `0c2af8e3401dd6acce6d87249886f7e31b2e7175`; both remote refs independently verified after push. TASK-009 is complete locally; the existing CI helper failure and hosted safety/deployment gates remain explicitly open.

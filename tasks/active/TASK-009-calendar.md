@@ -1,6 +1,6 @@
 # TASK-009 — Local saved Hangout Calendar
 
-Status: Reviewed and accepted — local-only integration publication pending
+Status: Complete — reviewed local-only Calendar integrated and remote-verified; hosted gates remain open
 Date: 2026-09-22
 Planning branch: `agent/TASK-009-planning`
 Implementation branch: `agent/TASK-009-calendar`
@@ -56,3 +56,6 @@ Task branch pushed and independently remote-verified at `06101ee68ebb8b42e9f7837
 
 ## Reviewed completion
 Accepted task tip `777d4b875bedd26ea925a4982433809d3b048cc2` (implementation `06101ee`, final documentation receipt only thereafter), independently remote-verified. Fresh static and coordinator rendered review clear; all bounded local acceptance checks pass. CI has the demonstrated pre-existing action-manifest failure also present on starting main; see review and BACKLOG. Cleanup verified gate false and zero Hangouts/Auth users/private photo objects, with web/Supabase/Lima stopped. Coordinator is integrating reviewed work and these records; final remote main SHA follows in a receipt.
+
+## Final remote receipt
+`git ls-remote` verified task `777d4b875bedd26ea925a4982433809d3b048cc2` and integrated main `0c2af8e3401dd6acce6d87249886f7e31b2e7175` after publication. All task acceptance criteria are complete under the recorded local-only contract and pre-existing CI limitation. This subsequent documentation receipt records that immutable integration milestone.

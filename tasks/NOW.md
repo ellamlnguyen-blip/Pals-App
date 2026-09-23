@@ -28,3 +28,5 @@ Start from the accepted product and architecture documents in this repository. D
 
 ## TASK-009 Calendar outcome
 `active/TASK-009-calendar.md` — reviewed local-only Calendar accepted for integration from remote-verified task `777d4b875bedd26ea925a4982433809d3b048cc2`. Today/Day and Monday–Sunday Week, authoritative Joined/Hosting filters, public-only payloads and existing detail navigation passed local workspace/SQL/real HTTP and desktop/phone checks; fresh review clear. CI action-manifest failure is proven pre-existing on starting main and remains a separate maintenance follow-up. Final main receipt follows publication. Gate disabled, disposable data cleared and local services stopped. No hosted changes or automatic TASK-010 dispatch.
+
+TASK-009 final receipt: reviewed task `777d4b875bedd26ea925a4982433809d3b048cc2` integrated into canonical main `0c2af8e3401dd6acce6d87249886f7e31b2e7175`; both remote refs independently verified after push. TASK-009 is complete locally; the existing CI helper failure and hosted safety/deployment gates remain explicitly open.
