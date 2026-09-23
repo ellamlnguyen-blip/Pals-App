@@ -1,6 +1,6 @@
 # TASK-011 — Local People discovery
 
-Status: Planning; implementation blocked on explicit ADR-0013 acceptance
+Status: Planning reviewed; implementation blocked on explicit ADR-0013 acceptance
 Date: 2026-09-22
 Planning branch: `agent/TASK-011-planning`
 Starting clean canonical main / freshly fetched origin/main: `b3011bc74adb46d01fd4b709520ecf5c3f8fa8a2`
