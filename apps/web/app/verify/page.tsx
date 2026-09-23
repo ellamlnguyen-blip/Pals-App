@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { localPeopleAvailable } from "../../lib/people";
 import { Frame, Intro } from "../components";
 import { ResendForm } from "../forms";
 export default async function Verify({
@@ -35,6 +36,11 @@ export default async function Verify({
           <p>
             <Link href="/continue">I’ve confirmed my email</Link>
           </p>
+          {localPeopleAvailable() && (
+            <p>
+              <Link href="/people/privacy">Manage People sharing</Link>
+            </p>
+          )}
           <p>
             <Link href="/signin">Back to sign in</Link>
           </p>

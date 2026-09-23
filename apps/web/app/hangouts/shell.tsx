@@ -8,9 +8,11 @@ import { filterMockHangouts, MOCK_HANGOUTS } from "./fixtures";
 export function HangoutsShell({
   token,
   createEnabled,
+  peopleEnabled,
 }: {
   token: string;
   createEnabled: boolean;
+  peopleEnabled: boolean;
 }) {
   const [category, setCategory] = useState("All");
   const [time, setTime] = useState("Any time");
@@ -56,9 +58,19 @@ export function HangoutsShell({
           Hangouts
         </a>
         {createEnabled && <a href="/calendar">Calendar</a>}
+        {peopleEnabled ? (
+          <Link href="/people">People</Link>
+        ) : (
+          <button
+            onClick={() => showShell("People")}
+            aria-label="People, coming later"
+          >
+            People
+          </button>
+        )}
         {(createEnabled
-          ? ["People", "Chats", "Notifications"]
-          : ["Calendar", "People", "Chats", "Notifications"]
+          ? ["Chats", "Notifications"]
+          : ["Calendar", "Chats", "Notifications"]
         ).map((name) => (
           <button
             key={name}

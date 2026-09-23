@@ -39,6 +39,30 @@ export async function peopleHttpChecks(owner, peer, a, b, sql, png, url, key) {
     assert.deepEqual(Object.keys(detail.data[0]).sort(), [
       "account_id", "bio", "campus_name", "down_to_do", "graduation_year", "interests", "major", "real_name",
     ]);
+    if (process.env.WEB_TEST_ORIGIN) {
+      const web = process.env.WEB_TEST_ORIGIN;
+      const headers = { Cookie: owner.header() };
+      for (const path of [
+        "/people",
+        `/people/${b.id}`,
+        "/people/privacy",
+        "/people?search=x&search=y",
+      ]) {
+        const response = await fetch(`${web}${path}`, { headers });
+        assert.equal(response.status, 200);
+        assert.match(response.headers.get("cache-control") ?? "", /no-store/, `${path} is not cached`);
+      }
+      const malformedBack = await fetch(
+        `${web}/people/${b.id}?from=%2Fpeople&from=%2Fcalendar`,
+        { headers },
+      );
+      assert.match(await malformedBack.text(), /href="\/people"/, "duplicate return values fall back to People");
+      const next = await fetch(`${web}/people?afterId=${b.id}`, { headers });
+      assert.equal(next.status, 200);
+      assert.doesNotMatch(await next.text(), /Check your People filters/, "UI accepts ID-only cursor");
+      const legacy = await fetch(`${web}/people?afterName=${encodeURIComponent(rawPeerName)}&afterId=${b.id}`, { headers });
+      assert.match(await legacy.text(), /Check your People filters/, "UI rejects old name cursor");
+    }
     assert.deepEqual((await ownerApi.from("profiles").select("user_id").eq("user_id", b.id)).data, []);
     assert.deepEqual((await ownerApi.from("profiles").select("user_id,accounts(id)").eq("user_id", b.id)).data, []);
     assert.deepEqual((await ownerApi.from("accounts").select("id,profiles(user_id)").eq("id", b.id)).data, []);

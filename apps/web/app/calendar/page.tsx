@@ -1,6 +1,8 @@
 import { Frame } from "../components";
+import Link from "next/link";
 import { requireAccess } from "../../lib/access";
 import { requireLocalHangouts } from "../../lib/hangouts";
+import { localPeopleAvailable } from "../../lib/people";
 import { queryCalendar } from "../../lib/calendar";
 import {
   addDays,
@@ -74,7 +76,12 @@ export default async function CalendarPage({
         <a href="/calendar" aria-current="page">
           Calendar
         </a>
-        {["People", "Chats", "Notifications"].map((name) => (
+        {localPeopleAvailable() ? (
+          <Link href="/people">People</Link>
+        ) : (
+          <span>People</span>
+        )}
+        {["Chats", "Notifications"].map((name) => (
           <span key={name} aria-label={`${name}, coming later`}>
             {name}
           </span>

@@ -1,4 +1,6 @@
 import { requireAccess } from "../../lib/access";
+import Link from "next/link";
+import { localPeopleAvailable } from "../../lib/people";
 import { Frame, Intro } from "../components";
 import { OnboardingForm } from "../forms";
 export default async function Onboarding() {
@@ -22,6 +24,11 @@ export default async function Onboarding() {
           <p className="help">University of North Carolina at Chapel Hill</p>
           <p className="help">{user!.email}</p>
           <OnboardingForm profile={profile} />
+          {localPeopleAvailable() && (
+            <p>
+              <Link href="/people/privacy">Manage People sharing</Link>
+            </p>
+          )}
         </section>
       </div>
     </Frame>

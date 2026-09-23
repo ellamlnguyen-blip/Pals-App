@@ -8,6 +8,28 @@
 .profile-heading p {
   color: var(--pals-muted);
 }
+.profile-people-preview {
+  max-width: 48rem;
+  border: 1px solid var(--pals-line);
+  border-radius: var(--pals-input-radius);
+  padding: var(--pals-space-6);
+  margin: var(--pals-space-6) 0;
+  background: var(--pals-surface);
+}
+.profile-people-preview h2 {
+  margin-bottom: var(--pals-space-2);
+}
+.profile-people-preview dl {
+  margin: 0;
+}
+.profile-people-preview dt {
+  font-weight: 900;
+  margin-top: var(--pals-space-4);
+}
+.profile-people-preview dd {
+  margin: var(--pals-space-1) 0;
+  overflow-wrap: anywhere;
+}
 .profile-layout {
   display: grid;
   grid-template-columns: minmax(0, 18rem) minmax(0, 1fr);
