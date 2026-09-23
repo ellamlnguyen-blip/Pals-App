@@ -4,6 +4,7 @@ import { DmInbox } from "./dm-inbox";
 import { chatAccess, chatUuid, readChat } from "../../lib/chat";
 import { access } from "../../lib/access";
 import { localPeopleAvailable } from "../../lib/people";
+import { localNotificationsAvailable } from "../../lib/notifications";
 import "../hangouts/map.css";
 import "./chat.css";
 
@@ -81,7 +82,11 @@ export default async function ChatsPage({
         <Link href="/chats" aria-current="page">
           Chats
         </Link>
-        <span>Notifications</span>
+        {localNotificationsAvailable() ? (
+          <Link href="/notifications">Notifications</Link>
+        ) : (
+          <span>Notifications</span>
+        )}
       </nav>
       <section className="chat-page" aria-labelledby="chats-title">
         <p className="badge">Chats · local only</p>

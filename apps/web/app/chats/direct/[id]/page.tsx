@@ -40,7 +40,7 @@ export default async function DirectPage({
         <Link href="/chats" aria-current="page">
           Chats
         </Link>
-        <span>Notifications</span>
+        <Link href="/notifications">Notifications</Link>
       </nav>
       <section className="chat-page" aria-labelledby="direct-title">
         <Link href="/chats">← All chats</Link>

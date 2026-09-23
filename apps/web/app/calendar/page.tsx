@@ -82,11 +82,7 @@ export default async function CalendarPage({
           <span>People</span>
         )}
         <Link href="/chats">Chats</Link>
-        {["Notifications"].map((name) => (
-          <span key={name} aria-label={`${name}, coming later`}>
-            {name}
-          </span>
-        ))}
+        <Link href="/notifications">Notifications</Link>
       </nav>
       <section className="calendar-page" aria-labelledby="calendar-title">
         <div className="calendar-heading">

@@ -74,7 +74,7 @@ export default async function PeoplePage({
           People
         </Link>
         <Link href="/chats">Chats</Link>
-        <span>Notifications</span>
+        <Link href="/notifications">Notifications</Link>
       </nav>
       <FocusReturn
         id={focus}

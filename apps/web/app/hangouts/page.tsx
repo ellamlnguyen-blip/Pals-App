@@ -7,6 +7,7 @@ import "./map.css";
 import { localHangoutsAvailable } from "../../lib/hangouts";
 import { localPeopleAvailable } from "../../lib/people";
 import { OwnedHangouts } from "./owned-list";
+import { localNotificationsAvailable } from "../../lib/notifications";
 
 export default async function Hangouts() {
   const { client, user } = await requireAccess("ready");
@@ -59,6 +60,7 @@ export default async function Hangouts() {
       <HangoutsShell
         createEnabled={localCreate}
         peopleEnabled={localPeopleAvailable()}
+        notificationsEnabled={localNotificationsAvailable()}
         token={
           process.env.NEXT_PUBLIC_MAPBOX_TOKEN?.startsWith("pk.")
             ? process.env.NEXT_PUBLIC_MAPBOX_TOKEN
