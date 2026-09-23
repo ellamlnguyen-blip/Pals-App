@@ -65,7 +65,72 @@ select throws_ok($$select public.browse_people(p_search=>repeat('a',101))$$,'220
 select throws_ok($$select public.browse_people(p_search=>repeat(' ',101))$$,'22023',null,'long whitespace search rejected before trim');
 select throws_ok($$select public.browse_people(p_major=>repeat(' ',201))$$,'22023',null,'long whitespace major rejected before trim');
 select throws_ok($$select public.browse_people(p_after_name=>'bea')$$,'22023',null,'partial cursor rejected');
-select throws_ok($$select public.browse_people(p_after_name=>'BEA',p_after_id=>'11000000-0000-4000-8000-000000000002')$$,'22023',null,'unnormalized cursor rejected');
+select is((select count(*) from public.browse_people(p_after_name=>'Bea %_',p_after_id=>'11000000-0000-4000-8000-000000000002')),1::bigint,'raw returned name cursor advances');
+select throws_ok($$select public.browse_people(p_after_name=>repeat('x',101),p_after_id=>'11000000-0000-4000-8000-000000000002')$$,'22023',null,'overlong raw cursor rejected');
+select throws_ok($$select public.browse_people(p_after_name=>'   ',p_after_id=>'11000000-0000-4000-8000-000000000002')$$,'22023',null,'blank raw cursor rejected');
+
+-- Two pages cross a shared-name UUID boundary. The last name on page one has
+-- U+00A0 at both ends, which JavaScript trim removes but PostgreSQL btrim keeps.
+reset role;
+insert into auth.users(id,email,email_confirmed_at)
+select ('11000000-0000-4000-8000-'||lpad(n::text,12,'0'))::uuid,
+  'people-'||n||'@unc.edu', now() from generate_series(7,35) n;
+insert into storage.objects(bucket_id,name,owner_id)
+select 'profile-photos',id::text||'/primary.png',id::text
+from public.accounts where id::text between
+  '11000000-0000-4000-8000-000000000007' and '11000000-0000-4000-8000-000000000034';
+update public.profiles set real_name=case when user_id::text between
+    '11000000-0000-4000-8000-000000000007' and '11000000-0000-4000-8000-000000000032'
+    then U&'\00A0Zed\00A0' else 'Zed' end,
+  major='Biology', graduation_year=2028, bio='Private bio',
+  primary_photo_path=case when user_id='11000000-0000-4000-8000-000000000035'
+    then null else user_id::text||'/primary.png' end
+where user_id::text between
+  '11000000-0000-4000-8000-000000000007' and '11000000-0000-4000-8000-000000000035';
+insert into private.people_preferences(account_id,opted_in)
+select id,true from public.accounts where id::text between
+  '11000000-0000-4000-8000-000000000007' and '11000000-0000-4000-8000-000000000032';
+insert into private.people_preferences(account_id,opted_in)
+values ('11000000-0000-4000-8000-000000000034',true),
+  ('11000000-0000-4000-8000-000000000035',true);
+insert into private.people_blocks(blocker_id,blocked_id)
+values ('11000000-0000-4000-8000-000000000001','11000000-0000-4000-8000-000000000034');
+set local role authenticated;
+create temp table cursor_first as select * from public.browse_people(p_limit=>24);
+create temp table cursor_second as
+  select p.* from (select real_name,account_id from cursor_first
+    order by pg_catalog.lower(pg_catalog.btrim(real_name)) collate "C" desc, account_id desc limit 1) last_row,
+    lateral public.browse_people(p_after_name=>last_row.real_name,p_after_id=>last_row.account_id) p;
+select is((select count(*) from cursor_first),24::bigint,'first page is full');
+select is((select account_id::text from cursor_first order by
+  pg_catalog.lower(pg_catalog.btrim(real_name)) collate "C" desc,account_id desc limit 1),
+  '11000000-0000-4000-8000-000000000028','NBSP name is the page boundary');
+select is((select real_name from cursor_first where account_id='11000000-0000-4000-8000-000000000028'),
+  U&'\00A0Zed\00A0','boundary row returns exact raw name');
+select is((select count(*) from cursor_second),4::bigint,'second page contains the remaining peers');
+select is((select count(distinct account_id) from
+  (select account_id from cursor_first union all select account_id from cursor_second) pages),
+  28::bigint,'two pages enumerate each authorized ID once');
+reset role;
+select is((select array_agg(account_id order by pg_catalog.lower(pg_catalog.btrim(real_name)) collate "C",account_id)
+  from (select * from cursor_first union all select * from cursor_second) pages),
+  (select array_agg(id order by pg_catalog.lower(pg_catalog.btrim(p.real_name)) collate "C",id)
+    from public.accounts a join public.profiles p on p.user_id=a.id
+    where a.id in ('11000000-0000-4000-8000-000000000002','11000000-0000-4000-8000-000000000003')
+      or a.id::text between '11000000-0000-4000-8000-000000000007' and '11000000-0000-4000-8000-000000000032'),
+  'two pages equal database order across same-name UUIDs');
+set local role authenticated;
+select is((select count(*) from (select account_id from cursor_first union all select account_id from cursor_second) pages
+  where account_id in ('11000000-0000-4000-8000-000000000033','11000000-0000-4000-8000-000000000034',
+    '11000000-0000-4000-8000-000000000035','11000000-0000-4000-8000-000000000004')),
+  0::bigint,'cursor does not reveal opted-out, blocked, unready or cross-campus peers');
+drop table cursor_second,cursor_first;
+reset role;
+update private.people_preferences set opted_in=false where account_id::text between
+  '11000000-0000-4000-8000-000000000007' and '11000000-0000-4000-8000-000000000035';
+delete from private.people_blocks where blocker_id='11000000-0000-4000-8000-000000000001'
+  and blocked_id='11000000-0000-4000-8000-000000000034';
+set local role authenticated;
 select is(public.set_people_block('11000000-0000-4000-8000-000000000002',true),true,'visible peer can be blocked');
 select is(public.set_people_block('11000000-0000-4000-8000-000000000002',true),true,'block retry is idempotent');
 select is((select count(*) from public.get_people_detail('11000000-0000-4000-8000-000000000002')),0::bigint,'outbound block hides detail');
