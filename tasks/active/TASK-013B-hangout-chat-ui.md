@@ -1,6 +1,6 @@
 # TASK-013B — Local Hangout chat UI
 
-Status: Planned — review/publish before fresh UI dispatch
+Status: Active — fresh UI agent dispatched from verified canonical main
 Date: 2026-09-23
 Parent: TASK-013
 Decision: Accepted ADR-0015
@@ -28,3 +28,6 @@ Give current joined students a simple, usable text thread for a saved Hangout an
 Run `pnpm check` and focused action/route tests using real local Auth/PostgREST and a validated loopback Supabase stack where available. Test anonymous, current joined host/member, discoverer, left, removed, cancelled, gate off with public membership still visible, readiness loss, stale direct URL, denied poll, lost send response/exact-key retry, changed draft after uncertainty, pagination, author redaction and no-store responses. Verify hidden tab/pageshow/bfcache and cross-tab signout reauthorization before showing retained text, plus invalidation of earlier in-flight responses after denial. Verify rendered desktop/tablet/390px/320px, keyboard/focus, multiline composer, loading/empty/error/denied/uncertain states, no horizontal overflow and no raw HTML rendering. Note any unavailable runtime/visual checks precisely; do not invent a passing result. Restore gates false, remove fixtures and stop services.
 
 Commit only in-scope UI/code/tests/interaction plan and `agents/handoffs/TASK-013B.md`, push/independently verify the task branch, then stop. The coordinator owns shared queue/state, fresh security/design review and main integration before marking TASK-013 complete. Do not start TASK-014 or hosted work from this stage.
+
+## Dispatch receipt
+This contract passed independent GPT-6 Sol medium security/design planning review after chat-gate and tab-lifecycle privacy clarifications. It was published and independently verified on both `origin/agent/TASK-013-planning` and `origin/main` at `4e1ca92f20d715cdf0a92d40846819d83845969c`. A fresh GPT-6 Sol medium agent was dispatched from that baseline to an isolated UI branch/worktree. Standard is the app preference; dispatch tooling has no speed selector, so speed is not verified. Exact-tip rendered/security review and main integration remain required.
