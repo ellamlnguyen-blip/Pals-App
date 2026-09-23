@@ -13,14 +13,23 @@ alter table private.notification_items add constraint notification_items_check c
  or (source_kind='hangout' and event_code in('hangout_edited','hangout_cancelled','hangout_joined','hangout_left'))
  or (source_kind='hangout_chat' and event_code='hangout_chat_message'));
 
--- Only source RPCs/triggers call this helper after their source locks. Gate SHARE
--- precedes each recipient's advisory lock, in ascending UUID order.
+-- Only source RPCs/triggers call this helper after their parent-row locks.
+-- Source gate SHARE, then notification gate SHARE, precede recipient advisory
+-- locks in ascending UUID order. A source gate disabled during the mutation
+-- silently skips its event without rolling back the source transition.
 create function private.notification_emit_hangout(p_event uuid,p_hangout uuid,p_actor uuid,p_code text)
 returns void language plpgsql volatile security definer set search_path='' as $$
 declare recipient uuid; event_category text; essential boolean; kind text;
 begin
  if p_code not in('hangout_edited','hangout_cancelled','hangout_joined','hangout_left','hangout_chat_message') then
   raise exception 'Invalid notification event' using errcode='22023'; end if;
+ perform 1 from private.hangout_feature_gate where singleton for share;
+ -- A fresh READ COMMITTED check after any source-gate lock wait.
+ if not private.hangouts_enabled() then return; end if;
+ if p_code='hangout_chat_message' then
+  perform 1 from private.hangout_chat_feature_gate where singleton for share;
+  if not exists(select 1 from private.hangout_chat_feature_gate where singleton and enabled) then return; end if;
+ end if;
  perform 1 from private.notification_feature_gate where singleton for share;
  if not private.notification_enabled() then return; end if;
  essential:=p_code='hangout_cancelled';

@@ -93,3 +93,87 @@ test("observed parent-row and recipient/gate races preserve recipients", async (
       delete from auth.users where id in ('${host}','${peer}','${removed}');`);
   }
 });
+
+// Source-gate races are separate from the notification-gate races above: an
+// already admitted Hangout mutation may commit while source delivery turns off.
+test("observed source-gate orders never create post-disable items", async () => {
+  const sourceHost = "51500000-0000-4000-8000-000000000021";
+  const sourcePeer = "51500000-0000-4000-8000-000000000022";
+  const hangouts = [];
+  sql(`insert into auth.users(id,email,email_confirmed_at) values
+    ('${sourceHost}','source-race-host@unc.edu',now()),('${sourcePeer}','source-race-peer@unc.edu',now());
+    insert into storage.objects(bucket_id,name,owner_id)
+      select 'profile-photos',id::text||'/primary.png',id::text from public.accounts where id in ('${sourceHost}','${sourcePeer}');
+    update public.profiles set real_name='Source race',major='Science',graduation_year=2028,
+      bio='Local fixture',primary_photo_path=user_id::text||'/primary.png'
+      where user_id in ('${sourceHost}','${sourcePeer}');
+    update private.hangout_feature_gate set enabled=true;
+    update private.hangout_chat_feature_gate set enabled=true;
+    update private.notification_feature_gate set enabled=true;`);
+  const sourceOn = () => sql("update private.hangout_feature_gate set enabled=true");
+  const chatOn = () => sql("update private.hangout_chat_feature_gate set enabled=true");
+  const create = () => {
+    const id = sql(`begin; ${claims(sourceHost)} select public.create_hangout('${crypto.randomUUID()}','Gate race',now()+interval '1 hour','Area',35,-79); commit;`).split("\n")[0];
+    hangouts.push(id);
+    return id;
+  };
+  const join = (id) => sql(`begin; ${claims(sourcePeer)} select public.join_hangout('${id}'); commit;`);
+  const count = (id, code, recipient = sourcePeer) => Number(sql(`select count(*) from private.notification_items where target_id='${id}' and event_code='${code}' and recipient_id='${recipient}'`));
+  const edit = (id, revision, title) => `${claims(sourceHost)} select public.edit_hangout('${id}',${revision},'${title}',(select starts_at from public.hangouts where id='${id}'),'Area',35,-79);`;
+  try {
+    const editId = create(); join(editId);
+    await race("hb_source_edit_off", "update private.hangout_feature_gate set enabled=false;", edit(editId, 1, "Off edit"));
+    assert.equal(sql(`select revision from public.hangouts where id='${editId}'`), "2", "edit source commits after gate disable");
+    assert.equal(count(editId, "hangout_edited"), 0, "disabled Hangout gate skips edit item");
+    sourceOn();
+    await race("hb_edit_before_source_off", edit(editId, 2, "On edit"), "update private.hangout_feature_gate set enabled=false;");
+    assert.equal(count(editId, "hangout_edited"), 1, "edit holding source gate commits first");
+    sourceOn();
+
+    const joinId = create();
+    await race("hb_source_join_off", "update private.hangout_feature_gate set enabled=false;", `${claims(sourcePeer)} select public.join_hangout('${joinId}');`);
+    assert.equal(sql(`select state from public.hangout_participants where hangout_id='${joinId}' and account_id='${sourcePeer}'`), "joined", "join source commits after gate disable");
+    assert.equal(count(joinId, "hangout_joined", sourceHost), 0, "disabled Hangout gate skips join item");
+    sourceOn();
+    sql(`begin; ${claims(sourcePeer)} select public.leave_hangout('${joinId}'); commit;`);
+    await race("hb_join_before_source_off", `${claims(sourcePeer)} select public.join_hangout('${joinId}');`, "update private.hangout_feature_gate set enabled=false;");
+    assert.equal(count(joinId, "hangout_joined", sourceHost), 1, "join holding source gate commits first");
+    sourceOn();
+
+    const cancelOffId = create(); join(cancelOffId);
+    await race("hb_source_cancel_off", "update private.hangout_feature_gate set enabled=false;", `${claims(sourceHost)} select public.cancel_hangout('${cancelOffId}',1);`);
+    assert.equal(sql(`select status from public.hangouts where id='${cancelOffId}'`), "cancelled", "cancel source commits after gate disable");
+    assert.equal(count(cancelOffId, "hangout_cancelled"), 0, "disabled Hangout gate skips essential item");
+    sourceOn();
+    const cancelOnId = create(); join(cancelOnId);
+    await race("hb_cancel_before_source_off", `${claims(sourceHost)} select public.cancel_hangout('${cancelOnId}',1);`, "update private.hangout_feature_gate set enabled=false;");
+    assert.equal(count(cancelOnId, "hangout_cancelled"), 1, "cancel holding source gate commits first");
+    sourceOn();
+
+    const chatId = create(); join(chatId);
+    const send = (requestId) => `${claims(sourceHost)} select message_id from public.send_hangout_message('${chatId}','${requestId}','Gate race text');`;
+    await race("hb_chat_source_off", "update private.hangout_chat_feature_gate set enabled=false;", send(crypto.randomUUID()), true);
+    assert.equal(count(chatId, "hangout_chat_message"), 0, "chat disabled first leaves no event");
+    assert.equal(Number(sql(`select count(*) from private.hangout_messages m join private.hangout_conversations c on c.id=m.conversation_id where c.hangout_id='${chatId}'`)), 0, "chat disabled first vetoes send");
+    chatOn();
+    await race("hb_send_before_chat_off", send(crypto.randomUUID()), "update private.hangout_chat_feature_gate set enabled=false;");
+    assert.equal(count(chatId, "hangout_chat_message"), 1, "send holding chat gate commits first");
+  } finally {
+    const ids = hangouts.length ? hangouts.map((id) => `'${id}'`).join(",") : "null";
+    sql(`update private.notification_feature_gate set enabled=false;
+      update private.hangout_chat_feature_gate set enabled=false;
+      update private.hangout_feature_gate set enabled=false;
+      delete from private.notification_items where recipient_id in ('${sourceHost}','${sourcePeer}') or actor_id in ('${sourceHost}','${sourcePeer}');
+      delete from private.notification_preferences where recipient_id in ('${sourceHost}','${sourcePeer}');
+      set chat.allow_fixture_cleanup='true';
+      delete from private.hangout_message_requests where hangout_id in (${ids});
+      delete from private.hangout_messages where conversation_id in (select id from private.hangout_conversations where hangout_id in (${ids}));
+      delete from private.hangout_conversations where hangout_id in (${ids});
+      delete from private.hangout_create_requests where hangout_id in (${ids});
+      delete from public.hangouts where id in (${ids});
+      update public.profiles set primary_photo_path=null where user_id in ('${sourceHost}','${sourcePeer}');
+      set storage.allow_delete_query='true';
+      delete from storage.objects where owner_id in ('${sourceHost}','${sourcePeer}');
+      delete from auth.users where id in ('${sourceHost}','${sourcePeer}');`);
+  }
+});

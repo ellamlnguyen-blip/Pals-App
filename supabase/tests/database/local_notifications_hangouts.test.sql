@@ -99,5 +99,23 @@ set local role authenticated;
 select set_config('request.jwt.claims','{"sub":"51500000-0000-4000-8000-000000000002","role":"authenticated"}',true);
 select is((select event_code from public.list_notifications() limit 1),'hangout_cancelled','muted participant sees cancellation');
 select is((select count(*) from public.list_notifications() where event_code='hangout_chat_message'),0::bigint,'cancelled chat item unavailable');
+reset role;
+insert into private.people_preferences(account_id,opted_in) values
+ ('51500000-0000-4000-8000-000000000001',true),('51500000-0000-4000-8000-000000000002',true);
+update private.people_feature_gate set enabled=true;
+update private.friendship_feature_gate set enabled=true;
+set local role authenticated;
+select set_config('request.jwt.claims','{"sub":"51500000-0000-4000-8000-000000000001","role":"authenticated"}',true);
+select public.create_friend_request('51500000-0000-4000-8000-000000000002',pg_temp.key(3));
+select set_config('request.jwt.claims','{"sub":"51500000-0000-4000-8000-000000000002","role":"authenticated"}',true);
+select is((select source_kind from public.list_notifications(p_limit=>1)),'friendship','mixed cursor starts at newest social item');
+select set_config('notice.cursor_time',(select created_at::text from public.list_notifications(p_limit=>1)),true);
+select set_config('notice.cursor_id',(select notification_id::text from public.list_notifications(p_limit=>1)),true);
+select is((select source_kind from public.list_notifications(current_setting('notice.cursor_time')::timestamptz,current_setting('notice.cursor_id')::uuid,1)),
+ 'hangout','mixed cursor reaches older Hangout cancellation');
+select isnt((select notification_id from public.list_notifications(p_limit=>1)),
+ (select notification_id from public.list_notifications(current_setting('notice.cursor_time')::timestamptz,current_setting('notice.cursor_id')::uuid,1)),
+ 'mixed-source page IDs never repeat');
+select is((select count(*) from public.list_notifications(p_limit=>1)),1::bigint,'mixed-source page limit preserved');
 select finish();
 rollback;
