@@ -1,6 +1,6 @@
 # TASK-012B — Local friendship People UI
 
-Status: Reviewed contract published; fresh UI agent dispatched; implementation/review in progress
+Status: First UI tip pushed; independent security/design review found two state gaps; correction in progress before integration
 Date: 2026-09-23
 Parent: TASK-012
 Decision: Accepted ADR-0014
