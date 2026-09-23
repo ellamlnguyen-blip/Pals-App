@@ -93,7 +93,9 @@ export async function profileChecks(owner, peer, a, sql, png) {
     const page = await fetch(`${origin}/profile`, {
       headers: { Cookie: owner.header() },
     });
-    assert.ok((await page.text()).includes("Only you can see your profile"));
+    const html = await page.text();
+    assert.ok(html.includes("Your photos and extra details stay private"));
+    assert.ok(html.includes("Preview and manage People sharing"));
     for (const [slot, expected] of [
       ["primary", 200],
       ["0", 200],

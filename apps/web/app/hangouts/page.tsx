@@ -5,6 +5,7 @@ import { signOut } from "../actions";
 import { HangoutsShell } from "./shell";
 import "./map.css";
 import { localHangoutsAvailable } from "../../lib/hangouts";
+import { localPeopleAvailable } from "../../lib/people";
 import { OwnedHangouts } from "./owned-list";
 
 export default async function Hangouts() {
@@ -59,6 +60,7 @@ export default async function Hangouts() {
       {localCreate && <OwnedHangouts />}
       <HangoutsShell
         createEnabled={localCreate}
+        peopleEnabled={localPeopleAvailable()}
         token={
           process.env.NEXT_PUBLIC_MAPBOX_TOKEN?.startsWith("pk.")
             ? process.env.NEXT_PUBLIC_MAPBOX_TOKEN

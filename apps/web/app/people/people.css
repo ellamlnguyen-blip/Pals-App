@@ -1,0 +1,227 @@
+.people-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  gap: 1rem;
+  margin: 2rem 0;
+}
+.page .primary-nav {
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 1rem;
+}
+.page .primary-nav > * {
+  flex: none;
+  white-space: nowrap;
+}
+.people-heading h1 {
+  font-size: clamp(2.3rem, 4vw, 3.3rem);
+}
+.people-heading p:last-child {
+  color: var(--pals-muted);
+}
+.people-filters {
+  display: grid;
+  grid-template-columns:
+    minmax(10rem, 2fr) repeat(2, minmax(8rem, 1fr))
+    auto auto;
+  align-items: end;
+  gap: 1rem;
+  padding: 1.5rem;
+  border: 1px solid var(--pals-line);
+  border-radius: var(--pals-radius);
+}
+.people-filters label,
+.unblock-control label {
+  display: grid;
+  gap: 0.3rem;
+  font-weight: 800;
+}
+.people-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+  list-style: none;
+  padding: 0;
+  margin: 2rem 0;
+}
+.people-grid li {
+  min-width: 0;
+}
+.people-grid a {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+  min-height: 11rem;
+  padding: 1.5rem;
+  border: 1px solid var(--pals-line);
+  border-radius: var(--pals-radius);
+  text-decoration: none;
+  color: var(--pals-ink);
+  background: var(--pals-surface);
+}
+.people-grid a:hover {
+  border-color: var(--pals-accent);
+}
+.people-card-name {
+  font-size: 1.35rem;
+  font-weight: 900;
+  line-height: 1.2;
+}
+.people-card-cta {
+  margin-top: auto;
+  color: var(--pals-accent);
+  font-weight: 800;
+}
+.people-pages {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin: 1.5rem 0 3rem;
+}
+.people-panel {
+  margin: 1.5rem 0;
+  overflow-wrap: anywhere;
+}
+.people-panel h1 {
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+.people-panel h2 {
+  margin-top: 0;
+}
+.people-detail {
+  max-width: 52rem;
+  margin: 0 auto 3rem;
+}
+.people-detail > .people-panel {
+  margin-top: 1.5rem;
+}
+.people-detail-body {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+.people-detail-body section {
+  padding: 1.25rem;
+  background: var(--pals-canvas);
+  border: 1px solid var(--pals-line);
+}
+.people-detail-body section:first-child {
+  grid-column: 1/-1;
+}
+.people-detail-body h2 {
+  font-size: 1.15rem;
+  margin-bottom: 0.5rem;
+}
+.people-detail-body p,
+.people-detail-body ul {
+  margin: 0.25rem 0;
+}
+.people-block {
+  margin-top: 1.5rem;
+}
+.people-preview {
+  border: 1px solid var(--pals-line);
+  border-radius: var(--pals-input-radius);
+  padding: 1.25rem;
+  background: var(--pals-canvas);
+}
+.people-preview dl {
+  margin: 0;
+}
+.people-preview dt {
+  font-weight: 900;
+  margin-top: 1rem;
+}
+.people-preview dd {
+  margin: 0.25rem 0;
+}
+.privacy-toggle {
+  margin-top: 1.5rem;
+}
+.blocked-ids {
+  padding: 0;
+  list-style: none;
+}
+.blocked-ids li {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border-top: 1px solid var(--pals-line);
+  padding: 0.75rem 0;
+}
+.blocked-ids code,
+dialog code {
+  overflow-wrap: anywhere;
+  user-select: all;
+}
+.people-block dialog,
+.unblock-control dialog {
+  max-width: min(30rem, calc(100vw - 2rem));
+  padding: 1.5rem;
+  border: 1px solid var(--pals-line);
+  border-radius: var(--pals-radius);
+  background: var(--pals-canvas);
+  color: var(--pals-ink);
+  box-shadow: var(--pals-overlay-shadow);
+}
+.people-block dialog::backdrop,
+.unblock-control dialog::backdrop {
+  background: rgb(0 0 0 / 0.55);
+}
+.people-dialog-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+.people-block-status {
+  padding: 1.5rem;
+  background: var(--pals-surface);
+}
+@media (max-width: 800px) {
+  .people-filters {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .people-filters label:first-child {
+    grid-column: 1/-1;
+  }
+  .people-heading {
+    align-items: start;
+  }
+}
+@media (max-width: 600px) {
+  .people-heading {
+    display: block;
+  }
+  .people-heading a {
+    display: inline-block;
+  }
+  .people-filters,
+  .people-grid,
+  .people-detail-body {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .people-filters label:first-child,
+  .people-detail-body section:first-child {
+    grid-column: auto;
+  }
+  .people-grid a {
+    min-height: 0;
+  }
+  .blocked-ids li {
+    align-items: start;
+    flex-direction: column;
+  }
+  .people-dialog-actions .button {
+    width: 100%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .people-grid a,
+  .people-block button {
+    scroll-behavior: auto;
+  }
+}

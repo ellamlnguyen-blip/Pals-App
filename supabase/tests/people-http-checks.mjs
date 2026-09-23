@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { existsSync, readFileSync } from "node:fs";
 
 export async function peopleHttpChecks(owner, peer, a, b, sql, png, url, key) {
   const ownerApi = owner.auth;
@@ -39,6 +40,60 @@ export async function peopleHttpChecks(owner, peer, a, b, sql, png, url, key) {
     assert.deepEqual(Object.keys(detail.data[0]).sort(), [
       "account_id", "bio", "campus_name", "down_to_do", "graduation_year", "interests", "major", "real_name",
     ]);
+    if (process.env.WEB_TEST_ORIGIN) {
+      const web = process.env.WEB_TEST_ORIGIN;
+      const headers = { Cookie: owner.header() };
+      for (const path of [
+        "/people",
+        `/people/${b.id}`,
+        "/people/privacy",
+        "/people?search=x&search=y",
+      ]) {
+        const response = await fetch(`${web}${path}`, { headers });
+        assert.equal(response.status, 200);
+        assert.match(response.headers.get("cache-control") ?? "", /no-store/, `${path} is not cached`);
+      }
+      const malformedBack = await fetch(
+        `${web}/people/${b.id}?from=%2Fpeople&from=%2Fcalendar`,
+        { headers },
+      );
+      assert.match(await malformedBack.text(), /href="\/people"/, "duplicate return values fall back to People");
+      const next = await fetch(`${web}/people?afterId=${b.id}`, { headers });
+      assert.equal(next.status, 200);
+      assert.doesNotMatch(await next.text(), /Check your People filters/, "UI accepts ID-only cursor");
+      const legacy = await fetch(`${web}/people?afterName=${encodeURIComponent(rawPeerName)}&afterId=${b.id}`, { headers });
+      assert.match(await legacy.text(), /Check your People filters/, "UI rejects old name cursor");
+      const devManifest = new URL("../../apps/web/.next/dev/server/server-reference-manifest.json", import.meta.url);
+      const productionManifest = new URL("../../apps/web/.next/server/server-reference-manifest.json", import.meta.url);
+      const manifest = JSON.parse(readFileSync(existsSync(productionManifest) ? productionManifest : devManifest, "utf8"));
+      const actionIds = Object.fromEntries(Object.entries(manifest.node).map(([id, entry]) => [entry.exportedName, id]));
+      assert.ok(actionIds.setPeopleVisibility && actionIds.blockPerson);
+      async function action(name, args, path, cookie) {
+        const form = new FormData();
+        form.set("0", JSON.stringify(args));
+        const response = await fetch(`${web}${path}`, {
+          method: "POST",
+          headers: { Cookie: cookie, Origin: web, "Next-Action": actionIds[name] },
+          body: form,
+          redirect: "manual",
+        });
+        const body = await response.text();
+        assert.equal(response.status, 200, body);
+        assert.match(response.headers.get("cache-control") ?? "", /no-store/, `${name} action response is not cached`);
+        return body;
+      }
+      assert.match(await action("setPeopleVisibility", [false], "/people/privacy", owner.header()), /sharing choice is off/);
+      assert.match(await action("blockPerson", ["not-a-uuid"], `/people/${b.id}`, owner.header()), /person is unavailable/);
+      assert.match(await action("setPeopleVisibility", [false], "/people/privacy", ""), /Account access is unavailable/);
+      sql("update private.people_feature_gate set enabled=false");
+      try {
+        const uncertain = await action("blockPerson", [b.id], `/people/${b.id}`, owner.header());
+        assert.match(uncertain, /could not confirm the block/);
+        assert.ok(!uncertain.includes(rawPeerName), "uncertain action does not return peer text");
+      } finally {
+        sql("update private.people_feature_gate set enabled=true");
+      }
+    }
     assert.deepEqual((await ownerApi.from("profiles").select("user_id").eq("user_id", b.id)).data, []);
     assert.deepEqual((await ownerApi.from("profiles").select("user_id,accounts(id)").eq("user_id", b.id)).data, []);
     assert.deepEqual((await ownerApi.from("accounts").select("id,profiles(user_id)").eq("id", b.id)).data, []);
