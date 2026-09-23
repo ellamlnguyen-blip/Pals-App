@@ -1,6 +1,6 @@
 # TASK-016B — disposable-local reporting backend
 
-Status: In progress after independently reviewed canonical publication. Parent: TASK-016. Authority: accepted ADR-0018. Dependency A is complete: independently reviewed task tip `2819d8f7e04dad24121fd891fa2c53e546344f90` integrated on remote-verified canonical main `d99adde65858080a0d5a6e966396b26be7e4fd1a`. Read AGENTS.md, this contract, TASK-016, ADR-0018, DATA_MODEL, AUTHORIZATION, SECURITY_AND_SAFETY, TESTING, TASK-016A handoff/review and final source migration definitions before implementation. The coordinator owns contract review, task queue, shared records, stage integration and C dispatch. The B implementation agent owns only bounded implementation and handoff after reviewed publication.
+Status: Implemented and locally verified on pushed task tip `427254cb79703e8894ae2571444c9461762da0f3`; independent exact-tip security/evidence review underway. Parent: TASK-016. Authority: accepted ADR-0018. Dependency A is complete: independently reviewed task tip `2819d8f7e04dad24121fd891fa2c53e546344f90` integrated on remote-verified canonical main `d99adde65858080a0d5a6e966396b26be7e4fd1a`. Read AGENTS.md, this contract, TASK-016, ADR-0018, DATA_MODEL, AUTHORIZATION, SECURITY_AND_SAFETY, TESTING, TASK-016A handoff/review and final source migration definitions before implementation. The coordinator owns contract review, task queue, shared records, stage integration and C dispatch. The B implementation agent owns only bounded implementation and handoff after reviewed publication.
 
 ## Outcome and boundary
 
