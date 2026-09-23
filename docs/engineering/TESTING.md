@@ -20,3 +20,7 @@ TASK-006 adds database optional-shape/photo-membership tests, direct HTTP round 
 ## TASK-013A local Hangout chat verification
 
 `local_hangout_chat.test.sql` covers actual-role table/RPC denial, joined history, retries, author projection, pagination, readiness changes, both gates and cancellation. `hangout-chat-http.integration.mjs` uses real local Auth/PostgREST sessions. `hangout-chat-concurrency.integration.mjs` waits for observed Postgres lock contention before testing gate, profile, membership and duplicate-send races. Run the Node suites serially against the validated disposable loopback Supabase stack; each disables local gates and removes its fixtures. The pgTAP file is included in normal `pnpm db:verify`.
+
+## TASK-014A local DM verification
+
+`local_direct_messages.test.sql` checks actual-role table denial, gate default, consent states, suppression, authorized pages, retries and block teardown. `dm-http.integration.mjs` uses real local Auth/PostgREST sessions and cleans private fixtures. `dm-concurrency.integration.mjs` observes Postgres lock waits for opposite creates, block versus reply and opt-out versus accept, plus stronger-isolation denial. Run these Node suites serially against verified loopback Supabase with Docker access; their fixtures restore the DM and People gates to false. The pgTAP file is included in the database suite.
