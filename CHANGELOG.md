@@ -2,6 +2,12 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-23 — TASK-011 local People directory
+
+- Added a ready-only, opt-in, same-campus text People list/detail with literal search, year/major filters, deterministic ID-only cursor pages and owner privacy preview. Added People-only bilateral blocks, outbound ID management and immediate detail clearing after block.
+- Kept profile photos and excluded fields owner-only; Hangout permissions, friendship, messaging and hosted environments unchanged. Both local database gates remain disabled after verification.
+- Independent security/design review and local SQL, HTTP/action, concurrency, desktop/phone and keyboard checks passed; isolated offline tooling prevented a default `pnpm check`/Turbopack green claim.
+
 ## 2026-09-22 — TASK-011A local People backend
 
 - Added reviewed opt-in text discovery, minimal two-way People blocking and default-disabled local gate with caller-bound RPCs. Preserved owner-only raw profiles/photos and existing Hangout access.

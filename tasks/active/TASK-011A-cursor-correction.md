@@ -1,6 +1,6 @@
 # TASK-011A cursor correction — People pagination
 
-Status: Corrective backend complete; exact-commit security review clear and integrated on remote-verified main `c393a2e36985a44c7a86b42d83252a2e7320e401`; parent TASK-011 awaits UI and final review
+Status: Corrective backend complete; exact-commit security review clear and integrated on remote-verified main `c393a2e36985a44c7a86b42d83252a2e7320e401`; parent TASK-011 local text increment complete after UI review/integration
 Date: 2026-09-22
 Parent: TASK-011; decision: Accepted ADR-0013
 Starting verified main: `02853e8be789f62056dd8a58fe0fcc4fa3cf4383`
