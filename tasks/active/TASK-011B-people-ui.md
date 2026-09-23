@@ -1,7 +1,8 @@
 # TASK-011B — Local People directory and privacy controls
 
-Status: TASK-011A reviewed and integrated; publish this contract before UI dispatch
+Status: Published on canonical main; UI implementation dispatched in isolated worktree
 Parent: TASK-011; authority: Accepted ADR-0013
+Implementation branch: `agent/TASK-011B-people-ui` from verified main `6cf286ed72269ac603cb298b30a52d5fba74ecf1`
 Backend task branch: `ca1d6d234ea1af3f08af8c21d76f7db8ffc88f0d`; reviewed main integration: `ef4da666dbd89996190aa7fb0fd1f31aba7b7d40`
 
 ## Goal

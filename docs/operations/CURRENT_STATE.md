@@ -86,3 +86,5 @@ ADR-0013 was explicitly accepted by the user (“yes”) on 2026-09-22 for local
 TASK-011A local backend stage dispatched from verified `a9c10a81ce24af4d84330c027d2d0b8a53c3bacc` on isolated `agent/TASK-011A-people-backend`; implementation/review/verification are in progress. No peer access is integrated on main.
 
 TASK-011A local privacy backend is reviewed and integrated: gate default disabled, opt-in text projections, live same-campus readiness and two-way People block suppression, all caller-bound. Raw profile/photos remain owner-only. Task branch `ca1d6d234ea1af3f08af8c21d76f7db8ffc88f0d`, remote-verified main `ef4da666dbd89996190aa7fb0fd1f31aba7b7d40`. Two clean local resets/actual role checks, real HTTP, concurrency and direct workspace checks passed with offline symlink/CLI limits documented in the handoff. TASK-011B local UI remains next; no People UI or hosted enablement exists yet.
+
+TASK-011B local People UI stage dispatched from verified main `6cf286ed72269ac603cb298b30a52d5fba74ecf1` to isolated `agent/TASK-011B-people-ui`. No UI integrated yet.
