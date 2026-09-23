@@ -116,6 +116,14 @@ After review, integrate accepted code together with its handoff and relevant CUR
 
 The coordinator owns these shared records to avoid concurrent queue edits. Use a bounded documentation branch for status-only updates when the implementation branch contains unreviewed code. Do not require the user to request routine authorized publication/integration separately for every task. At each new task, read the latest `origin/main` records before proceeding.
 
+## Automatic Next-Task Handoff
+
+Standing user instruction: after a task is finished, automatically create a new Codex chat/task in the Pals App project and start the next task without asking for routine permission. This supersedes older task/handoff language saying not to auto-dispatch the next task.
+
+Finish means the applicable acceptance criteria, review, handoff, shared records, publication and remote-verified main integration are complete. A proposed contract, blocked decision or task-branch push alone is not completion. Select the next ready task from current NOW/BACKLOG and dependency order; do not duplicate an existing active task. Use a fresh project worktree from current canonical main and pass a concise task contract/context, verified baseline, dependencies, remaining gates and this standing instruction. Announce the new task to the user with the created-task link.
+
+Starting the next task authorizes its bounded planning and already accepted implementation scope; it does not accept Proposed ADRs, waive safety gates or authorize otherwise excluded hosted operations. Surface genuine decisions in the new task while completing independent authorized work. Preserve blocked tasks as incomplete. Documentation receipts and implementation sub-stages do not each trigger duplicate product-task chats; the coordinator creates one successor when the bounded parent task is complete. If no next task can proceed, report the specific dependency or decision instead of inventing scope.
+
 ## ADR Policy
 Use ADRs for major dependencies/services, schema/domain changes, auth/authorization strategy, deployment topology, permissions/privacy changes, replacing core providers, or major product behavior.
 
