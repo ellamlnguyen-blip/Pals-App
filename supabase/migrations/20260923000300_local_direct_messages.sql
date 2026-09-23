@@ -223,7 +223,7 @@ begin
       or (p_action='close' and pair.state='accepted')) then
     raise exception 'DM unavailable' using errcode='42501'; end if;
   if p_action in ('accept','reply') then
-    if not private.dm_eligible(p_peer_id) or private.people_ready_campus() <> pair.campus_id then
+    if not private.dm_eligible(p_peer_id) then
       raise exception 'DM unavailable' using errcode='42501'; end if;
     if p_action='reply' then
       if p_reply_request_id is null or p_reply_body is null then
@@ -277,7 +277,7 @@ begin
   select * into pair from private.dm_pairs d where d.generation_id=p_generation_id
     and d.low_id=least(actor,p_peer_id) and d.high_id=greatest(actor,p_peer_id)
     and d.state='accepted';
-  if not found or pair.campus_id <> private.people_ready_campus() then
+  if not found then
     raise exception 'DM unavailable' using errcode='42501'; end if;
   select * into old_retry from private.dm_retries r where r.actor_id=actor and r.request_id=p_request_id;
   if found then

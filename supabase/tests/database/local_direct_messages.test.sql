@@ -137,15 +137,59 @@ select is((select count(*) from public.list_dm_inbox()),0::bigint,'unrelated acc
 select is((select count(*) from public.read_dm_messages('14000000-0000-4000-8000-000000000001',
   (select generation_id from reverse_dm))),0::bigint,'unrelated body read empty');
 reset role;
+update private.people_preferences set opted_in=true
+  where account_id='14000000-0000-4000-8000-000000000002';
+insert into public.universities(id,slug,name,active,allowed_email_domains)
+  values('14000000-0000-4000-8000-0000000000ff','dm-fixture-campus',
+    'DM fixture campus',true,array['unc.edu']);
+set local role authenticated;
+select set_config('request.jwt.claims','{"sub":"14000000-0000-4000-8000-000000000002","role":"authenticated"}',true);
+select public.create_dm_request('14000000-0000-4000-8000-000000000003',
+  '14000000-0000-4000-8000-0000000000a1','Campus thread');
+create temp table campus_dm as select generation_id
+  from public.get_dm_status('14000000-0000-4000-8000-000000000003');
+select set_config('request.jwt.claims','{"sub":"14000000-0000-4000-8000-000000000003","role":"authenticated"}',true);
+select ok(public.transition_dm('14000000-0000-4000-8000-000000000002',
+  (select generation_id from campus_dm),'accept'),'recipient accepts at formation campus');
+reset role;
+update public.university_memberships set university_id='14000000-0000-4000-8000-0000000000ff'
+  where user_id in ('14000000-0000-4000-8000-000000000002',
+    '14000000-0000-4000-8000-000000000003');
+set local role authenticated;
+select set_config('request.jwt.claims','{"sub":"14000000-0000-4000-8000-000000000002","role":"authenticated"}',true);
+select is(public.get_access_state(),'ready','both transferred accounts remain ready');
+select is((select count(*) from public.read_dm_messages('14000000-0000-4000-8000-000000000003',
+  (select generation_id from campus_dm))),1::bigint,'accepted body readable at new shared campus');
+select isnt(public.send_dm_message('14000000-0000-4000-8000-000000000003',
+  (select generation_id from campus_dm),'14000000-0000-4000-8000-0000000000a2',
+  'Still together'),null::uuid,'send resumes at new shared campus');
+reset role;
+update public.university_memberships set university_id='00000000-0000-4000-8000-000000000001'
+  where user_id='14000000-0000-4000-8000-000000000003';
+set local role authenticated;
+select is((select count(*) from public.read_dm_messages('14000000-0000-4000-8000-000000000003',
+  (select generation_id from campus_dm))),0::bigint,'cross-campus body denied');
+select throws_ok($$select public.send_dm_message('14000000-0000-4000-8000-000000000003',
+  (select generation_id from campus_dm),'14000000-0000-4000-8000-0000000000a3',
+  'Across campus')$$,'42501',null,'cross-campus send denied');
+reset role;
+update public.university_memberships set university_id='14000000-0000-4000-8000-0000000000ff'
+  where user_id in ('14000000-0000-4000-8000-000000000001',
+    '14000000-0000-4000-8000-000000000003');
+set local role authenticated;
+select set_config('request.jwt.claims','{"sub":"14000000-0000-4000-8000-000000000001","role":"authenticated"}',true);
+select ok(public.transition_dm('14000000-0000-4000-8000-000000000003',
+  (select generation_id from reverse_dm),'accept'),
+  'pending request accepted after both transfer to same new campus');
+reset role;
 update private.people_feature_gate set enabled=false;
 set local role authenticated;
 select set_config('request.jwt.claims','{"sub":"14000000-0000-4000-8000-000000000001","role":"authenticated"}',true);
-select is((select first_body from public.list_dm_inbox()
-  where generation_id=(select generation_id from reverse_dm)),null::text,
-  'People gate off removes pending body');
+select is((select count(*) from public.read_dm_messages('14000000-0000-4000-8000-000000000003',
+  (select generation_id from reverse_dm))),0::bigint,'People gate off removes accepted body');
 select ok(public.transition_dm('14000000-0000-4000-8000-000000000003',
-  (select generation_id from reverse_dm),'ignore'),
-  'participant can ignore while People gate off');
+  (select generation_id from reverse_dm),'close'),
+  'participant can close while People gate off');
 reset role;
 update private.dm_feature_gate set enabled=false;
 select * from finish();

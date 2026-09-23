@@ -77,6 +77,44 @@ test("DM pair, block, gate and opt-out serialize across real sessions", async ()
       (output)=>assert.match(output,/DM unavailable/));
     assert.equal(sql(`select state from private.dm_pairs where generation_id='${reverse}'`),"blocked");
     assert.equal(sql(`select count(*) from private.dm_messages where generation_id='${reverse}'`),"1");
+    sql(`delete from private.people_blocks where blocker_id='${a}' and blocked_id='${b}'`);
+    const creator=session("dm_blocked_creator"), blocker=session("dm_block_against_loser"),
+      opposite=session("dm_opposite_after_block");
+    try {
+      creator.send(`begin; ${claims(a)} select public.create_dm_request('${b}',
+        '15000000-0000-4000-8000-000000000096','First before block'); select 'created';`);
+      await until(()=>creator.output().includes("created"));
+      blocker.send(`begin; ${claims(b)} select public.set_people_block('${a}',true);
+        commit; select 'block_committed';`);
+      await waiting("dm_block_against_loser");
+      opposite.send(`begin; ${claims(b)} select public.create_dm_request('${a}',
+        '15000000-0000-4000-8000-000000000097','Losing opposite'); commit;`);
+      await waiting("dm_opposite_after_block");
+      creator.send("commit;"); creator.child.stdin.end();
+      await creator.done;
+      await until(()=>blocker.output().includes("block_committed"));
+      blocker.child.stdin.end(); opposite.child.stdin.end();
+      await blocker.done; await opposite.done;
+      assert.match(opposite.output(),/DM unavailable/);
+      assert.equal(sql(`select state from private.dm_pairs where initiator_id='${a}'
+        and state='blocked' order by created_at desc limit 1`),"blocked");
+    } finally { creator.child.kill(); blocker.child.kill(); opposite.child.kill(); }
+    sql(`delete from private.people_blocks where blocker_id='${b}' and blocked_id='${a}'`);
+    const pendingIgnore=sql(`begin; ${claims(b)} select public.create_dm_request('${a}',
+      '15000000-0000-4000-8000-000000000098','Please reply'); commit;`).split("\n")[0];
+    await race("dm_ignore_leader",`${claims(a)} select public.transition_dm('${b}',
+      '${pendingIgnore}','ignore');`,"dm_reply_after_ignore",`${claims(a)}
+      select public.transition_dm('${b}','${pendingIgnore}','reply',
+      '15000000-0000-4000-8000-000000000099','Too late');`,
+      (output)=>assert.match(output,/DM unavailable/));
+    assert.equal(sql(`select state from private.dm_pairs where generation_id='${pendingIgnore}'`),"ignored");
+    const pendingReply=sql(`begin; ${claims(a)} select public.create_dm_request('${b}',
+      '15000000-0000-4000-8000-0000000000a1','Answer this'); commit;`).split("\n")[0];
+    await race("dm_reply_leader",`${claims(b)} select public.transition_dm('${a}',
+      '${pendingReply}','reply','15000000-0000-4000-8000-0000000000a2','Answered');`,
+      "dm_ignore_after_reply",`${claims(b)} select public.transition_dm('${a}',
+      '${pendingReply}','ignore');`,(output)=>assert.match(output,/DM unavailable/));
+    assert.equal(sql(`select state from private.dm_pairs where generation_id='${pendingReply}'`),"accepted");
     for (const isolation of ["repeatable read","serializable"])
       assert.throws(()=>sql(`begin isolation level ${isolation}; ${claims(a)}
         select * from public.list_dm_inbox(); rollback;`),/DM unavailable/);
