@@ -1,11 +1,11 @@
 # TASK-012B — Local friendship People UI
 
-Status: Contract ready for review/publication; UI not dispatched
+Status: Reviewed contract published; fresh UI agent dispatched; implementation/review in progress
 Date: 2026-09-23
 Parent: TASK-012
 Decision: Accepted ADR-0014
 Backend prerequisite: reviewed TASK-012A tip `2a1f6b13b332196ba599fb739513fd424024f2a7` integrated on remote-verified main `bfd13ee1f6e6eb1cab52a442c52cf6e8ac01792e`
-Planned branch: `agent/TASK-012B-friendship-ui` from the latest remote-verified canonical main after this contract is published
+Implementation branch/worktree: `agent/TASK-012B-friendship-ui`; `/private/tmp/pals-task012b-friendship-ui`, from remote-verified canonical main `7c20f6b5f987f463ba36dd9264628228ec09a702`
 
 ## Goal
 Let an eligible student request friendship from a currently visible People profile, and let each participant privately inspect and resolve their own requests/friendships. Keep relationships as a coordination tool without public lists, counts, peer-photo release or Hangout access changes.
