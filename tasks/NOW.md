@@ -189,3 +189,5 @@ TASK-016A review milestone: implementation and handoff are pushed on `agent/TASK
 TASK-016A review outcome: fresh independent security review accepted exact tip `2819d8f7e04dad24121fd891fa2c53e546344f90` with no actionable findings. Reviewed implementation, handoff and review record are included in canonical integration; remote publication receipt follows verification. Reporting contract B must be independently reviewed and published before implementation; C remains dependent.
 
 TASK-016A publication: reviewed task `2819d8f7e04dad24121fd891fa2c53e546344f90` and canonical integration `d99adde65858080a0d5a6e966396b26be7e4fd1a` were independently remote-verified after push. A is complete. TASK-016B reporting contract is separately reviewed and published before fresh implementation; TASK-016C remains dependent on reviewed B.
+
+TASK-016B dispatch: reviewed contract published on planning/main, both remote-verified at `5eac9f5d39648312da05c4a19897cbbcd7eae80d`. Fresh GPT-6 Sol medium agent owns isolated `agent/TASK-016B-reporting-backend` and the disposable local runtime. No C implementation or hosted work dispatched; C preparation is draft-only.
