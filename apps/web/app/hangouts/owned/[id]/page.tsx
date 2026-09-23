@@ -24,7 +24,7 @@ export default async function OwnedHangoutPage({
         <h1>{record.title}</h1>
         <p>
           {record.status === "published"
-            ? "Saved for ready UNC students. Discovery pins, joining and chat are not connected yet."
+            ? "Saved for ready UNC students. This plan appears in local Saved Hangouts discovery; chat is not connected yet."
             : "This Hangout was cancelled and cannot be edited."}
         </p>
       </div>
@@ -71,6 +71,11 @@ export default async function OwnedHangoutPage({
                 owner view is private.
               </p>
             </section>
+          )}
+          {record.status === "published" && (
+            <Link className="button" href={`/hangouts/saved/${record.id}`}>
+              View saved detail
+            </Link>
           )}
           {record.status === "published" && (
             <Link

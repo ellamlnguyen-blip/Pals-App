@@ -3,6 +3,30 @@
   margin: 0 auto;
   padding: 0 var(--pals-space-8) var(--pals-space-8);
 }
+.saved-entry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  border: 1px solid var(--pals-line);
+  border-radius: var(--pals-radius);
+  background: var(--pals-surface);
+  padding: 1rem 1.25rem;
+  margin: 1.25rem 0;
+}
+.saved-entry p {
+  color: var(--pals-muted);
+  margin: 0.15rem 0 0;
+}
+@media (max-width: 599px) {
+  .saved-entry {
+    display: block;
+  }
+  .saved-entry .button {
+    width: 100%;
+    margin-top: 0.75rem;
+  }
+}
 .hangouts-header {
   min-height: 72px;
 }

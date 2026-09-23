@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFileSync, writeFileSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync } from "node:fs";
 export async function actionChecks(owner, a, png) {
   if (!process.env.WEB_TEST_ORIGIN) return;
   const origin = process.env.WEB_TEST_ORIGIN;
@@ -14,15 +14,9 @@ export async function actionChecks(owner, a, png) {
   };
   await fetch(`${origin}/profile`, { headers: { Cookie: owner.header() } });
   async function action(name, values = {}, cookie = owner.header()) {
-    const manifest = JSON.parse(
-      readFileSync(
-        new URL(
-          "../../apps/web/.next/dev/server/server-reference-manifest.json",
-          import.meta.url,
-        ),
-        "utf8",
-      ),
-    );
+    const devManifest = new URL("../../apps/web/.next/dev/server/server-reference-manifest.json", import.meta.url);
+    const productionManifest = new URL("../../apps/web/.next/server/server-reference-manifest.json", import.meta.url);
+    const manifest = JSON.parse(readFileSync(existsSync(productionManifest) ? productionManifest : devManifest, "utf8"));
     const id = Object.entries(manifest.node).find(
       ([, entry]) => entry.exportedName === name,
     )?.[0];

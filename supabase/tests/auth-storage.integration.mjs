@@ -295,7 +295,7 @@ test("real confirmation, SSR callback, RLS and private photo ownership", async (
       );
     }
     await hangoutHttpChecks(owner, peer, a, b, sql, png, url, key);
-    await hangoutActionChecks(owner, peer, a, sql);
+    await hangoutActionChecks(owner, peer, a, b, png, sql);
     await profileChecks(owner, peer, a, sql, png);
     path = (await actionChecks(owner, a, png)) ?? path;
     sql(`update public.accounts set status='suspended' where id='${a.id}'`);
