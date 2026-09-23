@@ -2,6 +2,10 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-23 — TASK-014A local DM backend
+
+- Added reviewed private DM request, generation, message and retry storage behind a default-disabled local gate. Caller-bound operations enforce first-message consent, current People eligibility, narrow block teardown and terminal privacy. Local SQL/Auth/concurrency, workspace and schema checks passed within the documented test-wrapper limit; no hosted, Realtime or UI change.
+
 ## 2026-09-23 — TASK-014 DM policy acceptance
 
 - User explicitly accepted ADR-0016's disposable-local DM request, consent, privacy and narrow People-block policy. Prepared the separate backend contract; no implementation or hosted change follows from acceptance alone.
