@@ -1,10 +1,10 @@
 # TASK-012A — Local friendship state and authorization
 
-Status: Contract ready for publication; backend not dispatched
+Status: Dispatched to fresh backend agent; implementation/review in progress
 Date: 2026-09-23
 Parent: TASK-012
 Decision: Accepted ADR-0014, explicitly accepted by the user on 2026-09-23
-Planned branch: `agent/TASK-012A-friendship-backend` from remote-verified canonical main after this contract is published
+Implementation branch/worktree: `agent/TASK-012A-friendship-backend`; `/private/tmp/pals-task012a-friendship-backend`, from remote-verified canonical main `7499c1056c866a085389ff373509ee419dca3b8f`
 
 ## Goal
 Implement and prove the authoritative disposable-local database boundary for mutual friend requests and friendships. Preserve the existing People text/privacy boundary and campus-only Hangout access.
