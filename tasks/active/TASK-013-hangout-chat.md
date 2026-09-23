@@ -1,6 +1,6 @@
 # TASK-013 — Local Hangout chat
 
-Status: Planning; policy proposed, implementation blocked pending explicit acceptance
+Status: Active — ADR-0015 accepted; TASK-013A backend stage pending reviewed publication and dispatch
 Date: 2026-09-23
 Planning branch: `agent/TASK-013-planning`
 Starting canonical `origin/main`: `373ae47117b677308723f657f61ee0c732550c1d` (clean worktree; independently verified by `git ls-remote`)
@@ -11,7 +11,7 @@ Let the host and current joined participants of a saved campus Hangout coordinat
 ## Dependencies and required context
 - Read `AGENTS.md`, NOW/BACKLOG/CURRENT_STATE, MVP/PRINCIPLES, ARCHITECTURE/DATA_MODEL/AUTHORIZATION/SECURITY_AND_SAFETY/REALTIME_AND_MESSAGING/TESTING, UX flows/navigation/screen/design guidance, Accepted ADR-0010, Proposed ADR-0012, Accepted ADR-0013/0014, and current Hangout/People schema, routes and tests.
 - Existing saved Hangout create/join/leave/remove/cancel access is the only chat membership basis. TASK-010 co-host management remains blocked on Proposed ADR-0012. Neither friendship nor People blocks change Hangout authority under current accepted rules.
-- Publish this reviewed contract, Proposed ADR-0015 and shared status on canonical main before implementation dispatch. Publication does not accept ADR-0015. Explicitly accept its message reader, retention, People-block interaction and delivery policy before any migration or new message route.
+- The reviewed planning contract and Proposed ADR-0015 were published on canonical main `178939f9ecf79b5b6e77f1170e7706e3031e2a4b`. On 2026-09-23, the user explicitly accepted ADR-0015 as written. Publish that acceptance and each narrower stage contract on main before its fresh implementation dispatch.
 
 ## Proposed stages after acceptance
 1. **TASK-013A local data and authorization:** fresh bounded backend agent/branch. Add an additive migration for one conversation per saved Hangout, private text messages and creation-key ledger; separate default-disabled chat gate; caller-bound paged read/send with narrow grants, transaction and Hangout-row serialization. No direct client message-table access, UI or hosted changes. Test actual-role SQL, real caller-session HTTP and deterministic revocation races. Fresh independent security review and verified main integration precede B.

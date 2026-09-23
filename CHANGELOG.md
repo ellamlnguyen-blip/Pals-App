@@ -2,6 +2,10 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-23 — TASK-013 chat policy acceptance
+
+- User explicitly accepted ADR-0015 for disposable-local Hangout chat and a narrower backend stage contract was prepared. No implementation, Realtime transport or hosted permission follows from the acceptance record alone.
+
 ## 2026-09-23 — TASK-013 Hangout chat planning
 
 - Drafted a bounded local chat contract and Proposed ADR-0015 for current-participant text messages, revocation, minimal author display, idempotent sends and polling delivery.

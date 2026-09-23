@@ -1,6 +1,6 @@
 # ADR-0015 — Local Hangout chat authorization and delivery
 
-Status: Proposed — explicit user acceptance required before implementation
+Status: Accepted — local-only policy
 Date: 2026-09-23
 Task: TASK-013
 
@@ -25,4 +25,7 @@ Accepted ADR-0004 makes conversation part of casual Hangout coordination. Accept
 - Delete all messages on cancellation: deferred because later safety reporting/moderation needs evidence, and production retention is unresolved.
 
 ## Consequences
-This proposal gives local participants a usable coordination thread while preserving current Hangout revocation and avoiding a new peer-profile reader. It intentionally leaves Realtime delivery, global blocks, reporting/moderation and hosted use open. Publication alone changes no schema or access.
+This decision permits a local coordination thread while preserving current Hangout revocation and avoiding a new peer-profile reader. It intentionally leaves Realtime delivery, global blocks, reporting/moderation and hosted use open. Acceptance alone changes no schema or access.
+
+## Acceptance evidence
+After the complete reviewed proposal was published on canonical main, the coordinator asked, “Do you accept ADR-0015 as written?” The user replied “yes” on 2026-09-23. This accepts the local-only reader/history, send/read revocation, author projection, retry, retention, People-block boundary and polling delivery decisions above. It authorizes the bounded TASK-013A/B stages after narrower contracts are published. It does not accept ADR-0012, global messaging block precedence, Realtime transport, hosted migration or deployment.

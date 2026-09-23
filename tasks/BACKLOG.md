@@ -6,7 +6,7 @@
 - TASK-010 host/co-host management — bounded contract prepared; blocked on explicit Proposed ADR-0012 acceptance. Backend then management UI stages require separate fresh agents/reviews; no implementation dispatched. See `active/TASK-010-host-cohost-management.md`.
 - TASK-011 people discovery — bounded local opt-in text directory, privacy and People-only blocks complete under Accepted ADR-0013; see `DONE.md` and its handoffs. Peer photos, recommendations, attendance context and social actions remain deferred.
 - TASK-012 friendship — bounded local backend and People UI complete and independently reviewed on remote-verified main; see `DONE.md` and handoffs. Friend-aware ranking, friends-only Hangout authorization and global block precedence remain separate.
-- TASK-013 hangout chat — bounded local contract and Proposed ADR-0015 under planning review; explicit acceptance before implementation. Realtime/global block/hosted access remain separate.
+- TASK-013 hangout chat — Accepted ADR-0015; bounded local backend/UI stages pending reviewed publication and implementation. Realtime/global block/hosted access remain separate.
 - TASK-014 DM requests/direct chat
 - TASK-015 notification inbox/preferences
 - TASK-016 blocking/reporting — still open. TASK-011A implemented only caller-owned People blocks and bilateral People suppression under Accepted ADR-0013; no global Hangout/private-access, messaging, reporting or launch completion.

@@ -22,3 +22,6 @@ Document consistency, `git diff --check`, scoped diff and independent read-only 
 
 ## Ready for next stage?
 No. Reviewed planning records are on canonical main. Request explicit ADR-0015 acceptance; backend/UI implementation must wait for that decision and narrower published contracts. TASK-010 remains blocked independently.
+
+## Acceptance follow-up
+On 2026-09-23 the user explicitly replied “yes” to accepting ADR-0015 as written after the complete reviewed proposal was published. This authorizes only bounded disposable-local stages. The narrower TASK-013A backend contract and acceptance/status records must be reviewed, published on main and remote-verified before fresh implementation dispatch.
