@@ -1,6 +1,6 @@
 # TASK-012A — Local friendship state and authorization
 
-Status: Dispatched to fresh backend agent; implementation/review in progress
+Status: First implementation pushed; independent security review found a revocation race; correction in progress before integration
 Date: 2026-09-23
 Parent: TASK-012
 Decision: Accepted ADR-0014, explicitly accepted by the user on 2026-09-23
