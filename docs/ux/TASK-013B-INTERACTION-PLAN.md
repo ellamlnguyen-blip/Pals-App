@@ -1,0 +1,9 @@
+# TASK-013B interaction and visual plan
+
+The local chat is a small coordination surface attached to a saved Hangout. Use the existing Nunito type, white canvas, campus-blue action color, generous spacing, rounded form controls and simple borders. The live `usepals.com` reference was inspected on 2026-09-23: it uses bright white, pale blue, friendly rounded typography and a compact top navigation. Accepted Pals navigation and tokens govern this implementation.
+
+- Saved detail shows a chat action only after a fresh authorized read for a published Hangout's current joined member or host. Otherwise it shows neutral unavailability.
+- Chats lists at most 24 public current membership candidates per keyset page. Each row gets an independent fresh chat read before a link appears. A denied row states chat is unavailable without exposing a reason, peer information or message preview.
+- The thread is a narrow readable column. Message text is literal and line breaks are retained. Author is You, current account ID or Former participant. Server time is secondary. The composer sits after the conversation with a clear 2000-character bound and a short future-history and People-block disclosure.
+- Desktop/tablet use a centered content column, while 390px and 320px screens use full-width controls and wrapping text without horizontal overflow. Loading, empty, denied, paging, send pending and uncertain states occupy the same stable reading order. Focus is visible, status changes use a concise live region, and polling never announces each message.
+- Enter adds a newline in the textarea. Sending requires the explicit button. Hidden, pagehide and cross-tab auth changes mask text. Return, focus and pageshow require a fresh authorized read before content or composer reappears. Reduced motion uses the existing static controls.

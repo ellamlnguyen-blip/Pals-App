@@ -81,7 +81,8 @@ export default async function CalendarPage({
         ) : (
           <span>People</span>
         )}
-        {["Chats", "Notifications"].map((name) => (
+        <Link href="/chats">Chats</Link>
+        {["Notifications"].map((name) => (
           <span key={name} aria-label={`${name}, coming later`}>
             {name}
           </span>
