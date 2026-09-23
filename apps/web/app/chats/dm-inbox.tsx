@@ -6,9 +6,9 @@ import {
   AUTH_TRANSITION_CHANNEL,
   AUTH_TRANSITION_EVENT,
   authTransitionDecision,
-  authVerificationDecision,
   type AuthTransitionMessage,
 } from "../auth-transition";
+import { createInboxAuthVerifier } from "./inbox-auth-verifier";
 export function DmInbox({ actor }: { actor: string }) {
   const [rows, setRows] = useState<DmInboxRow[]>([]),
     [phase, setPhase] = useState<"loading" | "ready" | "denied" | "error">(
@@ -92,38 +92,24 @@ export function DmInbox({ actor }: { actor: string }) {
     [actor, deny],
   );
   useEffect(() => {
-    const verify = async (
-      message: Extract<AuthTransitionMessage, { token: string }>,
-    ) => {
-      if (
-        document.hidden ||
-        denied.current ||
-        !pendingTransitions.current.has(message.token)
-      )
-        return;
-      const now = request.current;
-      try {
+    const verify = createInboxAuthVerifier({
+      pending: pendingTransitions.current,
+      settled: settledTransitions.current,
+      revision: () => request.current,
+      active: (startedAt) =>
+        startedAt === request.current && !document.hidden && !denied.current,
+      probe: async () => {
         const response = await fetch("/api/dm", {
           cache: "no-store",
           credentials: "same-origin",
           headers: { "x-pals-dm-actor": actor },
         });
-        if (now !== request.current || document.hidden || denied.current)
-          return;
         // This is an account probe. Never put its inbox bodies in UI state.
-        const decision = authVerificationDecision(
-          pendingTransitions.current,
-          message,
-          response.status,
-        );
-        if (!pendingTransitions.current.has(message.token))
-          settledTransitions.current.delete(message.token);
-        if (decision === "deny") deny();
-        else if (decision === "reauthorize") resume();
-      } catch {
-        /* Keep request text masked until a fresh probe succeeds. */
-      }
-    };
+        return response.status;
+      },
+      deny,
+      reauthorize: () => resume(),
+    });
     const resume = () => {
       if (document.hidden || denied.current) return;
       mask();

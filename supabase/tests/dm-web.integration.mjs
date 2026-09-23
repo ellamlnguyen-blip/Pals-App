@@ -36,17 +36,20 @@ async function web(path, account, method = "GET", body) {
   return { status: response.status, body: await response.json() };
 }
 test("local web DM routes bind original sessions and preserve request consent", async () => {
-  let a, b;
+  let a, b, c;
   try {
-    a = await fixture(); b = await fixture();
-    sql(`insert into storage.objects(bucket_id,name,owner_id) select 'profile-photos',id::text||'/primary.png',id::text from public.accounts where id in ('${a.id}','${b.id}');
-      update public.profiles set real_name='DM Web',major='Science',graduation_year=2028,bio='Local fixture',primary_photo_path=user_id::text||'/primary.png' where user_id in ('${a.id}','${b.id}');
-      insert into private.people_preferences(account_id,opted_in) values ('${a.id}',true),('${b.id}',true);`);
+    a = await fixture(); b = await fixture(); c = await fixture();
+    sql(`insert into storage.objects(bucket_id,name,owner_id) select 'profile-photos',id::text||'/primary.png',id::text from public.accounts where id in ('${a.id}','${b.id}','${c.id}');
+      update public.profiles set real_name='DM Web',major='Science',graduation_year=2028,bio='Local fixture',primary_photo_path=user_id::text||'/primary.png' where user_id in ('${a.id}','${b.id}','${c.id}');
+      insert into private.people_preferences(account_id,opted_in) values ('${a.id}',true),('${b.id}',true),('${c.id}',true);`);
     sql(`update private.people_feature_gate set enabled=true; update private.dm_feature_gate set enabled=true;`);
     assert.equal((await a.client.rpc("get_access_state")).data, "ready");
     assert.equal((await b.client.rpc("get_access_state")).data, "ready");
     assert.equal((await web("/api/dm", null)).status, 403);
     const first = { peer: b.id, key: crypto.randomUUID(), body: "Hello <script>alert(1)</script>\nSee you?" };
+    sql(`update private.people_preferences set opted_in=false where account_id='${b.id}'`);
+    assert.equal((await web("/api/dm", a, "POST", first)).status, 403, "hidden target denies creation");
+    sql(`update private.people_preferences set opted_in=true where account_id='${b.id}'`);
     assert.equal((await web("/api/dm", b, "POST", first)).status, 403, "original actor binding");
     const created = await web("/api/dm", a, "POST", first);
     assert.equal(created.body.kind, "ok", JSON.stringify(created.body));
@@ -68,6 +71,19 @@ test("local web DM routes bind original sessions and preserve request consent", 
     assert.equal(accepted.body.kind, "ok", JSON.stringify(accepted.body));
     const active = await web(`/api/dm/${b.id}`, a);
     assert.deepEqual(active.body.messages.map(row => row.body), [first.body, "Yes"]);
+    for (let index = 0; index < 49; index++) {
+      const sent = await web(`/api/dm/${b.id}`, a, "POST", { action: "send", generation: created.body.generation, key: crypto.randomUUID(), body: `Page ${index}` });
+      assert.equal(sent.body.kind, "ok", `message ${index}`);
+    }
+    const firstPage = await web(`/api/dm/${b.id}`, a);
+    assert.equal(firstPage.body.messages.length, 50);
+    assert.equal(firstPage.body.messages[49].sequence, 50);
+    const secondPage = await web(`/api/dm/${b.id}?after=50`, a);
+    assert.equal(secondPage.body.messages.length, 1);
+    assert.equal(secondPage.body.messages[0].sequence, 51);
+    const beyondEnd = await web(`/api/dm/${b.id}?after=51`, a);
+    assert.equal(beyondEnd.body.bodyAccess, true);
+    assert.deepEqual(beyondEnd.body.messages, []);
     sql(`update private.people_preferences set opted_in=false where account_id='${b.id}'`);
     const paused = await web(`/api/dm/${b.id}`, a);
     assert.equal(paused.body.status.state, "accepted");
@@ -89,6 +105,18 @@ test("local web DM routes bind original sessions and preserve request consent", 
     const closed = await web(`/api/dm/${b.id}`, a, "POST", { action: "close", generation: created.body.generation });
     assert.equal(closed.body.kind, "ok");
     assert.equal((await web(`/api/dm/${b.id}`, a)).body.kind, "unavailable");
+    const withdrawn = await web("/api/dm", a, "POST", { peer: c.id, key: crypto.randomUUID(), body: "Withdraw me" });
+    assert.equal(withdrawn.body.kind, "ok");
+    assert.equal((await web(`/api/dm/${c.id}`, a, "POST", { action: "withdraw", generation: withdrawn.body.generation })).body.kind, "ok");
+    assert.equal((await web(`/api/dm/${c.id}`, a)).body.kind, "unavailable");
+    const ignored = await web("/api/dm", c, "POST", { peer: a.id, key: crypto.randomUUID(), body: "Ignore me" });
+    assert.equal(ignored.body.kind, "ok");
+    assert.equal((await web(`/api/dm/${c.id}`, a, "POST", { action: "ignore", generation: ignored.body.generation })).body.kind, "ok");
+    assert.equal((await web(`/api/dm/${c.id}`, a)).body.kind, "unavailable");
+    const blocked = await web("/api/dm", b, "POST", { peer: c.id, key: crypto.randomUUID(), body: "Block me" });
+    assert.equal(blocked.body.kind, "ok");
+    assert.equal((await web(`/api/dm/${c.id}`, b, "POST", { action: "block", generation: blocked.body.generation })).body.kind, "ok");
+    assert.equal((await web(`/api/dm/${c.id}`, b)).body.kind, "unavailable");
   } finally {
     sql(`update private.dm_feature_gate set enabled=false; update private.people_feature_gate set enabled=false;
       set dm.allow_fixture_cleanup='true';

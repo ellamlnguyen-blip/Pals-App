@@ -7,6 +7,7 @@ import {
   settleAuthTransition,
   announceCompletedAuthCallback,
 } from "../apps/web/app/auth-transition.ts";
+import { createInboxAuthVerifier } from "../apps/web/app/chats/inbox-auth-verifier.ts";
 
 function browser(pathname, search = "") {
   const data = new Map();
@@ -124,4 +125,39 @@ test("overlapping account transitions keep inbox text masked until every token i
     "reauthorize",
   );
   assert.equal(pending.size, 0);
+});
+
+test("overlapping completion re-probes an invalidated settled token before revealing requests", async () => {
+  const pending = new Set(["first", "second"]);
+  const settled = new Map([["first", "cancelled"]]);
+  const probes = [];
+  let revision = 1;
+  let reveals = 0;
+  const verify = createInboxAuthVerifier({
+    pending,
+    settled,
+    revision: () => revision,
+    active: (startedAt) => startedAt === revision,
+    probe: () => new Promise((resolve) => probes.push(resolve)),
+    deny: () => assert.fail("account remained authorized"),
+    reauthorize: () => reveals++,
+  });
+  const first = verify({ phase: "cancelled", token: "first" });
+  assert.equal(probes.length, 1);
+  revision++;
+  settled.set("second", "cancelled");
+  const second = verify({ phase: "cancelled", token: "second" });
+  assert.equal(probes.length, 2);
+  probes[0](200);
+  await first;
+  assert.deepEqual([...pending], ["first", "second"]);
+  probes[1](200);
+  await second;
+  assert.deepEqual([...pending], ["first"]);
+  assert.equal(probes.length, 3, "settled first token gets a fresh probe");
+  assert.equal(reveals, 0, "requests remain masked between probes");
+  probes[2](200);
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.equal(pending.size, 0);
+  assert.equal(reveals, 1);
 });
