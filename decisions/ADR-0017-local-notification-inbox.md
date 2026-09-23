@@ -1,13 +1,13 @@
 # ADR-0017 — Disposable-local notification inbox and preference policy
 
-Status: Proposed — requires explicit user acceptance
+Status: Accepted — disposable-local TASK-015 stages only
 Date: 2026-09-23
 Task: TASK-015
 
 ## Context
 The accepted MVP requires a Notifications tab and category preferences. `NOTIFICATIONS.md` lists requests, messages, Hangout changes, reminders, safety and attendance, but does not define which events create rows, what muting means, or what is safe to retain and display after access changes. Existing friendship, DM, Hangout and chat work is disposable-local behind separate default-off gates. TASK-010/ADR-0012, global blocking/reporting, moderation, attendance, hosted delivery and Realtime remain unresolved. Persisting notifications and changing source mutations crosses schema and privacy boundaries, so a decision is required before implementation.
 
-## Proposed decision
+## Decision
 Acceptance authorizes only reviewed, narrower disposable-local TASK-015 stages. Add a separate private notification gate, disabled by default and not client-writable. Web routes additionally require `APP_ENV=local` and loopback Supabase validation. No hosted migration, live-student delivery or push follows.
 
 ### Sources and recipients
@@ -32,5 +32,7 @@ Acceptance authorizes only reviewed, narrower disposable-local TASK-015 stages. 
 - Treating every category as muteable is rejected for cancellation and future safety/account notices, which carry operational or safety information.
 - Adding push, email or Realtime now is deferred until delivery consent, stale subscriptions, revocation and hosted retention are reviewed separately.
 
-## Consequences and decision gate
-This proposal adds a private local event ledger and minimal owner inbox without changing the source feature gates or their accepted access rules. Backend source hooks and preferences are cross-cutting and must be independently security reviewed. TASK-016 still decides global block precedence/reporting; TASK-010/ADR-0012 remains Proposed. Acceptance changes no schema, route, grant or deployment by itself. Do not dispatch TASK-015 implementation until this reviewed proposal is published on canonical main and explicitly accepted.
+## Consequences and acceptance evidence
+This decision authorizes a private local event ledger and minimal owner inbox without changing the source feature gates or their accepted access rules. Backend source hooks and preferences are cross-cutting and must be independently security reviewed. TASK-016 still decides global block precedence/reporting; TASK-010/ADR-0012 remains Proposed. Acceptance changes no schema, route, grant or deployment by itself; narrower implementation contracts require independent review and canonical publication before dispatch.
+
+After the complete reviewed proposal and planning contract were published on canonical main, the coordinator asked, “Do you accept ADR-0017 as written for the bounded, disposable-local TASK-015 implementation?” The user replied “yes” on 2026-09-23. This accepts the local event, muting, revocation, retention and delivery policy above. It does not accept ADR-0012, global blocking/reporting, push, email, Realtime, hosted operation or production retention.

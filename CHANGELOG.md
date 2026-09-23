@@ -2,6 +2,10 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-23 — TASK-015 local notification policy accepted
+
+- Recorded explicit acceptance of reviewed ADR-0017 after canonical publication. Split backend work into a private ledger/social events stage and a later Hangout/chat source stage before UI. This acceptance adds no schema, route or hosted delivery by itself.
+
 ## 2026-09-23 — TASK-015 notification policy proposed
 
 - Planned a private disposable-local notification inbox and category preferences. Proposed ADR-0017 defines source events, minimal payloads, essential cancellation, muting and revocation. It awaits independent review, canonical publication and explicit acceptance; no implementation or hosted delivery is included.
