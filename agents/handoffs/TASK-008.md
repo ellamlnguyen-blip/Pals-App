@@ -30,4 +30,4 @@ The query detects full-result changes between its two requests and fails closed;
 
 ## Publication
 
-Implementation branch is for coordinator review only. The coordinator owns NOW/BACKLOG/CURRENT_STATE/CHANGELOG and canonical main integration. This handoff will receive a pushed-commit receipt after the implementation commit is remote-verified; final branch tip is separately reported to the coordinator. No later task is auto-dispatched.
+Implementation branch is for coordinator review only. The coordinator owns NOW/BACKLOG/CURRENT_STATE/CHANGELOG and canonical main integration. Implementation/handoff commit `3c244d9b48517b35d74626dcaa8df17a4a776077` was pushed and verified at `origin/agent/TASK-008-map-discovery`; canonical `origin/main` was verified at the starting SHA `aecb8a8982953e2a2c19b437a9c094f0cc1d031c`. This receipt is a subsequent documentation-only commit whose final remote tip is reported to the coordinator. No later task is auto-dispatched.
