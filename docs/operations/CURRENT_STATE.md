@@ -88,3 +88,5 @@ TASK-011A local backend stage dispatched from verified `a9c10a81ce24af4d84330c02
 TASK-011A local privacy backend is reviewed and integrated: gate default disabled, opt-in text projections, live same-campus readiness and two-way People block suppression, all caller-bound. Raw profile/photos remain owner-only. Task branch `ca1d6d234ea1af3f08af8c21d76f7db8ffc88f0d`, remote-verified main `ef4da666dbd89996190aa7fb0fd1f31aba7b7d40`. Two clean local resets/actual role checks, real HTTP, concurrency and direct workspace checks passed with offline symlink/CLI limits documented in the handoff. TASK-011B local UI remains next; no People UI or hosted enablement exists yet.
 
 TASK-011B local People UI stage dispatched from verified main `6cf286ed72269ac603cb298b30a52d5fba74ecf1` to isolated `agent/TASK-011B-people-ui`. No UI integrated yet.
+
+TASK-011B review found a reproducible People pagination defect for U+00A0-padded names: JavaScript and SQL derive different cursors. A bounded local backend correction is required before UI integration; see `tasks/active/TASK-011A-cursor-correction.md`. Existing People data gates and hosted exclusions remain unchanged.
