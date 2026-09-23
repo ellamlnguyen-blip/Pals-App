@@ -7,7 +7,7 @@
 - TASK-011 people discovery — bounded local opt-in text directory, privacy and People-only blocks complete under Accepted ADR-0013; see `DONE.md` and its handoffs. Peer photos, recommendations, attendance context and social actions remain deferred.
 - TASK-012 friendship — bounded local backend and People UI complete and independently reviewed on remote-verified main; see `DONE.md` and handoffs. Friend-aware ranking, friends-only Hangout authorization and global block precedence remain separate.
 - TASK-013 hangout chat — complete for bounded local scope under Accepted ADR-0015 on remote-verified main `f2404941aaf5cea5a830e9813950b33871b5e796`; see `DONE.md` and handoffs. Realtime/global block/hosted access remain separate.
-- TASK-014 DM requests/direct chat
+- TASK-014 DM requests/direct chat — bounded disposable-local planning contract and Proposed ADR-0016 drafted; policy review/publication and explicit acceptance precede any implementation. See `active/TASK-014-dm-requests-direct-chat.md`.
 - TASK-015 notification inbox/preferences
 - TASK-016 blocking/reporting — still open. TASK-011A implemented only caller-owned People blocks and bilateral People suppression under Accepted ADR-0013; no global Hangout/private-access, messaging, reporting or launch completion.
 - TASK-017 admin moderation console

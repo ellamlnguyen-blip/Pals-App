@@ -2,6 +2,10 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-23 — TASK-014 DM planning
+
+- Drafted a bounded disposable-local DM request/direct chat contract and Proposed ADR-0016. It specifies first-message consent, opt-in People eligibility, narrow DM-specific block behavior and privacy/revocation policy for review; no implementation or hosted change follows from the proposal.
+
 ## 2026-09-23 — TASK-013B local Hangout chat UI
 
 - Added a Chats list and saved-Hangout text thread for current authorized participants, using the reviewed caller-bound chat RPC and no-store local API. The thread shows one 50-message page at a time, with explicit forward/back controls and author reprojection during visible polling.
