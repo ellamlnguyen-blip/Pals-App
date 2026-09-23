@@ -1,6 +1,6 @@
 # TASK-014B — Local DM requests and direct-chat UI
 
-Status: Dispatched to fresh bounded UI agent; implementation/review pending
+Status: Complete locally — reviewed UI integrated on coordinator branch; canonical publication pending
 Date: 2026-09-23
 Parent: TASK-014
 Decision: Accepted ADR-0016

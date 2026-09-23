@@ -1,6 +1,6 @@
 # TASK-014 — Local DM requests and direct chat
 
-Status: ADR-0016 accepted; backend stage contract pending review/publication
+Status: Complete for bounded disposable-local scope; reviewed backend and UI integrated
 Date: 2026-09-23
 Planning branch: `agent/TASK-014-planning`
 Starting canonical `origin/main`: `4989195dbb6fc54641ea6f1417aaf6e19f19e989` (fetched and verified before branching)
@@ -22,12 +22,12 @@ Realtime/push/notifications; attachments, edits/deletes, typing/presence, read r
 
 ## Acceptance criteria for a future bounded local increment
 - [x] ADR-0016 explicitly accepted and published.
-- [ ] Each stage contract reviewed/published before fresh dispatch; A independently reviewed and integrated before B.
-- [ ] A visible, ready same-campus sender can create only one pending first-message request to a currently eligible recipient; the recipient can explicitly accept/reply or ignore. No ordinary back-and-forth thread is available before acceptance. Retries and concurrent opposite-direction actions cannot duplicate a pair or reopen ignored contact.
-- [ ] Only current authorized participants can read their own bounded request/thread state and text. New sends obey current readiness, campus, People visibility and either-direction block checks defined by ADR-0016. An opt-out or block removes future peer text access as specified; no client role, admin role or friendship grants hidden profile/photo access.
-- [ ] Direct table reads/writes are denied; caller identity is derived server-side; immutable message/retry records and bounded keyset reads survive lost responses without duplicate sends. Concurrent gate, readiness, opt-out and block changes have deterministic tests and fail closed after committed revocation.
-- [ ] No-store web responses and sensitive-client-state clearing cover denied reads, signout/account switch, history navigation and uncertain actions. Rendered desktop/phone/keyboard checks and real local Auth/HTTP checks pass within recorded limits.
-- [ ] Local gates restored false, fixtures removed, services stopped; handoffs/status and task/main remote refs verified. No hosted, Realtime or global safety completion claim.
+- [x] Each stage contract reviewed/published before fresh dispatch; A independently reviewed and integrated before B.
+- [x] A visible, ready same-campus sender can create only one pending first-message request to a currently eligible recipient; the recipient can explicitly accept/reply or ignore. No ordinary back-and-forth thread is available before acceptance. Retries and concurrent opposite-direction actions cannot duplicate a pair or reopen ignored contact.
+- [x] Only current authorized participants can read their own bounded request/thread state and text. New sends obey current readiness, campus, People visibility and either-direction block checks defined by ADR-0016. An opt-out or block removes future peer text access as specified; no client role, admin role or friendship grants hidden profile/photo access.
+- [x] Direct table reads/writes are denied; caller identity is derived server-side; immutable message/retry records and bounded keyset reads survive lost responses without duplicate sends. Concurrent gate, readiness, opt-out and block changes have deterministic tests and fail closed after committed revocation.
+- [x] No-store web responses and sensitive-client-state clearing cover denied reads, signout/account switch, history navigation and uncertain actions. Rendered desktop/phone/keyboard checks and real local Auth/HTTP checks pass within recorded limits.
+- [x] Local gates restored false, fixtures removed, services stopped; handoffs/status and task/main remote refs verified. No hosted, Realtime or global safety completion claim.
 
 ## Ownership and handoff
 The coordinator owns policy acceptance, shared queue/status, stage dispatch, independent review and main publication. Stage agents own only their bounded contract and handoff, then stop. Planning requires document consistency and security review, not runtime checks. Use fresh GPT-6 Sol medium task/review agents and the app's Standard speed preference; dispatch tooling may not expose speed.

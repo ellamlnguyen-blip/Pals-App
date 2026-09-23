@@ -2,6 +2,11 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-23 — TASK-014B local DM UI
+
+- Added a consent-based first-message entry on People detail, Requests and Direct chats in Chats, and a direct text thread using the reviewed caller-bound DM backend. Pending senders see only a waiting state; current authorized recipients can accept, reply or ignore.
+- Added bounded message pages, stable-key retry, no-store responses and private-text masking across visibility and account changes. Fresh reviews corrected overlapping auth-transition privacy and liveness races; signed-in local HTTP and rendered phone/tablet/desktop checks passed. Local gates and fixtures were cleared. No hosted, Realtime or global block release.
+
 ## 2026-09-23 — TASK-023 frontend design alignment planned
 
 - Added a dedicated student-web visual alignment task informed by current usepals.com, scheduled after TASK-020 and before staging rehearsal.
