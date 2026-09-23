@@ -2,6 +2,11 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-23 — TASK-016B private local reporting
+
+- Added caller-bound user, Hangout and retained-host reports with private minimal provenance, opaque receipts, exact retry deduplication and an atomic five-new-reports-per-hour limit. No report reader or automatic moderation action.
+- Independent exact-tip security review accepted the stage. Focused reporting/local API/concurrency/workspace checks passed; an unresolved one-off failure in an unchanged notification fixture is recorded separately. Safety UI and hosted readiness remain open.
+
 ## 2026-09-23 — TASK-016A local global blocking
 
 - Extended the existing directional block across Hangout discovery, attendance, private details, chat and notification projections; added private retained evidence, deterministic reconciliation and safety-gated owner ID recovery.
