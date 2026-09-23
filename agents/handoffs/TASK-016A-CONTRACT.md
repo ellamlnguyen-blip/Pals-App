@@ -10,3 +10,6 @@ A fresh GPT-6 Sol medium documentation agent drafted the narrower global-block b
 
 ## Verification and boundary
 Documents only; `git diff --check` passes. No migration, runtime service, gate or hosted change. Implementation requires reviewed publication of this contract and acceptance on canonical main, then a fresh bounded agent. Stage A must supply its own tests/handoff and exact-tip independent security review before reporting backend B or UI C. Global write serialization is a deliberate disposable-local implementation choice, not a production throughput claim.
+
+## Publication and dispatch
+Accepted policy and reviewed stage contract were pushed on `agent/TASK-016-planning`, integrated through canonical local main, and both remote refs independently verified at `a09433f1708de8f2c2cc966b691ccb663c3c83db`. A fresh GPT-6 Sol medium backend agent was then dispatched into `/private/tmp/pals-task016a-global-block` on `agent/TASK-016A-global-block-backend` from that exact main. Implementation/evidence review remains open.
