@@ -1,10 +1,10 @@
 # TASK-013A — Local Hangout chat state and authorization
 
-Status: Planned — dispatch after reviewed contract publication
+Status: Active — fresh backend agent dispatched from verified canonical main
 Date: 2026-09-23
 Parent: TASK-013
 Decision: Accepted ADR-0015, explicitly accepted by the user on 2026-09-23
-Implementation baseline: latest verified canonical `origin/main` after this contract is published
+Implementation baseline: verified canonical `origin/main` `cb81a094d86d2e67d5d80043942c855cd8141780`
 
 ## Goal
 Implement and prove the authoritative disposable-local message boundary for saved campus Hangouts. This backend stage supplies only private persistence and caller-bound read/send APIs; TASK-013B owns the thread/composer UI.
@@ -29,3 +29,6 @@ Implement and prove the authoritative disposable-local message boundary for save
 Run `pnpm check`, two clean `pnpm db:verify` resets/lint and real local Auth/PostgREST plus deterministic races where the environment supports them. Cover anonymous, same-campus joined/host, discoverer, cross-campus, left/rejoined, removed, cancelled, closed joining, unready/photo/email/account/campus changes, both disabled gates, forged actor/platform role, direct table/API grants/embeds, current versus former author projection when the author leaves or becomes unready while the reader remains joined, 1/50/over-limit/malformed page inputs, empty and multi-page threads, duplicate/lost-response/idempotency-conflict sends, gate/readiness/member revocation committed before lock acquisition versus begun after send locks (including profile completeness and photo replacement/deletion), in-flight versus subsequent read, stronger isolation and existing Hangout/People/friendship regressions. Record exact evidence and environmental limits; do not claim green CI for an unavailable check. Clean fixtures, restore all local gates false and stop local services.
 
 Commit only in-scope implementation and `agents/handoffs/TASK-013A.md`, push the task branch and independently verify its remote SHA, then stop. Do not integrate into main. The coordinator reviews code/handoff, obtains fresh independent security review and integrates only accepted work before publishing/dispatching TASK-013B.
+
+## Dispatch receipt
+Accepted ADR-0015 and this reviewed contract were published and independently verified on both `origin/agent/TASK-013-planning` and `origin/main` at `cb81a094d86d2e67d5d80043942c855cd8141780`. A fresh GPT-6 Sol medium implementation agent was dispatched from that baseline to an isolated worktree/branch. Standard is the app preference; the sub-agent dispatch tool has no speed selector, so speed is not verified. Independent security review and main integration remain required before TASK-013B.
