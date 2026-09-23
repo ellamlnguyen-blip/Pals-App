@@ -8,7 +8,7 @@ Reviewed planning and initial canonical publication SHA: `4582e23f412c2ec5b29172
 Outstanding blocker: narrower stage A contract requires independent review and canonical publication before implementation dispatch
 
 ## Outcome
-Prepared a bounded policy/contract for extending the existing private block relation across Hangouts, private instructions, group chat and notifications, and adding private user/Hangout reports after removal. Three narrower backend/backend/UI stages require review/publication before fresh dispatch. TASK-010/ADR-0012 remains blocked independently.
+Prepared a bounded policy/contract for extending the existing private block relation across Hangouts, private instructions, group chat and notifications, and adding private user/Hangout reports after removal. Three narrower backend/backend/UI stages require review/publication before fresh dispatch. TASK-010 ADR-0012 is accepted separately; its implementation awaits its own stage contracts.
 
 ## Files changed
 ADR-0018, TASK-016 parent contract, NOW, BACKLOG, CURRENT_STATE, CHANGELOG and this handoff. No application/schema/runtime changes.
