@@ -1,6 +1,6 @@
 # TASK-013B — Local Hangout chat UI
 
-Status: Active — fresh UI agent dispatched from verified canonical main
+Status: Active — exact-tip review found cross-tab auth masking blocker; UI correction in progress
 Date: 2026-09-23
 Parent: TASK-013
 Decision: Accepted ADR-0015
@@ -31,3 +31,6 @@ Commit only in-scope UI/code/tests/interaction plan and `agents/handoffs/TASK-01
 
 ## Dispatch receipt
 This contract passed independent GPT-6 Sol medium security/design planning review after chat-gate and tab-lifecycle privacy clarifications. It was published and independently verified on both `origin/agent/TASK-013-planning` and `origin/main` at `4e1ca92f20d715cdf0a92d40846819d83845969c`. A fresh GPT-6 Sol medium agent was dispatched from that baseline to an isolated UI branch/worktree. Standard is the app preference; dispatch tooling has no speed selector, so speed is not verified. Exact-tip rendered/security review and main integration remain required.
+
+## Review blocker — 2026-09-23
+The UI task tip `9da44c96f8ec91bf61953a0a73d7136b68d923ee` was pushed and independently verified, and local HTTP/workspace and initial rendered layout checks passed. Fresh exact-tip security/design review blocked integration: one Hangouts sign-out path emits no cross-tab signal, and the other emits before server sign-out completes, allowing a still-valid old session to reveal masked text again. Sign-in/account switching also lacks a signal. The UI agent is correcting all auth-transition masking and will resubmit a new tip for review and browser lifecycle checks. No UI code is integrated on main yet.
