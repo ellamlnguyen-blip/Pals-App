@@ -52,7 +52,7 @@ select is((select count(*) from public.browse_people(p_search=>'BEA')),1::bigint
 select is((select count(*) from public.browse_people(p_major=>'biology',p_graduation_year=>2028)),2::bigint,'exact filters work');
 select is((select count(*) from public.browse_people(p_major=>'Chemistry')),0::bigint,'wrong major excludes');
 select is((select count(*) from public.browse_people(p_limit=>1)),1::bigint,'page limit applied');
-select is((select count(*) from public.browse_people(p_after_name=>'bea %_',p_after_id=>'11000000-0000-4000-8000-000000000002')),1::bigint,'name and ID cursor advances');
+select is((select count(*) from public.browse_people(p_after_id=>'11000000-0000-4000-8000-000000000002')),1::bigint,'ID-only cursor advances');
 select is((select count(*) from public.get_people_detail('11000000-0000-4000-8000-000000000004')),0::bigint,'cross-campus detail unavailable');
 select is((select count(*) from public.get_people_detail('11000000-0000-4000-8000-000000000005')),0::bigint,'opted-out detail unavailable');
 select is((select count(*) from public.get_people_detail('11000000-0000-4000-8000-000000000099')),0::bigint,'missing detail same shape');
@@ -64,13 +64,14 @@ select throws_ok($$select public.browse_people(p_limit=>25)$$,'22023',null,'page
 select throws_ok($$select public.browse_people(p_search=>repeat('a',101))$$,'22023',null,'long search rejected');
 select throws_ok($$select public.browse_people(p_search=>repeat(' ',101))$$,'22023',null,'long whitespace search rejected before trim');
 select throws_ok($$select public.browse_people(p_major=>repeat(' ',201))$$,'22023',null,'long whitespace major rejected before trim');
-select throws_ok($$select public.browse_people(p_after_name=>'bea')$$,'22023',null,'partial cursor rejected');
-select is((select count(*) from public.browse_people(p_after_name=>'Bea %_',p_after_id=>'11000000-0000-4000-8000-000000000002')),1::bigint,'raw returned name cursor advances');
+select throws_ok($$select public.browse_people(p_after_name=>'bea')$$,'22023',null,'name-only cursor rejected');
+select throws_ok($$select public.browse_people(p_after_name=>'Bea %_',p_after_id=>'11000000-0000-4000-8000-000000000002')$$,'22023',null,'name plus ID cursor rejected');
 select throws_ok($$select public.browse_people(p_after_name=>repeat('x',101),p_after_id=>'11000000-0000-4000-8000-000000000002')$$,'22023',null,'overlong raw cursor rejected');
 select throws_ok($$select public.browse_people(p_after_name=>'   ',p_after_id=>'11000000-0000-4000-8000-000000000002')$$,'22023',null,'blank raw cursor rejected');
 
 -- Two pages cross a shared-name UUID boundary. The last name on page one has
--- U+00A0 at both ends, which JavaScript trim removes but PostgreSQL btrim keeps.
+-- 100 ASCII spaces plus U+00A0 at both ends of Zed: raw length 105, while
+-- btrim length is 5. A returned name cannot be used as a bounded cursor.
 reset role;
 insert into auth.users(id,email,email_confirmed_at)
 select ('11000000-0000-4000-8000-'||lpad(n::text,12,'0'))::uuid,
@@ -79,9 +80,12 @@ insert into storage.objects(bucket_id,name,owner_id)
 select 'profile-photos',id::text||'/primary.png',id::text
 from public.accounts where id::text between
   '11000000-0000-4000-8000-000000000007' and '11000000-0000-4000-8000-000000000034';
-update public.profiles set real_name=case when user_id::text between
-    '11000000-0000-4000-8000-000000000007' and '11000000-0000-4000-8000-000000000032'
-    then U&'\00A0Zed\00A0' else 'Zed' end,
+update public.profiles set real_name=case
+    when user_id='11000000-0000-4000-8000-000000000028'
+      then repeat(' ',100)||U&'\00A0Zed\00A0'
+    when user_id::text between '11000000-0000-4000-8000-000000000007'
+      and '11000000-0000-4000-8000-000000000032' then U&'\00A0Zed\00A0'
+    else 'Zed' end,
   major='Biology', graduation_year=2028, bio='Private bio',
   primary_photo_path=case when user_id='11000000-0000-4000-8000-000000000035'
     then null else user_id::text||'/primary.png' end
@@ -100,13 +104,15 @@ create temp table cursor_first as select * from public.browse_people(p_limit=>24
 create temp table cursor_second as
   select p.* from (select real_name,account_id from cursor_first
     order by pg_catalog.lower(pg_catalog.btrim(real_name)) collate "C" desc, account_id desc limit 1) last_row,
-    lateral public.browse_people(p_after_name=>last_row.real_name,p_after_id=>last_row.account_id) p;
+    lateral public.browse_people(p_after_id=>last_row.account_id) p;
 select is((select count(*) from cursor_first),24::bigint,'first page is full');
 select is((select account_id::text from cursor_first order by
   pg_catalog.lower(pg_catalog.btrim(real_name)) collate "C" desc,account_id desc limit 1),
   '11000000-0000-4000-8000-000000000028','NBSP name is the page boundary');
-select is((select real_name from cursor_first where account_id='11000000-0000-4000-8000-000000000028'),
-  U&'\00A0Zed\00A0','boundary row returns exact raw name');
+select is((select length(real_name) from cursor_first where account_id='11000000-0000-4000-8000-000000000028'),
+  105,'boundary row has valid raw name over 100 characters');
+select is((select pg_catalog.btrim(real_name) from cursor_first where account_id='11000000-0000-4000-8000-000000000028'),
+  U&'\00A0Zed\00A0','boundary keeps NBSP after PostgreSQL btrim');
 select is((select count(*) from cursor_second),4::bigint,'second page contains the remaining peers');
 select is((select count(distinct account_id) from
   (select account_id from cursor_first union all select account_id from cursor_second) pages),
@@ -124,7 +130,29 @@ select is((select count(*) from (select account_id from cursor_first union all s
   where account_id in ('11000000-0000-4000-8000-000000000033','11000000-0000-4000-8000-000000000034',
     '11000000-0000-4000-8000-000000000035','11000000-0000-4000-8000-000000000004')),
   0::bigint,'cursor does not reveal opted-out, blocked, unready or cross-campus peers');
+select throws_ok($$select * from public.browse_people(p_after_id=>'11000000-0000-4000-8000-000000000033')$$,
+  '42501','People operation unavailable','opted-out cursor ID is unavailable');
+select throws_ok($$select * from public.browse_people(p_after_id=>'11000000-0000-4000-8000-000000000034')$$,
+  '42501','People operation unavailable','blocked cursor ID is unavailable');
+select throws_ok($$select * from public.browse_people(p_after_id=>'11000000-0000-4000-8000-000000000035')$$,
+  '42501','People operation unavailable','unready cursor ID is unavailable');
+select throws_ok($$select * from public.browse_people(p_after_id=>'11000000-0000-4000-8000-000000000004')$$,
+  '42501','People operation unavailable','cross-campus cursor ID is unavailable');
+select throws_ok($$select * from public.browse_people(p_after_id=>'11000000-0000-4000-8000-000000000099')$$,
+  '42501','People operation unavailable','nonexistent cursor ID is unavailable');
+select throws_ok($$select * from public.browse_people(p_after_id=>'11000000-0000-4000-8000-000000000028',p_search=>'Bea')$$,
+  '42501','People operation unavailable','filter-mismatched cursor ID is unavailable');
+select throws_ok($$select * from public.browse_people(p_after_id=>'11000000-0000-4000-8000-000000000028',p_graduation_year=>2029)$$,
+  '42501','People operation unavailable','year-mismatched cursor ID is unavailable');
+select throws_ok($$select * from public.browse_people(p_after_id=>'11000000-0000-4000-8000-000000000028',p_major=>'Chemistry')$$,
+  '42501','People operation unavailable','major-mismatched cursor ID is unavailable');
 drop table cursor_second,cursor_first;
+reset role;
+update private.people_preferences set opted_in=false
+  where account_id='11000000-0000-4000-8000-000000000028';
+set local role authenticated;
+select throws_ok($$select * from public.browse_people(p_after_id=>'11000000-0000-4000-8000-000000000028')$$,
+  '42501','People operation unavailable','opt-out invalidates old cursor ID');
 reset role;
 update private.people_preferences set opted_in=false where account_id::text between
   '11000000-0000-4000-8000-000000000007' and '11000000-0000-4000-8000-000000000035';

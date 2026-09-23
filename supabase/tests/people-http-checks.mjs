@@ -10,7 +10,8 @@ export async function peopleHttpChecks(owner, peer, a, b, sql, png, url, key) {
     assert.equal((await ownerApi.rpc("set_people_preference", { p_opted_in: false })).data, false);
     assert.equal((await ownerApi.rpc("browse_people")).error?.code, "42501");
     assert.equal((await peerApi.storage.from("profile-photos").upload(peerPath, png, { contentType: "image/png" })).error, null);
-    assert.equal((await peerApi.from("profiles").update({ real_name: "\u00a0Peer\u00a0", major: "Science", graduation_year: 2028, bio: "Local", primary_photo_path: peerPath }).eq("user_id", b.id)).error, null);
+    const rawPeerName = `${" ".repeat(100)}\u00a0Peer\u00a0`;
+    assert.equal((await peerApi.from("profiles").update({ real_name: rawPeerName, major: "Science", graduation_year: 2028, bio: "Local", primary_photo_path: peerPath }).eq("user_id", b.id)).error, null);
     assert.equal((await peerApi.rpc("get_access_state")).data, "ready");
     sql("update private.people_feature_gate set enabled=true");
     assert.equal((await peerApi.rpc("set_people_preference", { p_opted_in: true })).error, null);
@@ -20,17 +21,19 @@ export async function peopleHttpChecks(owner, peer, a, b, sql, png, url, key) {
       ["account_id", "campus_name", "graduation_year", "major", "real_name"],
     ]);
     assert.equal(card.data[0].account_id, b.id);
-    assert.equal(card.data[0].real_name, "\u00a0Peer\u00a0");
+    assert.equal(card.data[0].real_name, rawPeerName);
     const { data: { session } } = await ownerApi.auth.getSession();
     assert.ok(session?.access_token);
     const cursorResponse = await fetch(`${url}/rest/v1/rpc/browse_people`, {
       method: "POST",
       headers: { apikey: key, authorization: `Bearer ${session.access_token}`, "content-type": "application/json" },
-      body: JSON.stringify({ p_after_name: card.data[0].real_name, p_after_id: card.data[0].account_id, p_limit: 1 }),
+      body: JSON.stringify({ p_after_id: card.data[0].account_id, p_limit: 1 }),
     });
     const cursorBody = await cursorResponse.text();
     assert.equal(cursorResponse.status, 200, cursorBody);
-    assert.deepEqual(JSON.parse(cursorBody), [], "raw NBSP cursor accepted by direct PostgREST RPC");
+    assert.deepEqual(JSON.parse(cursorBody), [], "ID-only cursor accepted for long raw name by direct PostgREST RPC");
+    assert.equal((await ownerApi.rpc("browse_people", { p_after_name: rawPeerName, p_after_id: b.id })).error?.code, "22023");
+    assert.equal((await ownerApi.rpc("browse_people", { p_after_id: "00000000-0000-4000-8000-000000000099" })).error?.code, "42501");
     const detail = await ownerApi.rpc("get_people_detail", { p_account_id: b.id });
     assert.equal(detail.error, null);
     assert.deepEqual(Object.keys(detail.data[0]).sort(), [
@@ -53,6 +56,7 @@ export async function peopleHttpChecks(owner, peer, a, b, sql, png, url, key) {
     assert.equal((await peerApi.rpc("get_people_detail", { p_account_id: a.id })).data?.[0]?.account_id, a.id);
     assert.equal((await ownerApi.rpc("set_people_block", { p_account_id: b.id, p_blocked: true })).data, true);
     assert.equal((await ownerApi.rpc("set_people_block", { p_account_id: b.id, p_blocked: true })).data, true);
+    assert.equal((await ownerApi.rpc("browse_people", { p_after_id: b.id })).error?.code, "42501");
     assert.deepEqual((await ownerApi.rpc("get_people_detail", { p_account_id: b.id })).data, []);
     assert.deepEqual((await peerApi.rpc("get_people_detail", { p_account_id: a.id })).data, []);
     assert.deepEqual((await peerApi.rpc("browse_people", { p_search: "Local Test Student" })).data, []);
@@ -61,6 +65,7 @@ export async function peopleHttpChecks(owner, peer, a, b, sql, png, url, key) {
     assert.equal((await ownerApi.rpc("set_people_block", { p_account_id: b.id, p_blocked: false })).data, false);
     assert.equal((await peerApi.rpc("set_people_preference", { p_opted_in: false })).data, false);
     assert.deepEqual((await ownerApi.rpc("get_people_detail", { p_account_id: b.id })).data, []);
+    assert.equal((await ownerApi.rpc("browse_people", { p_after_id: b.id })).error?.code, "42501");
     assert.equal((await peerApi.rpc("set_people_preference", { p_opted_in: true })).data, true);
     sql(`update auth.users set email='changed@example.invalid' where id='${b.id}'`);
     assert.deepEqual((await ownerApi.rpc("get_people_detail", { p_account_id: b.id })).data, []);
