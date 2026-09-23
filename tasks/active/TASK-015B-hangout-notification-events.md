@@ -1,6 +1,6 @@
 # TASK-015B — Local Hangout and chat notification events
 
-Status: Contract under independent review; no implementation dispatched
+Status: Complete for bounded disposable-local backend stage; reviewed and integrated
 Date: 2026-09-23
 Parent: `TASK-015-notification-inbox-preferences.md`
 Policy: Accepted ADR-0017
@@ -23,10 +23,10 @@ Read `AGENTS.md`, parent TASK-015, ADR-0017, TASK-015A contract/handoff/review, 
 Notifications web UI (TASK-015C); new Hangout roles/co-host policy under Proposed ADR-0012; restricted visibility/invitations, global block/reporting, Realtime/push/email/reminders, moderation/attendance notices, friend-activity push, hosted target or production retention; unrelated source authorization redesign or CI repairs.
 
 ## Acceptance checks
-- [ ] Additive migration, two clean resets, actual-role/real Auth/race suites, schema lint and workspace checks pass within recorded limits.
-- [ ] Every specified actual source transition generates the right owner item once, with correct recipients, category/essential behavior and no copied sensitive content. Source retries/no-ops and disabled gate produce none without source failure.
-- [ ] Current source rights are required for non-neutral projection and destination open; client table/source forgery stays denied, social behavior remains unchanged.
-- [ ] Gates false, fixtures/services cleared; fresh exact-tip security review, handoff review, canonical main integration and verified task/main remote SHAs precede TASK-015C dispatch.
+- [x] Additive migration, two clean resets, all ten actual-role suites, fourteen real HTTP/race suites, schema lint and workspace checks passed within the handoff's documented local wrapper limit.
+- [x] Specified source transitions, recipient/category/essential rules, no-op/retry/gate behavior and no sensitive copies passed local checks, including the corrected source-gate races.
+- [x] Current source rights and neutral revocation projection were reviewed; direct table/source forgery remained denied and A's social behavior passed regressions. Destination source readers remain authoritative when opened.
+- [x] Gates false, fixtures/services cleared; final exact-tip security review clear. Canonical main and remote verification are recorded in the coordinator's publication receipt before TASK-015C dispatch.
 
 ## Handoff
 Work only in an isolated `agent/TASK-015B-hangout-events` branch/worktree from the verified published baseline. Commit in-scope work and handoff, push and verify task remote SHA, then stop. Coordinator owns shared queue/state/changelog and main integration. Use GPT-6 Sol medium and the app's Standard speed preference where selectable; dispatch tooling may not expose speed.

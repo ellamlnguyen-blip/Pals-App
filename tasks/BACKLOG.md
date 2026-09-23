@@ -8,7 +8,7 @@
 - TASK-012 friendship — bounded local backend and People UI complete and independently reviewed on remote-verified main; see `DONE.md` and handoffs. Friend-aware ranking, friends-only Hangout authorization and global block precedence remain separate.
 - TASK-013 hangout chat — complete for bounded local scope under Accepted ADR-0015 on remote-verified main `f2404941aaf5cea5a830e9813950b33871b5e796`; see `DONE.md` and handoffs. Realtime/global block/hosted access remain separate.
 - TASK-014 DM requests/direct chat — complete for bounded disposable-local scope under Accepted ADR-0016; see `DONE.md`, its contract and handoffs. Hosted messaging, Realtime and global block/reporting remain open.
-- TASK-015 notification inbox/preferences — Accepted ADR-0017; TASK-015A private ledger/social events complete for disposable-local scope after independent review. TASK-015B Hangout/chat source contract is under independent review; UI (C) follows after reviewed B integration. See `active/TASK-015-notification-inbox-preferences.md`.
+- TASK-015 notification inbox/preferences — Accepted ADR-0017; independently reviewed local backend stages A (ledger/social) and B (Hangout/chat events) complete. TASK-015C Notifications UI awaits its own reviewed and published contract. See `active/TASK-015-notification-inbox-preferences.md`.
 - TASK-016 blocking/reporting — still open. TASK-011A implemented only caller-owned People blocks and bilateral People suppression under Accepted ADR-0013; no global Hangout/private-access, messaging, reporting or launch completion.
 - TASK-017 admin moderation console
 - TASK-018 attendance confirmation

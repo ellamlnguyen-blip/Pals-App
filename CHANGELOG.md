@@ -2,6 +2,10 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-23 — TASK-015B local Hangout notification events
+
+- Added source-owned inbox items for material Hangout edits, essential cancellations, actual host-relevant joins/leaves and Hangout-chat messages. A fresh review found and drove a source-gate race correction before integration. Local reset, authorization, concurrency and workspace checks passed. UI and hosted delivery remain separate.
+
 ## 2026-09-23 — TASK-015A local notification ledger and social events
 
 - Added a private default-disabled notification gate, owner preferences and bounded caller-bound inbox/mark-read operations. Authoritative friendship/DM transitions now create minimal local inbox items when gates and preferences allow. Independent security review and local database/Auth/race checks cleared the bounded backend stage; Hangout/chat events, UI and hosted delivery remain separate.
