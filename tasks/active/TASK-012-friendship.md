@@ -1,6 +1,6 @@
 # TASK-012 — Local friendship requests
 
-Status: ADR-0014 accepted; TASK-012A contract publication precedes backend dispatch
+Status: Bounded local implementation and independent stage reviews complete; canonical main closure publication/verification pending
 Date: 2026-09-23
 Planning branch: `agent/TASK-012-planning`
 Starting canonical `origin/main`: `a4a011e2026d4ab6c9eb41c9d2381b7be123da81` (freshly verified with `git ls-remote origin refs/heads/main` after sandbox escalation)
@@ -32,3 +32,6 @@ Friend-aware ranking, mutual friends, public counts/lists, peer photos/new text 
 
 ## Ownership and handoff
 The coordinator owns shared queue/state, policy acceptance, narrower dispatch, review and integration. Stage agents own only their contracts and handoffs, then stop. Use `agents/HANDOFF_TEMPLATE.md`. Planning handoff: `agents/handoffs/TASK-012-CONTRACT.md`. Planning validation is document consistency/scoped diff/review only; it is not runtime, UI, policy acceptance or task completion. Use GPT-6 Sol medium at the app's Standard speed preference for task/review agents; dispatch tooling has no speed selector, so do not claim speed verification. No automatic successor task until this bounded parent task is actually complete.
+
+## Bounded local outcome
+Reviewed backend `2a1f6b13b332196ba599fb739513fd424024f2a7` and UI `b21f4e247ae24ec3ac5ae70bea24efb50aee09ad` are merged on coordinator branch. Backend and UI first-tip security findings were corrected and cleared by exact-tip re-reviews. Local database/real Auth/action/desktop/phone/keyboard evidence and limits are in `agents/handoffs/TASK-012.md`, `TASK-012A-REVIEW.md` and `TASK-012B-REVIEW.md`. All local gates and fixtures are cleaned. Parent completion awaits canonical main publication and both task/main remote verification; deferred MVP friend context and hosted safety gates stay open.

@@ -1,6 +1,6 @@
 # TASK-012B — Local friendship People UI
 
-Status: First UI tip pushed; independent security/design review found two state gaps; correction in progress before integration
+Status: Corrected UI security/design review clear; merged on coordinator integration branch; canonical main publication/verification pending
 Date: 2026-09-23
 Parent: TASK-012
 Decision: Accepted ADR-0014
@@ -35,3 +35,6 @@ Database migrations, SQL grants or authorization changes; friend-aware ranking/a
 
 ## Handoff
 Implementation agent owns only this UI stage and `agents/handoffs/TASK-012B.md`, then stops. Coordinator owns shared NOW/BACKLOG/CURRENT_STATE/CHANGELOG, review and integration. This contract must be published on canonical main before fresh UI dispatch. Do not mark parent TASK-012 complete until its bounded acceptance criteria and verified integration are satisfied.
+
+## Review outcome
+First UI tip `7b0c2bf6e46ed37e1b9f89ae452c22cebc418916` passed full workspace, production Auth/action and rendered desktop/phone/keyboard checks but independent review found stale peer text after a denied create and immediate retry after an unknown ID-block outcome. Corrected task tip `b21f4e247ae24ec3ac5ae70bea24efb50aee09ad` passed focused regression, full workspace and production Auth/action checks; exact-tip security/design re-review found no remaining blocker. A focused browser retest after the correction was unavailable due Mac lock, with prior layout and keyboard checks retained. See `agents/handoffs/TASK-012B.md` and `TASK-012B-REVIEW.md`. Reviewed tip merged on coordinator branch at `39bfe3223bb7dbb6a5eb60cafe451b47a712f604`; canonical main publication remains pending.

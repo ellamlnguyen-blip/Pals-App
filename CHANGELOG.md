@@ -17,6 +17,12 @@ Record meaningful product, architecture, schema, safety, and release changes—n
 - Extended People blocking only to tear down an active friendship atomically and allow a ready participant to block a now-hidden friend by ID. Current Hangout access, profile/photo readers and hosted environments remain unchanged.
 - Independent security review found and then cleared a create/accept revocation race. Local SQL/Auth/HTTP/concurrency checks passed; full `pnpm check` remained unavailable in the isolated offline worktree.
 
+## 2026-09-23 — TASK-012B local friendship UI
+
+- Added request/status controls to People detail and private owner relationship management with ID-only fallback when peer text is unavailable.
+- Confirmations explain decline/cancel suppression, unfriend and People-block effects. The exact outbound blocked ID is required for a confirmed block result; denied creates clear revoked People text.
+- Full workspace and production Auth/action checks plus desktop/phone/keyboard inspection passed. Independent review findings on denied/unknown state handling were corrected and cleared; a focused browser retest of the corrected unknown state was unavailable after Mac lock.
+
 ## 2026-09-23 — TASK-011 local People directory
 
 - Added a ready-only, opt-in, same-campus text People list/detail with literal search, year/major filters, deterministic ID-only cursor pages and owner privacy preview. Added People-only bilateral blocks, outbound ID management and immediate detail clearing after block.
