@@ -24,4 +24,4 @@ Documentation diff and whitespace checks only; no runtime tests are claimed or n
 Publish/remote-verify reviewed planning branch and main; request explicit user decision on linked ADR; record acceptance/revisions on main. Only then publish stage A contract and dispatch fresh backend implementation, independent security review and integration; stage B follows under its own contract. Preserve default-disabled gate/disposable-local boundary, separate mock/saved records and all hosted safety/auth/deployment prerequisites. CI helper maintenance stays separate.
 
 ## Publication receipt
-Pending reviewed planning publication. This does not mark TASK-010 implementation complete.
+Planning branch and canonical main were pushed and independently verified with `git ls-remote` at `304fc81bc11b38f351341c6bdd285d55eb37bad2`. Canonical main was fast-forwarded only after independent planning review and clean-checkout verification. This subsequent documentation receipt records that immutable planning milestone. ADR-0012 remains Proposed; TASK-010 implementation is incomplete and undispatched pending explicit user acceptance.

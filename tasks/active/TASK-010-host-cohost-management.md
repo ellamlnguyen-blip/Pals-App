@@ -50,3 +50,6 @@ Host, current/former co-host, ordinary/left/removed participant, nonparticipant,
 
 ## Ownership and handoff
 Coordinator owns shared queues/CURRENT_STATE/CHANGELOG, policy acceptance records, stage contracts, review and integration. Agents own only assigned stage files and stage handoffs using agents/HANDOFF_TEMPLATE.md. Record verified remote branch/main SHAs and exact tests/limitations. No code dispatch or migration exists at this planning milestone. Do not auto-dispatch later product tasks.
+
+## Planning publication
+Reviewed contract/proposal published and independently remote-verified on planning branch and canonical main at `304fc81bc11b38f351341c6bdd285d55eb37bad2`. ADR-0012 remains Proposed, with no acceptance evidence. Implementation and stage dispatch remain blocked on that decision.

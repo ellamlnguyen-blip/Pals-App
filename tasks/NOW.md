@@ -34,3 +34,5 @@ TASK-009 final receipt: reviewed task `777d4b875bedd26ea925a4982433809d3b048cc2`
 
 ## TASK-010 host/co-host planning
 User explicitly requested the next task. `active/TASK-010-host-cohost-management.md` defines staged local backend and management UI work; `decisions/ADR-0012-hangout-cohost-authority.md` is **Proposed**, awaiting explicit policy acceptance. Planning branch: `agent/TASK-010-planning`, from clean remote-verified main `49d6e780aebf5f23f384efe24d0a8bd55232888a`. No implementation agent, code change or migration is authorized/dispatched yet. Publish reviewed planning records to main, then record the user's decision before stage contracts/implementation. Existing host authority remains Accepted ADR-0010; co-hosts still have no implemented authority. See `agents/handoffs/TASK-010-CONTRACT.md` for review/publication evidence.
+
+Planning publication verified: `agent/TASK-010-planning` and `origin/main` both at `304fc81bc11b38f351341c6bdd285d55eb37bad2`. Independent planning review clear; awaiting user policy decision, no implementation dispatched.
