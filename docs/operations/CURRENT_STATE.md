@@ -90,3 +90,5 @@ TASK-011A local privacy backend is reviewed and integrated: gate default disable
 TASK-011B local People UI stage dispatched from verified main `6cf286ed72269ac603cb298b30a52d5fba74ecf1` to isolated `agent/TASK-011B-people-ui`. No UI integrated yet.
 
 TASK-011B review found a reproducible People pagination defect for U+00A0-padded names: JavaScript and SQL derive different cursors. A bounded local backend correction is required before UI integration; see `tasks/active/TASK-011A-cursor-correction.md`. Existing People data gates and hosted exclusions remain unchanged.
+
+Fresh exact-commit review of the first TASK-011A cursor correction found a valid long raw name that stops pagination. A second bounded additive local migration is required: derive cursor sort position from the currently visible last-row account ID inside the database. TASK-011B stays in progress and unintegrated until this correction is reviewed.
