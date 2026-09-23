@@ -307,3 +307,25 @@ dialog code {
   padding: 0;
   accent-color: var(--pals-accent);
 }
+.dm-request {
+  margin-top: 1.5rem;
+  display: grid;
+  gap: 0.65rem;
+}
+.dm-request label {
+  font-weight: 800;
+}
+.dm-request textarea {
+  min-height: 7rem;
+}
+.dm-request p {
+  margin: 0.25rem 0;
+}
+.dm-request .button {
+  justify-self: start;
+}
+@media (max-width: 390px) {
+  .dm-request .button {
+    width: 100%;
+  }
+}

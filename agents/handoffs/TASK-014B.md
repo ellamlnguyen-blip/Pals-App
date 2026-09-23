@@ -1,0 +1,31 @@
+# TASK-014B local DM UI handoff
+
+Status: corrected implementation branch for independent exact-tip security/design review; not integrated on main. Coordinator owns acceptance, shared records and canonical integration.
+
+## Baseline and scope
+
+- Isolated branch `agent/TASK-014B-dm-ui` from independently verified canonical `origin/main` `9b76bcc19850f28b856a770f9539ad1608a7f670`.
+- Accepted ADR-0016 and published TASK-014B govern this disposable-local UI. No migration, backend RPC, Realtime, hosted enablement, notification or Hangout authorization change.
+- GPT-6 Sol medium was specified by the coordinator. The dispatch tool did not expose a speed selector, so Standard speed was not independently verified here.
+
+## Outcome
+
+- Added no-store, loopback-guarded, current-session HTTP endpoints for DM inbox, request creation, status/messages and transitions. The actor header binds the original page account to the server-derived session; database RPCs remain authority. Creation rechecks fresh People detail.
+- Added People-detail first-message consent composer, exact UUID/body uncertain retry, and local DM teardown copy to the existing People block confirmation/action. A React Strict Mode remount found during rendered inspection was corrected so the composer remains available.
+- Added Requests and Direct chats beside existing independently gated Hangout chats. Active but temporarily unready participants can access minimal DM management. Incoming request text uses only the authorized first-body projection; outgoing pending and accepted rows have no preview. Unknown peers show a neutral label and full participant-owned ID.
+- Added direct route with recipient accept/reply/ignore, sender waiting/withdraw, accepted send/pages/close, paused cleanup and ready-caller People block. Bodies remain literal text with line breaks, server time and You/Peer. Client masks on hide/pagehide/auth change, discards stale responses, and polls only the visible bounded page.
+- Corrected the shared Chats navigation at 320px: a higher-specificity mobile wrap rule overcomes the People stylesheet's nowrap override, leaving every item visible without horizontal clipping.
+- Exact-tip review found an inbox auth race: one boolean could reveal text after the first of two overlapping transitions settled. The inbox now tracks every transition token and uses an original-account server probe without copying its bodies. It stays masked until all tokens resolve; stale completion markers alone cannot reveal content. Follow-up reviews found that a later completion could invalidate an earlier probe and leave a cancelled transition masked forever, first in the inbox and then in the direct thread. Both now use the same verification coordinator: clearing one verified token re-probes any other settled token. Separate deferred-response regressions reproduce each interleaving and verify reveal or thread reload only after both probes complete.
+- Added explicit no-store headers for `/chats` and `/chats/:path*` in Next config and `docs/ux/TASK-014B-INTERACTION-PLAN.md`. Live `usepals.com` was attempted on 2026-09-23 but failed DNS/navigation; existing direct reference observations and current tokens/components guided the design.
+
+## Verification
+
+- Final `pnpm check` passes formatting, lint, workspace types, unit tests and web/admin production builds after the inbox/direct liveness and 320px corrections. Focused deferred-response ordering tests and the expanded signed-in HTTP test pass. `git diff --check` passes.
+- Real disposable-local Auth/PostgREST DM consent/revocation test passes. Expanded signed-in web route test passes original-actor binding, no-store JSON responses, hidden-target denial, exact-key dedupe and changed-body conflict, outgoing first-body redaction, incoming first-body read, reply-and-accept, accepted history, a 51-message cursor boundary (50, 1, then empty), opt-out pause/restoration, active-but-unready minimal management, withdraw, ignore, block, close and terminal denial. The built Next server returned no-store for the direct content page. Next dev itself reported `no-cache, must-revalidate` for rendered pages despite headers; production-mode test confirmed no-store.
+- Native Chrome Incognito rendered checks reached People request, outgoing waiting, incoming inbox/detail, reply-and-accept, accepted thread and multiline literal `<script>` text. Enter inserted a newline; Tab showed a visible Send focus ring; Return sent. A peer opt-out hid all direct bodies/composer while retaining management, and opt-in restored them. Signout in another tab left the original direct tab unavailable with no text. Coordinator independently inspected the same flow in the in-app browser and found no horizontal overflow at an effective 325px phone viewport.
+- Coordinator IAB found the initial 320px Notifications item clipped, then reloaded the corrected built app: `/chats` and direct navigation wrap it to x16–106 at 320px, with document width equal to viewport. At 390px all nav items fit (rightmost x371); at 768px the rightmost ends at x458. Sender pending text/composer remained redacted. Browser automation did not directly force two overlapping auth transitions, bfcache or in-flight response revocation; the asynchronous token regression and stale-response guards cover those paths in code. Request management copy, large-page cursor UI and remaining adversarial target cases merit exact-tip reviewer scrutiny; the route behavior and 50-item cursor boundary have been exercised with real local Auth/HTTP.
+- After this follow-up, all five local gates were verified false; DM pairs/messages/retries/suppression and `dm-visual-*`/`dm-web-*` Auth fixture users were zero. The disposable web server, Supabase and Lima VM were stopped. An initial earlier Lima startup attempt failed (`did not receive an event with the running status`), then the coordinator recovered the existing VM and signed-in tests ran successfully.
+
+## Review focus
+
+Review inbox/direct auth masking, no-store page behavior, paused management and retry/state conflicts at the exact pushed tip. The branch is intentionally unintegrated; TASK-014 and successor dispatch remain the coordinator's responsibility.
