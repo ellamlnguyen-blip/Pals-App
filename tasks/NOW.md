@@ -9,7 +9,7 @@ Every active task must have its contract/status recorded on `main` before dispat
 
 Do these in order unless dependencies allow safe parallel work.
 
-Completed: TASK-001, TASK-002, TASK-004, TASK-005, TASK-006, TASK-007 and TASK-008. See `DONE.md` and their handoffs.
+Completed: TASK-001, TASK-002, TASK-004, TASK-005, TASK-006, TASK-007, TASK-008 and TASK-009. See `DONE.md` and their handoffs.
 
 TASK-008 local-only saved map discovery/detail/joining is reviewed and integrated from `agent/TASK-008-map-discovery` tip `0ef4bbb67f5fab908092eba47243ebea3b394931` on remote-verified main `279c325384f5584e76e611ac78d722836ce47cff`. See its contract, `agents/handoffs/TASK-008.md` and `TASK-008-REVIEW.md`. The default-disabled gate, no-hosted-use boundary and launch safety prerequisites remain in force. TASK-009 is now explicitly requested; its bounded contract and safety gates are recorded below.
 
@@ -26,5 +26,5 @@ Parallelization after TASK-001:
 
 Start from the accepted product and architecture documents in this repository. Do not introduce behavior or architecture from sources outside the current project specifications.
 
-## Active — TASK-009 Calendar
-`active/TASK-009-calendar.md` — bounded local-only Today/Week saved discovery and authoritative Joined/Hosting filters. Planning baseline `e2e3b2d0b59d32100dfca91c04801b96d551f5ab`; planned branch `agent/TASK-009-calendar`. Contract/main published and remote-verified at `29c9343edc560dd0731804b3b9624f8329ad6d4c`; fresh implementation agent dispatched from that baseline. Implementation pushed and independently remote-verified at `06101ee68ebb8b42e9f783769faf9fab0aea280e`. Static review clear; workspace, SQL 226×2/lint and three built-server real HTTP/concurrency suites pass. Final rendered-state checks, cleanup and integration pending. No private Calendar payloads, friend context, restricted modes, schema changes or hosted enablement. Review/test/integration remain pending.
+## TASK-009 Calendar outcome
+`active/TASK-009-calendar.md` — reviewed local-only Calendar accepted for integration from remote-verified task `777d4b875bedd26ea925a4982433809d3b048cc2`. Today/Day and Monday–Sunday Week, authoritative Joined/Hosting filters, public-only payloads and existing detail navigation passed local workspace/SQL/real HTTP and desktop/phone checks; fresh review clear. CI action-manifest failure is proven pre-existing on starting main and remains a separate maintenance follow-up. Final main receipt follows publication. Gate disabled, disposable data cleared and local services stopped. No hosted changes or automatic TASK-010 dispatch.

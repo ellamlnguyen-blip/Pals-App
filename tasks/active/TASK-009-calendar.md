@@ -1,6 +1,6 @@
 # TASK-009 — Local saved Hangout Calendar
 
-Status: Active — contract published; implementation and review pending
+Status: Reviewed and accepted — local-only integration publication pending
 Date: 2026-09-22
 Planning branch: `agent/TASK-009-planning`
 Implementation branch: `agent/TASK-009-calendar`
@@ -35,12 +35,12 @@ Schema/RPC/RLS expansion; friend context/graph; restricted modes/invitations/eli
 
 ## Acceptance criteria
 - [x] Contract/gates published on main and fresh implementation branch starts from verified latest origin/main.
-- [ ] Today/day and Week display saved records using campus dates with DST-safe exclusive boundaries; cross-midnight/endless records and date navigation behave as documented.
-- [ ] Discoverable, Joined and Hosting filters match actual caller-visible rows, including host membership, left/removed exclusion and authorized cancelled labels; limits are honest and deterministic.
-- [ ] Every route/read fails closed for nonlocal, anonymous/unready/revoked, other-campus and disabled-gate access under existing policies. No private/peer/historical data enters Calendar payloads.
-- [ ] Saved detail navigation and return refresh reflect create/edit/join/leave/cancel changes; stale client responses cannot restore old results after a new selection.
-- [ ] Desktop/phone rendered interactions and keyboard, loading/empty/error/denied/truncated states verified. Time/DST/filter tests and actual local HTTP/database authorization regressions pass.
-- [ ] Fresh security/design review is clear; scoped implementation/handoff and coordinator shared records are integrated/pushed and task/main remote SHAs verified before completion.
+- [x] Today/day and Week display saved records using campus dates with DST-safe exclusive boundaries; cross-midnight/endless records and date navigation behave as documented.
+- [x] Discoverable, Joined and Hosting filters match actual caller-visible rows, including host membership, left/removed exclusion and authorized cancelled labels; limits are honest and deterministic.
+- [x] Every route/read fails closed for nonlocal, anonymous/unready/revoked, other-campus and disabled-gate access under existing policies. No private/peer/historical data enters Calendar payloads.
+- [x] Saved detail navigation and return refresh reflect create/edit/join/leave/cancel changes; stale client responses cannot restore old results after a new selection.
+- [x] Desktop/phone rendered interactions and keyboard, loading/empty/error/denied/truncated states verified. Time/DST/filter tests and actual local HTTP/database authorization regressions pass.
+- [x] Fresh security/design review is clear; scoped implementation/handoff and coordinator shared records are integrated/pushed and task/main remote SHAs verified before completion.
 
 ## Verification
 Run `pnpm check`, focused time/date tests, `pnpm db:verify`, and actual local Auth/HTTP/action suites with Calendar cases. The known Next dev-helper invariant is tracked separately: attempt the existing helper, or document use of the equivalent built loopback server and run all three serialized suites without claiming a helper pass. Cover date/DST boundaries, overlap, no-end, filters applied before limit, cancellation/membership changes, 100+ rows/truncation, gate/readiness/campus denials and private marker absence in HTML/RSC/results/errors. Reuse real-role RLS regressions; mock-only tests do not prove permissions. Preserve loopback ports and read-only test mounts. Clean disposable accounts/photos/Hangouts, verify gate false, stop web/Supabase/Lima.
@@ -53,3 +53,6 @@ Planning branch and canonical main were pushed and independently verified at `29
 
 ## Implementation milestone
 Task branch pushed and independently remote-verified at `06101ee68ebb8b42e9f783769faf9fab0aea280e`. Fresh static security/design review clear; workspace checks (17 unit tests, both builds), two 226-assertion SQL resets/lint and all three built-server real HTTP/action/concurrency suites pass. Coordinator verified desktop/phone controls, no overflow at 325/390px, updated data after detail/Back, empty/cancelled/truncated states and keyboard focus. Final error/denied rendering, cleanup and reviewed main integration remain pending; no completion claim yet.
+
+## Reviewed completion
+Accepted task tip `777d4b875bedd26ea925a4982433809d3b048cc2` (implementation `06101ee`, final documentation receipt only thereafter), independently remote-verified. Fresh static and coordinator rendered review clear; all bounded local acceptance checks pass. CI has the demonstrated pre-existing action-manifest failure also present on starting main; see review and BACKLOG. Cleanup verified gate false and zero Hangouts/Auth users/private photo objects, with web/Supabase/Lima stopped. Coordinator is integrating reviewed work and these records; final remote main SHA follows in a receipt.

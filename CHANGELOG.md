@@ -2,9 +2,11 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
-## 2026-09-22 — TASK-009 Calendar contract
+## 2026-09-22 — TASK-009 local Calendar
 
-- Bounded local-only Today/Week Calendar with authoritative joined/hosted filters, campus-time boundaries, public-only payloads and existing detail navigation. Implementation pending; no safety gate or hosted permission changed.
+- Added saved-only Today/Day and Monday–Sunday Week views, campus-time/DST boundaries, authoritative Joined/Hosting filters and clear cancelled/truncated states.
+- Calendar exposes public schedule/place and caller relationship only; existing detail handles joining and private instructions. No safety gate, access policy or hosted permission changed.
+- Local workspace, SQL, real built-server HTTP/action and rendered desktop/phone checks passed; fresh review clear. Existing CI action-manifest failure confirmed on pre-Calendar main and tracked separately.
 
 ## 2026-09-22 — TASK-008 local saved Hangout discovery and joining
 

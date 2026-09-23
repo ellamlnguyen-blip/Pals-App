@@ -2,7 +2,7 @@
 ## Product Build
 - TASK-007 create/edit Hangouts — complete locally; see `DONE.md`, its contract and handoffs. Hosted enablement remains gated on separate safety/deployment work.
 - TASK-008 map discovery/detail/joining — complete locally; see `DONE.md`, its contract and handoffs. Hosted safety gates remain open
-- TASK-009 calendar — active bounded local contract: `active/TASK-009-calendar.md`; Today/Week and joined/hosted only. Friend context remains dependent on accepted friendship access.
+- TASK-009 calendar — reviewed local-only implementation accepted; see `DONE.md`, contract and handoffs. Friend context remains dependent on accepted friendship access; hosted gates remain open.
 - TASK-010 host/co-host management
 - TASK-011 people discovery
 - TASK-012 friendship
@@ -30,3 +30,5 @@ TASK-003 deployed HTTPS callback and real UNC email delivery acceptance remains 
 ## Engineering follow-ups
 - CI maintenance: review Node 20 runtime deprecation annotations for checkout/setup-node/pnpm actions and the announced ubuntu-latest runner migration. TASK-006 CI passes; update action/runtime pins in a separate bounded maintenance task, not profile scope.
 - Local web test helper: investigate Next 16 dev `/signin` HTTP 500 (`Invariant: Expected workUnitAsyncStorage to have a store`) seen during TASK-008 `pnpm test:auth:web`. The equivalent real Auth/HTTP/action/concurrency suites passed against the built loopback server; restore the dev-helper path in a separate bounded maintenance task.
+
+- Confirmed pre-existing CI action-manifest failure: pre-Calendar main `e2e3b2d` [run 35806871829](https://github.com/ellamlnguyen-blip/Pals-App/actions/runs/35806871829) and Calendar implementation `06101ee` [run 35810561283](https://github.com/ellamlnguyen-blip/Pals-App/actions/runs/35810561283) both fail the same `ids.createHangout && ids.editHangout && ids.searchSaved && ids.changeSavedMembership` assertion in the dev-server action harness before Calendar checks. Validate and SQL checks pass; equivalent built-server suites pass locally. Include this distinct dev-manifest symptom in the bounded test-helper maintenance task; TASK-009 does not repair it or claim green CI.
