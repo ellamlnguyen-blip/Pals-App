@@ -72,8 +72,42 @@ begin
     and private.people_visible(target, campus), false);
 end;
 $$;
+
+-- Hold every row that can revoke current People eligibility until commit.
+-- The caller first takes the unordered-pair lock, then these shared row locks;
+-- all eligibility predicates are evaluated again in a later statement.
+create function private.friendship_lock_eligibility(actor uuid, target uuid) returns void
+language plpgsql volatile security definer set search_path = '' as $$
+declare subject uuid;
+declare campus uuid;
+declare photo_path text;
+begin
+  perform 1 from private.people_feature_gate g where g.singleton for share;
+  perform 1 from private.friendship_feature_gate g where g.singleton for share;
+  for subject in select id from (values(actor),(target)) v(id) order by id loop
+    perform 1 from public.accounts a where a.id = subject for share;
+    if not found then raise exception 'Friendship unavailable' using errcode = '42501'; end if;
+    perform 1 from auth.users u where u.id = subject for share;
+    if not found then raise exception 'Friendship unavailable' using errcode = '42501'; end if;
+    select m.university_id into campus from public.university_memberships m
+      where m.user_id = subject for share;
+    if not found then raise exception 'Friendship unavailable' using errcode = '42501'; end if;
+    perform 1 from public.universities c where c.id = campus for share;
+    if not found then raise exception 'Friendship unavailable' using errcode = '42501'; end if;
+    select p.primary_photo_path into photo_path from public.profiles p
+      where p.user_id = subject for share;
+    if not found then raise exception 'Friendship unavailable' using errcode = '42501'; end if;
+    perform 1 from storage.objects o where o.bucket_id = 'profile-photos'
+      and o.name = photo_path and o.owner_id = subject::text for share;
+    if not found then raise exception 'Friendship unavailable' using errcode = '42501'; end if;
+    perform 1 from private.people_preferences v where v.account_id = subject for share;
+    if not found then raise exception 'Friendship unavailable' using errcode = '42501'; end if;
+  end loop;
+end;
+$$;
 revoke all on function private.friendship_enabled(), private.friendship_lock_pair(uuid,uuid),
-  private.friendship_eligible(uuid) from public, anon, authenticated;
+  private.friendship_eligible(uuid), private.friendship_lock_eligibility(uuid,uuid)
+  from public, anon, authenticated;
 
 create function public.create_friend_request(p_target_id uuid, p_request_id uuid)
 returns uuid language plpgsql volatile security definer set search_path = '' as $$
@@ -91,6 +125,7 @@ begin
   perform pg_catalog.pg_advisory_xact_lock(pg_catalog.hashtextextended(
     'friendship-request:' || actor::text || ':' || p_request_id::text, 0));
   perform private.friendship_lock_pair(actor, p_target_id);
+  perform private.friendship_lock_eligibility(actor, p_target_id);
   if not private.friendship_enabled() or not private.people_active_owner() then
     raise exception 'Friendship unavailable' using errcode = '42501';
   end if;
@@ -177,6 +212,9 @@ begin
     raise exception 'Friendship unavailable' using errcode = '42501';
   end if;
   perform private.friendship_lock_pair(actor,p_peer_id);
+  if p_action = 'accept' then
+    perform private.friendship_lock_eligibility(actor,p_peer_id);
+  end if;
   if not private.friendship_enabled() or not private.people_active_owner() then
     raise exception 'Friendship unavailable' using errcode = '42501';
   end if;

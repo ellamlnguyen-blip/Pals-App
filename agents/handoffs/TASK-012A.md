@@ -8,7 +8,7 @@ Implementation commit: `383586e3d6721e06ce9a3d89822746bd52d2b27d`
 Task branch and pushed commit SHA: recorded in the agent's final publication receipt; the handoff commit cannot contain its own SHA.
 Integrated `main` commit SHA: Not integrated; coordinator review is pending.
 Main status-record path and last published milestone: `tasks/active/TASK-012A-friendship-backend.md`, published at starting main SHA above.
-Outstanding review/integration blockers: independent security review, coordinator acceptance and remote-verified main integration.
+Outstanding review/integration blockers: security fix re-review, coordinator acceptance and remote-verified main integration.
 
 ## Outcome
 
@@ -31,6 +31,10 @@ One unordered pair has pending/accepted state, immutable server generation and c
 - Direct Prettier check and ESLint check passed. `node --test tests/*.test.mjs`: 17 passed. `git diff --cached --check` passed.
 - `pnpm check` could not install workspace dependencies: registry DNS returned `ENOTFOUND`; offline install lacked `@types/node@24.13.6` tarball. Existing matching-lockfile modules were usable for direct Prettier/ESLint but `pnpm check` itself aborted at its module-purge prompt. No green full check or CI is claimed.
 - Final local query showed People, friendship and Hangout gates all `false`, zero friendship rows and zero synthetic HTTP/race Auth accounts. Supabase and Lima were stopped. Temporary dependency links were removed.
+
+## Security review follow-up
+
+An independent exact-commit review found a P2 race: a readiness, opt-in or gate revocation could commit after a successful creation/acceptance check but before the relationship mutation committed. The follow-up locks the live eligibility evidence and both gates with shared row locks through commit, then rechecks in a fresh READ COMMITTED statement. A deterministic two-session test now proves opt-out, gate disable and profile-photo readiness changes begun after the check wait; the reverse ordering denies new creation. This fix was reverified on a clean reset with all six SQL suites, local Auth/PostgREST test, race test and schema lint. Security re-review is still required.
 
 ## Decisions and limits
 

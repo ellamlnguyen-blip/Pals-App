@@ -70,6 +70,63 @@ test("block wins against waiting accept and tears down while friendship gate is 
     sql(`begin; ${claims(a)} select public.set_people_block('${b}',true); commit;`);
     sql("update private.friendship_feature_gate set enabled=true");
     assert.equal(sql(`select count(*) from private.friendships where low_id='${a}' and high_id='${b}'`), "0");
+    sql("delete from private.people_blocks");
+
+    // A revocation begun after the create check cannot commit ahead of the
+    // request: the eligibility rows stay share-locked until create commits.
+    const creator = session("task012a_create_holds_eligibility"), optOut = session("task012a_optout_waiter");
+    try {
+      creator.send(`begin; ${claims(a)} select public.create_friend_request('${b}','14000000-0000-4000-8000-000000000097'); select 'created';`);
+      await until(() => creator.output().includes("created"));
+      optOut.send(`begin; ${claims(b)} select public.set_people_preference(false); commit;`);
+      await waiting("task012a_optout_waiter");
+      assert.equal(sql(`select opted_in from private.people_preferences where account_id='${b}'`), "t");
+      creator.send("commit;"); creator.child.stdin.end(); optOut.child.stdin.end();
+      await creator.done; await optOut.done;
+      assert.equal(sql(`select opted_in from private.people_preferences where account_id='${b}'`), "f");
+    } finally { creator.child.kill(); optOut.child.kill(); }
+
+    // In the reverse order, the creation waits and sees committed opt-out.
+    sql(`delete from private.friendships where low_id='${a}' and high_id='${b}';
+      update private.people_preferences set opted_in=true where account_id='${b}';`);
+    const revoke = session("task012a_optout_holder"), late = session("task012a_create_waiter");
+    try {
+      revoke.send(`begin; ${claims(b)} select public.set_people_preference(false); select 'revoked';`);
+      await until(() => revoke.output().includes("revoked"));
+      late.send(`begin; ${claims(a)} select public.create_friend_request('${b}','14000000-0000-4000-8000-000000000096'); commit;`);
+      await waiting("task012a_create_waiter");
+      revoke.send("commit;"); revoke.child.stdin.end(); late.child.stdin.end();
+      await revoke.done; await late.done;
+      assert.match(late.output(), /Friendship unavailable/);
+      assert.equal(sql(`select count(*) from private.friendships where low_id='${a}' and high_id='${b}'`), "0");
+    } finally { revoke.child.kill(); late.child.kill(); }
+
+    sql(`update private.people_preferences set opted_in=true where account_id='${b}'`);
+    const gatedCreate = session("task012a_create_holds_gate"), gateWriter = session("task012a_gate_write_waiter");
+    try {
+      gatedCreate.send(`begin; ${claims(a)} select public.create_friend_request('${b}','14000000-0000-4000-8000-000000000095'); select 'created';`);
+      await until(() => gatedCreate.output().includes("created"));
+      gateWriter.send("begin; update private.friendship_feature_gate set enabled=false; commit;");
+      await waiting("task012a_gate_write_waiter");
+      gatedCreate.send("commit;"); gatedCreate.child.stdin.end(); gateWriter.child.stdin.end();
+      await gatedCreate.done; await gateWriter.done;
+      assert.equal(sql("select enabled from private.friendship_feature_gate"), "f");
+      assert.equal(sql(`select state from private.friendships where low_id='${a}' and high_id='${b}'`), "pending");
+    } finally { gatedCreate.child.kill(); gateWriter.child.kill(); }
+
+    sql(`delete from private.friendships where low_id='${a}' and high_id='${b}';
+      update private.friendship_feature_gate set enabled=true;`);
+    const readyCreate = session("task012a_create_holds_profile"), profileWriter = session("task012a_profile_write_waiter");
+    try {
+      readyCreate.send(`begin; ${claims(a)} select public.create_friend_request('${b}','14000000-0000-4000-8000-000000000094'); select 'created';`);
+      await until(() => readyCreate.output().includes("created"));
+      profileWriter.send(`begin; update public.profiles set primary_photo_path=null where user_id='${b}'; commit;`);
+      await waiting("task012a_profile_write_waiter");
+      readyCreate.send("commit;"); readyCreate.child.stdin.end(); profileWriter.child.stdin.end();
+      await readyCreate.done; await profileWriter.done;
+      assert.equal(sql(`select primary_photo_path is null from public.profiles where user_id='${b}'`), "t");
+    } finally { readyCreate.child.kill(); profileWriter.child.kill(); }
+
     for (const isolation of ["repeatable read", "serializable"])
       assert.throws(() => sql(`begin isolation level ${isolation}; ${claims(a)} select * from public.list_friendships(); rollback;`), /People operation unavailable/);
   } finally {
