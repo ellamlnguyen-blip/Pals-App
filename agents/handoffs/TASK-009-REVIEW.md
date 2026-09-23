@@ -3,7 +3,7 @@
 Date: 2026-09-22
 Implementation reviewed: `06101ee68ebb8b42e9f783769faf9fab0aea280e`
 Baseline: `29c9343edc560dd0731804b3b9624f8329ad6d4c`
-Disposition: reviewed task tip `777d4b875bedd26ea925a4982433809d3b048cc2` accepted; cleanup complete, integration publication pending.
+Disposition: reviewed task tip `777d4b875bedd26ea925a4982433809d3b048cc2` accepted and integrated on remote-verified main `0c2af8e3401dd6acce6d87249886f7e31b2e7175`; cleanup complete.
 
 ## Scope and security
 Fresh read-only reviewer `calendar_review` reported no actionable implementation finding after initial and final source/test audits. Coordinator also inspected actual Hangout grants/RLS, query construction, handoff and scoped diff. Calendar uses caller-only joined embeds before limit; cancelled personal reads rely on existing host/still-joined RLS without expanding cancelled roster access. Both bounded subsets are rechecked and deterministically merged. Payloads omit private instructions, host/account identifiers, full rosters, profiles/photos and historical states. Live readiness, local/loopback guards and default-disabled database gate remain unchanged. No migrations, grants, dependencies, hosted operations or deployment.
