@@ -45,3 +45,5 @@ User preference for subsequent agent dispatch: GPT-6 Sol, medium reasoning, Stan
 TASK-011 planning publication verified: task branch and canonical main both at `9f52a39ac8b92ea082ad199b55ab766f671fd2f4`. Planning reviewed/published; ADR-0013 remains Proposed and implementation undispatched.
 
 ADR-0013 acceptance: on 2026-09-22 the user explicitly answered “yes” to accepting the complete local People privacy proposal. TASK-011A privacy backend may start after its narrower published contract; TASK-011B waits for reviewed A integration. TASK-010/ADR-0012 remain Proposed and independent.
+
+TASK-011A dispatch: accepted ADR-0013 and narrower backend contract were published and both `origin/main` / planning branch verified at `a9c10a81ce24af4d84330c027d2d0b8a53c3bacc`. Fresh GPT-6 Sol medium backend agent works on isolated `agent/TASK-011A-people-backend` from that SHA. Tooling has no speed selector; Standard speed is the standing app preference, with no speed verification claim. Independent security review and main integration must precede TASK-011B dispatch.

@@ -1,10 +1,10 @@
 # TASK-011A — Local People privacy and text backend
 
-Status: Contract to publish; implementation not dispatched
+Status: Published on canonical main; implementation dispatched to fresh bounded agent
 Date: 2026-09-22
 Parent: TASK-011
 Decision: Accepted ADR-0013, user answered “yes” to its complete proposal on 2026-09-22
-Branch after publication: `agent/TASK-011A-people-backend` from fresh remote-verified `origin/main`
+Implementation branch: `agent/TASK-011A-people-backend` from remote-verified `origin/main` at `a9c10a81ce24af4d84330c027d2d0b8a53c3bacc` in isolated `/private/tmp/pals-task011a-people-backend`
 
 ## Goal
 Build only the authoritative local database boundary for an opt-in same-campus text directory and minimal caller-owned People blocks. No UI. Preserve all existing owner profile/photo and Hangout boundaries.
