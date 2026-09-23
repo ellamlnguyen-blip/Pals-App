@@ -1,6 +1,6 @@
 # TASK-015A — Private notification ledger and social-source events
 
-Status: Contract under independent review; no implementation dispatched
+Status: Complete for bounded disposable-local backend stage; reviewed and integrated
 Date: 2026-09-23
 Parent: `TASK-015-notification-inbox-preferences.md`
 Policy: Accepted ADR-0017 (user accepted reviewed, main-published proposal on 2026-09-23)
@@ -24,10 +24,10 @@ Read `AGENTS.md`, parent TASK-015, ADR-0017, MVP/PRINCIPLES, NOTIFICATIONS, ARCH
 Hangout edits/cancellation/join/leave, Hangout-chat source hooks (TASK-015B); Notifications web UI (TASK-015C); push/email/Realtime, background reminders, safety/moderation/attendance/co-host events, hosted use; global block/reporting, source permission redesign, friend-aware ranking, analytics, badge counts, message excerpts, peer media, arbitrary links, production retention, unrelated CI fixes.
 
 ## Acceptance checks
-- [ ] Additive migration applies on two clean local resets; database lint, workspace checks, actual-role SQL and real Auth/PostgREST checks pass within documented limits.
-- [ ] No client can read/write raw records, forge a recipient/source, inspect another inbox or infer a hidden social source. Reader revocation after commit is verified, including an in-flight read boundary where feasible.
-- [ ] Current eligible source mutations create exactly their specified optional items; retries, no-ops, mute, gate disable and concurrent preference changes follow ADR-0017. No extra source action fails solely because the optional notification gate is disabled.
-- [ ] Default-off gates restored, fixtures/services cleared; no hosted target touched. Independent exact-tip security review, coordinator handoff review, canonical main integration and remote verification precede TASK-015B dispatch.
+- [x] Additive migration applied on two clean local resets; database lint, workspace checks, actual-role SQL and real Auth/PostgREST checks passed within documented limits.
+- [x] Direct client table/forged/cross-owner access denied. Committed source revocation was tested; an in-flight inbox read was not instrumented, as permitted by the stated acceptance check and reviewed as a non-blocking evidence limit.
+- [x] Current eligible source mutations generated the specified optional items; retries, no-ops, mute, gate disable and concurrent preference changes passed local tests. Disabled notification gate did not veto source mutations.
+- [x] Default-off gates restored, fixtures/services cleared; no hosted target touched. Independent exact-tip security review cleared integration; main and remote verification are recorded in the coordinator's publication receipt.
 
 ## Handoff
 Work only in an isolated `agent/TASK-015A-notification-ledger` branch/worktree from the verified published baseline. Commit in-scope work and handoff, push and verify the task remote SHA, then stop. Coordinator owns shared NOW/BACKLOG/CURRENT_STATE/CHANGELOG and main integration. Record outcome, files, tests, security evidence, risks and remote SHA. Use GPT-6 Sol medium and the app's Standard speed preference where selectable; dispatch tooling may not expose speed.

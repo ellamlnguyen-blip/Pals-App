@@ -2,6 +2,10 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-23 — TASK-015A local notification ledger and social events
+
+- Added a private default-disabled notification gate, owner preferences and bounded caller-bound inbox/mark-read operations. Authoritative friendship/DM transitions now create minimal local inbox items when gates and preferences allow. Independent security review and local database/Auth/race checks cleared the bounded backend stage; Hangout/chat events, UI and hosted delivery remain separate.
+
 ## 2026-09-23 — TASK-015 local notification policy accepted
 
 - Recorded explicit acceptance of reviewed ADR-0017 after canonical publication. Split backend work into a private ledger/social events stage and a later Hangout/chat source stage before UI. This acceptance adds no schema, route or hosted delivery by itself.
