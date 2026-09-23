@@ -1,6 +1,6 @@
 # TASK-016A — global block backend handoff
 
-Status: implementation and disposable-local verification complete; awaiting independent security review and canonical-main integration. Parent TASK-016 remains open. Branch: `agent/TASK-016A-global-block-backend`, started from canonical `a09433f1708de8f2c2cc966b691ccb663c3c83db`. The implementation commit `58b100bd0e14eef9feadfd7168d83516c932db49` was pushed to `origin` and its exact remote SHA verified. The subsequent handoff commit's exact remote SHA is reported to the coordinator after push.
+Status: complete for disposable-local TASK-016A after independent security review and remote-verified canonical integration. Parent TASK-016 remains open. Branch: `agent/TASK-016A-global-block-backend`, started from canonical `a09433f1708de8f2c2cc966b691ccb663c3c83db`. The implementation commit `58b100bd0e14eef9feadfd7168d83516c932db49` was pushed to `origin` and its exact remote SHA verified. The subsequent handoff commit's exact remote SHA is reported to the coordinator after push.
 
 ## Delivered boundary
 
@@ -20,3 +20,7 @@ Status: implementation and disposable-local verification complete; awaiting inde
 ## Review focus and limits
 
 Check security-definer search paths/grants, source and safety gate rechecks after contention, sorted parent locks, historical evidence scope (immutable friendship request ledger, terminal DM, host/overlap), no blocked-author pagination oracle, and neutral notification projection. The separate existing photo-delete lock order may safely deadlock and abort a transaction; no partial teardown can commit. The fixtures do not claim to observe every possible overlap between a live read and a committing block; they enforce the documented later-read boundary. The upgrade and race fixtures intentionally require a disposable local database and run serially. Coordinator owns independent review, queue/CURRENT_STATE/CHANGELOG updates, main integration, and TASK-016B dispatch.
+
+## Canonical publication receipt
+
+Fresh exact-tip security review accepted task tip `2819d8f7e04dad24121fd891fa2c53e546344f90` without findings; see TASK-016A-REVIEW.md. Coordinator integrated the reviewed implementation and records on canonical main `d99adde65858080a0d5a6e966396b26be7e4fd1a`. Both task and main remote SHAs were independently verified after push. Parent TASK-016 remains open for B reporting and C UI.

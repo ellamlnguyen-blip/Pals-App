@@ -1,6 +1,6 @@
 # TASK-016A — Global block backend, disposable local
 
-Status: Independent exact-tip security review accepted; canonical integration publication in progress
+Status: Complete for disposable-local stage; reviewed task integrated on remote-verified main `d99adde65858080a0d5a6e966396b26be7e4fd1a`
 Date: 2026-09-23
 Parent: TASK-016; decision: ADR-0018 (user accepted the complete reviewed decision on 2026-09-23; coordinator records the acceptance)
 Planning baseline: `3d4fec11d13c1f936bb89e7012e20cae7f4151bd`
