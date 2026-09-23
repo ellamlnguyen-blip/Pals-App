@@ -1,13 +1,13 @@
 # ADR-0018 — Disposable-local blocking and reporting
 
-Status: Proposed — explicit acceptance required before implementation
+Status: Accepted — disposable-local TASK-016 stages only
 Date: 2026-09-23
 Task: TASK-016
 
 ## Context
 Accepted ADR-0013/0014/0016 implement bilateral People suppression, friendship teardown and DM termination using a directional private block relation. ADR-0010/0015 explicitly defer Hangout/private-location/chat precedence. MVP requires reporting users and Hangouts; USER_FLOWS requires reporting after removal. No accepted policy yet defines those extensions, report evidence or report retention. TASK-010/ADR-0012 remains independently blocked.
 
-## Proposed decision
+## Decision
 Acceptance authorizes only narrower reviewed, main-published disposable-local stages. No hosted migration, deployment, live-student operation, Realtime, production retention or moderation authority follows. Existing feature gates stay default off. This ADR supersedes only the local People-only/Hangout block exceptions in ADR-0010/0013/0015 once implemented; other accepted privacy boundaries remain.
 
 ### One directional block relation
@@ -58,4 +58,4 @@ Reports, retry/provenance and existing retained source records persist only for 
 Strict separation may cause the blocker to leave several shared Hangouts and deny a join without naming the conflict. This is preferable for this proposal to granting arbitrary attendee removal or allowing continued shared private coordination. A softer mute-only group policy was considered but would leave exact meeting details and future chat available to blocked peers. Existing ID-only outbound block management remains a documented local usability limitation; identifying blocked users with retained names/photos requires a later privacy decision.
 
 ## Acceptance evidence
-None. Publishing or reviewing this Proposed ADR is not acceptance. Request explicit acceptance of the complete reviewed proposal before any migration or implementation dispatch. TASK-010/ADR-0012 remains Proposed and independent.
+After the independently reviewed proposal was published and canonical main verified at `3d4fec11d13c1f936bb89e7012e20cae7f4151bd`, the coordinator asked, “Do you accept ADR-0018 as written for local-only implementation?” The user explicitly replied “yes” on 2026-09-23. This accepts the complete local blocking, Hangout separation, provenance, reporting and retention policy above. Each narrower stage still requires reviewed canonical publication before dispatch. No hosted operation, production retention, moderation access or deployment is authorized. TASK-010/ADR-0012 remains Proposed and independent.

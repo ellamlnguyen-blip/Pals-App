@@ -2,6 +2,10 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-23 — TASK-016 policy acceptance
+
+- User explicitly accepted ADR-0018 after reviewed canonical publication. Narrower global-block backend, reporting backend and safety UI contracts still require independent review/publication; no implementation or hosted change follows from acceptance alone.
+
 ## 2026-09-23 — TASK-016 planning
 
 - Prepared a bounded disposable-local blocking/reporting contract and Proposed ADR-0018 for independent review and canonical publication. Shared-Hangout departures, private/chat/notification separation and post-removal report eligibility require explicit policy acceptance; no implementation or hosted change.
