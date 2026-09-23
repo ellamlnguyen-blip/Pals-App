@@ -2,6 +2,12 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-22 — TASK-011 People planning
+
+- Added bounded staged local People contract and Proposed ADR-0013 for explicit opt-in peer text, bilateral People suppression and minimal local block prerequisite.
+- Preserved owner-only photos, pending TASK-010 policy, existing Hangout permissions and all hosted gates. No policy acceptance, migration, implementation or CI-green claim.
+- User requested GPT-6 Sol / medium at Standard speed (not Fast) for subsequent agents.
+
 ## 2026-09-22 — TASK-010 planning
 
 - Established bounded local host/co-host contract and Proposed ADR-0012 permission/role lifecycle matrix, pending explicit user acceptance.

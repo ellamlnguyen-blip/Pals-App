@@ -4,12 +4,12 @@
 - TASK-008 map discovery/detail/joining — complete locally; see `DONE.md`, its contract and handoffs. Hosted safety gates remain open
 - TASK-009 calendar — reviewed local-only implementation accepted; see `DONE.md`, contract and handoffs. Friend context remains dependent on accepted friendship access; hosted gates remain open.
 - TASK-010 host/co-host management — bounded contract prepared; blocked on explicit Proposed ADR-0012 acceptance. Backend then management UI stages require separate fresh agents/reviews; no implementation dispatched. See `active/TASK-010-host-cohost-management.md`.
-- TASK-011 people discovery
+- TASK-011 people discovery — planning contract and Proposed ADR-0013; explicit acceptance required before local text-first opt-in directory/privacy stages. Photos, recommendations, attendance context and social actions remain deferred; see `active/TASK-011-people-discovery.md`.
 - TASK-012 friendship
 - TASK-013 hangout chat
 - TASK-014 DM requests/direct chat
 - TASK-015 notification inbox/preferences
-- TASK-016 blocking/reporting
+- TASK-016 blocking/reporting — still open. Proposed TASK-011A brings forward only caller-owned blocks and bilateral People suppression after ADR-0013 acceptance; no global Hangout/private-access, messaging, reporting or launch completion.
 - TASK-017 admin moderation console
 - TASK-018 attendance confirmation
 - TASK-019 PostHog instrumentation
