@@ -6,9 +6,9 @@ import {
   AUTH_TRANSITION_CHANNEL,
   AUTH_TRANSITION_EVENT,
   authTransitionDecision,
-  authVerificationDecision,
   type AuthTransitionMessage,
 } from "../../../auth-transition";
+import { createDmAuthVerifier } from "../../dm-auth-verifier";
 
 type Read = {
   kind: string;
@@ -187,34 +187,26 @@ export function DirectThread({
     [api, deny, headers, mask],
   );
   useEffect(() => {
-    const verify = async (
-      message: Extract<AuthTransitionMessage, { token: string }>,
-    ) => {
-      if (document.hidden || !transitions.current.has(message.token)) return;
-      const now = ticket.current;
-      try {
+    const verify = createDmAuthVerifier({
+      pending: transitions.current,
+      settled: settled.current,
+      revision: () => ticket.current,
+      active: (startedAt) =>
+        startedAt === ticket.current && !document.hidden && !terminal.current,
+      probe: async () => {
         const response = await fetch(api, {
           cache: "no-store",
           credentials: "same-origin",
           headers: headers(),
         });
-        if (now !== ticket.current || document.hidden) return;
-        const decision = authVerificationDecision(
-          transitions.current,
-          message,
-          response.status,
-        );
-        if (!transitions.current.has(message.token))
-          settled.current.delete(message.token);
-        if (decision === "deny") deny();
-        else if (decision === "reauthorize") {
-          mask("Account checked. Rechecking conversation…");
-          void read(null, true);
-        }
-      } catch {
-        /* Keep private text masked until a fresh verification succeeds. */
-      }
-    };
+        return response.status;
+      },
+      deny: () => deny(),
+      reauthorize: () => {
+        mask("Account checked. Rechecking conversation…");
+        void read(null, true);
+      },
+    });
     const resume = () => {
       if (document.hidden || terminal.current) return;
       mask();

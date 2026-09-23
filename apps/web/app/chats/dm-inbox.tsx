@@ -8,7 +8,7 @@ import {
   authTransitionDecision,
   type AuthTransitionMessage,
 } from "../auth-transition";
-import { createInboxAuthVerifier } from "./inbox-auth-verifier";
+import { createDmAuthVerifier } from "./dm-auth-verifier";
 export function DmInbox({ actor }: { actor: string }) {
   const [rows, setRows] = useState<DmInboxRow[]>([]),
     [phase, setPhase] = useState<"loading" | "ready" | "denied" | "error">(
@@ -92,7 +92,7 @@ export function DmInbox({ actor }: { actor: string }) {
     [actor, deny],
   );
   useEffect(() => {
-    const verify = createInboxAuthVerifier({
+    const verify = createDmAuthVerifier({
       pending: pendingTransitions.current,
       settled: settledTransitions.current,
       revision: () => request.current,

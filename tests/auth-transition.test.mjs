@@ -7,7 +7,7 @@ import {
   settleAuthTransition,
   announceCompletedAuthCallback,
 } from "../apps/web/app/auth-transition.ts";
-import { createInboxAuthVerifier } from "../apps/web/app/chats/inbox-auth-verifier.ts";
+import { createDmAuthVerifier } from "../apps/web/app/chats/dm-auth-verifier.ts";
 
 function browser(pathname, search = "") {
   const data = new Map();
@@ -133,7 +133,7 @@ test("overlapping completion re-probes an invalidated settled token before revea
   const probes = [];
   let revision = 1;
   let reveals = 0;
-  const verify = createInboxAuthVerifier({
+  const verify = createDmAuthVerifier({
     pending,
     settled,
     revision: () => revision,
@@ -160,4 +160,43 @@ test("overlapping completion re-probes an invalidated settled token before revea
   await new Promise((resolve) => setImmediate(resolve));
   assert.equal(pending.size, 0);
   assert.equal(reveals, 1);
+});
+
+test("direct thread re-probes an invalidated cancelled token before reloading bodies", async () => {
+  const pending = new Set(["first", "second"]);
+  const settled = new Map([["first", "cancelled"]]);
+  const probes = [];
+  let ticket = 1;
+  let reloads = 0;
+  const verify = createDmAuthVerifier({
+    pending,
+    settled,
+    revision: () => ticket,
+    active: (startedAt) => startedAt === ticket,
+    probe: () => new Promise((resolve) => probes.push(resolve)),
+    deny: () => assert.fail("account remained authorized"),
+    reauthorize: () => {
+      ticket++;
+      reloads++;
+    },
+  });
+  const first = verify({ phase: "cancelled", token: "first" });
+  ticket++; // A second begin masks the direct thread and invalidates the first probe.
+  settled.set("second", "cancelled");
+  const second = verify({ phase: "cancelled", token: "second" });
+  probes[1](200);
+  await second;
+  assert.equal(probes.length, 3, "first token is re-probed");
+  assert.equal(
+    reloads,
+    0,
+    "no direct bodies are requested while one token remains",
+  );
+  probes[0](200);
+  await first;
+  assert.deepEqual([...pending], ["first"]);
+  probes[2](200);
+  await new Promise((resolve) => setImmediate(resolve));
+  assert.equal(pending.size, 0);
+  assert.equal(reloads, 1);
 });

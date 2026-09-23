@@ -5,7 +5,7 @@ import {
 
 type SettledMessage = Extract<AuthTransitionMessage, { token: string }>;
 
-export function createInboxAuthVerifier({
+export function createDmAuthVerifier({
   pending,
   settled,
   revision,
