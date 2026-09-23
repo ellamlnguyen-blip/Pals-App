@@ -2,6 +2,10 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-22 — TASK-009 Calendar contract
+
+- Bounded local-only Today/Week Calendar with authoritative joined/hosted filters, campus-time boundaries, public-only payloads and existing detail navigation. Implementation pending; no safety gate or hosted permission changed.
+
 ## 2026-09-22 — TASK-008 local saved Hangout discovery and joining
 
 - Added a separate saved campus map/list/detail, with bounded viewport reads, time/open filters, approximate public pins and accessible no-map fallback. Mock examples remain clearly labeled and separate.

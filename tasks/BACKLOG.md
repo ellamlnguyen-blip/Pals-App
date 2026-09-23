@@ -2,7 +2,7 @@
 ## Product Build
 - TASK-007 create/edit Hangouts — complete locally; see `DONE.md`, its contract and handoffs. Hosted enablement remains gated on separate safety/deployment work.
 - TASK-008 map discovery/detail/joining — complete locally; see `DONE.md`, its contract and handoffs. Hosted safety gates remain open
-- TASK-009 calendar
+- TASK-009 calendar — active bounded local contract: `active/TASK-009-calendar.md`; Today/Week and joined/hosted only. Friend context remains dependent on accepted friendship access.
 - TASK-010 host/co-host management
 - TASK-011 people discovery
 - TASK-012 friendship
