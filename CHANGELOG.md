@@ -11,6 +11,12 @@ Record meaningful product, architecture, schema, safety, and release changes—n
 
 - User explicitly accepted ADR-0014 for bounded disposable-local friendship stages; published a narrower TASK-012A backend contract. No migration or hosted change follows from the acceptance record alone.
 
+## 2026-09-23 — TASK-012A local friendship backend
+
+- Added a default-disabled private friendship gate, mutual pending/accepted pair, retained request-key and generation checks, participant-only ID/status readers and caller-bound transitions.
+- Extended People blocking only to tear down an active friendship atomically and allow a ready participant to block a now-hidden friend by ID. Current Hangout access, profile/photo readers and hosted environments remain unchanged.
+- Independent security review found and then cleared a create/accept revocation race. Local SQL/Auth/HTTP/concurrency checks passed; full `pnpm check` remained unavailable in the isolated offline worktree.
+
 ## 2026-09-23 — TASK-011 local People directory
 
 - Added a ready-only, opt-in, same-campus text People list/detail with literal search, year/major filters, deterministic ID-only cursor pages and owner privacy preview. Added People-only bilateral blocks, outbound ID management and immediate detail clearing after block.

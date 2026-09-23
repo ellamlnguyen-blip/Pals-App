@@ -1,6 +1,6 @@
 # TASK-012A — Local friendship state and authorization
 
-Status: First implementation pushed; independent security review found a revocation race; correction in progress before integration
+Status: Corrected backend security review clear; merged on coordinator integration branch; canonical main publication/verification pending
 Date: 2026-09-23
 Parent: TASK-012
 Decision: Accepted ADR-0014, explicitly accepted by the user on 2026-09-23
@@ -29,3 +29,6 @@ Implement and prove the authoritative disposable-local database boundary for mut
 Run `pnpm check`, two clean `pnpm db:verify` resets/schema lint and real local Auth/PostgREST plus pair-race tests where environment supports them. Cover anon, self, ready opted-in same campus, either/both blocks, now-hidden current relationship block by a ready caller, denial of a new block to a nonready/suspended/banned caller, changed opt-in/email/photo/campus/status, disabled People/friendship gates, forged moderator/admin, direct table access/embeds, malformed IDs/page bounds, duplicate/opposite requests, same creation UUID with different target/payload, decline/cancel suppression, stale generation after teardown/new request, create→accept→unfriend→old-key retry, concurrent block versus accept/create, block with friendship gate off then re-enable, stronger isolation and post-wait revocation. Rerun existing People/profile/photo/Hangout/Calendar regressions. Record exact commands, evidence and environmental limits without claiming green CI from an unavailable check. Clean fixtures, restore all gates false, stop local services.
 
 Commit in-scope implementation and `agents/handoffs/TASK-012A.md`, push the task branch and independently verify its remote SHA, then stop. Do not merge to main. The coordinator reviews code/handoff, obtains independent security review and integrates only accepted work; TASK-012B waits.
+
+## Review outcome
+Initial task tip `83d0557` exposed a create/accept versus eligibility-revocation race. Corrected task tip `2a1f6b13b332196ba599fb739513fd424024f2a7` was independently remote-verified and cleared by fresh exact-commit security re-review. Two clean resets, six SQL suites, real Auth/PostgREST and deterministic race checks passed with the offline full-check limitation documented in `agents/handoffs/TASK-012A.md` and `TASK-012A-REVIEW.md`. The coordinator merged the reviewed tip on `agent/TASK-012-planning` at `bb6818b98c2357ea3d60d75ff8ed575e9574945b`; canonical main publication remains pending.
