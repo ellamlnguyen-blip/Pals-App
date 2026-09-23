@@ -1,6 +1,6 @@
 # TASK-011A — Local People privacy and text backend
 
-Status: Published on canonical main; implementation dispatched to fresh bounded agent
+Status: Complete locally — independent security review clear; implementation and handoff integrated and remote-verified
 Date: 2026-09-22
 Parent: TASK-011
 Decision: Accepted ADR-0013, user answered “yes” to its complete proposal on 2026-09-22
@@ -26,6 +26,9 @@ Read AGENTS.md, this stage contract, TASK-011 parent, Accepted ADR-0013, NOW/BAC
 
 ## Verification and handoff
 Run `pnpm check`, two clean `pnpm db:verify` resets with warning-free lint, actual local Auth/PostgREST tests and deterministic concurrency where relevant. Cover anon, self, opted out, either/both block directions, other campus, unready/missing photo/changed email, inactive campus, suspended/banned, forged operator, gate on/off, direct table select/DML/embed, max/filter/cursor malformed inputs, repeatable-read denial, post-lock revocation and blocked/nonexistent indistinguishability. Re-run existing profile/photo/Hangout/Calendar regressions; disclose known pre-existing dev-helper/CI action-manifest failures without broadening scope. No hosted operations. Write `agents/handoffs/TASK-011A.md` with exact evidence, known limitations and commit SHA; push task branch and verify remote SHA, then stop. Coordinator reviews before integration.
+
+## Completion receipt
+Task branch `ca1d6d234ea1af3f08af8c21d76f7db8ffc88f0d` and main integration `ef4da666dbd89996190aa7fb0fd1f31aba7b7d40` independently verified by `git ls-remote`. See `agents/handoffs/TASK-011A.md` and `TASK-011A-REVIEW.md`. Actual local tests and environment limits are recorded there. TASK-011B may start after its contract is published on main.
 
 ## Exclusions
 No UI, photo processing/peer photo read, friendship, DM, recommendations, attendance, global Hangout block precedence, reports/moderation, restricted modes, hosted migration/enablement/deployment, or TASK-010 co-host policy. Do not weaken existing controls or repair unrelated test harness issues. If a concrete contract contradiction appears, stop implementation of that portion and send the coordinator a precise finding; continue independent authorized work.

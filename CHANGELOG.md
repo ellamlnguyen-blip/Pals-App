@@ -2,6 +2,11 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-22 — TASK-011A local People backend
+
+- Added reviewed opt-in text discovery, minimal two-way People blocking and default-disabled local gate with caller-bound RPCs. Preserved owner-only raw profiles/photos and existing Hangout access.
+- Local SQL/HTTP/concurrency and equivalent workspace checks passed; isolated offline dependency tooling prevented the default `pnpm check` wrapper and Turbopack build. No hosted operation.
+
 ## 2026-09-22 — TASK-011 privacy decision
 
 - User explicitly accepted ADR-0013 for local opt-in People text and a minimal People-only block prerequisite; stage A and B contracts remain bounded. No implementation, peer photo release or hosted authorization follows directly from publication.
