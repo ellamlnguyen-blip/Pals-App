@@ -1,6 +1,6 @@
 # TASK-011 — Local People discovery
 
-Status: Planning reviewed and published; implementation blocked on explicit ADR-0013 acceptance
+Status: ADR-0013 accepted; TASK-011A contract publication and backend dispatch next
 Date: 2026-09-22
 Planning branch: `agent/TASK-011-planning`
 Starting clean canonical main / freshly fetched origin/main: `b3011bc74adb46d01fd4b709520ecf5c3f8fa8a2`
@@ -39,6 +39,9 @@ Run `pnpm check`, two clean resets/lint through `pnpm db:verify`, and actual loc
 
 ## Ownership and handoff
 Coordinator owns shared queue/CURRENT_STATE/CHANGELOG, acceptance evidence, narrower dispatch contracts, integration and remote receipts. Stage agents own assigned files and their handoff using agents/HANDOFF_TEMPLATE.md, then stop. Planning handoff: `agents/handoffs/TASK-011-CONTRACT.md`. TASK-010 remains pending. Follow current AGENTS.md automatic next-task policy only after the bounded parent task is complete; this proposed contract/blocked decision does not trigger a successor chat. Use GPT-6 Sol / medium at Standard speed (not Fast) for all implementation/review agents and subsequent task chats.
+
+## Accepted privacy decision
+The user replied “yes” to explicit ADR-0013 acceptance on 2026-09-22. Acceptance is scoped to the local stages in this contract. TASK-011A begins only after its narrower contract and this decision are published on canonical main. TASK-010/ADR-0012 remain pending.
 
 ## Planning publication
 Independent planning review resolved; planning branch and canonical main verified remotely at `9f52a39ac8b92ea082ad199b55ab766f671fd2f4`. No policy acceptance, implementation, migration or parent-task completion follows from this publication.

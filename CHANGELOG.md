@@ -2,6 +2,10 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-22 — TASK-011 privacy decision
+
+- User explicitly accepted ADR-0013 for local opt-in People text and a minimal People-only block prerequisite; stage A and B contracts remain bounded. No implementation, peer photo release or hosted authorization follows directly from publication.
+
 ## 2026-09-22 — TASK-011 People planning
 
 - Added bounded staged local People contract and Proposed ADR-0013 for explicit opt-in peer text, bilateral People suppression and minimal local block prerequisite.

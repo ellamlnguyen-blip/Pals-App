@@ -1,6 +1,6 @@
 # ADR-0013 — Local People discovery and peer text privacy
 
-Status: Proposed — explicit user acceptance required before implementation
+Status: Accepted — local TASK-011 stages only
 Date: 2026-09-22
 Task: TASK-011
 
@@ -44,4 +44,4 @@ Stage A provides privacy/block primitives and tested text reads; stage B provide
 - Mock People shell only: can explore layout without peer permissions but does not prove real search or authorization; no mock implementation is authorized by publication alone.
 
 ## Acceptance evidence
-None. Proposed only. Record explicit user acceptance or revisions on canonical main before stage contracts/implementation. Planning publication and moving to the next task are not acceptance.
+On 2026-09-22, after the coordinator presented this complete ADR-0013 proposal and explicitly asked “Do you accept ADR-0013?”, the user replied “yes” in this task. This accepts the stated local text visibility, default-off opt-in, bilateral People blocking, minimal block prerequisite, separate disabled gate, field allowlists and local-only stages. It does not accept ADR-0012 or authorize hosted changes, photo release, global block precedence, friendship or messaging. Record this acceptance on canonical main before TASK-011A implementation dispatch.

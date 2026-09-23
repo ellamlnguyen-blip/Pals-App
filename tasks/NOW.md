@@ -43,3 +43,5 @@ User requested moving to the next task in a new chat. `active/TASK-011-people-di
 User preference for subsequent agent dispatch: GPT-6 Sol, medium reasoning, Standard speed (not Fast) (explicit instruction in TASK-011 planning).
 
 TASK-011 planning publication verified: task branch and canonical main both at `9f52a39ac8b92ea082ad199b55ab766f671fd2f4`. Planning reviewed/published; ADR-0013 remains Proposed and implementation undispatched.
+
+ADR-0013 acceptance: on 2026-09-22 the user explicitly answered “yes” to accepting the complete local People privacy proposal. TASK-011A privacy backend may start after its narrower published contract; TASK-011B waits for reviewed A integration. TASK-010/ADR-0012 remain Proposed and independent.
