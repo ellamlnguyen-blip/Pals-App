@@ -1,6 +1,6 @@
 # TASK-012 — Local friendship requests
 
-Status: Planning; implementation blocked on explicit ADR-0014 acceptance and reviewed main publication
+Status: ADR-0014 accepted; TASK-012A contract publication precedes backend dispatch
 Date: 2026-09-23
 Planning branch: `agent/TASK-012-planning`
 Starting canonical `origin/main`: `a4a011e2026d4ab6c9eb41c9d2381b7be123da81` (freshly verified with `git ls-remote origin refs/heads/main` after sandbox escalation)
@@ -12,6 +12,8 @@ Let two eligible UNC students explicitly form, inspect and end a mutual friendsh
 - TASK-003 live readiness, TASK-006 owner-only profiles, TASK-011 text People/People-only blocks and Accepted ADRs 0007, 0009–0011, 0013 are integrated. Read `AGENTS.md`, NOW/BACKLOG/CURRENT_STATE, MVP/PRINCIPLES, ARCHITECTURE/DATA_MODEL/AUTH/AUTHORIZATION/SECURITY_AND_SAFETY/TESTING, UX USER_FLOWS/INFORMATION_ARCHITECTURE/SCREEN_INVENTORY/DESIGN_DIRECTION, existing migrations, People routes/actions and local target guards.
 - TASK-010/Proposed ADR-0012 remain blocked and independent. Existing Hangout access from ADR-0010 is unchanged. Friendship never authorizes friends-only, invite-only, eligibility-restricted or private Hangout access in this task.
 - Publish this reviewed contract, Proposed ADR-0014 and queue/status/handoff on canonical main before implementation dispatch. Publication is not acceptance. Record explicit user acceptance of ADR-0014's request, suppression, reader and block interaction rules before any migration or new peer reader.
+
+The contract was reviewed and published on remote-verified main `797961b4a3eda51a2fa7e2b9bd0d1bfdf291f913`. The user then explicitly accepted ADR-0014 on 2026-09-23. This decision does not expand hosted or restricted-Hangout scope; the narrower TASK-012A contract still must be published before dispatch.
 
 ## Stages after acceptance
 1. **TASK-012A state and authorization**: fresh bounded agent/branch. Add an additive local migration for canonical mutual pair, immutable request-generation IDs, caller-scoped creation idempotency ledger, pending/accepted transitions and private suppression; default-disabled friendship gate; caller-bound read/action APIs with narrow grants and pair-lock concurrency. Extend the existing People block mutation narrowly so a newly committed block also ends that pair's pending/accepted friendship atomically, including while the friendship gate is off, and a current relationship participant can block a now-hidden peer by ID under the proposed exception. Preserve all other People gate/opt-in/block checks, owner-only profile/Storage and current Hangout RLS. Add meaningful actual-role SQL, real caller-session HTTP and race tests. No UI, notifications or hosted work. Fresh independent security review, handoff and verified main integration before B.

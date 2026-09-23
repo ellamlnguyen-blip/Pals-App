@@ -7,6 +7,10 @@ Record meaningful product, architecture, schema, safety, and release changes—n
 - Drafted a bounded local friendship contract and Proposed ADR-0014 for mutual requests, private relationship reads, repeat-request suppression and People-block interaction.
 - Preserved current People field/privacy rules, owner-only photos, campus-only Hangouts and hosted safety gates. No policy acceptance, migration or friendship implementation follows from this proposal.
 
+## 2026-09-23 — TASK-012 friendship policy acceptance
+
+- User explicitly accepted ADR-0014 for bounded disposable-local friendship stages; published a narrower TASK-012A backend contract. No migration or hosted change follows from the acceptance record alone.
+
 ## 2026-09-23 — TASK-011 local People directory
 
 - Added a ready-only, opt-in, same-campus text People list/detail with literal search, year/major filters, deterministic ID-only cursor pages and owner privacy preview. Added People-only bilateral blocks, outbound ID management and immediate detail clearing after block.

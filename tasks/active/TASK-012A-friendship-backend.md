@@ -1,0 +1,31 @@
+# TASK-012A — Local friendship state and authorization
+
+Status: Contract ready for publication; backend not dispatched
+Date: 2026-09-23
+Parent: TASK-012
+Decision: Accepted ADR-0014, explicitly accepted by the user on 2026-09-23
+Planned branch: `agent/TASK-012A-friendship-backend` from remote-verified canonical main after this contract is published
+
+## Goal
+Implement and prove the authoritative disposable-local database boundary for mutual friend requests and friendships. Preserve the existing People text/privacy boundary and campus-only Hangout access.
+
+## Read before work
+`AGENTS.md`, this stage contract, parent TASK-012, Accepted ADR-0014 and ADR-0013/0007/0009–0011, NOW/BACKLOG/CURRENT_STATE, MVP/PRINCIPLES, ARCHITECTURE/DATA_MODEL/AUTH/AUTHORIZATION/SECURITY_AND_SAFETY/TESTING, current People and identity/Hangout migrations/tests, local Auth/PostgREST and concurrency harness, and `supabase/README.md`. The coordinator must publish this narrower contract and acceptance on main and verify both refs before dispatch. The implementation agent stops after its handoff; independent security review and main integration precede TASK-012B.
+
+## Allowed scope
+- Add only committed additive local migrations after current latest migrations. Create a private default-disabled friendship gate, canonical unordered pair with pending/accepted state, server-generated immutable generation ID, campus-at-formation, caller-scoped create-request UUID ledger and directional decline/cancel suppression. Explicit constraints/grants/RLS; no direct client table access.
+- Caller-bound fixed-search-path RPCs: create request, participant-owned bounded list/status, accept, decline, cancel and unfriend with immutable generation check. Derive actor from `auth.uid()`; prevent self/forged/cross-campus requests. Creation idempotency persists through relationship teardown; stale create keys cannot create a second request. Reusing one caller-scoped creation UUID with a different target or request payload returns generic conflict without a target probe or mutation. Use current People opt-in/readiness/campus/bilateral block checks for creation and acceptance. Allow active participant cleanup transitions under ADR-0014 even after own readiness/opt-in loss; no suspended/banned management.
+- Extend `set_people_block` narrowly under its current unordered-pair serialization to delete the current friendship pair atomically when setting a block, even if friendship gate is off. Permit a ready active current relationship participant to block that now-hidden peer by ID under ADR-0014's explicit target-visibility exception. Retain People gate and ready/active-caller checks; a nonready participant can cancel, decline or unfriend but cannot create a new People block. All other ADR-0013 block semantics stay. Block cannot reveal peer text or incoming-block state. Existing `set_people_block(false)` never revives a relationship.
+- Add meaningful actual-role pgTAP/SQL, Auth/PostgREST HTTP and deterministic overlapping-session tests. Update only implemented data/authorization and test/API documentation; shared backend types only if needed. No web UI in A.
+
+## Hard invariants
+- Default-off gate after reset; all direct friendship RPCs/readers require it and live READ COMMITTED checks; stronger isolation fails closed. Safety teardown through an authorized People block is the sole friendship-gate exception. No client grant on private tables or feature gates, no service-role application path, no operator bypass.
+- Pair/generation checks prevent stale accept/decline/cancel/unfriend from acting on a new request. A repeated creation UUID returns the same still-authorized original result or generic unavailable after teardown, never a new pending row. Only one live pair for two accounts. Opposite requests and retries cannot silently accept.
+- Participant list/status returns only participant IDs, immutable generation ID, direction and state in bounded pages. No peer profile fields, photos, email, counts, mutual graph, hidden reasons, incoming-block enumeration or nonparticipant probe. Current People text remains separately reauthorized through existing ADR-0013 APIs.
+- Pair mutations and People block writes share a pair lock and recheck current gate/authorization after waiting. An authorized block commits with no live friendship pair; friendship-gate disable/re-enable and unblock cannot restore it. After opt-out/readiness/campus changes, existing pair remains ID/status only and active participants can clean it up; new request/accept remains denied.
+- Existing owner-only profile/photo policies and Hangout RLS/roster/private-location access are unchanged. No friend-aware Hangout ranking, friends-only visibility, DM, notification, invite, reporting or hosted work.
+
+## Verification and handoff
+Run `pnpm check`, two clean `pnpm db:verify` resets/schema lint and real local Auth/PostgREST plus pair-race tests where environment supports them. Cover anon, self, ready opted-in same campus, either/both blocks, now-hidden current relationship block by a ready caller, denial of a new block to a nonready/suspended/banned caller, changed opt-in/email/photo/campus/status, disabled People/friendship gates, forged moderator/admin, direct table access/embeds, malformed IDs/page bounds, duplicate/opposite requests, same creation UUID with different target/payload, decline/cancel suppression, stale generation after teardown/new request, create→accept→unfriend→old-key retry, concurrent block versus accept/create, block with friendship gate off then re-enable, stronger isolation and post-wait revocation. Rerun existing People/profile/photo/Hangout/Calendar regressions. Record exact commands, evidence and environmental limits without claiming green CI from an unavailable check. Clean fixtures, restore all gates false, stop local services.
+
+Commit in-scope implementation and `agents/handoffs/TASK-012A.md`, push the task branch and independently verify its remote SHA, then stop. Do not merge to main. The coordinator reviews code/handoff, obtains independent security review and integrates only accepted work; TASK-012B waits.

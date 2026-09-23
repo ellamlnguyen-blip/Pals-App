@@ -22,3 +22,6 @@ Document consistency and scoped diff only for planning; no runtime, UI or CI suc
 
 ## Ready for next stage?
 No. The reviewed planning records are on canonical main. Request explicit ADR-0014 acceptance; only then publish the narrower TASK-012A contract and dispatch its fresh agent. No successor product task is triggered by planning.
+
+## Acceptance follow-up
+The user explicitly replied “yes” to accepting ADR-0014 on 2026-09-23 after planning publication. This authorizes only the bounded disposable-local stages. The narrower TASK-012A backend contract and acceptance/status records are being published before implementation dispatch; this follow-up does not claim backend completion.
