@@ -2,6 +2,11 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-23 — TASK-013A local Hangout chat backend
+
+- Added reviewed private text-message storage, a default-disabled chat gate and caller-bound paged read/idempotent send for current ready joined members of published campus Hangouts.
+- Live authorization, author redaction and transaction locks passed local SQL/Auth/concurrency checks and independent exact-tip security review. The database wrapper's Lima mount failed, so equivalent direct SQL/reset/lint steps were used; no hosted change.
+
 ## 2026-09-23 — TASK-013 chat policy acceptance
 
 - User explicitly accepted ADR-0015 for disposable-local Hangout chat and a narrower backend stage contract was prepared. No implementation, Realtime transport or hosted permission follows from the acceptance record alone.

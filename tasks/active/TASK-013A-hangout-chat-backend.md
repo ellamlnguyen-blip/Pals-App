@@ -1,6 +1,6 @@
 # TASK-013A — Local Hangout chat state and authorization
 
-Status: Active — fresh backend agent dispatched from verified canonical main
+Status: Reviewed locally — exact-tip security review clear; main publication pending
 Date: 2026-09-23
 Parent: TASK-013
 Decision: Accepted ADR-0015, explicitly accepted by the user on 2026-09-23
@@ -32,3 +32,6 @@ Commit only in-scope implementation and `agents/handoffs/TASK-013A.md`, push the
 
 ## Dispatch receipt
 Accepted ADR-0015 and this reviewed contract were published and independently verified on both `origin/agent/TASK-013-planning` and `origin/main` at `cb81a094d86d2e67d5d80043942c855cd8141780`. A fresh GPT-6 Sol medium implementation agent was dispatched from that baseline to an isolated worktree/branch. Standard is the app preference; the sub-agent dispatch tool has no speed selector, so speed is not verified. Independent security review and main integration remain required before TASK-013B.
+
+## Review outcome
+Final task tip `94219cd682449cf46a90035d001804ac92f1a2d1` was independently remote-verified. A fresh read-only GPT-6 Sol medium security review of that exact commit found no blocking authorization/privacy issue; see `agents/handoffs/TASK-013A-REVIEW.md`. The backend agent passed `pnpm check`, two clean local resets with direct execution of all existing pgTAP suites and chat assertions (69 on both resets, expanded final 72 after the second), schema lint, real Auth/PostgREST and deterministic races. The `pnpm db:verify` wrapper itself could not bind-mount the isolated `/private/tmp` worktree into Lima, so no green wrapper/hosted CI claim is made. Gates false, fixtures zero, Supabase and Lima stopped. Reviewed code merged into the coordinator branch at `091dbfa`; canonical main publication and remote verification remain before TASK-013B dispatch.
