@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { signOut } from "./actions";
+import { SignOutForm } from "./auth-change-signal";
 export function Frame({
   children,
   signedIn = false,
@@ -18,11 +18,7 @@ export function Frame({
           Pals
         </Link>
         <span className="campus">UNC Chapel Hill</span>
-        {signedIn && (
-          <form action={signOut}>
-            <button className="text-button">Sign out</button>
-          </form>
-        )}
+        {signedIn && <SignOutForm />}
       </header>
       <main id="main" tabIndex={-1}>
         {children}

@@ -68,8 +68,9 @@ export function HangoutsShell({
             People
           </button>
         )}
+        {createEnabled && <Link href="/chats">Chats</Link>}
         {(createEnabled
-          ? ["Chats", "Notifications"]
+          ? ["Notifications"]
           : ["Calendar", "Chats", "Notifications"]
         ).map((name) => (
           <button

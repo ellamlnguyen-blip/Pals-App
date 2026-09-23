@@ -4,6 +4,7 @@ import { requireAccess } from "../../../../lib/access";
 import { requireLocalHangouts } from "../../../../lib/hangouts";
 import { readSavedDetail } from "../../../../lib/saved-hangouts";
 import { MembershipControl } from "./membership-control";
+import { chatAccess, readChat } from "../../../../lib/chat";
 import "../../create.css";
 import "../saved.css";
 
@@ -42,6 +43,11 @@ export default async function SavedDetailPage({
   const { record, ownState, roster, instructions } = result;
   const cancelled = record.status === "cancelled";
   const joined = ownState === "joined" || ownState === "host";
+  const chatCaller = joined && !cancelled ? await chatAccess() : null;
+  const chat =
+    chatCaller?.user.id === result.userId
+      ? await readChat(chatCaller.client, id)
+      : null;
   return (
     <Frame signedIn>
       <main className="saved-detail" id="main">
@@ -63,6 +69,18 @@ export default async function SavedDetailPage({
                       ? "Joining is closed"
                       : "Open to join"}
         </p>
+        {joined && !cancelled && (
+          <section className="saved-chat-entry">
+            <h2>Coordinate together</h2>
+            {chat?.kind === "ok" ? (
+              <Link className="button" href={`/chats/hangouts/${id}`}>
+                Open Hangout chat
+              </Link>
+            ) : (
+              <p>Chat unavailable right now.</p>
+            )}
+          </section>
+        )}
         <div className="saved-detail-grid">
           <section>
             <h2>The plan</h2>

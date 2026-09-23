@@ -149,3 +149,14 @@
     width: 100%;
   }
 }
+
+.saved-chat-entry {
+  margin-top: 1.5rem;
+  padding: 1.25rem 1.5rem;
+  border: 1px solid var(--pals-line);
+  border-radius: var(--pals-radius);
+  background: var(--pals-surface);
+}
+.saved-chat-entry h2 {
+  margin-bottom: 0.5rem;
+}

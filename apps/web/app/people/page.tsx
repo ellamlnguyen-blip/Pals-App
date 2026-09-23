@@ -73,7 +73,7 @@ export default async function PeoplePage({
         <Link href="/people" aria-current="page">
           People
         </Link>
-        <span>Chats</span>
+        <Link href="/chats">Chats</Link>
         <span>Notifications</span>
       </nav>
       <FocusReturn

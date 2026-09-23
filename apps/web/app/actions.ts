@@ -72,7 +72,7 @@ export async function signIn(
           : "We couldn’t sign you in. Check your email and password and try again.",
       values: safeValues(form),
     };
-  redirect(accessPath((await access()).state));
+  redirect(`${accessPath((await access()).state)}?pals_auth_done=signin`);
 }
 export async function resendConfirmation(
   _state: FormState,
@@ -106,7 +106,7 @@ export async function signOut() {
   const client = await supabase();
   const { error } = await client.auth.signOut({ scope: "local" });
   if (error) throw new Error("Sign out did not finish. Please try again.");
-  redirect("/signin");
+  redirect("/signin?pals_auth_done=signout");
 }
 export async function completeProfile(
   _state: FormState,

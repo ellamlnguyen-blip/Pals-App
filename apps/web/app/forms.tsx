@@ -1,5 +1,6 @@
 "use client";
-import { useActionState } from "react";
+import { useActionState, useEffect } from "react";
+import { beginAuthTransition, settleAuthTransition } from "./auth-transition";
 import {
   signIn,
   signUp,
@@ -24,8 +25,18 @@ export function AuthForm({ mode }: { mode: "signup" | "signin" }) {
     mode === "signup" ? signUp : signIn,
     {},
   );
+  useEffect(() => {
+    if (mode === "signin" && state.error) settleAuthTransition(true);
+  }, [mode, state]);
   return (
-    <form action={action} className="form-stack" aria-busy={pending}>
+    <form
+      action={action}
+      onSubmit={
+        mode === "signin" ? () => beginAuthTransition("signin") : undefined
+      }
+      className="form-stack"
+      aria-busy={pending}
+    >
       <label htmlFor="email">
         UNC email
         <input

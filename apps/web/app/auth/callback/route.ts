@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
       flowId ? { flowId } : undefined,
     );
     if (!error)
-      return NextResponse.redirect(`${origin}/continue`, {
+      return NextResponse.redirect(`${origin}/continue?auth_callback=1`, {
         headers: {
           "Cache-Control": "no-store",
           "Referrer-Policy": "no-referrer",
