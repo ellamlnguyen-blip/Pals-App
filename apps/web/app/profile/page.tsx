@@ -49,6 +49,7 @@ export default async function ProfilePage() {
             <Link href="/people/privacy">
               Preview and manage People sharing
             </Link>
+            <Link href="/people/friends">Your friendships</Link>
           </>
         )}
       </div>

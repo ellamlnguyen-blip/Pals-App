@@ -7,6 +7,7 @@ import { actionChecks } from "./profile-action-checks.mjs";
 import { hangoutHttpChecks } from "./hangout-http-checks.mjs";
 import { hangoutActionChecks } from "./hangout-action-checks.mjs";
 import { peopleHttpChecks } from "./people-http-checks.mjs";
+import { friendshipActionChecks } from "./friendship-action-checks.mjs";
 
 // Deliberately local only. Never accept a hosted URL or privileged key.
 if (process.env.APP_ENV && process.env.APP_ENV !== "local")
@@ -297,6 +298,7 @@ test("real confirmation, SSR callback, RLS and private photo ownership", async (
     }
     await hangoutHttpChecks(owner, peer, a, b, sql, png, url, key);
     await peopleHttpChecks(owner, peer, a, b, sql, png, url, key);
+    await friendshipActionChecks(owner, peer, a, b, png, sql);
     await hangoutActionChecks(owner, peer, a, b, png, sql);
     await profileChecks(owner, peer, a, sql, png);
     path = (await actionChecks(owner, a, png)) ?? path;

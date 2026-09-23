@@ -86,7 +86,10 @@ export default async function PeoplePage({
           <h1>Find a familiar face</h1>
           <p>Browse students who chose to appear in People.</p>
         </div>
-        <Link href="/people/privacy">Your People visibility</Link>
+        <div className="people-heading-links">
+          <Link href="/people/friends">Your friendships</Link>
+          <Link href="/people/privacy">Your People visibility</Link>
+        </div>
       </div>
       {gateOff ? (
         <section className="people-panel">
