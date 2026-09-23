@@ -2,6 +2,11 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-23 — TASK-023 frontend design alignment planned
+
+- Added a dedicated student-web visual alignment task informed by current usepals.com, scheduled after TASK-020 and before staging rehearsal.
+- Required a shared-token/component and route-wide responsive pass while preserving existing backend schemas, RLS, API/action contracts, gates, and authorization behavior. No product or backend implementation is included in this planning change.
+
 ## 2026-09-23 — TASK-014A local DM backend
 
 - Added reviewed private DM request, generation, message and retry storage behind a default-disabled local gate. Caller-bound operations enforce first-message consent, current People eligibility, narrow block teardown and terminal privacy. Local SQL/Auth/concurrency, workspace and schema checks passed within the documented test-wrapper limit; no hosted, Realtime or UI change.
