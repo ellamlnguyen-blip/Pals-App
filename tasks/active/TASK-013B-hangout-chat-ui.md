@@ -1,6 +1,6 @@
 # TASK-013B — Local Hangout chat UI
 
-Status: Reviewed at remote-verified task tip `620cb11424b5238343b00069a157a03ef849a974`; canonical integration pending
+Status: Complete for bounded local UI stage — reviewed tip `620cb11424b5238343b00069a157a03ef849a974` integrated on remote-verified main `f2404941aaf5cea5a830e9813950b33871b5e796`
 Date: 2026-09-23
 Parent: TASK-013
 Decision: Accepted ADR-0015
@@ -38,4 +38,4 @@ The UI task tip `9da44c96f8ec91bf61953a0a73d7136b68d923ee` was pushed and indepe
 The corrected UI tip `5db260be3284af6fe18c1729d270d862c63d750f` passed workspace/local HTTP and coordinator cross-tab signout, account-switch, Back and post-send-focus browser checks; gates, fixtures and services were cleaned. A second fresh exact-tip review still blocked integration: a user-editable completion URL can release a pending signout mask before the server action completes, and polling crosses explicit 50-message page boundaries. The agent is applying a fail-closed session probe and one-page bounded polling with page navigation, then will resubmit. The final completion-marker refinement in that tip had not been browser retested. TASK-013B and parent TASK-013 remain active.
 
 ## Final review receipt
-The task branch `620cb11424b5238343b00069a157a03ef849a974` is pushed and independently remote-verified. It treats a completion marker only as a cue for a guarded session probe, keeps old-account 200 results masked, terminally denies 403, and polls one current 50-message page with explicit Previous/Load newer controls. `pnpm check`, focused local Auth/PostgREST/web checks, coordinator 70-message browser paging, and fresh exact-tip security/design review passed. Both gates false, fixtures removed and services stopped. See `agents/handoffs/TASK-013B.md` and `TASK-013B-REVIEW.md` for unexercised browser races and exact evidence. Canonical main integration remains pending.
+The task branch `620cb11424b5238343b00069a157a03ef849a974` is pushed and independently remote-verified. It treats a completion marker only as a cue for a guarded session probe, keeps old-account 200 results masked, terminally denies 403, and polls one current 50-message page with explicit Previous/Load newer controls. `pnpm check`, focused local Auth/PostgREST/web checks, coordinator 70-message browser paging, and fresh exact-tip security/design review passed. Both gates false, fixtures removed and services stopped. See `agents/handoffs/TASK-013B.md` and `TASK-013B-REVIEW.md` for unexercised browser races and exact evidence. Canonical main integration `f2404941aaf5cea5a830e9813950b33871b5e796` was independently remote-verified.

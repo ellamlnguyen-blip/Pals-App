@@ -4,7 +4,7 @@ Date: 2026-09-23
 Coordinator branch: `agent/TASK-013-planning`
 Reviewed backend task branch: `agent/TASK-013A-hangout-chat-backend` at remote-verified `94219cd682449cf46a90035d001804ac92f1a2d1`
 Reviewed UI task branch: `agent/TASK-013B-hangout-chat-ui` at remote-verified `620cb11424b5238343b00069a157a03ef849a974`
-Canonical main integration: pending final publication receipt below
+Canonical main integration: reviewed backend/UI and handoffs pushed and independently remote-verified at `f2404941aaf5cea5a830e9813950b33871b5e796`
 Main status records: `tasks/NOW.md`, `tasks/BACKLOG.md`, `tasks/DONE.md`, `docs/operations/CURRENT_STATE.md`, `CHANGELOG.md`
 
 ## Outcome
@@ -24,4 +24,4 @@ People blocks remain People-only. Global blocking/reporting/moderation, DMs, not
 
 ## Publication receipt
 
-Task branch SHAs above were independently verified against `origin`. Reviewed backend is already integrated on remote-verified main `543d064bd9962c963cbebb0ba8df0f8c0e05e60c`. Final UI integration and main remote verification will be appended before TASK-013 is marked complete.
+Task branch SHAs above were independently verified against `origin`. Reviewed backend was first integrated on remote-verified main `543d064bd9962c963cbebb0ba8df0f8c0e05e60c`; final reviewed UI, stage/parent handoffs and review record were integrated and `origin/main` independently verified at `f2404941aaf5cea5a830e9813950b33871b5e796`. The final queue/completion receipt is published afterward; this integration SHA remains the exact reviewed-code baseline. TASK-013 is complete only for the accepted disposable-local scope and the test limits stated above.

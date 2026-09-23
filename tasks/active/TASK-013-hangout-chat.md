@@ -1,6 +1,6 @@
 # TASK-013 — Local Hangout chat
 
-Status: Reviewed local backend and UI; final canonical main publication pending
+Status: Complete for bounded disposable-local scope — reviewed code and handoffs on remote-verified main `f2404941aaf5cea5a830e9813950b33871b5e796`
 Date: 2026-09-23
 Planning branch: `agent/TASK-013-planning`
 Starting canonical `origin/main`: `373ae47117b677308723f657f61ee0c732550c1d` (clean worktree; independently verified by `git ls-remote`)
@@ -26,7 +26,7 @@ Realtime transport or push/notifications in this local stage; DMs/message reques
 - [x] No request authorized after committed revocation returns a message body or historical sender ID; no shared cache or continued polling exposes old content. An in-flight read authorized before revocation may still arrive afterward, as stated in ADR-0015. A current authorized reader sees only the proposed minimal author projection. Cancellation/leave/removal/readiness/gate changes prevent future reads and sends; retained rows are not deleted by these transitions.
 - [x] Send idempotency, immutable message contents, bounded pagination and ordering prevent duplicate/lost-response posts and stale-authority replays. No client-supplied author/campus/conversation authority.
 - [x] SQL/RLS/grant, real Auth/PostgREST/action and concurrency checks cover forged actor, late join/full history, leave/rejoin, removal, cancellation/readiness/gate races, idempotency reuse, page bounds, current-author projection, direct DML denial and existing Hangout/People/friendship regressions. UI checks cover desktop/phone/keyboard and loading/empty/error/revoked/uncertain states within handoff test limits.
-- [ ] Local gate false, fixtures cleaned, services stopped; handoffs, shared state and task/remote refs verified. No hosted or Realtime completion claim. Final main verification pending.
+- [x] Local gate false, fixtures cleaned, services stopped; handoffs, shared state and task/remote refs verified. No hosted or Realtime completion claim. Reviewed integration main `f2404941aaf5cea5a830e9813950b33871b5e796` was remotely verified; final queue receipt follows it.
 
 ## Ownership and handoff
 The coordinator owns policy acceptance, queue/status, stage dispatch, independent reviews and canonical integration. Stage agents own only their bounded contracts and handoffs, then stop. Use `agents/HANDOFF_TEMPLATE.md`. Planning handoff: `agents/handoffs/TASK-013-CONTRACT.md`. Planning checks are document consistency and review, not runtime or policy acceptance. Use GPT-6 Sol medium and the app's Standard speed preference for task/review agents; current dispatch tooling has no speed selector, so do not claim speed verification.
