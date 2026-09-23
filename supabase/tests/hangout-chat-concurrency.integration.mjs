@@ -162,6 +162,36 @@ test("Hangout chat send serializes against committed revocation and holds readin
       } finally { first.child.kill(); second.child.kill(); }
     }
 
+    sql(`insert into storage.objects(bucket_id,name,owner_id) values
+      ('profile-photos','${peer}/replacement.png','${peer}')`);
+    {
+      const sender = session("chat_send_holds_photo_replace"), writer = session("chat_photo_replace_writer");
+      try {
+        sender.send(`begin; ${claims(peer)} select sequence from public.send_hangout_message('${hangout}','51310000-0000-4000-8001-000000000012','Race'); select 'sent';`);
+        await until(() => sender.output().includes("sent"));
+        writer.send(`begin; update public.profiles set primary_photo_path='${peer}/replacement.png' where user_id='${peer}'; commit;`);
+        await waiting("chat_photo_replace_writer");
+        sender.send("commit;"); sender.child.stdin.end(); writer.child.stdin.end();
+        await sender.done; await writer.done;
+        assert.equal(sql("select count(*) from private.hangout_messages"), "4");
+        assert.equal(sql(`select primary_photo_path from public.profiles where user_id='${peer}'`), `${peer}/replacement.png`);
+      } finally { sender.child.kill(); writer.child.kill(); }
+    }
+    {
+      const sender = session("chat_send_holds_photo_delete"), deleter = session("chat_photo_delete_writer");
+      try {
+        sender.send(`begin; ${claims(peer)} select sequence from public.send_hangout_message('${hangout}','51310000-0000-4000-8001-000000000013','Race'); select 'sent';`);
+        await until(() => sender.output().includes("sent"));
+        deleter.send(`begin; set storage.allow_delete_query='true'; delete from storage.objects where bucket_id='profile-photos' and name='${peer}/replacement.png'; commit;`);
+        await waiting("chat_photo_delete_writer");
+        sender.send("commit;"); sender.child.stdin.end(); deleter.child.stdin.end();
+        await sender.done; await deleter.done;
+        assert.match(deleter.output(), /Detach a profile photo before deleting it/);
+        assert.equal(sql("select count(*) from private.hangout_messages"), "5");
+        assert.equal(sql(`select count(*) from storage.objects where bucket_id='profile-photos' and name='${peer}/replacement.png'`), "1");
+      } finally { sender.child.kill(); deleter.child.kill(); }
+    }
+
     // Projection is already authorized before this controlled in-statement
     // delay. A gate disable during that delay cannot recall the page, while
     // the next authorization statement must deny.
