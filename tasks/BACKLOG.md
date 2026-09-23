@@ -9,7 +9,7 @@
 - TASK-013 hangout chat — complete for bounded local scope under Accepted ADR-0015 on remote-verified main `f2404941aaf5cea5a830e9813950b33871b5e796`; see `DONE.md` and handoffs. Realtime/global block/hosted access remain separate.
 - TASK-014 DM requests/direct chat — complete for bounded disposable-local scope under Accepted ADR-0016; see `DONE.md`, its contract and handoffs. Hosted messaging, Realtime and global block/reporting remain open.
 - TASK-015 notification inbox/preferences — complete for the bounded disposable-local increment under Accepted ADR-0017; reviewed A/B/C stages, final handoff and main integration are recorded in `DONE.md`. Hosted delivery, Realtime and later safety/eligibility events remain separate.
-- TASK-016 blocking/reporting — still open. TASK-011A implemented only caller-owned People blocks and bilateral People suppression under Accepted ADR-0013; no global Hangout/private-access, messaging, reporting or launch completion.
+- TASK-016 blocking/reporting — bounded local planning in `active/TASK-016-blocking-reporting.md`; Proposed ADR-0018 requires explicit acceptance after independent review/main publication. Global block backend, report backend and safety UI require separate fresh stages. Existing People/friendship/DM blocking remains implemented; global Hangout/private/chat/reporting work is not yet authorized or complete.
 - TASK-017 admin moderation console
 - TASK-018 attendance confirmation
 - TASK-019 PostHog instrumentation

@@ -5,6 +5,8 @@ Last updated: 2026-09-23
 Decision tree resolved through product purpose, loop, profile/hangout/social model, safety, map/calendar navigation, MVP boundary, technical architecture, and agent operating model.
 
 ## Build State
+TASK-016 is in bounded planning on `agent/TASK-016-planning` from remote-verified main `de5d79946532f7bca127432b85ef6e21c56d2c45`. Proposed ADR-0018 covers global block/Hangout separation and private user/Hangout reports after removal. Reviewed publication does not accept that policy. No schema, application, gate, service or hosted change is made; implementation waits for explicit acceptance and separately published stage contracts. TASK-010/ADR-0012 remains independently blocked. See `agents/handoffs/TASK-016-CONTRACT.md`.
+
 TASK-015 is complete for its bounded disposable-local scope under Accepted ADR-0017. Reviewed A/B backend stages provide the owner-only notification ledger, preferences and authoritative friendship, DM, Hangout and Hangout-chat events; reviewed C provides the local-only Notifications inbox and preferences UI. SQL/Auth/HTTP/race/workspace and rendered desktop/tablet/phone/keyboard/failure checks passed within the handoff limits. All notification and related local gates are false, disposable fixtures gone and local services stopped. No hosted delivery, Realtime, push/email or global blocking/reporting readiness is claimed; TASK-010/ADR-0012 and TASK-016 remain open. See `agents/handoffs/TASK-015.md` and stage/review handoffs.
 
 ### TASK-015 progress history

@@ -2,6 +2,10 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-23 — TASK-016 planning
+
+- Prepared a bounded disposable-local blocking/reporting contract and Proposed ADR-0018 for independent review and canonical publication. Shared-Hangout departures, private/chat/notification separation and post-removal report eligibility require explicit policy acceptance; no implementation or hosted change.
+
 ## 2026-09-23 — TASK-015 local Notifications inbox and preferences
 
 - Added a local-only private Notifications tab with bounded pages, read state, four optional-category preferences, neutral revoked-source rows and explicit destination reauthorization. The earlier A/B stages supply authoritative social, Hangout and chat items.
