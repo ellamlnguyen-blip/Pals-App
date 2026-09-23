@@ -2,6 +2,11 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-23 — TASK-013 Hangout chat planning
+
+- Drafted a bounded local chat contract and Proposed ADR-0015 for current-participant text messages, revocation, minimal author display, idempotent sends and polling delivery.
+- No policy acceptance, migration, messaging permission or hosted authorization follows from planning. Global block precedence, Realtime delivery and moderation remain separate.
+
 ## 2026-09-23 — TASK-012 local friendship completion
 
 - Integrated independently reviewed backend and UI on remote-verified main. Participant-only relationship management and fresh People text authorization are available for disposable local development behind default-disabled gates. Gates and fixtures were cleaned; hosted and restricted-Hangout work remain open.
