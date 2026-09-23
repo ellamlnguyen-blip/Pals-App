@@ -2,6 +2,10 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-23 — TASK-015 notification policy proposed
+
+- Planned a private disposable-local notification inbox and category preferences. Proposed ADR-0017 defines source events, minimal payloads, essential cancellation, muting and revocation. It awaits independent review, canonical publication and explicit acceptance; no implementation or hosted delivery is included.
+
 ## 2026-09-23 — TASK-014B local DM UI
 
 - Added a consent-based first-message entry on People detail, Requests and Direct chats in Chats, and a direct text thread using the reviewed caller-bound DM backend. Pending senders see only a waiting state; current authorized recipients can accept, reply or ignore.

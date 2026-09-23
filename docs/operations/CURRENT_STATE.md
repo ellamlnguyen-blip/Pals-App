@@ -5,6 +5,8 @@ Last updated: 2026-09-23
 Decision tree resolved through product purpose, loop, profile/hangout/social model, safety, map/calendar navigation, MVP boundary, technical architecture, and agent operating model.
 
 ## Build State
+TASK-015 notification inbox/preferences has a bounded disposable-local planning contract and Proposed ADR-0017. This is policy planning only: no notification schema, event hook, inbox UI, push, Realtime or hosted access exists. Independent review, canonical publication and explicit acceptance are required before fresh implementation stages. TASK-010/ADR-0012 and TASK-016 global blocking/reporting remain open; existing local gates remain disabled by default.
+
 TASK-001 complete: pnpm monorepo with Next.js 16.3.5/React 19.3 TypeScript web/admin, reserved mobile workspace and six shared packages. Apps use shared light/dark design tokens and self-hosted Nunito. Local-first configuration, formatting, lint, strict typechecks, tests and production builds pass. TASK-006 task-branch GitHub CI now passes workspace checks plus local database/auth/profile verification (see TASK-006 outcome); hosted callback/email acceptance remains separate.
 
 TASK-002 complete: universities, accounts, separate campus verification, profile drafts, platform roles, owner-only RLS, synthetic tests, migration/seed scripts and target validation. Local Postgres and the authorized hosted development/staging project are verified. See `agents/handoffs/TASK-002.md` and `docs/operations/HOSTED_ENVIRONMENT.md`.
