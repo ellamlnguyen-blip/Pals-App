@@ -1,6 +1,6 @@
 # TASK-016A — Global block backend, disposable local
 
-Status: In progress in isolated backend worktree after reviewed canonical publication
+Status: Implemented and locally verified on task branch; exact-tip independent security review pending canonical integration
 Date: 2026-09-23
 Parent: TASK-016; decision: ADR-0018 (user accepted the complete reviewed decision on 2026-09-23; coordinator records the acceptance)
 Planning baseline: `3d4fec11d13c1f936bb89e7012e20cae7f4151bd`

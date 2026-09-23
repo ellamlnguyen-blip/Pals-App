@@ -1,6 +1,6 @@
 # TASK-016 — Local blocking and reporting
 
-Status: ADR-0018 accepted; stage A contract independently reviewed, canonical publication precedes dispatch
+Status: ADR-0018 accepted; stage A implemented on task branch and undergoing independent security review; B/C remain dependent
 Date: 2026-09-23
 Planning branch: `agent/TASK-016-planning`
 Starting canonical `origin/main`: `de5d79946532f7bca127432b85ef6e21c56d2c45`, fetched and independently verified
