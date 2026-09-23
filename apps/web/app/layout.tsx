@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "@fontsource-variable/nunito";
 import "@pals/design-tokens/tokens.css";
 import "./globals.css";
+import { AuthTransitionNotifier } from "./auth-transition-notifier";
 
 export const metadata: Metadata = {
   title: "Pals",
@@ -15,7 +16,10 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <AuthTransitionNotifier />
+        {children}
+      </body>
     </html>
   );
 }

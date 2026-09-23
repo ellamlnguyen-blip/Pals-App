@@ -1,15 +1,13 @@
 "use client";
-export function AuthChangeSignal() {
+import { signOut } from "./actions";
+import { beginAuthTransition } from "./auth-transition";
+
+export function SignOutForm() {
   return (
-    <button
-      className="text-button"
-      onClick={() => {
-        const channel = new BroadcastChannel("pals-auth-change");
-        channel.postMessage("changing");
-        channel.close();
-      }}
-    >
-      Sign out
-    </button>
+    <form action={signOut} onSubmit={() => beginAuthTransition("signout")}>
+      <button className="text-button" type="submit">
+        Sign out
+      </button>
+    </form>
   );
 }

@@ -1,6 +1,13 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
+import { flushSync } from "react-dom";
 import type { ChatMessage } from "../../../../lib/chat";
+import {
+  AUTH_TRANSITION_CHANNEL,
+  AUTH_TRANSITION_EVENT,
+  authTransitionDecision,
+  type AuthTransitionMessage,
+} from "../../../auth-transition";
 
 type ReadResult =
   | { kind: "ok"; messages: ChatMessage[] }
@@ -27,6 +34,7 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
   const draftRef = useRef("");
   const pendingRef = useRef<Pending | null>(null);
   const composerRef = useRef<HTMLTextAreaElement>(null);
+  const authPending = useRef(new Set<string>());
   const api = `/api/chat/${id}`;
 
   const mask = useCallback((reason: "hidden" | "auth" = "hidden") => {
@@ -67,7 +75,8 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
   }, []);
   const read = useCallback(
     async (after: number | null, reveal = false) => {
-      if (document.hidden || busy.current) return false;
+      if (document.hidden || busy.current || authPending.current.size)
+        return false;
       busy.current = true;
       const ticket = generation.current;
       try {
@@ -132,7 +141,13 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
   // Reproject displayed history on each visible poll. A forward-only tail read
   // would leave an old peer account ID on screen after that author leaves.
   const refreshProjection = useCallback(async () => {
-    if (document.hidden || busy.current || !visible.current) return false;
+    if (
+      document.hidden ||
+      busy.current ||
+      !visible.current ||
+      authPending.current.size
+    )
+      return false;
     busy.current = true;
     const ticket = generation.current;
     const through = latest.current;
@@ -187,12 +202,24 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
     const resume = () => {
       if (document.hidden) return;
       mask();
-      void read(null, true);
+      if (!authPending.current.size) void read(null, true);
     };
     const hide = () => mask();
-    const authChange = () => {
+    const reauthorize = () => {
       mask("auth");
-      if (!document.hidden) void read(null, true);
+      if (!document.hidden && !authPending.current.size) void read(null, true);
+    };
+    const transition = (message: AuthTransitionMessage) => {
+      const decision = authTransitionDecision(authPending.current, message);
+      if (decision === "mask") {
+        mask("auth");
+        setStatus("Account change in progress. Chat is hidden.");
+      } else if (decision === "reauthorize") reauthorize();
+    };
+    const onLocalTransition = (event: Event) =>
+      transition((event as CustomEvent<AuthTransitionMessage>).detail);
+    const onStorage = (event: StorageEvent) => {
+      if (event.key?.includes("auth-token")) reauthorize();
     };
     resume();
     const visibilityChange = () => {
@@ -203,9 +230,11 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
     window.addEventListener("pagehide", hide);
     window.addEventListener("pageshow", resume);
     window.addEventListener("focus", resume);
-    window.addEventListener("storage", authChange);
-    const channel = new BroadcastChannel("pals-auth-change");
-    channel.onmessage = authChange;
+    window.addEventListener("storage", onStorage);
+    window.addEventListener(AUTH_TRANSITION_EVENT, onLocalTransition);
+    const channel = new BroadcastChannel(AUTH_TRANSITION_CHANNEL);
+    channel.onmessage = (event: MessageEvent<AuthTransitionMessage>) =>
+      transition(event.data);
     const interval = window.setInterval(() => {
       if (visible.current && !document.hidden) void refreshProjection();
     }, 8000);
@@ -216,13 +245,20 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
       window.removeEventListener("pagehide", hide);
       window.removeEventListener("pageshow", resume);
       window.removeEventListener("focus", resume);
-      window.removeEventListener("storage", authChange);
+      window.removeEventListener("storage", onStorage);
+      window.removeEventListener(AUTH_TRANSITION_EVENT, onLocalTransition);
       channel.close();
     };
   }, [mask, read, refreshProjection]);
 
   async function send() {
-    if (sending || state !== "ready" || document.hidden) return;
+    if (
+      sending ||
+      state !== "ready" ||
+      document.hidden ||
+      authPending.current.size
+    )
+      return;
     const body = pendingRef.current?.body ?? draftRef.current.trim();
     if (!body || body.length > 2000) {
       setStatus("Write 1 to 2000 characters.");
@@ -240,6 +276,7 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
       setSending(false);
       return;
     }
+    let sent = false;
     try {
       const response = await fetch(api, {
         method: "POST",
@@ -265,7 +302,7 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
           setDraft("");
         }
         setStatus("Message sent.");
-        composerRef.current?.focus();
+        sent = true;
         await read(latest.current || null);
       } else if (result.kind === "conflict")
         setStatus(
@@ -281,7 +318,14 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
           "Send outcome uncertain. Retry the original message with the same request key.",
         );
     } finally {
-      if (ticket === generation.current) setSending(false);
+      if (ticket === generation.current) {
+        // The pending button loses native focus when disabled. Commit its
+        // enabled state before focusing the composer for keyboard continuity.
+        flushSync(() => setSending(false));
+        if (sent && !document.hidden && composerRef.current) {
+          composerRef.current.focus({ preventScroll: true });
+        }
+      }
     }
   }
   return (
@@ -357,6 +401,7 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
             <label htmlFor="chat-message">Message</label>
             <textarea
               id="chat-message"
+              ref={composerRef}
               value={draft}
               onChange={(event) => {
                 const value = event.target.value;

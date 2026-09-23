@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { requireAccess } from "../../lib/access";
-import { signOut } from "../actions";
+import { SignOutForm } from "../auth-change-signal";
 import { HangoutsShell } from "./shell";
 import "./map.css";
 import { localHangoutsAvailable } from "../../lib/hangouts";
@@ -40,9 +40,7 @@ export default async function Hangouts() {
             <strong>{profile?.real_name ?? "Your account"}</strong>
             <p>UNC email verified</p>
             <Link href="/profile">Your profile</Link>
-            <form action={signOut}>
-              <button className="text-button">Sign out</button>
-            </form>
+            <SignOutForm />
           </div>
         </details>
       </header>
