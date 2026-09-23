@@ -3,7 +3,7 @@
 Date: 2026-09-22
 Reviewed task tip: `0ef4bbb67f5fab908092eba47243ebea3b394931`
 Baseline: canonical main `aecb8a8982953e2a2c19b437a9c094f0cc1d031c`
-Disposition: Accepted for local-only main integration; publication receipt follows remote verification.
+Disposition: Accepted and integrated locally on remote-verified main `279c325384f5584e76e611ac78d722836ce47cff`; task ref `0ef4bbb67f5fab908092eba47243ebea3b394931` was independently verified.
 
 ## Scope and authorization
 The reviewed diff adds a separate saved campus map/list/detail and caller-session join/leave actions. The existing mock map stays labeled and separate. No migration, RLS, hosted provider, service-role key, peer-profile reader, restricted visibility or launch control changed. Saved paths/actions check `APP_ENV=local`, the validated loopback Supabase target and live ready access; existing TASK-005 RLS and the default-disabled database gate remain independent controls. Public map data excludes private instructions. The detail reads them separately and rechecks state; the join/leave action returns no private payload and verifies persisted membership before success.

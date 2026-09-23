@@ -1,6 +1,6 @@
 # TASK-008 — Local map discovery, Hangout detail and joining
 
-Status: Reviewed local implementation accepted for main integration — remote publication pending
+Status: Complete — reviewed local-only implementation integrated and remote-verified; hosted gates remain open
 Date: 2026-09-22
 Planning branch: `agent/TASK-008-planning`
 Implementation branch: `agent/TASK-008-map-discovery`
@@ -39,10 +39,13 @@ Database migration or RLS expansion; TASK-010 host lifecycle/removal controls; T
 - [x] Join/leave/rejoin and host/closed/removed/cancelled cases reflect the actual RPC outcomes and persisted state. Concurrent or uncertain results do not claim success without verification.
 - [x] Private instructions appear only to a currently authorized published host/joined member, disappear after leave/removal/cancellation/readiness or gate revocation, and are never cached or passed to public map clients.
 - [x] Desktop and phone rendered map/list/detail/action flows, keyboard/focus, no-map fallback, and loading/empty/error/denied states are inspected. Relevant workspace, database and actual HTTP/action privacy tests pass; a fresh security/design review is clear.
-- [ ] Scoped task branch/handoff are reviewed, pushed and remote-verified; accepted work and shared state records are integrated to canonical main and its remote SHA verified.
+- [x] Scoped task branch/handoff are reviewed, pushed and remote-verified; accepted work and shared state records are integrated to canonical main and its remote SHA verified.
 
 ## Verification
 Run `pnpm check`, `pnpm db:verify`, `pnpm test:auth:web` and focused actual web/API tests against disposable local ready accounts. Cover gate off, nonlocal path, anonymous/unready/revoked/other-campus caller, owner/peer/left/removed states, closed/cancelled Hangouts, private read after each revocation, stale visible-region responses, map failure, rapid pan/query ordering, uncertain join/leave response and retry/reload. Reuse the TASK-005 actual-role SQL matrix for database authorization. Clean disposable users, photos and Hangouts; leave the gate disabled and local stack stopped. Record actual results and unrun checks.
 
 ## Documentation and handoff
 The coordinator publishes this contract and NOW/BACKLOG status to main before implementation dispatch. The implementation agent owns its task branch, interaction plan, code, scoped tests and `agents/handoffs/TASK-008.md`; the coordinator owns shared queue/current-state/changelog updates and integration. Record task and main pushed SHAs, review evidence, remaining hosted blockers and concrete limitations. Do not auto-dispatch TASK-009/010/013 or safety follow-ups.
+
+## Completion receipt
+Reviewed task tip `0ef4bbb67f5fab908092eba47243ebea3b394931` and coordinator records were integrated on canonical main `279c325384f5584e76e611ac78d722836ce47cff`; both remote refs were independently verified. The final documentation receipt follows this integration commit. See `agents/handoffs/TASK-008.md` and `TASK-008-REVIEW.md` for tests, visual evidence, review fixes and local cleanup. No hosted gate enablement, migration or deployment occurred.

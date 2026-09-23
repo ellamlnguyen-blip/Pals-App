@@ -31,3 +31,6 @@ The query detects full-result changes between its two requests and fails closed;
 ## Publication
 
 Implementation branch is for coordinator review only. The coordinator owns NOW/BACKLOG/CURRENT_STATE/CHANGELOG and canonical main integration. Implementation/handoff commit `3c244d9b48517b35d74626dcaa8df17a4a776077` and receipt tip `9e49ae311fcc02b97589306c0e387d9d71f2ccbe` were pushed and verified at `origin/agent/TASK-008-map-discovery`; canonical `origin/main` was verified at the starting SHA `aecb8a8982953e2a2c19b437a9c094f0cc1d031c`. This supplemental live-map receipt is a subsequent documentation-only commit whose final remote tip is reported to the coordinator. No later task is auto-dispatched.
+
+## Coordinator integration receipt
+Fresh reviewer findings were resolved and rechecked clear. Coordinator independently inspected fallback and live Mapbox saved desktop/390px phone flows, reviewed the scoped diff and handoff, then integrated final task tip `0ef4bbb67f5fab908092eba47243ebea3b394931` with shared completion records. `git ls-remote` verified that task ref and canonical main `279c325384f5584e76e611ac78d722836ce47cff` after publication. This subsequent receipt does not change implementation code. The default-disabled gate and hosted safety dependencies remain unchanged.
