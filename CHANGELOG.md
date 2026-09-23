@@ -2,6 +2,11 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-23 — TASK-013B local Hangout chat UI
+
+- Added a Chats list and saved-Hangout text thread for current authorized participants, using the reviewed caller-bound chat RPC and no-store local API. The thread shows one 50-message page at a time, with explicit forward/back controls and author reprojection during visible polling.
+- Added stable-key send recovery, plain-text rendering and account-change masking. Independent reviews drove corrections to early cross-tab unmasking and unbounded polling; local workspace/HTTP and rendered desktop/phone/auth/page-flow checks passed within the handoff limits. No hosted or Realtime change.
+
 ## 2026-09-23 — TASK-013A local Hangout chat backend
 
 - Added reviewed private text-message storage, a default-disabled chat gate and caller-bound paged read/idempotent send for current ready joined members of published campus Hangouts.
