@@ -14,3 +14,6 @@ The implementer ran `pnpm check`, two clean local resets, every existing pgTAP S
 
 ## Decision
 The reviewed backend is eligible for canonical main integration. TASK-013B waits for remote-verified main, its own bounded contract and fresh agent/review. Global messaging block, reporting/moderation, Realtime and hosted gates remain open.
+
+## Integration receipt
+Reviewed backend and status records were fast-forward integrated through the clean main checkout. `origin/main` and coordinator branch were independently remote-verified at `543d064bd9962c963cbebb0ba8df0f8c0e05e60c`; the backend task branch remained at exact reviewed tip `94219cd682449cf46a90035d001804ac92f1a2d1`.

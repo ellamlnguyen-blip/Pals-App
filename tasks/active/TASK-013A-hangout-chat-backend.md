@@ -1,6 +1,6 @@
 # TASK-013A — Local Hangout chat state and authorization
 
-Status: Reviewed locally — exact-tip security review clear; main publication pending
+Status: Complete locally — exact-tip security review clear; integrated and remote-verified on canonical main
 Date: 2026-09-23
 Parent: TASK-013
 Decision: Accepted ADR-0015, explicitly accepted by the user on 2026-09-23
@@ -35,3 +35,5 @@ Accepted ADR-0015 and this reviewed contract were published and independently ve
 
 ## Review outcome
 Final task tip `94219cd682449cf46a90035d001804ac92f1a2d1` was independently remote-verified. A fresh read-only GPT-6 Sol medium security review of that exact commit found no blocking authorization/privacy issue; see `agents/handoffs/TASK-013A-REVIEW.md`. The backend agent passed `pnpm check`, two clean local resets with direct execution of all existing pgTAP suites and chat assertions (69 on both resets, expanded final 72 after the second), schema lint, real Auth/PostgREST and deterministic races. The `pnpm db:verify` wrapper itself could not bind-mount the isolated `/private/tmp` worktree into Lima, so no green wrapper/hosted CI claim is made. Gates false, fixtures zero, Supabase and Lima stopped. Reviewed code merged into the coordinator branch at `091dbfa`; canonical main publication and remote verification remain before TASK-013B dispatch.
+
+Canonical main integration receipt: the reviewed backend, handoff and coordinator review/status were published and independently remote-verified at `543d064bd9962c963cbebb0ba8df0f8c0e05e60c`. The task branch remained at reviewed `94219cd682449cf46a90035d001804ac92f1a2d1`. TASK-013B may proceed only after its narrower contract is reviewed/published and a fresh UI agent is dispatched.
