@@ -45,6 +45,17 @@ export default async function Hangouts() {
           </div>
         </details>
       </header>
+      {localCreate && (
+        <div className="saved-entry">
+          <div>
+            <strong>Saved Hangouts · local only</strong>
+            <p>Explore real plans from ready UNC accounts on the campus map.</p>
+          </div>
+          <Link className="button" href="/hangouts/saved">
+            Explore saved Hangouts
+          </Link>
+        </div>
+      )}
       {localCreate && <OwnedHangouts />}
       <HangoutsShell
         createEnabled={localCreate}
