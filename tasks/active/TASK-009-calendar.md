@@ -50,3 +50,6 @@ Implementation agent owns bounded app/test code, interaction plan and `agents/ha
 
 ## Dispatch receipt
 Planning branch and canonical main were pushed and independently verified at `29c9343edc560dd0731804b3b9624f8329ad6d4c`. Fresh implementation agent `calendar_implementation` dispatched on `agent/TASK-009-calendar` from that baseline. No implementation SHA published yet; review, checks and integration remain pending.
+
+## Implementation milestone
+Task branch pushed and independently remote-verified at `06101ee68ebb8b42e9f783769faf9fab0aea280e`. Fresh static security/design review clear; workspace checks (17 unit tests, both builds), two 226-assertion SQL resets/lint and all three built-server real HTTP/action/concurrency suites pass. Coordinator verified desktop/phone controls, no overflow at 325/390px, updated data after detail/Back, empty/cancelled/truncated states and keyboard focus. Final error/denied rendering, cleanup and reviewed main integration remain pending; no completion claim yet.

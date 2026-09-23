@@ -64,3 +64,5 @@ Reviewed task tip `0ef4bbb67f5fab908092eba47243ebea3b394931` passed `pnpm check`
 
 ## TASK-009 Calendar planning
 User requested the next task. Verified clean canonical main/origin at `e2e3b2d0b59d32100dfca91c04801b96d551f5ab`. Contract `tasks/active/TASK-009-calendar.md` consumes reviewed TASK-005/007/008 without schema or access expansion. Contract/main published and remote-verified at `29c9343edc560dd0731804b3b9624f8329ad6d4c`; fresh implementation dispatched on `agent/TASK-009-calendar` from that baseline. No implementation SHA published yet; implementation/review pending. Today/Week campus-time views and authoritative joined/hosted filters remain local-only behind the default-disabled gate. Friend context, restricted access and all hosted safety/deployment gates stay deferred.
+
+TASK-009 milestone: implementation `06101ee68ebb8b42e9f783769faf9fab0aea280e` independently remote-verified; fresh static review clear, 17 unit tests/builds, SQL 226×2/lint and three built-server real HTTP/action/concurrency suites pass. Desktop/phone checks passed so far, including refresh after Back. Final state checks/cleanup/integration pending; code remains on its task branch.
