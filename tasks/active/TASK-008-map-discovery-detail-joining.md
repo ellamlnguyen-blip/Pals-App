@@ -1,6 +1,6 @@
 # TASK-008 — Local map discovery, Hangout detail and joining
 
-Status: Contract ready for implementation — local only
+Status: Reviewed local implementation accepted for main integration — remote publication pending
 Date: 2026-09-22
 Planning branch: `agent/TASK-008-planning`
 Implementation branch: `agent/TASK-008-map-discovery`
@@ -33,12 +33,12 @@ Before substantial UI work, read installed `design-taste-frontend` (Leon's Taste
 Database migration or RLS expansion; TASK-010 host lifecycle/removal controls; TASK-013 chat; calendar; friends/invitations/eligibility; peer profile/photo display; reporting/blocking/moderation implementation; notifications/analytics; capacity/waitlists; hosted environment or deployment. TASK-008 may consume existing backend join/leave behavior but must not silently implement dependent features.
 
 ## Acceptance criteria
-- [ ] Default-disabled database gate and nonlocal/anonymous/unready/cross-campus denials hold on direct route, data read and action paths. No service-role use or client-writable gate.
-- [ ] A created local saved Hangout appears as a saved approximate map pin and matching list item for a ready same-campus caller, with bounded viewport query and truthful loading, empty, error and truncation behavior. Mock examples cannot be mistaken for saved records.
-- [ ] Public preview/detail reveal only allowed fields. Current-ready participant IDs follow TASK-005 RLS; no peer profile/photo or private instructions leak through list/preview/errors/embeds.
-- [ ] Join/leave/rejoin and host/closed/removed/cancelled cases reflect the actual RPC outcomes and persisted state. Concurrent or uncertain results do not claim success without verification.
-- [ ] Private instructions appear only to a currently authorized published host/joined member, disappear after leave/removal/cancellation/readiness or gate revocation, and are never cached or passed to public map clients.
-- [ ] Desktop and phone rendered map/list/detail/action flows, keyboard/focus, no-map fallback, and loading/empty/error/denied states are inspected. Relevant workspace, database and actual HTTP/action privacy tests pass; a fresh security/design review is clear.
+- [x] Default-disabled database gate and nonlocal/anonymous/unready/cross-campus denials hold on direct route, data read and action paths. No service-role use or client-writable gate.
+- [x] A created local saved Hangout appears as a saved approximate map pin and matching list item for a ready same-campus caller, with bounded viewport query and truthful loading, empty, error and truncation behavior. Mock examples cannot be mistaken for saved records.
+- [x] Public preview/detail reveal only allowed fields. Current-ready participant IDs follow TASK-005 RLS; no peer profile/photo or private instructions leak through list/preview/errors/embeds.
+- [x] Join/leave/rejoin and host/closed/removed/cancelled cases reflect the actual RPC outcomes and persisted state. Concurrent or uncertain results do not claim success without verification.
+- [x] Private instructions appear only to a currently authorized published host/joined member, disappear after leave/removal/cancellation/readiness or gate revocation, and are never cached or passed to public map clients.
+- [x] Desktop and phone rendered map/list/detail/action flows, keyboard/focus, no-map fallback, and loading/empty/error/denied states are inspected. Relevant workspace, database and actual HTTP/action privacy tests pass; a fresh security/design review is clear.
 - [ ] Scoped task branch/handoff are reviewed, pushed and remote-verified; accepted work and shared state records are integrated to canonical main and its remote SHA verified.
 
 ## Verification

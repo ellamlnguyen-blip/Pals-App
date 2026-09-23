@@ -2,6 +2,12 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-22 — TASK-008 local saved Hangout discovery and joining
+
+- Added a separate saved campus map/list/detail, with bounded viewport reads, time/open filters, approximate public pins and accessible no-map fallback. Mock examples remain clearly labeled and separate.
+- Added caller-bound join/leave, current-ready roster IDs and participant-only private instructions, with server rechecks and conservative recovery for uncertain results. No peer profiles/photos, chat or restricted modes.
+- Verified local database and real built-server action/privacy flows, rendered desktop/phone fallback and live Mapbox saved pins. No hosted migration, deployment or gate enablement; launch safety dependencies remain open.
+
 ## 2026-09-22 — TASK-007 local Hangout create/edit
 
 - Replaced the unsaved Create entry with a ready-only local form that saves through the TASK-005 backend, then confirms and reopens the owner's Hangout for editing.

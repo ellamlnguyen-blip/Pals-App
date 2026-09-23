@@ -1,7 +1,7 @@
 # Backlog
 ## Product Build
 - TASK-007 create/edit Hangouts — complete locally; see `DONE.md`, its contract and handoffs. Hosted enablement remains gated on separate safety/deployment work.
-- TASK-008 map discovery/detail/joining — active local-only contract in `tasks/active/TASK-008-map-discovery-detail-joining.md`; hosted safety gates remain open
+- TASK-008 map discovery/detail/joining — complete locally; see `DONE.md`, its contract and handoffs. Hosted safety gates remain open
 - TASK-009 calendar
 - TASK-010 host/co-host management
 - TASK-011 people discovery

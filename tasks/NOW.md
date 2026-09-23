@@ -9,15 +9,15 @@ Every active task must have its contract/status recorded on `main` before dispat
 
 Do these in order unless dependencies allow safe parallel work.
 
-Completed: TASK-001, TASK-002, TASK-004, TASK-005, TASK-006 and TASK-007. See `DONE.md` and their handoffs.
+Completed: TASK-001, TASK-002, TASK-004, TASK-005, TASK-006, TASK-007 and TASK-008. See `DONE.md` and their handoffs.
 
-TASK-008 contract: `active/TASK-008-map-discovery-detail-joining.md`. Local-only map discovery/detail/joining is next, from reviewed TASK-005/007 on canonical main. The contract is the bounded implementation authority; ADR-0010's default-disabled gate and hosted safety prerequisites remain in force. Planning branch: `agent/TASK-008-planning`; implementation branch: `agent/TASK-008-map-discovery`. No implementation or hosted enablement is claimed by this entry.
+TASK-008 local-only saved map discovery/detail/joining is reviewed and integrated from `agent/TASK-008-map-discovery` tip `0ef4bbb67f5fab908092eba47243ebea3b394931`. See its contract, `agents/handoffs/TASK-008.md` and `TASK-008-REVIEW.md`. The default-disabled gate, no-hosted-use boundary and launch safety prerequisites remain in force. No later task is auto-dispatched.
 
 1. `active/TASK-003-auth-onboarding.md` — implemented and locally verified; independent security review clear, anonymous design review plus authenticated implementer visual check passed. Accepted ADR-0009 is implemented. Deployed HTTPS callback and hosted email delivery remain pending deployment/SMTP. Handoff: `agents/handoffs/TASK-003.md`.
-2. `active/TASK-004-map-shell.md` — complete on `agent/TASK-004-map`, including final real Mapbox basemap and authenticated desktop/phone interaction checks. Token is configured only in ignored local environment; no production deployment. Handoff: `agents/handoffs/TASK-004.md`. No live Hangout backend is connected.
+2. `active/TASK-004-map-shell.md` — complete on `agent/TASK-004-map`, including final real Mapbox basemap and authenticated desktop/phone interaction checks. Token is configured only in ignored local environment; no production deployment. Handoff: `agents/handoffs/TASK-004.md`. Its mock examples remain separate from TASK-008 saved discovery.
 
 
-3. `active/TASK-007-create-edit-hangouts.md` — complete local-only create/edit flow under explicitly accepted ADR-0010 and reviewed TASK-005 backend. Reviewed task tip `b6f338e314f1eca489cea0592acd5abc069a8884` is integrated; see `agents/handoffs/TASK-007.md` and `TASK-007-REVIEW.md`. No hosted changes. TASK-008 discovery, TASK-010 lifecycle and TASK-013 chat remain separately bounded work; do not auto-dispatch them.
+3. `active/TASK-007-create-edit-hangouts.md` — complete local-only create/edit flow under explicitly accepted ADR-0010 and reviewed TASK-005 backend. Reviewed task tip `b6f338e314f1eca489cea0592acd5abc069a8884` is integrated; see `agents/handoffs/TASK-007.md` and `TASK-007-REVIEW.md`. No hosted changes. TASK-010 lifecycle and TASK-013 chat remain separately bounded work; do not auto-dispatch them.
 
 Parallelization after TASK-001:
 - Supabase foundation
