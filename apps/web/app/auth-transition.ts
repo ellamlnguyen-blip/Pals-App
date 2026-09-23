@@ -1,7 +1,8 @@
 "use client";
 
 export type AuthTransitionMessage =
-  { phase: "begin" | "settled"; token: string } | { phase: "revalidate" };
+  | { phase: "begin" | "settled" | "cancelled"; token: string }
+  | { phase: "revalidate" };
 
 export const AUTH_TRANSITION_CHANNEL = "pals-auth-transition";
 export const AUTH_TRANSITION_EVENT = "pals-auth-transition-local";
@@ -37,7 +38,7 @@ export function settleAuthTransition(force = false) {
     pending.intent;
   if (!force && !completed) return false;
   sessionStorage.removeItem(pendingKey);
-  publish({ phase: "settled", token: pending.token });
+  publish({ phase: force ? "cancelled" : "settled", token: pending.token });
   return true;
 }
 
@@ -48,13 +49,27 @@ export function announceCompletedAuthCallback() {
 export function authTransitionDecision(
   pending: Set<string>,
   message: AuthTransitionMessage,
-): "mask" | "wait" | "reauthorize" {
+): "mask" | "wait" | "reauthorize" | "verify" {
   if (message.phase === "begin") {
     pending.add(message.token);
     return "mask";
   }
-  if (message.phase === "settled") {
-    if (!pending.delete(message.token)) return "wait";
+  if (message.phase === "settled" || message.phase === "cancelled")
+    return pending.has(message.token) ? "verify" : "wait";
+  return pending.size ? "wait" : "reauthorize";
+}
+
+export function authVerificationDecision(
+  pending: Set<string>,
+  message: Extract<AuthTransitionMessage, { token: string }>,
+  status: number,
+): "wait" | "deny" | "reauthorize" {
+  if (!pending.has(message.token)) return "wait";
+  if (status === 403) {
+    pending.delete(message.token);
+    return "deny";
   }
+  if (status !== 200 || message.phase !== "cancelled") return "wait";
+  pending.delete(message.token);
   return pending.size ? "wait" : "reauthorize";
 }

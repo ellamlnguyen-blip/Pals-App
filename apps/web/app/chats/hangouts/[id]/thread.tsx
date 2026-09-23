@@ -2,16 +2,15 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import type { ChatMessage } from "../../../../lib/chat";
+import { fetchVisiblePage, nextPageCursors } from "./page-data";
 import {
   AUTH_TRANSITION_CHANNEL,
   AUTH_TRANSITION_EVENT,
   authTransitionDecision,
+  authVerificationDecision,
   type AuthTransitionMessage,
 } from "../../../auth-transition";
 
-type ReadResult =
-  | { kind: "ok"; messages: ChatMessage[] }
-  | { kind: "denied" | "error" | "invalid" };
 type SendResult =
   | { kind: "ok"; message: ChatMessage }
   | { kind: "denied" | "error" | "invalid" | "conflict" };
@@ -27,14 +26,19 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
   const [sending, setSending] = useState(false);
   const [status, setStatus] = useState("");
   const [more, setMore] = useState(false);
+  const [pageIndex, setPageIndex] = useState(0);
   const generation = useRef(0);
   const busy = useRef(false);
   const latest = useRef(0);
+  const pageAfter = useRef<number | null>(null);
+  const pageCursors = useRef<(number | null)[]>([null]);
   const visible = useRef(false);
   const draftRef = useRef("");
   const pendingRef = useRef<Pending | null>(null);
   const composerRef = useRef<HTMLTextAreaElement>(null);
   const authPending = useRef(new Set<string>());
+  const authSettled = useRef(new Map<string, "settled" | "cancelled">());
+  const terminalDenial = useRef(false);
   const api = `/api/chat/${id}`;
 
   const mask = useCallback((reason: "hidden" | "auth" = "hidden") => {
@@ -42,6 +46,9 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
     visible.current = false;
     busy.current = false;
     latest.current = 0;
+    pageAfter.current = null;
+    pageCursors.current = [null];
+    setPageIndex(0);
     setMessages([]);
     setMore(false);
     setState("loading");
@@ -59,10 +66,16 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
     );
   }, []);
   const deny = useCallback(() => {
+    terminalDenial.current = true;
+    authPending.current.clear();
+    authSettled.current.clear();
     generation.current++;
     visible.current = false;
     busy.current = false;
     latest.current = 0;
+    pageAfter.current = null;
+    pageCursors.current = [null];
+    setPageIndex(0);
     setMessages([]);
     setMore(false);
     setDraft("");
@@ -75,28 +88,35 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
   }, []);
   const read = useCallback(
     async (after: number | null, reveal = false) => {
-      if (document.hidden || busy.current || authPending.current.size)
+      if (
+        terminalDenial.current ||
+        document.hidden ||
+        busy.current ||
+        authPending.current.size
+      )
         return false;
       busy.current = true;
       const ticket = generation.current;
       try {
-        const response = await fetch(
-          `${api}${after ? `?after=${after}` : ""}`,
-          {
-            cache: "no-store",
-            credentials: "same-origin",
-            headers: { "x-pals-chat-actor": userId },
-          },
+        const { status: responseStatus, data } = await fetchVisiblePage(
+          api,
+          userId,
+          after,
         );
-        const data = (await response.json()) as ReadResult;
         if (ticket !== generation.current || document.hidden) return false;
-        if (data.kind === "denied" || response.status === 403) {
+        if (data.kind === "denied" || responseStatus === 403) {
           deny();
           return false;
         }
         if (data.kind !== "ok") {
-          if (reveal) setState("error");
+          mask();
+          setState("error");
           setStatus("Could not check chat. Try again.");
+          return false;
+        }
+        if (reveal && after !== null && data.messages.length === 0) {
+          setMore(false);
+          setStatus("You're caught up.");
           return false;
         }
         if (reveal) {
@@ -109,25 +129,15 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
           setState("ready");
           setStatus(data.messages.length ? "Chat ready." : "No messages yet.");
         } else {
+          setMessages(data.messages);
           setMore(data.messages.length === 50);
-          if (data.messages.length) {
-            setMessages((current) => {
-              const known = new Set(current.map((item) => item.message_id));
-              return [
-                ...current,
-                ...data.messages.filter((item) => !known.has(item.message_id)),
-              ].sort((a, b) => a.sequence - b.sequence);
-            });
-            latest.current = Math.max(
-              latest.current,
-              data.messages.at(-1)?.sequence ?? 0,
-            );
-          }
+          latest.current = data.messages.at(-1)?.sequence ?? after ?? 0;
         }
         return true;
       } catch {
         if (ticket === generation.current && !document.hidden) {
-          if (reveal) setState("error");
+          mask();
+          setState("error");
           setStatus("Connection interrupted. Try again.");
         }
         return false;
@@ -135,85 +145,85 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
         if (ticket === generation.current) busy.current = false;
       }
     },
-    [api, deny, userId],
+    [api, deny, mask, userId],
   );
 
-  // Reproject displayed history on each visible poll. A forward-only tail read
-  // would leave an old peer account ID on screen after that author leaves.
-  const refreshProjection = useCallback(async () => {
-    if (
-      document.hidden ||
-      busy.current ||
-      !visible.current ||
-      authPending.current.size
-    )
-      return false;
-    busy.current = true;
-    const ticket = generation.current;
-    const through = latest.current;
-    const refreshed: ChatMessage[] = [];
-    let cursor: number | null = null;
-    let lastCount = 0;
-    let checkedTail = false;
-    try {
-      do {
-        const response = await fetch(
-          `${api}${cursor ? `?after=${cursor}` : ""}`,
-          {
-            cache: "no-store",
-            credentials: "same-origin",
-            headers: { "x-pals-chat-actor": userId },
-          },
-        );
-        const result = (await response.json()) as ReadResult;
-        if (ticket !== generation.current || document.hidden) return false;
-        if (result.kind === "denied" || response.status === 403) {
-          deny();
-          return false;
-        }
-        if (result.kind !== "ok") {
-          setStatus("Could not check chat. Try again.");
-          return false;
-        }
-        refreshed.push(...result.messages);
-        lastCount = result.messages.length;
-        cursor = result.messages.at(-1)?.sequence ?? cursor;
-        if (lastCount < 50 || !cursor) break;
-        if (cursor >= through) {
-          if (checkedTail) break;
-          checkedTail = true;
-        }
-      } while (true);
-      if (ticket !== generation.current || document.hidden) return false;
-      setMessages(refreshed);
-      latest.current = cursor ?? 0;
-      setMore(lastCount === 50);
-      return true;
-    } catch {
-      if (ticket === generation.current && !document.hidden)
-        setStatus("Connection interrupted. Try again.");
-      return false;
-    } finally {
-      if (ticket === generation.current) busy.current = false;
-    }
-  }, [api, deny, userId]);
+  // The displayed page has one forward cursor, so each poll reprojects at most
+  // 50 visible authors without silently walking the full conversation.
+  const refreshProjection = useCallback(() => {
+    if (terminalDenial.current || !visible.current || authPending.current.size)
+      return;
+    void read(pageAfter.current);
+  }, [read]);
 
   useEffect(() => {
+    const verifyTransition = async (
+      message: Extract<AuthTransitionMessage, { token: string }>,
+    ) => {
+      if (
+        terminalDenial.current ||
+        document.hidden ||
+        !authPending.current.has(message.token)
+      )
+        return;
+      const ticket = generation.current;
+      try {
+        const response = await fetch(api, {
+          cache: "no-store",
+          credentials: "same-origin",
+          headers: { "x-pals-chat-actor": userId },
+        });
+        if (ticket !== generation.current || document.hidden) return;
+        // This response is an identity/authorization probe. Never copy its
+        // message body into state while a transition is pending.
+        const decision = authVerificationDecision(
+          authPending.current,
+          message,
+          response.status,
+        );
+        if (!authPending.current.has(message.token))
+          authSettled.current.delete(message.token);
+        if (decision === "deny") deny();
+        else if (decision === "reauthorize") {
+          reauthorize();
+        }
+      } catch {
+        // Network uncertainty keeps private content masked.
+      }
+    };
+    const verifySettled = () => {
+      for (const [token, phase] of authSettled.current) {
+        void verifyTransition({ phase, token });
+      }
+    };
     const resume = () => {
       if (document.hidden) return;
+      if (terminalDenial.current) {
+        deny();
+        return;
+      }
       mask();
-      if (!authPending.current.size) void read(null, true);
+      if (authPending.current.size) verifySettled();
+      else void read(null, true);
     };
     const hide = () => mask();
     const reauthorize = () => {
+      if (terminalDenial.current) return;
       mask("auth");
       if (!document.hidden && !authPending.current.size) void read(null, true);
     };
     const transition = (message: AuthTransitionMessage) => {
+      if (terminalDenial.current) return;
       const decision = authTransitionDecision(authPending.current, message);
       if (decision === "mask") {
         mask("auth");
         setStatus("Account change in progress. Chat is hidden.");
+      } else if (
+        decision === "verify" &&
+        (message.phase === "settled" || message.phase === "cancelled")
+      ) {
+        authSettled.current.set(message.token, message.phase);
+        void verifyTransition(message);
       } else if (decision === "reauthorize") reauthorize();
     };
     const onLocalTransition = (event: Event) =>
@@ -236,7 +246,9 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
     channel.onmessage = (event: MessageEvent<AuthTransitionMessage>) =>
       transition(event.data);
     const interval = window.setInterval(() => {
-      if (visible.current && !document.hidden) void refreshProjection();
+      if (terminalDenial.current || document.hidden) return;
+      if (authPending.current.size) verifySettled();
+      else if (visible.current) refreshProjection();
     }, 8000);
     return () => {
       mask("auth");
@@ -249,7 +261,30 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
       window.removeEventListener(AUTH_TRANSITION_EVENT, onLocalTransition);
       channel.close();
     };
-  }, [mask, read, refreshProjection]);
+  }, [api, deny, mask, read, refreshProjection, userId]);
+
+  async function showNewerPage() {
+    if (!more || sending || !latest.current) return;
+    const ticket = generation.current;
+    const nextAfter = latest.current;
+    if (!(await read(nextAfter, true)) || ticket !== generation.current) return;
+    pageCursors.current = nextPageCursors(
+      pageCursors.current,
+      pageIndex,
+      nextAfter,
+    );
+    pageAfter.current = nextAfter;
+    setPageIndex(pageIndex + 1);
+  }
+
+  async function showPreviousPage() {
+    if (pageIndex === 0 || sending) return;
+    const ticket = generation.current;
+    const previous = pageCursors.current[pageIndex - 1];
+    if (!(await read(previous, true)) || ticket !== generation.current) return;
+    pageAfter.current = previous;
+    setPageIndex(pageIndex - 1);
+  }
 
   async function send() {
     if (
@@ -271,7 +306,7 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
     setSending(true);
     setStatus(retry ? "Checking before retry…" : "Checking before send…");
     const ticket = generation.current;
-    const authorized = await read(latest.current || null);
+    const authorized = await read(pageAfter.current);
     if (!authorized || ticket !== generation.current || document.hidden) {
       setSending(false);
       return;
@@ -301,9 +336,9 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
           draftRef.current = "";
           setDraft("");
         }
-        setStatus("Message sent.");
         sent = true;
-        await read(latest.current || null);
+        await read(pageAfter.current);
+        setStatus("Message sent.");
       } else if (result.kind === "conflict")
         setStatus(
           "This retry no longer matches the original message. Reload chat before sending again.",
@@ -382,14 +417,27 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
               ))}
             </ol>
           )}
-          {more && (
-            <button
-              className="quiet-button"
-              disabled={sending}
-              onClick={() => void read(latest.current || null)}
-            >
-              Load newer messages
-            </button>
+          {(pageIndex > 0 || more) && (
+            <div className="chat-page-actions">
+              {pageIndex > 0 && (
+                <button
+                  className="quiet-button"
+                  disabled={sending}
+                  onClick={() => void showPreviousPage()}
+                >
+                  Previous messages
+                </button>
+              )}
+              {more && (
+                <button
+                  className="quiet-button"
+                  disabled={sending}
+                  onClick={() => void showNewerPage()}
+                >
+                  Load newer messages
+                </button>
+              )}
+            </div>
           )}
           <form
             className="chat-composer"

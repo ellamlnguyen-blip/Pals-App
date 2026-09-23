@@ -90,6 +90,11 @@
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
+.chat-page-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
 .chat-composer {
   display: grid;
   gap: 0.5rem;

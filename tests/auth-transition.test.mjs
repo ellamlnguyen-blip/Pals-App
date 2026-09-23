@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import {
   authTransitionDecision,
+  authVerificationDecision,
   beginAuthTransition,
   settleAuthTransition,
   announceCompletedAuthCallback,
@@ -34,7 +35,7 @@ function browser(pathname, search = "") {
   return events;
 }
 
-test("signout stays masked until its destination and matching completion", () => {
+test("signout marker only starts a probe; the old account stays masked", () => {
   const events = browser("/hangouts");
   beginAuthTransition("signout");
   const pending = new Set();
@@ -54,8 +55,24 @@ test("signout stays masked until its destination and matching completion", () =>
   assert.equal(settleAuthTransition(), false, "wrong intent cannot settle");
   globalThis.location.search = "?pals_auth_done=signout";
   assert.equal(settleAuthTransition(), true);
-  assert.equal(authTransitionDecision(pending, events[1]), "reauthorize");
-  assert.equal(pending.size, 0);
+  assert.equal(authTransitionDecision(pending, events[1]), "verify");
+  assert.equal(
+    authVerificationDecision(pending, events[1], 200),
+    "wait",
+    "a spoofed or early marker cannot reveal old-account text",
+  );
+  assert.equal(pending.size, 1);
+  assert.equal(
+    authVerificationDecision(pending, events[1], 503),
+    "wait",
+    "an uncertain probe remains masked",
+  );
+  assert.equal(
+    authVerificationDecision(pending, events[1], 403),
+    "deny",
+    "server rejection denies the stale thread",
+  );
+  assert.equal(pending.size, 0, "a terminal denial stops transition probes");
 });
 
 test("sign-in failure can settle on the same page; callback revalidates other tabs", () => {
@@ -69,7 +86,12 @@ test("sign-in failure can settle on the same page; callback revalidates other ta
     true,
     "failed action completed without navigation",
   );
-  assert.equal(authTransitionDecision(pending, events[1]), "reauthorize");
+  assert.equal(authTransitionDecision(pending, events[1]), "verify");
+  assert.equal(
+    authVerificationDecision(pending, events[1], 200),
+    "reauthorize",
+    "a failed sign-in may restore the old account only after a fresh server read",
+  );
   announceCompletedAuthCallback();
   assert.equal(authTransitionDecision(pending, events[2]), "reauthorize");
 });
