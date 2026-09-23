@@ -101,8 +101,8 @@ export async function blockPerson(id: string): Promise<PeopleActionResult> {
       return {
         state: "hidden",
         message: writeError
-          ? "The block response was uncertain, but this ID is on your outbound block list. The current friendship status must be rechecked when available."
-          : "This ID is on your outbound block list. Any current request or friendship was ended; existing Hangout participation and private instructions are unchanged.",
+          ? "The block response was uncertain, but this ID is on your outbound block list. Any current direct request or chat ended; friendship status should be rechecked when available. Existing Hangout access and chat are unchanged."
+          : "This ID is on your outbound block list. Any current friend request, friendship, direct request or chat ended. Existing Hangout access, chat and private instructions are unchanged.",
       };
     if (ids.length < 24 || ids[23].account_id > id) break;
     after = ids[23].account_id;

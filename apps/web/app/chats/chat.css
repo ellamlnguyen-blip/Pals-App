@@ -153,3 +153,44 @@
     animation: none;
   }
 }
+.dm-inbox {
+  margin: 2rem 0 2.5rem;
+  display: grid;
+  gap: 2rem;
+}
+.dm-inbox section {
+  border-top: 1px solid var(--pals-line);
+  padding-top: 1.25rem;
+}
+.dm-inbox section > p {
+  color: var(--pals-muted);
+}
+.dm-inbox .chat-list li {
+  align-items: start;
+}
+.dm-id,
+.dm-peer code {
+  display: block;
+  overflow-wrap: anywhere;
+  user-select: all;
+  font-size: 0.78rem;
+  color: var(--pals-muted);
+  margin-top: 0.3rem;
+}
+.dm-preview {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  margin: 0.65rem 0 0;
+}
+.dm-inbox small {
+  display: block;
+  color: var(--pals-muted);
+}
+.dm-management {
+  border-top: 1px solid var(--pals-line);
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+}
+.dm-peer {
+  overflow-wrap: anywhere;
+}

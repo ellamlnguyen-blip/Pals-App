@@ -27,7 +27,7 @@ export default async function PersonPage({
   }>;
 }) {
   requireLocalPeople();
-  const { client } = await requireAccess("ready");
+  const { client, user } = await requireAccess("ready");
   const { id } = await params;
   const query = await searchParams;
   const baseBack = safeReturn(query.from);
@@ -59,7 +59,12 @@ export default async function PersonPage({
             <Link href="/people">Return to People</Link>
           </section>
         ) : (
-          <PersonView detail={detail} back={back} friendship={friendship!} />
+          <PersonView
+            detail={detail}
+            back={back}
+            friendship={friendship!}
+            actor={user!.id}
+          />
         )}
       </div>
     </Frame>

@@ -1,0 +1,9 @@
+# TASK-014B interaction and visual plan
+
+Reading this as a trust-first student coordination flow in the existing Pals visual language: bright canvas, pale campus blue, friendly Nunito, rounded controls and a narrow reading column. The current live reference could not be reached on 2026-09-23 through web or in-app browser; the direct reference observations in DESIGN_DIRECTION and TASK-013B's plan, plus current tokens/components, guide this stage.
+
+- A currently visible People detail gets one explicit request composer with consent copy. The entered first message is offered once; an uncertain outcome keeps the exact body and key for a deliberate retry after fresh eligibility check.
+- Chats separates Requests, Direct chats and Hangout chats with headings and spacing, no counters or preview for accepted/outgoing rows. Incoming request text is shown only when the authorized inbox reader provides it. Unknown peers have a neutral label and full ID.
+- A direct thread starts masked and server-rechecks the original account before revealing status and current message page. Incoming pending offers accept, atomic reply and ignore. Outgoing pending shows waiting and withdraw. Accepted offers bounded message pages, send, close and a local People block. Paused access shows only ID/state and allowed management.
+- Message bodies remain literal with line breaks, You/Peer and server time. No profile image, read receipt, unread count or live claim. A single visible page is polled; paging is explicit and never walks history automatically.
+- Desktop and tablet use the established centered column. At 390px and 320px, controls stack and long IDs/body text wrap. Native dialog and button focus are visible, status changes use live text, and reduced-motion styling removes transitions. Tab hide, pagehide, auth changes and account switch immediately mask private text until fresh authorization.
