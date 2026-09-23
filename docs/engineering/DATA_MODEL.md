@@ -41,6 +41,10 @@ Persisted inbox item with type, target, read state.
 ## Report / Moderation Action
 Report targets user/hangout (and later messages if needed). Moderation actions are auditable.
 
+## TASK-016B disposable-local reports
+
+`private.safety_reports` holds one allegation per accepted submission: opaque receipt UUID, server submission time, reporter UUID, resolved user or Hangout UUID, normalized category, optional trimmed narrative, and minimal provenance kind/reference UUID. A retained-host route records the caller-owned Hangout ID as provenance and the immutable host as a user target. The separate `private.safety_report_requests` ledger binds `(reporter_id, request_id)` to an original-input fingerprint and receipt. Both private tables have RLS and no client or platform-role table grants. Neither target nor source details are copied into a receipt. Production retention, deletion, review, appeals and moderation actions remain outside this local schema.
+
 ## Organization
 Future entity only; not MVP.
 
