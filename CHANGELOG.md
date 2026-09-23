@@ -2,6 +2,10 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-23 — TASK-012 local friendship completion
+
+- Integrated independently reviewed backend and UI on remote-verified main. Participant-only relationship management and fresh People text authorization are available for disposable local development behind default-disabled gates. Gates and fixtures were cleaned; hosted and restricted-Hangout work remain open.
+
 ## 2026-09-23 — TASK-012 friendship planning
 
 - Drafted a bounded local friendship contract and Proposed ADR-0014 for mutual requests, private relationship reads, repeat-request suppression and People-block interaction.
