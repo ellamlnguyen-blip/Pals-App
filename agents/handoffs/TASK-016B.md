@@ -25,4 +25,4 @@ After the final integration suites, private reports, retry rows, peer provenance
 
 ## Branch publication
 
-Implementation commit and task-branch remote SHA: pending branch push. The coordinator must independently verify the exact final task tip and record canonical integration SHA; this handoff cannot contain its own final commit hash without changing that hash.
+Implementation commit `8c3a2b0d5789e720cb2a74d983aba1030e0ef006` was pushed to `origin/agent/TASK-016B-reporting-backend`; `git ls-remote` independently returned that exact SHA. This receipt update will create a later handoff-only task tip, which the agent reports directly to the coordinator and the independent reviewer. The coordinator must verify that final tip and later record canonical integration SHA; this handoff cannot contain its own final commit hash without changing that hash.
