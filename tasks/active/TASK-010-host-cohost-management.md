@@ -1,6 +1,6 @@
 # TASK-010 — Local host/co-host management
 
-Status: Planning complete; blocked on explicit ADR-0012 policy acceptance; implementation not dispatched
+Status: ADR-0012 accepted 2026-09-23; narrower stage contracts and implementation not dispatched
 Date: 2026-09-22
 Planning branch: `agent/TASK-010-planning`
 Starting verified clean main/origin: `49d6e780aebf5f23f384efe24d0a8bd55232888a`
@@ -10,8 +10,8 @@ Let a live-ready local host manage joining, cancellation, participants and deleg
 
 ## Prerequisites and decision gates
 - TASK-005/007/008/009 are reviewed and integrated. Calendar reviewed tip `777d4b875bedd26ea925a4982433809d3b048cc2` integrated at `0c2af8e3401dd6acce6d87249886f7e31b2e7175`; final starting main above was independently verified with `git ls-remote`, and canonical main/worktree were clean before branching.
-- Accepted ADR-0010 remains authoritative. Proposed ADR-0012 must be explicitly accepted before any co-host implementation or local migration. Publication is not acceptance. No acceptance is inferred from “next task.”
-- Coordinator publishes reviewed contract, proposed ADR and status to canonical main before dispatch. Record acceptance on main before a fresh task-specific backend agent starts from the latest origin/main.
+- Accepted ADR-0010 remains authoritative. The user explicitly accepted ADR-0012 unchanged on 2026-09-23 after the reviewed proposal was published. Acceptance establishes the local co-host policy but does not itself change existing permissions.
+- Coordinator publishes a narrower reviewed TASK-010A contract to canonical main before a fresh task-specific backend agent starts from the latest origin/main. TASK-010B follows reviewed A integration and its own published contract.
 - Preserve default-disabled database gate; APP_ENV=local and validated loopback Supabase target on saved routes/actions; live ready campus access; denied direct DML; separate private instructions and mock/saved Hangouts.
 - Hosted block/private-access precedence, reporting/moderation, TASK-003 deployed HTTPS callback/real UNC email and deployment/launch checks remain independent gates. No hosted changes or live students.
 
@@ -24,8 +24,8 @@ Coordinator writes and publishes each stage's narrower dispatch contract before 
 1. **TASK-010A backend**, planned branch `agent/TASK-010A-cohost-backend`: additive committed local migration and necessary shared types/tests only. Implement accepted role matrix, joined-role invariants, current-ready role projection, caller-bound management operations, revision/lock/revocation guarantees. Preserve host primitives and all existing API consumers, updating scoped regression expectations where the accepted policy changes. No UI or hosted operation. Fresh independent security review and reviewed main integration are prerequisites for stage B.
 2. **TASK-010B management UI**, planned branch `agent/TASK-010B-host-management`: consume reviewed APIs in saved detail/management and existing edit flows. Host open/close/cancel/removal/promote/demote; accepted co-host edit/joining/removal/step-down/leave. Clear permission/role labels, destructive confirmations, stale/uncertain recovery and no private-content leakage. Preserve host-only meaning of Calendar Hosting; co-hosts remain in Joined. Add only a bounded manageable-Hangouts entry if required to reopen co-host edits, without relabeling ownership. No new permissions or migration. Fresh security/design review and rendered coordinator inspection before integration.
 
-## Proposed scope (not authorized until acceptance)
-- Implement exactly ADR-0012's proposed matrix, assignment/readiness restoration, role visibility and revocation rules if accepted unchanged.
+## Accepted local scope (implementation still requires stage contracts)
+- Implement exactly ADR-0012's accepted matrix, assignment/readiness restoration, role visibility and revocation rules in separately reviewed stages.
 - Current-ready account IDs and role labels only; no peer profile/photo expansion. Host/co-host controls act on authorized current roster entries, with database checks against forged targets and bounded reads/truncation disclosure. The host also gets a separate bounded current-co-host assignment list including nonready assigned IDs, for demotion only, as proposed in ADR-0012; it must offer pagination or another bounded way to reach every assignment. No profiles or historical assignments. Preserve the host's accepted backend historical-state lookup without building a historical roster UI.
 - Explain: demotion/step-down removes management powers but does not remove a joined participant or revoke their private instructions. Removing someone is terminal for self-rejoin, cancellation is terminal, and already-delivered instructions cannot be recalled.
 - Uncached caller-session pages/actions reauthorize actual role and persisted outcome. Public map/Calendar/action payloads exclude private instructions. No privileged credentials, optimistic grants or client-written feature gate.
@@ -51,5 +51,6 @@ Host, current/former co-host, ordinary/left/removed participant, nonparticipant,
 ## Ownership and handoff
 Coordinator owns shared queues/CURRENT_STATE/CHANGELOG, policy acceptance records, stage contracts, review and integration. Agents own only assigned stage files and stage handoffs using agents/HANDOFF_TEMPLATE.md. Record verified remote branch/main SHAs and exact tests/limitations. No code dispatch or migration exists at this planning milestone. Do not auto-dispatch later product tasks.
 
-## Planning publication
-Reviewed contract/proposal published and independently remote-verified on planning branch and canonical main at `304fc81bc11b38f351341c6bdd285d55eb37bad2`. ADR-0012 remains Proposed, with no acceptance evidence. Implementation and stage dispatch remain blocked on that decision.
+## Planning publication and policy acceptance
+Reviewed contract/proposal published and independently remote-verified on planning branch and canonical main at `304fc81bc11b38f351341c6bdd285d55eb37bad2`. At that planning milestone, ADR-0012 was Proposed and implementation was blocked on the user's decision.
+On 2026-09-23, the user explicitly accepted ADR-0012 unchanged after the co-host authority and alternatives were summarized. The policy gate is cleared; no stage contract, migration, code implementation, gate enablement or hosted operation has yet been dispatched by this acceptance record.

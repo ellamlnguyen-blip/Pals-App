@@ -2,6 +2,10 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-23 — TASK-010 co-host policy accepted
+
+- Recorded explicit acceptance of ADR-0012's local host/co-host authority, assignment, revocation and privacy rules after reviewed planning publication. Backend/UI implementation still requires separately reviewed contracts; no schema, app, hosted or gate change was made.
+
 ## 2026-09-23 — TASK-015 local Notifications inbox and preferences
 
 - Added a local-only private Notifications tab with bounded pages, read state, four optional-category preferences, neutral revoked-source rows and explicit destination reauthorization. The earlier A/B stages supply authoritative social, Hangout and chat items.

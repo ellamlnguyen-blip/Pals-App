@@ -3,7 +3,7 @@
 - TASK-007 create/edit Hangouts — complete locally; see `DONE.md`, its contract and handoffs. Hosted enablement remains gated on separate safety/deployment work.
 - TASK-008 map discovery/detail/joining — complete locally; see `DONE.md`, its contract and handoffs. Hosted safety gates remain open
 - TASK-009 calendar — reviewed local-only implementation accepted; see `DONE.md`, contract and handoffs. Friend context remains dependent on accepted friendship access; hosted gates remain open.
-- TASK-010 host/co-host management — bounded contract prepared; blocked on explicit Proposed ADR-0012 acceptance. Backend then management UI stages require separate fresh agents/reviews; no implementation dispatched. See `active/TASK-010-host-cohost-management.md`.
+- TASK-010 host/co-host management — ADR-0012 explicitly accepted on 2026-09-23. Backend then management UI stages require separately reviewed/published contracts and fresh agents; no implementation dispatched. See `active/TASK-010-host-cohost-management.md`.
 - TASK-011 people discovery — bounded local opt-in text directory, privacy and People-only blocks complete under Accepted ADR-0013; see `DONE.md` and its handoffs. Peer photos, recommendations, attendance context and social actions remain deferred.
 - TASK-012 friendship — bounded local backend and People UI complete and independently reviewed on remote-verified main; see `DONE.md` and handoffs. Friend-aware ranking, friends-only Hangout authorization and global block precedence remain separate.
 - TASK-013 hangout chat — complete for bounded local scope under Accepted ADR-0015 on remote-verified main `f2404941aaf5cea5a830e9813950b33871b5e796`; see `DONE.md` and handoffs. Realtime/global block/hosted access remain separate.

@@ -1,6 +1,6 @@
 # ADR-0012 — Local Hangout host/co-host management
 
-Status: Proposed — explicit user acceptance required before implementation
+Status: Accepted — explicit user acceptance recorded 2026-09-23
 Date: 2026-09-22
 Task: TASK-010
 
@@ -51,4 +51,4 @@ Only after explicit acceptance may separately bounded TASK-010 backend and UI st
 - Auto-delete roles on any readiness loss: stronger persistence revocation but couples identity/profile transitions to Hangout roles. Proposed live checks suspend authority and allow host demotion without new identity lifecycle machinery.
 
 ## Acceptance evidence
-None. Proposed only. Record the user's explicit acceptance or requested revisions here before changing authority, schema or application behavior.
+On 2026-09-23, after being shown the specific host/co-host authority decision and alternatives, the user replied “accept.” The proposal above is accepted unchanged for bounded disposable-local TASK-010 work. This acceptance authorizes preparation of separately reviewed backend and UI stage contracts; it does not itself apply a migration, dispatch implementation, enable a gate, or authorize hosted use.

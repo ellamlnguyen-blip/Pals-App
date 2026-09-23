@@ -37,6 +37,8 @@ User explicitly requested the next task. `active/TASK-010-host-cohost-management
 
 Planning publication verified: `agent/TASK-010-planning` and `origin/main` both at `304fc81bc11b38f351341c6bdd285d55eb37bad2`. Independent planning review clear; awaiting user policy decision, no implementation dispatched.
 
+ADR-0012 acceptance: on 2026-09-23, after the reviewed host/co-host authority proposal and alternatives were summarized, the user explicitly replied “accept.” ADR-0012 is Accepted unchanged for disposable-local TASK-010. Publish and review the narrower TASK-010A contract on canonical main before fresh backend dispatch; TASK-010B waits for reviewed A integration and its own contract. No migration, code implementation, gate enablement or hosted operation follows from this acceptance record alone. TASK-016 proceeds independently in its separate task.
+
 ## TASK-011 People planning
 User requested moving to the next task in a new chat. `active/TASK-011-people-discovery.md` and Proposed `decisions/ADR-0013-local-people-discovery.md` define an opt-in, disposable-local, text-first directory with a bounded People-only block prerequisite. Planning branch `agent/TASK-011-planning` starts from clean canonical main/freshly fetched origin/main `b3011bc74adb46d01fd4b709520ecf5c3f8fa8a2`. Independent planning/security review found no blocking conflict; opt-out gate semantics and ID-only unblock limitations were clarified. Publication precedes explicit policy acceptance; no implementation or migration dispatched. TASK-010/ADR-0012 remain pending and independent. Photos, friendship/DM, attendance context and global block/private-location precedence remain deferred. See `agents/handoffs/TASK-011-CONTRACT.md`.
 
