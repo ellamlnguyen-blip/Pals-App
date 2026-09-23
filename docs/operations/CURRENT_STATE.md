@@ -47,6 +47,8 @@ Reviewed TASK-014A backend, handoff and security review are integrated on indepe
 
 TASK-014B's People/Chats UI contract passed fresh read-only security/design review after outgoing-pending waiting and existing People block-copy requirements were clarified. It remains unimplemented until the reviewed contract is published and remote-verified on canonical main, then dispatched to a fresh agent. Existing Hangout chat remains independent.
 
+TASK-014B contract and TASK-014A integration receipt were published and independently remote-verified on canonical main `9b76bcc19850f28b856a770f9539ad1608a7f670` before a fresh GPT-6 Sol medium UI agent began isolated People/Chats work. No DM UI is integrated yet; exact-tip security/design and rendered checks remain before main integration. No hosted or Realtime work.
+
 ## TASK-004 outcome
 Responsive map shell on `agent/TASK-004-map`: UNC viewport, pan/zoom, keyboard-accessible clustered mock pins, preview/list, local example filters, no-publish Create shell, and optional one-shot coarse location. Existing live Supabase access gate is preserved. No schema, hosted environment, production or deployment changes. Full repository checks (11 Node tests and both builds) and real local Auth/Storage/web gate regression pass. Implementer inspected desktop/tablet/phone UI, offline Mapbox interactions and final real provider basemap on authenticated desktop/phone routes; independent static review findings were fixed and re-reviewed. No console errors/warnings during live checks. Rendered dark mode, Lighthouse and independent rendered review remain unverified; these are recorded limitations rather than live-basemap blockers. See `agents/handoffs/TASK-004.md`.
 

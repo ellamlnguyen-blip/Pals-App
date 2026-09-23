@@ -1,6 +1,6 @@
 # TASK-014B — Local DM requests and direct-chat UI
 
-Status: Independently reviewed contract; canonical publication required before dispatch
+Status: Dispatched to fresh bounded UI agent; implementation/review pending
 Date: 2026-09-23
 Parent: TASK-014
 Decision: Accepted ADR-0016
@@ -30,3 +30,6 @@ Give a currently visible People peer one first-message request, a recipient-owne
 Run `pnpm check`, focused real local Auth/PostgREST/web action tests with validated loopback Supabase, and rendered desktop/tablet/390px/320px plus keyboard tests where available. Cover anonymous, ready sender/recipient, hidden/cross-campus/opted-out/blocked targets, gate-off while People detail remains visible, incoming first-message body and outgoing redaction, accept/reply/ignore/withdraw/close/block, paused body loss and restoration, terminal reader denial, exact-key lost-response retry, changed-body conflict, stale generation, direct URL, bounded inbox/message pagination, no-store and XSS-safe rendering. Verify direct-thread **and existing People-detail** block confirmation, success and uncertain copy accurately describe local DM teardown while Hangout chat remains unchanged. Verify cross-tab signout/account switch, hidden/pagehide/bfcache and in-flight response invalidation before content reveal; do not treat a URL marker as authorization. Preserve existing Hangout-chat flow. Document runtime/rendering limits precisely; do not claim unavailable checks passed. Restore all local gates false, remove fixtures and stop services.
 
 Commit only in-scope UI/actions/tests/interaction plan and `agents/handoffs/TASK-014B.md`, push and independently verify the task branch, then stop. Coordinator owns shared queue/state, fresh security/design review and canonical integration before TASK-014 completion. Do not start TASK-015 or hosted work from this stage.
+
+## Dispatch receipt
+This contract passed fresh independent GPT-6 Sol medium read-only security/design review after existing People block-copy and pending initiator waiting-state clarifications. It was published and independently verified on both planning branch and canonical main at `9b76bcc19850f28b856a770f9539ad1608a7f670`. A fresh GPT-6 Sol medium UI agent was dispatched from that exact baseline to an isolated worktree/branch. Standard is the app preference; dispatch tooling has no speed selector, so speed is not verified. Exact-tip rendered/security review and canonical integration remain required.
