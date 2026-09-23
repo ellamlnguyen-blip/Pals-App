@@ -55,7 +55,11 @@ export function HangoutsShell({
         <a href="/hangouts" aria-current="page">
           Hangouts
         </a>
-        {["Calendar", "People", "Chats", "Notifications"].map((name) => (
+        {createEnabled && <a href="/calendar">Calendar</a>}
+        {(createEnabled
+          ? ["People", "Chats", "Notifications"]
+          : ["Calendar", "People", "Chats", "Notifications"]
+        ).map((name) => (
           <button
             key={name}
             onClick={() => showShell(name)}

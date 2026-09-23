@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { readFileSync, existsSync } from "node:fs";
+import { calendarHttpChecks } from "./calendar-http-checks.mjs";
 
 // Real Next server actions over HTTP, with public session cookies only.
 export async function hangoutActionChecks(owner, peer, host, member, png, sql) {
@@ -284,6 +285,7 @@ export async function hangoutActionChecks(owner, peer, host, member, png, sql) {
     const limited = await actionArgs("searchSaved", [bounds, filters], peer.header());
     assert.equal(limited.result?.items.length, 100, "viewport result is capped at 100");
     assert.equal(limited.result?.truncated, true, "limit is disclosed");
+    await calendarHttpChecks(owner, peer, host, member, sql);
     const peerBefore = await fetch(`${origin}/hangouts/saved/${id}`, { headers: headers(peer.header()) });
     assert.equal(peerBefore.status, 200);
     assert.ok(!(await peerBefore.text()).includes("Meet by the broad path"), "nonmember detail is public only");
