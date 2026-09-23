@@ -2,6 +2,10 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-23 — TASK-014 DM policy acceptance
+
+- User explicitly accepted ADR-0016's disposable-local DM request, consent, privacy and narrow People-block policy. Prepared the separate backend contract; no implementation or hosted change follows from acceptance alone.
+
 ## 2026-09-23 — TASK-014 DM planning
 
 - Drafted a bounded disposable-local DM request/direct chat contract and Proposed ADR-0016. It specifies first-message consent, opt-in People eligibility, narrow DM-specific block behavior and privacy/revocation policy for review; no implementation or hosted change follows from the proposal.

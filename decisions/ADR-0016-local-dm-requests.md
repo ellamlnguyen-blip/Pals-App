@@ -1,6 +1,6 @@
 # ADR-0016 — Local DM request consent and direct-chat privacy
 
-Status: Proposed
+Status: Accepted — disposable-local TASK-014 stages only
 Date: 2026-09-23
 Task: TASK-014
 
@@ -37,3 +37,6 @@ Acceptance authorizes only the disposable-local stages in TASK-014 after narrowe
 
 ## Consequences
 This creates a consent-based local DM path with explicit privacy checks and private retained evidence. It adds a narrow DM consequence to People blocks while leaving accepted Hangout behavior unchanged. Acceptance changes no schema or access by itself. TASK-016 global blocking/reporting/moderation and hosted release remain open.
+
+## Acceptance evidence
+After the complete reviewed proposal and planning contract were published on canonical main, the coordinator asked, “Do you accept ADR-0016 as written for the bounded, disposable-local TASK-014 implementation?” The user replied “yes” on 2026-09-23. This accepts the local request consent, active/terminal generation, directional suppression, participant reader, narrow DM-specific People-block effect, revocation, retention and polling policy above. It authorizes only narrower TASK-014 stages after their contracts are reviewed and published. It does not accept ADR-0012, global Hangout/private-location or Hangout-chat block precedence, Realtime, reporting/moderation access or hosted operation.

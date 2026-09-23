@@ -19,19 +19,19 @@ Prepared a bounded disposable-local DM request/direct chat contract and a propos
 None implemented. No DM schema, reader, UI, Realtime channel, notification, hosted migration or enablement. Proposed ADR-0016 explicitly limits People-block extension to DM pair teardown/denial; it does not decide Hangout or Hangout-chat block precedence.
 
 ## Tests / Verification
-Planning document consistency, scoped diff and `git diff --check`. A fresh independent GPT-6 Sol medium read-only security/policy review identified two lifecycle ambiguities: terminal pair generations and hidden-peer ID access. ADR-0016 now defines one active unordered pair, private terminal generation records and suppression, no terminal client reader, and a hidden-target block exception only for a proven current active pair. The reviewer re-read the revision and found both issues resolved with no remaining planning blocker. Reviewed planning commit `c422ef95d2cb18e60e46eb871d03a9535d7bbb32` was pushed to the task branch and fast-forwarded to canonical main from independently verified base `4989195dbb6fc54641ea6f1417aaf6e19f19e989`. No runtime, UI, CI or policy acceptance claim.
+Planning document consistency, scoped diff and `git diff --check`. A fresh independent GPT-6 Sol medium read-only security/policy review identified two lifecycle ambiguities: terminal pair generations and hidden-peer ID access. ADR-0016 now defines one active unordered pair, private terminal generation records and suppression, no terminal client reader, and a hidden-target block exception only for a proven current active pair. The reviewer re-read the revision and found both issues resolved with no remaining planning blocker. Reviewed planning commit `c422ef95d2cb18e60e46eb871d03a9535d7bbb32` was pushed to the task branch and fast-forwarded to canonical main from independently verified base `4989195dbb6fc54641ea6f1417aaf6e19f19e989`. After explicit user acceptance, a fresh read-only security/planning reviewer checked TASK-014A; its three reader-gate/projection/race clarifications were incorporated and re-reviewed with no remaining contract blocker. No runtime, UI or CI claim.
 
 ## Decisions
-ADR-0016 is Proposed, not Accepted. Its consent, suppression, block and revocation choices require explicit user acceptance after publication.
+The user explicitly accepted the complete main-published ADR-0016 on 2026-09-23 by replying “yes” to the coordinator's specific acceptance question. The acceptance is local-only and changes no access itself. A narrower `TASK-014A-dm-backend.md` contract has been prepared for independent review/publication before dispatch.
 
 ## Known Limitations
 Production retention, global separation, moderation/report access, notification policy, Realtime delivery and hosted launch remain unaddressed by this planning task.
 
 ## Follow-up Tasks
-After acceptance, publish narrower TASK-014A contract, dispatch a fresh backend agent, independently review/integrate A, then publish/dispatch B and review/integrate it. TASK-015/016/017 retain their boundaries.
+Review/publish narrower TASK-014A contract, dispatch a fresh backend agent, independently review/integrate A, then publish/dispatch B and review/integrate it. TASK-015/016/017 retain their boundaries.
 
 ## Documentation Updated
 Task queue, current state, ADR and changelog.
 
 ## Ready for Next Task?
-No — reviewed planning records are published; explicit ADR-0016 acceptance is required before narrower implementation contracts. Final remote verification for both refs follows the status-receipt commit.
+Yes for the backend stage once its independent contract review/publication and remote verification complete. Both planning refs were remotely verified at `46b841f602c88737a3b7c42e3318aba536815996`; ADR-0016 is now explicitly accepted. No implementation has yet been dispatched.

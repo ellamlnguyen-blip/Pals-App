@@ -1,6 +1,6 @@
 # TASK-014 — Local DM requests and direct chat
 
-Status: Planning; policy decision pending
+Status: ADR-0016 accepted; backend stage contract pending review/publication
 Date: 2026-09-23
 Planning branch: `agent/TASK-014-planning`
 Starting canonical `origin/main`: `4989195dbb6fc54641ea6f1417aaf6e19f19e989` (fetched and verified before branching)
@@ -10,7 +10,7 @@ Prove a private, consent-based first-message request and subsequent one-to-one t
 
 ## Required context and dependencies
 - Read `AGENTS.md`, NOW/BACKLOG/CURRENT_STATE, MVP/PRINCIPLES, ARCHITECTURE/DATA_MODEL/AUTHORIZATION/SECURITY_AND_SAFETY/REALTIME_AND_MESSAGING/TESTING, relevant UX docs, Accepted ADR-0013/0014/0015 and their implementation/handoffs. Review current People, friendship and chat grants, RPCs, routes and tests before implementation.
-- Proposed ADR-0016 defines request consent, pair state, narrow DM block effect, readers, revocation and delivery. It needs explicit acceptance after independent review and publication on `main`. This planning record creates no migration, reader, route or enablement authority.
+- Accepted ADR-0016 defines request consent, pair state, narrow DM block effect, readers, revocation and delivery. The user explicitly accepted the reviewed, main-published proposal on 2026-09-23. Acceptance alone creates no migration, reader, route or enablement authority; narrower stage contracts must be reviewed and published before fresh implementation dispatch.
 - TASK-010 remains blocked on Proposed ADR-0012 and is independent. TASK-016 must still settle global Hangout/private-location blocking and reporting/moderation before hosted use.
 
 ## Planned stages after explicit ADR acceptance
@@ -21,7 +21,8 @@ Prove a private, consent-based first-message request and subsequent one-to-one t
 Realtime/push/notifications; attachments, edits/deletes, typing/presence, read receipts, unread counts, search or group DMs; friend-based bypass or friend-aware ranking; invitations, restricted Hangouts, global People-block precedence, Hangout chat separation, reporting/moderation access and production retention; hosted migration/deployment/live users; unrelated CI repairs. TASK-015/016/017 retain their own scope.
 
 ## Acceptance criteria for a future bounded local increment
-- [ ] ADR-0016 explicitly accepted and published; each stage contract reviewed/published before fresh dispatch; A independently reviewed and integrated before B.
+- [x] ADR-0016 explicitly accepted and published.
+- [ ] Each stage contract reviewed/published before fresh dispatch; A independently reviewed and integrated before B.
 - [ ] A visible, ready same-campus sender can create only one pending first-message request to a currently eligible recipient; the recipient can explicitly accept/reply or ignore. No ordinary back-and-forth thread is available before acceptance. Retries and concurrent opposite-direction actions cannot duplicate a pair or reopen ignored contact.
 - [ ] Only current authorized participants can read their own bounded request/thread state and text. New sends obey current readiness, campus, People visibility and either-direction block checks defined by ADR-0016. An opt-out or block removes future peer text access as specified; no client role, admin role or friendship grants hidden profile/photo access.
 - [ ] Direct table reads/writes are denied; caller identity is derived server-side; immutable message/retry records and bounded keyset reads survive lost responses without duplicate sends. Concurrent gate, readiness, opt-out and block changes have deterministic tests and fail closed after committed revocation.
