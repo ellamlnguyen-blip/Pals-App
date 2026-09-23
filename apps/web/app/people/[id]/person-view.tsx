@@ -2,13 +2,17 @@
 import { useEffect, useRef, useState } from "react";
 import type { PeopleDetail } from "../../../lib/people";
 import { blockPerson } from "../actions";
+import { FriendControl } from "../friend-control";
+import type { FriendshipResult } from "../friend-actions";
 
 export function PersonView({
   detail,
   back,
+  friendship,
 }: {
   detail: PeopleDetail;
   back: string;
+  friendship: FriendshipResult;
 }) {
   const dialog = useRef<HTMLDialogElement>(null),
     trigger = useRef<HTMLButtonElement>(null),
@@ -77,6 +81,14 @@ export function PersonView({
           )}
         </section>
       </div>
+      <FriendControl
+        peerId={detail.account_id}
+        initial={friendship}
+        canRequest
+        canBlock={false}
+        peerLabel={detail.real_name}
+        onClear={() => setCleared(true)}
+      />
       <div className="people-block">
         <button
           ref={trigger}
@@ -95,8 +107,10 @@ export function PersonView({
         >
           <h2 id="block-heading">Block {detail.real_name} in People?</h2>
           <p id="block-explain">
-            You will be hidden from each other in People discovery. Existing
-            Hangout participation and private instructions do not change.
+            You will be hidden from each other in People discovery. Any current
+            friend request or friendship ends, even if friendship status is
+            unavailable. Existing Hangout participation and private instructions
+            do not change.
           </p>
           <div className="people-dialog-actions">
             <button
