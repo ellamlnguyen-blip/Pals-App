@@ -41,7 +41,6 @@ export function RequestControl({
     const channel = new BroadcastChannel(AUTH_TRANSITION_CHANNEL);
     channel.onmessage = () => hide();
     return () => {
-      hide();
       document.removeEventListener("visibilitychange", visibility);
       window.removeEventListener("pagehide", hide);
       window.removeEventListener(AUTH_TRANSITION_EVENT, local);

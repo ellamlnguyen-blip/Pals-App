@@ -6,12 +6,14 @@ parseAppEnvironment(process.env.APP_ENV);
 const config: NextConfig = {
   poweredByHeader: false,
   async headers() {
-    return ["/people", "/people/:path*"].map((source) => ({
-      source,
-      headers: [
-        { key: "Cache-Control", value: "private, no-store, max-age=0" },
-      ],
-    }));
+    return ["/people", "/people/:path*", "/chats", "/chats/:path*"].map(
+      (source) => ({
+        source,
+        headers: [
+          { key: "Cache-Control", value: "private, no-store, max-age=0" },
+        ],
+      }),
+    );
   },
   agentRules: false,
   transpilePackages: [

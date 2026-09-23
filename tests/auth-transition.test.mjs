@@ -95,3 +95,33 @@ test("sign-in failure can settle on the same page; callback revalidates other ta
   announceCompletedAuthCallback();
   assert.equal(authTransitionDecision(pending, events[2]), "reauthorize");
 });
+
+test("overlapping account transitions keep inbox text masked until every token is verified", () => {
+  const pending = new Set();
+  const first = { phase: "begin", token: "first" };
+  const second = { phase: "begin", token: "second" };
+  assert.equal(authTransitionDecision(pending, first), "mask");
+  assert.equal(authTransitionDecision(pending, second), "mask");
+  assert.equal(pending.size, 2);
+  const firstCancelled = { phase: "cancelled", token: "first" };
+  assert.equal(authTransitionDecision(pending, firstCancelled), "verify");
+  assert.equal(authVerificationDecision(pending, firstCancelled, 200), "wait");
+  assert.deepEqual([...pending], ["second"]);
+  assert.equal(
+    authTransitionDecision(pending, { phase: "revalidate" }),
+    "wait",
+  );
+  assert.equal(
+    authTransitionDecision(pending, { phase: "settled", token: "stale" }),
+    "wait",
+  );
+  const secondCancelled = { phase: "cancelled", token: "second" };
+  assert.equal(authTransitionDecision(pending, secondCancelled), "verify");
+  assert.equal(authVerificationDecision(pending, secondCancelled, 503), "wait");
+  assert.equal(pending.size, 1);
+  assert.equal(
+    authVerificationDecision(pending, secondCancelled, 200),
+    "reauthorize",
+  );
+  assert.equal(pending.size, 0);
+});

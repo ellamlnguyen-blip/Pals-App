@@ -5,6 +5,8 @@ import type { DmInboxRow } from "../../lib/dm";
 import {
   AUTH_TRANSITION_CHANNEL,
   AUTH_TRANSITION_EVENT,
+  authTransitionDecision,
+  authVerificationDecision,
   type AuthTransitionMessage,
 } from "../auth-transition";
 export function DmInbox({ actor }: { actor: string }) {
@@ -16,7 +18,9 @@ export function DmInbox({ actor }: { actor: string }) {
   const [note, setNote] = useState("");
   const cursor = useRef<{ time: string; generation: string } | null>(null),
     request = useRef(0),
-    blocked = useRef(false);
+    pendingTransitions = useRef(new Set<string>()),
+    settledTransitions = useRef(new Map<string, "settled" | "cancelled">()),
+    denied = useRef(false);
   const mask = useCallback(() => {
     request.current++;
     setRows([]);
@@ -24,9 +28,18 @@ export function DmInbox({ actor }: { actor: string }) {
     setPhase("loading");
     setNote("Checking Requests and direct chats…");
   }, []);
+  const deny = useCallback(() => {
+    denied.current = true;
+    pendingTransitions.current.clear();
+    settledTransitions.current.clear();
+    mask();
+    setPhase("denied");
+    setNote("Direct chats are unavailable. Your access may have changed.");
+  }, [mask]);
   const read = useCallback(
     async (next: { time: string; generation: string } | null = null) => {
-      if (document.hidden || blocked.current) return;
+      if (document.hidden || pendingTransitions.current.size || denied.current)
+        return;
       const now = ++request.current;
       setPhase("loading");
       setRows([]);
@@ -43,13 +56,15 @@ export function DmInbox({ actor }: { actor: string }) {
           kind: string;
           rows?: DmInboxRow[];
         };
-        if (now !== request.current || document.hidden || blocked.current)
+        if (
+          now !== request.current ||
+          document.hidden ||
+          pendingTransitions.current.size ||
+          denied.current
+        )
           return;
         if (response.status === 403) {
-          setPhase("denied");
-          setNote(
-            "Direct chats are unavailable. Your access may have changed.",
-          );
+          deny();
           return;
         }
         if (data.kind !== "ok") {
@@ -63,36 +78,80 @@ export function DmInbox({ actor }: { actor: string }) {
         setPhase("ready");
         setNote("");
       } catch {
-        if (now === request.current && !document.hidden) {
+        if (
+          now === request.current &&
+          !document.hidden &&
+          !pendingTransitions.current.size &&
+          !denied.current
+        ) {
           setPhase("error");
           setNote("Connection interrupted. Try again.");
         }
       }
     },
-    [actor],
+    [actor, deny],
   );
   useEffect(() => {
-    const resume = () => {
-      if (!document.hidden && !blocked.current) {
-        mask();
-        void read(null);
+    const verify = async (
+      message: Extract<AuthTransitionMessage, { token: string }>,
+    ) => {
+      if (
+        document.hidden ||
+        denied.current ||
+        !pendingTransitions.current.has(message.token)
+      )
+        return;
+      const now = request.current;
+      try {
+        const response = await fetch("/api/dm", {
+          cache: "no-store",
+          credentials: "same-origin",
+          headers: { "x-pals-dm-actor": actor },
+        });
+        if (now !== request.current || document.hidden || denied.current)
+          return;
+        // This is an account probe. Never put its inbox bodies in UI state.
+        const decision = authVerificationDecision(
+          pendingTransitions.current,
+          message,
+          response.status,
+        );
+        if (!pendingTransitions.current.has(message.token))
+          settledTransitions.current.delete(message.token);
+        if (decision === "deny") deny();
+        else if (decision === "reauthorize") resume();
+      } catch {
+        /* Keep request text masked until a fresh probe succeeds. */
       }
+    };
+    const resume = () => {
+      if (document.hidden || denied.current) return;
+      mask();
+      if (pendingTransitions.current.size) {
+        for (const [token, phase] of settledTransitions.current)
+          void verify({ token, phase });
+      } else void read(null);
     };
     const visibility = () => {
       if (document.hidden) mask();
       else resume();
     };
     const transition = (event: AuthTransitionMessage) => {
-      mask();
-      if (event.phase === "begin") blocked.current = true;
+      if (denied.current) return;
+      const decision = authTransitionDecision(
+        pendingTransitions.current,
+        event,
+      );
+      if (decision === "mask") mask();
       else if (
-        event.phase === "settled" ||
-        event.phase === "cancelled" ||
-        event.phase === "revalidate"
+        decision === "verify" &&
+        "token" in event &&
+        event.phase !== "begin"
       ) {
-        blocked.current = false;
-        resume();
-      }
+        mask();
+        settledTransitions.current.set(event.token, event.phase);
+        void verify(event);
+      } else if (decision === "reauthorize") resume();
     };
     const local = (event: Event) =>
       transition((event as CustomEvent<AuthTransitionMessage>).detail);
@@ -119,7 +178,7 @@ export function DmInbox({ actor }: { actor: string }) {
       window.removeEventListener("storage", storage);
       channel.close();
     };
-  }, [mask, read]);
+  }, [actor, deny, mask, read]);
   const requests = rows.filter((row) => row.state === "pending"),
     direct = rows.filter((row) => row.state === "accepted");
   const entry = (row: DmInboxRow) => (
