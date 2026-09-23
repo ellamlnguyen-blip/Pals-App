@@ -29,3 +29,4 @@ TASK-003 deployed HTTPS callback and real UNC email delivery acceptance remains 
 
 ## Engineering follow-ups
 - CI maintenance: review Node 20 runtime deprecation annotations for checkout/setup-node/pnpm actions and the announced ubuntu-latest runner migration. TASK-006 CI passes; update action/runtime pins in a separate bounded maintenance task, not profile scope.
+- Local web test helper: investigate Next 16 dev `/signin` HTTP 500 (`Invariant: Expected workUnitAsyncStorage to have a store`) seen during TASK-008 `pnpm test:auth:web`. The equivalent real Auth/HTTP/action/concurrency suites passed against the built loopback server; restore the dev-helper path in a separate bounded maintenance task.
