@@ -48,7 +48,7 @@ test("DM pair, block, gate and opt-out serialize across real sessions", async ()
     update public.profiles set real_name='DM race',major='Science',graduation_year=2028,
       bio='Local fixture',primary_photo_path=user_id::text||'/primary.png' where user_id in ('${a}','${b}');
     insert into private.people_preferences(account_id,opted_in) values ('${a}',true),('${b}',true);
-    update private.people_feature_gate set enabled=true; update private.dm_feature_gate set enabled=true;`);
+    update private.people_feature_gate set enabled=true; update private.safety_feature_gate set enabled=true; update private.dm_feature_gate set enabled=true;`);
   try {
     await race("dm_create_leader",`${claims(a)} select public.create_dm_request('${b}',
       '15000000-0000-4000-8000-000000000091','First');`,"dm_create_waiter",
@@ -119,7 +119,7 @@ test("DM pair, block, gate and opt-out serialize across real sessions", async ()
       assert.throws(()=>sql(`begin isolation level ${isolation}; ${claims(a)}
         select * from public.list_dm_inbox(); rollback;`),/DM unavailable/);
   } finally {
-    sql(`update private.dm_feature_gate set enabled=false; update private.people_feature_gate set enabled=false;
+    sql(`update private.dm_feature_gate set enabled=false; update private.people_feature_gate set enabled=false; update private.safety_feature_gate set enabled=false;
       set dm.allow_fixture_cleanup='true';
       delete from private.dm_retries where actor_id in ('${a}','${b}');
       delete from private.dm_messages where author_id in ('${a}','${b}');

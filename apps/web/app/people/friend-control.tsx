@@ -25,7 +25,7 @@ const explanation = (action: FriendshipTransition | "block") => {
   if (action === "unfriend")
     return "The current friendship will end. Connecting again later needs a new request.";
   if (action === "block")
-    return "Blocking ends any current request or friendship and hides both of you in People. Existing Hangout participation and private instructions do not change.";
+    return "Blocking ends any current request or friendship and hides both of you in People. A confirmed block now affects Hangout access and may end shared attendance. Creating a block is temporarily unavailable.";
   return "Accept this request and become friends?";
 };
 
@@ -203,10 +203,10 @@ export function FriendControl({
           {row && canBlock && (
             <button
               className="text-button"
-              disabled={disabled}
+              disabled
               onClick={() => open("block")}
             >
-              Block in People
+              New blocking temporarily unavailable
             </button>
           )}
         </div>
@@ -281,7 +281,7 @@ export function FriendControl({
         <div className="people-dialog-actions">
           <button
             className="button"
-            disabled={!confirmed || busy}
+            disabled={!confirmed || busy || confirmation === "block"}
             onClick={() => {
               const action = confirmation;
               dialog.current?.close();

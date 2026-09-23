@@ -1,6 +1,6 @@
 # TASK-016A — Global block backend, disposable local
 
-Status: Implemented and locally verified on task branch; exact-tip independent security review pending canonical integration
+Status: Independent exact-tip security review accepted; canonical integration publication in progress
 Date: 2026-09-23
 Parent: TASK-016; decision: ADR-0018 (user accepted the complete reviewed decision on 2026-09-23; coordinator records the acceptance)
 Planning baseline: `3d4fec11d13c1f936bb89e7012e20cae7f4151bd`
@@ -61,12 +61,12 @@ For **pre-existing** People blocks, the migration leaves every source gate off a
 
 ## Acceptance and verification
 
-- [ ] Migration compiles under two clean disposable-local resets; schema lint passes; all grants/RLS are inspected with actual `authenticated`/`anon` roles. No hosted target or new service is touched.
-- [ ] SQL and real local Auth/PostgREST tests exercise direct `/hangouts`, participant/private-location REST and embeds, all listed old/new RPCs, caller-owned ID recovery, blocked-host discovery, third-party-host public view, suppressed roster/chat history before pagination, neutral inbox items and absent block-generated events.
-- [ ] Deterministic concurrency tests observe actual PostgreSQL lock waits and test both commit orders for new/opposite blocks versus join, leave, remove, create/edit/cancel/joining state, friend/DM create/accept/send, chat send, readiness/photo/opt-in/source/safety/notification gate changes, and notification preference changes. Include multiple shared Hangouts, rejoin, cancelled Hangout, mutual blocks, existing-block retries and full initial-snapshot reconciliation cycles. Record any accepted in-flight read boundary; later reads must deny.
-- [ ] Lost-response and duplicate desired-state retries are idempotent; no old response replays private text after revocation. Stronger isolation rejects new safety operations. Failures leave no partial teardown, provenance or event.
-- [ ] Existing source, HTTP, action and production-mode web regression suites plus `pnpm check` pass as relevant. Do not infer green CI. Old block-write UI is unavailable with truthful text until C; owner ID read/exact unblock remains safe.
-- [ ] Test fixtures and private provenance are cleared, all local gates restored false and local services stopped. Stage handoff records precise commands/results, residual limitations and task-branch SHA. Coordinator performs independent security review and canonical-main integration before B dispatch.
+- [x] Migration compiles under two clean disposable-local resets; schema lint passes; all grants/RLS are inspected with actual `authenticated`/`anon` roles. No hosted target or new service is touched.
+- [x] SQL and real local Auth/PostgREST tests exercise direct `/hangouts`, participant/private-location REST and embeds, all listed old/new RPCs, caller-owned ID recovery, blocked-host discovery, third-party-host public view, suppressed roster/chat history before pagination, neutral inbox items and absent block-generated events.
+- [x] Deterministic concurrency tests observe actual PostgreSQL lock waits and test both commit orders for new/opposite blocks versus join, leave, remove, create/edit/cancel/joining state, friend/DM create/accept/send, chat send, readiness/photo/opt-in/source/safety/notification gate changes, and notification preference changes. Include multiple shared Hangouts, rejoin, cancelled Hangout, mutual blocks, existing-block retries and full initial-snapshot reconciliation cycles. Record any accepted in-flight read boundary; later reads must deny.
+- [x] Lost-response and duplicate desired-state retries are idempotent; no old response replays private text after revocation. Stronger isolation rejects new safety operations. Failures leave no partial teardown, provenance or event.
+- [x] Existing source, HTTP, action and production-mode web regression suites plus `pnpm check` pass as relevant. Do not infer green CI. Old block-write UI is unavailable with truthful text until C; owner ID read/exact unblock remains safe.
+- [x] Test fixtures and private provenance are cleared, all local gates restored false and local services stopped. Stage handoff records precise commands/results, residual limitations and task-branch SHA. Coordinator performs independent security review and canonical-main integration before B dispatch.
 
 ## Exclusions and completion boundary
 

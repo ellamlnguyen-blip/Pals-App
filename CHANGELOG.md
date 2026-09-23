@@ -2,6 +2,11 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-23 — TASK-016A local global blocking
+
+- Extended the existing directional block across Hangout discovery, attendance, private details, chat and notification projections; added private retained evidence, deterministic reconciliation and safety-gated owner ID recovery.
+- Independent exact-tip security review accepted the backend after local upgrade/reset, authorization, race and workspace checks. Legacy block-write controls are temporarily unavailable until the final confirmation UI. Reporting and hosted operation remain separate.
+
 ## 2026-09-23 — TASK-016 policy acceptance
 
 - User explicitly accepted ADR-0018 after reviewed canonical publication. Narrower global-block backend, reporting backend and safety UI contracts still require independent review/publication; no implementation or hosted change follows from acceptance alone.

@@ -37,7 +37,7 @@ test("block wins against waiting accept and tears down while friendship gate is 
     update public.profiles set real_name='Friend race',major='Science',graduation_year=2028,
       bio='Local fixture',primary_photo_path=user_id::text||'/primary.png' where user_id in ('${a}','${b}');
     insert into private.people_preferences(account_id,opted_in) values ('${a}',true),('${b}',true);
-    update private.people_feature_gate set enabled=true;
+    update private.people_feature_gate set enabled=true; update private.safety_feature_gate set enabled=true;
     update private.friendship_feature_gate set enabled=true;`);
   try {
     const generation = sql(`begin; ${claims(a)} select public.create_friend_request('${b}','14000000-0000-4000-8000-000000000099'); commit;`).split("\n").at(-1);
@@ -131,7 +131,7 @@ test("block wins against waiting accept and tears down while friendship gate is 
       assert.throws(() => sql(`begin isolation level ${isolation}; ${claims(a)} select * from public.list_friendships(); rollback;`), /People operation unavailable/);
   } finally {
     sql(`update private.friendship_feature_gate set enabled=false;
-      update private.people_feature_gate set enabled=false;
+      update private.people_feature_gate set enabled=false; update private.safety_feature_gate set enabled=false;
       delete from private.friendships where low_id in ('${a}','${b}') or high_id in ('${a}','${b}');
       delete from private.friendship_create_requests where actor_id in ('${a}','${b}');
       delete from private.friendship_suppression where requester_id in ('${a}','${b}') or recipient_id in ('${a}','${b}');

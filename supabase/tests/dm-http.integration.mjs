@@ -43,6 +43,7 @@ test("real Auth sessions enforce DM consent and revocation", async () => {
         where user_id in ('${a.id}','${b.id}');
       insert into private.people_preferences(account_id,opted_in) values ('${a.id}',true),('${b.id}',true);
       update private.people_feature_gate set enabled=true;
+      update private.safety_feature_gate set enabled=true;
       update private.dm_feature_gate set enabled=true;`);
     const anon = await call("/rest/v1/rpc/list_dm_inbox", null);
     assert.ok([401,403].includes(anon.status));
@@ -84,6 +85,7 @@ test("real Auth sessions enforce DM consent and revocation", async () => {
   } finally {
     sql(`update private.dm_feature_gate set enabled=false;
       update private.people_feature_gate set enabled=false;
+      update private.safety_feature_gate set enabled=false;
       set dm.allow_fixture_cleanup='true';
       delete from private.dm_retries where actor_id in (${users.map((u) => `'${u.id}'`).join(",") || "null"});
       delete from private.dm_messages where author_id in (${users.map((u) => `'${u.id}'`).join(",") || "null"});

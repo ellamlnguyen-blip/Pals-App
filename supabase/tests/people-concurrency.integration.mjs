@@ -39,7 +39,7 @@ test("People pair serialization and post-wait revocation", async () => {
     update public.profiles set real_name='Ready person',major='Science',graduation_year=2028,
       bio='Local fixture',primary_photo_path=user_id::text||'/primary.png'
       where user_id in ('${first}','${second}');
-    update private.people_feature_gate set enabled=true;
+    update private.people_feature_gate set enabled=true; update private.safety_feature_gate set enabled=true;
     insert into private.people_preferences(account_id,opted_in) values ('${first}',true),('${second}',true);`);
   try {
     const a = session("task011a_first_block"), b = session("task011a_second_block");
@@ -50,7 +50,7 @@ test("People pair serialization and post-wait revocation", async () => {
       await waiting("task011a_second_block");
       a.send("commit;"); a.child.stdin.end(); b.child.stdin.end();
       await a.done; await b.done;
-      assert.match(b.output(), /People operation unavailable/, "losing mutual block is denied after pair lock");
+      assert.match(b.output(), /Safety operation unavailable/, "losing mutual block is denied after pair lock");
       assert.equal(sql("select count(*) from private.people_blocks"), "1", "only one direction committed");
     } finally { a.child.kill(); b.child.kill(); }
 
@@ -65,7 +65,7 @@ test("People pair serialization and post-wait revocation", async () => {
       sql("update private.people_feature_gate set enabled=false");
       lock.send("commit;"); lock.child.stdin.end(); blocked.child.stdin.end();
       await lock.done; await blocked.done;
-      assert.match(blocked.output(), /People operation unavailable/, "gate loss after wait denies block");
+      assert.match(blocked.output(), /Safety operation unavailable/, "gate loss after wait denies block");
       assert.equal(sql("select count(*) from private.people_blocks"), "0");
     } finally { lock.child.kill(); blocked.child.kill(); }
 
@@ -74,7 +74,7 @@ test("People pair serialization and post-wait revocation", async () => {
         select public.get_people_preference(); rollback;`), /People operation unavailable/);
     }
   } finally {
-    sql(`update private.people_feature_gate set enabled=false;
+    sql(`update private.people_feature_gate set enabled=false; update private.safety_feature_gate set enabled=false;
       delete from private.people_blocks where blocker_id in ('${first}','${second}') or blocked_id in ('${first}','${second}');
       delete from private.people_preferences where account_id in ('${first}','${second}');
       delete from auth.users where id in ('${first}','${second}');

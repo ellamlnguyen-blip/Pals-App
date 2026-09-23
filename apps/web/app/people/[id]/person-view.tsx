@@ -97,9 +97,10 @@ export function PersonView({
         <button
           ref={trigger}
           className="text-button"
+          disabled
           onClick={() => dialog.current?.showModal()}
         >
-          Block in People
+          New blocking temporarily unavailable
         </button>
         <dialog
           ref={dialog}
@@ -113,12 +114,14 @@ export function PersonView({
           <p id="block-explain">
             You will be hidden from each other in People discovery. Any current
             friend request or friendship and active direct request or chat ends,
-            even if its status is unavailable. Existing Hangout access, chat and
-            private instructions do not change.
+            even if its status is unavailable. A confirmed block now affects
+            Hangout access and may end shared attendance. Creating a block is
+            temporarily unavailable.
           </p>
           <div className="people-dialog-actions">
             <button
               className="button"
+              disabled
               onClick={async () => {
                 dialog.current?.close();
                 setCleared(true);
@@ -132,7 +135,7 @@ export function PersonView({
                 }
               }}
             >
-              Block in People
+              New blocking temporarily unavailable
             </button>
             <button
               className="text-button"

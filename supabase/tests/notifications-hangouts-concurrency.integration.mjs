@@ -122,27 +122,28 @@ test("observed source-gate orders never create post-disable items", async () => 
   const edit = (id, revision, title) => `${claims(sourceHost)} select public.edit_hangout('${id}',${revision},'${title}',(select starts_at from public.hangouts where id='${id}'),'Area',35,-79);`;
   try {
     const editId = create(); join(editId);
-    await race("hb_source_edit_off", "update private.hangout_feature_gate set enabled=false;", edit(editId, 1, "Off edit"));
-    assert.equal(sql(`select revision from public.hangouts where id='${editId}'`), "2", "edit source commits after gate disable");
+    await race("hb_source_edit_off", "update private.hangout_feature_gate set enabled=false;", edit(editId, 1, "Off edit"), true);
+    assert.equal(sql(`select revision from public.hangouts where id='${editId}'`), "1", "committed gate disable denies later edit");
     assert.equal(count(editId, "hangout_edited"), 0, "disabled Hangout gate skips edit item");
     sourceOn();
-    await race("hb_edit_before_source_off", edit(editId, 2, "On edit"), "update private.hangout_feature_gate set enabled=false;");
+    await race("hb_edit_before_source_off", edit(editId, 1, "On edit"), "update private.hangout_feature_gate set enabled=false;");
     assert.equal(count(editId, "hangout_edited"), 1, "edit holding source gate commits first");
     sourceOn();
 
     const joinId = create();
-    await race("hb_source_join_off", "update private.hangout_feature_gate set enabled=false;", `${claims(sourcePeer)} select public.join_hangout('${joinId}');`);
-    assert.equal(sql(`select state from public.hangout_participants where hangout_id='${joinId}' and account_id='${sourcePeer}'`), "joined", "join source commits after gate disable");
+    await race("hb_source_join_off", "update private.hangout_feature_gate set enabled=false;", `${claims(sourcePeer)} select public.join_hangout('${joinId}');`, true);
+    assert.equal(sql(`select count(*) from public.hangout_participants where hangout_id='${joinId}' and account_id='${sourcePeer}'`), "0", "committed gate disable denies later join");
     assert.equal(count(joinId, "hangout_joined", sourceHost), 0, "disabled Hangout gate skips join item");
     sourceOn();
+    join(joinId);
     sql(`begin; ${claims(sourcePeer)} select public.leave_hangout('${joinId}'); commit;`);
     await race("hb_join_before_source_off", `${claims(sourcePeer)} select public.join_hangout('${joinId}');`, "update private.hangout_feature_gate set enabled=false;");
-    assert.equal(count(joinId, "hangout_joined", sourceHost), 1, "join holding source gate commits first");
+    assert.equal(count(joinId, "hangout_joined", sourceHost), 2, "join holding source gate commits first after setup join");
     sourceOn();
 
     const cancelOffId = create(); join(cancelOffId);
-    await race("hb_source_cancel_off", "update private.hangout_feature_gate set enabled=false;", `${claims(sourceHost)} select public.cancel_hangout('${cancelOffId}',1);`);
-    assert.equal(sql(`select status from public.hangouts where id='${cancelOffId}'`), "cancelled", "cancel source commits after gate disable");
+    await race("hb_source_cancel_off", "update private.hangout_feature_gate set enabled=false;", `${claims(sourceHost)} select public.cancel_hangout('${cancelOffId}',1);`, true);
+    assert.equal(sql(`select status from public.hangouts where id='${cancelOffId}'`), "published", "committed gate disable denies later cancel");
     assert.equal(count(cancelOffId, "hangout_cancelled"), 0, "disabled Hangout gate skips essential item");
     sourceOn();
     const cancelOnId = create(); join(cancelOnId);

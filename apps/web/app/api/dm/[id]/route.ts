@@ -88,6 +88,7 @@ export async function POST(
   )
     return reply({ kind: "invalid" }, 400);
   const action = input.action;
+  if (action === "block") return reply({ kind: "unavailable" }, 403);
   if (
     ![
       "accept",
@@ -125,11 +126,6 @@ export async function POST(
       p_generation_id: input.generation,
       p_request_id: input.key,
       p_body: input.body,
-    });
-  else if (action === "block")
-    result = await target.client.rpc("set_people_block", {
-      p_account_id: id,
-      p_blocked: true,
     });
   else
     result = await target.client.rpc("transition_dm", {

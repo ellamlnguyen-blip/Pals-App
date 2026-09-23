@@ -66,13 +66,13 @@ export async function friendshipActionChecks(owner, peer, a, b, png, sql) {
     const hiddenFriend = await fetch(`${origin}/people/friends`, { headers: { Cookie: owner.header() } });
     assert.doesNotMatch(await hiddenFriend.text(), /Local friend peer/);
     sql("update private.people_feature_gate set enabled=false");
-    assert.match(await action("blockPerson", [b.id]), /could not confirm the block/);
+    assert.match(await action("blockPerson", [b.id]), /temporarily unavailable/);
     sql("update private.people_feature_gate set enabled=true; update private.friendship_feature_gate set enabled=false");
     assert.match(await action("readFriendship", [b.id]), /Friendship is unavailable/);
-    assert.match(await action("blockPerson", [b.id]), /outbound block list/);
-    assert.deepEqual((await owner.auth.rpc("list_people_blocked_ids")).data, [{ account_id: b.id }]);
+    assert.match(await action("blockPerson", [b.id]), /temporarily unavailable/);
+    assert.equal(sql(`select count(*) from private.people_blocks where blocker_id='${a.id}' and blocked_id='${b.id}'`).trim(), "0", "legacy block action never writes");
     sql("update private.friendship_feature_gate set enabled=true");
-    assert.deepEqual((await owner.auth.rpc("get_friendship", { p_peer_id: b.id })).data, []);
+    assert.equal((await owner.auth.rpc("get_friendship", { p_peer_id: b.id })).data?.[0]?.state, "pending");
     const hidden = await fetch(`${origin}/people/${b.id}`, { headers: { Cookie: owner.header() } });
     assert.doesNotMatch(await hidden.text(), /Local friend peer/);
     sql("update public.accounts set status='suspended' where id='" + a.id + "'");

@@ -5,7 +5,7 @@ import test from "node:test";
 
 const origin = process.env.WEB_TEST_ORIGIN;
 assert.equal(origin, "http://127.0.0.1:3000");
-const status = JSON.parse(execFileSync("pnpm", ["exec", "supabase", "status", "--output", "json"], { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }));
+const status = JSON.parse(execFileSync(process.env.SUPABASE_CLI ?? "supabase", ["status", "--output", "json"], { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }));
 assert.equal(status.API_URL, "http://127.0.0.1:54321");
 const require = createRequire(new URL("../../apps/web/package.json", import.meta.url));
 const { createServerClient } = require("@supabase/ssr");

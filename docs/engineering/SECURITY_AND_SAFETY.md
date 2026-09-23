@@ -17,3 +17,9 @@ Post-hangout feedback: attended? happened as described? comfortable attending ag
 ## TASK-014A local DM retention and consent
 
 Direct-message requests and accepted text use the default-disabled disposable-local gate from ADR-0016. Client roles cannot read or write raw pairs, messages, retries or suppression. Current participants receive only active pair metadata, and bodies require fresh bilateral People eligibility. Ignored, withdrawn, closed and blocked generations remain private evidence without a client reader. A People block atomically ends an active DM pair, but this local rule does not change Hangout or Hangout-chat access. Hosted retention, moderator access and global separation remain separate decisions.
+
+The TASK-014A People-only limitation above describes the earlier local boundary; TASK-016A supersedes it for confirmed blocks.
+
+## TASK-016A local blocking
+
+A confirmed block now affects shared Hangout attendance and private coordination. The blocker-host removes a joined target; a nonhost blocker leaves every Hangout still shared with the target. The target host remains joined and ownership never transfers. The same deterministic separation applies to cancelled retained rows. Unblock removes only the caller's direction and restores no friendship, DM generation or attendance. Safety transitions emit no ordinary source notification and never file an automatic report. Existing blocks remain enforced with management/source gates off. The local web disables old block-write controls and both old server write paths until TASK-016C provides confirmation of these effects. Exact outbound-ID read and unblock remain available when the safety gate is on. This stage adds no report, moderation reader, hosted operation or physical-separation guarantee.
