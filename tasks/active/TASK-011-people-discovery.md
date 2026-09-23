@@ -1,6 +1,6 @@
 # TASK-011 — Local People discovery
 
-Status: ADR-0013 accepted; TASK-011A contract publication and backend dispatch next
+Status: Complete for the bounded local-only text People increment; reviewed A, cursor correction and B integrated on main; deferred MVP People capabilities remain open
 Date: 2026-09-22
 Planning branch: `agent/TASK-011-planning`
 Starting clean canonical main / freshly fetched origin/main: `b3011bc74adb46d01fd4b709520ecf5c3f8fa8a2`
@@ -24,13 +24,13 @@ AGENTS.md; this contract and ADR-0013; NOW/BACKLOG/CURRENT_STATE; MVP/PRINCIPLES
 Do not dispatch a peer-photo or global blocking stage under this contract. A subsequent accepted contract is required to complete deferred MVP People capabilities.
 
 ## Acceptance criteria for this bounded increment
-- [ ] ADR-0013 explicitly accepted and published; stage contracts on main before dispatch; A reviewed/integrated before B.
-- [ ] Existing/new users default private; opt-in shares only accepted fields, opt-out revokes direct and list reads, and readiness restoration behavior is honest. Raw owner profile/Storage readers stay unchanged.
-- [ ] Same-campus live-ready viewer/subject and either-direction block checks apply to every exposed People query, known-ID request, filter and cursor. No hidden-subject count/options or incoming-block leak.
-- [ ] Caller-owned block/unblock and active-owner privacy management work with safe retries, bounded outbound list, no forged actor/target escalation and no revival through concurrent mutations. UI explains People-only separation and unchanged Hangout access.
-- [ ] Search/filter/pagination are bounded and deterministic; text-only detail and explicit opt-in preview match field projections; late responses do not replace newer search results. No friendship, DM, photos, attendance or popular-user ranking claim.
-- [ ] Meaningful SQL, real caller-session HTTP/action and concurrency cases pass along with profile/photo and saved Hangout/Calendar regressions. Independent security review clear and desktop/phone/keyboard verification recorded.
-- [ ] Data cleaned, both gates false, local services stopped; stage/task/main publication verified and handoffs/queue/CURRENT_STATE synchronized. Deferred features and hosted gates remain explicit.
+- [x] ADR-0013 explicitly accepted and published; stage contracts on main before dispatch; A reviewed/integrated before B.
+- [x] Existing/new users default private; opt-in shares only accepted fields, opt-out revokes direct and list reads, and readiness restoration behavior is honest. Raw owner profile/Storage readers stay unchanged.
+- [x] Same-campus live-ready viewer/subject and either-direction block checks apply to every exposed People query, known-ID request, filter and cursor. No hidden-subject count/options or incoming-block leak.
+- [x] Caller-owned block/unblock and active-owner privacy management work with safe retries, bounded outbound list, no forged actor/target escalation and no revival through concurrent mutations. UI explains People-only separation and unchanged Hangout access.
+- [x] Search/filter/pagination are bounded and deterministic; text-only detail and explicit opt-in preview match field projections; late responses do not replace newer search results. No friendship, DM, photos, attendance or popular-user ranking claim.
+- [x] Meaningful SQL, real caller-session HTTP/action and concurrency cases pass along with profile/photo and saved Hangout/Calendar regressions. Independent security review clear and desktop/phone/keyboard verification recorded.
+- [x] Data cleaned, both gates false, local services stopped; stage/task/main publication verified and handoffs/queue/CURRENT_STATE synchronized. Deferred features and hosted gates remain explicit.
 
 ## Verification matrix
 Test anonymous, ready same-campus, self, cross-campus, incomplete/missing-primary, changed email, inactive campus, suspended/banned, forged admin/moderator, opted-in/out and either/both block directions. Exercise gate false/true, direct SQL actual roles, PostgREST RPC/tables/embeds, Storage, web routes/actions and malformed filters/cursors. Verify unchanged owner-only photos and excluded fields, nonready owner opt-out/unblock, active-owner opt-out with People gate disabled, full-ID unblock confirmation, mutual-block races, lost responses, hidden/nonexistent indistinguishability, readiness/gate changes while mutations wait, READ COMMITTED versus denied stronger isolation, post-commit revocation and cache headers. Do not equate setup with a privileged SQL connection to RLS verification.
@@ -45,3 +45,6 @@ The user replied “yes” to explicit ADR-0013 acceptance on 2026-09-22. Accept
 
 ## Planning publication
 Independent planning review resolved; planning branch and canonical main verified remotely at `9f52a39ac8b92ea082ad199b55ab766f671fd2f4`. No policy acceptance, implementation, migration or parent-task completion follows from this publication.
+
+## Bounded completion
+Reviewed TASK-011A backend `ca1d6d234ea1af3f08af8c21d76f7db8ffc88f0d`, ID-only cursor correction `8bf5432781e40b9f9fdfda04f45d6104ac94cee7` and TASK-011B UI `ab62749d453c6662dcdca6ff6c1560e748663db6` are integrated; the final UI merge was remote-verified on main `5877b015c8838c04e000d20ae94db3d5f28e892e`. Independent backend security and final UI/security/design reviews cleared the exact task commits. See `agents/handoffs/TASK-011.md` and stage/review handoffs for evidence and limits. This closes the specified local text increment, not the deferred photo, friend, DM, recommendation, reporting or hosted launch work.
