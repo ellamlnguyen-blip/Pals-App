@@ -11,6 +11,8 @@ Do these in order unless dependencies allow safe parallel work.
 
 Completed: TASK-001, TASK-002, TASK-004, TASK-005, TASK-006 and TASK-007. See `DONE.md` and their handoffs.
 
+TASK-008 contract: `active/TASK-008-map-discovery-detail-joining.md`. Local-only map discovery/detail/joining is next, from reviewed TASK-005/007 on canonical main. The contract is the bounded implementation authority; ADR-0010's default-disabled gate and hosted safety prerequisites remain in force. Planning branch: `agent/TASK-008-planning`; implementation branch: `agent/TASK-008-map-discovery`. No implementation or hosted enablement is claimed by this entry.
+
 1. `active/TASK-003-auth-onboarding.md` — implemented and locally verified; independent security review clear, anonymous design review plus authenticated implementer visual check passed. Accepted ADR-0009 is implemented. Deployed HTTPS callback and hosted email delivery remain pending deployment/SMTP. Handoff: `agents/handoffs/TASK-003.md`.
 2. `active/TASK-004-map-shell.md` — complete on `agent/TASK-004-map`, including final real Mapbox basemap and authenticated desktop/phone interaction checks. Token is configured only in ignored local environment; no production deployment. Handoff: `agents/handoffs/TASK-004.md`. No live Hangout backend is connected.
 
