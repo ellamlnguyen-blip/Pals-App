@@ -29,7 +29,12 @@ export function PersonView({
           Checking People access
         </h1>
         <p>{message || "Checking the latest People access…"}</p>
-        <a href={back}>Return to People</a>
+        <div className="people-dialog-actions">
+          {/* A full navigation fetches the latest outbound block list. */}
+          {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+          <a href="/people/privacy">Check outbound blocked IDs</a>
+          <a href={back}>Return to People</a>
+        </div>
       </section>
     );
   return (
@@ -107,7 +112,6 @@ export function PersonView({
                     "We could not confirm the block. Check your blocked IDs before another action.",
                   );
                 }
-                window.location.replace(back);
               }}
             >
               Block in People

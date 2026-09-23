@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { existsSync, readFileSync } from "node:fs";
 
 export async function peopleHttpChecks(owner, peer, a, b, sql, png, url, key) {
   const ownerApi = owner.auth;
@@ -62,6 +63,36 @@ export async function peopleHttpChecks(owner, peer, a, b, sql, png, url, key) {
       assert.doesNotMatch(await next.text(), /Check your People filters/, "UI accepts ID-only cursor");
       const legacy = await fetch(`${web}/people?afterName=${encodeURIComponent(rawPeerName)}&afterId=${b.id}`, { headers });
       assert.match(await legacy.text(), /Check your People filters/, "UI rejects old name cursor");
+      const devManifest = new URL("../../apps/web/.next/dev/server/server-reference-manifest.json", import.meta.url);
+      const productionManifest = new URL("../../apps/web/.next/server/server-reference-manifest.json", import.meta.url);
+      const manifest = JSON.parse(readFileSync(existsSync(productionManifest) ? productionManifest : devManifest, "utf8"));
+      const actionIds = Object.fromEntries(Object.entries(manifest.node).map(([id, entry]) => [entry.exportedName, id]));
+      assert.ok(actionIds.setPeopleVisibility && actionIds.blockPerson);
+      async function action(name, args, path, cookie) {
+        const form = new FormData();
+        form.set("0", JSON.stringify(args));
+        const response = await fetch(`${web}${path}`, {
+          method: "POST",
+          headers: { Cookie: cookie, Origin: web, "Next-Action": actionIds[name] },
+          body: form,
+          redirect: "manual",
+        });
+        const body = await response.text();
+        assert.equal(response.status, 200, body);
+        assert.match(response.headers.get("cache-control") ?? "", /no-store/, `${name} action response is not cached`);
+        return body;
+      }
+      assert.match(await action("setPeopleVisibility", [false], "/people/privacy", owner.header()), /sharing choice is off/);
+      assert.match(await action("blockPerson", ["not-a-uuid"], `/people/${b.id}`, owner.header()), /person is unavailable/);
+      assert.match(await action("setPeopleVisibility", [false], "/people/privacy", ""), /Account access is unavailable/);
+      sql("update private.people_feature_gate set enabled=false");
+      try {
+        const uncertain = await action("blockPerson", [b.id], `/people/${b.id}`, owner.header());
+        assert.match(uncertain, /could not confirm the block/);
+        assert.ok(!uncertain.includes(rawPeerName), "uncertain action does not return peer text");
+      } finally {
+        sql("update private.people_feature_gate set enabled=true");
+      }
     }
     assert.deepEqual((await ownerApi.from("profiles").select("user_id").eq("user_id", b.id)).data, []);
     assert.deepEqual((await ownerApi.from("profiles").select("user_id,accounts(id)").eq("user_id", b.id)).data, []);
