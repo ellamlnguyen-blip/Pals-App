@@ -1,6 +1,6 @@
 # TASK-014A — Local DM state and authorization backend
 
-Status: Independently reviewed contract; canonical publication required before dispatch
+Status: Dispatched to fresh bounded backend agent; implementation/review pending
 Date: 2026-09-23
 Parent: TASK-014
 Decision: Accepted ADR-0016, explicitly accepted by the user on 2026-09-23
@@ -29,3 +29,6 @@ Implement the authoritative disposable-local DM request, consent and direct-mess
 Run workspace checks, two clean local database resets/all existing SQL suites and schema lint where supported, real Auth/PostgREST and deterministic races. Cover anonymous, forged actor, self/cross-campus/nonready/opted-out/blocked targets, hidden-ID probes, pending accept/reply/ignore/withdraw, close, reverse-direction new generation, exact/stale/different-payload retries, opposite creates (including block committed against the loser), overlapping ignore versus reply and block versus send, block while DM gate off, hidden-peer block exception, friendship teardown, direct grants, pagination, stronger isolation, gates, readiness/opt-out/photo/account/campus revocation before versus after locks, in-flight versus subsequent read, and Hangout/People/friendship/chat regressions. Record exact evidence and environmental limitations; never claim an unavailable check passed. Clean fixtures, restore every local feature gate false and stop local services.
 
 Commit only in-scope implementation and `agents/handoffs/TASK-014A.md`, push the task branch and independently verify its remote SHA, then stop. Do not integrate into main. Coordinator reviews exact tip/handoff, obtains fresh independent security review and integrates only accepted work before publishing/dispatching TASK-014B.
+
+## Dispatch receipt
+Accepted ADR-0016 and this independently reviewed contract were published and independently remote-verified on both `origin/agent/TASK-014-planning` and canonical `origin/main` at `3681bdb8409a4f027e032f562d33d550aa42167b`. A fresh GPT-6 Sol medium backend agent was dispatched from that exact baseline to an isolated worktree/branch. Standard speed is the app preference; the dispatch tool has no speed selector, so speed is not verified. Independent exact-tip security review and main integration remain required before TASK-014B.
