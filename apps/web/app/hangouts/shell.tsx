@@ -9,10 +9,12 @@ export function HangoutsShell({
   token,
   createEnabled,
   peopleEnabled,
+  notificationsEnabled,
 }: {
   token: string;
   createEnabled: boolean;
   peopleEnabled: boolean;
+  notificationsEnabled: boolean;
 }) {
   const [category, setCategory] = useState("All");
   const [time, setTime] = useState("Any time");
@@ -69,10 +71,17 @@ export function HangoutsShell({
           </button>
         )}
         {createEnabled && <Link href="/chats">Chats</Link>}
-        {(createEnabled
-          ? ["Notifications"]
-          : ["Calendar", "Chats", "Notifications"]
-        ).map((name) => (
+        {notificationsEnabled ? (
+          <Link href="/notifications">Notifications</Link>
+        ) : (
+          <button
+            onClick={() => showShell("Notifications")}
+            aria-label="Notifications, coming later"
+          >
+            Notifications
+          </button>
+        )}
+        {(!createEnabled ? ["Calendar", "Chats"] : []).map((name) => (
           <button
             key={name}
             onClick={() => showShell(name)}

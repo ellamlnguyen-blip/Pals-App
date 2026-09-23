@@ -54,7 +54,7 @@ export default async function ThreadPage({
         <Link href="/chats" aria-current="page">
           Chats
         </Link>
-        <span>Notifications</span>
+        <Link href="/notifications">Notifications</Link>
       </nav>
       <section className="chat-page" aria-labelledby="thread-title">
         <Link href="/chats">← All chats</Link>
