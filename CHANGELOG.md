@@ -2,6 +2,11 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-22 — TASK-010 planning
+
+- Established bounded local host/co-host contract and Proposed ADR-0012 permission/role lifecycle matrix, pending explicit user acceptance.
+- Require fresh backend implementation and independent security review before a separate management UI stage; no code, migration, access or hosted change at planning.
+
 ## 2026-09-22 — TASK-009 local Calendar
 
 - Added saved-only Today/Day and Monday–Sunday Week views, campus-time/DST boundaries, authoritative Joined/Hosting filters and clear cancelled/truncated states.
