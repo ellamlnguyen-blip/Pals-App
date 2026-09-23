@@ -1,6 +1,6 @@
 # TASK-016B — disposable-local reporting backend handoff
 
-Status: implementation ready for independent exact-tip security review; parent TASK-016 remains open. Branch: `agent/TASK-016B-reporting-backend`, based on remote-verified canonical main `5eac9f5d39648312da05c4a19897cbbcd7eae80d`. The coordinator owns shared task records, review, integration and C dispatch. This stage made no web UI, hosted migration or moderation reader.
+Status: complete for disposable-local B after independent exact-tip security review and canonical integration; parent TASK-016 remains open. Branch: `agent/TASK-016B-reporting-backend`, based on remote-verified canonical main `5eac9f5d39648312da05c4a19897cbbcd7eae80d`. The coordinator owns shared task records, review, integration and C dispatch. This stage made no web UI, hosted migration or moderation reader.
 
 ## Delivered boundary
 
@@ -26,3 +26,7 @@ After the final integration suites, private reports, retry rows, peer provenance
 ## Branch publication
 
 Implementation commit `8c3a2b0d5789e720cb2a74d983aba1030e0ef006` was pushed to `origin/agent/TASK-016B-reporting-backend`; `git ls-remote` independently returned that exact SHA. This receipt update will create a later handoff-only task tip, which the agent reports directly to the coordinator and the independent reviewer. The coordinator must verify that final tip and later record canonical integration SHA; this handoff cannot contain its own final commit hash without changing that hash.
+
+## Canonical publication receipt
+
+Fresh security/evidence review accepted final task tip `427254cb79703e8894ae2571444c9461762da0f3`; see TASK-016B-REVIEW.md. Reviewed B is integrated on canonical main `fb697c23daa02c0d1f7f6e26259eddbd630b46f8`. Coordinator independently verified both task/main remote refs after push. C and parent completion remain; the unresolved notification-fixture observation is retained in BACKLOG.
