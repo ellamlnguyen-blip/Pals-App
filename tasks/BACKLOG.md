@@ -14,8 +14,11 @@
 - TASK-018 attendance confirmation
 - TASK-019 PostHog instrumentation
 - TASK-020 large-hangout basic safeguards
+- TASK-023 student web frontend design alignment — execute after TASK-020 and before TASK-021 staging. Align the student-facing UI with current usepals.com visual direction, including shared tokens/components and route-wide rendered checks; preserve existing backend/schema/RLS/API/authorization behavior. Contract: `active/TASK-023-frontend-design-alignment.md`.
 - TASK-021 staging launch rehearsal
 - TASK-022 domain migration/cutover
+
+Execution order note: TASK-023 is deliberately numbered after the existing launch tasks to avoid renumbering established contracts. Its dependency places it before TASK-021 staging and TASK-022 domain cutover.
 
 ## Later
 Expo mobile; native release pipeline; organization accounts; polls; optional capacity/waitlists; multi-campus.
