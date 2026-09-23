@@ -1,12 +1,16 @@
 "use client";
 import { useRef, useState } from "react";
 import { blockPerson } from "../actions";
+import { blockReviewOutcome } from "../../../lib/relationship-block-outcome";
 
 export function KnownRelationshipBlock() {
   const [id, setId] = useState("");
   const [typed, setTyped] = useState("");
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
+  const [outcome, setOutcome] = useState<"ready" | "unknown" | "confirmed">(
+    "ready",
+  );
   const dialog = useRef<HTMLDialogElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
   const valid =
@@ -30,12 +34,21 @@ export function KnownRelationshipBlock() {
       <button
         ref={trigger}
         className="text-button"
-        disabled={!valid || busy}
+        disabled={!valid || busy || outcome !== "ready"}
         onClick={() => dialog.current?.showModal()}
       >
         Review block
       </button>
       <p role="status">{message}</p>
+      {outcome !== "ready" && (
+        <p>
+          {/* Full navigation rechecks live access after an uncertain block. */}
+          {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+          <a href="/people/friends">Reload current access</a> ·{" "}
+          {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+          <a href="/people/privacy">Check outbound blocked IDs</a>
+        </p>
+      )}
       <dialog
         ref={dialog}
         onClose={() => {
@@ -72,10 +85,12 @@ export function KnownRelationshipBlock() {
               try {
                 const result = await blockPerson(id);
                 setMessage(result.message);
+                setOutcome(blockReviewOutcome(result.state));
               } catch {
                 setMessage(
                   "Block outcome unknown. Reload outbound blocked IDs before another action.",
                 );
+                setOutcome("unknown");
               } finally {
                 setBusy(false);
               }

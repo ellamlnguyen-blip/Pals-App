@@ -2,6 +2,7 @@
 
 import { access } from "../../lib/access";
 import { peopleId, requireLocalPeople } from "../../lib/people";
+import { emptyCreateOutcome } from "../../lib/friendship-create-outcome";
 
 export type Friendship = {
   peer_id: string;
@@ -44,6 +45,20 @@ async function current(
   }
 }
 
+async function currentlyVisible(
+  client: Awaited<ReturnType<typeof access>>["client"],
+  peerId: string,
+) {
+  try {
+    const { data, error } = await client.rpc("get_people_detail", {
+      p_account_id: peerId,
+    });
+    return !error && !!data?.length;
+  } catch {
+    return false;
+  }
+}
+
 export async function readFriendship(
   peerId: string,
 ): Promise<FriendshipResult> {
@@ -68,10 +83,7 @@ export async function createFriendRequest(
   if (!valid(peerId) || !valid(requestId)) return unavailable();
   const { client, state } = await access();
   if (state !== "ready") return unavailable();
-  const detail = await client.rpc("get_people_detail", {
-    p_account_id: peerId,
-  });
-  if (detail.error || !detail.data?.length) return unavailable();
+  if (!(await currentlyVisible(client, peerId))) return unavailable();
   const before = await current(client, peerId);
   if (!before) return unavailable();
   if (before.relationship)
@@ -80,36 +92,34 @@ export async function createFriendRequest(
       relationship: before.relationship,
       message: "Relationship changed. Reload before another action.",
     };
-  let writeOk = false;
+  let write: "confirmed" | "denied" | "uncertain" = "uncertain";
   try {
-    writeOk = !(
-      await client.rpc("create_friend_request", {
-        p_target_id: peerId,
-        p_request_id: requestId,
-      })
-    ).error;
+    const result = await client.rpc("create_friend_request", {
+      p_target_id: peerId,
+      p_request_id: requestId,
+    });
+    write = result.error ? "denied" : "confirmed";
   } catch {
-    /* Read after uncertain write. */
+    // A transport loss leaves the write uncertain; the same key may be retried
+    // only after a successful current-state and People-visibility recheck.
   }
   const after = await current(client, peerId);
   if (!after)
     return unknown(
-      "Request outcome unknown. Reload before trying again with the same request key.",
+      "Request outcome unknown. Check current status before trying again.",
     );
+  if (!(await currentlyVisible(client, peerId)))
+    return emptyCreateOutcome(write, false);
   if (after.relationship)
     return {
       state: "known",
       relationship: after.relationship,
-      message: writeOk
-        ? "Current request status is shown."
-        : "The request response was uncertain. Current relationship status is shown.",
+      message:
+        write === "confirmed"
+          ? "Current request status is shown."
+          : "The request response was uncertain or denied. Current relationship status is shown.",
     };
-  return {
-    state: "known",
-    relationship: null,
-    message:
-      "No current relationship is visible. This does not confirm whether the request was received. You can retry this same request key.",
-  };
+  return emptyCreateOutcome(write, true);
 }
 
 export type FriendshipTransition = "accept" | "decline" | "cancel" | "unfriend";
