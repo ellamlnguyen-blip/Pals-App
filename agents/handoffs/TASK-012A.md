@@ -47,3 +47,7 @@ Data model, authorization, testing and Supabase API README. Shared NOW/BACKLOG/C
 ## Ready for next task?
 
 No. TASK-012B waits for independent security review, coordinator acceptance and main integration of A. Remote verification for task branch is recorded in the agent's final publication receipt; main verification and integration belong to the coordinator.
+
+## Coordinator integration receipt
+
+The corrected backend branch was independently verified at `2a1f6b13b332196ba599fb739513fd424024f2a7`; fresh exact-commit security re-review found no remaining blocker. The reviewed stage merged on the coordinator branch at `bb6818b98c2357ea3d60d75ff8ed575e9574945b` and was published with this handoff/review on canonical main `bfd13ee1f6e6eb1cab52a442c52cf6e8ac01792e`. All three refs were checked with `git ls-remote`. TASK-012A is complete within the documented offline full-check limitation; TASK-012B still requires its separately published contract and fresh agent.

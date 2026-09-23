@@ -1,6 +1,6 @@
 # TASK-012A — Local friendship state and authorization
 
-Status: Corrected backend security review clear; merged on coordinator integration branch; canonical main publication/verification pending
+Status: Complete locally — corrected backend security review clear; integrated and remote-verified on canonical main
 Date: 2026-09-23
 Parent: TASK-012
 Decision: Accepted ADR-0014, explicitly accepted by the user on 2026-09-23
@@ -31,4 +31,4 @@ Run `pnpm check`, two clean `pnpm db:verify` resets/schema lint and real local A
 Commit in-scope implementation and `agents/handoffs/TASK-012A.md`, push the task branch and independently verify its remote SHA, then stop. Do not merge to main. The coordinator reviews code/handoff, obtains independent security review and integrates only accepted work; TASK-012B waits.
 
 ## Review outcome
-Initial task tip `83d0557` exposed a create/accept versus eligibility-revocation race. Corrected task tip `2a1f6b13b332196ba599fb739513fd424024f2a7` was independently remote-verified and cleared by fresh exact-commit security re-review. Two clean resets, six SQL suites, real Auth/PostgREST and deterministic race checks passed with the offline full-check limitation documented in `agents/handoffs/TASK-012A.md` and `TASK-012A-REVIEW.md`. The coordinator merged the reviewed tip on `agent/TASK-012-planning` at `bb6818b98c2357ea3d60d75ff8ed575e9574945b`; canonical main publication remains pending.
+Initial task tip `83d0557` exposed a create/accept versus eligibility-revocation race. Corrected task tip `2a1f6b13b332196ba599fb739513fd424024f2a7` was independently remote-verified and cleared by fresh exact-commit security re-review. Two clean resets, six SQL suites, real Auth/PostgREST and deterministic race checks passed with the offline full-check limitation documented in `agents/handoffs/TASK-012A.md` and `TASK-012A-REVIEW.md`. The coordinator merged the reviewed tip on `agent/TASK-012-planning` at `bb6818b98c2357ea3d60d75ff8ed575e9574945b`. Canonical main and coordinator branch were pushed and independently verified at `bfd13ee1f6e6eb1cab52a442c52cf6e8ac01792e`; backend task branch remained at reviewed `2a1f6b13b332196ba599fb739513fd424024f2a7`. TASK-012B may proceed under its separately published UI contract.
