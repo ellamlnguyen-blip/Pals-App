@@ -67,3 +67,9 @@ The local migration adds `hangouts`, `hangout_participants` and separate `hangou
 ## TASK-011A local People privacy records (ADR-0013)
 
 `private.people_feature_gate` is a singleton defaulting disabled. `private.people_preferences` stores a sparse per-account boolean: no row means opted out. `private.people_blocks` stores a directional `(blocker_id, blocked_id)` pair without client table access. Caller-bound functions provide owner preference, bounded outbound blocked IDs, desired-state block changes and allowlisted text browse/detail. The profile table remains the sole source of shared text; no peer-readable profile copy or photo reference is introduced. These blocks affect only the local People directory, not Hangouts or future messaging.
+
+## TASK-012A disposable-local friendship records (ADR-0014)
+
+`private.friendship_feature_gate` defaults disabled. `private.friendships` stores one canonical unordered account pair, requester, campus at formation, server-generated generation UUID and pending/accepted state. `private.friendship_create_requests` retains each caller-scoped creation UUID and original generation after teardown, preventing an old retry from opening another request. `private.friendship_suppression` stores directional decline/cancel suppression. All three tables have RLS and no client access.
+
+Caller-bound RPCs create, list/status, accept, decline, cancel and unfriend. New creation and acceptance require current ready same-campus People opt-in and bilateral visibility. Existing active participants retain ID/status and may clean up after readiness or opt-in loss. `set_people_block` atomically deletes the pair under the shared unordered-pair lock, including while the friendship gate is off. A ready current participant may block a now-hidden peer by ID. Unblock never restores a pair. No friend relation changes Hangout authorization or grants peer profile/photo access.
