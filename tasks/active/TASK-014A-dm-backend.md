@@ -1,6 +1,6 @@
 # TASK-014A — Local DM state and authorization backend
 
-Status: Reviewed local backend merged on coordinator branch; canonical publication pending
+Status: Complete locally — reviewed backend integrated and remotely verified on canonical main
 Date: 2026-09-23
 Parent: TASK-014
 Decision: Accepted ADR-0016, explicitly accepted by the user on 2026-09-23
@@ -35,3 +35,5 @@ Accepted ADR-0016 and this independently reviewed contract were published and in
 
 ## Review outcome
 Final task tip `eb5259e521df86d17e8cc5d01c69e4ae8b90f57b` was independently remote-verified. Fresh exact-tip GPT-6 Sol medium reviews found no remaining code/privacy blocker after the current-campus correction and added required DM race evidence; see `agents/handoffs/TASK-014A-REVIEW.md`. Local SQL/Auth/concurrency/workspace/lint checks passed within the handoff's direct-SQL wrapper limitation. Gates false, fixtures zero and services stopped. Reviewed backend merged into the coordinator branch at `993aa005da087977157780b7a597e90529333329`; publish/verify canonical main before TASK-014B planning or dispatch.
+
+Canonical main integration receipt: the reviewed backend, handoff and coordinator security/status record were published and independently remote-verified at `7b4be6faa8e45193e01001169e2adfbdf27b69f7`; the task branch remained at reviewed `eb5259e521df86d17e8cc5d01c69e4ae8b90f57b`. TASK-014B may proceed only after its narrower contract is independently reviewed/published and a fresh UI agent is dispatched. No hosted operation or green `db:test` wrapper claim.
