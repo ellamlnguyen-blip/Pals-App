@@ -16,3 +16,7 @@ TASK-006 adds database optional-shape/photo-membership tests, direct HTTP round 
 ## TASK-012A friendship verification
 
 `local_friendship.test.sql` tests actual-role privacy and state transitions. `friendship-http.integration.mjs` uses real local Auth/PostgREST caller sessions; `friendship-concurrency.integration.mjs` waits for observed pair-lock contention to verify block teardown, post-wait gate revocation, and committed opt-out, gate-disable and photo-readiness writes racing after a create eligibility check. Run the two Node suites with `--test-concurrency=1` against a validated disposable loopback Supabase stack; both manipulate private local feature gates and clean fixtures. The normal `pnpm db:verify` pgTAP run includes the SQL file.
+
+## TASK-013A local Hangout chat verification
+
+`local_hangout_chat.test.sql` covers actual-role table/RPC denial, joined history, retries, author projection, pagination, readiness changes, both gates and cancellation. `hangout-chat-http.integration.mjs` uses real local Auth/PostgREST sessions. `hangout-chat-concurrency.integration.mjs` waits for observed Postgres lock contention before testing gate, profile, membership and duplicate-send races. Run the Node suites serially against the validated disposable loopback Supabase stack; each disables local gates and removes its fixtures. The pgTAP file is included in normal `pnpm db:verify`.
