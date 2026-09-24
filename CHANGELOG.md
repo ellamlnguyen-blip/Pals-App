@@ -2,6 +2,12 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-24 — TASK-024 Pals brand correction planned
+
+- Added a follow-up prompt after TASK-023 because the delivered visual direction did not make the requested brand clear enough.
+- Required the supplied Pals logo, UNC Carolina blue `#7BAFD4`, white canvas/surfaces, accessible supporting colors, and a shared-token route-wide correction.
+- Frozen backend boundary: no schema, RLS, API, server-action, feature-gate, privacy, safety, or authorization changes.
+
 ## 2026-09-24 — TASK-017A case revision policy acceptance
 
 - The user accepted ADR-0020's narrow `case_revision` field for an already authorized and audited operator report-detail response. It resolves the versioning policy gap for multi-operator case transitions; implementation and verification are still pending. No runtime or hosted behavior changed in this decision record.
