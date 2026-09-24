@@ -1,3 +1,13 @@
+TASK-017B2's `local_hangout_disable.test.sql` covers actual-role local
+moderation authority, exact action binding/replay, immutable evidence,
+published/cancelled lifecycle, direct student RLS/RPC denial, unavailable
+Hangout/chat notifications and retained safety reporting. The real local
+Auth/PostgREST counterpart is `hangout-disable-http.integration.mjs`;
+`hangout-disable-concurrency.integration.mjs` observes waits in both commit
+orders for edit, join, chat send and cancellation, plus operator revocation and
+case contention. Run HTTP and overlapping-session suites serially. Immutable
+disable/audit fixtures require a final disposable database reset.
+
 # Database tests
 
 TASK-017B1's `local_account_enforcement.test.sql` exercises the caller-bound

@@ -110,6 +110,31 @@ Hosted CDN caching and immediate revocation of preissued URLs require separate
 policy and engineering decisions under Accepted ADR-0021. No hosted use is
 authorized by this migration.
 
+## Disposable-local Hangout disable boundary (TASK-017B2)
+
+Migration `20260924000300_local_hangout_disable.sql` adds a private one-way
+Hangout disable record. The moderation gate remains false after every reset.
+`apply_hangout_moderation_action(p_report_id,p_request_id,p_expected_case_revision,p_reason)`
+acts only on the exact Hangout stored in an `in_review` report. A current active
+moderator/admin supplies a fresh UUID and trimmed 1–2000-code-point reason.
+The RPC returns only case state, revision and disabled state; same-payload
+replay requires current authority and returns the saved result. A disable
+atomically closes its case as `action_taken`, links one immutable private action,
+appends an audit event and leaves lifecycle status and retained evidence intact.
+There is no re-enable RPC or client table grant.
+
+The shared social/Hangout transaction lock precedes moderation authority,
+stored report, the single Hangout parent `FOR UPDATE` lock, request UUID and
+case. Existing Hangout mutation RPCs recheck the private disable after waiting
+for their parent lock. Direct Hangout, roster and private-instruction RLS,
+chat authorization and notification source projection use the same disabled
+source boundary. Calendar/map source reads therefore lose the row; retained
+notifications show `Unavailable` without a destination. The separate safety
+gate still permits an active caller to recover only their own retained Hangout
+ID/state and file an evidence-qualified private report. Internal global-block
+reconciliation can still transition retained participants. This migration
+adds no ordinary disable notification, hosted operation or admin UI.
+
 ## Hosted procedure
 
 A configured, authorized non-production Supabase project is required before these steps. Its Postgres major version must match local 17. Review the project name and reference against the environment inventory; never infer staging from a URL or substitute production. Use a disposable checkout dedicated to hosted operations. Current target and actual verification evidence are recorded in `docs/operations/HOSTED_ENVIRONMENT.md`.
