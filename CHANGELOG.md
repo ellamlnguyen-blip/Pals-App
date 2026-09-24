@@ -2,6 +2,11 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-24 — TASK-017 disposable-local moderation console complete
+
+- Replaced the admin placeholder with a private, local-only operator queue, audited report detail and confirmed case/account/Hangout actions over the accepted caller-bound RPCs. The console clears sensitive state on denial or revocation, guards late report/mutation responses and supports same-key retry after an uncertain result.
+- Independent exact-tip source/security review and coordinator local Auth/browser checks passed, including two-operator stale decisions, unavailable targets, suspended/banned operators, responsive light/dark rendering and response loss. Final reset cleared fixtures and disabled all eight gates; no hosted or default-on operation occurred.
+
 ## 2026-09-24 — TASK-017B2 local Hangout disabling
 
 - Added an audited, one-way operator action that disables the exact reported Hangout and atomically closes its case, with immutable private action and retry evidence. Disabled Hangouts lose student discovery, detail, roster, private-instruction, chat, notification-destination and mutation access, including direct database/API routes. Retained own ID/state and private safety reporting remain available under their existing gates.

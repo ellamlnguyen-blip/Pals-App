@@ -1,5 +1,9 @@
 # NOW
 
+## TASK-017 completion
+
+All bounded disposable-local TASK-017 stages A/B1/B2/C are integrated locally and accepted after exact-tip review. Final Stage C production-browser checks covered local Auth/operator roles, unavailable targets, two-operator stale revision, suspended/banned operator denial, response-loss retry, gate revocation, responsive light/dark views and keyboard behavior. Final reset found zero fixtures and eight disabled gates; owned services stopped. Canonical remote publication is the final coordination step. TASK-018 attendance confirmation is the next product task; hosted moderation is not authorized by this completion.
+
 ## TASK-017 moderation planning
 
 TASK-017C dispatch: independently remote-verified main `16793a4dbbd16f834803695bfb99a547ab60f0c8` contains reviewed C contract and accepted B2 backend. A fresh scoped GPT-6 Sol medium agent implements only the disposable-local operator UI in `/private/tmp/pals-task-017c-admin` on `agent/TASK-017C-admin-console`; the dispatch tool exposes no Standard-speed selector to verify. Authenticated UI, rendered QA, local checks, handoff, exact-tip security/design review and main integration remain pending. Hosted work remains excluded.

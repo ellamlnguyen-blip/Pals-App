@@ -1,5 +1,5 @@
 # TASK-017C — Disposable-local operator console
-Status: Reviewed contract ready for publication; B2 exact-tip security review accepted and canonical integration independently remote-verified
+Status: Complete for disposable-local Stage C; implementation tip `8f1557bd1ea56eef76904907b9737c8745619e48` accepted after exact-tip source/security and rendered local review
 Date: 2026-09-24
 Planning baseline: canonical main `057c6ba2e5a3e59250a2318703a6edfd54da4911`; reviewed B2 integrated on independently remote-verified main `a7af812a20d1de066a6e8893b678bb43b61bf068`
 

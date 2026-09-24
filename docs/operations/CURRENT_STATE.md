@@ -6,6 +6,8 @@ Last updated: 2026-09-24
 Decision tree resolved through product purpose, loop, profile/hangout/social model, safety, map/calendar navigation, MVP boundary, technical architecture, and agent operating model.
 
 ## Build State
+TASK-017's disposable-local A/B1/B2/C moderation scope is accepted and integrated locally. The admin console uses only caller-bound audited RPCs; final production-browser checks covered local Auth, queue/detail/case and enforcement flows, uncertain-response same-key retry, unavailable targets, two-operator stale revision, suspended/banned operator denial and responsive light/dark rendering. Exact-tip independent Stage C source/security review found no remaining P0/P1/P2 after two corrections. The final reset found zero fixtures and all eight gates false; local services are stopped. Canonical remote publication is the final coordination step. Hosted moderation, staffing, retention and deployment remain separate. See `agents/handoffs/TASK-017C-REVIEW.md`.
+
 TASK-017C operator UI runs in a fresh disposable-local checkout from independently remote-verified main `16793a4dbbd16f834803695bfb99a547ab60f0c8`, which contains the reviewed UI contract and accepted A/B1/B2 backend. Implementation, rendered/authenticated checks, exact-tip review and integration remain pending. Hosted operation remains excluded.
 
 TASK-017B2 local Hangout disabling and its exact-tip security review are on independently remote-verified canonical main `a7af812a20d1de066a6e8893b678bb43b61bf068`. The reviewed TASK-017C admin-console contract is merged locally; its canonical publication and a fresh UI task dispatch are next. No hosted or default-on moderation operation has occurred.

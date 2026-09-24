@@ -1,5 +1,5 @@
 # TASK-017 — Disposable-local admin moderation console
-Status: Active; audited review and account/Hangout enforcement backends complete locally, Stage C admin UI pending
+Status: Complete for bounded disposable-local A/B1/B2/C scope; hosted moderation remains separate
 Date: 2026-09-23
 Branch: `agent/TASK-017-admin-moderation` from verified `origin/main` `78e074247b03eafb554a4a7ecad6ab11644308dd`
 

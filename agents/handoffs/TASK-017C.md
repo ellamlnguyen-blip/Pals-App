@@ -1,6 +1,6 @@
 # TASK-017C implementation handoff
 
-Status: implementation branch ready for fresh security and rendered review; TASK-017C remains incomplete until its live local operator-flow and review gates are satisfied and the coordinator integrates accepted work.
+Status: accepted after exact-tip security review and coordinator rendered/local Auth QA; integrated locally. See `TASK-017C-REVIEW.md` for final evidence and cleanup.
 
 ## Exact-tip review response, 2026-09-24
 
@@ -43,4 +43,4 @@ Status: implementation branch ready for fresh security and rendered review; TASK
 ## Publication
 
 - Initial implementation commit `2d8ce79560bac45b8318db407363f5f511821eeb` and first handoff tip `38c17a6497fb094cbe15a659469a1aeee0319912` were pushed and independently verified on 2026-09-24. Review fixes follow; the coordinator should use the subsequently verified final branch tip for review.
-- Canonical main SHA after integration: pending coordinator acceptance.
+- Coordinator local integration commit: `e225e3e`; canonical remote verification is recorded in the parent completion receipt.
