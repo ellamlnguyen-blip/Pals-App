@@ -53,7 +53,6 @@ export default async function DirectPage({
           key={`${id}:${local.user?.id}`}
           id={id}
           actor={local.user!.id}
-          ready={local.state === "ready"}
           knownPair={knownPair}
         />
       </section>

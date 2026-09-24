@@ -7,12 +7,10 @@ import { DirectThread } from "./thread";
 export function DirectSafetyBoundary({
   id,
   actor,
-  ready,
   knownPair,
 }: {
   id: string;
   actor: string;
-  ready: boolean;
   knownPair: boolean;
 }) {
   const [cleared, setCleared] = useState(false);
@@ -24,7 +22,7 @@ export function DirectSafetyBoundary({
           <Link href="/safety">Open Safety</Link>
         </div>
       ) : (
-        <DirectThread id={id} actor={actor} ready={ready} />
+        <DirectThread id={id} actor={actor} />
       )}
       {knownPair && (
         <SafetyActions

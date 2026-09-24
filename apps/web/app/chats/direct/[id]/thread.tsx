@@ -17,15 +17,7 @@ type Read = {
   bodyAccess?: boolean;
 };
 type Pending = { key: string; body: string; action: "reply" | "send" };
-export function DirectThread({
-  id,
-  actor,
-  ready,
-}: {
-  id: string;
-  actor: string;
-  ready: boolean;
-}) {
+export function DirectThread({ id, actor }: { id: string; actor: string }) {
   const [phase, setPhase] = useState<
     | "loading"
     | "ready"
@@ -279,8 +271,7 @@ export function DirectThread({
     setPage(index);
   }
   async function mutate(
-    action:
-      "accept" | "reply" | "ignore" | "withdraw" | "close" | "send" | "block",
+    action: "accept" | "reply" | "ignore" | "withdraw" | "close" | "send",
   ) {
     if (
       !status ||
@@ -364,11 +355,9 @@ export function DirectThread({
       }
       if (data.kind !== "ok") {
         setNote(
-          action === "block"
-            ? "Block outcome uncertain. Check outbound blocked IDs before another action. Any confirmed block ends this direct chat; confirmed blocks now affect Hangout access and may end shared attendance."
-            : item
-              ? "Outcome uncertain. Retry the same message after a fresh check."
-              : "Outcome uncertain. Reload to check before another action.",
+          item
+            ? "Outcome uncertain. Retry the same message after a fresh check."
+            : "Outcome uncertain. Reload to check before another action.",
         );
         return;
       }
@@ -378,12 +367,8 @@ export function DirectThread({
         draftRef.current = "";
         setDraft("");
       }
-      if (["ignore", "withdraw", "close", "block"].includes(action)) {
+      if (["ignore", "withdraw", "close"].includes(action)) {
         deny("unavailable");
-        if (action === "block")
-          setNote(
-            "Block confirmed. People discovery, friendship and this direct chat ended. Confirmed blocks now affect Hangout access and may end shared attendance.",
-          );
         return;
       }
       mask("Checking updated conversation…");
@@ -392,11 +377,9 @@ export function DirectThread({
     } catch {
       if (now === ticket.current)
         setNote(
-          action === "block"
-            ? "Block outcome uncertain. Check outbound blocked IDs before another action. Any confirmed block ends this direct chat; confirmed blocks now affect Hangout access and may end shared attendance."
-            : item
-              ? "Outcome uncertain. Retry the same message after a fresh check."
-              : "Outcome uncertain. Reload to check before another action.",
+          item
+            ? "Outcome uncertain. Retry the same message after a fresh check."
+            : "Outcome uncertain. Reload to check before another action.",
         );
     } finally {
       if (now === ticket.current) setBusy(false);
@@ -475,22 +458,6 @@ export function DirectThread({
                       ? "Ignore request"
                       : "Withdraw request"}
                 </button>
-                {ready && (
-                  <button
-                    className="text-button"
-                    disabled
-                    onClick={() => {
-                      if (
-                        window.confirm(
-                          "Block this ID in People? This ends People discovery, friendship and this direct chat. Confirmed blocks now affect Hangout access and may end shared attendance.",
-                        )
-                      )
-                        void mutate("block");
-                    }}
-                  >
-                    New blocking temporarily unavailable
-                  </button>
-                )}
               </div>
             )}
             {phase === "ready" && (
@@ -610,20 +577,6 @@ export function DirectThread({
                       Close chat
                     </button>
                   )}
-                  <button
-                    className="text-button"
-                    disabled
-                    onClick={() => {
-                      if (
-                        window.confirm(
-                          "Block this ID in People? This ends People discovery, friendship and this direct chat. Confirmed blocks now affect Hangout access and may end shared attendance.",
-                        )
-                      )
-                        void mutate("block");
-                    }}
-                  >
-                    New blocking temporarily unavailable
-                  </button>
                 </div>
               </>
             )}
