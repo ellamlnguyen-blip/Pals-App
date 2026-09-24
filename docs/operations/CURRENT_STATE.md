@@ -6,6 +6,8 @@ Last updated: 2026-09-24
 Decision tree resolved through product purpose, loop, profile/hangout/social model, safety, map/calendar navigation, MVP boundary, technical architecture, and agent operating model.
 
 ## Build State
+On 2026-09-24 the user explicitly approved the reviewed TASK-017B2 default-off disposable-local Hangout-disable authorization migration and tests after two automatic approval-review rejections. A fresh isolated attempt can proceed under Accepted ADR-0019. No B2 implementation, hosted migration or gate enablement has occurred; exact-tip security review and integration remain required.
+
 TASK-017B2 Hangout disable is blocked by two automatic approval-review rejections of its source authorization migration, despite Accepted ADR-0019 and the published B2 contract. The tool stated trusted approval covers account enforcement only. Its isolated branch is clean at `b7f0dfecf4569a7969befb3e0caf64b68241023f`; no B2 code, tests, task push, gate enablement or hosted operation occurred. The coordinator is requesting specific approval for the guarded disposable-local B2 stage. See `agents/handoffs/TASK-017B2-BLOCKED.md`.
 
 TASK-017B2 Hangout-disable implementation runs in a fresh isolated checkout from independently remote-verified main `b7f0dfecf4569a7969befb3e0caf64b68241023f`, which contains its reviewed contract. Local migration/tests, exact-tip security review, cleanup and main integration remain pending. The moderation and student source gates stay default-off; no admin UI or hosted moderation has begun.

@@ -1,5 +1,5 @@
 # TASK-017B2 — Disposable-local Hangout disable backend
-Status: Blocked by repeated automatic approval review of guarded Hangout authorization changes; explicit stage approval requested, implementation branch clean
+Status: Explicitly approved for a fresh disposable-local implementation attempt on 2026-09-24; code, tests, review and integration pending
 Date: 2026-09-24
 Planning baseline: independently remote-verified canonical main `5bf3cc454dda4cb9e7c272adf659c98fe1e9b917`
 
