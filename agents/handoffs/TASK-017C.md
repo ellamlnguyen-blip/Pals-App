@@ -33,6 +33,5 @@ Status: implementation branch ready for fresh security and rendered review; TASK
 
 ## Publication
 
-- Task branch commit: pending.
-- Independently verified remote task SHA: pending.
+- Implementation commit `2d8ce79560bac45b8318db407363f5f511821eeb` was pushed to `origin/agent/TASK-017C-admin-console` and independently verified with `git ls-remote` on 2026-09-24. This handoff receipt update follows that implementation commit; the coordinator should verify the final branch tip before review.
 - Canonical main SHA after integration: pending coordinator acceptance.
