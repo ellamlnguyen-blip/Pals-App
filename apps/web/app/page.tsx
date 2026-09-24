@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { StudentHeader } from "./student-shell";
 
 export default function Home() {
   return (
@@ -6,28 +7,27 @@ export default function Home() {
       <a className="skip-link" href="#main">
         Skip to content
       </a>
-      <header>
-        <span className="wordmark">Pals</span>
-        <span className="campus">UNC Chapel Hill</span>
-      </header>
+      <StudentHeader />
       <main id="main" tabIndex={-1}>
-        <section aria-labelledby="page-heading">
-          <p className="status">Meet your campus</p>
-          <h1 id="page-heading">Good plans start with people.</h1>
-          <p className="intro">
-            Find your people at UNC. Start with your campus email and a little
-            about yourself.
-          </p>
-          <div className="actions">
-            <Link className="button" href="/signup">
-              Join Pals
-            </Link>
-            <Link href="/signin">Already here? Sign in</Link>
+        <section className="welcome-hero" aria-labelledby="page-heading">
+          <div>
+            <p className="status">Meet your campus</p>
+            <h1 id="page-heading">Meet up. Make it happen.</h1>
+            <p className="intro">
+              Make a casual plan, find a Hangout and spend more time together at
+              UNC.
+            </p>
+            <div className="actions">
+              <Link className="button" href="/signup">
+                Join Pals
+              </Link>
+              <Link href="/signin">Already here? Sign in</Link>
+            </div>
           </div>
         </section>
         <p className="notice">
-          Pals is taking shape. Account setup is ready; Hangouts are coming
-          next.
+          This local build includes UNC account setup and a clearly labeled mock
+          Hangouts map. Saved plans require running local services.
         </p>
       </main>
     </div>
