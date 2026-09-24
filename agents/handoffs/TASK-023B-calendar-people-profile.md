@@ -5,10 +5,10 @@ Agent: isolated TASK-023B implementation agent
 Branch/worktree: `agent/TASK-023B-calendar-people-profile`, `/private/tmp/pals-task-023b-calendar-people-profile`
 Baseline: canonical main `63314d88630950f1237ea04dfae286d8d93a8a73`
 Implementation commit: `f231e0ca781013635f05bb453c029eec0734211b`
-Task branch and pushed commit SHA: pending publication; coordinator should verify the final handoff commit tip remotely.
+Task branch prior pushed tip: `4b1d9158a3a8d3d2fd3d8e8b98204d235185d883` (verified by `git ls-remote`). The corrected final task tip is reported to the coordinator after this handoff is committed and remotely verified.
 Integrated `main` commit SHA: pending independent exact-tip review and coordinator integration.
 Main status-record path and last published milestone: `tasks/active/TASK-023B-student-route-adoption.md`; coordinator owns shared records.
-Outstanding review/integration blockers: fresh exact-tip design/security review, coordinator-side rendered viewport QA, and inherited real authenticated route QA.
+Outstanding review/integration blockers: fresh corrected exact-tip design/security review, coordinator-side rendered viewport QA, and inherited real authenticated route QA.
 
 ## Outcome
 
@@ -22,7 +22,7 @@ Only `apps/web/app/calendar/`, `apps/web/app/people/` and `apps/web/app/profile/
 
 ## Behavior / Architecture Impact
 
-Existing Calendar day/week, discoverable/joined/hosting selection, public approximate place, People opt-in filtering, friendship/peer visibility, photo privacy, focus return, live regions, dialog behavior and action results are preserved. The shared nav only appears for ready routes; friends/privacy retain their unready access path without active navigation. Calendar's client error boundary has a standalone student header and skip target because it cannot call server-side gate functions.
+Existing Calendar day/week, discoverable/joined/hosting selection, public approximate place, People opt-in filtering, friendship/peer visibility, photo privacy, focus return, live regions, dialog behavior and action results are preserved. The shared nav only appears for authorized ready page results; friends/privacy retain their unready access path without active navigation. All four route loading fallbacks now render a gate-neutral Frame without ready-only navigation or a profile photo request while access is unresolved. Calendar's client error boundary has a gate-neutral student header and skip target because it cannot establish a signed-in state or call server-side gate functions.
 
 ## Tests / Verification
 
@@ -31,6 +31,7 @@ Existing Calendar day/week, discoverable/joined/hosting selection, public approx
 - Existing unit suite: 37 pass, 0 fail.
 - Web production build: pass; `/profile` is dynamic.
 - `git diff --check`: pass.
+- Focused review of all four loading files and Calendar error boundary confirms they pass no `signedIn` or `navigation` props before authorization resolves; authenticated page results still use the shared navigation. This was checked alongside lint, TypeScript and a production build after the correction.
 - Disposable synthetic route mounted the shared student shell and representative Calendar, People and owner profile markup. A local server on owned port 4319 returned HTTP 200 and generated HTML for the Calendar preview. The fixture route was removed and the server stopped. No student data or hosted service was used.
 
 ## Known Limitations
@@ -53,4 +54,4 @@ This handoff only. Coordinator owns `CURRENT_STATE`, queue and changelog updates
 
 No. Exact-tip independent review, rendered QA and main integration remain coordinator-owned; TASK-023C must wait for accepted B integration.
 
-Remote verification for both refs: pending branch publication and main integration by coordinator; this handoff records the local implementation SHA above.
+Remote verification for both refs: prior task branch tip `4b1d9158a3a8d3d2fd3d8e8b98204d235185d883` and main `094f78c8d14ef765959e24156adade0dc98d8971` were confirmed by `git ls-remote` before the readiness correction. The final corrected task tip is reported separately after publication; main integration remains coordinator-owned.

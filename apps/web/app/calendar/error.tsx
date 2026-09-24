@@ -8,7 +8,7 @@ export default function CalendarError() {
       <a className="skip-link" href="#main">
         Skip to content
       </a>
-      <StudentHeader signedIn />
+      <StudentHeader />
       <main id="main" tabIndex={-1}>
         <section className="calendar-empty" role="alert">
           <h1>Calendar unavailable</h1>
