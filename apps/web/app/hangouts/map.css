@@ -27,76 +27,6 @@
     margin-top: 0.75rem;
   }
 }
-.hangouts-header {
-  min-height: 72px;
-}
-.hangouts-header .campus {
-  margin-right: auto;
-}
-.account-menu {
-  position: relative;
-}
-.account-menu summary {
-  cursor: pointer;
-  list-style: none;
-  width: 44px;
-  height: 44px;
-  display: grid;
-  place-items: center;
-}
-.account-menu summary::-webkit-details-marker {
-  display: none;
-}
-.account-menu img {
-  border-radius: 50%;
-  object-fit: cover;
-  border: 1px solid var(--pals-line);
-}
-.account-panel {
-  position: absolute;
-  right: 0;
-  top: 52px;
-  z-index: var(--pals-layer-menu);
-  background: var(--pals-canvas);
-  border: 1px solid var(--pals-line);
-  border-radius: var(--pals-input-radius);
-  padding: 1rem;
-  width: 240px;
-  box-shadow: var(--pals-overlay-shadow);
-  overflow-wrap: anywhere;
-}
-.account-panel p {
-  font-size: 0.875rem;
-  margin: 0.5rem 0;
-}
-.primary-nav {
-  display: flex;
-  gap: 1.75rem;
-  border-bottom: 1px solid var(--pals-line);
-  overflow-x: auto;
-  padding: 0.5rem 0;
-}
-.primary-nav a,
-.primary-nav button {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-  padding: 0.3rem 0;
-  border: 0;
-  background: none;
-  color: var(--pals-muted);
-  font-size: 0.95rem;
-  font-weight: 750;
-  white-space: nowrap;
-  text-decoration: none;
-}
-.primary-nav [aria-current] {
-  color: var(--pals-accent);
-  box-shadow: inset 0 -3px var(--pals-accent);
-}
-.primary-nav button:hover {
-  color: var(--pals-accent);
-}
 .hangouts-main {
   padding-top: 2rem;
 }
@@ -412,18 +342,6 @@
   .hangouts-page {
     padding: 0 1rem 1.5rem;
   }
-  .hangouts-header {
-    min-height: 64px;
-  }
-  .primary-nav {
-    flex-wrap: wrap;
-    gap: 0 1.25rem;
-    overflow: visible;
-  }
-  .primary-nav a,
-  .primary-nav button {
-    font-size: 0.85rem;
-  }
   .hangouts-main {
     padding-top: 1.5rem;
   }
@@ -464,5 +382,49 @@
   }
   .shell-dialog {
     padding: 1.5rem;
+  }
+}
+
+/* Shared discovery rhythm for mock and saved map routes. */
+.hangouts-page {
+  max-width: var(--pals-content-width);
+}
+.hangouts-main {
+  padding-top: 1.5rem;
+}
+.hangouts-heading {
+  margin: 0.25rem 0 1.25rem;
+}
+.hangouts-heading h1 {
+  font-size: clamp(2rem, 3.5vw, 3rem);
+}
+.fixture-notice {
+  border: 1px solid var(--pals-line);
+}
+.map-frame {
+  background: var(--pals-surface-raised);
+  box-shadow: var(--pals-panel-shadow);
+}
+.discovery-rail {
+  padding: 1.25rem;
+  border: 1px solid var(--pals-line);
+  border-radius: var(--pals-radius-panel);
+  background: var(--pals-surface-raised);
+  box-shadow: var(--pals-panel-shadow);
+}
+.hangout-preview {
+  background: var(--pals-surface);
+}
+@media (max-width: 899px) {
+  .discovery-rail {
+    max-width: none;
+  }
+}
+@media (max-width: 599px) {
+  .discovery-rail {
+    padding: 1rem;
+  }
+  .map-frame {
+    height: 340px;
   }
 }

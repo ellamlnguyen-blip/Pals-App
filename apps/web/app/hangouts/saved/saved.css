@@ -160,3 +160,37 @@
 .saved-chat-entry h2 {
   margin-bottom: 0.5rem;
 }
+
+.saved-page,
+.saved-detail {
+  max-width: var(--pals-content-width);
+  padding: 0 0 4rem;
+}
+.saved-heading {
+  margin-top: 1rem;
+}
+.saved-detail-grid > *,
+.saved-private,
+.saved-chat-entry {
+  background: var(--pals-surface-raised);
+  border: 1px solid var(--pals-line);
+  border-radius: var(--pals-radius-panel);
+  padding: 1.5rem;
+  box-shadow: var(--pals-panel-shadow);
+}
+.saved-detail-grid {
+  gap: 1rem;
+}
+.saved-detail-state {
+  background: var(--pals-accent-soft);
+  color: var(--pals-accent);
+}
+.saved-limit {
+  background: var(--pals-accent-soft);
+}
+@media (max-width: 700px) {
+  .saved-page,
+  .saved-detail {
+    padding: 0 0 3rem;
+  }
+}

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { HangoutsMap } from "./map";
 import { filterMockHangouts, MOCK_HANGOUTS } from "./fixtures";
+import { StudentNav } from "../student-shell";
 
 export function HangoutsShell({
   token,
@@ -55,42 +56,15 @@ export function HangoutsShell({
   }
   return (
     <>
-      <nav className="primary-nav" aria-label="Primary">
-        <a href="/hangouts" aria-current="page">
-          Hangouts
-        </a>
-        {createEnabled && <a href="/calendar">Calendar</a>}
-        {peopleEnabled ? (
-          <Link href="/people">People</Link>
-        ) : (
-          <button
-            onClick={() => showShell("People")}
-            aria-label="People, coming later"
-          >
-            People
-          </button>
-        )}
-        {createEnabled && <Link href="/chats">Chats</Link>}
-        {notificationsEnabled ? (
-          <Link href="/notifications">Notifications</Link>
-        ) : (
-          <button
-            onClick={() => showShell("Notifications")}
-            aria-label="Notifications, coming later"
-          >
-            Notifications
-          </button>
-        )}
-        {(!createEnabled ? ["Calendar", "Chats"] : []).map((name) => (
-          <button
-            key={name}
-            onClick={() => showShell(name)}
-            aria-label={`${name}, coming later`}
-          >
-            {name}
-          </button>
-        ))}
-      </nav>
+      <StudentNav
+        available={{
+          calendar: createEnabled,
+          people: peopleEnabled,
+          chats: createEnabled,
+          notifications: notificationsEnabled,
+        }}
+        onUnavailable={showShell}
+      />
       <main id="main" className="hangouts-main" tabIndex={-1}>
         <div className="hangouts-heading">
           <div>

@@ -165,3 +165,36 @@
     padding: 1rem;
   }
 }
+
+/* Match the shared student panels without changing editor or saved data. */
+.hangout-page-heading {
+  padding-top: 0.5rem;
+}
+.hangout-editor-main,
+.hangout-editor-area,
+.hangout-confirmation section {
+  background: var(--pals-surface-raised);
+  border: 1px solid var(--pals-line);
+  border-radius: var(--pals-radius-panel);
+  box-shadow: var(--pals-panel-shadow);
+}
+.hangout-confirmation section {
+  padding: 1.5rem;
+}
+.hangout-private {
+  background: var(--pals-surface);
+  border-radius: var(--pals-input-radius);
+  padding: 1rem;
+}
+.owned-hangouts {
+  max-width: none;
+  padding: 1.25rem;
+  border-radius: var(--pals-radius-panel);
+  background: var(--pals-surface-raised);
+  box-shadow: var(--pals-panel-shadow);
+}
+@media (max-width: 599px) {
+  .owned-hangouts {
+    margin: 1rem 0;
+  }
+}

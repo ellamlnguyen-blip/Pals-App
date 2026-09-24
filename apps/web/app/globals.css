@@ -289,3 +289,211 @@ h1 {
     font-size: 0.75rem;
   }
 }
+
+/* Shared student shell. Route styles can adopt these surfaces without changing data flow. */
+.student-header {
+  max-width: var(--pals-content-width);
+  margin: 0 auto;
+}
+.student-header .campus {
+  margin-right: auto;
+}
+.header-signin {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  font-weight: 800;
+  text-decoration: none;
+}
+.header-safety {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-weight: 800;
+  text-decoration: none;
+}
+.account-menu {
+  position: relative;
+}
+.account-menu summary {
+  cursor: pointer;
+  list-style: none;
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--pals-accent-soft);
+}
+.account-menu summary::-webkit-details-marker {
+  display: none;
+}
+.account-menu img,
+.account-initial {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  display: grid;
+  place-items: center;
+  color: var(--pals-accent);
+  font-weight: 900;
+}
+.account-panel {
+  position: absolute;
+  right: 0;
+  top: 52px;
+  z-index: var(--pals-layer-menu);
+  background: var(--pals-surface-raised);
+  border: 1px solid var(--pals-line);
+  border-radius: var(--pals-input-radius);
+  padding: 1rem;
+  width: min(250px, calc(100vw - 2rem));
+  box-shadow: var(--pals-overlay-shadow);
+  overflow-wrap: anywhere;
+}
+.account-panel > a,
+.account-panel form {
+  display: block;
+  margin-top: 0.5rem;
+}
+.account-panel p {
+  color: var(--pals-muted);
+  font-size: 0.875rem;
+  margin: 0.25rem 0 0.75rem;
+}
+.primary-nav {
+  display: flex;
+  gap: 0.35rem;
+  border-bottom: 1px solid var(--pals-line);
+  overflow-x: auto;
+  scrollbar-width: thin;
+  padding: 0.45rem 0;
+}
+.primary-nav a,
+.primary-nav button,
+.primary-nav .nav-unavailable {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  min-height: 44px;
+  padding: 0.55rem 0.9rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: var(--pals-muted);
+  font-size: 0.95rem;
+  font-weight: 800;
+  white-space: nowrap;
+  text-decoration: none;
+}
+.primary-nav [aria-current="page"] {
+  color: var(--pals-accent);
+  background: var(--pals-accent-soft);
+}
+.primary-nav a:hover,
+.primary-nav button:hover {
+  background: var(--pals-surface);
+  color: var(--pals-accent);
+}
+.primary-nav .nav-unavailable {
+  opacity: 0.65;
+}
+:focus-visible {
+  outline-color: var(--pals-focus);
+}
+.page > main {
+  padding-top: var(--pals-space-8);
+}
+.auth-layout {
+  gap: clamp(1.5rem, 5vw, 4rem);
+  align-items: center;
+}
+.form-panel {
+  background: var(--pals-surface-raised);
+  border: 1px solid var(--pals-line);
+  border-radius: var(--pals-radius);
+  box-shadow: var(--pals-panel-shadow);
+}
+.form-stack {
+  margin-top: 1rem;
+}
+.form-message {
+  background: var(--pals-surface);
+  border-radius: 0 var(--pals-input-radius) var(--pals-input-radius) 0;
+}
+.welcome-hero {
+  min-height: 24rem;
+  display: flex;
+  align-items: center;
+  padding: var(--pals-space-12);
+  background: var(--pals-surface-feature);
+  border-radius: var(--pals-radius);
+  margin-top: 0.5rem;
+}
+.welcome-hero h1 {
+  max-width: 13ch;
+  color: #fff;
+}
+.welcome-hero .status,
+.welcome-hero .intro {
+  color: #fff;
+}
+.welcome-hero .intro {
+  max-width: 43ch;
+}
+.welcome-hero .button {
+  background: #fff;
+  color: #174e79;
+}
+.welcome-hero .actions > a:not(.button) {
+  color: #fff;
+  font-weight: 800;
+}
+.notice {
+  max-width: 75ch;
+}
+.button,
+.quiet-button,
+.filter-button {
+  transition:
+    background-color 160ms ease,
+    box-shadow 160ms ease;
+}
+@media (prefers-reduced-motion: reduce) {
+  .button,
+  .quiet-button,
+  .filter-button {
+    transition: none;
+  }
+  .button:active {
+    transform: none;
+  }
+}
+@media (max-width: 767px) {
+  .student-header {
+    min-height: 64px;
+  }
+  .primary-nav {
+    margin-right: -1rem;
+    padding-right: 1rem;
+  }
+  .primary-nav a,
+  .primary-nav button,
+  .primary-nav .nav-unavailable {
+    font-size: 0.875rem;
+  }
+  .welcome-hero {
+    min-height: 0;
+    padding: 2rem 1.5rem;
+  }
+  .welcome-hero h1 {
+    font-size: clamp(2.2rem, 10vw, 3.3rem);
+  }
+}
+@media (max-width: 399px) {
+  .student-header .campus {
+    display: none;
+  }
+}

@@ -12,8 +12,8 @@ export default async function SavedHangoutsPage() {
   requireLocalHangouts();
   await requireAccess("ready");
   return (
-    <Frame signedIn>
-      <main className="saved-page" id="main">
+    <Frame signedIn navigation>
+      <div className="saved-page">
         <Link href="/hangouts">← Hangouts</Link>
         <div className="saved-heading">
           <div>
@@ -35,7 +35,7 @@ export default async function SavedHangoutsPage() {
               : ""
           }
         />
-      </main>
+      </div>
     </Frame>
   );
 }

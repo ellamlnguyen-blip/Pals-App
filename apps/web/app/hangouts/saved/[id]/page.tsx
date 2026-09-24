@@ -22,8 +22,8 @@ export default async function SavedDetailPage({
   const result = await readSavedDetail(id);
   if (result.kind !== "ok")
     return (
-      <Frame signedIn>
-        <main className="saved-detail" id="main">
+      <Frame signedIn navigation>
+        <div className="saved-detail">
           <Link href="/hangouts/saved">← Saved Hangouts</Link>
           <p className="badge">Saved Hangout · local only</p>
           <h1>
@@ -39,7 +39,7 @@ export default async function SavedDetailPage({
               : "The plan may have been removed from your view, or your account may no longer have access."}
           </p>
           <Link href="/safety">Use retained Hangout ID recovery in Safety</Link>
-        </main>
+        </div>
       </Frame>
     );
   const { record, ownState, roster, instructions } = result;
@@ -51,8 +51,8 @@ export default async function SavedDetailPage({
       ? await readChat(chatCaller.client, id)
       : null;
   return (
-    <Frame signedIn>
-      <main className="saved-detail" id="main">
+    <Frame signedIn navigation>
+      <div className="saved-detail">
         <Link href="/hangouts/saved">← Saved Hangouts</Link>
         <p className="badge">Saved Hangout · local only</p>
         <h1>{record.title}</h1>
@@ -157,7 +157,7 @@ export default async function SavedDetailPage({
             </p>
           </section>
         )}
-      </main>
+      </div>
     </Frame>
   );
 }

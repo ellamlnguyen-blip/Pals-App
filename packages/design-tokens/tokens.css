@@ -1,11 +1,15 @@
 :root {
   color-scheme: light dark;
-  --pals-canvas: #ffffff;
-  --pals-surface: #edf5fb;
-  --pals-ink: #19364b;
-  --pals-muted: #486176;
-  --pals-accent: #35698e;
+  --pals-canvas: #f8fbfd;
+  --pals-surface: #eaf3fa;
+  --pals-surface-raised: #ffffff;
+  --pals-surface-feature: #386d99;
+  --pals-ink: #16334b;
+  --pals-muted: #4a6377;
+  --pals-accent: #285d83;
+  --pals-accent-soft: #dcecf7;
   --pals-line: #c9dce9;
+  --pals-focus: #174e79;
   --pals-font: "Nunito Variable", ui-rounded, system-ui, sans-serif;
   --pals-space-1: 0.25rem;
   --pals-space-2: 0.5rem;
@@ -16,26 +20,33 @@
   --pals-space-12: 3rem;
   --pals-space-16: 4rem;
   --pals-radius: 1.5rem;
+  --pals-radius-panel: 1.25rem;
   --pals-input-radius: 0.75rem;
   --pals-button-ink: #ffffff;
   --pals-error: #a22832;
-  --pals-content-width: 70rem;
+  --pals-content-width: 76rem;
   --pals-layer-menu: 10;
+  --pals-panel-shadow: 0 12px 34px rgb(25 54 75 / 0.07);
   --pals-overlay-shadow: 0 8px 24px rgb(25 54 75 / 0.16);
-  /* Map markers retain high contrast against either basemap. */
-  --pals-pin-fill: #35698e;
+  /* Pins stay legible over either basemap. */
+  --pals-pin-fill: #285d83;
   --pals-pin-ink: #ffffff;
   --pals-pin-edge: #ffffff;
 }
 @media (prefers-color-scheme: dark) {
   :root {
-    --pals-canvas: #142631;
-    --pals-surface: #1d3748;
-    --pals-ink: #eef6fc;
-    --pals-muted: #b5cbdb;
-    --pals-accent: #9ac8e9;
-    --pals-line: #426074;
-    --pals-button-ink: #142631;
+    --pals-canvas: #122532;
+    --pals-surface: #1d394c;
+    --pals-surface-raised: #193243;
+    --pals-surface-feature: #315e80;
+    --pals-ink: #f0f7fc;
+    --pals-muted: #bed1df;
+    --pals-accent: #acd7f4;
+    --pals-accent-soft: #254a64;
+    --pals-line: #49677a;
+    --pals-focus: #c6e5fa;
+    --pals-button-ink: #122532;
     --pals-error: #ffb4ba;
+    --pals-panel-shadow: 0 12px 34px rgb(0 0 0 / 0.16);
   }
 }

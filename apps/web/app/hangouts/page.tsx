@@ -1,7 +1,6 @@
-import Image from "next/image";
 import Link from "next/link";
 import { requireAccess } from "../../lib/access";
-import { SignOutForm } from "../auth-change-signal";
+import { StudentHeader } from "../student-shell";
 import { HangoutsShell } from "./shell";
 import "./map.css";
 import { localHangoutsAvailable } from "../../lib/hangouts";
@@ -22,29 +21,7 @@ export default async function Hangouts() {
       <a className="skip-link" href="#main">
         Skip to content
       </a>
-      <header className="hangouts-header">
-        <Link className="wordmark" href="/hangouts">
-          Pals
-        </Link>
-        <span className="campus">UNC Chapel Hill</span>
-        <details className="account-menu">
-          <summary aria-label="Your account">
-            <Image
-              src="/profile/photo"
-              alt="Your profile photo"
-              width={40}
-              height={40}
-              unoptimized
-            />
-          </summary>
-          <div className="account-panel">
-            <strong>{profile?.real_name ?? "Your account"}</strong>
-            <p>UNC email verified</p>
-            <Link href="/profile">Your profile</Link>
-            <SignOutForm />
-          </div>
-        </details>
-      </header>
+      <StudentHeader signedIn accountReady name={profile?.real_name} />
       {localCreate && (
         <div className="saved-entry">
           <div>

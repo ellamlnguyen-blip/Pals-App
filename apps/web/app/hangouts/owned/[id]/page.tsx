@@ -17,14 +17,14 @@ export default async function OwnedHangoutPage({
   if (!record) notFound();
   const { edit } = await searchParams;
   return (
-    <Frame signedIn>
+    <Frame signedIn navigation>
       <div className="hangout-page-heading">
         <Link href="/hangouts">← Hangouts</Link>
         <p className="badge">Your saved Hangout · local only</p>
         <h1>{record.title}</h1>
         <p>
           {record.status === "published"
-            ? "Saved for ready UNC students. This plan appears in local Saved Hangouts discovery; chat is not connected yet."
+            ? "Saved for ready UNC students. This plan appears in local Saved Hangouts discovery; chat opens when its local gate and membership allow it."
             : "This Hangout was cancelled and cannot be edited."}
         </p>
       </div>

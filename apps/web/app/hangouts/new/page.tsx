@@ -8,14 +8,15 @@ export default async function NewHangoutPage() {
   await requireAccess("ready");
   requireLocalHangouts();
   return (
-    <Frame signedIn>
+    <Frame signedIn navigation>
       <div className="hangout-page-heading">
         <Link href="/hangouts">← Hangouts</Link>
         <p className="badge">Local UNC Hangout</p>
         <h1>Make a plan</h1>
         <p>
-          A title, campus time and broad area are enough. Your Hangout saves for
-          UNC students; map discovery and chat arrive later.
+          A title, campus time and broad area are enough. This local Hangout
+          saves for ready UNC students. Map discovery and chat use separate
+          local gates.
         </p>
       </div>
       <HangoutEditor
