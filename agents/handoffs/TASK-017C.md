@@ -2,6 +2,13 @@
 
 Status: implementation branch ready for fresh security and rendered review; TASK-017C remains incomplete until its live local operator-flow and review gates are satisfied and the coordinator integrates accepted work.
 
+## Exact-tip review response, 2026-09-24
+
+- The first exact-tip security review found that detail/action denial left queue metadata on screen. The denial transition now clears queue, paging history, detail, selection, pending action and advisory role, and shows only the neutral unavailable state. Late queue/detail responses are invalidated by the selection generation.
+- It also found that a late denied mutation for report A could clear report B. Mutation success, denial, and announcements now require the captured session, selection generation and report ID to match the current view. Sign-out invalidates pending mutation UI updates. A mutation response for an earlier selection cannot alter the newly selected report. The success path checks selection again after the audited queue refresh before reopening detail.
+- Added six focused tests for denial state, rapid A→B and session changes, exact same-key retry payload, bounded cursor paging, duplicate candidate rules, and delayed keyboard focus. Direct admin lint, TypeScript, tests and production build pass after the fixes.
+- Coordinator is operating the disposable local stack for live QA; this implementation agent did not reset, stop, or alter its fixtures or moderation gate.
+
 ## Scope and baseline
 
 - Branch: `agent/TASK-017C-admin-console` in disposable worktree `/private/tmp/pals-task-017c-admin`.
@@ -22,6 +29,7 @@ Status: implementation branch ready for fresh security and rendered review; TASK
 - Direct TypeScript check for `apps/admin`: pass.
 - Direct Next production build: pass, including dynamic root page and API routes.
 - `git diff --check`: pass.
+- `node --test apps/admin/tests/*.test.mjs`: six passing focused tests after the review fixes.
 - Live local production server: forged `Origin: http://127.0.0.1:3000` POST to `/api/moderation` returned 403 and to `/api/session` returned 400. Responses carried `Cache-Control: private, no-store` and `Referrer-Policy: no-referrer`; root page headers did too.
 - Source scan found no browser storage, analytics, client service key, or ID query-string construction.
 
@@ -33,5 +41,5 @@ Status: implementation branch ready for fresh security and rendered review; TASK
 
 ## Publication
 
-- Implementation commit `2d8ce79560bac45b8318db407363f5f511821eeb` was pushed to `origin/agent/TASK-017C-admin-console` and independently verified with `git ls-remote` on 2026-09-24. This handoff receipt update follows that implementation commit; the coordinator should verify the final branch tip before review.
+- Initial implementation commit `2d8ce79560bac45b8318db407363f5f511821eeb` and first handoff tip `38c17a6497fb094cbe15a659469a1aeee0319912` were pushed and independently verified on 2026-09-24. Review fixes follow; the coordinator should use the subsequently verified final branch tip for review.
 - Canonical main SHA after integration: pending coordinator acceptance.

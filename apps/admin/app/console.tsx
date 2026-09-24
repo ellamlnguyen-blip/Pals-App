@@ -1,6 +1,15 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  deniedView,
+  duplicateCandidates,
+  mutationBody,
+  nextCursor,
+  responseBelongsTo,
+  scheduleSelectedFocus,
+  type MutationIntent,
+} from "../lib/flow";
 
 type QueueItem = {
   report_id: string;
@@ -23,16 +32,7 @@ type Detail = QueueItem & {
   target_disabled: boolean | null;
 };
 type Cursor = { afterAt: string | null; afterId: string | null };
-type Intent = {
-  op: "case" | "account" | "hangout";
-  reportId: string;
-  requestId: string;
-  revision: number;
-  action?: string;
-  note?: string | null;
-  duplicateId?: string | null;
-  reason?: string;
-};
+type Intent = MutationIntent;
 const initialCursor: Cursor = { afterAt: null, afterId: null };
 const label: Record<string, string> = {
   start_review: "Start review",
@@ -85,6 +85,8 @@ export default function Console({ configured }: { configured: boolean }) {
   const [busy, setBusy] = useState(false);
   const [mobileDetail, setMobileDetail] = useState(false);
   const generation = useRef(0);
+  const sessionGeneration = useRef(0);
+  const mutationGeneration = useRef(0);
   const selection = useRef<string | null>(null);
   const dialog = useRef<HTMLDialogElement>(null);
   const lastFocus = useRef<HTMLElement | null>(null);
@@ -101,27 +103,38 @@ export default function Console({ configured }: { configured: boolean }) {
     setMobileDetail(false);
     dialog.current?.close();
   }, []);
+  const authorityDenied = useCallback(() => {
+    const view = deniedView();
+    clearSensitive();
+    setQueue(view.queue);
+    setHistory(view.history);
+    setUncertain(view.uncertain);
+    setRole(null);
+    setDenied(view.denied);
+    setLoading(false);
+    setDetailLoading(false);
+    setMessage("Moderation unavailable.");
+  }, [clearSensitive]);
   const loadQueue = useCallback(
-    async (c: Cursor) => {
+    async (c: Cursor, preserveMessage = false) => {
       const g = ++generation.current;
       setLoading(true);
       setDenied(false);
       try {
         const result = await call("/api/moderation", { op: "list", ...c });
-        if (g !== generation.current) return;
+        if (g !== generation.current) return false;
         setQueue(result.data as QueueItem[]);
         setCursor(c);
         setLoading(false);
+        if (!preserveMessage) setMessage("");
+        return true;
       } catch {
-        if (g !== generation.current) return;
-        clearSensitive();
-        setQueue([]);
-        setLoading(false);
-        setDenied(true);
-        setMessage("Moderation unavailable.");
+        if (g !== generation.current) return false;
+        authorityDenied();
+        return false;
       }
     },
-    [clearSensitive],
+    [authorityDenied],
   );
   useEffect(() => {
     if (!configured) return;
@@ -151,34 +164,46 @@ export default function Console({ configured }: { configured: boolean }) {
     };
   }, [session, loadQueue]);
 
-  async function openDetail(id: string) {
+  async function openDetail(id: string, preserveMessage = false) {
     lastFocus.current = document.activeElement as HTMLElement;
     selection.current = id;
     const g = ++generation.current;
+    const capturedSession = sessionGeneration.current;
     setSelected(id);
     setDetail(null);
     setDetailLoading(true);
     setIntent(null);
     setMobileDetail(true);
-    setMessage("");
+    if (!preserveMessage) setMessage("");
     try {
       const result = await call("/api/moderation", {
         op: "detail",
         reportId: id,
       });
-      if (g !== generation.current || selection.current !== id) return;
+      if (
+        !responseBelongsTo(
+          { generation: g, session: capturedSession, reportId: id },
+          {
+            generation: generation.current,
+            session: sessionGeneration.current,
+            reportId: selection.current,
+          },
+        )
+      )
+        return;
       const row = result.data?.[0] as Detail | undefined;
       if (!row || row.report_id !== id) throw new Error("Unavailable");
       setDetail(row);
       setDetailLoading(false);
-      requestAnimationFrame(() =>
-        document.getElementById("detail-heading")?.focus(),
+      scheduleSelectedFocus(
+        id,
+        () => selection.current,
+        () => document.getElementById("detail-heading")?.focus(),
+        requestAnimationFrame,
       );
     } catch {
       if (g !== generation.current) return;
-      clearSensitive();
-      setDetailLoading(false);
-      setMessage("Moderation unavailable.");
+      authorityDenied();
     }
   }
   function back() {
@@ -204,6 +229,8 @@ export default function Console({ configured }: { configured: boolean }) {
     }
   }
   async function signOut() {
+    sessionGeneration.current++;
+    mutationGeneration.current++;
     generation.current++;
     clearSensitive();
     setQueue([]);
@@ -273,45 +300,53 @@ export default function Console({ configured }: { configured: boolean }) {
     };
   }
   async function submit(p: Intent) {
+    const mutation = ++mutationGeneration.current;
     setBusy(true);
     setUncertain(p);
     finishIntent();
     const captured = generation.current;
+    const capturedSession = sessionGeneration.current;
+    const isCurrent = () =>
+      responseBelongsTo(
+        {
+          generation: captured,
+          session: capturedSession,
+          reportId: p.reportId,
+        },
+        {
+          generation: generation.current,
+          session: sessionGeneration.current,
+          reportId: selection.current,
+        },
+      );
     try {
-      const body =
-        p.op === "hangout"
-          ? {
-              op: p.op,
-              reportId: p.reportId,
-              requestId: p.requestId,
-              revision: p.revision,
-              reason: p.reason,
-            }
-          : p;
-      await call("/api/moderation", body);
-      setUncertain(null);
-      if (captured === generation.current && selection.current === p.reportId) {
+      await call("/api/moderation", mutationBody(p));
+      if (isCurrent()) {
+        setUncertain(null);
         setMessage("Decision recorded. Refreshing the audited state.");
-        await loadQueue(cursor);
-        await openDetail(p.reportId);
+        const refreshed = await loadQueue(cursor, true);
+        if (
+          refreshed &&
+          capturedSession === sessionGeneration.current &&
+          selection.current === p.reportId
+        )
+          await openDetail(p.reportId, true);
       }
     } catch (error) {
+      if (!isCurrent()) return;
       if (error instanceof Error && error.message === "Denied") {
-        setUncertain(null);
-        clearSensitive();
-        setMessage(
-          "Moderation unavailable. Open a fresh report before deciding again.",
-        );
-      } else if (
-        captured === generation.current &&
-        selection.current === p.reportId
-      ) {
+        authorityDenied();
+      } else {
         setMessage(
           "Outcome unconfirmed. Retry the same request or refresh the report before deciding again.",
         );
       }
     } finally {
-      setBusy(false);
+      if (
+        mutation === mutationGeneration.current &&
+        capturedSession === sessionGeneration.current
+      )
+        setBusy(false);
     }
   }
   const actions =
@@ -486,16 +521,13 @@ export default function Console({ configured }: { configured: boolean }) {
                     </button>
                     <button
                       className="secondary"
-                      disabled={loading || queue.length < 24}
+                      disabled={loading || !nextCursor(queue)}
                       onClick={() => {
-                        const q = queue.at(-1);
-                        if (!q) return;
+                        const next = nextCursor(queue);
+                        if (!next) return;
                         setHistory([...history, cursor]);
                         clearSensitive();
-                        void loadQueue({
-                          afterAt: q.submitted_at,
-                          afterId: q.report_id,
-                        });
+                        void loadQueue(next);
                       }}
                     >
                       Next page
@@ -733,27 +765,16 @@ export default function Console({ configured }: { configured: boolean }) {
                 />
               </label>
               <div className="candidates">
-                {queue
-                  .filter(
-                    (q) =>
-                      detail &&
-                      q.report_id !== detail.report_id &&
-                      q.target_type === detail.target_type &&
-                      q.target_id === detail.target_id &&
-                      (q.submitted_at < detail.submitted_at ||
-                        (q.submitted_at === detail.submitted_at &&
-                          q.report_id < detail.report_id)),
-                  )
-                  .map((q) => (
-                    <button
-                      type="button"
-                      className="secondary"
-                      key={q.report_id}
-                      onClick={() => setDuplicateId(q.report_id)}
-                    >
-                      Use {q.report_id}
-                    </button>
-                  ))}
+                {(detail ? duplicateCandidates(queue, detail) : []).map((q) => (
+                  <button
+                    type="button"
+                    className="secondary"
+                    key={q.report_id}
+                    onClick={() => setDuplicateId(q.report_id)}
+                  >
+                    Use {q.report_id}
+                  </button>
+                ))}
               </div>
             </>
           )}
