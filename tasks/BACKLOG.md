@@ -13,6 +13,7 @@
 - TASK-015 notification inbox/preferences — complete for the bounded disposable-local increment under Accepted ADR-0017; reviewed A/B/C stages, final handoff and main integration are recorded in `DONE.md`. Hosted delivery, Realtime and later safety/eligibility events remain separate.
 - TASK-016 blocking/reporting — all bounded local stages reviewed and verified under Accepted ADR-0018; complete on remote-verified canonical main. See DONE and parent/A/B/C handoffs. Hosted moderation/retention/deployment remain separate.
 - TASK-023 student web frontend design alignment — start after TASK-016C is reviewed/integrated and before TASK-017. Apply the usepals.com-informed visual system to existing student routes now; later student-facing UI tasks should use its shared tokens/components. Backend/schema/RLS/API/authorization changes are out of scope. Contract: `active/TASK-023-frontend-design-alignment.md`.
+- TASK-024 Pals brand direction correction — follow-up to TASK-023. Use the supplied logo and an explicit Carolina light blue (`#7BAFD4`) and white system across the student web frontend while preserving all existing backend/schema/RLS/API/authorization behavior. Contract and implementation prompt: `active/TASK-024-pals-brand-direction-correction.md`.
 - TASK-017 admin moderation console
 - TASK-018 attendance confirmation
 - TASK-019 PostHog instrumentation
