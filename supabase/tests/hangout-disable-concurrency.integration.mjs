@@ -131,6 +131,6 @@ test("Hangout disable serializes with source writers and operator revocation", {
     select * from public.apply_hangout_moderation_action('${rid(10)}',
       '${key(210)}',1,'Competing');`, true);
   assert.equal(sql(`select count(*) from private.hangout_disables where hangout_id='${hid(10)}'`), "1");
-  assert.equal(sql(`select count(*) from private.moderation_audit where hangout_disable_id is not null`), "10");
+  assert.equal(sql(`select count(*) from private.moderation_audit where hangout_disable_id is not null and operator_id='${operator}'`), "10");
   // Immutable evidence is removed only by the caller's final disposable reset.
 });

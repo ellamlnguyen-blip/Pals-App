@@ -28,10 +28,15 @@ select set_config('b2.h1',public.create_hangout(
 select set_config('b2.h2',public.create_hangout(
  '53200000-0000-4000-8003-000000000002','Cancelled title',
  now()+interval '2 hours','Approximate area',35,-79)::text,true);
-select public.cancel_hangout(current_setting('b2.h2')::uuid,1);
 select set_config('request.jwt.claims',
  '{"sub":"53200000-0000-4000-8000-000000000003","role":"authenticated"}',true);
 select public.join_hangout(current_setting('b2.h1')::uuid);
+select public.join_hangout(current_setting('b2.h2')::uuid);
+select set_config('request.jwt.claims',
+ '{"sub":"53200000-0000-4000-8000-000000000002","role":"authenticated"}',true);
+select public.cancel_hangout(current_setting('b2.h2')::uuid,1);
+select set_config('request.jwt.claims',
+ '{"sub":"53200000-0000-4000-8000-000000000003","role":"authenticated"}',true);
 select * from public.send_hangout_message(current_setting('b2.h1')::uuid,
  '53200000-0000-4000-8003-000000000039','Earlier message');
 reset role;
@@ -240,6 +245,26 @@ select is((select count(*) from public.hangout_participants where hangout_id=cur
  2::bigint,'participant evidence retained');
 set local role authenticated;
 select set_config('request.jwt.claims',
+ '{"sub":"53200000-0000-4000-8000-000000000003","role":"authenticated"}',true);
+select is(public.set_safety_block('53200000-0000-4000-8000-000000000002',true),
+ true,'global safety block reconciles disabled Hangout');
+select is(public.get_hangout_participant_state(current_setting('b2.h1')::uuid,auth.uid()),
+ 'left','disabled participant safety state reflects internal reconciliation');
+select throws_ok($$select public.join_hangout(current_setting('b2.h1')::uuid)$$,
+ '42501',null,'reconciled attendee cannot rejoin disabled source');
+select throws_ok($$select public.leave_hangout(current_setting('b2.h1')::uuid)$$,
+ '42501',null,'reconciled attendee cannot use ordinary leave');
+reset role;
+select is((select state from public.hangout_participants
+ where hangout_id=current_setting('b2.h1')::uuid
+ and account_id='53200000-0000-4000-8000-000000000003'),'left',
+ 'internal block transition persisted on disabled Hangout');
+select is((select state from public.hangout_participants
+ where hangout_id=current_setting('b2.h1')::uuid
+ and account_id='53200000-0000-4000-8000-000000000002'),'joined',
+ 'disabled Hangout host remains joined after attendee block');
+set local role authenticated;
+select set_config('request.jwt.claims',
  '{"sub":"53200000-0000-4000-8000-000000000001","role":"authenticated"}',true);
 select is((select revision from public.apply_hangout_moderation_action(
  '53200000-0000-4000-8002-000000000002',
@@ -251,6 +276,30 @@ select is((select target_status from public.get_moderation_report(
 select is((select target_disabled from public.get_moderation_report(
  '53200000-0000-4000-8002-000000000002')),true,
  'cancelled target disabled in detail');
+select set_config('request.jwt.claims',
+ '{"sub":"53200000-0000-4000-8000-000000000002","role":"authenticated"}',true);
+select is((select count(*) from public.hangouts where id=current_setting('b2.h2')::uuid),
+ 0::bigint,'disabled cancelled host direct read masked');
+select is((select count(*) from public.hangout_participants
+ where hangout_id=current_setting('b2.h2')::uuid),0::bigint,
+ 'disabled cancelled host roster masked');
+select is(public.get_hangout_participant_state(current_setting('b2.h2')::uuid,auth.uid()),
+ 'joined','disabled cancelled host retains only own safety state');
+select set_config('request.jwt.claims',
+ '{"sub":"53200000-0000-4000-8000-000000000003","role":"authenticated"}',true);
+select is((select count(*) from public.hangouts where id=current_setting('b2.h2')::uuid),
+ 0::bigint,'disabled cancelled attendee direct read masked');
+select is((select count(*) from public.hangout_participants
+ where hangout_id=current_setting('b2.h2')::uuid),0::bigint,
+ 'disabled cancelled attendee roster masked');
+select is(public.get_hangout_participant_state(current_setting('b2.h2')::uuid,auth.uid()),
+ 'left','disabled cancelled attendee retains only own safety state');
+select is((select count(*) from public.submit_safety_report(
+ '53200000-0000-4000-8003-000000000042','hangout',current_setting('b2.h2')::uuid,
+ 'harassment',null)),1::bigint,
+ 'disabled cancelled attendee can file retained private report');
+select set_config('request.jwt.claims',
+ '{"sub":"53200000-0000-4000-8000-000000000001","role":"authenticated"}',true);
 select is((select revision from public.transition_moderation_case(
  '53200000-0000-4000-8002-000000000001',
  '53200000-0000-4000-8003-000000000012',2,'reopen','Further review')),3::bigint,

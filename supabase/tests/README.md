@@ -5,8 +5,12 @@ Hangout/chat notifications and retained safety reporting. The real local
 Auth/PostgREST counterpart is `hangout-disable-http.integration.mjs`;
 `hangout-disable-concurrency.integration.mjs` observes waits in both commit
 orders for edit, join, chat send and cancellation, plus operator revocation and
-case contention. Run HTTP and overlapping-session suites serially. Immutable
-disable/audit fixtures require a final disposable database reset.
+case contention. The B2 HTTP fixture also verifies cancelled-source REST
+embeds and map/Calendar source queries. With
+`WEB_TEST_ORIGIN=http://127.0.0.1:3000` and a local production web server, it
+checks saved-detail, owned-detail and Calendar routes before and after disable.
+Run HTTP and overlapping-session suites serially. Immutable disable/audit
+fixtures require a final disposable database reset.
 
 # Database tests
 

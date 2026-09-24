@@ -3,7 +3,7 @@
 Date: 2026-09-24
 Agent: GPT-6 Sol medium task agent; the dispatch tool did not expose Standard-speed verification
 Branch/worktree: `agent/TASK-017B2-approved-disable` at `/private/tmp/pals-task-017b2-approved`
-Task branch and pushed commit SHA: recorded in coordinator dispatch receipt after this handoff commit and independent remote verification
+Task branch and pushed commit SHA: previous verified tip `346e8d4816e18c687d5787b4fca7c970677ba2a1`; revised exact tip independently verified and sent to coordinator after this handoff commit
 Integrated `main` commit SHA: pending fresh exact-tip review and coordinator integration
 Main status-record path and last published milestone: coordinator-owned `tasks/NOW.md`, `tasks/BACKLOG.md`, `docs/operations/CURRENT_STATE.md`, `CHANGELOG.md`; independently remote-verified B2 baseline `08e42c4c42ef63a96c073ec3d72840230a07c511`
 Outstanding review/integration blockers: fresh exact-tip security review, coordinator status update and canonical-main integration
@@ -15,7 +15,7 @@ Implemented the explicitly approved disposable-local Hangout disable under Accep
 ## Files Changed
 
 - `supabase/migrations/20260924000300_local_hangout_disable.sql`: private disable/action binding, audited caller RPC, detail projection and source authorization.
-- `supabase/tests/database/local_hangout_disable.test.sql`: actual-role and source matrix, 62 assertions.
+- `supabase/tests/database/local_hangout_disable.test.sql`: actual-role and source matrix, 75 assertions.
 - `supabase/tests/hangout-disable-http.integration.mjs`: real local Auth/PostgREST bypass and source checks.
 - `supabase/tests/hangout-disable-concurrency.integration.mjs`: observed commit-order waits and revocation checks.
 - `supabase/tests/moderation-http.integration.mjs`: existing detail allowlist updated for nullable `target_disabled`.
@@ -32,10 +32,10 @@ Student authorization inventory: `private.can_read_hangout` masks direct public 
 ## Tests / Verification
 
 - At least two clean disposable local resets applied every migration, including B2, successfully. The final reset plus rollback-only fixture check showed zero Auth users, reports, cases, account sanctions, Hangout disables, audit rows and moderation retries, with all eight feature gates false. Task-owned Supabase services and Lima VM were stopped.
-- All 15 actual-role SQL fixtures passed on the final migration/test revision: **795 assertions, zero failures**. The B2 fixture covers gate/role/reporter/host denial, exact/changed/cross-RPC retry, stale revision, published and cancelled targets, missing target nullable detail, immutable/restrictive evidence, exact linked action, reopen history, direct host/attendee RLS/RPC masking, chat, notifications and retained safety reporting.
-- B2 real Auth/PostgREST passed: anonymous, student and forged `admin` metadata denial; moderator action/replay; direct table/detail/roster/private-instruction and old RPC after-commit denial; host/attendee own-state safety recovery; private table absence; role-revoked replay denial. Existing Stage A/B1 moderation HTTP regression passed with the revised detail field.
+- All 15 actual-role SQL fixtures passed on the final migration/test revision: **808 assertions, zero failures**. The B2 fixture covers gate/role/reporter/host denial, exact/changed/cross-RPC retry, stale revision, published and cancelled targets, missing target nullable detail, immutable/restrictive evidence, exact linked action, reopen history, direct host/attendee RLS/RPC masking on published and cancelled Hangouts, chat, notifications, retained safety reporting after a cancelled disable, and internal global-block reconciliation on a disabled Hangout while ordinary join/leave continue to deny.
+- B2 real Auth/PostgREST passed: anonymous, student and forged `admin` metadata denial; moderator action/replay; direct table/detail/roster/private-instruction and old RPC after-commit denial; host/attendee own-state safety recovery; private table absence; role-revoked replay denial; cancelled Hangout REST/embedded masking and retained report; published map and Calendar source queries before/after disable. A local production server also verified saved-detail, owned-detail and Calendar pages showed the fixture before disable and masked it afterward. The owned-detail Next.js streamed not-found response can retain HTTP 200, so the test asserts the absent title/private details and not-found body. Existing Stage A/B1 moderation HTTP regression passed with the revised detail field.
 - Source HTTP regressions passed serially (6/6): account enforcement, global block, Hangout chat, B2, Hangout notifications and safety reporting. On a clean reset, source concurrency regressions passed serially (7/7): global block, chat, Hangout writes, B2, Hangout notifications and report intake. B2 observed actual PostgreSQL lock waits in both disable-first and source-first orders for edit, join, chat send and cancel, plus gate/role/account revocation and two-operator case contention. No deadlock or partial disable was observed.
-- Local schema lint reported no warnings. Direct Prettier and ESLint on changed JavaScript, both app TypeScript checks and all 37 Node tests passed. Formal `pnpm typecheck` stopped at its borrowed `node_modules` purge guard (`ERR_PNPM_ABORTED_REMOVE_MODULES_DIR_NO_TTY`). A direct web production build reached Turbopack and failed because the borrowed app `node_modules` symlink points outside the checkout. No frontend code changed; the coordinator will run isolated exact-tip builds.
+- Local schema lint reported no warnings. With offline dependencies installed inside the isolated checkout, the full `pnpm check` passed: repository Prettier, ESLint, all workspace TypeScript checks, 37 Node tests, and both web/admin production builds. The local production web server served the route checks successfully. An earlier dev server with borrowed external `node_modules` returned a general Next.js `workUnitAsyncStorage` invariant even on `/signin`; that borrowed setup was replaced for the successful production verification. No frontend code changed.
 
 ## Decisions
 
@@ -43,7 +43,7 @@ The existing source guards were extended instead of adding a student-visible dis
 
 ## Known Limitations
 
-This is disposable-local evidence only. Hosted retention/deletion/legal hold, operator onboarding/MFA, appeals, staffed response, hosted deployment and admin UI remain outside B2. A read already in flight before disable commit may finish under its earlier snapshot; every later direct read is masked. Exact-tip independent security review and main integration are pending.
+This is disposable-local evidence only. The saved map discovery list is client-fed by the same `hangouts` RLS source that the REST map query verifies; the test did not automate a browser map pin. Hosted retention/deletion/legal hold, operator onboarding/MFA, appeals, staffed response, hosted deployment and admin UI remain outside B2. A read already in flight before disable commit may finish under its earlier snapshot; every later direct read is masked. Exact-tip independent security review and main integration are pending.
 
 ## Follow-up Tasks
 
