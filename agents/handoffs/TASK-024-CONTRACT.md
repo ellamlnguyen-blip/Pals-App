@@ -8,7 +8,7 @@ Added a bounded follow-up contract after TASK-023 with a copy-ready implementati
 
 Committed the supplied source logo at `apps/web/public/brand/pals-logo.png` so a future agent can use the exact asset from the repository. The original source remains unchanged; any transparent presentation derivative must preserve it.
 
-Task branch `agent/TASK-023-brand-refresh` remote SHA: `eb55cf9d377f0eeac6280a1384730f86034889e9`.
+Task branch `agent/TASK-024-brand-direction-correction` remote SHA: `eb55cf9d377f0eeac6280a1384730f86034889e9`.
 Canonical `main` integration remote SHA: `abb5532be18ac4320aecc99611e40db19496011d`.
 Both refs were independently verified with `git ls-remote` after push.
 
