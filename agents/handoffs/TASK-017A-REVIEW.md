@@ -12,4 +12,8 @@ Status: Incomplete; no canonical code integration
 
 The implementer added role-operation-first and account-operation-first observed-wait tests on independently remote-verified task tip `b73eca2cb528f11b761a4de3fd5ef5e2201fbaf5`. Fresh exact-tip re-review found the P2 gap closed with no new blocker in that diff. The reviewer checked syntax/diff and the reported observed-wait assertions; it did not rerun stopped local services. The P1 ADR-0020 decision remains open, so Stage A is still incomplete and off main.
 
+## Review after ADR-0020 acceptance
+
+ADR-0020 was accepted, and the task branch merged accepted main without rewriting history. Task tip `b2f6f37ccb364e6b990f75b80c74ba49408ee6a8` added detail-only server-owned `case_revision` and second-operator stale-action tests. Fresh exact-tip security review found no further confirmed privilege bypass but identified a P1 audit omission: case-action rows store report ID without the reported target UUID or current authoritative campus, contrary to ADR-0019 and the Stage A contract. The implementer is adding server-derived target type/ID and current campus (null if current target unavailable), with focused tests. The reviewer did not rerun local services. Do not integrate this tip; a corrected tip needs fresh review.
+
 The fresh read-only reviewer found no additional confirmed privilege bypass in static source review. It did not rerun the stopped disposable services; the implementer's local test/cleanup evidence is in `agents/handoffs/TASK-017A.md` on the task branch. Any corrected tip requires re-review. No hosted use is authorized.
