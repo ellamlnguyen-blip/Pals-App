@@ -1,6 +1,6 @@
 # ADR-0019 — Disposable-local moderation authority and audit
-Status: Proposed  
-Date: 2026-09-23
+Status: Accepted — disposable-local TASK-017 only
+Date: 2026-09-23; accepted 2026-09-24
 
 ## Context
 
@@ -55,4 +55,4 @@ The admin console needs explicit audited database functions and changes to exist
 
 ## Acceptance
 
-Proposed only. A user decision is required before TASK-017 privileged implementation. Publication or review of this proposal does not accept it or authorize hosted use.
+After the independently reviewed proposal and contract were published on remote-verified canonical main `fd7665614be99b4ed3b16703fff85dcef8c49bb2`, the coordinator asked the user explicitly whether to accept the linked ADR-0019 for disposable-local TASK-017 implementation, with “Accept as written,” “Request changes,” and “Decline” as choices. The user replied “ok” on 2026-09-24. In that direct response to the acceptance question, “ok” accepts this proposal as written for its stated local scope. Stage A still requires its own reviewed, published contract. No hosted operation, production retention policy or staffed response is accepted.
