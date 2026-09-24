@@ -1,5 +1,5 @@
 # ADR-0021 — Preissued photo URL boundary after account sanction
-Status: Proposed — explicit acceptance required before TASK-017B1 implementation
+Status: Accepted — disposable-local TASK-017B1 only
 Date: 2026-09-24
 
 ## Context
@@ -28,4 +28,4 @@ The immediate account-status guarantee remains enforceable for requests that con
 
 ## Acceptance
 
-Pending explicit user decision after independent review and canonical publication. A published Proposed ADR does not authorize B1 to implement the exception.
+The independently reviewed proposal was published on remote-verified canonical main `e084bc2353e20c43667802bd548587c7418ba12c`. The coordinator asked explicitly whether to accept its local enforcement boundary, including continued access through a preissued photo URL and possible hosted cache exposure beyond expiry. The user selected “Accept as written” on 2026-09-24. This accepts the narrow photo-access interpretation for disposable-local TASK-017B1; it does not authorize hosted use, extend the accepted operator reader, or waive any other ADR-0019 rule.

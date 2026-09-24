@@ -2,6 +2,10 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-24 — TASK-017B1 photo-link policy accepted
+
+- The user accepted ADR-0021 for disposable-local account enforcement: a sanction blocks new authenticated photo access, while a previously issued signed URL may remain usable through its expiry and hosted caching may extend exposure. No enforcement code or hosted behavior changed in this decision record.
+
 ## 2026-09-24 — TASK-017B1 account enforcement planned
 
 - Defined a bounded local account-sanction backend stage after completed audited review. Proposed ADR-0021 surfaces the preissued signed-photo-URL revocation limit for explicit decision; no enforcement code, gate enablement or hosted action is included.
