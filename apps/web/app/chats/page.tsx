@@ -4,7 +4,6 @@ import { DmInbox } from "./dm-inbox";
 import { chatAccess, chatUuid, readChat } from "../../lib/chat";
 import { access } from "../../lib/access";
 import { localPeopleAvailable } from "../../lib/people";
-import { localNotificationsAvailable } from "../../lib/notifications";
 import "../hangouts/map.css";
 import "./chat.css";
 
@@ -19,7 +18,7 @@ export default async function ChatsPage({
   const account = localPeopleAvailable() ? await access() : null;
   if (!account?.user || account.state === "restricted")
     return (
-      <Frame signedIn>
+      <Frame>
         <section className="chat-page">
           <h1>Chats unavailable</h1>
           <p>Your access may have changed. Sign in and try again.</p>
@@ -29,7 +28,7 @@ export default async function ChatsPage({
   const after = (await searchParams).after;
   if (after && !chatUuid.test(after))
     return (
-      <Frame signedIn>
+      <Frame signedIn navigation={account.state === "ready"}>
         <section className="chat-page">
           <h1>Check the page link</h1>
           <Link href="/chats">Return to Chats</Link>
@@ -74,20 +73,7 @@ export default async function ChatsPage({
     );
   }
   return (
-    <Frame signedIn>
-      <nav className="primary-nav" aria-label="Primary">
-        <Link href="/hangouts">Hangouts</Link>
-        <Link href="/calendar">Calendar</Link>
-        <Link href="/people">People</Link>
-        <Link href="/chats" aria-current="page">
-          Chats
-        </Link>
-        {localNotificationsAvailable() ? (
-          <Link href="/notifications">Notifications</Link>
-        ) : (
-          <span>Notifications</span>
-        )}
-      </nav>
+    <Frame signedIn navigation={account.state === "ready"}>
       <section className="chat-page" aria-labelledby="chats-title">
         <p className="badge">Chats · local only</p>
         <h1 id="chats-title">Your chats</h1>

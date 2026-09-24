@@ -26,7 +26,7 @@ export default async function SafetyPage() {
       </Frame>
     );
   return (
-    <Frame signedIn>
+    <Frame signedIn navigation={account.state === "ready"}>
       <SafetyDashboard key={account.user.id} actor={account.user.id} />
     </Frame>
   );

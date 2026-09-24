@@ -24,7 +24,7 @@ export default async function DirectPage({
   const local = result?.user && result.state !== "restricted" ? result : null;
   if (!local || !dmId.test(id))
     return (
-      <Frame signedIn>
+      <Frame>
         <section className="chat-page">
           <h1>Direct chat unavailable</h1>
           <Link href="/safety">Open Safety</Link>
@@ -35,16 +35,7 @@ export default async function DirectPage({
   const status = await local.client.rpc("get_dm_status", { p_peer_id: id });
   const knownPair = !status.error && !!status.data?.[0];
   return (
-    <Frame signedIn>
-      <nav className="primary-nav" aria-label="Primary">
-        <Link href="/hangouts">Hangouts</Link>
-        <Link href="/calendar">Calendar</Link>
-        <Link href="/people">People</Link>
-        <Link href="/chats" aria-current="page">
-          Chats
-        </Link>
-        <Link href="/notifications">Notifications</Link>
-      </nav>
+    <Frame signedIn navigation={local.state === "ready"}>
       <section className="chat-page" aria-labelledby="direct-title">
         <Link href="/chats">← All chats</Link>
         <p className="badge">Direct chat · local only</p>

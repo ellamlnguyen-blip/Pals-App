@@ -18,7 +18,7 @@ export default async function ThreadPage({
   const target = await chatAccess();
   if (!target || !chatUuid.test(id))
     return (
-      <Frame signedIn>
+      <Frame>
         <section className="chat-page">
           <h1>Chat unavailable</h1>
           <Link href="/chats">Back to Chats</Link>
@@ -28,7 +28,7 @@ export default async function ThreadPage({
   const gate = await readChat(target.client, id);
   if (gate.kind !== "ok")
     return (
-      <Frame signedIn>
+      <Frame>
         <section className="chat-page">
           <h1>Chat unavailable</h1>
           <p>Your Hangout or chat access may have changed.</p>
@@ -40,7 +40,7 @@ export default async function ThreadPage({
   const record = await readSavedPublic(target.client, id);
   if (!record || record.status !== "published")
     return (
-      <Frame signedIn>
+      <Frame>
         <section className="chat-page">
           <h1>Chat unavailable</h1>
           <Link href="/chats">Back to Chats</Link>
@@ -48,16 +48,7 @@ export default async function ThreadPage({
       </Frame>
     );
   return (
-    <Frame signedIn>
-      <nav className="primary-nav" aria-label="Primary">
-        <Link href="/hangouts">Hangouts</Link>
-        <Link href="/calendar">Calendar</Link>
-        <Link href="/people">People</Link>
-        <Link href="/chats" aria-current="page">
-          Chats
-        </Link>
-        <Link href="/notifications">Notifications</Link>
-      </nav>
+    <Frame signedIn navigation>
       <section className="chat-page" aria-labelledby="thread-title">
         <Link href="/chats">← All chats</Link>
         <p className="badge">Hangout chat · local only</p>
