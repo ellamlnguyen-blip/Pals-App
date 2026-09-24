@@ -130,7 +130,7 @@ test("moderation RPCs use live role/gate checks and allowlisted audited projecti
     assert.deepEqual(Object.keys(detail.body[0]).sort(),
       ["case_note", "case_revision", "case_state", "category", "disposition", "narrative",
         "provenance_kind", "provenance_ref_id", "report_id", "reporter_id",
-        "submitted_at", "target_campus_id", "target_id", "target_status", "target_type"]);
+        "submitted_at", "target_campus_id", "target_disabled", "target_id", "target_status", "target_type"]);
     assert.equal(detail.body[0].narrative, "Local allegation");
     assert.equal(detail.body[0].case_revision, 0);
     const requestId = crypto.randomUUID();
