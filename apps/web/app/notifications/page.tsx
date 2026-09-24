@@ -30,16 +30,7 @@ export default async function NotificationsPage() {
       </Frame>
     );
   return (
-    <Frame signedIn>
-      <nav className="primary-nav" aria-label="Primary">
-        <Link href="/hangouts">Hangouts</Link>
-        <Link href="/calendar">Calendar</Link>
-        <Link href="/people">People</Link>
-        <Link href="/chats">Chats</Link>
-        <Link href="/notifications" aria-current="page">
-          Notifications
-        </Link>
-      </nav>
+    <Frame signedIn navigation={account.state === "ready"}>
       <NotificationsInbox key={account.user.id} actor={account.user.id} />
     </Frame>
   );
