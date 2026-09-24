@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import type { PeopleDetail } from "../../../lib/people";
-import { blockPerson } from "../actions";
+import { SafetyActions } from "../../safety/safety-client";
 import { RequestControl } from "./request-control";
 import { FriendControl } from "../friend-control";
 import type { FriendshipResult } from "../friend-actions";
@@ -17,9 +17,7 @@ export function PersonView({
   friendship: FriendshipResult;
   actor: string;
 }) {
-  const dialog = useRef<HTMLDialogElement>(null),
-    trigger = useRef<HTMLButtonElement>(null),
-    profileHeading = useRef<HTMLHeadingElement>(null),
+  const profileHeading = useRef<HTMLHeadingElement>(null),
     clearedHeading = useRef<HTMLHeadingElement>(null);
   const [cleared, setCleared] = useState(false),
     [message, setMessage] = useState("");
@@ -93,59 +91,15 @@ export function PersonView({
         onClear={() => setCleared(true)}
       />
       <RequestControl peerId={detail.account_id} actor={actor} />
-      <div className="people-block">
-        <button
-          ref={trigger}
-          className="text-button"
-          disabled
-          onClick={() => dialog.current?.showModal()}
-        >
-          New blocking temporarily unavailable
-        </button>
-        <dialog
-          ref={dialog}
-          onClose={() => {
-            if (!cleared) trigger.current?.focus();
-          }}
-          aria-labelledby="block-heading"
-          aria-describedby="block-explain"
-        >
-          <h2 id="block-heading">Block {detail.real_name} in People?</h2>
-          <p id="block-explain">
-            You will be hidden from each other in People discovery. Any current
-            friend request or friendship and active direct request or chat ends,
-            even if its status is unavailable. A confirmed block now affects
-            Hangout access and may end shared attendance. Creating a block is
-            temporarily unavailable.
-          </p>
-          <div className="people-dialog-actions">
-            <button
-              className="button"
-              disabled
-              onClick={async () => {
-                dialog.current?.close();
-                setCleared(true);
-                try {
-                  const result = await blockPerson(detail.account_id);
-                  setMessage(result.message);
-                } catch {
-                  setMessage(
-                    "We could not confirm the block. Check your blocked IDs before another action.",
-                  );
-                }
-              }}
-            >
-              New blocking temporarily unavailable
-            </button>
-            <button
-              className="text-button"
-              onClick={() => dialog.current?.close()}
-            >
-              Cancel
-            </button>
-          </div>
-        </dialog>
-      </div>
+      <SafetyActions
+        actor={actor}
+        target={{ mode: "user", id: detail.account_id }}
+        allowBlock
+        onBlockConfirmed={() => {
+          setMessage("Block confirmed. Check your outbound IDs in Safety.");
+          setCleared(true);
+        }}
+      />
     </article>
   );
 }

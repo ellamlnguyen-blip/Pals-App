@@ -5,6 +5,7 @@ import { requireLocalHangouts } from "../../../../lib/hangouts";
 import { readSavedDetail } from "../../../../lib/saved-hangouts";
 import { MembershipControl } from "./membership-control";
 import { chatAccess, readChat } from "../../../../lib/chat";
+import { SafetyActions } from "../../../safety/safety-client";
 import "../../create.css";
 import "../saved.css";
 
@@ -37,6 +38,7 @@ export default async function SavedDetailPage({
               ? "Reload for the latest details and membership state."
               : "The plan may have been removed from your view, or your account may no longer have access."}
           </p>
+          <Link href="/safety">Use retained Hangout ID recovery in Safety</Link>
         </main>
       </Frame>
     );
@@ -54,6 +56,7 @@ export default async function SavedDetailPage({
         <Link href="/hangouts/saved">← Saved Hangouts</Link>
         <p className="badge">Saved Hangout · local only</p>
         <h1>{record.title}</h1>
+        <SafetyActions actor={result.userId} target={{ mode: "hangout", id }} />
         <p className="saved-detail-state">
           {cancelled
             ? "Cancelled"

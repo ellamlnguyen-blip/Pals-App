@@ -74,44 +74,9 @@ export async function blockPerson(id: string): Promise<PeopleActionResult> {
 }
 
 export async function unblockPerson(id: string): Promise<PeopleActionResult> {
-  requireLocalPeople();
-  if (!peopleId.test(id))
-    return { state: "unknown", message: "Choose a valid account ID." };
-  const { client, state } = await access();
-  if (state === "signed_out" || state === "restricted")
-    return { state: "unknown", message: "Account access is unavailable." };
-  let writeError = false;
-  try {
-    writeError = !!(
-      await client.rpc("set_people_block", {
-        p_account_id: id,
-        p_blocked: false,
-      })
-    ).error;
-  } catch {
-    writeError = true;
-  }
-  const { data, error } = await client.rpc("list_people_blocked_ids");
-  if (error)
-    return {
-      state: "unknown",
-      message:
-        "We could not confirm the unblock. Reload blocked IDs before another action.",
-    };
-  if (writeError)
-    return {
-      state: "unknown",
-      message:
-        "The unblock request was not confirmed. Reload the outbound IDs before another action.",
-    };
-  // The list is paged. A missing ID in the first page alone is not proof of removal.
-  if (data?.some((row: { account_id: string }) => row.account_id === id))
-    return {
-      state: "hidden",
-      message: "That ID is still on your outbound block list.",
-    };
+  void id;
   return {
-    state: "off",
-    message: "Unblock requested. Reload the list to confirm its latest state.",
+    state: "unknown",
+    message: "Use Safety to confirm an exact outbound ID before unblocking.",
   };
 }

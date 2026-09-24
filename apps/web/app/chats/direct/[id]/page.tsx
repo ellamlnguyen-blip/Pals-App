@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Frame } from "../../../components";
 import { dmId } from "../../../../lib/dm";
 import { DirectThread } from "./thread";
+import { SafetyActions } from "../../../safety/safety-client";
 import "../../../hangouts/map.css";
 import "../../chat.css";
 export const dynamic = "force-dynamic";
@@ -27,6 +28,7 @@ export default async function DirectPage({
       <Frame signedIn>
         <section className="chat-page">
           <h1>Direct chat unavailable</h1>
+          <Link href="/safety">Open Safety</Link>
           <Link href="/chats">Back to Chats</Link>
         </section>
       </Frame>
@@ -51,6 +53,11 @@ export default async function DirectPage({
           id={id}
           actor={local.user!.id}
           ready={local.state === "ready"}
+        />
+        <SafetyActions
+          actor={local.user!.id}
+          target={{ mode: "user", id }}
+          allowBlock
         />
       </section>
     </Frame>
