@@ -121,7 +121,7 @@ prerequisites. Shared queue/state/changelog files remain coordinator-owned.
 
 ## Ready for Next Task?
 
-The corrected exact tip passed fresh independent security review with no P0/P1 blocker. The coordinator merged it at `3d6ef86a8f6daf42708c4e446bf04a644377ff2d`; canonical push and remote verification remain before Stage B can depend on it.
+The corrected exact tip passed fresh independent security review with no P0/P1 blocker. The coordinator merged it at `3d6ef86a8f6daf42708c4e446bf04a644377ff2d`; canonical main was independently remote-verified at `19f8e5998298f8e2c9737502656832a429466927`. Stage B may depend on this backend after its own contract review/publication.
 
 Remote verification for both refs: accepted ADR-0020 main
 `56468f3d2d5cc503628d273fdd22a14eaf4cdbd5` was independently verified
@@ -133,4 +133,4 @@ canonical status record. This was the task-agent handoff state before coordinato
 
 The task branch was independently remote-verified at `5a82090b83910a7437ce4cc6c926f9232a1e00d7`. Fresh read-only exact-tip review found no remaining P0/P1 security or contract blocker, including the new target/campus audit fields and membership/role contention tests. The coordinator merged the reviewed tip onto current main in `3d6ef86a8f6daf42708c4e446bf04a644377ff2d`.
 
-The formal `pnpm check` entrypoint remained blocked by its dependency guard. An isolated archive of that exact task tip passed the same underlying checks directly: Prettier, ESLint, all 37 Node tests, both app typechecks and both production builds. The task agent's database and Auth/HTTP evidence and cleanup are recorded above. A final canonical remote SHA receipt follows publication.
+The formal `pnpm check` entrypoint remained blocked by its dependency guard. An isolated archive of that exact task tip passed the same underlying checks directly: Prettier, ESLint, all 37 Node tests, both app typechecks and both production builds. The task agent's database and Auth/HTTP evidence and cleanup are recorded above. Canonical main was pushed and independently remote-verified at `19f8e5998298f8e2c9737502656832a429466927`; the task ref remains `5a82090b83910a7437ce4cc6c926f9232a1e00d7`.
