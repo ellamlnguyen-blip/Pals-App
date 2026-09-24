@@ -69,6 +69,12 @@ Fresh exact-tip independent security review, coordinator integration and remote 
 
 ## Ready for Next Task?
 
-Not yet: exact-tip review, task-branch remote verification and coordinator main integration are pending. B2 must not depend on unreviewed B1 code.
+The independently remote-verified exact task tip passed fresh security review with no P0/P1 blocker. Reviewed code merged at `c82d42e3939624516a3a19aa7fd2ce3dc60787e9`; canonical publication and remote verification remain before B2 can depend on B1.
 
 Remote verification for both refs: task-branch receipt follows after commit/push; canonical-main receipt follows only after independent review and coordinator integration.
+
+## Coordinator review and integration receipt
+
+Task branch `agent/TASK-017B1-account-enforcement` was independently remote-verified at `79ffee1244a62a7af3bad9bd8bd2c9815efe4e0f`. Fresh read-only exact-tip review found no concrete P0/P1 security or contract blocker; see `agents/handoffs/TASK-017B1-REVIEW.md`. The coordinator merged the reviewed tip onto current main in `c82d42e3939624516a3a19aa7fd2ce3dc60787e9`.
+
+The formal `pnpm check` wrapper remained blocked by its borrowed dependency guard. The agent passed direct Prettier, ESLint, 37 Node tests and both TypeScript checks. The coordinator also ran both Next production builds successfully from an isolated archive of the exact task tip with copied dependency directories. The task agent's database and Auth/Storage evidence and cleanup are recorded above. Canonical remote SHA follows publication.

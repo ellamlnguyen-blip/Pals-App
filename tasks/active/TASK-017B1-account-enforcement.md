@@ -1,5 +1,5 @@
 # TASK-017B1 — Disposable-local account enforcement backend
-Status: In implementation on isolated `agent/TASK-017B1-account-enforcement` from remote-verified main `64f4e0b48a58a61dbcbc52e798261866376ee5fa`
+Status: Local implementation and exact-tip security review complete; canonical integration publication/receipt pending
 Date: 2026-09-24
 Planning baseline: remote-verified canonical main `dcd89ae9a47d598493ab6382aa4d1535dec6ffea`
 

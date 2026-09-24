@@ -2,6 +2,11 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-24 — TASK-017B1 local account enforcement
+
+- Added exact-report, case-linked account suspension, ban and reinstatement with role-specific authority, expected revision, idempotent retry, append-only sanction/audit records and atomic `action_taken` closure.
+- Added account-status locks on direct profile/photo writes and selected social/notification cleanup writes so a committed sanction denies stale in-flight student mutations. Local SQL/Auth/Storage/concurrency/regression checks and clean-archive app builds passed; final remote integration remains. Moderation stays default-off, with no Hangout disable, admin UI or hosted action.
+
 ## 2026-09-24 — TASK-017B1 photo-link policy accepted
 
 - The user accepted ADR-0021 for disposable-local account enforcement: a sanction blocks new authenticated photo access, while a previously issued signed URL may remain usable through its expiry and hosted caching may extend exposure. No enforcement code or hosted behavior changed in this decision record.

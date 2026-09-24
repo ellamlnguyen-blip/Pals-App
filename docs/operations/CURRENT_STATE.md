@@ -6,6 +6,8 @@ Last updated: 2026-09-24
 Decision tree resolved through product purpose, loop, profile/hangout/social model, safety, map/calendar navigation, MVP boundary, technical architecture, and agent operating model.
 
 ## Build State
+TASK-017B1's disposable-local account enforcement passed fresh exact-tip security review at independently remote-verified task `79ffee1244a62a7af3bad9bd8bd2c9815efe4e0f` and was merged onto the coordination branch at `c82d42e3939624516a3a19aa7fd2ce3dc60787e9`. Local SQL/Auth/Storage/concurrency/regressions and schema lint passed; clean-archive production builds for both apps passed. The formal `pnpm check` wrapper stopped at a borrowed dependency-directory guard before checks, while its direct constituent checks passed. Fixtures were cleared, all eight gates disabled and local services stopped. Canonical push/remote verification remain; Hangout disable and admin UI have not begun.
+
 TASK-017B1 account-enforcement implementation runs in a fresh isolated checkout from independently remote-verified accepted-policy main `64f4e0b48a58a61dbcbc52e798261866376ee5fa`. Its local migration/tests, exact-tip security review, cleanup and main integration remain pending. No Hangout disabling, admin UI or hosted operation has begun.
 
 The user accepted ADR-0021's narrow preissued photo-link boundary for disposable-local TASK-017B1 after its independently reviewed proposal was published on remote-verified main `e084bc2353e20c43667802bd548587c7418ba12c`. The acceptance receipt must be published/verified before a fresh B1 implementation branch starts. No enforcement code or hosted operation has begun.
