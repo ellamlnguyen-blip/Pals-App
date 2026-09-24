@@ -1,7 +1,7 @@
 # TASK-017C contract review
 
-Date: 2026-09-24  
-Scope: documentation-only draft operator-console contract  
+Date: 2026-09-24
+Scope: documentation-only draft operator-console contract
 Planning baseline: canonical main `057c6ba2e5a3e59250a2318703a6edfd54da4911`
 
 An independent GPT-6 Sol medium review checked the Stage C draft against Accepted ADR-0019/0020, the Stage A/B1 RPC projections and Stage B2's reviewed contract. It found no new policy authority required. The reviewed revisions removed an impossible target-platform-role UI promise, kept gate-off and other access denials neutral, defined admin-origin SSR/cookie and sensitive response headers, captured late-response/session guards, specified duplicate-reference entry from previously viewed queue evidence, distinguished case-only from enforcement confirmation, and made in-memory retry versus lost-tab recovery honest.

@@ -56,3 +56,7 @@ The coordinator owns exact-tip review, shared status records and remote-verified
 ## Ready for Next Task?
 
 No — TASK-017C must not depend on the backend until independent security review and canonical-main integration. Remote verification for the task ref will be reported to the coordinator after push; the integrated main ref is coordinator-owned.
+
+## Coordinator integration receipt
+
+Independent exact-tip security review accepted task tip `7885971ddbe15bb27e2ea46d875fb7945c1a0014` with no P0/P1/P2 finding; see `agents/handoffs/TASK-017B2-REVIEW.md`. The coordinator integrated it on independently remote-verified canonical main `a7af812a20d1de066a6e8893b678bb43b61bf068`. The prior readiness statement above records the task agent's handoff at its stopping point; Stage C may now depend on the integrated backend after its reviewed contract is published.

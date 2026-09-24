@@ -1,5 +1,5 @@
 # TASK-017B2 — Disposable-local Hangout disable backend
-Status: Complete locally; exact-tip security review accepted `7885971ddbe15bb27e2ea46d875fb7945c1a0014`, canonical integration publication in progress
+Status: Complete for disposable-local B2; task `7885971ddbe15bb27e2ea46d875fb7945c1a0014` and canonical main `a7af812a20d1de066a6e8893b678bb43b61bf068` independently remote-verified
 Date: 2026-09-24
 Planning baseline: independently remote-verified canonical main `5bf3cc454dda4cb9e7c272adf659c98fe1e9b917`
 
