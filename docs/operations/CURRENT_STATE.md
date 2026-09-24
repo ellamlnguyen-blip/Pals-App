@@ -17,6 +17,8 @@ The user then explicitly approved publication to that repository. Reviewed TASK-
 
 The publication receipt was remote-verified on canonical main/coordinator branch `63314d88630950f1237ea04dfae286d8d93a8a73`. TASK-023B now runs in a fresh isolated worktree from that baseline for Calendar/People/profile presentation. Independent review and main integration precede C; real authenticated route checks remain open.
 
+TASK-023B Calendar/People/profile visual adoption passed corrected exact-tip independent source review at remotely verified `d19b8f4020056574f17872b810917ca7090d5590`. Gate-neutral loading/error shells corrected an initial readiness finding. Lint, TypeScript, 37 units and web build passed. Coordinator inspected disposable synthetic desktop/tablet/phone/narrow and dark-token samples with no horizontal page overflow; real authenticated/backend/denied flows remain unverified because port 3000 is assigned to another checkout. B is merged locally into the coordinator branch; canonical publication is pending. See B handoff and review.
+
 TASK-015 is complete for its bounded disposable-local scope under Accepted ADR-0017. Reviewed A/B backend stages provide the owner-only notification ledger, preferences and authoritative friendship, DM, Hangout and Hangout-chat events; reviewed C provides the local-only Notifications inbox and preferences UI. SQL/Auth/HTTP/race/workspace and rendered desktop/tablet/phone/keyboard/failure checks passed within the handoff limits. All notification and related local gates are false, disposable fixtures gone and local services stopped. No hosted delivery, Realtime, push/email or global blocking/reporting readiness is claimed. See `agents/handoffs/TASK-015.md` and stage/review handoffs.
 
 ### TASK-015 progress history

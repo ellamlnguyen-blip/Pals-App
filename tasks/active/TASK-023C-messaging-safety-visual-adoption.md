@@ -1,6 +1,6 @@
 # TASK-023C — Chats, Notifications and Safety visual adoption
 
-Status: Draft; dependent on reviewed TASK-023B integration and contract publication
+Status: Ready for fresh implementation after reviewed TASK-023B canonical integration and this contract's publication
 Parent: `TASK-023-frontend-design-alignment.md`
 
 ## Goal

@@ -1,6 +1,6 @@
 # TASK-023B — Calendar, People and profile visual adoption
 
-Status: Ready for fresh implementation after reviewed TASK-023A integration and this contract's canonical publication
+Status: Reviewed local implementation merged into coordinator branch; canonical publication pending, authenticated parent QA open
 Parent: `TASK-023-frontend-design-alignment.md`
 
 ## Goal
