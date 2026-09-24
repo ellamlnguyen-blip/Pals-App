@@ -21,6 +21,8 @@ TASK-023B Calendar/People/profile visual adoption passed corrected exact-tip ind
 
 Reviewed B and the accepted C contract were integrated on independently remote-verified canonical main/coordinator branch `f264a66a5627a44acbd152cd88a121b74b47c0ce`; corrected B task branch remains at `d19b8f4020056574f17872b810917ca7090d5590`. C may start from this baseline. Real authenticated A/B/C visual and flow checks remain a parent completion gate.
 
+The B publication receipt advanced canonical main/coordinator branch to remote-verified `6684005ff9397f4939e96c65cf8200de4a9e24f1`. Fresh bounded TASK-023C implementation is underway for Chats/Notifications/Safety presentation. Its exact-tip review/integration and real authenticated A/B/C checks remain pending; port 3000 remains untouched.
+
 TASK-015 is complete for its bounded disposable-local scope under Accepted ADR-0017. Reviewed A/B backend stages provide the owner-only notification ledger, preferences and authoritative friendship, DM, Hangout and Hangout-chat events; reviewed C provides the local-only Notifications inbox and preferences UI. SQL/Auth/HTTP/race/workspace and rendered desktop/tablet/phone/keyboard/failure checks passed within the handoff limits. All notification and related local gates are false, disposable fixtures gone and local services stopped. No hosted delivery, Realtime, push/email or global blocking/reporting readiness is claimed. See `agents/handoffs/TASK-015.md` and stage/review handoffs.
 
 ### TASK-015 progress history
