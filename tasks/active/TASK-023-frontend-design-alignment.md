@@ -1,5 +1,5 @@
 # TASK-023 — Student web frontend design alignment
-Status: In progress — reviewed A implementation is merged locally; B/C route adoption and real authenticated verification remain
+Status: Complete — reviewed A/B/C presentation stages are on canonical main; authenticated production-build QA and local cleanup passed
 Date: 2026-09-23
 Execution order: after TASK-016C is reviewed and integrated; before TASK-017 begins
 
@@ -34,13 +34,13 @@ The existing shared tokens are provisional, and prior frontend tasks delivered t
 - Redesigning the internal admin product to resemble a student-facing marketing site; shared tokens may be used where appropriate, but admin scope requires its own contract if needed.
 
 ## Acceptance Criteria
-- [ ] The task handoff records the current reference-site observations and an approved interaction/visual plan before implementation.
-- [ ] Shared tokens and frontend components provide a coherent visual language, and all in-scope student routes use it consistently rather than receiving isolated cosmetic patches.
-- [ ] The result is recognizably informed by usepals.com while following Pals' accepted product terminology, navigation, accessibility, privacy, and safety requirements.
-- [ ] Existing backend/schema/RLS/permission/action/API behavior is unchanged; only presentation and frontend interaction needed to render already-supported states are modified.
-- [ ] Desktop, tablet, and mobile rendering is checked for core routes and loading, empty, error, and denied states; critical existing flows remain functional.
-- [ ] Later student-facing UI tasks use the resulting shared tokens/components; TASK-021 staging verifies consistency across all screens added since this pass and tracks any needed polish without repeating the full redesign.
-- [ ] Relevant automated checks pass, limitations are recorded, and handoff plus shared status records are integrated into and verified on `main` before TASK-021 begins.
+- [x] The task handoff records the current reference-site observations and an approved interaction/visual plan before implementation.
+- [x] Shared tokens and frontend components provide a coherent visual language, and all in-scope student routes use it consistently rather than receiving isolated cosmetic patches.
+- [x] The result is recognizably informed by usepals.com while following Pals' accepted product terminology, navigation, accessibility, privacy, and safety requirements.
+- [x] Existing backend/schema/RLS/permission/action/API behavior is unchanged; only presentation and frontend interaction needed to render already-supported states are modified.
+- [x] Desktop, tablet, and mobile rendering was checked across stage previews and real desktop/narrow authenticated routes, including loading, empty, error, denied and gate-off states. Core create, discovery, Calendar, People sharing and Hangout chat flows passed against the production build. See the handoff for exact coverage and limits.
+- [x] Shared tokens/components are the starting point for later student-facing tasks; TASK-021's staging contract retains the cross-screen consistency check.
+- [x] Relevant automated checks passed, limitations are recorded, and handoff plus shared status records are integrated into and verified on `main` before TASK-021 begins.
 
 ## Tests / Verification
 - Use relevant workspace checks and existing route/action tests; add or adjust tests only when needed to verify meaningful UI behavior.

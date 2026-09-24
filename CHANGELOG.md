@@ -2,6 +2,11 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-23 — TASK-023 student web design alignment
+
+- Added a cohesive shared visual system across the implemented student-facing web routes, informed by the live usepals.com reference while preserving Hangout-first navigation, access states, privacy and safety behavior.
+- Fresh stage reviews, existing workspace checks and production-build authenticated local QA covered core create/discovery, Calendar, People, chat, Notifications and Safety flows. No backend, migration, permission or hosted change. A development-server-only request-scope issue is tracked separately.
+
 ## 2026-09-23 — TASK-016 local safety UI and completion
 
 - Added active-owner Safety access, exact outbound block management, retained ID-only Hangout/host reporting, global consequence confirmations and explicit uncertain-response recovery. All legacy block writers remain denied; confirmed Direct chat blocking immediately clears its messages and composer.
