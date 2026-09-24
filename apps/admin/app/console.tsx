@@ -8,6 +8,7 @@ import {
   nextCursor,
   responseBelongsTo,
   scheduleSelectedFocus,
+  sessionReplyBelongsTo,
   type MutationIntent,
 } from "../lib/flow";
 
@@ -139,15 +140,23 @@ export default function Console({ configured }: { configured: boolean }) {
   useEffect(() => {
     if (!configured) return;
     let active = true;
+    const capturedSession = sessionGeneration.current;
     call("/api/session")
       .then((r) => {
-        if (active) {
+        if (
+          active &&
+          sessionReplyBelongsTo(capturedSession, sessionGeneration.current)
+        ) {
           setRole(r.role ?? null);
           setSession(r.signedIn ? "in" : "out");
         }
       })
       .catch(() => {
-        if (active) setSession("out");
+        if (
+          active &&
+          sessionReplyBelongsTo(capturedSession, sessionGeneration.current)
+        )
+          setSession("out");
       });
     return () => {
       active = false;
@@ -212,20 +221,25 @@ export default function Console({ configured }: { configured: boolean }) {
   }
   async function signIn(e: React.FormEvent) {
     e.preventDefault();
+    const capturedSession = ++sessionGeneration.current;
     setMessage("");
     setBusy(true);
     try {
       await call("/api/session", { op: "in", email, password });
       const current = await call("/api/session");
+      if (!sessionReplyBelongsTo(capturedSession, sessionGeneration.current))
+        return;
       setRole(current.role ?? null);
       setPassword("");
       setSession("in");
     } catch {
-      setMessage(
-        "Sign-in unavailable. Check your credentials and local setup.",
-      );
+      if (sessionReplyBelongsTo(capturedSession, sessionGeneration.current))
+        setMessage(
+          "Sign-in unavailable. Check your credentials and local setup.",
+        );
     } finally {
-      setBusy(false);
+      if (sessionReplyBelongsTo(capturedSession, sessionGeneration.current))
+        setBusy(false);
     }
   }
   async function signOut() {

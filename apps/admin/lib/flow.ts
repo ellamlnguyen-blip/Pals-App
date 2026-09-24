@@ -15,6 +15,10 @@ export function responseBelongsTo(
   );
 }
 
+export function sessionReplyBelongsTo(captured: number, current: number) {
+  return captured === current;
+}
+
 export function deniedView() {
   return {
     queue: [],

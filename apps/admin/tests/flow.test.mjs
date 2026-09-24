@@ -7,6 +7,7 @@ import {
   nextCursor,
   responseBelongsTo,
   scheduleSelectedFocus,
+  sessionReplyBelongsTo,
 } from "../lib/flow.ts";
 
 const A = "00000000-0000-4000-8000-000000000001";
@@ -127,4 +128,12 @@ test("detail focus follows only the still-selected report", () => {
   );
   callback();
   assert.equal(focused, 1);
+});
+
+test("late initial session reply cannot overwrite role after sign-in", () => {
+  const initialRead = 0;
+  const signedInRead = 1;
+  assert.equal(sessionReplyBelongsTo(initialRead, signedInRead), false);
+  assert.equal(sessionReplyBelongsTo(signedInRead, signedInRead), true);
+  assert.equal(sessionReplyBelongsTo(signedInRead, 2), false);
 });

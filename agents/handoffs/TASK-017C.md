@@ -6,7 +6,8 @@ Status: implementation branch ready for fresh security and rendered review; TASK
 
 - The first exact-tip security review found that detail/action denial left queue metadata on screen. The denial transition now clears queue, paging history, detail, selection, pending action and advisory role, and shows only the neutral unavailable state. Late queue/detail responses are invalidated by the selection generation.
 - It also found that a late denied mutation for report A could clear report B. Mutation success, denial, and announcements now require the captured session, selection generation and report ID to match the current view. Sign-out invalidates pending mutation UI updates. A mutation response for an earlier selection cannot alter the newly selected report. The success path checks selection again after the audited queue refresh before reopening detail.
-- Added six focused tests for denial state, rapid A→B and session changes, exact same-key retry payload, bounded cursor paging, duplicate candidate rules, and delayed keyboard focus. Direct admin lint, TypeScript, tests and production build pass after the fixes.
+- Added seven focused tests for denial state, rapid A→B and session changes, exact same-key retry payload, bounded cursor paging, duplicate candidate rules, delayed keyboard focus, and an initial session reply arriving after sign-in. Direct admin lint, TypeScript, tests and production build pass after the fixes.
+- Live local QA found that the first session read could return after successful sign-in and replace an admin role with an earlier null role, hiding Ban until reload. The initial read and sign-in completion now compare a session generation before updating role/session UI. A current live role remains advisory; RPC enforcement is authoritative.
 - Coordinator is operating the disposable local stack for live QA; this implementation agent did not reset, stop, or alter its fixtures or moderation gate.
 
 ## Scope and baseline
@@ -29,7 +30,7 @@ Status: implementation branch ready for fresh security and rendered review; TASK
 - Direct TypeScript check for `apps/admin`: pass.
 - Direct Next production build: pass, including dynamic root page and API routes.
 - `git diff --check`: pass.
-- `node --test apps/admin/tests/*.test.mjs`: six passing focused tests after the review fixes.
+- `node --test apps/admin/tests/*.test.mjs`: seven passing focused tests after the review fixes.
 - Live local production server: forged `Origin: http://127.0.0.1:3000` POST to `/api/moderation` returned 403 and to `/api/session` returned 400. Responses carried `Cache-Control: private, no-store` and `Referrer-Policy: no-referrer`; root page headers did too.
 - Source scan found no browser storage, analytics, client service key, or ID query-string construction.
 
