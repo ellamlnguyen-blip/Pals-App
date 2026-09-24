@@ -25,6 +25,57 @@ The client-facing RPC boundary is `create_hangout(p_request_id, p_title, p_start
 
 The database stores supplied timestamps as instants; later UI work handles America/New_York local-time disambiguation. Creation or a changed start must be within now and 366 days; end must follow start by at most seven days. This local foundation has no application flow, automatic expiry, hosted migration, block enforcement or launch authorization. See Accepted ADR-0010 and the TASK-005 contract for the full matrix.
 
+## Disposable-local moderation review backend (TASK-017A)
+
+Migration `20260924000100_local_moderation_review.sql` adds a separate
+`private.moderation_feature_gate`, default `false`. Only a live active account
+with an explicit `moderator` or `admin` platform role may use the three public
+caller-bound RPCs after a disposable local fixture enables that gate. The role
+does not grant a table reader; the private report, case, retry and audit tables
+retain RLS and no client grants. This stage does not include sanctions, Hangout
+disablement, an admin UI, or hosted use.
+
+- `list_moderation_reports(p_after_submitted_at,p_after_id,p_limit)` returns up
+  to 24 allowlisted queue rows in descending `(submitted_at,id)` order. Pass the
+  last returned time and ID together for the next page. Each successful page,
+  including an empty one, writes one audit event with a server request UUID and
+  returned IDs/count.
+- `get_moderation_report(p_report_id)` returns one allegation plus narrowly
+  projected current target context, or `unavailable` if its target row is gone.
+  Accepted ADR-0020 adds server-owned `case_revision` to this audited exact-ID
+  detail only; an absent case row returns zero. Queue and student APIs omit it.
+  Each successful opening writes one audit event. Unknown or conflicted IDs
+  receive `42501` with the same neutral message.
+- `transition_moderation_case(p_report_id,p_request_id,p_expected_revision,
+  p_action,p_note,p_duplicate_report_id)` returns only case state and revision.
+  Actions are `start_review`, `annotate`, `close_no_action`,
+  `close_duplicate`, and `reopen`. Preserve the operator-scoped UUID and the
+  same normalized payload for an uncertain retry. New actions require the
+  current revision; a changed-key payload or stale revision is denied. Each
+  new transition audit records the exact stored report target type and UUID,
+  plus the target's current membership or Hangout campus when it exists. An
+  absent current target leaves the audit campus null; retries add no audit.
+  User membership is locked through the action commit so a concurrent campus
+  change cannot make the stored audit campus stale before commit.
+
+The new RPCs require READ COMMITTED. They acquire one moderation transaction
+advisory lock, then the gate row, operator account `FOR SHARE` row and role row,
+report row, target account or Hangout row, and finally case/retry
+state. Queue/detail user targets use `FOR SHARE`; user-target case actions use
+`FOR UPDATE`: a concurrent role insertion's
+foreign-key key-share must wait, so an operator cannot act on a newly
+privileged account from a stale negative role lookup. The functions make fresh
+checks after any lock wait. A revocation that commits before those checks
+denies; an already-authorized operation holding locks can commit first. Case
+mutation, retry result and audit append share one transaction. Reporter and
+case report foreign keys restrict deletion; audit actor/subject IDs are
+retained UUIDs without cascading foreign keys. Audit campus is current
+evidence at the action, not a reconstructed historical campus.
+
+Before hosted use, resolve retention/deletion and legal holds, operator
+onboarding and MFA, appeals/escalation, and staffed response. Stage B must add
+atomic sanction/closure and source authorization enforcement separately.
+
 ## Hosted procedure
 
 A configured, authorized non-production Supabase project is required before these steps. Its Postgres major version must match local 17. Review the project name and reference against the environment inventory; never infer staging from a URL or substitute production. Use a disposable checkout dedicated to hosted operations. Current target and actual verification evidence are recorded in `docs/operations/HOSTED_ENVIRONMENT.md`.
