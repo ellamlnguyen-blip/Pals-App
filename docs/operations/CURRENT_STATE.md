@@ -6,6 +6,8 @@ Last updated: 2026-09-24
 Decision tree resolved through product purpose, loop, profile/hangout/social model, safety, map/calendar navigation, MVP boundary, technical architecture, and agent operating model.
 
 ## Build State
+TASK-018 planning, reviewed A/B contracts and the proposed attendance policy are published on independently remote-verified canonical main `a6b22d84fa840289e9d3c620b8082a4b6441dc9e`. Explicit ADR-0022 acceptance is pending before any backend/UI implementation; no attendance gate or response data exists.
+
 TASK-018 attendance confirmation is in planning. Its bounded contract and Proposed ADR-0022 define a private self-reported yes/no answer, eligibility and correction window, ID-only retained access and moderation precedence for user acceptance. No attendance schema, UI, notification or analytics implementation exists; local gates remain default off. TASK-017 remains complete. See `tasks/active/TASK-018-attendance-confirmation.md`.
 
 TASK-018A's narrower backend contract has cleared scoped independent review after explicit parent-lock, gate, retry and read-isolation clarifications. ADR-0022 acceptance is still required before any attendance migration/RPC work.
