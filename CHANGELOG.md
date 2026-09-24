@@ -5,6 +5,7 @@ Record meaningful product, architecture, schema, safety, and release changes—n
 ## 2026-09-24 — TASK-018 attendance policy proposed
 
 - Defined the bounded attendance-confirmation task and Proposed ADR-0022 for private self-reporting, time/correction limits and retained-ID privacy. Explicit acceptance is still required before any schema or permission change. No hosted operation or gate enablement occurred.
+- Reviewed the narrower TASK-018A database contract, including a separate owner-only lock path and after-commit revocation tests. Implementation remains blocked on the proposed policy's explicit acceptance.
 
 ## 2026-09-24 — TASK-017 disposable-local moderation console complete
 
