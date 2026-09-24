@@ -4,9 +4,8 @@ import "@pals/design-tokens/tokens.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Pals Admin",
-  description:
-    "The Pals team workspace is being built. Moderation tools are not available yet.",
+  title: "Pals · Moderation",
+  description: "Private local moderation workspace.",
   robots: { index: false, follow: false },
 };
 
