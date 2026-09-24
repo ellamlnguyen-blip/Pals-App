@@ -48,8 +48,9 @@ test("moderation RPCs use live role/gate checks and allowlisted audited projecti
   let ownHangoutReport;
   let hangout;
   try {
-    users.push(await signup(), await signup({ role: "admin" }), await signup());
-    const [operator, reporter, target] = users;
+    users.push(await signup(), await signup({ role: "admin" }), await signup(),
+      await signup());
+    const [operator, reporter, target, secondOperator] = users;
     const claims = JSON.parse(Buffer.from(reporter.token.split(".")[1], "base64url"));
     assert.equal(claims.user_metadata.role, "admin");
     assert.equal(claims.role, "authenticated");
@@ -59,7 +60,8 @@ test("moderation RPCs use live role/gate checks and allowlisted audited projecti
     ownHangoutReport = crypto.randomUUID();
     hangout = crypto.randomUUID();
     sql(`insert into public.platform_roles(user_id,role)
-      values (${quote(operator.id)},'moderator');
+      values (${quote(operator.id)},'moderator'),
+        (${quote(secondOperator.id)},'admin');
       insert into private.safety_reports(id,reporter_id,target_type,target_id,
         category,narrative,provenance_kind,provenance_ref_id)
       values (${quote(report)},${quote(reporter.id)},'user',${quote(target.id)},
@@ -116,10 +118,11 @@ test("moderation RPCs use live role/gate checks and allowlisted audited projecti
       { p_report_id: report });
     assert.equal(detail.status, 200, JSON.stringify(detail.body));
     assert.deepEqual(Object.keys(detail.body[0]).sort(),
-      ["case_note", "case_state", "category", "disposition", "narrative",
+      ["case_note", "case_revision", "case_state", "category", "disposition", "narrative",
         "provenance_kind", "provenance_ref_id", "report_id", "reporter_id",
         "submitted_at", "target_campus_id", "target_id", "target_status", "target_type"]);
     assert.equal(detail.body[0].narrative, "Local allegation");
+    assert.equal(detail.body[0].case_revision, 0);
     const requestId = crypto.randomUUID();
     const input = { p_report_id: report, p_request_id: requestId,
       p_expected_revision: 0, p_action: "start_review" };
@@ -128,6 +131,25 @@ test("moderation RPCs use live role/gate checks and allowlisted audited projecti
     assert.deepEqual(first.body, [{ case_state: "in_review", revision: 1 }]);
     assert.deepEqual((await rpc("transition_moderation_case", operator.token, input)).body,
       first.body);
+    const secondDetail = await rpc("get_moderation_report", secondOperator.token,
+      { p_report_id: report });
+    assert.equal(secondDetail.status, 200, JSON.stringify(secondDetail.body));
+    assert.equal(secondDetail.body[0].case_revision, 1,
+      "second operator learns current revision through audited detail");
+    const annotate = await rpc("transition_moderation_case", operator.token,
+      { p_report_id: report, p_request_id: crypto.randomUUID(),
+        p_expected_revision: 1, p_action: "annotate", p_note: "Reviewed evidence" });
+    assert.deepEqual(annotate.body, [{ case_state: "in_review", revision: 2 }]);
+    const beforeStaleAudit = Number(sql("select count(*) from private.moderation_audit"));
+    denied(await rpc("transition_moderation_case", secondOperator.token,
+      { p_report_id: report, p_request_id: crypto.randomUUID(),
+        p_expected_revision: secondDetail.body[0].case_revision,
+        p_action: "annotate", p_note: "Stale second review" }));
+    assert.equal(Number(sql("select count(*) from private.moderation_audit")),
+      beforeStaleAudit, "stale second-operator action writes no audit");
+    const refreshed = await rpc("get_moderation_report", secondOperator.token,
+      { p_report_id: report });
+    assert.equal(refreshed.body[0].case_revision, 2);
     assert.equal(sql(`select count(*) from private.moderation_audit
       where report_id=${quote(report)} and action='start_review'`), "1");
     assert.equal(sql(`select count(*) from private.moderation_audit

@@ -65,6 +65,9 @@ select is((select count(*) from public.list_moderation_reports()),2::bigint,
  'operator receives bounded queue');
 select is((select count(*) from public.get_moderation_report(
  '51900000-0000-4000-8002-000000000001')),1::bigint,'operator opens detail');
+select is((select case_revision from public.get_moderation_report(
+ '51900000-0000-4000-8002-000000000001')),0::bigint,
+ 'exact detail projects zero for an absent case row');
 select is((select revision from public.transition_moderation_case(
  '51900000-0000-4000-8002-000000000001',
  '51900000-0000-4000-8003-000000000001',0,'start_review')),1::bigint,
@@ -93,6 +96,9 @@ select is((select revision from public.transition_moderation_case(
  '51900000-0000-4000-8002-000000000001',
  '51900000-0000-4000-8003-000000000005',3,'reopen','New information')),4::bigint,
  'reopen advances revision');
+select is((select case_revision from public.get_moderation_report(
+ '51900000-0000-4000-8002-000000000001')),4::bigint,
+ 'exact detail projects current case revision after transitions');
 select is((select revision from public.transition_moderation_case(
  '51900000-0000-4000-8002-000000000002',
  '51900000-0000-4000-8003-000000000006',0,'start_review')),1::bigint,
@@ -124,8 +130,8 @@ select throws_ok($$select * from public.get_moderation_report(
 reset role;
 select is((select count(*) from private.moderation_audit where action='queue_read'),1::bigint,
  'one queue audit');
-select is((select count(*) from private.moderation_audit where action='detail_read'),1::bigint,
- 'one detail audit');
+select is((select count(*) from private.moderation_audit where action='detail_read'),3::bigint,
+ 'every successful exact detail call has its own audit');
 select is((select count(*) from private.moderation_audit where action='start_review'
  and report_id='51900000-0000-4000-8002-000000000001'),1::bigint,
  'replay did not duplicate audit');

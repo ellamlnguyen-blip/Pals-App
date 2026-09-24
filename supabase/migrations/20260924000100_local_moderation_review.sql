@@ -144,7 +144,7 @@ end; $$;
 
 create function public.get_moderation_report(p_report_id uuid)
 returns table(report_id uuid,submitted_at timestamptz,target_type text,target_id uuid,
-  reporter_id uuid,category text,case_state text,narrative text,
+  reporter_id uuid,category text,case_state text,case_revision bigint,narrative text,
   provenance_kind text,provenance_ref_id uuid,case_note text,disposition text,
   target_status text,target_campus_id uuid)
 language plpgsql volatile security definer set search_path='' as $$
@@ -158,7 +158,8 @@ begin
   target_id:=r.target_id; reporter_id:=r.reporter_id; category:=r.category;
   narrative:=r.narrative; provenance_kind:=r.provenance_kind;
   provenance_ref_id:=r.provenance_ref_id;
-  select coalesce(c.state,'open'),c.note,c.disposition into case_state,case_note,disposition
+  select coalesce(c.state,'open'),coalesce(c.revision,0),c.note,c.disposition
+    into case_state,case_revision,case_note,disposition
     from (select 1) x left join private.moderation_cases c on c.report_id=r.id;
   if r.target_type='user' then
     select a.status,m.university_id into target_status,target_campus_id

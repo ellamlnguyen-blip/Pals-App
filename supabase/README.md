@@ -42,6 +42,8 @@ disablement, an admin UI, or hosted use.
   returned IDs/count.
 - `get_moderation_report(p_report_id)` returns one allegation plus narrowly
   projected current target context, or `unavailable` if its target row is gone.
+  Accepted ADR-0020 adds server-owned `case_revision` to this audited exact-ID
+  detail only; an absent case row returns zero. Queue and student APIs omit it.
   Each successful opening writes one audit event. Unknown or conflicted IDs
   receive `42501` with the same neutral message.
 - `transition_moderation_case(p_report_id,p_request_id,p_expected_revision,
