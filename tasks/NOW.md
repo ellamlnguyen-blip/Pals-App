@@ -1,5 +1,9 @@
 # NOW
 
+## TASK-018 attendance planning
+
+Starting from independently remote-verified canonical main `be0344ed8b1f9dbef49a6246575ca8d8dd3bccc6`, TASK-018 has a bounded private self-report contract and Proposed ADR-0022 for timing, correction, retained-ID privacy and moderation precedence. The proposal requires explicit user acceptance before schema/authorization implementation. Stage A backend and Stage B UI, their narrower contracts, independent reviews, disposable-local checks and integration remain pending. No attendance migration, feature enablement or hosted operation has occurred. TASK-017 remains complete.
+
 ## TASK-017 completion
 
 All bounded disposable-local TASK-017 stages A/B1/B2/C are accepted after exact-tip review and published on independently remote-verified canonical main `eb3671c3160fbda6d90969891adb718cb451cc30`; C task tip `8f1557bd1ea56eef76904907b9737c8745619e48` is independently remote-verified. Final Stage C production-browser checks covered local Auth/operator roles, unavailable targets, two-operator stale revision, suspended/banned operator denial, response-loss retry, gate revocation, responsive light/dark views and keyboard behavior. Final reset found zero fixtures and eight disabled gates; owned services stopped. TASK-018 attendance confirmation is the next product task; hosted moderation is not authorized by this completion.
