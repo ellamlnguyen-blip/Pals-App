@@ -1,5 +1,5 @@
 # TASK-017B1 — Disposable-local account enforcement backend
-Status: Local implementation and exact-tip security review complete; canonical integration publication/receipt pending
+Status: Complete for disposable-local B1; reviewed task and canonical main independently remote-verified
 Date: 2026-09-24
 Planning baseline: remote-verified canonical main `dcd89ae9a47d598493ab6382aa4d1535dec6ffea`
 
