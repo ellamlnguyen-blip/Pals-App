@@ -6,6 +6,8 @@ Starting from independently remote-verified canonical main `be0344ed8b1f9dbef49a
 
 TASK-018A has a narrower backend contract after the planning integration on remote-verified main `35092024a2b0be5132dd9ee8b84c746fb9c03d2c`. Fresh scoped security review found no remaining concrete P0/P1/P2 issue after lock-path, projection, retry and read-isolation clarifications. Contract publication and explicit ADR acceptance are both required before a fresh implementation agent. The separate attendance gate remains absent and all existing gates remain default off.
 
+TASK-018B's dependent student UI contract and interaction plan are independently reviewed, including the ID-only hidden-source state, unready-owner route, closed unanswered state and exact-deadline privacy rule. Publish this planning milestone on main; B implementation still waits for accepted ADR-0022 and reviewed/integrated A. No UI code has changed.
+
 ## TASK-017 completion
 
 All bounded disposable-local TASK-017 stages A/B1/B2/C are accepted after exact-tip review and published on independently remote-verified canonical main `eb3671c3160fbda6d90969891adb718cb451cc30`; C task tip `8f1557bd1ea56eef76904907b9737c8745619e48` is independently remote-verified. Final Stage C production-browser checks covered local Auth/operator roles, unavailable targets, two-operator stale revision, suspended/banned operator denial, response-loss retry, gate revocation, responsive light/dark views and keyboard behavior. Final reset found zero fixtures and eight disabled gates; owned services stopped. TASK-018 attendance confirmation is the next product task; hosted moderation is not authorized by this completion.
