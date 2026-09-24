@@ -209,9 +209,8 @@ test("moderation read and revocation observe both committed lock orders", {
     sql(`update private.moderation_feature_gate set enabled=false;
       update private.safety_feature_gate set enabled=false;
       update private.hangout_feature_gate set enabled=false;
-      delete from private.moderation_audit where report_id in
-        ('${report}','${report2}','${report3}','${hangoutReport}')
-        or array_position(page_report_ids,'${hangoutReport}'::uuid) is not null;
+      -- Audit is append-only after TASK-017B1; the final disposable reset
+      -- clears these local audit fixtures.
       delete from private.moderation_requests where report_id in
         ('${report}','${report2}','${report3}','${hangoutReport}');
       delete from private.moderation_cases where report_id in

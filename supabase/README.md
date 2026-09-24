@@ -73,8 +73,42 @@ retained UUIDs without cascading foreign keys. Audit campus is current
 evidence at the action, not a reconstructed historical campus.
 
 Before hosted use, resolve retention/deletion and legal holds, operator
-onboarding and MFA, appeals/escalation, and staffed response. Stage B must add
-atomic sanction/closure and source authorization enforcement separately.
+onboarding and MFA, appeals/escalation, and staffed response. TASK-017B1 adds
+the separate local account-enforcement boundary below.
+
+## Disposable-local account enforcement (TASK-017B1)
+
+Migration `20260924000200_local_account_enforcement.sql` leaves the moderation
+gate disabled. `apply_account_moderation_action(p_report_id,p_request_id,
+p_expected_case_revision,p_action,p_reason)` acts only on the exact stored user
+target of an `in_review` case. `suspend` requires a live moderator or admin and
+an active nonoperator target; `ban` and `reinstate` require a live admin. The
+function returns only case state/revision and the resulting account status.
+Every new action, account status change, linked `action_taken` closure, retry
+result and append-only audit commit together. An exact retry rechecks the gate,
+operator's current action-specific role, report conflict and target role before
+returning its original result. A request UUID cannot cross from the Stage A
+case-transition RPC into enforcement. Reopening clears the current case link
+without removing a sanction or reversing status.
+
+The moderation lock precedes gate, operator account/role, report, target
+account `FOR UPDATE`, request UUID, case and target membership locks. A target
+role insertion's foreign-key key-share conflicts with that account lock.
+Existing source RPCs retain their gates and live active/ready checks. Direct
+profile writes, profile-photo Storage writes, friendship and DM cleanup writes,
+and notification preference/read-marker writes additionally hold the caller's
+account row `FOR SHARE` and recheck active status at the write boundary. A
+sanction started first denies a stale writer after its wait; an admitted writer
+holding that row lock may commit before the sanction. Public `accounts` keeps
+its owner-only status read for the restricted screen. No raw sanction, report,
+case, audit or retry table reader was added.
+
+An existing Storage signed photo URL remains a bearer capability until its
+expiration. The local Auth/Storage test verifies that behavior, denial of new
+owner photo reads and signed URL issuance after sanction, and local expiry.
+Hosted CDN caching and immediate revocation of preissued URLs require separate
+policy and engineering decisions under Accepted ADR-0021. No hosted use is
+authorized by this migration.
 
 ## Hosted procedure
 
