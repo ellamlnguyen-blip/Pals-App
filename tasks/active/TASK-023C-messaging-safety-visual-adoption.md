@@ -1,6 +1,6 @@
 # TASK-023C — Chats, Notifications and Safety visual adoption
 
-Status: Independently reviewed and merged locally; canonical publication and authenticated parent QA pending
+Status: Independently reviewed and integrated on canonical main; authenticated parent QA pending
 Parent: `TASK-023-frontend-design-alignment.md`
 
 ## Goal
