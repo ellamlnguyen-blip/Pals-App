@@ -1,6 +1,6 @@
 # TASK-016 — Local blocking and reporting
 
-Status: ADR-0018 accepted; stages A/B independently reviewed; B integrating, final safety UI C remains
+Status: ADR-0018 accepted; stages A/B reviewed and integrated; C implemented on its task branch, final rendered/security review in progress
 Date: 2026-09-23
 Planning branch: `agent/TASK-016-planning`
 Starting canonical `origin/main`: `de5d79946532f7bca127432b85ef6e21c56d2c45`, fetched and independently verified
