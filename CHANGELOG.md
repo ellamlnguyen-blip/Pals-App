@@ -2,6 +2,10 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-24 — TASK-017 local moderation policy acceptance
+
+- The user accepted ADR-0019 after its independent planning review and publication. It bounds audited operator report review, exact case-to-target enforcement and default-disabled local moderation. Stage A still requires its reviewed contract and implementation; this entry changes no runtime or hosted behavior.
+
 ## 2026-09-23 — TASK-023 student web design alignment
 
 - Added a cohesive shared visual system across the implemented student-facing web routes, informed by the live usepals.com reference while preserving Hangout-first navigation, access states, privacy and safety behavior.

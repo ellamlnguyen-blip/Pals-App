@@ -1,5 +1,5 @@
 # TASK-017 — Disposable-local admin moderation console
-Status: Planning; privileged implementation awaits explicit acceptance of Proposed ADR-0019
+Status: Active planning; ADR-0019 accepted for disposable-local implementation, Stage A contract/review/publication pending
 Date: 2026-09-23
 Branch: `agent/TASK-017-admin-moderation` from verified `origin/main` `78e074247b03eafb554a4a7ecad6ab11644308dd`
 
@@ -9,7 +9,7 @@ Build a locally verified operator workflow to review private safety reports and 
 
 ## Dependencies and policy gate
 
-TASK-016A/B/C and TASK-023 are complete on canonical main. Read AGENTS, MVP, architecture, authorization, security/safety, data model, ADR-0006, ADR-0018 and existing report contracts. ADR-0019 proposes the missing authority, evidence, audit and sanction rules. Publish and independently review this contract and the proposed ADR on main, then seek explicit acceptance before any privileged code or schema change. Resolve material policy objections in a revised, reviewed ADR rather than guessing.
+TASK-016A/B/C and TASK-023 are complete on canonical main. Read AGENTS, MVP, architecture, authorization, security/safety, data model, ADR-0006, ADR-0018 and existing report contracts. Accepted ADR-0019 defines the missing authority, evidence, audit and sanction rules. The independently reviewed proposal and parent contract were published on main before the user's 2026-09-24 acceptance. Resolve material policy conflicts in a revised, reviewed ADR rather than guessing.
 
 ## Bounded stages after acceptance
 
