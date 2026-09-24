@@ -1,5 +1,9 @@
 # NOW
 
+## TASK-018 planning publication receipt
+
+The bounded parent plan/Proposed ADR-0022, reviewed A backend contract, and reviewed dependent B UI contract/interaction plan are published on independently remote-verified canonical main `a6b22d84fa840289e9d3c620b8082a4b6441dc9e`. Their task-branch tips were independently verified: planning `cfec945dee5ea479120ab092678a42942dd4b727`, A contract `ff9b42c884e361d3ec843785eccd3732bf1f52ab`, B contract `47c2078e11d7d681f22ab1a03c95c827aa93a09f`. Scoped reviews found no remaining concrete P0/P1/P2 issue after recorded corrections. Explicit user acceptance of ADR-0022 remains pending. No attendance schema, UI runtime, gate enablement or hosted operation has begun. TASK-018 remains active; TASK-017 remains complete.
+
 ## TASK-018 attendance planning
 
 Starting from independently remote-verified canonical main `be0344ed8b1f9dbef49a6246575ca8d8dd3bccc6`, TASK-018 has a bounded private self-report contract and Proposed ADR-0022 for timing, correction, retained-ID privacy and moderation precedence. The proposal requires explicit user acceptance before schema/authorization implementation. Stage A backend and Stage B UI, their narrower contracts, independent reviews, disposable-local checks and integration remain pending. No attendance migration, feature enablement or hosted operation has occurred. TASK-017 remains complete.
