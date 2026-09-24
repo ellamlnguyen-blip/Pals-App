@@ -1,5 +1,5 @@
 # ADR-0020 — Moderation case revision in audited detail
-Status: Proposed
+Status: Accepted — disposable-local TASK-017A only
 Date: 2026-09-24
 
 ## Context
@@ -24,4 +24,4 @@ An authorized operator can supply the current detail revision to the case transi
 
 ## Acceptance
 
-Proposed only. Independent review and canonical publication do not accept this amendment. Explicit user acceptance is required before the new detail field is implemented. No hosted authorization is implied.
+The reviewed proposal was published on remote-verified canonical main `02124d635767c262ab969f120ff1dd4b24e85da7`. The coordinator explicitly asked whether to accept this exact amendment, explaining that it adds only a server-owned case revision to already authorized, audited moderator detail and does not affect queue, student APIs or hosted use. The user replied “ok” on 2026-09-24. In direct response to that question, this accepts the amendment for disposable-local TASK-017A. All other ADR-0019 limits remain in force. No hosted authorization is implied.

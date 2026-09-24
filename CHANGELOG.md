@@ -2,6 +2,10 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-24 — TASK-017A case revision policy acceptance
+
+- The user accepted ADR-0020's narrow `case_revision` field for an already authorized and audited operator report-detail response. It resolves the versioning policy gap for multi-operator case transitions; implementation and verification are still pending. No runtime or hosted behavior changed in this decision record.
+
 ## 2026-09-24 — TASK-017 local moderation policy acceptance
 
 - The user accepted ADR-0019 after its independent planning review and publication. It bounds audited operator report review, exact case-to-target enforcement and default-disabled local moderation. Stage A still requires its reviewed contract and implementation; this entry changes no runtime or hosted behavior.
