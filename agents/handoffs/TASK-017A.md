@@ -66,7 +66,8 @@ occur.
   pass when run serially; running them together caused their fixture gates to
   interfere, then a clean reset and serial rerun passed.
 - Overlapping-session test: observed `pg_stat_activity` lock waits for gate
-  disable in both commit orders, operator-role/account revocation, target-role
+  disable, operator-role deletion and account suspension in both commit orders
+  (each operation-first read audited once, later denied read unaudited), target-role
   insertion and action in both orders, two operators racing one case revision,
   concurrent same-key first actions, current Hangout report versus detail in
   both commit orders, and safety-block versus a queue that visits the user

@@ -118,8 +118,28 @@ test("moderation read and revocation observe both committed lock orders", {
     await race("role_first", `delete from public.platform_roles where user_id='${actor}';`,
       `${claims} ${detail}`, true);
     sql(`insert into public.platform_roles(user_id,role) values ('${actor}','moderator')`);
+    const beforeRoleReadFirst = Number(sql(`select count(*) from private.moderation_audit
+      where report_id='${report}' and action='detail_read'`));
+    await race("role_read_first", `${claims} ${detail}`,
+      `delete from public.platform_roles where user_id='${actor}';`, false);
+    assert.equal(Number(sql(`select count(*) from private.moderation_audit
+      where report_id='${report}' and action='detail_read'`)),
+      beforeRoleReadFirst + 1, "authorized read commits before role deletion");
+    assert.throws(() => sql(`begin; ${claims} ${detail} rollback;`),
+      /Moderation unavailable/);
+    sql(`insert into public.platform_roles(user_id,role) values ('${actor}','moderator')`);
     await race("account_first", `update public.accounts set status='suspended'
       where id='${actor}';`, `${claims} ${detail}`, true);
+    sql(`update public.accounts set status='active' where id='${actor}'`);
+    const beforeAccountReadFirst = Number(sql(`select count(*) from private.moderation_audit
+      where report_id='${report}' and action='detail_read'`));
+    await race("account_read_first", `${claims} ${detail}`,
+      `update public.accounts set status='suspended' where id='${actor}';`, false);
+    assert.equal(Number(sql(`select count(*) from private.moderation_audit
+      where report_id='${report}' and action='detail_read'`)),
+      beforeAccountReadFirst + 1, "authorized read commits before account suspension");
+    assert.throws(() => sql(`begin; ${claims} ${detail} rollback;`),
+      /Moderation unavailable/);
     sql(`update public.accounts set status='active' where id='${actor}'`);
     await race("target_role_first",
       `insert into public.platform_roles(user_id,role) values ('${target}','moderator');`,
