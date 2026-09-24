@@ -13,4 +13,4 @@ A fresh read-only security reviewer examined the Stage A contract against ADR-00
 
 ## Publication and next step
 
-Planning task/main remote SHA receipts: pending publication. After remote verification, dispatch a fresh bounded Stage A implementation agent from current main. The implementer stops after its own branch handoff and does not edit shared queue/state records. No Stage B work may start until A is independently code-reviewed and integrated.
+Planning task branch `agent/TASK-017A-contract` was independently remote-verified at `db17103dc40e27e56311066bd09f198b7a41315e`. Its reviewed merge on canonical main was independently remote-verified at `d745e3317a24cfbefef9a460dfda82cb93c601ed`. A later documentation receipt may advance main; the dispatch baseline is the latest separately verified main SHA. Dispatch a fresh bounded Stage A implementation agent from that baseline. The implementer stops after its own branch handoff and does not edit shared queue/state records. No Stage B work may start until A is independently code-reviewed and integrated.
