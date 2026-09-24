@@ -1,5 +1,19 @@
 # Database tests
 
+TASK-017B1's `local_account_enforcement.test.sql` exercises the caller-bound
+action, role matrix, exact retry/cross-RPC UUID boundary, linked sanction and
+case audit, restrictive deletion, reopen history and restricted notification
+marker under actual SQL roles. `moderation-http.integration.mjs` covers real
+local Auth/PostgREST/Storage, including post-sanction owner denials and the
+preissued signed-photo URL through local expiry. The separate
+`account-enforcement-concurrency.integration.mjs` observes real lock waits in
+both commit orders for direct profile, Storage photo delete, notification
+preference and friendship cleanup, plus operator gate/role and target-role
+revocation. Run these suites serially against `http://127.0.0.1:54321`.
+Moderation audit and sanction records are append-only; reset the disposable
+database after HTTP/concurrency tests to remove fixtures and restore all
+feature gates to false.
+
 `pnpm db:test` runs real pgTAP tests against local Supabase Postgres via `supabase test db --local`. Run after `pnpm db:reset`; the suite expects the clean reference seed and no existing accounts. All synthetic users and auxiliary campuses are inside a transaction rolled back at the end.
 
 Tests switch to `anon` and `authenticated` roles with simulated JWT subjects. This exercises actual SQL grants, policies, constraints and database identity helpers, not mocked application authorization. Fixtures cover verified, email-unconfirmed, campus-unverified, missing membership, inactive campus, suspended, banned, admin, moderator, cross-user/campus, forged metadata, email changes, column/role escalation and null subject behavior. A service-role/superuser query is never mistaken for an RLS client check.
