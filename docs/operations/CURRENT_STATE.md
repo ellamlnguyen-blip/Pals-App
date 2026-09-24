@@ -6,6 +6,8 @@ Last updated: 2026-09-24
 Decision tree resolved through product purpose, loop, profile/hangout/social model, safety, map/calendar navigation, MVP boundary, technical architecture, and agent operating model.
 
 ## Build State
+TASK-017B2 has a documentation-only Hangout-disable contract revised after independent security review. It is not yet published on canonical main or dispatched. The accepted local policy requires disabling to revoke future Hangout and chat access while preserving retained safety evidence and separate cancellation state. B1 remains complete locally; no admin UI or hosted moderation has begun.
+
 TASK-017B1's disposable-local account enforcement passed fresh exact-tip security review at independently remote-verified task `79ffee1244a62a7af3bad9bd8bd2c9815efe4e0f` and integrated on independently remote-verified canonical main `401556a36ab918724b2d91b69cad83b91df31bad`. Local SQL/Auth/Storage/concurrency/regressions and schema lint passed; clean-archive production builds for both apps passed. The formal `pnpm check` wrapper stopped at a borrowed dependency-directory guard before checks, while its direct constituent checks passed. Fixtures were cleared, all eight gates disabled and local services stopped. Hangout disable and admin UI have not begun.
 
 TASK-017B1 account-enforcement implementation runs in a fresh isolated checkout from independently remote-verified accepted-policy main `64f4e0b48a58a61dbcbc52e798261866376ee5fa`. Its local migration/tests, exact-tip security review, cleanup and main integration remain pending. No Hangout disabling, admin UI or hosted operation has begun.
