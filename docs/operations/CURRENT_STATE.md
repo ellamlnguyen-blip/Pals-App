@@ -6,6 +6,8 @@ Last updated: 2026-09-24
 Decision tree resolved through product purpose, loop, profile/hangout/social model, safety, map/calendar navigation, MVP boundary, technical architecture, and agent operating model.
 
 ## Build State
+TASK-017B1 account-enforcement implementation runs in a fresh isolated checkout from independently remote-verified accepted-policy main `64f4e0b48a58a61dbcbc52e798261866376ee5fa`. Its local migration/tests, exact-tip security review, cleanup and main integration remain pending. No Hangout disabling, admin UI or hosted operation has begun.
+
 The user accepted ADR-0021's narrow preissued photo-link boundary for disposable-local TASK-017B1 after its independently reviewed proposal was published on remote-verified main `e084bc2353e20c43667802bd548587c7418ba12c`. The acceptance receipt must be published/verified before a fresh B1 implementation branch starts. No enforcement code or hosted operation has begun.
 
 TASK-017B1 account enforcement has an independently reviewed documentation-only contract and Proposed ADR-0021 for the preissued signed-photo-URL boundary. The proposal explains that live account-status checks cannot retroactively revoke a bearer URL. Its publication and explicit user acceptance are required before B1 implementation; no sanction, Hangout disable or admin UI has been dispatched. Stage A remains complete locally on remote-verified main.
