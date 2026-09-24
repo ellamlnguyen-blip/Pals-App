@@ -1,5 +1,5 @@
 # TASK-017 — Disposable-local admin moderation console
-Status: Active planning; ADR-0019 accepted for disposable-local implementation, Stage A contract/review/publication pending
+Status: Active; audited review and account/Hangout enforcement backends complete locally, Stage C admin UI pending
 Date: 2026-09-23
 Branch: `agent/TASK-017-admin-moderation` from verified `origin/main` `78e074247b03eafb554a4a7ecad6ab11644308dd`
 

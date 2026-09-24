@@ -6,6 +6,8 @@ Last updated: 2026-09-24
 Decision tree resolved through product purpose, loop, profile/hangout/social model, safety, map/calendar navigation, MVP boundary, technical architecture, and agent operating model.
 
 ## Build State
+TASK-017B2's reviewed disposable-local Hangout-disable backend is merged in the coordinator branch from remote-verified task tip `7885971ddbe15bb27e2ea46d875fb7945c1a0014`. Fresh exact-tip review found no P0/P1/P2 issue. Local verification passed 15 SQL fixtures/808 assertions, actual-role Auth/PostgREST, observed concurrency, disabled cancelled Hangout and safety-retention checks, production web-route masking, schema lint and full `pnpm check` including both app builds. Final reset left zero fixtures, eight gates false and services stopped. Canonical publication/verification remains pending. Stage C UI and hosted use have not begun.
+
 TASK-017B2's fresh approved disposable-local implementation runs from independently remote-verified canonical main `08e42c4c42ef63a96c073ec3d72840230a07c511` on `agent/TASK-017B2-approved-disable`. Its migration, tests, handoff, exact-tip security review and integration remain pending. The user-approved scope excludes hosted and production operations and gate enablement.
 
 On 2026-09-24 the user explicitly approved the reviewed TASK-017B2 default-off disposable-local Hangout-disable authorization migration and tests after two automatic approval-review rejections. A fresh isolated attempt can proceed under Accepted ADR-0019. No B2 implementation, hosted migration or gate enablement has occurred; exact-tip security review and integration remain required.

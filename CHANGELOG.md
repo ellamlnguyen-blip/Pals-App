@@ -2,6 +2,11 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-24 — TASK-017B2 local Hangout disabling
+
+- Added an audited, one-way operator action that disables the exact reported Hangout and atomically closes its case, with immutable private action and retry evidence. Disabled Hangouts lose student discovery, detail, roster, private-instruction, chat, notification-destination and mutation access, including direct database/API routes. Retained own ID/state and private safety reporting remain available under their existing gates.
+- Accepted exact-tip security review and local permission, concurrency, cancelled-Hangout, block-reconciliation, browser-route and full workspace checks. Test fixtures were cleared, all eight gates returned false and local services stopped. This stage makes no hosted or default-on change; the admin UI remains pending.
+
 ## 2026-09-24 — TASK-017B2 Hangout-disable stage planned
 
 - Defined a separate local backend stage for one-way audited Hangout disabling, with source-wide access denial and a narrow retained safety exception. No migration, gate enablement or hosted change is included in this planning record.
