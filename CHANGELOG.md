@@ -2,6 +2,10 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-24 — TASK-017B2 Hangout-disable stage planned
+
+- Defined a separate local backend stage for one-way audited Hangout disabling, with source-wide access denial and a narrow retained safety exception. No migration, gate enablement or hosted change is included in this planning record.
+
 ## 2026-09-24 — TASK-017B1 local account enforcement
 
 - Added exact-report, case-linked account suspension, ban and reinstatement with role-specific authority, expected revision, idempotent retry, append-only sanction/audit records and atomic `action_taken` closure.
