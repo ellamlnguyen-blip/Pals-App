@@ -2,7 +2,7 @@
 
 ## TASK-017 completion
 
-All bounded disposable-local TASK-017 stages A/B1/B2/C are integrated locally and accepted after exact-tip review. Final Stage C production-browser checks covered local Auth/operator roles, unavailable targets, two-operator stale revision, suspended/banned operator denial, response-loss retry, gate revocation, responsive light/dark views and keyboard behavior. Final reset found zero fixtures and eight disabled gates; owned services stopped. Canonical remote publication is the final coordination step. TASK-018 attendance confirmation is the next product task; hosted moderation is not authorized by this completion.
+All bounded disposable-local TASK-017 stages A/B1/B2/C are accepted after exact-tip review and published on independently remote-verified canonical main `eb3671c3160fbda6d90969891adb718cb451cc30`; C task tip `8f1557bd1ea56eef76904907b9737c8745619e48` is independently remote-verified. Final Stage C production-browser checks covered local Auth/operator roles, unavailable targets, two-operator stale revision, suspended/banned operator denial, response-loss retry, gate revocation, responsive light/dark views and keyboard behavior. Final reset found zero fixtures and eight disabled gates; owned services stopped. TASK-018 attendance confirmation is the next product task; hosted moderation is not authorized by this completion.
 
 ## TASK-017 moderation planning
 

@@ -43,4 +43,4 @@ Status: accepted after exact-tip security review and coordinator rendered/local 
 ## Publication
 
 - Initial implementation commit `2d8ce79560bac45b8318db407363f5f511821eeb` and first handoff tip `38c17a6497fb094cbe15a659469a1aeee0319912` were pushed and independently verified on 2026-09-24. Review fixes follow; the coordinator should use the subsequently verified final branch tip for review.
-- Coordinator local integration commit: `e225e3e`; canonical remote verification is recorded in the parent completion receipt.
+- Coordinator integration commit: `e225e3e`; final canonical main `eb3671c3160fbda6d90969891adb718cb451cc30` was independently remote-verified.
