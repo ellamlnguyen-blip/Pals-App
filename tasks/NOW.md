@@ -4,6 +4,8 @@
 
 TASK-017 begins from independently fetched `origin/main` `78e074247b03eafb554a4a7ecad6ab11644308dd` on `agent/TASK-017-admin-moderation`. `active/TASK-017-admin-moderation.md` bounds disposable-local audited review, enforcement and admin UI stages; `decisions/ADR-0019-local-moderation-authority.md` is Proposed. Neither the existing private report table nor the admin placeholder has an operator reader today. Independent planning/security review found no remaining policy blocker after revisions; see `agents/handoffs/TASK-017-CONTRACT.md`. Canonical publication and explicit ADR acceptance precede privileged implementation. All gates stay off; no hosted operation or production data. The original checkout's port-3000 timeout remains a separate BACKLOG issue.
 
+TASK-017 planning publication: the reviewed task branch was pushed and independently remote-verified at `26890ba5594f3b0f3bf1d93e7f427fac9b7cf133`; its documentation-only merge on canonical main was independently remote-verified at `030519f3ac8ffc29f0131e560a43191df9f8374c`. ADR-0019 remains Proposed and has been presented for explicit user acceptance. No Stage A migration or privileged reader has been dispatched.
+
 ## Shared Code Baseline
 `main` is the canonical integration branch. Start each new task branch from the latest `origin/main`. After task review, integrate accepted changes into `main` and verify both remote refs; see `AGENTS.md`.
 

@@ -13,4 +13,4 @@ A fresh independent planning/security reviewer inspected the contract, ADR, exis
 
 ## Publication and next gate
 
-Planning branch and canonical main remote SHA receipts: pending publication. After publication, ask for explicit acceptance or revision of Proposed ADR-0019. No privileged implementation can begin on the strength of this planning record alone.
+Planning task branch `agent/TASK-017-admin-moderation` was pushed and independently verified at `26890ba5594f3b0f3bf1d93e7f427fac9b7cf133`. Its reviewed planning state was merged by `agent/TASK-017-plan-integration` into canonical main, independently verified at `030519f3ac8ffc29f0131e560a43191df9f8374c`. A later documentation receipt may advance main; its final remote SHA is recorded in `tasks/NOW.md`. Explicit acceptance or revision of Proposed ADR-0019 is still required. No privileged implementation can begin on the strength of this planning record alone.
