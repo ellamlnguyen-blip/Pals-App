@@ -12,3 +12,5 @@ Coordinator rendered a disposable fixture built from the corrected tip on owned 
 These are presentation checks, not real authenticated route checks. Local auth remains fixed to port 3000, still owned by another checkout. The fixture did not verify saved data, readiness denial, profile photo delivery, Calendar/People filters, friendship actions or loading/error transitions against Supabase. Those real routed checks remain a TASK-023 parent completion gate. The source review did not rerun runtime tests; the implementation handoff records passing lint, TypeScript, 37 units and web production build.
 
 Decision: accept B for canonical integration with this explicit parent verification limit. C contract publication and dispatch wait for remote-verified B integration.
+
+Publication receipt: corrected B task branch was independently remote-verified at `d19b8f4020056574f17872b810917ca7090d5590`. Reviewed B and the accepted C contract were integrated; canonical `main` and coordinator branch independently remote-verified at `f264a66a5627a44acbd152cd88a121b74b47c0ce`. The parent authenticated QA gate remains open.
