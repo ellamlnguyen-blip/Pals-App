@@ -87,6 +87,7 @@ export default async function FriendshipsPage({
                   row={row}
                   name={details[index]?.real_name ?? null}
                   canBlock={state === "ready"}
+                  actor={user.id}
                 />
               ))}
             </ul>

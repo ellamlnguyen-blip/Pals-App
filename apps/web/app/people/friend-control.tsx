@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { blockPerson } from "./actions";
+import { SafetyActions } from "../safety/safety-client";
 import {
   changeFriendship,
   createFriendRequest,
@@ -19,13 +19,11 @@ const label = (row: Friendship | null) =>
       : row.direction === "incoming"
         ? "Incoming request"
         : "Outgoing request";
-const explanation = (action: FriendshipTransition | "block") => {
+const explanation = (action: FriendshipTransition) => {
   if (action === "decline" || action === "cancel")
     return "This request will end. The same requester cannot send another request to this recipient in this local version.";
   if (action === "unfriend")
     return "The current friendship will end. Connecting again later needs a new request.";
-  if (action === "block")
-    return "Blocking ends any current request or friendship and hides both of you in People. A confirmed block now affects Hangout access and may end shared attendance. Creating a block is temporarily unavailable.";
   return "Accept this request and become friends?";
 };
 
@@ -36,6 +34,7 @@ export function FriendControl({
   canBlock,
   peerLabel,
   onClear,
+  actor,
 }: {
   peerId: string;
   initial: FriendshipResult;
@@ -43,14 +42,15 @@ export function FriendControl({
   canBlock: boolean;
   peerLabel: string;
   onClear?: () => void;
+  actor?: string;
 }) {
   const [result, setResult] = useState(initial);
   const [busy, setBusy] = useState(false);
   const [blocked, setBlocked] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
-  const [confirmation, setConfirmation] = useState<
-    FriendshipTransition | "block" | null
-  >(null);
+  const [confirmation, setConfirmation] = useState<FriendshipTransition | null>(
+    null,
+  );
   const [requestKey, setRequestKey] = useState<string | null>(null);
   const dialog = useRef<HTMLDialogElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
@@ -86,23 +86,11 @@ export function FriendControl({
     }
     status.current?.focus();
   };
-  const run = async (action: FriendshipTransition | "block" | "create") => {
+  const run = async (action: FriendshipTransition | "create") => {
     setBusy(true);
     setConfirmed(false);
-    if (action === "block") {
-      setBlocked(true);
-      onClear?.();
-    }
     try {
-      if (action === "block") {
-        const outcome = await blockPerson(peerId);
-        apply({
-          state: outcome.state === "hidden" ? "known" : "unknown",
-          relationship: null,
-          message: outcome.message,
-        });
-        setBlocked(true);
-      } else if (action === "create") {
+      if (action === "create") {
         const key = requestKey ?? crypto.randomUUID();
         setRequestKey(key);
         apply(await createFriendRequest(peerId, key));
@@ -127,7 +115,7 @@ export function FriendControl({
       setBusy(false);
     }
   };
-  const open = (action: FriendshipTransition | "block") => {
+  const open = (action: FriendshipTransition) => {
     setConfirmation(action);
     trigger.current =
       document.activeElement instanceof HTMLButtonElement
@@ -140,16 +128,8 @@ export function FriendControl({
   return (
     <div className="friend-control">
       <p ref={status} tabIndex={-1} role="status">
-        <strong>
-          {blocked && confirmation === "block"
-            ? busy
-              ? "Checking block"
-              : result.state === "known"
-                ? "Outbound block confirmed"
-                : "Block outcome unknown"
-            : label(row)}
-        </strong>{" "}
-        · {result.message}
+        <strong>{blocked ? "Checking current access" : label(row)}</strong> ·{" "}
+        {result.message}
       </p>
       {!blocked && result.state === "known" && (
         <div className="friend-actions">
@@ -200,14 +180,16 @@ export function FriendControl({
               Unfriend
             </button>
           )}
-          {row && canBlock && (
-            <button
-              className="text-button"
-              disabled
-              onClick={() => open("block")}
-            >
-              New blocking temporarily unavailable
-            </button>
+          {row && canBlock && actor && (
+            <SafetyActions
+              actor={actor}
+              target={{ mode: "user", id: peerId }}
+              allowBlock
+              onBlockConfirmed={() => {
+                setBlocked(true);
+                onClear?.();
+              }}
+            />
           )}
         </div>
       )}
@@ -255,15 +237,13 @@ export function FriendControl({
         aria-labelledby={`friend-confirm-${peerId}`}
       >
         <h2 id={`friend-confirm-${peerId}`}>
-          {confirmation === "block"
-            ? "Block"
-            : confirmation === "unfriend"
-              ? "Unfriend"
-              : confirmation === "decline"
-                ? "Decline request from"
-                : confirmation === "cancel"
-                  ? "Cancel request to"
-                  : "Accept request from"}{" "}
+          {confirmation === "unfriend"
+            ? "Unfriend"
+            : confirmation === "decline"
+              ? "Decline request from"
+              : confirmation === "cancel"
+                ? "Cancel request to"
+                : "Accept request from"}{" "}
           {peerLabel}?
         </h2>
         <p>
@@ -281,7 +261,7 @@ export function FriendControl({
         <div className="people-dialog-actions">
           <button
             className="button"
-            disabled={!confirmed || busy || confirmation === "block"}
+            disabled={!confirmed || busy}
             onClick={() => {
               const action = confirmation;
               dialog.current?.close();

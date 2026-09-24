@@ -5,13 +5,10 @@ export function KnownRelationshipBlock() {
     <section className="people-panel">
       <h2>Block a current relationship by ID</h2>
       <p>
-        Creating a block is temporarily unavailable in this local build. A
-        confirmed block now affects Hangout access and may end shared
-        attendance.
+        Use Safety to enter a full known account ID and review the effects on
+        shared Hangouts before blocking.
       </p>
-      <button className="text-button" disabled>
-        New blocking temporarily unavailable
-      </button>
+      <a href="/safety">Open Safety</a>
     </section>
   );
 }

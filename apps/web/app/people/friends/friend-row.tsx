@@ -7,10 +7,12 @@ export function FriendRow({
   row,
   name,
   canBlock,
+  actor,
 }: {
   row: Friendship;
   name: string | null;
   canBlock: boolean;
+  actor: string;
 }) {
   const [visibleName, setVisibleName] = useState(name);
   useEffect(() => {
@@ -47,6 +49,7 @@ export function FriendRow({
         }}
         canRequest={false}
         canBlock={canBlock}
+        actor={actor}
         peerLabel={visibleName ?? "this account ID"}
         onClear={() => setVisibleName(null)}
       />

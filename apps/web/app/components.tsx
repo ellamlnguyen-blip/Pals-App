@@ -18,6 +18,7 @@ export function Frame({
           Pals
         </Link>
         <span className="campus">UNC Chapel Hill</span>
+        {signedIn && <Link href="/safety">Safety</Link>}
         {signedIn && <SignOutForm />}
       </header>
       <main id="main" tabIndex={-1}>

@@ -1,6 +1,6 @@
 # TASK-016C — safety UI
 
-Status: In progress after reviewed canonical contract/visual-plan publication. Parent: TASK-016. Authority: accepted ADR-0018 and current product/UX specs. A and B are complete after exact-tip security review and canonical integration. B task tip `427254cb79703e8894ae2571444c9461762da0f3` is integrated on remote-verified main `fb697c23daa02c0d1f7f6e26259eddbd630b46f8`. Read AGENTS.md, this contract, `docs/ux/TASK-016C-SAFETY-PLAN.md`, parent TASK-016, ADR-0018, A/B handoffs/reviews and relevant product/UX/source files before implementation.
+Status: Reviewed and locally complete at remote-verified task `713e7c500f4c91b8ef6ba64b3bbf2c2b99664944`; canonical integration publication pending. Parent: TASK-016. Authority: Accepted ADR-0018. Final handoff and review: `agents/handoffs/TASK-016C.md`, `TASK-016C-REVIEW.md`.
 
 ## Outcome and dependency
 

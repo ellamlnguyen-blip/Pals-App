@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Frame } from "../../../components";
 import { dmId } from "../../../../lib/dm";
-import { DirectThread } from "./thread";
+import { DirectSafetyBoundary } from "./safety-boundary";
 import "../../../hangouts/map.css";
 import "../../chat.css";
 export const dynamic = "force-dynamic";
@@ -27,10 +27,13 @@ export default async function DirectPage({
       <Frame signedIn>
         <section className="chat-page">
           <h1>Direct chat unavailable</h1>
+          <Link href="/safety">Open Safety</Link>
           <Link href="/chats">Back to Chats</Link>
         </section>
       </Frame>
     );
+  const status = await local.client.rpc("get_dm_status", { p_peer_id: id });
+  const knownPair = !status.error && !!status.data?.[0];
   return (
     <Frame signedIn>
       <nav className="primary-nav" aria-label="Primary">
@@ -46,11 +49,11 @@ export default async function DirectPage({
         <Link href="/chats">← All chats</Link>
         <p className="badge">Direct chat · local only</p>
         <h1 id="direct-title">Direct chat</h1>
-        <DirectThread
+        <DirectSafetyBoundary
           key={`${id}:${local.user?.id}`}
           id={id}
           actor={local.user!.id}
-          ready={local.state === "ready"}
+          knownPair={knownPair}
         />
       </section>
     </Frame>

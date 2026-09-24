@@ -3,6 +3,7 @@ import { Frame } from "../../../components";
 import { chatAccess, chatUuid, readChat } from "../../../../lib/chat";
 import { readSavedPublic } from "../../../../lib/saved-hangouts";
 import { Thread } from "./thread";
+import { SafetyActions } from "../../../safety/safety-client";
 import "../../../hangouts/map.css";
 import "../../chat.css";
 
@@ -31,6 +32,7 @@ export default async function ThreadPage({
         <section className="chat-page">
           <h1>Chat unavailable</h1>
           <p>Your Hangout or chat access may have changed.</p>
+          <Link href="/safety">Use retained Hangout ID recovery in Safety</Link>
           <Link href="/chats">Back to Chats</Link>
         </section>
       </Frame>
@@ -65,6 +67,10 @@ export default async function ThreadPage({
           key={`${id}:${target.user.id}`}
           id={id}
           userId={target.user.id}
+        />
+        <SafetyActions
+          actor={target.user.id}
+          target={{ mode: "hangout", id }}
         />
       </section>
     </Frame>

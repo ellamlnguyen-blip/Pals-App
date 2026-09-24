@@ -2,6 +2,11 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-23 — TASK-016 local safety UI and completion
+
+- Added active-owner Safety access, exact outbound block management, retained ID-only Hangout/host reporting, global consequence confirmations and explicit uncertain-response recovery. All legacy block writers remain denied; confirmed Direct chat blocking immediately clears its messages and composer.
+- Fresh exact-tip review accepted final UI after state-refresh, pagination, navigation, source-authority and lifecycle fixes. Workspace, real API, deterministic ordering and independent responsive/light/dark-rule/keyboard/privacy checks passed within recorded limits. Fixtures cleared, seven gates disabled and task-owned services stopped. Hosted moderation and launch readiness remain separate; the unresolved notification fixture observation stays in the backlog.
+
 ## 2026-09-23 — TASK-016B private local reporting
 
 - Added caller-bound user, Hangout and retained-host reports with private minimal provenance, opaque receipts, exact retry deduplication and an atomic five-new-reports-per-hour limit. No report reader or automatic moderation action.

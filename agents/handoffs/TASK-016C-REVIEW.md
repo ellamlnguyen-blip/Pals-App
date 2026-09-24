@@ -1,6 +1,6 @@
 # TASK-016C independent review
 
-Status: Corrected code accepted; final deterministic evidence, cleanup and handoff pending
+Status: Accepted at final remote-verified task tip `713e7c500f4c91b8ef6ba64b3bbf2c2b99664944`; canonical publication receipt follows
 Date: 2026-09-23
 Reviewed checkpoint: `cbfcbec19ac03ad4edf741c1592cfd1d60d89a5b`, independently remote-verified on `agent/TASK-016C-safety-ui`.
 Reviewer: fresh GPT-6 Sol medium code/security agent; read-only exact-commit review. Runtime/browser remains with the implementation agent until explicit handoff.
@@ -28,3 +28,10 @@ Disposable proxy3101 dropped successful upstream responses after commit. Report 
 Disposable proxy3102 activated the shipped dark media rules and native color scheme without changing application declarations or OS settings. Phone390x844 and desktop1280 inspection covered lists, dialog, native report controls, muted text, keyboard focus and receipt wrapping. Phone document width equaled scroll width390. This is forced shipped-rule rendering, not OS preference emulation. Implementer separately inspected light tablet820.
 
 Deterministic contrary block/unblock response-order and lifecycle tests remain required before final acceptance. Runtime/browser ownership is back with the implementation agent for those checks and cleanup; no C/main integration yet.
+
+## Final acceptance
+Fresh exact-tip review accepted `713e7c500f4c91b8ef6ba64b3bbf2c2b99664944`. The final code/test checkpoint `8c8c3d305f275df613dcc1b9aa0bade387e29668` passed 37 unit tests plus lint, types and both production builds. Six tests execute the actual transpiled block dialog/safety hook/dashboard under both contrary commit orders, cross-tab start/finish masking, delayed probe abort and stale completion, uncertainty and wrong actor. Mocked React/events are complemented by the real rendered observations above. Ready Direct chat was independently exercised: confirmed block removed messages/composer while the result dialog remained usable. Obsolete temporary disabled block controls were removed; old backend writers remain denied.
+
+The final handoff-only correction accurately narrows HTTP evidence. A second keyset page was not independently rendered; backend bounded-page checks and client request-sequencing tests cover the relevant boundaries. Other/emoji checks were actual browser observations. Review did not independently rerun runtime suites.
+
+C reports a fresh reset with zero Auth users, blocks, reports/retries, provenance, Hangouts, DM pairs/messages, notifications and storage objects, all seven gates false, task ports3100–3102 and Supabase/Lima stopped. Coordinator browser tabs closed and viewport reset. Unrelatedport3000 was untouched. No remaining material code/security/evidence blocker; reviewed integration and remote verification complete the bounded local task.
