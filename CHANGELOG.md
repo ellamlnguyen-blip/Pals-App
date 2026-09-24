@@ -2,6 +2,10 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-24 — TASK-017B1 account enforcement planned
+
+- Defined a bounded local account-sanction backend stage after completed audited review. Proposed ADR-0021 surfaces the preissued signed-photo-URL revocation limit for explicit decision; no enforcement code, gate enablement or hosted action is included.
+
 ## 2026-09-24 — TASK-017A local audited report review
 
 - Added a default-disabled, caller-bound operator report queue, exact detail reader, review/annotation/closure case transitions, private retry ledger and append-only audit. The case-action audit retains the exact subject and current campus when available; reporter deletion cannot silently erase the allegation.
