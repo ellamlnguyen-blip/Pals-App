@@ -33,6 +33,8 @@ export default async function DirectPage({
         </section>
       </Frame>
     );
+  const status = await local.client.rpc("get_dm_status", { p_peer_id: id });
+  const knownPair = !status.error && !!status.data?.[0];
   return (
     <Frame signedIn>
       <nav className="primary-nav" aria-label="Primary">
@@ -54,11 +56,13 @@ export default async function DirectPage({
           actor={local.user!.id}
           ready={local.state === "ready"}
         />
-        <SafetyActions
-          actor={local.user!.id}
-          target={{ mode: "user", id }}
-          allowBlock
-        />
+        {knownPair && (
+          <SafetyActions
+            actor={local.user!.id}
+            target={{ mode: "user", id }}
+            allowBlock
+          />
+        )}
       </section>
     </Frame>
   );

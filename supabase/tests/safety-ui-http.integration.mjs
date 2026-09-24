@@ -51,8 +51,8 @@ async function api(user, path = "", body, marker = user?.id) {
   return { status: response.status, data: JSON.parse(raw), raw, url: url.toString() };
 }
 const block = (id, blocked) => ({ action: "block", id, blocked, confirmation });
-const report = (id, requestId, narrative = "  Private allegation  ") => ({
-  action: "report", mode: "user", id, requestId, category: "harassment", narrative,
+const report = (id, requestId, narrative = "  Private allegation  ", mode = "user") => ({
+  action: "report", mode, id, requestId, category: "harassment", narrative,
 });
 function expectReceipt(result, target, narrative) {
   assert.equal(result.status, 200, result.raw);
@@ -72,6 +72,7 @@ test("built safety API binds the cookie actor, rejects stale writes and keeps re
   concurrency: false, timeout: 120_000,
 }, async () => {
   const users = [];
+  const hangouts = [];
   try {
     const anonymous = await api(null, "?view=probe");
     assert.equal(anonymous.status, 403);
@@ -91,6 +92,7 @@ test("built safety API binds the cookie actor, rejects stale writes and keeps re
       update private.people_feature_gate set enabled=true;`);
     assert.equal((await a.client.rpc("get_access_state")).data, "ready");
     assert.equal((await b.client.rpc("get_access_state")).data, "ready");
+    db("update private.safety_feature_gate set enabled=false");
     assert.equal((await api(a, "?view=probe")).status, 403, "safety gate starts off");
     db("update private.safety_feature_gate set enabled=true");
     assert.equal((await api(a, "?view=probe", undefined, b.id)).status, 403);
@@ -140,12 +142,66 @@ test("built safety API binds the cookie actor, rejects stale writes and keeps re
     assert.equal(changed.status, 403);
     assert.deepEqual(changed.data, { kind: "denied" });
     const receipts = new Set([first.receipt_id]);
-    for (let i = 0; i < 4; i++) {
-      const input = report(b.id, crypto.randomUUID(), `Local allegation ${i}`);
-      receipts.add(expectReceipt(await api(a, "", input), b.id, input.narrative).receipt_id);
+
+    // The reporter joins a real Hangout, is removed, and then loses its public
+    // row when the host cancels it. Recovery may show only the retained ID/state.
+    db("update private.hangout_feature_gate set enabled=true");
+    const create = await b.client.rpc("create_hangout", {
+      p_request_id: crypto.randomUUID(), p_title: "Hidden retained title",
+      p_starts_at: new Date(Date.now() + 3600_000).toISOString(),
+      p_public_place: "Hidden retained place", p_public_latitude: 35.913,
+      p_public_longitude: -79.055, p_private_instructions: "Hidden retained instructions",
+    });
+    assert.equal(create.error, null, create.error?.message);
+    const hangoutId = create.data;
+    hangouts.push(hangoutId);
+    assert.equal((await a.client.rpc("join_hangout", { p_hangout_id: hangoutId })).error, null);
+    assert.equal((await b.client.rpc("remove_hangout_participant", {
+      p_hangout_id: hangoutId, p_account_id: a.id,
+    })).error, null);
+    assert.equal((await b.client.rpc("cancel_hangout", {
+      p_hangout_id: hangoutId, p_expected_revision: 1,
+    })).error, null);
+    db(`update private.hangout_feature_gate set enabled=false;
+      update private.people_feature_gate set enabled=false;
+      update private.people_preferences set opted_in=false where account_id=${quote(b.id)};
+      update public.profiles set primary_photo_path=null where user_id=${quote(a.id)};`);
+    assert.equal((await a.client.rpc("get_access_state")).data, "onboarding");
+    const retained = await api(a, "?view=retained");
+    assert.equal(retained.status, 200, retained.raw);
+    assert.deepEqual(retained.data, { kind: "ok", actor: a.id,
+      rows: [{ hangout_id: hangoutId, own_state: "removed" }] });
+    for (const hidden of [b.id, "Hidden retained title", "Hidden retained place", "Hidden retained instructions"])
+      assert.ok(!retained.raw.includes(hidden), `recovery omits ${hidden}`);
+    const hiddenRow = await a.client.from("hangouts").select("id,title").eq("id", hangoutId);
+    assert.deepEqual(hiddenRow.data, [], "removed reporter cannot recover cancelled source details");
+
+    const hangoutInput = report(hangoutId, crypto.randomUUID(), "Retained plan concern", "hangout");
+    receipts.add(expectReceipt(await api(a, "", hangoutInput), hangoutId,
+      hangoutInput.narrative).receipt_id);
+    const hostInput = report(hangoutId, crypto.randomUUID(), "Retained host concern", "hangout_host");
+    const hostResult = await api(a, "", hostInput);
+    receipts.add(expectReceipt(hostResult, hangoutId, hostInput.narrative).receipt_id);
+    assert.ok(!hostResult.raw.includes(b.id), "host identity is never resolved to the browser");
+    assert.ok(!hostResult.url.includes(b.id));
+    const unauthorizedHost = await api(b, "", report(hangoutId, crypto.randomUUID(),
+      "Own host concern", "hangout_host"));
+    const unknownHost = await api(a, "", report(crypto.randomUUID(), crypto.randomUUID(),
+      "Unknown host concern", "hangout_host"));
+    assert.equal(unauthorizedHost.status, 403);
+    assert.deepEqual(unauthorizedHost.data, { kind: "denied" });
+    assert.deepEqual(unknownHost.data, unauthorizedHost.data,
+      "unauthorized host reference reveals no identity or existence");
+    assert.ok(!unauthorizedHost.raw.includes(b.id));
+    assert.ok(!unknownHost.raw.includes(b.id));
+    assert.deepEqual(expectReceipt(await api(a, "", hostInput), hangoutId,
+      hostInput.narrative), hostResult.data.receipt, "retained host retry stays opaque");
+    for (let i = 0; i < 2; i++) {
+      const input = report(hangoutId, crypto.randomUUID(), `Local allegation ${i}`, "hangout");
+      receipts.add(expectReceipt(await api(a, "", input), hangoutId, input.narrative).receipt_id);
     }
     assert.equal(receipts.size, 5, "new keys create five distinct reports");
-    const sixth = await api(a, "", report(b.id, crypto.randomUUID(), "Sixth allegation"));
+    const sixth = await api(a, "", report(hangoutId, crypto.randomUUID(), "Sixth allegation", "hangout"));
     assert.equal(sixth.status, 403);
     assert.deepEqual(sixth.data, { kind: "denied" });
     assert.equal(db(`select count(*) from private.safety_reports where reporter_id=${quote(a.id)}`), "5");
@@ -158,9 +214,15 @@ test("built safety API binds the cookie actor, rejects stale writes and keeps re
     const ids = users.map(user => quote(user.id)).join(",") || "null";
     db(`update private.safety_feature_gate set enabled=false;
       update private.people_feature_gate set enabled=false;
+      update private.hangout_feature_gate set enabled=false;
       delete from private.safety_report_requests where reporter_id in (${ids});
       delete from private.safety_reports where reporter_id in (${ids});
       delete from private.people_blocks where blocker_id in (${ids}) or blocked_id in (${ids});
+      delete from private.notification_items where recipient_id in (${ids}) or actor_id in (${ids});
+      delete from private.notification_preferences where recipient_id in (${ids});
+      delete from private.hangout_peer_provenance where hangout_id in (${hangouts.map(quote).join(",") || "null"});
+      delete from private.hangout_create_requests where hangout_id in (${hangouts.map(quote).join(",") || "null"});
+      delete from public.hangouts where id in (${hangouts.map(quote).join(",") || "null"});
       update public.profiles set primary_photo_path=null where user_id in (${ids});
       delete from private.people_preferences where account_id in (${ids});
       set storage.allow_delete_query='true';

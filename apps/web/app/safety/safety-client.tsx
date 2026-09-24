@@ -48,14 +48,30 @@ function useSafety(actor: string) {
   const [phase, setPhase] = useState<Phase>("checking");
   const [sender] = useState(() => crypto.randomUUID());
   const generation = useRef(0);
+  const controllers = useRef(new Set<AbortController>());
   const mounted = useRef(false);
   const pending = useRef(new Set<string>());
   const [epoch, setEpoch] = useState(0);
   const mask = useCallback(() => {
     generation.current++;
+    for (const controller of controllers.current) controller.abort();
+    controllers.current.clear();
     setPhase("checking");
     setEpoch((x) => x + 1);
   }, []);
+  const fetchSafety = useCallback(
+    (path: string, init?: RequestInit) => {
+      const controller = new AbortController();
+      controllers.current.add(controller);
+      return request(actor, path, {
+        ...init,
+        signal: controller.signal,
+      }).finally(() => {
+        controllers.current.delete(controller);
+      });
+    },
+    [actor],
+  );
   const deny = useCallback(() => {
     mask();
     setPhase("unavailable");
@@ -73,7 +89,7 @@ function useSafety(actor: string) {
     mask();
     const ticket = generation.current;
     try {
-      const response = await request(actor, "?view=probe");
+      const response = await fetchSafety("?view=probe");
       if (!valid(ticket)) return;
       const data = await response.json();
       if (!valid(ticket)) return;
@@ -87,7 +103,7 @@ function useSafety(actor: string) {
     } catch {
       if (valid(ticket)) setPhase("error");
     }
-  }, [actor, mask, valid]);
+  }, [actor, fetchSafety, mask, valid]);
   useEffect(() => {
     mounted.current = true;
     const auth = (message: AuthTransitionMessage) => {
@@ -159,6 +175,7 @@ function useSafety(actor: string) {
     mask,
     deny,
     check,
+    fetchSafety,
     sender,
   };
 }
@@ -269,8 +286,7 @@ function BlockDialog({
   const exact = async () => {
     const ticket = safety.generation.current;
     try {
-      const res = await request(
-        actor,
+      const res = await safety.fetchSafety(
         `?view=exact&id=${encodeURIComponent(id)}`,
       );
       if (!safety.valid(ticket)) return;
@@ -307,7 +323,7 @@ function BlockDialog({
     signal(actor, safety.sender);
     const ticket = safety.generation.current;
     try {
-      const res = await request(actor, "", {
+      const res = await safety.fetchSafety("", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -325,8 +341,7 @@ function BlockDialog({
         return;
       }
       if (!res.ok || data.kind !== "ok") throw Error();
-      const check = await request(
-        actor,
+      const check = await safety.fetchSafety(
         `?view=exact&id=${encodeURIComponent(id)}`,
       );
       if (!safety.valid(ticket)) return;
@@ -483,7 +498,7 @@ function ReportForm({
     setStatus("Submitting report…");
     const ticket = safety.generation.current;
     try {
-      const res = await request(actor, "", {
+      const res = await safety.fetchSafety("", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action: "report", ...attempt }),
@@ -625,6 +640,8 @@ export function SafetyDashboard({ actor }: { actor: string }) {
   const [unblockId, setUnblockId] = useState<string | null>(null);
   const [blocked, setBlocked] = useState<BlockRow[]>([]);
   const [retained, setRetained] = useState<RetainedRow[]>([]);
+  const blockedSequence = useRef(0);
+  const retainedSequence = useRef(0);
   const [blockCursors, setBlockCursors] = useState<(string | null)[]>([null]);
   const [retainedCursors, setRetainedCursors] = useState<(string | null)[]>([
     null,
@@ -646,6 +663,16 @@ export function SafetyDashboard({ actor }: { actor: string }) {
       page: number,
     ) => {
       const ticket = safety.generation.current;
+      const sequence =
+        kind === "blocked"
+          ? ++blockedSequence.current
+          : ++retainedSequence.current;
+      const latest = () =>
+        safety.valid(ticket) &&
+        sequence ===
+          (kind === "blocked"
+            ? blockedSequence.current
+            : retainedSequence.current);
       if (kind === "blocked") {
         setBlocked([]);
         setBlockedPhase("loading");
@@ -655,13 +682,12 @@ export function SafetyDashboard({ actor }: { actor: string }) {
       }
       setListStatus("");
       try {
-        const response = await request(
-          actor,
+        const response = await safety.fetchSafety(
           `?view=${kind}${after ? `&after=${after}` : ""}`,
         );
-        if (!safety.valid(ticket)) return;
+        if (!latest()) return;
         const data = await response.json();
-        if (!safety.valid(ticket)) return;
+        if (!latest()) return;
         if (response.status === 403) {
           safety.deny();
           return;
@@ -696,7 +722,7 @@ export function SafetyDashboard({ actor }: { actor: string }) {
           setRetainedCursors((x) => [...x.slice(0, page), after]);
         }
       } catch {
-        if (safety.valid(ticket)) {
+        if (latest()) {
           setListStatus("Could not load this page. Try again.");
           if (kind === "blocked") setBlockedPhase("error");
           else setRetainedPhase("error");
@@ -708,6 +734,8 @@ export function SafetyDashboard({ actor }: { actor: string }) {
   useEffect(() => {
     queueMicrotask(() => {
       setId("");
+      blockedSequence.current++;
+      retainedSequence.current++;
       setBlockId(null);
       setUnblockId(null);
       setBlocked([]);
@@ -824,7 +852,7 @@ export function SafetyDashboard({ actor }: { actor: string }) {
             <nav aria-label="Blocked ID pages" className="safety-pages">
               <button
                 className="text-button"
-                disabled={blockPage === 0}
+                disabled={blockedPhase !== "ready" || blockPage === 0}
                 onClick={() =>
                   void load(
                     "blocked",
@@ -838,7 +866,7 @@ export function SafetyDashboard({ actor }: { actor: string }) {
               <span>Page {blockPage + 1}</span>
               <button
                 className="text-button"
-                disabled={blocked.length < 24}
+                disabled={blockedPhase !== "ready" || blocked.length < 24}
                 onClick={() =>
                   void load(
                     "blocked",
@@ -910,7 +938,7 @@ export function SafetyDashboard({ actor }: { actor: string }) {
             <nav aria-label="Retained Hangout pages" className="safety-pages">
               <button
                 className="text-button"
-                disabled={retainedPage === 0}
+                disabled={retainedPhase !== "ready" || retainedPage === 0}
                 onClick={() =>
                   void load(
                     "retained",
@@ -924,7 +952,7 @@ export function SafetyDashboard({ actor }: { actor: string }) {
               <span>Page {retainedPage + 1}</span>
               <button
                 className="text-button"
-                disabled={retained.length < 24}
+                disabled={retainedPhase !== "ready" || retained.length < 24}
                 onClick={() =>
                   void load(
                     "retained",
@@ -953,7 +981,10 @@ export function SafetyDashboard({ actor }: { actor: string }) {
               id={blockId}
               blocked
               safety={safety}
-              onClose={() => setBlockId(null)}
+              onClose={() => {
+                setBlockId(null);
+                if (safety.phase === "ready") void load("blocked", null, 0);
+              }}
             />
           )}
           {unblockId && (
@@ -962,7 +993,10 @@ export function SafetyDashboard({ actor }: { actor: string }) {
               id={unblockId}
               blocked={false}
               safety={safety}
-              onClose={() => setUnblockId(null)}
+              onClose={() => {
+                setUnblockId(null);
+                if (safety.phase === "ready") void load("blocked", null, 0);
+              }}
             />
           )}
         </>

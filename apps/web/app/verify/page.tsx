@@ -2,14 +2,25 @@ import Link from "next/link";
 import { localPeopleAvailable } from "../../lib/people";
 import { Frame, Intro } from "../components";
 import { ResendForm } from "../forms";
+import { access } from "../../lib/access";
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 export default async function Verify({
   searchParams,
 }: {
   searchParams: Promise<{ error?: string; sent?: string }>;
 }) {
   const params = await searchParams;
+  let signedIn = false;
+  try {
+    const account = await access();
+    signedIn =
+      !!account.user && !["signed_out", "restricted"].includes(account.state);
+  } catch {
+    /* Keep the verification view neutral while Auth is unavailable. */
+  }
   return (
-    <Frame>
+    <Frame signedIn={signedIn}>
       <div className="auth-layout">
         <Intro title="Check your UNC inbox.">
           Confirm your email, then we’ll make your profile feel like you.
