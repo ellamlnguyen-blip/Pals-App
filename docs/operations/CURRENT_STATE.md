@@ -15,6 +15,8 @@ Publishing the coordinator's reviewed A merge and B/C contracts to the project G
 
 The user then explicitly approved publication to that repository. Reviewed TASK-023A integration and the B contract/C draft are on remote-verified canonical main and coordinator branch `55ed930b3745018871a053448a8a767c0d28d334`; A task branch remains at reviewed `c5c127900eeaae270f4bfff7843cd4f2e68c8c57`. B can start from this baseline. Real authenticated route checks across A/B/C remain outstanding; port 3000 was not touched.
 
+The publication receipt was remote-verified on canonical main/coordinator branch `63314d88630950f1237ea04dfae286d8d93a8a73`. TASK-023B now runs in a fresh isolated worktree from that baseline for Calendar/People/profile presentation. Independent review and main integration precede C; real authenticated route checks remain open.
+
 TASK-015 is complete for its bounded disposable-local scope under Accepted ADR-0017. Reviewed A/B backend stages provide the owner-only notification ledger, preferences and authoritative friendship, DM, Hangout and Hangout-chat events; reviewed C provides the local-only Notifications inbox and preferences UI. SQL/Auth/HTTP/race/workspace and rendered desktop/tablet/phone/keyboard/failure checks passed within the handoff limits. All notification and related local gates are false, disposable fixtures gone and local services stopped. No hosted delivery, Realtime, push/email or global blocking/reporting readiness is claimed. See `agents/handoffs/TASK-015.md` and stage/review handoffs.
 
 ### TASK-015 progress history
