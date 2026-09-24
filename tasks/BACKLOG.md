@@ -1,6 +1,7 @@
 # Backlog
 ## Product Build
 - Development-runtime investigation: on the TASK-023 disposable local setup, Next.js `dev --webpack` returned a `cookies` outside request scope error for Hangout chat API, and denied Notifications/Safety probes plus an email-confirmation callback error. The same signed-in account successfully loaded Safety/Notifications and sent a Hangout message under `next build --webpack` + `next start`. Reproduce from a clean local setup, isolate the dev-only cause, and add a focused regression check without changing authorization behavior.
+- Older original checkout (`5321e04`) local-server response investigation: after TASK-023 returned port 3000, its restored Next process listened but `/` and `/signin` requests timed out under both original Turbopack startup and a clean-cache webpack retry. The prior generated cache is preserved at `/private/tmp/pals-original-dev-cache-before-task023`. Diagnose separately from the reviewed TASK-023 production build, which served authenticated QA normally.
 - TASK-007 create/edit Hangouts — complete locally; see `DONE.md`, its contract and handoffs. Hosted enablement remains gated on separate safety/deployment work.
 - TASK-008 map discovery/detail/joining — complete locally; see `DONE.md`, its contract and handoffs. Hosted safety gates remain open
 - TASK-009 calendar — reviewed local-only implementation accepted; see `DONE.md`, contract and handoffs. Friend context remains dependent on accepted friendship access; hosted gates remain open.
