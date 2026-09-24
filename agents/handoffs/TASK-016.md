@@ -1,6 +1,6 @@
 # Handoff — TASK-016 local blocking and reporting
 
-Status: All stages reviewed and locally verified; canonical integration publication pending
+Status: Complete for the bounded disposable-local scope; reviewed canonical integration published and remote-verified
 Date: 2026-09-23
 Coordinator branch: `agent/TASK-016-planning`
 Authority: explicitly accepted ADR-0018
@@ -15,7 +15,7 @@ The signed-in Safety route remains available to active unready owners. It provid
 ## Stages and publication
 - A reviewed task `2819d8f7e04dad24121fd891fa2c53e546344f90`; main integration `d99adde65858080a0d5a6e966396b26be7e4fd1a`.
 - B reviewed task `427254cb79703e8894ae2571444c9461762da0f3`; main integration `fb697c23daa02c0d1f7f6e26259eddbd630b46f8`.
-- C reviewed task `713e7c500f4c91b8ef6ba64b3bbf2c2b99664944`; canonical integration receipt follows publication.
+- C reviewed task `713e7c500f4c91b8ef6ba64b3bbf2c2b99664944`; canonical integration `927fa35796c54879b77fe1be39f7b8e12aa517f9`.
 Each stage had a narrower independently reviewed contract published on main before implementation and a fresh exact-tip reviewer before acceptance. Stage handoffs contain detailed evidence and limits.
 
 ## Verification
@@ -36,3 +36,6 @@ No hosted migration, deployment, live-student data, production retention, modera
 C verified a fresh reset: task fixture data zero, all seven gates false, owned web/proxy ports3100–3102 and Supabase/Lima stopped. Temporary credential/reference files and proxy scripts were deleted. Unrelated port3000 remained untouched.
 
 Next is TASK-023 student frontend design alignment, per the reviewed accelerated schedule. Create one fresh Pals project task from the final canonical main, GPT-6 Sol medium, following standing automatic handoff. Standard speed is an app preference that dispatch tooling cannot configure or verify. TASK-010 has a separate existing owner and must not be duplicated.
+
+## Publication receipt
+`git ls-remote` independently returned final C task `713e7c500f4c91b8ef6ba64b3bbf2c2b99664944` and both planning/main integration `927fa35796c54879b77fe1be39f7b8e12aa517f9` after push. All parent acceptance criteria and shared records are complete within the explicit limits above. This receipt is a documentation-only follow-up to the verified integration.

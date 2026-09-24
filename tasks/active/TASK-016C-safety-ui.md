@@ -1,6 +1,6 @@
 # TASK-016C — safety UI
 
-Status: Reviewed and locally complete at remote-verified task `713e7c500f4c91b8ef6ba64b3bbf2c2b99664944`; canonical integration publication pending. Parent: TASK-016. Authority: Accepted ADR-0018. Final handoff and review: `agents/handoffs/TASK-016C.md`, `TASK-016C-REVIEW.md`.
+Status: Reviewed and locally complete at remote-verified task `713e7c500f4c91b8ef6ba64b3bbf2c2b99664944`; canonical main integration `927fa35796c54879b77fe1be39f7b8e12aa517f9` independently remote-verified. Parent: TASK-016. Authority: Accepted ADR-0018. Final handoff and review: `agents/handoffs/TASK-016C.md`, `TASK-016C-REVIEW.md`.
 
 ## Outcome and dependency
 

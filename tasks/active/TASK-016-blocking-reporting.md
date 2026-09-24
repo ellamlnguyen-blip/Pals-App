@@ -1,6 +1,6 @@
 # TASK-016 — Local blocking and reporting
 
-Status: All A/B/C stages accepted and locally verified; final canonical publication pending
+Status: Complete — all stages reviewed, canonical integration published and remote-verified
 Date: 2026-09-23
 Planning branch: `agent/TASK-016-planning`
 Starting canonical `origin/main`: `de5d79946532f7bca127432b85ef6e21c56d2c45`, fetched and independently verified
@@ -28,9 +28,9 @@ TASK-017 moderation console, sanctions/audited evidence access, appeals, attachm
 - [x] Historical caller-specific evidence supports blocking/reporting after removal/revocation without target enumeration or restored content access; only caller receipts are returned. Reports have bounded input, atomic per-caller limits and conflict-safe retries.
 - [x] Two clean local database resets and schema lint, actual-role SQL, real Auth/PostgREST/REST embeds, deterministic observed-lock races and source regressions pass. Record exact commands/results and any tool/environment limitations honestly. Test both commit orders for blocks versus join/send/edit/cancel/readiness/gate changes, opposite blocks, multiple shared Hangouts, reconciliation cycles, report limit races and lost responses. `pnpm check` and relevant built-server action suites must be evidenced; no inferred green CI.
 - [x] Desktop/tablet/phone/keyboard and loading/empty/error/denied/uncertain/retry states pass; auth switching/back/focus does not restore stale private data. Future reads after committed revocation deny; documented in-flight boundary remains explicit.
-- [ ] Gates restored false, task fixtures/provenance/reports cleared, local services stopped. Reviewed stage and parent handoffs, source docs, CURRENT_STATE/CHANGELOG/NOW/BACKLOG/DONE synchronized; both task and canonical-main remote SHAs verified. No hosted readiness claim.
+- [x] Gates restored false, task fixtures/provenance/reports cleared, local services stopped. Reviewed stage and parent handoffs, source docs, CURRENT_STATE/CHANGELOG/NOW/BACKLOG/DONE synchronized; both task and canonical-main remote SHAs verified. No hosted readiness claim.
 
 ## Planning verification and ownership
 Coordinator owns queue/status/policy acceptance and canonical integration. Planning changes only documents and need consistency/security review plus `git diff --check`; runtime tests apply to implementation. Fresh stage agents stop after their bounded handoff. Planning handoff: `agents/handoffs/TASK-016-CONTRACT.md`; later parent handoff: `agents/handoffs/TASK-016.md`.
 
-Verification qualification: B’s unchanged notification fixture failed once, then passed61 repeats; cause unresolved and separately tracked. Final C actual-browser and deterministic evidence, cleanup and exact-tip reviews are in `agents/handoffs/TASK-016.md` and stage handoffs. Canonical publication/remote verification completes the final criterion.
+Verification qualification: B’s unchanged notification fixture failed once, then passed61 repeats; cause unresolved and separately tracked. Final C actual-browser and deterministic evidence, cleanup and exact-tip reviews are in `agents/handoffs/TASK-016.md` and stage handoffs. Canonical integration `927fa35796c54879b77fe1be39f7b8e12aa517f9` and final C task `713e7c500f4c91b8ef6ba64b3bbf2c2b99664944` were independently remote-verified; all criteria are complete within these recorded verification limits.

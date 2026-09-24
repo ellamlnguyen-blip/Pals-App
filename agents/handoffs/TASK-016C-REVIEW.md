@@ -1,6 +1,6 @@
 # TASK-016C independent review
 
-Status: Accepted at final remote-verified task tip `713e7c500f4c91b8ef6ba64b3bbf2c2b99664944`; canonical publication receipt follows
+Status: Accepted at final remote-verified task tip `713e7c500f4c91b8ef6ba64b3bbf2c2b99664944`; canonical integration `927fa35796c54879b77fe1be39f7b8e12aa517f9` remote-verified
 Date: 2026-09-23
 Reviewed checkpoint: `cbfcbec19ac03ad4edf741c1592cfd1d60d89a5b`, independently remote-verified on `agent/TASK-016C-safety-ui`.
 Reviewer: fresh GPT-6 Sol medium code/security agent; read-only exact-commit review. Runtime/browser remains with the implementation agent until explicit handoff.

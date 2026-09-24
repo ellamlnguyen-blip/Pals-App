@@ -9,7 +9,7 @@
 - TASK-013 hangout chat — complete for bounded local scope under Accepted ADR-0015 on remote-verified main `f2404941aaf5cea5a830e9813950b33871b5e796`; see `DONE.md` and handoffs. Realtime/global block/hosted access remain separate.
 - TASK-014 DM requests/direct chat — complete for bounded disposable-local scope under Accepted ADR-0016; see `DONE.md`, its contract and handoffs. Hosted messaging, Realtime and global block/reporting remain open.
 - TASK-015 notification inbox/preferences — complete for the bounded disposable-local increment under Accepted ADR-0017; reviewed A/B/C stages, final handoff and main integration are recorded in `DONE.md`. Hosted delivery, Realtime and later safety/eligibility events remain separate.
-- TASK-016 blocking/reporting — all bounded local stages reviewed and verified under Accepted ADR-0018; final canonical publication pending. See parent and A/B/C handoffs. Hosted moderation/retention/deployment remain separate.
+- TASK-016 blocking/reporting — all bounded local stages reviewed and verified under Accepted ADR-0018; complete on remote-verified canonical main. See DONE and parent/A/B/C handoffs. Hosted moderation/retention/deployment remain separate.
 - TASK-023 student web frontend design alignment — start after TASK-016C is reviewed/integrated and before TASK-017. Apply the usepals.com-informed visual system to existing student routes now; later student-facing UI tasks should use its shared tokens/components. Backend/schema/RLS/API/authorization changes are out of scope. Contract: `active/TASK-023-frontend-design-alignment.md`.
 - TASK-017 admin moderation console
 - TASK-018 attendance confirmation
