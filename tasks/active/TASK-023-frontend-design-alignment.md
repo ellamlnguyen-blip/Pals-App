@@ -1,5 +1,5 @@
 # TASK-023 — Student web frontend design alignment
-Status: Planned
+Status: In progress — reviewed A implementation is merged locally; B/C route adoption and real authenticated verification remain
 Date: 2026-09-23
 Execution order: after TASK-016C is reviewed and integrated; before TASK-017 begins
 
