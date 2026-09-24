@@ -41,7 +41,7 @@ export default async function PersonPage({
   const detail = (result.data?.[0] ?? null) as PeopleDetail | null;
   const friendship = detail ? await readFriendship(id) : null;
   return (
-    <Frame signedIn>
+    <Frame signedIn navigation>
       <div className="people-detail">
         <a href={back}>← Back to People</a>
         {result.error ? (

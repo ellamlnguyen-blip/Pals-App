@@ -34,7 +34,7 @@ export default async function PeoplePage({
   const selection = readSelection(filters);
   if (!selection)
     return (
-      <Frame signedIn>
+      <Frame signedIn navigation>
         <nav className="people-back">
           <Link href="/hangouts">Hangouts</Link>
         </nav>
@@ -66,16 +66,7 @@ export default async function PeoplePage({
       : null;
   const current = peopleUrl(selection);
   return (
-    <Frame signedIn>
-      <nav className="primary-nav" aria-label="Primary">
-        <Link href="/hangouts">Hangouts</Link>
-        <Link href="/calendar">Calendar</Link>
-        <Link href="/people" aria-current="page">
-          People
-        </Link>
-        <Link href="/chats">Chats</Link>
-        <Link href="/notifications">Notifications</Link>
-      </nav>
+    <Frame signedIn navigation>
       <FocusReturn
         id={focus}
         visibleIds={cards.map((card) => card.account_id)}

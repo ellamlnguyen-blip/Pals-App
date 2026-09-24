@@ -6,10 +6,12 @@ import { ProfileEditor } from "./editor";
 import type { OwnerProfile } from "@pals/types";
 import "./profile.css";
 
+export const dynamic = "force-dynamic";
+
 export default async function ProfilePage() {
   const { user, profile } = await ownerProfile();
   return (
-    <Frame signedIn>
+    <Frame signedIn navigation>
       <div className="profile-heading">
         <Link href="/hangouts">← Back to Hangouts</Link>
         <h1>Your profile</h1>
