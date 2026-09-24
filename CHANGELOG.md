@@ -2,6 +2,10 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-24 — TASK-018 attendance policy proposed
+
+- Defined the bounded attendance-confirmation task and Proposed ADR-0022 for private self-reporting, time/correction limits and retained-ID privacy. Explicit acceptance is still required before any schema or permission change. No hosted operation or gate enablement occurred.
+
 ## 2026-09-24 — TASK-017 disposable-local moderation console complete
 
 - Replaced the admin placeholder with a private, local-only operator queue, audited report detail and confirmed case/account/Hangout actions over the accepted caller-bound RPCs. The console clears sensitive state on denial or revocation, guards late report/mutation responses and supports same-key retry after an uncertain result.
