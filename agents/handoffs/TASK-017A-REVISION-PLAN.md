@@ -15,4 +15,4 @@ A fresh read-only contract/security reviewer checked the exact ADR and contract 
 
 ## Publication
 
-Task and canonical-main remote SHA receipts: pending publication. No runtime code or hosted environment is changed by this planning record.
+Reviewed amendment task branch `agent/TASK-017A-revision-amendment` was independently remote-verified at `bff8e8bf76f529c3030c91c6c8ea4e3c1ce92dda`; its documentation-only merge on canonical main was independently remote-verified at `aafc2f51d73b9c12d89ccabec381be273ff6c593`. A later receipt commit may advance main. ADR-0020 remains Proposed and was sent for the user's explicit decision. No runtime code or hosted environment is changed by this planning record.
