@@ -2,6 +2,11 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-24 — TASK-017A local audited report review
+
+- Added a default-disabled, caller-bound operator report queue, exact detail reader, review/annotation/closure case transitions, private retry ledger and append-only audit. The case-action audit retains the exact subject and current campus when available; reporter deletion cannot silently erase the allegation.
+- Fresh security review, local authorization/concurrency/regression checks and direct workspace checks passed. The `pnpm check` wrapper itself stopped at a dependency-directory guard before running. All test fixtures were cleared, all eight gates are false, and local services stopped. Sanctions, admin UI and hosted operation remain separate stages.
+
 ## 2026-09-24 — TASK-024 Pals brand correction planned
 
 - Added a follow-up prompt after TASK-023 because the delivered visual direction did not make the requested brand clear enough.

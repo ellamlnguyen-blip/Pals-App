@@ -1,11 +1,13 @@
 # Current State
 
-Last updated: 2026-09-23
+Last updated: 2026-09-24
 
 ## Product
 Decision tree resolved through product purpose, loop, profile/hangout/social model, safety, map/calendar navigation, MVP boundary, technical architecture, and agent operating model.
 
 ## Build State
+TASK-017A's corrected local audited-review backend passed fresh exact-tip security review and was merged into the coordination branch at `3d6ef86a8f6daf42708c4e446bf04a644377ff2d` from independently remote-verified task tip `5a82090b83910a7437ce4cc6c926f9232a1e00d7`. Local database/real-API/concurrency checks and schema lint passed; the separate exact-tip workspace archive passed direct formatting, lint, 37 Node tests, typechecks and both production builds. The `pnpm check` wrapper itself aborted on its borrowed-dependency purge before starting checks. Fixtures are clear, all eight gates are false, and local services stopped. Canonical publication/remote verification remains; Stage B enforcement and Stage C UI have not begun. This is disposable-local only.
+
 The user replied “ok” to the explicit ADR-0019 acceptance question on 2026-09-24. It now authorizes only disposable-local TASK-017 implementation under narrower reviewed stage contracts. Stage A's audited-review backend contract passed independent security re-review after six clarifications; its planning branch `db17103dc40e27e56311066bd09f198b7a41315e` and canonical main merge `d745e3317a24cfbefef9a460dfda82cb93c601ed` were independently remote-verified. No new schema, report reader, sanction, hosted action or gate enablement has occurred.
 
 TASK-017A's contract receipt advanced remote-verified main to `9f5942048b72b2f5e1e33e60e96dbc0ca062e406`. Fresh bounded local implementation runs from that exact baseline on `agent/TASK-017A-review-backend` in `/private/tmp/pals-task-017a-review-backend`. Its code, local permission/concurrency checks, handoff, independent exact-tip review and main integration remain pending. No hosted operation or Stage B enforcement has begun.

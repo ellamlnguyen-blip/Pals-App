@@ -1,5 +1,5 @@
 # TASK-017A — Disposable-local audited report review backend
-Status: ADR-0020 accepted; final detail-version implementation, tests and exact-tip review pending
+Status: Complete for disposable-local Stage A; reviewed task tip integrated, canonical publication receipt pending
 Date: 2026-09-24
 Planning branch: `agent/TASK-017A-contract` from remote-verified main `fd7665614be99b4ed3b16703fff85dcef8c49bb2`
 
