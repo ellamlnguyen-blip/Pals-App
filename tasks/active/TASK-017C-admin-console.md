@@ -1,7 +1,7 @@
 # TASK-017C — Disposable-local operator console
-Status: Draft contract; B2 exact-tip security review and canonical integration are prerequisites to implementation
+Status: Reviewed contract ready for publication; B2 exact-tip security review accepted and canonical integration independently remote-verified
 Date: 2026-09-24
-Planning baseline: canonical main `057c6ba2e5a3e59250a2318703a6edfd54da4911` while B2 is still in progress
+Planning baseline: canonical main `057c6ba2e5a3e59250a2318703a6edfd54da4911`; reviewed B2 integrated on independently remote-verified main `a7af812a20d1de066a6e8893b678bb43b61bf068`
 
 ## Goal and ownership
 
@@ -9,7 +9,7 @@ Replace the `apps/admin` placeholder with a local operator workflow for the alre
 
 Read `AGENTS.md`, TASK-017 parent, completed A/B1/B2 contracts, handoffs and reviews, Accepted ADR-0006/0018/0019/0020/0021, MVP, authorization/security/safety, UX direction and shared design tokens. Use B2's exact integrated RPC signature and allowlist after its security review; a material backend/UI contract conflict returns to the coordinator before changing authority. No C implementation starts from unreviewed B2.
 
-The current B2 task tip defines `apply_hangout_moderation_action(p_report_id uuid, p_request_id uuid, p_expected_case_revision bigint, p_reason text)` and returns only `(case_state, revision, target_disabled)`; `get_moderation_report` adds nullable `target_disabled` after `target_campus_id`. Verify these exact shapes again at the integrated B2 tip before C dispatch. The Hangout action has no client-supplied action enum because its sole action is disable.
+The integrated B2 tip defines `apply_hangout_moderation_action(p_report_id uuid, p_request_id uuid, p_expected_case_revision bigint, p_reason text)` and returns only `(case_state, revision, target_disabled)`; `get_moderation_report` adds nullable `target_disabled` after `target_campus_id`. The Hangout action has no client-supplied action enum because its sole action is disable.
 
 ## Design and interaction plan
 
