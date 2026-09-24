@@ -10,15 +10,15 @@
 - TASK-014 DM requests/direct chat — complete for bounded disposable-local scope under Accepted ADR-0016; see `DONE.md`, its contract and handoffs. Hosted messaging, Realtime and global block/reporting remain open.
 - TASK-015 notification inbox/preferences — complete for the bounded disposable-local increment under Accepted ADR-0017; reviewed A/B/C stages, final handoff and main integration are recorded in `DONE.md`. Hosted delivery, Realtime and later safety/eligibility events remain separate.
 - TASK-016 blocking/reporting — bounded local planning in `active/TASK-016-blocking-reporting.md`; ADR-0018 explicitly accepted on 2026-09-23; reviewed/published stage A is implemented and locally verified on its task branch, accepted by independent exact-tip security review and included in canonical integration. Reporting backend B is independently reviewed and included in canonical integration; final safety UI C remains. No hosted changes.
+- TASK-023 student web frontend design alignment — start after TASK-016C is reviewed/integrated and before TASK-017. Apply the usepals.com-informed visual system to existing student routes now; later student-facing UI tasks should use its shared tokens/components. Backend/schema/RLS/API/authorization changes are out of scope. Contract: `active/TASK-023-frontend-design-alignment.md`.
 - TASK-017 admin moderation console
 - TASK-018 attendance confirmation
 - TASK-019 PostHog instrumentation
 - TASK-020 large-hangout basic safeguards
-- TASK-023 student web frontend design alignment — execute after TASK-020 and before TASK-021 staging. Align the student-facing UI with current usepals.com visual direction, including shared tokens/components and route-wide rendered checks; preserve existing backend/schema/RLS/API/authorization behavior. Contract: `active/TASK-023-frontend-design-alignment.md`.
 - TASK-021 staging launch rehearsal
 - TASK-022 domain migration/cutover
 
-Execution order note: TASK-023 is deliberately numbered after the existing launch tasks to avoid renumbering established contracts. Its dependency places it before TASK-021 staging and TASK-022 domain cutover.
+Execution order note: TASK-023 is deliberately numbered after the existing launch tasks to avoid renumbering established contracts. Its dependency places it immediately after TASK-016C and before TASK-017; tasks 018–020 should use its shared design system for any student-facing UI they add. Staging still checks consistency across the complete product.
 
 ## Later
 Expo mobile; native release pipeline; organization accounts; polls; optional capacity/waitlists; multi-campus.

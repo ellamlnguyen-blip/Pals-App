@@ -1,7 +1,7 @@
 # TASK-023 — Student web frontend design alignment
 Status: Planned
 Date: 2026-09-23
-Execution order: after TASK-020 and before TASK-021 staging launch rehearsal
+Execution order: after TASK-016C is reviewed and integrated; before TASK-017 begins
 
 ## Goal
 Bring the student-facing Pals web experience into a coherent, polished visual system informed by the current usepals.com site, while preserving Pals' accepted product behavior and all existing backend contracts.
@@ -10,8 +10,9 @@ Bring the student-facing Pals web experience into a coherent, polished visual sy
 The existing shared tokens are provisional, and prior frontend tasks delivered their scoped flows without a website-wide visual alignment pass. The design instructions require inspecting usepals.com before substantial UI work, but inspection alone does not ensure that existing or future screens follow a coherent design. This task makes that work explicit before staging.
 
 ## Dependencies
-- Complete and integrate the student-facing MVP UI work through TASK-020, so the alignment pass can cover the finished set of flows.
-- Keep TASK-021 staging and TASK-022 domain cutover after this task. TASK numbering identifies work; this dependency order makes TASK-023 precede TASK-021 and TASK-022.
+- Complete and integrate TASK-016C's student safety UI first, so this pass does not edit the same routes/components concurrently.
+- Do not wait for TASK-017 through TASK-020 to begin this pass. TASK-023 establishes the shared visual language for the existing student product early; any student-facing UI added by later work should use its tokens/components and receive route-level visual checks in that task.
+- Keep TASK-021 staging and TASK-022 domain cutover after this task. TASK numbering identifies work; this dependency order makes TASK-023 precede TASK-017 and all later MVP tasks.
 - Start its implementation branch from the latest `origin/main`; inspect current routes and backend contracts at dispatch time.
 
 ## Required Context
@@ -21,7 +22,7 @@ The existing shared tokens are provisional, and prior frontend tasks delivered t
 
 ## Allowed Scope
 - Create a concise visual and interaction audit, then refine shared frontend tokens, components, and layouts to make the existing student-facing web product meaningfully consistent with the current reference site's visual character.
-- Cover authentication/onboarding, Hangouts map/discovery/detail/create/edit/management, profiles, Calendar, People, Chats, and Notifications, including task-built screens available when this work begins.
+- Cover the student-facing routes already implemented when this work begins: authentication/onboarding, Hangouts map/discovery/detail/create/edit/management, profiles, Calendar, People, Chats, Notifications, and TASK-016C safety UI.
 - Adapt the visual reference to Pals' accepted product: retain Hangouts terminology and navigation, map-first discovery, privacy/safety behavior, accessible contrast/focus, and responsive desktop/tablet/mobile layouts.
 - Use only data and actions supported by current backend contracts. If an expected visual state lacks backend support, present the actual supported state and record the limitation as follow-up work.
 - Verify rendered key routes and loading, empty, error, and denied-access states at desktop and mobile sizes; run relevant existing UI checks and regression flows.
@@ -38,6 +39,7 @@ The existing shared tokens are provisional, and prior frontend tasks delivered t
 - [ ] The result is recognizably informed by usepals.com while following Pals' accepted product terminology, navigation, accessibility, privacy, and safety requirements.
 - [ ] Existing backend/schema/RLS/permission/action/API behavior is unchanged; only presentation and frontend interaction needed to render already-supported states are modified.
 - [ ] Desktop, tablet, and mobile rendering is checked for core routes and loading, empty, error, and denied states; critical existing flows remain functional.
+- [ ] Later student-facing UI tasks use the resulting shared tokens/components; TASK-021 staging verifies consistency across all screens added since this pass and tracks any needed polish without repeating the full redesign.
 - [ ] Relevant automated checks pass, limitations are recorded, and handoff plus shared status records are integrated into and verified on `main` before TASK-021 begins.
 
 ## Tests / Verification
