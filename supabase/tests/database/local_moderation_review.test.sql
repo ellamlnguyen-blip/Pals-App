@@ -135,6 +135,24 @@ select is((select count(*) from private.moderation_audit where action='detail_re
 select is((select count(*) from private.moderation_audit where action='start_review'
  and report_id='51900000-0000-4000-8002-000000000001'),1::bigint,
  'replay did not duplicate audit');
+select is((select subject_target_type from private.moderation_audit where
+ action='start_review' and report_id='51900000-0000-4000-8002-000000000001'),
+ 'user','user transition audit records report target type');
+select is((select subject_target_id from private.moderation_audit where
+ action='start_review' and report_id='51900000-0000-4000-8002-000000000001'),
+ '51900000-0000-4000-8000-000000000003'::uuid,
+ 'user transition audit records exact stored target ID');
+select is((select subject_campus_id from private.moderation_audit where
+ action='start_review' and report_id='51900000-0000-4000-8002-000000000001'),
+ (select university_id from public.university_memberships where
+  user_id='51900000-0000-4000-8000-000000000003'),
+ 'user transition audit records current membership campus');
+select ok((select subject_campus_id is not null from private.moderation_audit where
+ action='start_review' and report_id='51900000-0000-4000-8002-000000000001'),
+ 'current user target has authoritative campus evidence');
+select ok(not exists(select 1 from private.moderation_audit where
+ action in ('queue_read','detail_read') and subject_target_id is not null),
+ 'read audits do not invent a transition subject');
 select ok(not exists(select 1 from private.moderation_audit where
   reason like '%Private allegation%'), 'audit does not copy allegation');
 select is((select duplicate_report_id from private.moderation_cases where
@@ -169,7 +187,51 @@ set local role authenticated;
 select is((select target_status from public.get_moderation_report(
  '51900000-0000-4000-8002-000000000003')),'unavailable',
  'missing current target leaves allegation reviewable with unavailable context');
+select is((select revision from public.transition_moderation_case(
+ '51900000-0000-4000-8002-000000000003',
+ '51900000-0000-4000-8003-000000000012',0,'start_review')),1::bigint,
+ 'missing target allegation remains actionable');
 reset role;
+select is((select subject_target_id from private.moderation_audit where
+ action='start_review' and report_id='51900000-0000-4000-8002-000000000003'),
+ '51900000-0000-4000-8000-000000000099'::uuid,
+ 'missing user target UUID retained in audit');
+select ok((select subject_campus_id is null from private.moderation_audit where
+ action='start_review' and report_id='51900000-0000-4000-8002-000000000003'),
+ 'missing user target has no guessed campus');
+insert into public.hangouts(id,university_id,host_id,title,starts_at,
+ public_place,public_latitude,public_longitude) values
+ ('51900000-0000-4000-8004-000000000002',
+  (select id from public.universities where slug='unc-chapel-hill'),
+  '51900000-0000-4000-8000-000000000003','Reported Hangout',now()+interval '1 hour',
+  'Approximate place',35,-79);
+insert into public.hangout_participants(hangout_id,account_id,state) values
+ ('51900000-0000-4000-8004-000000000002',
+  '51900000-0000-4000-8000-000000000003','joined');
+insert into private.safety_reports(id,reporter_id,target_type,target_id,category,
+ provenance_kind,provenance_ref_id) values
+ ('51900000-0000-4000-8002-000000000004',
+  '51900000-0000-4000-8000-000000000002','hangout',
+  '51900000-0000-4000-8004-000000000002','harassment',
+  'current_hangout','51900000-0000-4000-8004-000000000002');
+set local role authenticated;
+select is((select revision from public.transition_moderation_case(
+ '51900000-0000-4000-8002-000000000004',
+ '51900000-0000-4000-8003-000000000013',0,'start_review')),1::bigint,
+ 'Hangout target allegation starts review');
+reset role;
+select is((select subject_target_type from private.moderation_audit where
+ action='start_review' and report_id='51900000-0000-4000-8002-000000000004'),
+ 'hangout','Hangout transition audit records stored target type');
+select is((select subject_target_id from private.moderation_audit where
+ action='start_review' and report_id='51900000-0000-4000-8002-000000000004'),
+ '51900000-0000-4000-8004-000000000002'::uuid,
+ 'Hangout transition audit records exact stored target ID');
+select is((select subject_campus_id from private.moderation_audit where
+ action='start_review' and report_id='51900000-0000-4000-8002-000000000004'),
+ (select university_id from public.hangouts where
+  id='51900000-0000-4000-8004-000000000002'),
+ 'Hangout transition audit records current Hangout campus');
 select throws_ok($$delete from public.accounts where id=
  '51900000-0000-4000-8000-000000000002'$$,'23503',null,
  'reporter cannot cascade-delete allegation');

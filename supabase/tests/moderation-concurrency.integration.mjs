@@ -167,6 +167,30 @@ test("moderation read and revocation observe both committed lock orders", {
       report_id='${report3}'`), "1");
     assert.equal(sql(`select count(*) from private.moderation_audit where
       report_id='${report3}' and action='start_review'`), "1");
+    await race("membership_delete_first",
+      `delete from public.university_memberships where user_id='${target}';`,
+      `${claims} select * from public.transition_moderation_case(
+        '${report2}','52000000-0000-4000-8003-000000000008',1,'annotate',
+        'Campus unavailable');`, false);
+    assert.equal(sql(`select subject_campus_id is null from private.moderation_audit
+      where request_id='52000000-0000-4000-8003-000000000008'`), "t",
+      "membership deletion commits before audit campus lookup");
+    sql(`insert into public.university_memberships(user_id,university_id,verified_at,
+      verification_email) values ('${target}',
+      (select id from public.universities where slug='unc-chapel-hill'),now(),
+      'moderation-race-3@unc.edu');`);
+    await race("action_before_membership_delete",
+      `${claims} select * from public.transition_moderation_case(
+        '${report2}','52000000-0000-4000-8003-000000000009',2,'annotate',
+        'Current campus');`,
+      `delete from public.university_memberships where user_id='${target}';`, false);
+    assert.equal(sql(`select subject_campus_id is not null from private.moderation_audit
+      where request_id='52000000-0000-4000-8003-000000000009'`), "t",
+      "action holds current membership through commit before deletion");
+    sql(`insert into public.university_memberships(user_id,university_id,verified_at,
+      verification_email) values ('${target}',
+      (select id from public.universities where slug='unc-chapel-hill'),now(),
+      'moderation-race-3@unc.edu');`);
     const currentHangoutReport = `${claims} select * from public.submit_safety_report(
       '52000000-0000-4000-8003-000000000005','hangout','${hangout}',
       'harassment',null);`;

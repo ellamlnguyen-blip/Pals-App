@@ -28,7 +28,12 @@ report intake and its no-reader boundary remain intact.
 
 The migration changes `private.safety_reports.reporter_id` to restrictive
 deletion, and cases reference reports restrictively. Audit actor/subject IDs
-are retained UUID values, with no cascading foreign keys. All new private
+are retained UUID values, with no cascading foreign keys. New transition audit
+rows retain the exact report target type and UUID and the current membership
+or Hangout campus when the target still exists. A missing current target leaves
+campus null; no historical campus is inferred. Read audits do not claim a
+transition subject. User membership is locked through the action commit to
+keep the recorded campus stable against concurrent changes. All new private
 relations have RLS and no client or service-role raw grants. The public RPCs
 return bounded allowlisted queue/detail projections and minimal transition
 results. Every successful page/detail appends an audit row in the same
@@ -54,14 +59,15 @@ occur.
 
 ## Tests / Verification
 
-- Two clean disposable local database resets applied the final ADR-0020
-  revision projection; earlier resets verified the narrowed lock modes.
-- Schema lint: no warnings after the final migration adjustment.
-- Focused pgTAP: 39 assertions passing, including gate/RLS/grants,
+- Clean disposable local database reset applied the transition audit subject
+  fields after the earlier ADR-0020 and lock-mode resets.
+- Schema lint: no warnings after the audit migration adjustment.
+- Focused pgTAP: 51 assertions passing, including gate/RLS/grants,
   student/unknown/conflict denial, deletion restriction, tied-time pagination,
-  unavailable target, duplicate reference rules, audit counts, replay and
-  absent/current case revision projection, revision behavior, and immutable
-  Hangout host guard.
+  unavailable target, duplicate reference rules, transition audit target and
+  current campus for user and Hangout reports, null campus for a missing
+  target, no second audit on exact replay, absent/current case revision
+  projection, revision behavior, and immutable Hangout host guard.
 - Existing report pgTAP: 43 assertions passing. Existing global-block pgTAP:
   62 assertions passing.
 - Real local Auth/PostgREST moderation HTTP test: passing for anon/student,
@@ -69,21 +75,25 @@ occur.
   private table denial, exact-ID self-filed/self-target/own-host conflicts,
   output allowlists, no audit on denial, exact replay, gate-off replay,
   second-operator case revision read, and stale-action denial with no audit.
-  Existing report HTTP and concurrency tests
-  pass when run serially; running them together caused their fixture gates to
-  interfere, then a clean reset and serial rerun passed.
+  Existing report HTTP and concurrency tests pass when run serially.
 - Overlapping-session test: observed `pg_stat_activity` lock waits for gate
   disable, operator-role deletion and account suspension in both commit orders
   (each operation-first read audited once, later denied read unaudited), target-role
   insertion and action in both orders, two operators racing one case revision,
-  concurrent same-key first actions, current Hangout report versus detail in
-  both commit orders, and safety-block versus a queue that visits the user
-  target before its Hangout report. Stronger-isolation denial passed.
+  concurrent same-key first actions, membership deletion versus a case action
+  in both observed commit orders (null campus when deletion commits first;
+  recorded campus when the action commits first), current Hangout report versus
+  detail in both commit orders, and safety-block versus a queue that visits
+  the user target before its Hangout report. Stronger-isolation denial passed.
 - Node syntax, direct ESLint and Prettier checks passed for the new JS tests.
-  `pnpm check` could not run in this disposable checkout: its dependency guard
-  tried to purge a borrowed `node_modules` symlink and aborted without a TTY.
-- Cleanup query found zero reports, cases, audits and moderation retries; all
-  eight feature gates were false. Local services stopped at final handoff.
+  Full command `pnpm check` did not reach the checks in this disposable
+  checkout. It printed `Scope: all 10 workspace projects`, then
+  `[ERR_PNPM_ABORTED_REMOVE_MODULES_DIR_NO_TTY] Aborted removal of modules
+  directory due to no TTY` while its dependency guard tried to purge the
+  borrowed `node_modules` symlink (exit 1). Direct checks above passed.
+- Cleanup query found zero reports, cases, audits, moderation retries and Auth
+  users; all eight feature gates were false. Local services stopped at final
+  handoff.
 
 ## Decisions
 

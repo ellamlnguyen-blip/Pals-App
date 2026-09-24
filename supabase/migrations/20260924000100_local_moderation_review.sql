@@ -35,6 +35,9 @@ create table private.moderation_audit (
   operator_id uuid not null,
   action text not null,
   report_id uuid,
+  subject_target_type text check (subject_target_type in ('user','hangout')),
+  subject_target_id uuid,
+  subject_campus_id uuid,
   request_id uuid not null,
   previous_state text,
   new_state text,
@@ -43,7 +46,8 @@ create table private.moderation_audit (
   reason text,
   duplicate_report_id uuid,
   page_report_ids uuid[],
-  page_count integer
+  page_count integer,
+  check ((subject_target_type is null)=(subject_target_id is null))
 );
 create index moderation_reports_order_idx on private.safety_reports(submitted_at desc,id desc);
 create index moderation_audit_operator_time_idx on private.moderation_audit(operator_id,occurred_at desc);
@@ -184,6 +188,7 @@ declare actor uuid; c private.moderation_cases%rowtype; old_state text;
   old_revision bigint; new_state text; new_disposition text; normalized_note text;
   fingerprint text; prior private.moderation_requests%rowtype;
   r private.safety_reports%rowtype; duplicate private.safety_reports%rowtype;
+  subject_campus uuid;
 begin
   actor:=private.moderation_actor();
   if p_report_id is null or p_request_id is null or p_expected_revision is null
@@ -245,10 +250,19 @@ begin
   insert into private.moderation_requests(operator_id,request_id,fingerprint,report_id,
     result_state,result_revision) values(actor,p_request_id,fingerprint,p_report_id,
     case_state,revision);
-  insert into private.moderation_audit(operator_id,action,report_id,request_id,
+  if r.target_type='user' then
+    select m.university_id into subject_campus from public.university_memberships m
+      where m.user_id=r.target_id for share;
+  else
+    select h.university_id into subject_campus from public.hangouts h
+      where h.id=r.target_id;
+  end if;
+  insert into private.moderation_audit(operator_id,action,report_id,
+    subject_target_type,subject_target_id,subject_campus_id,request_id,
     previous_state,new_state,previous_revision,new_revision,reason,duplicate_report_id)
-    values(actor,p_action,p_report_id,p_request_id,old_state,new_state,
-      old_revision,revision,normalized_note,p_duplicate_report_id);
+    values(actor,p_action,p_report_id,r.target_type,r.target_id,subject_campus,
+      p_request_id,old_state,new_state,old_revision,revision,
+      normalized_note,p_duplicate_report_id);
   return next;
 end; $$;
 

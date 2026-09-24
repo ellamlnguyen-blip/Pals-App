@@ -51,7 +51,12 @@ disablement, an admin UI, or hosted use.
   Actions are `start_review`, `annotate`, `close_no_action`,
   `close_duplicate`, and `reopen`. Preserve the operator-scoped UUID and the
   same normalized payload for an uncertain retry. New actions require the
-  current revision; a changed-key payload or stale revision is denied.
+  current revision; a changed-key payload or stale revision is denied. Each
+  new transition audit records the exact stored report target type and UUID,
+  plus the target's current membership or Hangout campus when it exists. An
+  absent current target leaves the audit campus null; retries add no audit.
+  User membership is locked through the action commit so a concurrent campus
+  change cannot make the stored audit campus stale before commit.
 
 The new RPCs require READ COMMITTED. They acquire one moderation transaction
 advisory lock, then the gate row, operator account `FOR SHARE` row and role row,
@@ -64,7 +69,8 @@ checks after any lock wait. A revocation that commits before those checks
 denies; an already-authorized operation holding locks can commit first. Case
 mutation, retry result and audit append share one transaction. Reporter and
 case report foreign keys restrict deletion; audit actor/subject IDs are
-retained UUIDs without cascading foreign keys.
+retained UUIDs without cascading foreign keys. Audit campus is current
+evidence at the action, not a reconstructed historical campus.
 
 Before hosted use, resolve retention/deletion and legal holds, operator
 onboarding and MFA, appeals/escalation, and staffed response. Stage B must add
