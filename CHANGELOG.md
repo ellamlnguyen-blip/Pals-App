@@ -55,6 +55,11 @@ Record meaningful product, architecture, schema, safety, and release changes—n
 - Added a dedicated student-web visual alignment task informed by current usepals.com, scheduled after TASK-020 and before staging rehearsal.
 - Required a shared-token/component and route-wide responsive pass while preserving existing backend schemas, RLS, API/action contracts, gates, and authorization behavior. No product or backend implementation is included in this planning change.
 
+## 2026-09-23 — TASK-023 moved earlier
+
+- Moved the student-web design alignment to immediately after TASK-016C and before TASK-017, instead of waiting until all remaining MVP tasks are complete.
+- Later student-facing screens should use the established shared design tokens/components; staging will check consistency across the full product. The task still changes no backend contract or permission, and it does not replace the remaining functionality or launch tasks.
+
 ## 2026-09-23 — TASK-014A local DM backend
 
 - Added reviewed private DM request, generation, message and retry storage behind a default-disabled local gate. Caller-bound operations enforce first-message consent, current People eligibility, narrow block teardown and terminal privacy. Local SQL/Auth/concurrency, workspace and schema checks passed within the documented test-wrapper limit; no hosted, Realtime or UI change.
