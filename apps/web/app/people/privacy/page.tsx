@@ -30,7 +30,7 @@ export default async function PrivacyPage() {
       ? await client.rpc("browse_people", { p_limit: 1 })
       : null;
   return (
-    <Frame signedIn>
+    <Frame signedIn navigation={state === "ready"}>
       <div className="people-detail">
         <Link href={state === "ready" ? "/people" : accessPath(state)}>
           ← Back

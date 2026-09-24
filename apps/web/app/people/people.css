@@ -3,16 +3,7 @@
   justify-content: space-between;
   align-items: end;
   gap: 1rem;
-  margin: 2rem 0;
-}
-.page .primary-nav {
-  flex-wrap: nowrap;
-  overflow-x: auto;
-  gap: 1rem;
-}
-.page .primary-nav > * {
-  flex: none;
-  white-space: nowrap;
+  margin: 0 0 var(--pals-space-8);
 }
 .people-heading h1 {
   font-size: clamp(2.3rem, 4vw, 3.3rem);
@@ -27,9 +18,14 @@
     auto auto;
   align-items: end;
   gap: 1rem;
-  padding: 1.5rem;
+  padding: var(--pals-space-6);
   border: 1px solid var(--pals-line);
-  border-radius: var(--pals-radius);
+  border-radius: var(--pals-radius-panel);
+  background: var(--pals-surface-raised);
+  box-shadow: var(--pals-panel-shadow);
+}
+.people-filters input {
+  width: 100%;
 }
 .people-filters label,
 .unblock-control label {
@@ -55,10 +51,11 @@
   min-height: 11rem;
   padding: 1.5rem;
   border: 1px solid var(--pals-line);
-  border-radius: var(--pals-radius);
+  border-radius: var(--pals-radius-panel);
   text-decoration: none;
   color: var(--pals-ink);
-  background: var(--pals-surface);
+  background: var(--pals-surface-raised);
+  box-shadow: var(--pals-panel-shadow);
 }
 .people-grid a:hover {
   border-color: var(--pals-accent);
@@ -83,6 +80,10 @@
 .people-panel {
   margin: 1.5rem 0;
   overflow-wrap: anywhere;
+  background: var(--pals-surface-raised);
+  border: 1px solid var(--pals-line);
+  border-radius: var(--pals-radius-panel);
+  padding: var(--pals-space-8);
 }
 .people-panel h1 {
   font-size: clamp(2rem, 4vw, 3rem);
@@ -104,8 +105,9 @@
 }
 .people-detail-body section {
   padding: 1.25rem;
-  background: var(--pals-canvas);
+  background: var(--pals-surface);
   border: 1px solid var(--pals-line);
+  border-radius: var(--pals-input-radius);
 }
 .people-detail-body section:first-child {
   grid-column: 1/-1;
@@ -125,7 +127,7 @@
   border: 1px solid var(--pals-line);
   border-radius: var(--pals-input-radius);
   padding: 1.25rem;
-  background: var(--pals-canvas);
+  background: var(--pals-surface);
 }
 .people-preview dl {
   margin: 0;
@@ -180,6 +182,24 @@ dialog code {
 .people-block-status {
   padding: 1.5rem;
   background: var(--pals-surface);
+}
+.people-heading-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: var(--pals-space-2) var(--pals-space-4);
+  border: 1px solid var(--pals-line);
+  border-radius: 999px;
+  background: var(--pals-surface-raised);
+  font-weight: 800;
+  text-decoration: none;
+}
+.people-back a,
+.people-detail > a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-weight: 800;
 }
 @media (max-width: 800px) {
   .people-filters {
@@ -289,8 +309,7 @@ dialog code {
 }
 
 .friend-heading {
-  border-bottom: 1px solid var(--pals-line);
-  padding: 0 0 1.5rem;
+  background: var(--pals-surface);
 }
 .friend-heading h1 {
   max-width: none;

@@ -1,8 +1,6 @@
 import { Frame } from "../components";
-import Link from "next/link";
 import { requireAccess } from "../../lib/access";
 import { requireLocalHangouts } from "../../lib/hangouts";
-import { localPeopleAvailable } from "../../lib/people";
 import { queryCalendar } from "../../lib/calendar";
 import {
   addDays,
@@ -55,7 +53,7 @@ export default async function CalendarPage({
   };
   if (!validSelection(selection))
     return (
-      <Frame signedIn>
+      <Frame signedIn navigation>
         <h1>Calendar</h1>
         <p role="alert">
           Choose a valid campus date, Day or Week view, and Hangout filter.
@@ -69,21 +67,8 @@ export default async function CalendarPage({
   const previous = addDays(selection.date, -step),
     next = addDays(selection.date, step);
   return (
-    <Frame signedIn>
+    <Frame signedIn navigation>
       <CalendarRefresh />
-      <nav className="primary-nav" aria-label="Primary">
-        <a href="/hangouts">Hangouts</a>
-        <a href="/calendar" aria-current="page">
-          Calendar
-        </a>
-        {localPeopleAvailable() ? (
-          <Link href="/people">People</Link>
-        ) : (
-          <span>People</span>
-        )}
-        <Link href="/chats">Chats</Link>
-        <Link href="/notifications">Notifications</Link>
-      </nav>
       <section className="calendar-page" aria-labelledby="calendar-title">
         <div className="calendar-heading">
           <div>

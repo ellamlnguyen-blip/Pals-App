@@ -50,7 +50,7 @@ export default async function FriendshipsPage({
     }),
   );
   return (
-    <Frame signedIn>
+    <Frame signedIn navigation={state === "ready"}>
       <div className="people-detail">
         <Link href={state === "ready" ? "/people" : accessPath(state)}>
           ← Back
