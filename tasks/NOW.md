@@ -2,6 +2,8 @@
 
 ## TASK-020 policy accepted — stage A contract pending
 
+Stage A contract: `active/TASK-020A-large-hangout-backend.md` defines the private gate/signal, current host-size RPC and viewer-safe discovery projection. Independent security/planning review found and resolved a revalidation gap and cutoff bound; final review has no remaining P0/P1/P2. Publish this contract on canonical main and independently verify it before fresh A agent dispatch. No A code or gate enablement yet.
+
 ADR-0024 acceptance: On 2026-09-25 the user replied “accept” to the explicit decision request for disposable-local implementation and temporary synthetic QA gates. Record this receipt on canonical main before stage A contract publication/dispatch. No implementation or gate enablement has occurred. The private size signal remains unconsumed; hosted review is a separate prerequisite.
 
 Planning publication (before acceptance): independent scope and corrected final policy review cleared the documentation with no remaining P0/P1/P2. Planning branch and canonical main were both remotely verified at `0d6fa6686e7f94b11611695c9f1ace94291d4cb1`. At that milestone ADR-0024 was still Proposed and no implementation had been dispatched.

@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-25 — TASK-020A backend contract
+
+- Reviewed the narrow local backend contract for host size awareness, a private signal and viewer-safe saved discovery. The contract specifies join/gate lock order and preserves the existing two-read discovery revalidation. Runtime implementation remains pending.
+
 ## 2026-09-25 — ADR-0024 accepted for local TASK-020
 
 - User explicitly accepted the reviewed 25-member safeguard policy, host warning, private unconsumed signal and saved-map dampening for disposable-local implementation. Narrower stage contracts, review and publication remain before code work; no hosted or runtime change occurred.
