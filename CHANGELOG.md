@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-25 — TASK-019 analytics policy proposed
+
+- Defined a bounded PostHog event allowlist and Proposed ADR-0023 for affirmative consent, anonymous visit identity, minimal payloads, private attendance exclusion and a hosted retention gate. Postgres stays authoritative. This is planning only; no analytics SDK, hosted ingest, live-user capture or deployment is authorized.
+
 ## 2026-09-25 — TASK-018 private attendance confirmation complete locally
 
 - Reviewed A backend and B student UI are integrated for disposable-local use under Accepted ADR-0022. The UI and parent handoff are on independently verified main `b6d0d054dab901574a6cd06b07372fae3f5013ad`; task tips, tests, limits and cleanup are recorded in their handoffs. All nine gates remain false. Hosted release and TASK-019 analytics are separate.

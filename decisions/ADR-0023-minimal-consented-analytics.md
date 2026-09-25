@@ -1,0 +1,24 @@
+# ADR-0023 — Minimal consented behavior analytics
+
+Status: Proposed — explicit acceptance required before TASK-019 runtime implementation
+Date: 2026-09-25
+Task: TASK-019
+
+## Context
+
+The accepted architecture names PostHog for behavior and Postgres for authoritative state. The MVP names analytics outcomes but does not decide analytics consent, identity linkage, private attendance handling, vendor payloads or retention. The current web/admin code has no PostHog client. TASK-018's attendance result is a private self-report under ADR-0022. Sending a Hangout, peer or attendance identifier to a third party would create a new privacy boundary.
+
+## Proposed decision
+
+1. Student-web behavior analytics is **affirmative opt-in**. Missing or invalid choice is off. No SDK/network initialization or event capture before consent; no backfill. Provide an accessible way to change the choice. Consent is memory-only in the current tab and resets off on reload; no account ID or consent choice is persisted in browser storage, and no server-side consent ledger is added. Revocation and sign-out stop capture in all open Pals tabs through the existing auth-transition broadcast pattern and clear local analytics state. Account switch ends the anonymous visit and requires a new opt-in; a tab with uncertain current identity stays off. This task does not claim cross-device consistency.
+2. Capture only the named, fixed-schema TASK-019 events. Application properties are limited to `schema_version: 1`; the event name, random visit `distinct_id` and required transport fields form a separate provider envelope. Inspect that full envelope locally and reject unreviewed SDK metadata. Do not send account, email, campus, peer, Hangout, message, notification or report identifiers; coordinates, map bounds, place, schedule, search term, free text, URLs/referrers, device location or attendance answers. Disable automatic captures, pageviews, replay, heatmaps, form collection, error collection, person profiles and group analytics. Use an in-memory anonymous visit identity, with no `identify`, `alias`, user-to-visit mapping or cross-visit correlation. A browser request still exposes transport metadata such as IP to the provider; this proposal does not claim otherwise.
+3. PostHog is explanatory and best effort. A domain mutation is counted only by its authoritative Postgres record. Analytics failure never changes authorization, business success or UI completion. Private attendance, safety reports, blocking and moderation stay entirely out of PostHog. Self-reported attendance and repeat outcomes use separately authorized Postgres aggregates, with no direct row export or new aggregate endpoint in TASK-019.
+4. Disposable-local development uses a test sink and no external ingest. Hosted capture requires a separate review of project region, access, deletion, IP/geolocation controls, consent copy and actual outbound payloads. Raw event retention must be bounded to **90 days or less** and independently verifiable in the selected project before hosted capture. If the plan/project cannot satisfy that bound, capture stays off pending a revised accepted decision. No project configuration or hosted use is authorized by this ADR.
+
+## Tradeoffs
+
+Opt-in and anonymous visit identity limit funnel coverage and prevent cross-visit PostHog retention analysis. Repeated opt-in after reload is a usability cost. Postgres can calculate only outcomes its current records actually retain; repeated joins to the same Hangout and complete join/leave history are unavailable. Memory-only consent does not prove legal consent across devices; a hosted release needs its own consent and privacy review. The 90-day retention bound is a product policy, not a claim that every PostHog plan exposes a configurable deletion setting. PostHog's [events-retention API](https://posthog.com/docs/api/events-retention) reports a plan-dependent query window and is read-only; the hosted review must verify actual storage/deletion behavior separately. No raw-event retention promise is inferred from that query window.
+
+## Acceptance scope
+
+Acceptance would authorize only the reviewed disposable-local TASK-019 adapter, consent UI and event wiring, after a narrower contract is published and reviewed. It would not authorize a hosted project change, live-user capture, deployment, gate enablement, new database object, analytics export or relaxation of ADR-0022 privacy. Material changes to identity, payload, consent or retention require a revised proposal and explicit acceptance.

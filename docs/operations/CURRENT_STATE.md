@@ -1,11 +1,13 @@
 # Current State
 
-Last updated: 2026-09-24
+Last updated: 2026-09-25
 
 ## Product
 Decision tree resolved through product purpose, loop, profile/hangout/social model, safety, map/calendar navigation, MVP boundary, technical architecture, and agent operating model.
 
 ## Build State
+TASK-019 analytics is in documentation-only planning from independently queried remote main `937672d184098d6f5cb8e5226d0bb84104fcf71e`. Its bounded contract and Proposed ADR-0023 define an opt-in, anonymous-visit, fixed-event PostHog path with no attendance/safety payloads and authoritative Postgres outcomes. Independent review, main publication/verification and explicit policy acceptance precede runtime implementation. No SDK, external ingest, hosted project change or feature enablement exists from this plan.
+
 TASK-018 private attendance confirmation is complete for bounded disposable-local scope under Accepted ADR-0022. Reviewed backend task `249efcc4214656a32beba49c13eb479b9e0c614b` and UI task `2c589da0d323ca2feeda6d9ce0bf11ace9b2324d` are independently remote-verified; the integrated UI and parent handoff are on independently verified canonical main `b6d0d054dab901574a6cd06b07372fae3f5013ad`. Database/API/workspace and rendered responsive/light/dark/keyboard/failure checks passed within handoff limits. No disposable users, Hangouts or attendance answers remain; all nine gates are false and owned services stopped. This completes no hosted migration or attendance launch. TASK-019 PostHog instrumentation is next for bounded planning, with sensitive attendance analytics policy still to define.
 
 TASK-018B's reviewed local attendance UI tip `2c589da0d323ca2feeda6d9ce0bf11ace9b2324d` is independently remote-verified and merged in the coordinator branch. Fresh exact-tip review found no P0/P1/P2 issue after pagination-ID masking corrections. The route and actor-bound server path show only own ID/answer, never peer/source detail, and handle denial, stale and unknown saves through fresh owner reads. Full workspace, local authenticated API and coordinator rendered responsive/light/dark/keyboard/denial/uncertain/stale checks passed within handoff limits. Fixtures were removed, nine gates false and owned services stopped. Canonical publication and final handoff receipts remain before TASK-018 is complete. No hosted operation is authorized.
