@@ -10,7 +10,7 @@ Baseline: independently remote-verified canonical `origin/main` `4179ca3399d0589
 - Added local-only `/attendance` using `access()` for signed-in active states, the existing Frame, an account-menu entry for active signed-in owners, and a small Calendar entry. Primary navigation remains five destinations.
 - Added an actor-bound, no-store attendance server path. It accepts only a bounded 24-item ID keyset owner list, exact owner read, and expected-revision answer through TASK-018A RPCs. IDs and answers never appear in route URLs, browser storage, analytics or error messages.
 - The student surface deliberately stays ID-only. Exact retained Hangout IDs are selectable, including when source details are hidden. It shows own answer, open/closed/non-actionable states, neutral zero-row and denial states, and the general 30-day rule without deriving a deadline from unauthorized source data. Reporting is a separate `/safety` link.
-- A save is only confirmed after a fresh exact own-read followed by a fresh current owner page, so source-gate-off and stale-revision cases cannot leave older actionable controls enabled. Stale or uncertain outcomes show the observed answer or offer an explicit exact recheck, then require a deliberate new choice. Duplicate simultaneous saves are blocked. Auth changes, page hide/restore, focus revalidation and denial mask in-memory records and invalidate late responses.
+- A save is only confirmed after a fresh exact own-read followed by a fresh current owner page, so source-gate-off and stale-revision cases cannot leave older actionable controls enabled. Stale or uncertain outcomes show the observed answer or offer an explicit exact recheck, then require a deliberate new choice. Duplicate simultaneous saves are blocked. Auth changes, page hide/restore, focus revalidation and denial mask in-memory records, pagination IDs, selection/retry state and invalidate late responses. `load()` establishes a new cursor/history only after masking, preserving pagination and error Retry for the current authorized actor.
 - No migration, SQL permission, gate, fixture, hosted service, notification or analytics change.
 
 ## Verification
@@ -30,5 +30,5 @@ After QA, removed both disposable Auth users (including the first failed setup a
 
 ## Publication receipt
 
-Task branch commit and remote SHA: pending push below.
+Task branch commit and remote SHA: corrected exact tip pending push below.
 Canonical main integration SHA: pending coordinator review and integration.

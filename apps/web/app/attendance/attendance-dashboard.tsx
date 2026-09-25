@@ -42,6 +42,8 @@ export function AttendanceDashboard({ actor }: { actor: string }) {
     for (const c of controllers.current) c.abort();
     controllers.current.clear();
     setRows([]);
+    setCursor(null);
+    setHistory([]);
     setChoices({});
     setEditing(null);
     setBusy(null);
