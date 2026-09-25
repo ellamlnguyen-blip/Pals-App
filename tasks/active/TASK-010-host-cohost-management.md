@@ -1,6 +1,6 @@
 # TASK-010 — Local host/co-host management
 
-Status: ADR-0012 accepted; Stages A/B reviewed and implemented for disposable-local use; canonical integration pending
+Status: Complete for disposable-local use under Accepted ADR-0012; Stages A/B reviewed and main-integrated
 Date: 2026-09-22
 Planning branch: `agent/TASK-010-planning`
 Starting verified clean main/origin: `49d6e780aebf5f23f384efe24d0a8bd55232888a`
@@ -35,13 +35,13 @@ Coordinator writes and publishes each stage's narrower dispatch contract before 
 Host transfer, invitations/acceptance inbox unless user revises policy, friendship/restricted visibility/eligibility, peer identities/profiles/photos, chat/notifications, report/block/moderation, attendance, automatic expiry, hard deletion, capacity/waitlists, analytics, hosted environments/migrations/enabling/deployment and unrelated CI/dev-helper repair.
 
 ## Acceptance criteria
-- [ ] Explicit ADR acceptance recorded and published before migrations/implementation; each stage contract published before dispatch.
-- [ ] Role assignment/loss/restoration and permission matrix enforced in database, including forged self-promotion, co-host-on-co-host removal, host-target denial, cross-campus and revoked callers.
-- [ ] Parent-row serialization, post-lock authorization and revisions prevent stale role actions or membership changes from restoring privileges; cancellation/private access remains terminal as specified.
-- [ ] Hosts and co-hosts can complete their accepted local desktop/phone management flows with honest confirmation, stale conflict, loading, empty, error, denied and uncertain-response recovery.
-- [ ] Private instructions never leak through public payloads/roles/errors; demotion versus removal behavior is accurately explained and tested; peer readers and operator access remain unchanged.
-- [ ] Workspace, two clean actual-role SQL resets/lint and all three actual built-server Auth/HTTP/action/concurrency suites pass with relevant new cases. Fresh independent security/design review clear, rendered desktop/phone/keyboard checks documented.
-- [ ] Disposable data cleaned, gate false, local services stopped; scoped task branches and reviewed integrations pushed/remote-verified; coordinator records/handoffs synchronized before completion.
+- [x] Explicit ADR acceptance recorded and published before migrations/implementation; each stage contract published before dispatch.
+- [x] Role assignment/loss/restoration and permission matrix enforced in database, including forged self-promotion, co-host-on-co-host removal, host-target denial, cross-campus and revoked callers.
+- [x] Parent-row serialization, post-lock authorization and revisions prevent stale role actions or membership changes from restoring privileges; cancellation/private access remains terminal as specified.
+- [x] Hosts and co-hosts can complete their accepted local desktop/phone management flows with honest confirmation, stale conflict, loading, empty, error, denied and uncertain-response recovery. The final Step down browser click was unavailable; SQL/HTTP cover it.
+- [x] Private instructions never leak through public payloads/roles/errors; demotion versus removal behavior is accurately explained and tested; peer readers and operator access remain unchanged.
+- [x] Workspace, two clean actual-role SQL resets/lint and all three actual built-server Auth/HTTP/action/concurrency suites pass with relevant new cases. Fresh independent security/design review clear, rendered desktop/phone/keyboard checks documented. The unrelated People/friendship harness assertions required temporary isolation, as recorded in the handoff.
+- [x] Disposable data cleaned, gate false, local services stopped; scoped task branches and reviewed integrations pushed/remote-verified; coordinator records/handoffs synchronized before completion.
 
 ## Required verification matrix
 Host, current/former co-host, ordinary/left/removed participant, nonparticipant, anonymous, other campus, incomplete/missing-photo, changed email, inactive campus, suspended/banned and forged operator. Test direct DML and every exposed RPC/read with gate on/off and READ COMMITTED versus denied stronger isolation. Exercise promotion versus leave/removal, demotion versus edit/open-close/removal, cancellation versus all writes, readiness/gate revocation during lock waits, stale revision and lost-response recovery. Verify no role resurrection on rejoin and explicit readiness restoration behavior. Cover host-only assignment lookup and demotion of nonready target; no co-host historical-state reads; private access after demotion, leave, removal and cancellation. Preserve create retry, atomic public/private edit, profile/photo and Calendar regressions.

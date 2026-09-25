@@ -1,8 +1,8 @@
 # NOW
 
-## TASK-010 local host/co-host management ready for canonical integration
+## TASK-010 local host/co-host management complete
 
-Accepted ADR-0012 is implemented for disposable-local use. Reviewed Stage A backend task branch is verified at `e1426bd7f368dbee44c6cabd135969ceced78172`; reviewed Stage B UI task branch is verified at `903827995917e8bdbd2d98640ef24c4e861d1bfc` (implementation `b262f43b3573689f71b3d0ace2a12b54b5c6c862`). Independent Stage B final review found no remaining P1/P2. Full `pnpm check`, 68/68 actual-role SQL assertions, focused built-loopback Auth/action checks and prior desktop/390 px/320 px/keyboard inspection passed within the handoff limits. The Step down browser confirmation and final-tip screenshots were unavailable; SQL/HTTP cover its operation. Reset left zero disposable fixtures, the Hangout gate off and local services stopped. Coordinator status integration and remote main verification remain; no hosted operation or gate enablement occurred. TASK-021's remaining hosted dependencies are separate.
+Accepted ADR-0012 is implemented for disposable-local use. Reviewed Stage A backend task branch is verified at `e1426bd7f368dbee44c6cabd135969ceced78172`; reviewed Stage B UI task branch is verified at `903827995917e8bdbd2d98640ef24c4e861d1bfc` (implementation `b262f43b3573689f71b3d0ace2a12b54b5c6c862`). Independent Stage B final review found no remaining P1/P2. Full `pnpm check`, 68/68 actual-role SQL assertions, focused built-loopback Auth/action checks and prior desktop/390 px/320 px/keyboard inspection passed within the handoff limits. The Step down browser confirmation and final-tip screenshots were unavailable; SQL/HTTP cover its operation. Reset left zero disposable fixtures, the Hangout gate off and local services stopped. Canonical main integration was independently remote-verified at `09f468f2185b5da0b3ad5390153f3fcfef91fc1c`; this status receipt follows. No hosted operation or gate enablement occurred. TASK-021's remaining hosted dependencies are separate.
 
 ## TASK-010A backend integrated; TASK-010B ready
 

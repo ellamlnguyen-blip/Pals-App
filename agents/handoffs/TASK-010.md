@@ -4,7 +4,7 @@ Date: 2026-09-25
 Policy: Accepted ADR-0012; disposable-local scope only.
 Backend branch: `origin/agent/TASK-010A-cohost-backend` independently verified at `e1426bd7f368dbee44c6cabd135969ceced78172`.
 UI branch: `origin/agent/TASK-010B-host-management` independently verified at `903827995917e8bdbd2d98640ef24c4e861d1bfc`; exact reviewed implementation `b262f43b3573689f71b3d0ace2a12b54b5c6c862`.
-Canonical main integration: pending remote verification.
+Canonical main integration: independently remote-verified at `09f468f2185b5da0b3ad5390153f3fcfef91fc1c`; this completion receipt follows.
 
 The backend enforces the accepted host/co-host matrix through a default-off local migration, caller-bound role readers and revision-aware management RPCs. The saved-Hangout UI presents current-ready ID/role roster pages and a separate host-only retained co-host assignment list. Hosts can manage joining, roles, participants and cancellation; co-hosts can edit, manage joining and ordinary members, and step down. Actions reauthorize persisted state and pause controls after uncertain results. Private detail and paginated IDs are rechecked after slow reads and visibility changes.
 

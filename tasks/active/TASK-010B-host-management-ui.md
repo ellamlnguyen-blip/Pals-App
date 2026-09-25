@@ -1,6 +1,6 @@
 # TASK-010B — Local host/co-host management UI
 
-Status: Reviewed implementation and task branch published; canonical integration pending
+Status: Reviewed implementation and task branch published; canonical main-integrated for disposable-local use
 Date: 2026-09-25
 Parent: `tasks/active/TASK-010-host-cohost-management.md`
 
