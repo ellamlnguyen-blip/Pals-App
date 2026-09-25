@@ -50,18 +50,34 @@ test("serialized crossing joins and gate/source revocations leave no partial sig
       where user_id::text like '52010000-%';
     update private.hangout_feature_gate set enabled=true;
     update private.large_hangout_feature_gate set enabled=true;
+    update private.moderation_feature_gate set enabled=true;
+    insert into public.platform_roles(user_id,role) values ('${uid(29)}','moderator');
     insert into public.hangouts(id,university_id,host_id,title,starts_at,
       public_place,public_latitude,public_longitude)
     select ('52010000-0000-4000-8001-'||lpad(n::text,12,'0'))::uuid,
       '00000000-0000-4000-8000-000000000001', '${uid(1)}',
       'Race '||n,now()+interval '1 hour','Campus area',35.913,-79.055
-      from generate_series(1,5) n;
+      from generate_series(1,7) n;
     insert into public.hangout_participants(hangout_id,account_id,state)
     select ('52010000-0000-4000-8001-'||lpad(h::text,12,'0'))::uuid,
       ('52010000-0000-4000-8000-'||lpad(n::text,12,'0'))::uuid,'joined'
-      from generate_series(1,5) h cross join generate_series(1,24) n;
+      from generate_series(1,7) h cross join generate_series(1,24) n;
+    insert into private.safety_reports(id,reporter_id,target_type,target_id,
+      category,provenance_kind,provenance_ref_id)
+    select ('52010000-0000-4000-8002-'||lpad(n::text,12,'0'))::uuid,
+      '${uid(30)}','hangout',
+      ('52010000-0000-4000-8001-'||lpad(n::text,12,'0'))::uuid,
+      'harassment','current_hangout',
+      ('52010000-0000-4000-8001-'||lpad(n::text,12,'0'))::uuid
+      from generate_series(6,7) n;
     commit;`);
   try {
+    for (const n of [6, 7]) {
+      sql(`begin; ${auth(29)} select * from public.transition_moderation_case(
+        '52010000-0000-4000-8002-${String(n).padStart(12, "0")}',
+        '52010000-0000-4000-8003-${String(n).padStart(12, "0")}',
+        0,'start_review'); commit;`);
+    }
     // First crossing join commits, second crosses above the same threshold.
     // The latter waits on the shared social lock and cannot duplicate signal.
     const first = session("task020a_cross_first");
@@ -138,6 +154,61 @@ test("serialized crossing joins and gate/source revocations leave no partial sig
       assert.equal(sql(`select count(*) from private.large_hangout_signals
         where hangout_id='${hid(4)}'`), "0");
     } finally { await stop(block, blocked); }
+    sql(`delete from private.people_blocks where blocker_id='${uid(1)}'
+      and blocked_id='${uid(25)}'`);
+
+    // A committed moderation disable wins the same social/parent lock order;
+    // the waiting join cannot leave a participant or size signal behind.
+    const report = (n) => `52010000-0000-4000-8002-${String(n).padStart(12, "0")}`;
+    const action = (n) => `52010000-0000-4000-8003-${String(100 + n).padStart(12, "0")}`;
+    const moderation = (n) => `${auth(29)} select * from
+      public.apply_hangout_moderation_action('${report(n)}','${action(n)}',
+      1,'Local decision');`;
+    const disableFirst = session("task020a_mod_first");
+    const deniedJoin = session("task020a_mod_join_waiter");
+    try {
+      disableFirst.send(`begin; ${moderation(6)} select 'held';`);
+      await until(() => disableFirst.output().includes("held"));
+      deniedJoin.send(`begin; ${auth(25)} select public.join_hangout('${hid(6)}'); commit;`);
+      await observe("task020a_mod_join_waiter");
+      disableFirst.send("commit;"); disableFirst.child.stdin.end(); deniedJoin.child.stdin.end();
+      const [[leaderCode], [waiterCode]] = await Promise.all([disableFirst.done, deniedJoin.done]);
+      assert.equal(leaderCode, 0, disableFirst.output());
+      assert.equal(waiterCode, 3, deniedJoin.output());
+      assert.match(deniedJoin.output(), /Hangout operation not permitted/);
+      assert.equal(sql(`select count(*) from public.hangout_participants
+        where hangout_id='${hid(6)}' and state='joined'`), "24");
+      assert.equal(sql(`select count(*) from private.large_hangout_signals
+        where hangout_id='${hid(6)}'`), "0");
+      assert.equal(sql(`select count(*) from private.hangout_disables
+        where hangout_id='${hid(6)}'`), "1");
+    } finally { await stop(disableFirst, deniedJoin); }
+
+    // If admission commits first, the size signal commits with it; the
+    // subsequent disable retains both private evidence and membership.
+    const joinFirst = session("task020a_mod_join_first");
+    const disableWaiter = session("task020a_mod_waiter");
+    try {
+      joinFirst.send(`begin; ${auth(25)} select public.join_hangout('${hid(7)}');
+        select 'held';`);
+      await until(() => joinFirst.output().includes("held"));
+      disableWaiter.send(`begin; ${moderation(7)} select 'disabled'; commit;`);
+      await observe("task020a_mod_waiter");
+      assert.equal(sql(`select count(*) from private.large_hangout_signals
+        where hangout_id='${hid(7)}'`), "0", "uncommitted join signal stays private");
+      joinFirst.send("commit;"); joinFirst.child.stdin.end(); disableWaiter.child.stdin.end();
+      const [[joinCode], [disableCode]] = await Promise.all([joinFirst.done, disableWaiter.done]);
+      assert.equal(joinCode, 0, joinFirst.output());
+      assert.equal(disableCode, 0, disableWaiter.output());
+      assert.match(disableWaiter.output(), /disabled/);
+      assert.equal(sql(`select count(*) from public.hangout_participants
+        where hangout_id='${hid(7)}' and state='joined'`), "25");
+      assert.equal(sql(`select count(*) from private.large_hangout_signals
+        where hangout_id='${hid(7)}'`), "1");
+      assert.equal(sql(`select count(*) from private.hangout_disables
+        where hangout_id='${hid(7)}'`), "1");
+    } finally { await stop(joinFirst, disableWaiter); }
+
     for (const isolation of ["repeatable read", "serializable"]) {
       const attempt = session(`task020a_${isolation.replaceAll(" ", "_")}`);
       try {
@@ -169,6 +240,7 @@ test("serialized crossing joins and gate/source revocations leave no partial sig
     } finally { await stop(cancel, reader); }
   } finally {
     sql(`update private.large_hangout_feature_gate set enabled=false;
-      update private.hangout_feature_gate set enabled=false;`);
+      update private.hangout_feature_gate set enabled=false;
+      update private.moderation_feature_gate set enabled=false;`);
   }
 });

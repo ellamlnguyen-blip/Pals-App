@@ -254,11 +254,31 @@ select set_config('request.jwt.claims',
   '{"sub":"52000000-0000-4000-8000-000000000025","role":"authenticated"}',true);
 select lives_ok($$select public.leave_hangout('52000000-0000-4000-8001-000000000002')$$,
   'member may leave');
+select set_config('request.jwt.claims',
+  '{"sub":"52000000-0000-4000-8000-000000000001","role":"authenticated"}',true);
+select is((select is_large from public.get_hangout_large_state(pg_temp.hid(2))),false,
+  'host coarse flag falls below 25 after a joined member leaves');
+select set_config('request.jwt.claims',
+  '{"sub":"52000000-0000-4000-8000-000000000025","role":"authenticated"}',true);
 select lives_ok($$select public.join_hangout('52000000-0000-4000-8001-000000000002')$$,
   'same member may rejoin');
+select set_config('request.jwt.claims',
+  '{"sub":"52000000-0000-4000-8000-000000000001","role":"authenticated"}',true);
+select is((select is_large from public.get_hangout_large_state(pg_temp.hid(2))),true,
+  'host coarse flag rises again after genuine rejoin');
+select lives_ok($$select public.remove_hangout_participant(
+  '52000000-0000-4000-8001-000000000002',
+  '52000000-0000-4000-8000-000000000025')$$,
+  'host removes the rejoined member');
+select is((select is_large from public.get_hangout_large_state(pg_temp.hid(2))),false,
+  'host coarse flag excludes removed membership');
+select set_config('request.jwt.claims',
+  '{"sub":"52000000-0000-4000-8000-000000000025","role":"authenticated"}',true);
+select throws_ok($$select public.join_hangout('52000000-0000-4000-8001-000000000002')$$,
+  '42501',null,'removed member cannot recreate a size crossing');
 reset role;
 select is((select count(*) from private.large_hangout_signals where hangout_id=pg_temp.hid(2)),
-  1::bigint,'leave/rejoin cannot duplicate signal');
+  1::bigint,'leave/rejoin/removal cannot duplicate or erase signal');
 select is((select count(*) from private.large_hangout_signals where hangout_id=pg_temp.hid(1)),
   0::bigint,'no signal for small Hangout');
 
