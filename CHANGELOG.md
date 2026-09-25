@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-25 — TASK-010A co-host backend integrated locally
+
+- Added the accepted disposable-local co-host authority migration and callers on a reviewed task branch. Exact `e1426bd7f368dbee44c6cabd135969ceced78172` was published to and independently verified on `origin/agent/TASK-010A-cohost-backend` after the user's specific approval. Prior-schema upgrade, full SQL 19/1,010, real HTTP, 12 observed races and `pnpm check` passed; local fixtures were cleared and all ten gates left off. The user separately approved exact main integration, and independent remote verification confirms `origin/main` at the same SHA. Stage A is complete for disposable-local scope; TASK-010B UI remains to be built. No hosted operation occurred.
+
 ## 2026-09-25 — TASK-021 migration inventory
 
 TASK-021 now has a repository migration snapshot at `docs/operations/TASK-021-MIGRATION-INVENTORY.md`: 19 committed migrations, ten private gates, and 17 migrations not documented as hosted in the 2026-09-22 integration record. These are historical-document comparisons, not a current hosted pending list. The pinned CLI failed before a read-only listing, so live target state remains unverified. TASK-010A may add another migration; refresh from the exact release tip. No hosted operation occurred.

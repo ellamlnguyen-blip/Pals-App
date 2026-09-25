@@ -5,15 +5,15 @@ Agent: bounded TASK-010A backend agent (GPT-6 Sol, medium requested; dispatch ha
 Branch/worktree: `agent/TASK-010A-cohost-backend` at `/private/tmp/pals-task010a-cohost-backend`
 Starting remote `main`: `559db5bf8d3be55f2d0223f47cdf08a730d2354c`
 Rebased remote `main`: `26e1a3edbaa736f9b57794415b92c3201206339e` (eight docs-only commits, no implementation overlap)
-Tested code commit: local `agent/TASK-010A-cohost-backend` HEAD (exact SHA in coordinator report; earlier reviewed tip `36c05ae00913c68857ae047c653ed9e25799a125`)
-Task branch remote SHA: **unpublished** — automatic approval review rejected `git push` twice
-Integrated `main` SHA: **pending** — security review and publication remain blocked
+Tested code commit: `e1426bd7f368dbee44c6cabd135969ceced78172`
+Task branch remote SHA: `e1426bd7f368dbee44c6cabd135969ceced78172`, independently verified after the user’s exact-branch publication approval
+Integrated `main` SHA: `e1426bd7f368dbee44c6cabd135969ceced78172`, independently remote-verified
 Main status record: coordinator-owned `tasks/NOW.md`, `docs/operations/CURRENT_STATE.md`
-Outstanding: targeted independent exact-tip review of the test-only follow-up, task-branch publication and verified main integration.
+Outstanding: dependent TASK-010B UI dispatch and full TASK-010 completion.
 
 ## Outcome
 
-Added the Accepted ADR-0012 co-host assignment and management boundary in `20260925000200_local_cohost_authority.sql`, with no UI, hosted migration, persistent gate enablement or new product event. The implementation remains local and incomplete until review and publication.
+Added the Accepted ADR-0012 co-host assignment and management boundary in `20260925000200_local_cohost_authority.sql`, with no UI, hosted migration, persistent gate enablement or new product event. The task branch and reviewed Stage A code are integrated on remote main.
 
 `private.hangout_cohosts` uses the existing `(hangout_id,account_id)` participant key and no client grants. A central participant-state trigger clears assignments on leave, removal, block teardown and future reconciliation. Effective authority requires a currently joined, live-ready, same-campus nonhost on a published, undisabled Hangout. Readiness loss suspends authority; restoration while the assignment and joined state remain restores it. Cancellation makes assignments ineffective. The host is immutable and never an assignment target.
 
@@ -52,6 +52,6 @@ Migration: `supabase/migrations/20260925000200_local_cohost_authority.sql`. New 
 
 After the final clean reset following the expanded races, local SQL counted **0** Auth users, **0** Hangouts and **0** profile-photo objects; a dynamic check found no enabled `private.*feature_gate` row. The Supabase CLI stop exited 137 without output, so the six explicitly identified `pals-local` containers were stopped directly with Docker; the task-owned Lima VM then stopped successfully. No `.env`, credentials, gate state or dependency directory was committed.
 
-## Publication blocker
+## Publication and integration
 
-Automatic approval review rejected the exact task-branch `git push -u origin agent/TASK-010A-cohost-backend` action twice. It said publishing private implementation contents to the GitHub remote lacks explicit user authorization for this destination/branch, even after the retry cited the published TASK-010A contract, `AGENTS.md` publishing rule and coordinator dispatch. The rejection forbids indirect workarounds. The branch is committed locally and has no verified remote SHA. Do not mark A complete, dispatch TASK-010B or integrate main until the user authorizes this specific publication and the exact tip receives independent security review.
+Automatic approval review initially rejected the task-branch push for lack of explicit authorization to publish private implementation to that GitHub destination. The user then explicitly approved publishing exact commit `e1426bd7f368dbee44c6cabd135969ceced78172` to `origin/agent/TASK-010A-cohost-backend`; the push succeeded and an independent `git ls-remote` verified that exact remote SHA. Fresh independent security review and targeted final-tip review found no remaining P0/P1/P2 issue. The user separately approved the exact fast-forward of main from `26e1a3edbaa736f9b57794415b92c3201206339e` to `e1426bd7f368dbee44c6cabd135969ceced78172`. Standard non-force push succeeded, and an independent `git ls-remote` verified both remote refs at that SHA. Stage A backend is complete for disposable-local scope; TASK-010B UI may now dispatch under its existing reviewed contract. No hosted operation was authorized or performed.

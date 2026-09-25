@@ -36,3 +36,7 @@ Use `agents/HANDOFF_TEMPLATE.md`: exact migration and RPC signatures, authorizat
 
 ## Dispatch receipt
 Reviewed contract and canonical main were independently remote-verified at `eccc3539aa0f2f70ccdafdfe11e2c97fbd7b0f55` before fresh TASK-010A agent dispatch. Implementation, tests, security review and integration are pending. Stage B remains blocked on reviewed A integration.
+
+## Reviewed task-branch publication — 2026-09-25
+
+The exact local backend tip `e1426bd7f368dbee44c6cabd135969ceced78172` passed independent security and targeted final-tip review, the complete local verification in `agents/handoffs/TASK-010A-BACKEND.md`, and user-authorized task-branch publication. `origin/agent/TASK-010A-cohost-backend` independently resolves to that SHA. The user separately approved exact main fast-forward; independent remote verification resolves `origin/main` to the same SHA. Stage A is complete for disposable-local scope and TASK-010B UI may dispatch under its reviewed contract. No hosted operation or persistent gate enablement occurred.

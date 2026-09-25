@@ -1,5 +1,9 @@
 # NOW
 
+## TASK-010A backend integrated; TASK-010B ready
+
+The Accepted ADR-0012 local co-host backend is independently reviewed and published on `origin/agent/TASK-010A-cohost-backend` at `e1426bd7f368dbee44c6cabd135969ceced78172`. A true prior-schema upgrade, 19-file/1,010-assertion SQL suite, real Auth/PostgREST checks, 12 observed lock waits and full `pnpm check` passed. Disposable fixtures are zero, all ten gates are off and local services are stopped. The user approved exact task-branch publication and separately approved exact main integration, and independent remote verification now resolves both `origin/main` and the task branch to `e1426bd7f368dbee44c6cabd135969ceced78172`. Stage A is complete for disposable-local scope; TASK-010B UI can dispatch under its reviewed contract. Full TASK-010 and TASK-021 remain open. No hosted operation occurred. See `agents/handoffs/TASK-010A-BACKEND.md`.
+
 ## TASK-021 repository migration snapshot
 
 TASK-021 now has a repository migration snapshot at `docs/operations/TASK-021-MIGRATION-INVENTORY.md`: 19 committed migrations, ten private gates, and 17 migrations not documented as hosted in the 2026-09-22 integration record. These are historical-document comparisons, not a current hosted pending list. The pinned CLI failed before a read-only listing, so live target state remains unverified. TASK-010A may add another migration; refresh from the exact release tip. No hosted operation occurred.
