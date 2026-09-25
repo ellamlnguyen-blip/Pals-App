@@ -1,6 +1,6 @@
 # TASK-020 — Large-Hangout basic safeguards
 
-Status: Planning; blocked on explicit ADR-0024 acceptance before implementation
+Status: Planning; ADR-0024 accepted, awaiting reviewed/published stage A contract
 Date: 2026-09-25
 Planning baseline: independently remote-verified canonical main `8c087fa396475f966a3a783307719e4d625f60e2`
 Planning branch: `agent/TASK-020-large-hangout-plan`
@@ -9,7 +9,7 @@ Planning branch: `agent/TASK-020-large-hangout-plan`
 
 Deliver the accepted basic large-Hangout safety primitives in a bounded disposable-local increment: host awareness, voluntary joining control, a private future-review hook and saved-map dampening. Read `AGENTS.md`, this contract, MVP/PRINCIPLES, SECURITY_AND_SAFETY, AUTHORIZATION, DATA_MODEL, LOCATION_AND_MAPS, USER_FLOWS, relevant design docs and ADR-0004/0010/0012/0018/0019/0022/0023/0024.
 
-TASK-019 is complete locally; it authorizes no hosted rollout or persistent gates. ADR-0024 is Proposed: its 25-member threshold, host coarse disclosure, signal schema/retention and discovery order require explicit acceptance. No threshold is an attendance estimate or safety guarantee. Existing Accepted ADR-0019 remains report-only; the hook has no operator consumer and hosted review remains open. TASK-010 co-host work is separate and must not be duplicated. Host-only UI scope reflects the current implementation and does not narrow Accepted ADR-0012's co-host authority; reconcile with any newly integrated TASK-010 work before stage dispatch.
+TASK-019 is complete locally; it authorizes no hosted rollout or persistent gates. ADR-0024 was explicitly accepted on 2026-09-25 for this disposable-local scope: its 25-member threshold, host coarse disclosure, signal schema/retention and discovery order are authoritative for the narrower stage contracts. No threshold is an attendance estimate or safety guarantee. Existing Accepted ADR-0019 remains report-only; the hook has no operator consumer and hosted review remains open. TASK-010 co-host work is separate and must not be duplicated. Host-only UI scope reflects the current implementation and does not narrow Accepted ADR-0012's co-host authority; reconcile with any newly integrated TASK-010 work before stage dispatch.
 
 ## Bounded implementation stages after acceptance
 
@@ -34,4 +34,4 @@ No automatic capacity or closure, waitlist, popularity badge, scale-based sancti
 
 ## Planning review and handoff
 
-Read-only independent scope audit confirmed the accepted primitives and unresolved policy choices against baseline `8c087fa`. Fresh independent planning/security review cleared the corrected proposal with no remaining P0/P1/P2 after explicit preservation of ADR-0012 co-host authority and discovery live revalidation. See `agents/handoffs/TASK-020-CONTRACT.md` for review/publication receipts and remaining work. Implementation still requires explicit ADR acceptance and narrower stage contracts.
+Read-only independent scope audit confirmed the accepted primitives and policy choices against baseline `8c087fa`. Fresh independent planning/security review cleared the corrected proposal with no remaining P0/P1/P2 after explicit preservation of ADR-0012 co-host authority and discovery live revalidation. The user accepted ADR-0024 on 2026-09-25. See `agents/handoffs/TASK-020-CONTRACT.md` for review/publication receipts and remaining work. Implementation still requires narrower reviewed/published stage contracts.

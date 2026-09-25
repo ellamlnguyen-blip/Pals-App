@@ -1,6 +1,6 @@
 # ADR-0024 — Disposable-local large-Hangout safeguards
 
-Status: Proposed — explicit user acceptance required
+Status: Accepted — disposable-local TASK-020 only; explicit user acceptance recorded 2026-09-25
 Date: 2026-09-25
 Task: TASK-020
 
@@ -53,4 +53,4 @@ Acceptance authorizes bounded implementation and temporary enablement of only re
 
 ## Acceptance
 
-Pending. Publishing this proposal or the task contract does not accept it. No runtime implementation may start until explicit acceptance is recorded on remote-verified canonical main and the narrower stage contract is reviewed and published.
+After the independently reviewed proposal and task contract were published on remote-verified canonical main `768931fb947e6be08c7a7b5f5b99fded0fe4f20f`, the coordinator asked the user explicitly whether to accept this ADR for disposable-local implementation and temporary test gates. The user replied “accept” on 2026-09-25. The decision above is accepted unchanged for that bounded scope. The narrower stage A contract still requires independent review and publication before implementation dispatch. This acceptance does not authorize hosted migration, deployment, live students, persistent gate enablement or an operator consumer for the private hook.

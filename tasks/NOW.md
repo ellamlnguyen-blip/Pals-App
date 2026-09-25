@@ -1,10 +1,12 @@
 # NOW
 
-## TASK-020 policy planning — awaiting acceptance
+## TASK-020 policy accepted — stage A contract pending
 
-Planning publication: independent scope and corrected final policy review cleared the documentation with no remaining P0/P1/P2. Planning branch and canonical main were both remotely verified at `0d6fa6686e7f94b11611695c9f1ace94291d4cb1`. ADR-0024 remains Proposed; acceptance and narrower stage contracts are the next gates. No implementation was dispatched.
+ADR-0024 acceptance: On 2026-09-25 the user replied “accept” to the explicit decision request for disposable-local implementation and temporary synthetic QA gates. Record this receipt on canonical main before stage A contract publication/dispatch. No implementation or gate enablement has occurred. The private size signal remains unconsumed; hosted review is a separate prerequisite.
 
-`active/TASK-020-large-hangout-safeguards.md` bounds disposable-local host awareness/control, a private unconsumed review signal and saved-map dampening. Proposed `decisions/ADR-0024-local-large-hangout-safeguards.md` specifies the provisional 25-joined-member threshold, host coarse flag, private signal and viewer-relative ordering before truncation. Explicit acceptance and narrower reviewed/published A/B contracts precede implementation. No migration, UI change, gate enablement or hosted operation has occurred. TASK-010 co-host work and operational moderation of size signals remain separate. Planning started from independently remote-verified main `8c087fa396475f966a3a783307719e4d625f60e2`; review/publication evidence is in `agents/handoffs/TASK-020-CONTRACT.md`.
+Planning publication (before acceptance): independent scope and corrected final policy review cleared the documentation with no remaining P0/P1/P2. Planning branch and canonical main were both remotely verified at `0d6fa6686e7f94b11611695c9f1ace94291d4cb1`. At that milestone ADR-0024 was still Proposed and no implementation had been dispatched.
+
+`active/TASK-020-large-hangout-safeguards.md` bounds disposable-local host awareness/control, a private unconsumed review signal and saved-map dampening. Accepted `decisions/ADR-0024-local-large-hangout-safeguards.md` specifies the provisional 25-joined-member threshold, host coarse flag, private signal and viewer-relative ordering before truncation. Narrower reviewed/published A/B contracts precede implementation. No migration, UI change, gate enablement or hosted operation has occurred. TASK-010 co-host work and operational moderation of size signals remain separate. Planning started from independently remote-verified main `8c087fa396475f966a3a783307719e4d625f60e2`; review/publication evidence is in `agents/handoffs/TASK-020-CONTRACT.md`.
 
 ## TASK-020 planning handoff
 

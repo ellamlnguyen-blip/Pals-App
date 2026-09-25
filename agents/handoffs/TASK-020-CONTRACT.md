@@ -1,7 +1,7 @@
 # TASK-020 planning handoff
 
 Date: 2026-09-25
-Status: Documentation-only planning; explicit ADR-0024 acceptance required before implementation
+Status: Documentation-only planning; ADR-0024 explicitly accepted, narrower stage A contract pending
 Baseline: canonical remote main independently queried at `8c087fa396475f966a3a783307719e4d625f60e2`
 Branch: `agent/TASK-020-large-hangout-plan`
 
@@ -19,6 +19,8 @@ Independent GPT-6 Sol medium planning/security review identified one P2 wording 
 
 ## Publication and next action
 
-The independently reviewed documentation was committed and published on the task branch, then fast-forward integrated into canonical main. Both remote refs were independently queried and matched `0d6fa6686e7f94b11611695c9f1ace94291d4cb1`. This receipt changes documentation only; the proposed policy is not accepted. Request explicit acceptance of ADR-0024. The parent TASK-020 remains incomplete; no successor task may be created on the basis of this planning milestone alone. After acceptance is published, prepare/review A's exact backend contract and lock/projection specification before dispatch; B waits for reviewed A integration.
+The independently reviewed documentation was committed and published on the task branch, then fast-forward integrated into canonical main. Both remote refs were independently queried and matched `0d6fa6686e7f94b11611695c9f1ace94291d4cb1`. At that planning milestone the policy was still proposed. The parent TASK-020 remains incomplete; no successor task may be created on the basis of this planning milestone alone. After acceptance is published, prepare/review A's exact backend contract and lock/projection specification before dispatch; B waits for reviewed A integration.
+
+Acceptance update: the user replied “accept” on 2026-09-25 to the explicit ADR-0024 decision request. The accepted policy authorizes bounded disposable-local implementation and temporary synthetic QA gates after the narrower stage contract is independently reviewed and published. It does not close TASK-020 or authorize hosted work.
 
 Agents used GPT-6 Sol with medium reasoning as requested. Dispatch tools expose no Standard-speed selector; no speed configuration or verification is claimed.

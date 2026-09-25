@@ -17,7 +17,7 @@
 - TASK-017 admin moderation console — complete for disposable-local scope; see `DONE.md` and stage handoffs. Hosted staffing, retention and deployment remain separate.
 - TASK-018 attendance confirmation — complete for bounded disposable-local scope under Accepted ADR-0022; see `DONE.md`, its active contract and A/B/parent handoffs. Hosted work and gate enablement remain separate.
 - TASK-019 PostHog instrumentation — complete for disposable-local scope; see `DONE.md` and `agents/handoffs/TASK-019.md`. Hosted release and five deliberately unwired events need separate reviewed work.
-- TASK-020 large-Hangout basic safeguards — bounded contract drafted; Proposed ADR-0024 requires explicit acceptance before backend/UI stages. See `active/TASK-020-large-hangout-safeguards.md`. No implementation dispatched.
+- TASK-020 large-Hangout basic safeguards — bounded contract drafted; ADR-0024 explicitly accepted for disposable-local work. Reviewed/published backend/UI stage contracts are next. See `active/TASK-020-large-hangout-safeguards.md`. No implementation dispatched.
 - Hosted large-Hangout review prerequisite — TASK-020 proposes only a private unconsumed size signal. Define and accept its operational consumer, audited operator access, retention and response policy before hosted use; ADR-0019 remains report-only. TASK-021 must account for this unresolved dependency.
 - TASK-021 staging launch rehearsal
 - TASK-022 domain migration/cutover

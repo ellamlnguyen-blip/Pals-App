@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-25 — ADR-0024 accepted for local TASK-020
+
+- User explicitly accepted the reviewed 25-member safeguard policy, host warning, private unconsumed signal and saved-map dampening for disposable-local implementation. Narrower stage contracts, review and publication remain before code work; no hosted or runtime change occurred.
+
 ## 2026-09-25 — TASK-020 safeguards proposal
 
 - Defined a bounded disposable-local contract and Proposed ADR-0024 for a provisional 25-member host warning, voluntary joining control, a private unconsumed review hook and saved-map dampening. Explicit acceptance and reviewed stage contracts are required before implementation. No runtime or hosted state changed.
