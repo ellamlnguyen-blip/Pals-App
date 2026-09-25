@@ -1,6 +1,6 @@
 # TASK-018B — Student attendance UI
 
-Status: Reviewed dependent contract; implementation waits for accepted ADR-0022 and reviewed/integrated TASK-018A
+Status: Reviewed dependent contract; implementation waits for reviewed/integrated TASK-018A
 Date: 2026-09-24
 Parent: `tasks/active/TASK-018-attendance-confirmation.md`
 Planning baseline: independently remote-verified main `5e941bfb81bc2a64ad33f0d6557ff656a8d6e0ac`
@@ -11,7 +11,7 @@ Give a student a calm, private way to answer whether they attended their own pas
 
 ## Dependency and scope
 
-Implement only after ADR-0022 is explicitly accepted, TASK-018A is integrated on remote-verified main, and this UI contract is reconciled against A's exact projection/denial behavior. Add a local-only `/attendance` owner route and small entry points from Calendar and the signed-in account menu so active owners whose profile or campus readiness lapsed can still reach it. Keep the five primary destinations unchanged. The account entry appears only when the local attendance surface is available; a gate-off database response remains an unavailable state, never a fake empty list. The page uses `access()` and permits signed-in active states, while signed-out/restricted states show a neutral sign-in/unavailable shell. All responses are no-store.
+Implement only after the accepted ADR-0022 receipt is independently remote-verified on main, TASK-018A is integrated on remote-verified main, and this UI contract is reconciled against A's exact projection/denial behavior. Add a local-only `/attendance` owner route and small entry points from Calendar and the signed-in account menu so active owners whose profile or campus readiness lapsed can still reach it. Keep the five primary destinations unchanged. The account entry appears only when the local attendance surface is available; a gate-off database response remains an unavailable state, never a fake empty list. The page uses `access()` and permits signed-in active states, while signed-out/restricted states show a neutral sign-in/unavailable shell. All responses are no-store.
 
 ## Interaction and privacy contract
 
