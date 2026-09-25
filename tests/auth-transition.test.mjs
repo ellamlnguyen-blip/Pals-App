@@ -39,6 +39,7 @@ function browser(pathname, search = "") {
 test("signout marker only starts a probe; the old account stays masked", () => {
   const events = browser("/hangouts");
   beginAuthTransition("signout");
+  assert.equal(events[0].intent, "signout");
   const pending = new Set();
   assert.equal(authTransitionDecision(pending, events[0]), "mask");
   assert.equal(settleAuthTransition(), false, "button event is not completion");
@@ -79,6 +80,7 @@ test("signout marker only starts a probe; the old account stays masked", () => {
 test("sign-in failure can settle on the same page; callback revalidates other tabs", () => {
   const events = browser("/signin");
   beginAuthTransition("signin");
+  assert.equal(events[0].intent, "signin");
   const pending = new Set();
   assert.equal(authTransitionDecision(pending, events[0]), "mask");
   assert.equal(settleAuthTransition(), false);

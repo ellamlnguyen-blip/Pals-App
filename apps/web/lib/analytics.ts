@@ -23,6 +23,7 @@ export class BrowserAnalytics {
   private status: AnalyticsStatus = "off";
   private account: string | null = null;
   private choice = false;
+  private pendingAuth = new Set<string>();
   private generation = 0;
   private visitId = crypto.randomUUID();
   private controllers = new Set<AbortController>();
@@ -73,14 +74,23 @@ export class BrowserAnalytics {
   private onReturn = () => {
     if (!this.choice) return;
     this.stop("checking");
-    void this.revalidate();
+    if (this.pendingAuth.size === 0) void this.revalidate();
   };
   private onLocalAuth = (event: CustomEvent<AuthTransitionMessage>) =>
     this.onAuth(event.detail);
   private onAuth = (message: AuthTransitionMessage) => {
+    if (message?.phase === "begin") {
+      this.pendingAuth.add(message.token);
+      // A sign-out intent stops every tab before a cookie can become stale.
+      if (message.intent !== "signin") this.clear();
+      else if (this.choice) this.stop("checking");
+      return;
+    }
+    if (message?.phase === "settled" || message?.phase === "cancelled")
+      this.pendingAuth.delete(message.token);
     if (!this.choice) return;
     this.stop("checking");
-    if (message?.phase !== "begin") void this.revalidate();
+    if (this.pendingAuth.size === 0) void this.revalidate();
   };
   private onRevoke = () => this.clear();
   private async access(): Promise<{
@@ -97,7 +107,7 @@ export class BrowserAnalytics {
       : null;
   }
   private async revalidate() {
-    if (!this.choice) return;
+    if (!this.choice || this.pendingAuth.size > 0) return;
     const result = await this.access();
     if (!result) return;
     const { reply, generation } = result;
@@ -116,7 +126,12 @@ export class BrowserAnalytics {
       this.stop("error", true);
       return;
     }
-    if (generation !== this.generation || !this.choice) return;
+    if (
+      generation !== this.generation ||
+      !this.choice ||
+      this.pendingAuth.size > 0
+    )
+      return;
     this.account = reply.actor;
     this.config = { sink: reply.sink, token: reply.token };
     this.update("on");
@@ -125,7 +140,7 @@ export class BrowserAnalytics {
     this.install();
     this.choice = true;
     this.stop("checking", true);
-    await this.revalidate();
+    if (this.pendingAuth.size === 0) await this.revalidate();
   }
   optOut() {
     this.clear();
@@ -146,6 +161,7 @@ export class BrowserAnalytics {
     window.removeEventListener(revokeLocalEvent, this.onRevoke);
     this.authChannel?.close();
     this.revokeChannel?.close();
+    this.pendingAuth.clear();
     this.installed = false;
   }
   async capture(...args: [AnalyticsEvent]): Promise<void> {
@@ -153,6 +169,7 @@ export class BrowserAnalytics {
     if (
       !validCaptureArguments(args) ||
       !this.choice ||
+      this.pendingAuth.size > 0 ||
       this.status !== "on" ||
       !this.account ||
       !this.config
@@ -178,6 +195,7 @@ export class BrowserAnalytics {
       generation !== this.generation ||
       this.status !== "on" ||
       !this.choice ||
+      this.pendingAuth.size > 0 ||
       this.account !== expectedAccount ||
       this.visitId !== expectedVisit ||
       !localAnalyticsConfig("local", reply.sink, reply.token)

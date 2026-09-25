@@ -1,7 +1,8 @@
 "use client";
 
 export type AuthTransitionMessage =
-  | { phase: "begin" | "settled" | "cancelled"; token: string }
+  | { phase: "begin"; token: string; intent?: "signin" | "signout" }
+  | { phase: "settled" | "cancelled"; token: string }
   | { phase: "revalidate" };
 
 export const AUTH_TRANSITION_CHANNEL = "pals-auth-transition";
@@ -20,7 +21,7 @@ function publish(message: AuthTransitionMessage) {
 export function beginAuthTransition(intent: "signin" | "signout") {
   const token = crypto.randomUUID();
   sessionStorage.setItem(pendingKey, JSON.stringify({ token, intent }));
-  publish({ phase: "begin", token });
+  publish({ phase: "begin", token, intent });
 }
 
 export function settleAuthTransition(force = false) {

@@ -134,10 +134,14 @@ test("browser adapter stays off, rechecks identity, and revokes across tabs", as
     await first.optIn();
     window.dispatchEvent(
       new CustomEvent("pals-auth-transition-local", {
-        detail: { phase: "begin", token: "transition-one" },
+        detail: { phase: "begin", token: "transition-one", intent: "signin" },
       }),
     );
     assert.equal(first.getSnapshot(), "checking");
+    const accessBeforePendingFocus = accessCount;
+    window.dispatchEvent(new Event("focus"));
+    window.dispatchEvent(new Event("pageshow"));
+    assert.equal(accessCount, accessBeforePendingFocus);
     await first.capture("hangout_created");
     assert.equal(captures.length, sentBeforeDenial);
     window.dispatchEvent(
@@ -180,21 +184,9 @@ test("stale access, transport failure and reload never backfill", async () => {
   const tab = new BrowserAnalytics();
   try {
     const pending = tab.optIn();
+    assert.equal(tab.getSnapshot(), "checking");
     tab.optOut();
-    releaseAccess({
-      ok: true,
-      json: async () => ({ kind: "ok", actor: accountA, sink, token }),
-    });
-    await pending;
     assert.equal(tab.getSnapshot(), "off");
-    await tab.capture("hangout_created");
-    assert.equal(sent, 0);
-    const reloadedTab = new BrowserAnalytics();
-    assert.equal(reloadedTab.getSnapshot(), "off");
-    await reloadedTab.capture("hangout_created");
-    assert.equal(sent, 0);
-    reloadedTab.dispose();
-
     globalThis.fetch = async (url) => {
       if (url === "/api/analytics/access")
         return {
@@ -205,6 +197,28 @@ test("stale access, transport failure and reload never backfill", async () => {
       throw Error("blocked sink");
     };
     await tab.optIn();
+    assert.equal(tab.getSnapshot(), "on");
+    releaseAccess({
+      ok: true,
+      json: async () => ({ kind: "ok", actor: accountA, sink, token }),
+    });
+    await pending;
+    assert.equal(
+      tab.getSnapshot(),
+      "on",
+      "stale access cannot replace the new check",
+    );
+    tab.optOut();
+    assert.equal(tab.getSnapshot(), "off");
+    await tab.capture("hangout_created");
+    assert.equal(sent, 0);
+    const reloadedTab = new BrowserAnalytics();
+    assert.equal(reloadedTab.getSnapshot(), "off");
+    await reloadedTab.capture("hangout_created");
+    assert.equal(sent, 0);
+    reloadedTab.dispose();
+
+    await tab.optIn();
     await tab.capture("hangout_created");
     assert.equal(sent, 1);
     assert.equal(tab.getSnapshot(), "on");
@@ -212,6 +226,59 @@ test("stale access, transport failure and reload never backfill", async () => {
     assert.equal(sent, 1);
   } finally {
     tab.dispose();
+    globalThis.fetch = oldFetch;
+    globalThis.window = oldWindow;
+    await cleanup();
+  }
+});
+
+test("sign-out begin clears consent across tabs and focus cannot resume an old cookie", async () => {
+  const oldWindow = globalThis.window;
+  const oldFetch = globalThis.fetch;
+  globalThis.window = new EventTarget();
+  let accessCount = 0;
+  let captures = 0;
+  globalThis.fetch = async (url) => {
+    if (url === "/api/analytics/access") {
+      accessCount++;
+      return {
+        ok: true,
+        json: async () => ({ kind: "ok", actor: accountA, sink, token }),
+      };
+    }
+    captures++;
+    return { ok: true };
+  };
+  const { BrowserAnalytics, cleanup } = await loadBrowserAnalytics();
+  const first = new BrowserAnalytics();
+  const second = new BrowserAnalytics();
+  const authChannel = new BroadcastChannel("pals-auth-transition");
+  try {
+    await first.optIn();
+    await second.optIn();
+    authChannel.postMessage({
+      phase: "begin",
+      token: "signout-token",
+      intent: "signout",
+    });
+    await new Promise((resolve) => setTimeout(resolve, 5));
+    assert.equal(first.getSnapshot(), "off");
+    assert.equal(second.getSnapshot(), "off");
+    const beforeFocus = accessCount;
+    window.dispatchEvent(new Event("focus"));
+    window.dispatchEvent(new Event("pageshow"));
+    await first.capture("hangout_created");
+    await second.capture("hangout_created");
+    assert.equal(accessCount, beforeFocus);
+    assert.equal(captures, 0);
+    authChannel.postMessage({ phase: "cancelled", token: "signout-token" });
+    await new Promise((resolve) => setTimeout(resolve, 5));
+    assert.equal(first.getSnapshot(), "off");
+    assert.equal(second.getSnapshot(), "off");
+  } finally {
+    authChannel.close();
+    first.dispose();
+    second.dispose();
     globalThis.fetch = oldFetch;
     globalThis.window = oldWindow;
     await cleanup();
