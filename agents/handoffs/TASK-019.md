@@ -1,6 +1,6 @@
 # TASK-019 handoff — local analytics implementation pending final flow acceptance
 
-Status: active. Reviewed code is integrated on the coordinator branch; authenticated event-to-sink verification remains open under the standing gates-off instruction.
+Status: active. Reviewed code is on independently remote-verified canonical main `51106b4195748076875b611dc7042c89675a360d`; authenticated event-to-sink verification remains open under the standing gates-off instruction.
 
 ## Decision and scope
 

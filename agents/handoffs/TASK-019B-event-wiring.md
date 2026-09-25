@@ -32,7 +32,7 @@ Status: exact-tip reviewed and integrated on coordinator branch; parent TASK-019
 
 ## Remaining gates
 
-Coordinator independently verified remote task tip `3ff4737e9eaa495e58f7c41659c9f2ff91fc20a6`; fresh exact-tip privacy/security/product review found no remaining P0/P1/P2 after removing the unproven `friend_request_sent` callsite. The final correction only removed a source-text test and updated this handoff. The reviewed branch was merged into the coordinator branch. Canonical main publication and verification remain before this receipt closes.
+Coordinator independently verified remote task tip `3ff4737e9eaa495e58f7c41659c9f2ff91fc20a6`; fresh exact-tip privacy/security/product review found no remaining P0/P1/P2 after removing the unproven `friend_request_sent` callsite. The final correction only removed a source-text test and updated this handoff. The reviewed branch is on independently remote-verified canonical main `51106b4195748076875b611dc7042c89675a360d`. Authenticated event-flow acceptance remains open.
 
 
 The coordinator owns fresh exact remote-tip privacy/security review, the unresolved authenticated desktop/phone sink-flow acceptance gate, shared NOW/CURRENT_STATE/CHANGELOG status, integration to main, remote SHA verification and final parent TASK-019 disposition. Hosted project controls and deployment remain separate. If full counts for the four deferred non-cancel events are required, review a new contract for commit evidence before changing server response shapes.
