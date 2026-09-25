@@ -1,6 +1,6 @@
 # TASK-018 — Private attendance confirmation
 
-Status: Active; ADR-0022 Accepted, Stages A/B reviewed, final canonical publication receipt pending
+Status: Complete for bounded disposable-local scope; ADR-0022 Accepted, Stages A/B reviewed and remote-verified
 Date: 2026-09-24
 Planning branch: `agent/TASK-018-planning` from independently remote-verified `origin/main` `be0344ed8b1f9dbef49a6246575ca8d8dd3bccc6`
 

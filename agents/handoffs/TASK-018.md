@@ -1,6 +1,6 @@
 # TASK-018 — Private attendance confirmation handoff
 
-Status: Reviewed disposable-local backend and UI merged in coordinator integration branch; canonical publication and remote SHA receipts pending.
+Status: Complete for the bounded disposable-local scope after reviewed A/B stages and verified canonical main integration.
 Policy: Accepted ADR-0022 on 2026-09-24.
 Parent contract: `tasks/active/TASK-018-attendance-confirmation.md`.
 
@@ -20,4 +20,4 @@ The local pgTAP wrapper could not mount the isolated backend checkout, so Stage 
 
 ## Publication receipt
 
-Stage B task branch and canonical main integration SHAs: pending coordinator remote verification. TASK-018 remains active until both are recorded and shared status is published.
+Stage B task branch `agent/TASK-018B-attendance-ui` and remote SHA `2c589da0d323ca2feeda6d9ce0bf11ace9b2324d` were independently verified. The reviewed parent implementation and this handoff reached independently verified canonical main `b6d0d054dab901574a6cd06b07372fae3f5013ad`; both remote SHAs were checked together. The final completion receipt records this integration and shared task status on main. No hosted or default-on release is implied.
