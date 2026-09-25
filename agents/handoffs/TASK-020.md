@@ -19,4 +19,4 @@ Disposable local reset left zero Auth users, Hangouts and Storage objects, all t
 
 The private size signal has no consumer. Before hosted use, define and accept its operational consumer, audited access, retention and response policy; staging and deployment remain separately bounded in TASK-021. TASK-010 co-host UI/authority work remains separate, and this implementation does not change Accepted ADR-0012.
 
-Canonical main integration and independently verified remote SHA: recorded in the final publication receipt below.
+Publication receipt: the reviewed Stage B task branch is remote-verified at `65f0356c8cce888d769adcadcb41d050d78f40da`. The TASK-020 integration branch and canonical `main` were independently remote-verified at `2a4f104a11a163b50e32952cb6636d9525cfdc79` after the reviewed merge and completion record. This receipt is documentation only; its follow-up commit advances main beyond that integration SHA.
