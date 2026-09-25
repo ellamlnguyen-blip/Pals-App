@@ -36,9 +36,9 @@ D. Independent evidence review and go/no-go receipt. Resolve failures in separat
 
 ## Acceptance criteria
 Planning milestone:
-- [ ] Source-backed blocker matrix distinguishes implemented locally, accepted-but-unimplemented, hosted-unverified and undecided policy.
-- [ ] Rehearsal matrix includes identity, core loop, revocation/privacy, operator controls, failure recovery, responsive states, analytics boundaries and cleanup evidence.
-- [ ] Independent planning/security review resolved; task branch and canonical integration published and remotely verified; status/handoff synchronized.
+- [x] Source-backed blocker matrix distinguishes implemented locally, accepted-but-unimplemented, hosted-unverified and undecided policy.
+- [x] Rehearsal matrix includes identity, core loop, revocation/privacy, operator controls, failure recovery, responsive states, analytics boundaries and cleanup evidence.
+- [x] Independent planning/security review resolved; task branch and canonical integration published and remotely verified; status/handoff synchronized.
 Full TASK-021 completion (not satisfied by planning):
 - [ ] Required product/policy dependencies resolved by reviewed implementation or explicit accepted scope changes.
 - [ ] Exact hosted target, operations and temporary test/gate plan authorized in a published narrower contract.

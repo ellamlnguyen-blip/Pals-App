@@ -2,7 +2,7 @@
 Date: 2026-09-25
 Branch/worktree: `agent/TASK-021-staging-rehearsal`, `/Users/ellanguyen/.codex/worktrees/9e5c/Pals App`
 Baseline: `737ca32f1eefd4b347940e367b3923b47c2e0884`, verified with remote `refs/heads/main` before branching. App-created worktree initially held `53de3ad`; switched to the requested verified baseline. The unrelated local main ref is stale and is not used as release evidence.
-Task/main publication: pending; the receipt section below will record remote verification after reviewed integration.
+Task planning branch remote-verified at `dc9999068aeb29fa6bb8cd38fc1b30dcaac369a2`; reviewed canonical main integration remote-verified at `b72fef8668272b0161a3aad2ec2c47eeeadf14fc`. Integration branch: `agent/TASK-021-main-integration`.
 
 ## Outcome
 Defined a bounded TASK-021 contract and source-backed readiness matrix/runbook. TASK-021 remains planning-only and hosted execution is blocked. No staging rehearsal or launch pass is claimed. Primary dependencies: accepted-but-unimplemented TASK-010, TASK-003 deployed HTTPS/controlled real UNC mailbox, hosted moderation/retention/photo-URL decisions, and an accepted operational consumer for TASK-020's private size signal. Additional MVP access/friend-context/profile/measurement gaps are explicit, not silently waived.
@@ -24,3 +24,6 @@ Resume accepted TASK-010 through reconciled A/B contracts; prepare hosted safety
 
 ## Documentation updated
 TASK-021 contract, `docs/operations/TASK-021-STAGING-READINESS.md`, NOW, BACKLOG, CURRENT_STATE and CHANGELOG. Final publication receipts follow without changing the above boundary.
+
+## Publication receipt
+After final independent review cleared the exact documentation scope, `git ls-remote origin` independently returned the task/main SHAs above. All 12 checked contract/evidence paths exist and `git diff --check` passed. This receipt advances main beyond the reviewed integration; it adds no execution authorization. Planning milestone complete; full TASK-021 remains incomplete and hosted execution blocked.
