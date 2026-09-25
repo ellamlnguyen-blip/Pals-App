@@ -1,7 +1,7 @@
 """Disposable local two-session attendance lock checks (requires psycopg 3).
 
 Run only against the local Supabase database; the script verifies its loopback
-endpoint and always removes fixtures. A fresh local reset remains the final gate.
+endpoint. Immutable moderation evidence requires a fresh local reset afterward.
 """
 
 import concurrent.futures
@@ -54,23 +54,33 @@ def setup():
         c.execute("update private.moderation_feature_gate set enabled=true")
 
 
-def new_hangout(with_report=False):
+def new_hangout(report_kind=None, opening_delay_seconds=None):
     ident = uuid.uuid4()
     with root() as c:
         with c.transaction():
-            c.execute("""insert into public.hangouts(id,university_id,host_id,title,
-              starts_at,ends_at,public_place,public_latitude,public_longitude)
-              values(%s,%s,%s,'Race fixture',clock_timestamp()-interval '3 hours',
-              clock_timestamp()-interval '1 hour','Area',35,-79)""", (ident, CAMPUS, HOST))
+            if opening_delay_seconds is None:
+                c.execute("""insert into public.hangouts(id,university_id,host_id,title,
+                  starts_at,ends_at,public_place,public_latitude,public_longitude)
+                  values(%s,%s,%s,'Race fixture',clock_timestamp()-interval '3 hours',
+                  clock_timestamp()-interval '1 hour','Area',35,-79)""", (ident, CAMPUS, HOST))
+            else:
+                c.execute("""insert into public.hangouts(id,university_id,host_id,title,
+                  starts_at,ends_at,public_place,public_latitude,public_longitude)
+                  values(%s,%s,%s,'Race fixture',clock_timestamp()-interval '1 hour',
+                  clock_timestamp()+make_interval(secs=>%s),'Area',35,-79)""",
+                          (ident, CAMPUS, HOST, opening_delay_seconds))
             c.execute("""insert into public.hangout_participants(hangout_id,account_id,state)
               values(%s,%s,'joined'),(%s,%s,'joined')""", (ident, HOST, ident, OWNER))
-            if with_report:
+            if report_kind:
                 report = uuid.uuid4()
                 REPORTS[ident] = report
                 c.execute("""insert into private.safety_reports(id,reporter_id,target_type,target_id,
                   category,provenance_kind,provenance_ref_id)
-                  values(%s,%s,'hangout',%s,'harassment','retained_hangout',%s)""",
-                          (report, OWNER, ident, ident))
+                  values(%s,%s,%s,%s,'harassment',%s,%s)""",
+                          (report, OWNER if report_kind == "hangout" else HOST,
+                           report_kind, ident if report_kind == "hangout" else OWNER,
+                           "retained_hangout" if report_kind == "hangout" else "hangout_overlap",
+                           ident))
                 c.execute("""insert into private.moderation_cases(report_id,state,revision)
                   values(%s,'in_review',1)""", (report,))
     return ident
@@ -87,12 +97,21 @@ def change(conn, kind, hangout):
     elif kind == "source gate":
         conn.execute("update private.hangout_feature_gate set enabled=false")
     elif kind == "sanction":
-        conn.execute("update public.accounts set status='suspended' where id=%s", (OWNER,))
+        conn.execute("set local role authenticated")
+        conn.execute("select set_config('request.jwt.claims',%s,true)",
+                     (json.dumps({"sub": str(MODERATOR), "role": "authenticated"}),))
+        conn.execute("""select * from public.apply_account_moderation_action(
+          %s,%s,1,'suspend','Race fixture')""", (REPORTS[hangout], uuid.uuid4()))
     elif kind == "leave":
         conn.execute("set local role authenticated")
         conn.execute("select set_config('request.jwt.claims',%s,true)",
                      (json.dumps({"sub": str(OWNER), "role": "authenticated"}),))
         conn.execute("select public.leave_hangout(%s)", (hangout,))
+    elif kind == "remove":
+        conn.execute("set local role authenticated")
+        conn.execute("select set_config('request.jwt.claims',%s,true)",
+                     (json.dumps({"sub": str(HOST), "role": "authenticated"}),))
+        conn.execute("select public.remove_hangout_participant(%s,%s)", (hangout, OWNER))
     elif kind == "cancel":
         conn.execute("set local role authenticated")
         conn.execute("select set_config('request.jwt.claims',%s,true)",
@@ -133,7 +152,8 @@ def restore(kind):
 
 
 def race(kind, revocation_first):
-    hangout = new_hangout(with_report=kind == "disable")
+    hangout = new_hangout(report_kind="hangout" if kind == "disable"
+                          else "user" if kind == "sanction" else None)
     denied = kind in ("attendance gate", "source gate", "sanction", "disable")
     a, b = student(), psycopg.connect(DSN)
     try:
@@ -155,6 +175,9 @@ def race(kind, revocation_first):
                         a.rollback()
                     else:
                         raise AssertionError(f"{kind}: answered after committed revocation")
+                    with root() as verify:
+                        assert verify.execute("""select count(*) from private.attendance_answers
+                          where hangout_id=%s and account_id=%s""", (hangout, OWNER)).fetchone()[0] == 0
                 else:
                     assert pending.result(timeout=5) == 1
                     a.commit()
@@ -171,6 +194,10 @@ def race(kind, revocation_first):
                 with root() as c:
                     assert c.execute("""select count(*) from private.attendance_answers
                       where hangout_id=%s and account_id=%s""", (hangout, OWNER)).fetchone()[0] == 1
+                if kind in ("attendance gate", "sanction", "disable"):
+                    with student() as probe:
+                        assert probe.execute("select * from public.get_own_attendance(%s)",
+                                             (hangout,)).fetchall() == []
             print(f"PASS {kind}: {'revocation' if revocation_first else 'answer'} committed first")
     finally:
         a.close()
@@ -222,6 +249,56 @@ def frozen_schedule_race(answer_first):
         b.close()
 
 
+def schedule_crosses_opening_while_parent_locked():
+    hangout = new_hangout(opening_delay_seconds=2)
+    blocker, host_edit = psycopg.connect(DSN), psycopg.connect(DSN)
+    try:
+        blocker.execute("select id from public.hangouts where id=%s for update", (hangout,))
+        host_pid = host_edit.execute("select pg_backend_pid()").fetchone()[0]
+        host_edit.commit()
+
+        def edit():
+            host_edit.execute("set local role authenticated")
+            host_edit.execute("select set_config('request.jwt.claims',%s,true)",
+                              (json.dumps({"sub": str(HOST), "role": "authenticated"}),))
+            starts, ends = host_edit.execute("select starts_at,ends_at from public.hangouts where id=%s",
+                                            (hangout,)).fetchone()
+            host_edit.execute("""select public.edit_hangout(%s,1,'Race fixture',%s,'Area',35,-79,
+              p_ends_at=>%s)""", (hangout, starts, ends + datetime.timedelta(hours=1)))
+
+        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as pool:
+            pending = pool.submit(edit)
+            with root() as observer:
+                for _ in range(20):
+                    wait_type = observer.execute("""select wait_event_type from pg_stat_activity
+                      where pid=%s""", (host_pid,)).fetchone()[0]
+                    if wait_type == "Lock":
+                        break
+                    time.sleep(0.05)
+                assert wait_type == "Lock" and not pending.done(), "edit did not block on parent"
+                assert observer.execute("""select clock_timestamp()<ends_at from public.hangouts
+                  where id=%s""", (hangout,)).fetchone()[0], "edit did not begin before opening"
+                while observer.execute("""select clock_timestamp()<ends_at from public.hangouts
+                  where id=%s""", (hangout,)).fetchone()[0]:
+                    time.sleep(0.05)
+            blocker.commit()
+            try:
+                pending.result(timeout=5)
+            except psycopg.Error as error:
+                assert error.sqlstate == "23514", error.sqlstate
+                host_edit.rollback()
+            else:
+                raise AssertionError("host moved schedule after opening while waiting on parent")
+        with student() as owner:
+            assert answer(owner, hangout) == 1
+        with root() as c:
+            assert c.execute("select revision from public.hangouts where id=%s", (hangout,)).fetchone()[0] == 1
+        print("PASS host time edit began before opening, waited on parent, and failed after opening")
+    finally:
+        blocker.close()
+        host_edit.close()
+
+
 def cleanup():
     with root() as c:
         c.execute("update private.attendance_feature_gate set enabled=false")
@@ -239,11 +316,12 @@ def cleanup():
 if __name__ == "__main__":
     setup()
     try:
-        for case in ("attendance gate", "source gate", "sanction", "leave", "cancel",
+        for case in ("attendance gate", "source gate", "sanction", "leave", "remove", "cancel",
                      "block", "host edit", "disable"):
             for first in (True, False):
                 race(case, first)
         for first in (True, False):
             frozen_schedule_race(first)
+        schedule_crosses_opening_while_parent_locked()
     finally:
         cleanup()

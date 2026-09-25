@@ -141,6 +141,46 @@ reset role;
 select throws_ok($$update public.hangouts set starts_at=starts_at+interval '1 minute',revision=revision+1 where id='53800000-0000-4000-8001-000000000001'$$,'23514',null,'privileged direct schedule update frozen');
 update public.hangouts set title='Allowed other edit',revision=revision+1 where id='53800000-0000-4000-8001-000000000001';
 select is((select title from public.hangouts where id='53800000-0000-4000-8001-000000000001'),'Allowed other edit','non-schedule edit preserved');
+-- The new opening instant is set to the database clock by a permitted edit.
+-- Each subsequent RPC runs after that stored instant, with no sleep or wall
+-- clock assumption. The old opening is safely in the future at edit time.
+update private.hangout_feature_gate set enabled=true;
+insert into public.hangouts(id,university_id,host_id,title,starts_at,ends_at,
+ public_place,public_latitude,public_longitude) values
+ ('53800000-0000-4000-8001-000000000007','00000000-0000-4000-8000-000000000001','53800000-0000-4000-8000-000000000001','Exact end',clock_timestamp()-interval '1 hour',clock_timestamp()+interval '10 minutes','Area',35,-79),
+ ('53800000-0000-4000-8001-000000000008','00000000-0000-4000-8000-000000000001','53800000-0000-4000-8000-000000000001','Exact fallback',clock_timestamp()-interval '1 hour',null,'Area',35,-79),
+ ('53800000-0000-4000-8001-000000000009','00000000-0000-4000-8000-000000000001','53800000-0000-4000-8000-000000000001','Before close',clock_timestamp()-interval '31 days',clock_timestamp()-interval '30 days'+interval '10 minutes','Area',35,-79),
+ ('53800000-0000-4000-8001-000000000010','00000000-0000-4000-8000-000000000001','53800000-0000-4000-8000-000000000001','At close',clock_timestamp()-interval '31 days',clock_timestamp()-interval '30 days','Area',35,-79);
+insert into public.hangout_participants(hangout_id,account_id,state)
+ select h.id,x.account_id,'joined' from public.hangouts h
+ cross join (values ('53800000-0000-4000-8000-000000000001'::uuid),
+                    ('53800000-0000-4000-8000-000000000002'::uuid)) x(account_id)
+ where h.id in ('53800000-0000-4000-8001-000000000007','53800000-0000-4000-8001-000000000008',
+                '53800000-0000-4000-8001-000000000009','53800000-0000-4000-8001-000000000010');
+set local role authenticated;
+select set_config('request.jwt.claims','{"sub":"53800000-0000-4000-8000-000000000002","role":"authenticated"}',true);
+select throws_ok($$select * from public.answer_own_attendance('53800000-0000-4000-8001-000000000007',true,0)$$,'42501',null,'explicit end before opening denies');
+select throws_ok($$select * from public.answer_own_attendance('53800000-0000-4000-8001-000000000008',true,0)$$,'42501',null,'two-hour fallback before opening denies');
+reset role;
+update public.hangouts set ends_at=clock_timestamp(),revision=revision+1
+ where id='53800000-0000-4000-8001-000000000007';
+update public.hangouts set starts_at=clock_timestamp()-interval '2 hours',revision=revision+1
+ where id='53800000-0000-4000-8001-000000000008';
+set local role authenticated;
+select set_config('request.jwt.claims','{"sub":"53800000-0000-4000-8000-000000000002","role":"authenticated"}',true);
+select is((select revision from public.answer_own_attendance('53800000-0000-4000-8001-000000000007',true,0)),1::bigint,'explicit end opens at its stored instant');
+select is((select revision from public.answer_own_attendance('53800000-0000-4000-8001-000000000008',true,0)),1::bigint,'start plus two hours opens at its stored instant');
+select is((select revision from public.answer_own_attendance('53800000-0000-4000-8001-000000000009',true,0)),1::bigint,'correction window remains open before 30-day close');
+reset role;
+insert into private.attendance_answers(hangout_id,account_id,attended,revision,answered_at)
+ select id,'53800000-0000-4000-8000-000000000002',true,1,ends_at+interval '1 day'
+ from public.hangouts where id='53800000-0000-4000-8001-000000000010';
+set local role authenticated;
+select set_config('request.jwt.claims','{"sub":"53800000-0000-4000-8000-000000000002","role":"authenticated"}',true);
+select throws_ok($$select * from public.answer_own_attendance('53800000-0000-4000-8001-000000000010',true,1)$$,'42501',null,'identical retry at 30-day close still denies');
+select is((select revision from public.get_own_attendance('53800000-0000-4000-8001-000000000010')),1::bigint,'exact own-read recovers saved answer after close');
+select is((select within_window from public.list_own_attendance() where hangout_id='53800000-0000-4000-8001-000000000010'),false,'list marks answer closed at 30-day boundary');
+reset role;
 insert into private.safety_reports(id,reporter_id,target_type,target_id,category,provenance_kind,provenance_ref_id)
  values('53800000-0000-4000-8002-000000000001','53800000-0000-4000-8000-000000000002',
  'hangout','53800000-0000-4000-8001-000000000001','harassment',
