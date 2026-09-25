@@ -8,6 +8,8 @@ Never expose private exact location to unauthorized users.
 ## Large Hangouts
 MVP: threshold awareness, host warning, close-joining control, moderation review hooks, and ranking dampening. Do not build complex mass-event tooling before usage proves it.
 
+Accepted ADR-0024 and TASK-020A implement the disposable-local backend primitives: a provisional 25-current-joined threshold (including host), a host-only coarse size flag, one private unconsumed observation signal and saved-map ordering by viewer-visible roster size before the 100-result display limit. Close joining remains voluntary under existing authority. The signal is not a safety allegation, sanction, operator queue or staffed review. TASK-020B will add the student warning/control; hosted use still requires an accepted operational review consumer, retention and response policy.
+
 Commercial promotion is not allowed in MVP.
 
 Eligibility restrictions must use deliberately provided profile attributes and be transparent.

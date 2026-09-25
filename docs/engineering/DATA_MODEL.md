@@ -50,6 +50,10 @@ Report targets user/hangout (and later messages if needed). Moderation actions a
 ## Organization
 Future entity only; not MVP.
 
+## TASK-020A disposable-local large-Hangout safeguards
+
+The private safeguard gate defaults false. A private immutable `(hangout_id, policy_version)` observation signal stores only the threshold value and server observation time after a genuine authorized join reaches 25 currently joined membership rows, including host. It is not an attendance record or report, has no student/operator reader, and remains after cancellation or disable until disposable reset. The host size RPC exposes only a current coarse boolean. Saved-map discovery uses a separate viewer-visible roster count only for ordering before its 101-row probe; it returns no size class or count. See Accepted ADR-0024.
+
 ## TASK-002 implementation
 
 Migration `20260921000100_identity_foundation.sql` implements universities, accounts referencing `auth.users`, current university memberships, editable profile drafts and platform roles. Membership is separate from the account and profile, with one current campus per account. `verified_at` and `verification_email` are assigned together only by trusted database operations. The latter binds verification to the current Auth email; email changes invalidate the helper check. Campus transfer/verification endpoints remain unimplemented.

@@ -1,6 +1,8 @@
 # NOW
 
-## TASK-020 policy accepted — stage A contract pending
+## TASK-020 — Stage A reviewed; Stage B pending
+
+Stage A reviewed integration: task tip `06cae8d1472170eec99641d46181e3fa9b4d882c` passed fresh exact-tip security review after missing host boundary and moderation-race evidence was added. All 64 focused SQL assertions, 17 fixtures, real Auth/PostgREST/notification HTTP, observed-lock checks, upgrade, lint and workspace checks passed within the documented Lima wrapper limitation. Zero fixtures, ten gates false, services stopped. Reviewed backend/handoff are merged into the coordinator branch; canonical publication/remote receipt remains. Stage B contract is a dependent draft awaiting A remote integration and exact RPC reconciliation.
 
 Stage A response amendment: dependent B planning required an explicit non-sensitive ranking mode for truthful gate-on/off copy. The reviewed A contract now returns it with the 101 public rows and opaque gate epoch, and compares all three across the two reads. Independent re-review found no remaining P0/P1/P2. Publish the amendment on canonical main before A handoff; implementation remains isolated on its task branch.
 

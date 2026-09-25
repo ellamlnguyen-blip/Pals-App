@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-25 — TASK-020A local backend
+
+- Added a default-off large-Hangout gate, host coarse size reader, private append-once observation and viewer-safe saved-map ordering RPC. Exact-tip review cleared after focused threshold/revocation and moderation-race tests. Local fixture cleanup left all ten gates false; student UI and hosted review remain separate.
+
 ## 2026-09-25 — TASK-020A backend contract
 
 - Reviewed the narrow local backend contract for host size awareness, a private signal and viewer-safe saved discovery. The contract specifies join/gate lock order and preserves the existing two-read discovery revalidation. Runtime implementation remains pending.
