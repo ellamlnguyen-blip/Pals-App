@@ -3,10 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { SafetyActions } from "../safety/safety-client";
 import { analytics } from "../../lib/analytics";
-import {
-  friendAcceptanceConfirmed,
-  newFriendRequestConfirmed,
-} from "../../lib/analytics-evidence";
+import { friendAcceptanceConfirmed } from "../../lib/analytics-evidence";
 import {
   changeFriendship,
   createFriendRequest,
@@ -100,8 +97,6 @@ export function FriendControl({
         setRequestKey(key);
         const next = await createFriendRequest(peerId, key);
         apply(next);
-        if (alive.current && newFriendRequestConfirmed(!!requestKey, next))
-          void analytics.capture("friend_request_sent");
       } else if (result.relationship) {
         const next = await changeFriendship(
           peerId,

@@ -1,28 +1,17 @@
 import assert from "node:assert/strict";
+import { readFileSync } from "node:fs";
 import { test } from "node:test";
 import {
   firstRequestConfirmed,
   friendAcceptanceConfirmed,
-  newFriendRequestConfirmed,
 } from "../apps/web/lib/analytics-evidence.ts";
 
-test("a first friend request requires a newly confirmed outgoing pending state", () => {
-  const committed = {
-    state: "known",
-    relationship: { state: "pending", direction: "outgoing" },
-  };
-  assert.equal(newFriendRequestConfirmed(false, committed), true);
-  assert.equal(newFriendRequestConfirmed(true, committed), false);
-  for (const result of [
-    { state: "unknown", relationship: committed.relationship },
-    { state: "stale", relationship: committed.relationship },
-    { state: "known", relationship: null },
-    {
-      state: "known",
-      relationship: { state: "pending", direction: "incoming" },
-    },
-  ])
-    assert.equal(newFriendRequestConfirmed(false, result), false);
+test("friend request state projection cannot emit a new-commit event", () => {
+  const control = readFileSync(
+    new URL("../apps/web/app/people/friend-control.tsx", import.meta.url),
+    "utf8",
+  );
+  assert.doesNotMatch(control, /analytics\.capture\("friend_request_sent"\)/);
 });
 
 test("acceptance requires the committed transition result", () => {
