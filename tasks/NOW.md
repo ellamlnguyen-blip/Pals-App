@@ -1,6 +1,8 @@
 # NOW
 
-## TASK-020 — Stage A reviewed; Stage B pending
+## TASK-020 — local implementation complete
+
+Reviewed Stage A backend `06cae8d1472170eec99641d46181e3fa9b4d882c` and Stage B UI `65f0356c8cce888d769adcadcb41d050d78f40da` are integrated for disposable-local use under Accepted ADR-0024. Independent exact-tip security/design reviews found no remaining P0/P1/P2. Backend authorization, lock/race, SQL and real HTTP checks passed; the authenticated production-build UI covered 24/25 host awareness, nonhost privacy, joining close/reopen/stale/denied behavior, over-100 discovery ordering, gate-off behavior, phone layout and keyboard focus. The local reset left zero fixtures, ten gates false and owned services stopped. Stage handoffs and `agents/handoffs/TASK-020.md` record the evidence and limits. Hosted operation remains blocked on an accepted private-signal consumer and operational policy; TASK-021 staging planning is next. Canonical publication and remote receipt are recorded in the parent handoff.
 
 Stage B contract: exact integrated A RPCs and current host authority were reconciled in `active/TASK-020B-large-hangout-student-ui.md` and `docs/ux/TASK-020B-INTERACTION-PLAN.md`. Fresh independent design/security review found no remaining P0/P1/P2. Publish the reviewed B contract on canonical main and verify remote SHA before fresh isolated implementation dispatch. No B runtime change or gate enablement yet.
 

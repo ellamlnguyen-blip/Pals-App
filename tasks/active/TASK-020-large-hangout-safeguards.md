@@ -1,6 +1,6 @@
 # TASK-020 — Large-Hangout basic safeguards
 
-Status: Planning; ADR-0024 accepted, awaiting reviewed/published stage A contract
+Status: Complete for bounded disposable-local scope; hosted review remains separate
 Date: 2026-09-25
 Planning baseline: independently remote-verified canonical main `8c087fa396475f966a3a783307719e4d625f60e2`
 Planning branch: `agent/TASK-020-large-hangout-plan`

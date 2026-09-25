@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-25 — TASK-020 large-Hangout safeguards complete locally
+
+- Integrated reviewed Stage A backend and Stage B student UI under Accepted ADR-0024. A current host sees a coarse warning at 25 joined members and can close or reopen joining through existing authority; saved discovery prioritizes smaller viewer-visible groups before the 100-item display limit. The private size signal remains unconsumed. Independent exact-tip reviews, local backend checks and authenticated built-web checks passed within the handoff limits. Reset cleared fixtures and left ten gates false; no hosted operation occurred.
+
 ## 2026-09-25 — TASK-020B reviewed UI contract
 
 - Defined the host-only warning and desired-state joining control, exact two-read saved-discovery adapter, access-loss masking and rendered QA matrix against reviewed Stage A RPCs. Final independent design/security contract review is clear; implementation remains pending.
