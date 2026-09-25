@@ -1,5 +1,8 @@
 # Current State
 
+## TASK-010 reconciled contracts for TASK-021
+Starting canonical main `5dd585638387b1e72e57724bebf5ee0ef09e17a5` was independently remote-verified on 2026-09-25. Accepted ADR-0012 needs no reacceptance. A/B stage contracts preserve subsequently implemented global block teardown/provenance, shared lock order, notifications, one-way moderation disable, attendance schedule freeze and TASK-020 host-only coarse size signal while adding accepted local co-host management. Review/publication evidence is in `agents/handoffs/TASK-010-RECONCILIATION.md`. No TASK-010 runtime behavior, migration, UI, gate or hosted setting changed. TASK-010 implementation and full TASK-021 rehearsal remain open.
+
 ## TASK-021 plan acceptance
 
 On 2026-09-25 the user replied “accept” after the published TASK-021 readiness audit and rehearsal plan. This accepts the reviewed planning direction and prerequisite sequence. It does not select or accept any still-undefined hosted policy, authorize hosted execution, or complete TASK-021. Next, resume the existing TASK-010 task to reconcile and publish its narrower co-host contracts under already Accepted ADR-0012; no duplicate successor task is created.

@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-25 — TASK-010 A/B contract reconciliation
+
+- Defined backend and dependent UI stage contracts under already Accepted ADR-0012, preserving later blocking/provenance, notifications, moderation disable, attendance freeze and large-Hangout host controls.
+- Documentation-only TASK-021 prerequisite; TASK-010 and TASK-021 remain incomplete with no migration, app behavior, gate or hosted change.
+
 ## 2026-09-25 — TASK-021 plan accepted
 
 On 2026-09-25 the user replied “accept” after the published TASK-021 readiness audit and rehearsal plan. This accepts the reviewed planning direction and prerequisite sequence. It does not select or accept any still-undefined hosted policy, authorize hosted execution, or complete TASK-021. Next, resume the existing TASK-010 task to reconcile and publish its narrower co-host contracts under already Accepted ADR-0012; no duplicate successor task is created.

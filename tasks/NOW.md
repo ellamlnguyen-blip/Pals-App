@@ -1,5 +1,8 @@
 # NOW
 
+## TASK-010 contracts reconciled for TASK-021
+Accepted ADR-0012 remains authoritative. Stage A backend and dependent Stage B UI planning contracts now reconcile co-host powers with implemented global blocking/provenance, notifications, moderation disable, attendance schedule freeze and TASK-020 host warning/joining control. See `tasks/active/TASK-010A-cohost-backend.md`, `TASK-010B-host-management-ui.md` and `agents/handoffs/TASK-010-RECONCILIATION.md`. This is a documentation-only prerequisite for accepted TASK-021 planning: no implementation, migration, gate or hosted operation. TASK-010 and TASK-021 both remain incomplete. A fresh scoped A implementation and exact-tip review must precede B dispatch; no duplicate product-task chat is created by this planning substage.
+
 ## TASK-021 plan accepted; TASK-010 prerequisite resumption
 
 On 2026-09-25 the user replied “accept” after the published TASK-021 readiness audit and rehearsal plan. This accepts the reviewed planning direction and prerequisite sequence. It does not select or accept any still-undefined hosted policy, authorize hosted execution, or complete TASK-021. Next, resume the existing TASK-010 task to reconcile and publish its narrower co-host contracts under already Accepted ADR-0012; no duplicate successor task is created.
