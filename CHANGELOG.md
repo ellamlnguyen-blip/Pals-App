@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-24 — TASK-018A first backend review
+
+- The first private attendance backend tip passed local implementation checks and reached its remote task branch. Exact-tip security review found no migration defect but required four targeted evidence additions before main integration; Stage B remains dependent. No hosted operation or attendance gate enablement occurred.
+
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
 ## 2026-09-24 — TASK-018 attendance policy accepted

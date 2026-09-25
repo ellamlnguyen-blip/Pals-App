@@ -1,5 +1,9 @@
 # NOW
 
+## TASK-018A backend exact-tip review
+
+The private attendance backend task branch `agent/TASK-018A-attendance-backend` is independently remote-verified at `a70c65a733ac3de768c7d44d323ef23c0869050d`. Its disposable-local migration, authorization tests and handoff are complete, with all nine gates false and services stopped. Fresh exact-tip review found no migration defect but held integration for four P2 evidence gaps required by the published contract: a real moderator-sanction race, participant-removal race, exact opening/closing boundaries, and saved-answer recovery after closing. The same bounded agent is adding those checks. B UI remains undispatched until corrected A passes fresh exact-tip review and reaches remote-verified main. No hosted operation or gate enablement is authorized.
+
 ## TASK-018A backend dispatch
 
 ADR-0022 acceptance is on independently remote-verified canonical main `f728b08b53dc05508ec19744c9dc799557f4365e`; the acceptance task branch `5b6b14ad40a1003a5b0dba71b933717528e4a597` is also independently remote-verified. A fresh scoped GPT-6 Sol medium task agent is implementing only the disposable-local backend contract in `/private/tmp/pals-task-018a-attendance` on `agent/TASK-018A-attendance-backend` from that exact baseline. The dispatch tool exposes no Standard-speed selector to verify. Migration/tests, cleanup, handoff, task-branch publication, independent exact-tip security review and main integration remain pending. B UI remains undispatched; no hosted operation or gate enablement is authorized.

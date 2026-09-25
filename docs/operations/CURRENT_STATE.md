@@ -6,6 +6,8 @@ Last updated: 2026-09-24
 Decision tree resolved through product purpose, loop, profile/hangout/social model, safety, map/calendar navigation, MVP boundary, technical architecture, and agent operating model.
 
 ## Build State
+TASK-018A's first backend task tip `a70c65a733ac3de768c7d44d323ef23c0869050d` is independently remote-verified. Its private default-off attendance gate, answer relation and caller-bound RPCs passed local SQL, PostgREST, concurrency, Auth regression, schema lint and workspace checks. Fresh exact-tip security review found no migration defect but withheld clearance for contract-required moderator-sanction and participant-removal races, exact opening/closing boundaries and post-closing saved-answer recovery evidence. The same scoped agent is closing those test gaps before re-review. All nine local gates were false, fixtures cleared and services stopped. TASK-018B remains dependent on accepted A; no hosted operation is authorized.
+
 TASK-018A backend implementation is underway in an isolated disposable-local worktree from independently verified main `f728b08b53dc05508ec19744c9dc799557f4365e`, which contains the explicit ADR-0022 acceptance. No A code has been reviewed or integrated yet. Stage B UI waits for accepted A; hosted work remains excluded.
 
 The user accepted ADR-0022 on 2026-09-24 for bounded disposable-local TASK-018. The acceptance receipt is being published; A backend implementation may start only from the independently verified main tip containing it. B UI waits for accepted A. No attendance code or gate exists yet.
