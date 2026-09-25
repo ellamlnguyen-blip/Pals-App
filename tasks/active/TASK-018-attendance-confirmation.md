@@ -1,6 +1,6 @@
 # TASK-018 — Private attendance confirmation
 
-Status: Active; ADR-0022 Accepted for disposable-local stages, Stage A pending
+Status: Active; ADR-0022 Accepted, Stage A reviewed for integration, Stage B pending
 Date: 2026-09-24
 Planning branch: `agent/TASK-018-planning` from independently remote-verified `origin/main` `be0344ed8b1f9dbef49a6246575ca8d8dd3bccc6`
 

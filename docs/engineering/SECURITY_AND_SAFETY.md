@@ -31,3 +31,7 @@ An active student may submit a private allegation about an authorized user or Ha
 ## TASK-017B2 local Hangout disabling
 
 The default-off local moderation backend can now commit a one-way disable for the exact reported Hangout, separately from ordinary cancellation. Source authorization removes future student discovery, detail, roster, private instructions, chat, notification destinations and mutations, including direct REST and old RPC access. Private reports, participation and chat evidence remain retained; an active caller's safety-gated own ID/state recovery and evidence-qualified private report are the narrow exception. A read already in flight before disable commit may finish, but later reads are masked. Local tests exercised cancelled targets, block reconciliation, concurrent writers and real API routes. This is not a staffed or hosted moderation service, and production retention, appeals and operator operations remain undecided.
+
+## TASK-018A local attendance self-report
+
+Attendance is a private owner self-report. A retained participant can answer through a caller-bound RPC even after a block, leave, removal or readiness loss, without gaining Hangout detail or peer access. A moderation-disabled Hangout and a suspended/banned account deny owner reads and writes. A negative answer never creates a report or safety finding. The default-off local gate and private relation have no client table grants; the backend adds no notification, analytics event or hosted surface.

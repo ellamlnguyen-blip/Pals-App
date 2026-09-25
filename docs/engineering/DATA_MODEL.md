@@ -26,6 +26,8 @@ Platform-scoped role; never conflate with host/co-host.
 ## Participant
 Hangout membership, join/leave/removal state, attendance confirmation.
 
+For disposable-local TASK-018A, `private.attendance_answers` stores one self-reported boolean, server revision and answer time per retained `(hangout_id, account_id)` participant row. The separate `private.attendance_feature_gate` defaults false. Neither table has a client grant; no attendance column or peer response is added to public Hangout or participant rows. The latest answer remains after leaving or removal and becomes read-only after the 30-day response window, subject to the owner read gate and moderation disable.
+
 ## Eligibility Rule
 General rule model: attribute + operator + values. Example: major IN [Business], gender IN [Woman]. Only deliberately provided profile attributes may be used.
 

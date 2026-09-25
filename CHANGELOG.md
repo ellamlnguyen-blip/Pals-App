@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-24 — TASK-018A private attendance backend
+
+- Added a default-off local attendance gate, private self-answer relation, caller-bound own read/list/write RPCs and a post-opening database schedule freeze under Accepted ADR-0022. The corrected task tip passed exact-tip security review and disposable-local authorization, race, boundary, API, lint and workspace checks. Stage B UI and canonical main publication receipts remain; no hosted operation or gate enablement occurred.
+
 ## 2026-09-24 — TASK-018A first backend review
 
 - The first private attendance backend tip passed local implementation checks and reached its remote task branch. Exact-tip security review found no migration defect but required four targeted evidence additions before main integration; Stage B remains dependent. No hosted operation or attendance gate enablement occurred.

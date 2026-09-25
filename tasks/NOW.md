@@ -1,5 +1,9 @@
 # NOW
 
+## TASK-018A reviewed backend integration
+
+The corrected backend task tip `249efcc4214656a32beba49c13eb479b9e0c614b` is independently remote-verified and passed fresh exact-tip security review with no P0/P1/P2 finding. Its private default-off gate, self-answer relation, caller-bound owner RPCs and schedule freeze are merged in the coordinator integration branch. All 16 local SQL suites, 65 attendance assertions, 21 two-session outcomes, local PostgREST, Auth regression, schema lint and workspace checks passed within handoff limits. The final reset found zero fixtures, nine gates false and stopped local services. Main publication/verification and a handoff SHA receipt precede Stage B dispatch; TASK-018 parent remains active. No hosted operation or gate enablement occurred.
+
 ## TASK-018A backend exact-tip review
 
 The private attendance backend task branch `agent/TASK-018A-attendance-backend` is independently remote-verified at `a70c65a733ac3de768c7d44d323ef23c0869050d`. Its disposable-local migration, authorization tests and handoff are complete, with all nine gates false and services stopped. Fresh exact-tip review found no migration defect but held integration for four P2 evidence gaps required by the published contract: a real moderator-sanction race, participant-removal race, exact opening/closing boundaries, and saved-answer recovery after closing. The same bounded agent is adding those checks. B UI remains undispatched until corrected A passes fresh exact-tip review and reaches remote-verified main. No hosted operation or gate enablement is authorized.
