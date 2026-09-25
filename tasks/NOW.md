@@ -1,5 +1,9 @@
 # NOW
 
+## TASK-018 completion and successor
+
+TASK-018 private attendance confirmation is complete for its bounded disposable-local scope under Accepted ADR-0022. Reviewed A backend tip `249efcc4214656a32beba49c13eb479b9e0c614b` and B UI tip `2c589da0d323ca2feeda6d9ce0bf11ace9b2324d` are independently remote-verified; the B implementation and parent handoff reached independently verified canonical main `b6d0d054dab901574a6cd06b07372fae3f5013ad`. Local database/API/workspace and rendered UI checks passed within handoff limits, fixtures were removed, nine gates remain false and services stopped. The final SHA/status receipt is being published on main. TASK-019 PostHog instrumentation is the next ready bounded planning task; no analytics event, hosted operation or gate enablement follows from TASK-018 completion.
+
 ## TASK-018 reviewed UI integration
 
 The final Stage B task tip `2c589da0d323ca2feeda6d9ce0bf11ace9b2324d` is independently remote-verified and passed fresh exact-tip design/security review with no P0/P1/P2 finding after both private pagination-ID fixes. The local-only attendance route, actor-bound server path and Calendar/account entries are merged in the coordinator integration branch. Full workspace checks, local Auth/API and rendered responsive/light/dark/keyboard/denial/uncertain/stale checks passed within the B handoff limits; all disposable fixtures are gone, nine gates false and services stopped. Canonical main publication/verification, stage/parent handoff SHA receipts and final task status remain before TASK-018 completion. No hosted operation or gate enablement occurred.

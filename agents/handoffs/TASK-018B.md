@@ -1,6 +1,6 @@
 # TASK-018B — Private student attendance UI handoff
 
-Status: Implementation delivered on task branch for independent exact-tip design/security review and coordinator integration. TASK-018 parent remains active.
+Status: Completed for disposable-local Stage B after fresh exact-tip design/security review and verified main integration.
 Date: 2026-09-25
 Branch: `agent/TASK-018B-attendance-ui`
 Baseline: independently remote-verified canonical `origin/main` `4179ca3399d0589829308dd8283bfdd48c6271ff` (accepted ADR-0022, integrated TASK-018A, reconciled B contract).
@@ -35,5 +35,4 @@ After each QA session, removed every disposable Auth user (including the first f
 
 ## Publication receipt
 
-Task branch commit and remote SHA: corrected exact tip pending push below.
-Canonical main integration SHA: pending coordinator review and integration.
+Corrected task branch `agent/TASK-018B-attendance-ui` and remote SHA `2c589da0d323ca2feeda6d9ce0bf11ace9b2324d` were independently verified. Fresh GPT-6 Sol medium exact-tip review found no P0/P1/P2 issue; it inspected the code and handoff evidence without rerunning stopped local services. The implementation and parent handoff reached independently verified canonical main `b6d0d054dab901574a6cd06b07372fae3f5013ad`. Both remote SHAs were checked together. The dispatch tool did not expose a Standard-speed setting for verification.

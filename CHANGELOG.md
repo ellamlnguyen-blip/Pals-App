@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-25 — TASK-018 private attendance confirmation complete locally
+
+- Reviewed A backend and B student UI are integrated for disposable-local use under Accepted ADR-0022. The UI and parent handoff are on independently verified main `b6d0d054dab901574a6cd06b07372fae3f5013ad`; task tips, tests, limits and cleanup are recorded in their handoffs. All nine gates remain false. Hosted release and TASK-019 analytics are separate.
+
 ## 2026-09-25 — TASK-018B private attendance UI
 
 - Added a local-only owner attendance page, actor-bound no-store server route and small Calendar/account entries. The ID-only UI shows the caller's self-reported answer, actionable/closed states and separate safety link; stale, denied and uncertain saves recheck current owner authority. Fresh exact-tip review cleared the privacy fixes, and local authenticated responsive/light/dark/keyboard and failure checks passed within handoff limits. Main publication receipts remain; no hosted operation or gate enablement occurred.

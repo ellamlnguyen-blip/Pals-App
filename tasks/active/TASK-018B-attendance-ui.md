@@ -1,6 +1,6 @@
 # TASK-018B — Student attendance UI
 
-Status: Implementation and exact-tip review accepted; canonical integration receipt pending
+Status: Complete for disposable-local Stage B; exact-tip review and main integration remote-verified
 Date: 2026-09-24
 Parent: `tasks/active/TASK-018-attendance-confirmation.md`
 Planning baseline: independently remote-verified main `5e941bfb81bc2a64ad33f0d6557ff656a8d6e0ac`

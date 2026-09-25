@@ -15,7 +15,7 @@
 - TASK-023 student web frontend design alignment — start after TASK-016C is reviewed/integrated and before TASK-017. Apply the usepals.com-informed visual system to existing student routes now; later student-facing UI tasks should use its shared tokens/components. Backend/schema/RLS/API/authorization changes are out of scope. Contract: `active/TASK-023-frontend-design-alignment.md`.
 - TASK-024 Pals brand direction correction — follow-up to TASK-023. Use the supplied logo and an explicit Carolina light blue (`#7BAFD4`) and white system across the student web frontend while preserving all existing backend/schema/RLS/API/authorization behavior. Contract and implementation prompt: `active/TASK-024-pals-brand-direction-correction.md`.
 - TASK-017 admin moderation console — complete for disposable-local scope; see `DONE.md` and stage handoffs. Hosted staffing, retention and deployment remain separate.
-- TASK-018 attendance confirmation — Accepted ADR-0022; reviewed disposable-local Stage A backend is being integrated and Stage B student UI remains. See `active/TASK-018-attendance-confirmation.md`. No hosted work or gate enablement.
+- TASK-018 attendance confirmation — complete for bounded disposable-local scope under Accepted ADR-0022; see `DONE.md`, its active contract and A/B/parent handoffs. Hosted work and gate enablement remain separate.
 - TASK-019 PostHog instrumentation
 - TASK-020 large-hangout basic safeguards
 - TASK-021 staging launch rehearsal
