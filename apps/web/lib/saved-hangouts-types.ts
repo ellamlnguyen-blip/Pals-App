@@ -31,3 +31,19 @@ export type SavedDetail = SavedPin & {
 };
 export type ParticipantState =
   "host" | "joined" | "left" | "removed" | "none" | "unknown";
+
+// A Hangout revision does not cover every roster visibility transition
+// (for example, a block can remove a visible ID without changing it).
+export function sameVisiblePage(
+  first: readonly { account_id: string; role_label?: string }[],
+  second: readonly { account_id: string; role_label?: string }[],
+) {
+  return (
+    first.length === second.length &&
+    first.every(
+      (row, index) =>
+        row.account_id === second[index].account_id &&
+        row.role_label === second[index].role_label,
+    )
+  );
+}

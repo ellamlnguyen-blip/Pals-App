@@ -34,7 +34,8 @@ export function ManagementControls({
   assignmentsMore: boolean;
 }) {
   const router = useRouter();
-  const { deny, hidePrivate } = useDetailAccess();
+  const { deny, hidePrivate, managementPaused, pauseManagement } =
+    useDetailAccess();
   const [roster, setRoster] = useState(initialRoster);
   const [rosterMore, setRosterMore] = useState(initialRosterMore);
   const [assignments, setAssignments] = useState(initialAssignments);
@@ -42,7 +43,8 @@ export function ManagementControls({
     initialAssignmentsMore,
   );
   const [pending, start] = useTransition();
-  const [locked, setLocked] = useState(false);
+  const [localLocked, setLocked] = useState(false);
+  const locked = localLocked || managementPaused;
   const [sensitiveHidden, setSensitiveHidden] = useState(false);
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState<"roster" | "assignments" | null>(null);
@@ -66,9 +68,11 @@ export function ManagementControls({
           return;
         }
         if (result.kind !== "ok" || result.revision !== revision) {
+          hidePrivate();
           setSensitiveHidden(true);
           setRoster([]);
           setAssignments([]);
+          pauseManagement();
           setLocked(true);
           setMessage("The list or your access changed. Reload to review it.");
           return;
@@ -84,9 +88,11 @@ export function ManagementControls({
           setAssignmentsMore(result.more);
         }
       } catch {
+        hidePrivate();
         setSensitiveHidden(true);
         setRoster([]);
         setAssignments([]);
+        pauseManagement();
         setLocked(true);
         setMessage("The list is unavailable. Reload before managing people.");
       } finally {
@@ -114,6 +120,7 @@ export function ManagementControls({
       setRoster([]);
       setAssignments([]);
     }
+    pauseManagement();
     setLocked(true);
     setMessage("");
     start(async () => {
@@ -124,6 +131,7 @@ export function ManagementControls({
           return;
         }
         if (result.kind !== "saved") {
+          hidePrivate();
           setSensitiveHidden(true);
           setRoster([]);
           setAssignments([]);
@@ -131,6 +139,7 @@ export function ManagementControls({
         setMessage(result.message);
         if (result.kind === "saved") router.refresh();
       } catch {
+        hidePrivate();
         setSensitiveHidden(true);
         setRoster([]);
         setAssignments([]);

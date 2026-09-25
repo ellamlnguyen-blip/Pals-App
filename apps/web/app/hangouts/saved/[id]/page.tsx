@@ -60,7 +60,7 @@ export default async function SavedDetailPage({
   return (
     <Frame signedIn navigation>
       <AnalyticsView event="hangout_detail_viewed" />
-      <HostDetailBoundary>
+      <HostDetailBoundary key={`${id}:${record.revision}`}>
         <div className="saved-detail">
           <Link href="/hangouts/saved">← Saved Hangouts</Link>
           <p className="badge">Saved Hangout · local only</p>

@@ -5,6 +5,7 @@ import { requireLocalHangouts } from "./hangouts";
 import {
   UNC_BOUNDS,
   validSavedHangoutId,
+  sameVisiblePage,
   type Bounds,
   type SavedFilter,
   type SavedPin,
@@ -215,7 +216,7 @@ export async function readSavedDetail(id: string) {
     role_label: "host" | "cohost" | "participant";
   }[] = [];
   let rosterMore = false;
-  let assignments: string[] = [];
+  let assignmentRows: { account_id: string }[] = [];
   let assignmentsMore = false;
   if (record.status === "published") {
     const { data, error } = await client.rpc("list_hangout_roster_roles", {
@@ -231,10 +232,8 @@ export async function readSavedDetail(id: string) {
         p_limit: 24,
       });
       if (assigned.error) return { kind: "denied" as const };
-      assignments = (assigned.data ?? []).map(
-        (row: { account_id: string }) => row.account_id,
-      );
-      assignmentsMore = assignments.length === 24;
+      assignmentRows = assigned.data ?? [];
+      assignmentsMore = assignmentRows.length === 24;
     }
   }
   let instructions: string | null = null;
@@ -295,7 +294,26 @@ export async function readSavedDetail(id: string) {
     latestRole !== ownRole
   )
     return { kind: "changed" as const };
-  if (latest.status !== "published") instructions = null;
+  if (latest.status === "published") {
+    // The revision does not advance for all block/readiness roster changes.
+    // Verify the exact currently authorized first pages after all other reads.
+    const verifiedRoster = await client.rpc("list_hangout_roster_roles", {
+      p_hangout_id: id,
+      p_limit: 24,
+    });
+    if (verifiedRoster.error) return { kind: "denied" as const };
+    if (!sameVisiblePage(roster, verifiedRoster.data ?? []))
+      return { kind: "changed" as const };
+    if (latestState === "host") {
+      const verifiedAssignments = await client.rpc("list_hangout_cohosts", {
+        p_hangout_id: id,
+        p_limit: 24,
+      });
+      if (verifiedAssignments.error) return { kind: "denied" as const };
+      if (!sameVisiblePage(assignmentRows, verifiedAssignments.data ?? []))
+        return { kind: "changed" as const };
+    }
+  } else instructions = null;
   return {
     kind: "ok" as const,
     record: latest,
@@ -303,7 +321,7 @@ export async function readSavedDetail(id: string) {
     ownRole,
     roster,
     rosterMore,
-    assignments,
+    assignments: assignmentRows.map((row) => row.account_id),
     assignmentsMore,
     instructions,
     userId: user.id,

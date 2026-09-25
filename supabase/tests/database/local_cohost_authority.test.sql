@@ -215,8 +215,30 @@ select set_config('request.jwt.claims',
 select is(public.promote_hangout_cohost(current_setting('cohost.blocked')::uuid,
   '54000000-0000-4000-8000-000000000004',1),2::bigint,
   'block target has an assignment');
+select set_config('cohost.pre_block_revision',(select revision::text from public.hangouts
+  where id=current_setting('cohost.blocked')::uuid),true);
+select is((select count(*) from public.list_hangout_roster_roles(
+  current_setting('cohost.blocked')::uuid) where account_id=
+  '54000000-0000-4000-8000-000000000004'),1::bigint,
+  'host roster initially includes cohost before block reconciliation');
+select is((select count(*) from public.list_hangout_cohosts(
+  current_setting('cohost.blocked')::uuid) where account_id=
+  '54000000-0000-4000-8000-000000000004'),1::bigint,
+  'host assignment page initially includes cohost before block reconciliation');
 select is(public.set_safety_block('54000000-0000-4000-8000-000000000004',true),
   true,'host block tears down joined cohost');
+select is((select revision from public.hangouts where id=
+  current_setting('cohost.blocked')::uuid),
+  current_setting('cohost.pre_block_revision')::bigint,
+  'block reconciliation changes visibility without a Hangout revision advance');
+select is((select count(*) from public.list_hangout_roster_roles(
+  current_setting('cohost.blocked')::uuid) where account_id=
+  '54000000-0000-4000-8000-000000000004'),0::bigint,
+  'host roster page omits blocked cohost at the same revision');
+select is((select count(*) from public.list_hangout_cohosts(
+  current_setting('cohost.blocked')::uuid) where account_id=
+  '54000000-0000-4000-8000-000000000004'),0::bigint,
+  'host assignment page omits blocked cohost at the same revision');
 reset role;
 select is((select count(*) from private.hangout_cohosts
   where hangout_id=current_setting('cohost.blocked')::uuid),0::bigint,

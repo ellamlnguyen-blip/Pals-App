@@ -395,8 +395,11 @@ export function HangoutEditor({ token, existing, returnHref }: Props) {
           )}
           {locked && (
             <p className="help">
-              Your original details are held for retry. Check your Hangouts
-              first if the response was lost.
+              {existing
+                ? result?.kind === "conflict"
+                  ? "Review the latest Hangout and your role before another edit. Your entries remain here."
+                  : "Review the latest Hangout and your role before another edit. Public entries remain here; private instructions are hidden."
+                : "Your original details are held for retry. Check your Hangouts first if the response was lost."}
             </p>
           )}
         </div>
@@ -408,7 +411,9 @@ export function HangoutEditor({ token, existing, returnHref }: Props) {
           {pending
             ? "Saving…"
             : locked
-              ? "Retry same creation"
+              ? existing
+                ? "Review latest details"
+                : "Retry same creation"
               : existing
                 ? "Save changes"
                 : "Create Hangout"}

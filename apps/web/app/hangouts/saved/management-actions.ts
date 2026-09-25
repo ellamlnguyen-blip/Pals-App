@@ -7,7 +7,10 @@ import {
   readSavedPublic,
   readSavedRole,
 } from "../../../lib/saved-hangouts";
-import { validSavedHangoutId } from "../../../lib/saved-hangouts-types";
+import {
+  sameVisiblePage,
+  validSavedHangoutId,
+} from "../../../lib/saved-hangouts-types";
 
 const denied = {
   kind: "denied" as const,
@@ -84,11 +87,27 @@ export async function managementPage(
       kind: "denied" as const,
       rows: [] as { account_id: string; role_label?: string }[],
     };
+  // A concurrent block or readiness change can alter IDs without a
+  // Hangout revision bump. Return only a page that remains authorized.
+  const verified = await client.rpc(
+    type === "roster" ? "list_hangout_roster_roles" : "list_hangout_cohosts",
+    { p_hangout_id: id, p_after_account_id: after, p_limit: 24 },
+  );
+  if (verified.error)
+    return {
+      kind: "denied" as const,
+      rows: [] as { account_id: string; role_label?: string }[],
+    };
+  if (!sameVisiblePage(result.data ?? [], verified.data ?? []))
+    return {
+      kind: "error" as const,
+      rows: [] as { account_id: string; role_label?: string }[],
+    };
   return {
     kind: "ok" as const,
-    rows: result.data ?? [],
+    rows: verified.data ?? [],
     revision: latest.revision,
-    more: (result.data?.length ?? 0) === 24,
+    more: (verified.data?.length ?? 0) === 24,
   };
 }
 

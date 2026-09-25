@@ -17,7 +17,15 @@ const AccessLoss = createContext<{
   deny: () => void;
   hidePrivate: () => void;
   privateHidden: boolean;
-}>({ deny: () => {}, hidePrivate: () => {}, privateHidden: false });
+  managementPaused: boolean;
+  pauseManagement: () => void;
+}>({
+  deny: () => {},
+  hidePrivate: () => {},
+  privateHidden: false,
+  managementPaused: false,
+  pauseManagement: () => {},
+});
 export function useDetailAccess() {
   return useContext(AccessLoss);
 }
@@ -29,6 +37,7 @@ export function PrivateDetail({ children }: { children: ReactNode }) {
 export function HostDetailBoundary({ children }: { children: ReactNode }) {
   const [masked, setMasked] = useState(false);
   const [privateHidden, setPrivateHidden] = useState(false);
+  const [managementPaused, setManagementPaused] = useState(false);
   function deny() {
     // A server refresh may be delayed. Remove the mounted source and private
     // details synchronously before leaving the page after an access loss.
@@ -48,6 +57,8 @@ export function HostDetailBoundary({ children }: { children: ReactNode }) {
         deny,
         hidePrivate: () => flushSync(() => setPrivateHidden(true)),
         privateHidden,
+        managementPaused,
+        pauseManagement: () => flushSync(() => setManagementPaused(true)),
       }}
     >
       {children}
@@ -67,7 +78,7 @@ export function HostJoiningControl({
   largeState: "large" | "small" | "unavailable" | null;
 }) {
   const router = useRouter();
-  const { deny } = useDetailAccess();
+  const { deny, managementPaused, pauseManagement } = useDetailAccess();
   const [pending, startTransition] = useTransition();
   const [needsReload, setNeedsReload] = useState(false);
   const [message, setMessage] = useState("");
@@ -120,10 +131,11 @@ export function HostJoiningControl({
         ref={button}
         type="button"
         className="button"
-        disabled={pending || needsReload}
+        disabled={pending || needsReload || managementPaused}
         onClick={() => {
           setMessage("");
           setNeedsReload(true);
+          pauseManagement();
           startTransition(async () => {
             try {
               const result = await changeSavedJoining(id, revision, desired);
