@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-25 — TASK-019 analytics policy accepted
+
+- The user accepted ADR-0023 as written for disposable-local implementation after independent planning review and publication. A narrower contract and fresh implementation review remain required. No hosted PostHog ingest, live user, gate enablement or deployment is authorized.
+
 ## 2026-09-25 — TASK-019 analytics policy proposed
 
 - Defined a bounded PostHog event allowlist and Proposed ADR-0023 for affirmative consent, anonymous visit identity, minimal payloads, private attendance exclusion and a hosted retention gate. Postgres stays authoritative. This is planning only; no analytics SDK, hosted ingest, live-user capture or deployment is authorized.

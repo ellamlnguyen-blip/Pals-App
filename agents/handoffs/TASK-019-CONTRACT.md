@@ -19,4 +19,4 @@ The initial independent planning review found that current participant rows cann
 
 ## Next decision
 
-Ask the user to accept or revise ADR-0023's affirmative opt-in, anonymous visit-only analytics, excluded private attendance/safety events and 90-day maximum raw-event retention requirement. Acceptance covers local implementation only. Hosted PostHog configuration and live capture need a later reviewed release decision.
+The user replied “acceot” to the explicit ADR-0023 acceptance question on 2026-09-25. The acceptance receipt is being published and independently verified on canonical main. Next, review and publish a narrower implementation contract, then dispatch a fresh task-specific agent from its verified main tip. Acceptance covers local implementation only. Hosted PostHog configuration and live capture need a later reviewed release decision.

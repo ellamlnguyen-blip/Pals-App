@@ -1,6 +1,6 @@
 # ADR-0023 — Minimal consented behavior analytics
 
-Status: Proposed — explicit acceptance required before TASK-019 runtime implementation
+Status: Accepted — disposable-local TASK-019 scope only
 Date: 2026-09-25
 Task: TASK-019
 
@@ -21,4 +21,4 @@ Opt-in and anonymous visit identity limit funnel coverage and prevent cross-visi
 
 ## Acceptance scope
 
-Acceptance would authorize only the reviewed disposable-local TASK-019 adapter, consent UI and event wiring, after a narrower contract is published and reviewed. It would not authorize a hosted project change, live-user capture, deployment, gate enablement, new database object, analytics export or relaxation of ADR-0022 privacy. Material changes to identity, payload, consent or retention require a revised proposal and explicit acceptance.
+On 2026-09-25, the user replied “acceot” to the explicit question asking acceptance of this published ADR as written. This is accepted as an unambiguous typo for “accept.” Acceptance authorizes only the reviewed disposable-local TASK-019 adapter, consent UI and event wiring, after a narrower contract is published and reviewed. It does not authorize a hosted project change, live-user capture, deployment, gate enablement, new database object, analytics export or relaxation of ADR-0022 privacy. Material changes to identity, payload, consent or retention require a revised proposal and explicit acceptance.

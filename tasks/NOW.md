@@ -2,7 +2,7 @@
 
 ## TASK-019 analytics planning
 
-TASK-019 has a bounded, documentation-only PostHog contract and Proposed ADR-0023 on `agent/TASK-019-posthog-plan`, based on independently queried remote `main` `937672d184098d6f5cb8e5226d0bb84104fcf71e`. The event allowlist excludes private attendance and safety data; Postgres remains authoritative. Independent planning review, canonical main publication/verification and explicit ADR acceptance precede any runtime implementation dispatch. No hosted PostHog change, ingest, live user, gate enablement or deployment is authorized. TASK-018 remains complete for its disposable-local scope with nine gates off.
+TASK-019's reviewed planning contract and Proposed ADR-0023 were published and independently remote-verified on canonical main `b10c924feb0ec174ad05f5c58aa48b223af0caea`. The user replied “acceot” to the explicit acceptance question on 2026-09-25, accepting the policy as written for disposable-local implementation. Publish and independently verify the acceptance receipt, then review/publish a narrower implementation contract before fresh agent dispatch. The event allowlist excludes private attendance and safety data; Postgres remains authoritative. No hosted PostHog change, ingest, live user, gate enablement or deployment is authorized. TASK-018 remains complete with nine local gates off.
 
 ## TASK-018 completion and successor
 

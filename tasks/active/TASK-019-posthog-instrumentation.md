@@ -1,6 +1,6 @@
 # TASK-019 — Minimal PostHog instrumentation
 
-Status: Planning; implementation blocked on ADR-0023 acceptance and reviewed stage contracts
+Status: Planning; ADR-0023 accepted, implementation waits for reviewed narrow contract and published receipt
 Date: 2026-09-25
 Planning baseline: independently queried remote `main` at `937672d184098d6f5cb8e5226d0bb84104fcf71e` (TASK-018 complete; nine local feature gates off)
 
@@ -12,7 +12,7 @@ Explain where consenting students encounter friction in the accepted hangout loo
 
 - Read `AGENTS.md`, `docs/product/MVP.md`, `docs/engineering/ANALYTICS.md`, `ARCHITECTURE.md`, `DATA_MODEL.md`, `AUTHORIZATION.md`, `SECURITY_AND_SAFETY.md`, the relevant flow contracts, and ADR-0010/0014/0015/0016/0017/0018/0019/0022.
 - TASK-018 is complete only for its bounded local scope. Its private answers and hidden-source ID path remain private.
-- Proposed ADR-0023 settles the new consent, identity, payload and provider-retention policy. Explicit acceptance, a published receipt on independently verified `main`, a narrow implementation contract and fresh task-specific implementation agent precede runtime code.
+- Accepted ADR-0023 settles the new consent, identity, payload and provider-retention policy for disposable-local scope. The acceptance receipt on independently verified `main`, a narrow implementation contract and fresh task-specific implementation agent precede runtime code.
 - The coordinator reviews the implementation handoff and obtains fresh exact-tip privacy/security review before integrating. Keep unreviewed code off `main`.
 
 ## Event contract
