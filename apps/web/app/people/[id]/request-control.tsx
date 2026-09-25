@@ -1,6 +1,8 @@
 "use client";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { analytics } from "../../../lib/analytics";
+import { firstRequestConfirmed } from "../../../lib/analytics-evidence";
 import {
   AUTH_TRANSITION_CHANNEL,
   AUTH_TRANSITION_EVENT,
@@ -74,6 +76,8 @@ export function RequestControl({
       const data = (await response.json()) as { kind: string };
       if (now !== ticket.current || document.hidden) return;
       if (data.kind === "ok") {
+        if (firstRequestConfirmed(!!pending, data.kind))
+          void analytics.capture("dm_request_sent");
         current.current = null;
         setPending(null);
         setDraft("");

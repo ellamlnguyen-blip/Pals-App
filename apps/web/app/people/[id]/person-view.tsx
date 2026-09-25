@@ -5,6 +5,7 @@ import { SafetyActions } from "../../safety/safety-client";
 import { RequestControl } from "./request-control";
 import { FriendControl } from "../friend-control";
 import type { FriendshipResult } from "../friend-actions";
+import { AnalyticsView } from "../../analytics-view";
 
 export function PersonView({
   detail,
@@ -44,6 +45,7 @@ export function PersonView({
     );
   return (
     <article className="people-panel">
+      <AnalyticsView event="people_profile_viewed" />
       <p className="badge">People · local UNC</p>
       <h1 ref={profileHeading} tabIndex={-1}>
         {detail.real_name}

@@ -9,6 +9,7 @@ import {
 } from "../../../lib/saved-hangouts-types";
 import { searchSaved } from "./actions";
 import { SavedMap } from "./map";
+import { AnalyticsView } from "../../analytics-view";
 
 export function SavedDiscovery({ token }: { token: string }) {
   const [bounds, setBounds] = useState<Bounds | null>(UNC_BOUNDS);
@@ -78,6 +79,10 @@ export function SavedDiscovery({ token }: { token: string }) {
   }
   return (
     <>
+      <AnalyticsView
+        event="hangout_map_viewed"
+        ready={status === "ok" && !!bounds}
+      />
       <div className="saved-filters" aria-label="Saved Hangout filters">
         <label>
           Time{" "}

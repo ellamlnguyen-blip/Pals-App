@@ -15,6 +15,7 @@ import {
 } from "../../lib/calendar-time";
 import { CAMPUS_TIME_ZONE } from "../../lib/hangout-time";
 import { CalendarRefresh } from "./refresh";
+import { AnalyticsView } from "../analytics-view";
 import "../hangouts/map.css";
 import "./calendar.css";
 export const dynamic = "force-dynamic";
@@ -168,6 +169,7 @@ export default async function CalendarPage({
           </div>
         ) : (
           <>
+            <AnalyticsView event="calendar_viewed" />
             {result.truncated && (
               <p role="status" className="fixture-notice">
                 Showing the first 100 matching Hangouts, ordered by start time

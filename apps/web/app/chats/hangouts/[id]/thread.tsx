@@ -3,6 +3,8 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { flushSync } from "react-dom";
 import type { ChatMessage } from "../../../../lib/chat";
 import { fetchVisiblePage, nextPageCursors } from "./page-data";
+import { analytics } from "../../../../lib/analytics";
+import { firstRequestConfirmed } from "../../../../lib/analytics-evidence";
 import {
   AUTH_TRANSITION_CHANNEL,
   AUTH_TRANSITION_EVENT,
@@ -330,6 +332,8 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
         return;
       }
       if (result.kind === "ok") {
+        if (firstRequestConfirmed(retry, result.kind))
+          void analytics.capture("hangout_chat_message_sent");
         pendingRef.current = null;
         setPending(null);
         if (draftRef.current.trim() === item.body) {

@@ -13,6 +13,7 @@ import {
   notificationProbeState,
   notificationTransitionState,
 } from "./notification-auth-state";
+import { AnalyticsView } from "../analytics-view";
 type Cursor = { time: string; id: string } | null;
 type Preference = { category: string; enabled: boolean };
 const categoryCopy: Record<string, { name: string; description: string }> = {
@@ -282,6 +283,7 @@ export function NotificationsInbox({ actor }: { actor: string }) {
   };
   return (
     <div className="notifications-page">
+      <AnalyticsView event="notifications_viewed" ready={phase === "ready"} />
       <div className="notifications-heading">
         <p className="badge">Your updates · local only</p>
         <h1>Notifications</h1>

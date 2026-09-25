@@ -1,8 +1,9 @@
 "use client";
 import { useRouter } from "next/navigation";
-import { useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import type { ParticipantState } from "../../../../lib/saved-hangouts-types";
 import { changeSavedMembership } from "../actions";
+import { analytics } from "../../../../lib/analytics";
 
 export function MembershipControl({
   id,
@@ -20,6 +21,13 @@ export function MembershipControl({
   const [message, setMessage] = useState("");
   const [privateVisible, setPrivateVisible] = useState(true);
   const [needsReload, setNeedsReload] = useState(false);
+  const mounted = useRef(false);
+  useEffect(() => {
+    mounted.current = true;
+    return () => {
+      mounted.current = false;
+    };
+  }, []);
   const intent = state === "joined" ? "leave" : "join";
   const allowed =
     state === "joined" ||
@@ -48,7 +56,13 @@ export function MembershipControl({
               try {
                 const result = await changeSavedMembership(id, intent);
                 setMessage(result.message);
-                if (result.kind === "saved") router.refresh();
+                if (result.kind === "saved") {
+                  // The join RPC returns void even for an idempotent concurrent
+                  // join. Leave success requires an actual joined-row update.
+                  if (mounted.current && intent === "leave")
+                    void analytics.capture("hangout_left");
+                  router.refresh();
+                }
               } catch {
                 setMessage(
                   "We could not verify the outcome. Reload this Hangout before trying again.",
