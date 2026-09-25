@@ -1,6 +1,6 @@
 # TASK-010B — Local host/co-host management UI
 
-Status: Independently reviewed dependent planning contract; implementation blocked until reviewed TASK-010A integration
+Status: Reviewed implementation and task branch published; canonical integration pending
 Date: 2026-09-25
 Parent: `tasks/active/TASK-010-host-cohost-management.md`
 

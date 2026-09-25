@@ -1,6 +1,6 @@
 # TASK-010A — Local co-host authority backend
 
-Status: Reviewed/published contract; fresh implementation dispatched, review and integration pending
+Status: Reviewed implementation integrated on independently verified main for disposable-local use
 Date: 2026-09-25
 Parent: `tasks/active/TASK-010-host-cohost-management.md`
 Authority: Accepted ADR-0012 (2026-09-23), within Accepted ADR-0010 and later safety decisions

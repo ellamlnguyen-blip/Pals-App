@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-25 — TASK-010 local host/co-host management
+
+- Added the reviewed saved-Hangout host/co-host management UI on the accepted local backend. Hosts can manage current roles, retained co-host assignments, joining and cancellation; co-hosts can edit, manage ordinary participants and joining, and step down. Caller-bound actions and paginated ID-only readers recheck role, readiness and visibility, with private-content masking after revocation.
+- Stage B task branch `agent/TASK-010B-host-management` is independently remote-verified at `903827995917e8bdbd2d98640ef24c4e861d1bfc`; its reviewed implementation is `b262f43b3573689f71b3d0ace2a12b54b5c6c862`. Workspace, local SQL, built-loopback action/privacy regressions and earlier responsive/keyboard checks passed within handoff limits. A final-tip browser screenshot and Step down click were unavailable. Fixtures cleared, Hangout gate off, services stopped. No hosted operation.
+
 ## 2026-09-25 — TASK-010A co-host backend integrated locally
 
 - Added the accepted disposable-local co-host authority migration and callers on a reviewed task branch. Exact `e1426bd7f368dbee44c6cabd135969ceced78172` was published to and independently verified on `origin/agent/TASK-010A-cohost-backend` after the user's specific approval. Prior-schema upgrade, full SQL 19/1,010, real HTTP, 12 observed races and `pnpm check` passed; local fixtures were cleared and all ten gates left off. The user separately approved exact main integration, and independent remote verification confirms `origin/main` at the same SHA. Stage A is complete for disposable-local scope; TASK-010B UI remains to be built. No hosted operation occurred.

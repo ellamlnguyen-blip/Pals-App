@@ -1,5 +1,9 @@
 # Current State
 
+## TASK-010 local host/co-host management ready for canonical integration
+
+The Accepted ADR-0012 backend and host/co-host UI are implemented and independently reviewed for disposable-local use. Stage A's branch is remote-verified at `e1426bd7f368dbee44c6cabd135969ceced78172`; Stage B's branch is remote-verified at `903827995917e8bdbd2d98640ef24c4e861d1bfc`, with implementation reviewed at `b262f43b3573689f71b3d0ace2a12b54b5c6c862`. Stage B checks passed: full `pnpm check`, 68/68 actual-role SQL assertions, focused built-loopback Auth/action including delayed-chat revocation and cancelled leave, and earlier desktop/390 px/320 px/keyboard inspection. Browser Step down confirmation and final-tip screenshots remain unverified due to unavailable browser control; SQL/HTTP cover step down. Disposable fixtures were cleared, the Hangout gate is off and services stopped. Canonical main integration/remote receipt follow; hosted operation and TASK-021's other readiness gates remain separate. See `agents/handoffs/TASK-010A-BACKEND.md` and `TASK-010B-UI.md`.
+
 ## TASK-010A local backend integrated
 
 The co-host backend under Accepted ADR-0012 passed independent exact-tip security review and targeted test re-review. The published task branch `origin/agent/TASK-010A-cohost-backend` was independently verified at `e1426bd7f368dbee44c6cabd135969ceced78172`. Final local checks include true prior-schema migration upgrade, 19-file/1,010-assertion SQL pass, real Auth/PostgREST behavior, 12 observed lock waits and full `pnpm check`. Disposable data are zero, all ten private gates remain disabled and local services stopped. The user separately approved exact main integration; independent remote verification resolves `origin/main` to the same `e1426bd7f368dbee44c6cabd135969ceced78172`. Stage A is complete for disposable-local scope. TASK-010B UI can dispatch under its reviewed contract; full TASK-010/TASK-021 remain open. No hosted operation occurred.

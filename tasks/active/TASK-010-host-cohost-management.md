@@ -1,6 +1,6 @@
 # TASK-010 — Local host/co-host management
 
-Status: ADR-0012 accepted; Stage A backend reviewed and remote-main integrated; Stage B UI pending
+Status: ADR-0012 accepted; Stages A/B reviewed and implemented for disposable-local use; canonical integration pending
 Date: 2026-09-22
 Planning branch: `agent/TASK-010-planning`
 Starting verified clean main/origin: `49d6e780aebf5f23f384efe24d0a8bd55232888a`
