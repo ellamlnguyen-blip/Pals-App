@@ -64,11 +64,11 @@ test("observed social-lock waits recheck cohost membership, authority and lifecy
       select ('54010000-0000-4000-8001-'||lpad(n::text,12,'0'))::uuid,
         '00000000-0000-4000-8000-000000000001','${uid(1)}',
         'Race '||n,now()+interval '1 hour','Area',35,-79
-      from generate_series(1,3) n;
+      from generate_series(1,11) n;
     insert into public.hangout_participants(hangout_id,account_id,state)
       select ('54010000-0000-4000-8001-'||lpad(h::text,12,'0'))::uuid,
         ('54010000-0000-4000-8000-'||lpad(n::text,12,'0'))::uuid,'joined'
-      from generate_series(1,3) h cross join generate_series(1,3) n;
+      from generate_series(1,11) h cross join generate_series(1,3) n;
     commit;`);
   try {
     await race("cohost_leave_promote",
@@ -94,11 +94,87 @@ test("observed social-lock waits recheck cohost membership, authority and lifecy
       and account_id='${uid(3)}'`), "joined");
     sql(`begin; ${auth(1)} select public.remove_hangout_participant('${hid(3)}','${uid(2)}',3); commit;`);
     assert.equal(sql(`select count(*) from private.hangout_cohosts where hangout_id='${hid(3)}'`), "0");
+
+    await race("cohost_remove_promote",
+      `${auth(1)} select public.remove_hangout_participant('${hid(4)}','${uid(2)}',1);`,
+      `${auth(1)} select public.promote_hangout_cohost('${hid(4)}','${uid(2)}',2);`,
+      /Hangout operation not permitted/);
+    assert.equal(sql(`select count(*) from private.hangout_cohosts where hangout_id='${hid(4)}'`), "0");
+
+    sql(`begin; ${auth(1)} select public.promote_hangout_cohost('${hid(5)}','${uid(2)}',1); commit;`);
+    await race("cohost_demote_joining",
+      `${auth(1)} select public.demote_hangout_cohost('${hid(5)}','${uid(2)}',2);`,
+      `${auth(2)} select public.set_hangout_joining('${hid(5)}',3,'closed');`,
+      /Hangout operation not permitted/);
+    assert.equal(sql(`select joining_state from public.hangouts where id='${hid(5)}'`), "open");
+
+    sql(`begin; ${auth(1)} select public.promote_hangout_cohost('${hid(6)}','${uid(2)}',1); commit;`);
+    await race("cohost_demote_remove",
+      `${auth(1)} select public.demote_hangout_cohost('${hid(6)}','${uid(2)}',2);`,
+      `${auth(2)} select public.remove_hangout_participant('${hid(6)}','${uid(3)}',3);`,
+      /Hangout operation not permitted/);
+    assert.equal(sql(`select state from public.hangout_participants where hangout_id='${hid(6)}'
+      and account_id='${uid(3)}'`), "joined");
+
+    sql(`begin;
+      insert into public.platform_roles(user_id,role) values('${uid(4)}','moderator');
+      update private.moderation_feature_gate set enabled=true;
+      insert into private.safety_reports(id,reporter_id,target_type,target_id,category,
+        provenance_kind,provenance_ref_id) values
+        ('54010000-0000-4000-8002-000000000007','${uid(3)}','hangout',
+        '${hid(7)}','harassment','current_hangout','${hid(7)}');
+      commit;`);
+    sql(`begin; ${auth(4)} select * from public.transition_moderation_case(
+      '54010000-0000-4000-8002-000000000007',
+      '54010000-0000-4000-8003-000000000007',0,'start_review'); commit;`);
+    sql(`begin; ${auth(1)} select public.promote_hangout_cohost('${hid(7)}','${uid(2)}',1); commit;`);
+    await race("cohost_disable_edit",
+      `${auth(4)} select * from public.apply_hangout_moderation_action(
+        '54010000-0000-4000-8002-000000000007',
+        '54010000-0000-4000-8004-000000000007',1,'Disable fixture');`,
+      `${auth(2)} select public.edit_hangout('${hid(7)}',2,'Forged',
+        (select starts_at from public.hangouts where id='${hid(7)}'),'Area',35,-79);`,
+      /Hangout operation not permitted/);
+    assert.equal(sql(`select count(*) from private.hangout_disables where hangout_id='${hid(7)}'`), "1");
+
+    sql(`begin; ${auth(1)} select public.promote_hangout_cohost('${hid(8)}','${uid(2)}',1); commit;`);
+    await race("cohost_actor_readiness_edit",
+      `update public.profiles set primary_photo_path=null where user_id='${uid(2)}';`,
+      `${auth(2)} select public.edit_hangout('${hid(8)}',2,'Forged',
+        (select starts_at from public.hangouts where id='${hid(8)}'),'Area',35,-79);`,
+      /Hangout operation not permitted/);
+    sql(`update public.profiles set primary_photo_path=user_id::text||'/primary.png'
+      where user_id='${uid(2)}';`);
+
+    await race("cohost_target_readiness_promote",
+      `update public.profiles set primary_photo_path=null where user_id='${uid(3)}';`,
+      `${auth(1)} select public.promote_hangout_cohost('${hid(9)}','${uid(3)}',1);`,
+      /Hangout operation not permitted/);
+    assert.equal(sql(`select count(*) from private.hangout_cohosts where hangout_id='${hid(9)}'`), "0");
+    sql(`update public.profiles set primary_photo_path=user_id::text||'/primary.png'
+      where user_id='${uid(3)}';`);
+
+    await race("cohost_source_gate_promote",
+      `update private.hangout_feature_gate set enabled=false;`,
+      `${auth(1)} select public.promote_hangout_cohost('${hid(10)}','${uid(2)}',1);`,
+      /Hangout operation not permitted/);
+    sql(`update private.hangout_feature_gate set enabled=true;`);
+
+    sql(`update private.safety_feature_gate set enabled=true;`);
+    await race("cohost_block_promote",
+      `${auth(1)} select public.set_safety_block('${uid(3)}',true);`,
+      `${auth(1)} select public.promote_hangout_cohost('${hid(11)}','${uid(3)}',1);`,
+      /Hangout operation not permitted/);
+    assert.equal(sql(`select count(*) from private.hangout_cohosts where hangout_id='${hid(11)}'`), "0");
+    assert.equal(sql(`select count(*) from private.hangout_peer_provenance where hangout_id='${hid(11)}'
+      and low_id=least('${uid(1)}','${uid(3)}')::uuid
+      and high_id=greatest('${uid(1)}','${uid(3)}')::uuid`), "1");
+    sql(`begin; ${auth(1)} select public.set_safety_block('${uid(3)}',false); commit;`);
   } finally {
-    sql(`update private.hangout_feature_gate set enabled=false;
-      delete from public.hangouts where id in ('${hid(1)}','${hid(2)}','${hid(3)}');
-      delete from auth.users where id in ('${uid(1)}','${uid(2)}','${uid(3)}','${uid(4)}');
-      set storage.allow_delete_query='true';
-      delete from storage.objects where owner_id in ('${uid(1)}','${uid(2)}','${uid(3)}','${uid(4)}');`);
+    // Moderator disable evidence is immutable. The caller must reset this
+    // disposable local database after the suite to clear its fixtures.
+    sql(`update private.safety_feature_gate set enabled=false;
+      update private.moderation_feature_gate set enabled=false;
+      update private.hangout_feature_gate set enabled=false;`);
   }
 });

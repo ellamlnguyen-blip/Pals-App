@@ -51,7 +51,8 @@ test("real Auth and PostgREST enforce current cohost authority and private reads
         graduation_year=2028,bio='Local',primary_photo_path=user_id::text||'/primary.png'
       where user_id in (${ids});
       insert into public.platform_roles(user_id,role) values(${quote(moderator.id)},'moderator');
-      update private.hangout_feature_gate set enabled=true;`);
+      update private.hangout_feature_gate set enabled=true;
+      update private.notification_feature_gate set enabled=true;`);
     hangout = ok(await rpc("create_hangout", host.token, {
       p_request_id: crypto.randomUUID(), p_title: "Original",
       p_starts_at: new Date(Date.now() + 3_600_000).toISOString(),
@@ -86,6 +87,19 @@ test("real Auth and PostgREST enforce current cohost authority and private reads
     })), 3);
     const privateRow = ok(await request(`/rest/v1/hangout_private_locations?hangout_id=eq.${hangout}&select=instructions`, ordinary.token));
     assert.deepEqual(privateRow, [{ instructions: "New door" }]);
+    const editNotice = ok(await rpc("list_notifications", ordinary.token))
+      .find((item) => item.event_code === "hangout_edited");
+    assert.equal(editNotice.actor_id, cohost.id, "joined ready cohost ID is visible");
+    db(`update public.profiles set primary_photo_path=null where user_id=${quote(cohost.id)}`);
+    const unreadyNotice = ok(await rpc("list_notifications", ordinary.token))
+      .find((item) => item.notification_id === editNotice.notification_id);
+    assert.equal(unreadyNotice.actor_id, null, "readiness loss hides cohost actor ID");
+    assert.equal(unreadyNotice.label, "Unavailable");
+    db(`update public.profiles set primary_photo_path=user_id::text||'/primary.png'
+      where user_id=${quote(cohost.id)}`);
+    assert.equal(ok(await rpc("list_notifications", ordinary.token))
+      .find((item) => item.notification_id === editNotice.notification_id).actor_id, cohost.id);
+
     assert.equal(ok(await rpc("set_hangout_joining", cohost.token,
       { p_hangout_id: hangout, p_expected_revision: 3, p_joining_state: "closed" })), 4);
     denied(await rpc("cancel_hangout", cohost.token,
@@ -102,12 +116,18 @@ test("real Auth and PostgREST enforce current cohost authority and private reads
     assert.deepEqual(ok(await request(`/rest/v1/hangout_private_locations?hangout_id=eq.${hangout}&select=instructions`, cohost.token)),
       [{ instructions: "New door" }], "demotion retains joined private access");
     ok(await rpc("leave_hangout", cohost.token, { p_hangout_id: hangout }));
+    const departedNotice = ok(await rpc("list_notifications", ordinary.token))
+      .find((item) => item.notification_id === editNotice.notification_id);
+    assert.equal(departedNotice.actor_id, null, "leave hides former cohost actor ID");
+    assert.equal(departedNotice.label, "Unavailable");
+
     assert.deepEqual(ok(await request(`/rest/v1/hangout_private_locations?hangout_id=eq.${hangout}&select=instructions`, cohost.token)),
       [], "leave revokes future private reads");
     assert.equal(ok(await rpc("remove_hangout_participant", host.token,
       { p_hangout_id: hangout, p_account_id: cohost.id, p_expected_revision: 5 })), 6);
   } finally {
-    db(`update private.hangout_feature_gate set enabled=false;
+    db(`update private.notification_feature_gate set enabled=false;
+      update private.hangout_feature_gate set enabled=false;
       delete from private.hangout_create_requests where host_id in (${users.map((u) => quote(u.id)).join(",")});
       ${hangout ? `delete from public.hangouts where id=${quote(hangout)};` : ""}
       delete from auth.users where id in (${users.map((u) => quote(u.id)).join(",")});

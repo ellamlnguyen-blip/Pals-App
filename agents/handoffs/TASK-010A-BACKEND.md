@@ -5,11 +5,11 @@ Agent: bounded TASK-010A backend agent (GPT-6 Sol, medium requested; dispatch ha
 Branch/worktree: `agent/TASK-010A-cohost-backend` at `/private/tmp/pals-task010a-cohost-backend`
 Starting remote `main`: `559db5bf8d3be55f2d0223f47cdf08a730d2354c`
 Rebased remote `main`: `26e1a3edbaa736f9b57794415b92c3201206339e` (eight docs-only commits, no implementation overlap)
-Tested code commit: `36c05ae00913c68857ae047c653ed9e25799a125`
+Tested code commit: local `agent/TASK-010A-cohost-backend` HEAD (exact SHA in coordinator report; earlier reviewed tip `36c05ae00913c68857ae047c653ed9e25799a125`)
 Task branch remote SHA: **unpublished** — automatic approval review rejected `git push` twice
 Integrated `main` SHA: **pending** — security review and publication remain blocked
 Main status record: coordinator-owned `tasks/NOW.md`, `docs/operations/CURRENT_STATE.md`
-Outstanding: independent exact-tip security review, expanded observed-lock matrix, workspace lint/typecheck/build, task-branch publication and verified main integration.
+Outstanding: independent exact-tip security review, workspace lint/typecheck/build environment gaps, task-branch publication and verified main integration.
 
 ## Outcome
 
@@ -30,9 +30,11 @@ The authorization matrix is: host can promote/demote, edit, control joining, can
 Before: social mutation lock → parent Hangout lock → actor/source evidence → participant/provenance writes → notification gates/recipients.
 After: same order, with target live evidence and assignment checks after the parent wait; assignment deletion happens inside participant transition, and revision updates happen under the parent lock. The current `private.lock_hangout` remains mandatory for management mutations, including moderation-disable denial. `private.safety_record_joined_overlap` still precedes leave/removal writes. Safety-forced teardown emits no ordinary departure event. Material co-host edits emit only existing `hangout_edited`; cancellation only existing `hangout_cancelled`.
 
+`list_notifications` now revalidates the `hangout_edited` actor at inbox read time: the immutable host remains visible under the existing source check; a co-host actor must still be a current, ready joined roster member. A departed or nonready former co-host edit row becomes fully neutral (`Unavailable`, with no actor, source or target IDs) and becomes visible again if readiness returns while the actor remains joined. Other notification event branches retain their prior checks.
+
 ## Files changed
 
-Migration: `supabase/migrations/20260925000200_local_cohost_authority.sql`. New suites: `supabase/tests/database/local_cohost_authority.test.sql`, `supabase/tests/cohost-http.integration.mjs`, `supabase/tests/cohost-concurrency.integration.mjs`. Updated old removal callers in existing database, HTTP, action and concurrency suites; updated `supabase/README.md` RPC contract. No coordinator-owned shared status or UI file was edited.
+Migration: `supabase/migrations/20260925000200_local_cohost_authority.sql`. New suites: `supabase/tests/database/local_cohost_authority.test.sql`, `supabase/tests/database/local_cohost_notifications.test.sql`, `supabase/tests/cohost-http.integration.mjs`, `supabase/tests/cohost-concurrency.integration.mjs`. Updated old removal callers in existing database, HTTP, action and concurrency suites; updated `supabase/README.md` RPC contract. No coordinator-owned shared status or UI file was edited.
 
 ## Verification
 
@@ -41,11 +43,13 @@ Migration: `supabase/migrations/20260925000200_local_cohost_authority.sql`. New 
 - True upgrade passed: reset to the preceding schema through `20260925000100`, then `supabase migration up --local` applied `20260925000200`; migration history verified. The expanded co-host suite passed **63/63** against that upgraded schema. The 63 assertions cover role matrix, stale revision, direct DML/old RPC, bounded readers, readiness suspension/demotion, rejoin nonrestoration, block teardown/provenance/nonrestoration, and pre-start cancellation crossing attendance opening followed by host removal and assigned leave. Original `updated_at` stayed unchanged and attendance answers remained denied.
 - Local `db lint --schema public,private --level warning --fail-on warning`: no schema errors. New real Auth/PostgREST co-host suite passed **1/1** via direct `node` execution; its `node --test` invocation did not complete because Supabase CLI `status` intermittently exceeds Node's 15-second pre-registration limit. New observed-lock suite passed **1/1** with three observed waits: leave→promote, demote→edit, cancellation→co-host removal. Existing Hangout race **1/1**, global-block race **1/1**, Hangout notification race **2/2** passed.
 - Direct Prettier check: all matched files pass. Root unit tests: 46 pass, 0 fail, 1 sandbox loopback skip. Changed JavaScript syntax checks (10 files), Python AST parse and `git diff --check` pass.
-- `pnpm check` did not complete: offline install lacks `@types/react@19.3.0`, and pnpm then aborted a modules purge without a TTY. Standalone ESLint hangs even for `--version` in both this worktree and the canonical checkout; no ESLint pass is claimed. Typecheck/build and existing built Next HTTP suite were not run. The independent reviewer should treat these as open verification gates. The observed-lock suite covers three core races; additional TASK-010A contract races (promote versus block/host removal, demote versus joining/removal, disable/source-gate/readiness waits) remain to be added or independently verified before integration.
+- P1 notification fix regression: new pgTAP **10/10** covers visible co-host edit, readiness suspension/restoration, departure neutralization, and immutable host edit. Existing Hangout notifications **48/48** and co-host authority **63/63** still pass. Real Auth/PostgREST co-host suite passed **1/1** with co-host actor privacy checks across readiness loss/restoration and departure. After a clean reset the complete database suite passed **19 files / 1,010 assertions**, no `not ok` or SQL errors; a second clean reset applied the same migration successfully. Final schema lint again found no errors.
+- Expanded observed-lock suite passed **1/1** with 11 observed wait cases: leave→promote, demote→edit, cancellation→co-host removal, host removal→promote, demote→joining, demote→removal, moderation disable→edit, actor readiness loss→edit, target readiness loss→promote, source-gate off→promote, and global block→promote. It verifies no unauthorized role/write, target state, and block provenance for the affected pair. Because moderator disable evidence is immutable, fixtures were removed through a clean local reset.
+- `pnpm check` did not complete: offline install lacks `@types/react@19.3.0`, and pnpm then aborted a modules purge without a TTY. Direct web `tsc --noEmit -p apps/web/tsconfig.json` using canonical dependency symlinks timed out after **180.02 seconds** with no output; the process showed about 0.1% CPU and a sleeping state at 93 seconds. Direct `next typegen` was interrupted after more than 35 seconds with no output. Standalone canonical ESLint also hung even for `--version`, independently reproduced by the coordinator. A bounded direct ESLint `--version` call timed out at **30.02 seconds** with no output. Bounded direct Next web/admin builds each timed out at **90.01/90.02 seconds**, with no stdout or build artifact and only the Apple Silicon/Rosetta warning on stderr. No ESLint/typecheck/build pass is claimed. The independent reviewer should treat these as open verification gates.
 
 ## Cleanup
 
-After final reset and rolled-back SQL fixtures, local SQL counted **0** Auth users, **0** Hangouts and **0** profile-photo objects; a dynamic check found no enabled `private.*feature_gate` row. Supabase stopped successfully; the task-owned Lima VM stopped successfully. No `.env`, credentials, gate state or dependency directory was committed.
+After the final clean reset following the expanded races, local SQL counted **0** Auth users, **0** Hangouts and **0** profile-photo objects; a dynamic check found no enabled `private.*feature_gate` row. The Supabase CLI stop exited 137 without output, so the six explicitly identified `pals-local` containers were stopped directly with Docker; the task-owned Lima VM then stopped successfully. No `.env`, credentials, gate state or dependency directory was committed.
 
 ## Publication blocker
 

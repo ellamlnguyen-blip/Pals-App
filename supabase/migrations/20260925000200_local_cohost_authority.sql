@@ -310,4 +310,66 @@ grant execute on function public.promote_hangout_cohost(uuid,uuid,bigint),
   public.list_hangout_roster_roles(uuid,uuid,integer),
   public.remove_hangout_participant(uuid,uuid,bigint)
   to authenticated;
+-- A co-host edit actor is an attendee ID, not immutable host ownership.
+-- Revalidate that ID on every inbox read; a former or nonready actor must not
+-- survive merely because the recipient still has Hangout access. The host's
+-- immutable ID keeps its existing source behavior.
+create or replace function public.list_notifications(p_after_created_at timestamptz default null,p_after_id uuid default null,p_limit integer default 24)
+returns table(notification_id uuid,source_kind text,source_id uuid,event_code text,actor_id uuid,target_id uuid,label text,created_at timestamptz,read_at timestamptz)
+language plpgsql volatile security definer set search_path='' as $$
+declare owner_id uuid;
+begin
+ if p_limit is null or p_limit not between 1 and 24 or ((p_after_created_at is null)<>(p_after_id is null)) then
+  raise exception 'Invalid notification page' using errcode='22023';end if;
+ owner_id:=private.notification_require_owner();
+ return query with page as materialized (
+  select n.* from private.notification_items n where n.recipient_id=owner_id
+  and (p_after_created_at is null or (n.created_at,n.id)<(p_after_created_at,p_after_id))
+  order by n.created_at desc,n.id desc limit p_limit
+ ), checked as (select n.*,case when n.source_kind='friendship' then
+  private.friendship_enabled() and private.people_enabled()
+  and exists(select 1 from private.friendships f where f.generation_id=n.target_id
+   and f.low_id=least(owner_id,n.actor_id) and f.high_id=greatest(owner_id,n.actor_id)
+   and ((n.event_code='friend_request' and f.state='pending' and f.requester_id=n.actor_id)
+    or (n.event_code='friend_accepted' and f.state='accepted' and f.requester_id=owner_id)))
+  and private.friendship_eligible(n.actor_id)
+ when n.source_kind='dm' then private.dm_enabled() and private.people_enabled()
+  and exists(select 1 from private.dm_pairs d where d.generation_id=n.target_id and d.state in('pending','accepted')
+   and d.low_id=least(owner_id,n.actor_id) and d.high_id=greatest(owner_id,n.actor_id)
+   and ((n.event_code='dm_request' and d.state='pending' and d.initiator_id=n.actor_id
+     and n.source_id=d.generation_id and exists(select 1 from private.dm_messages m where m.generation_id=d.generation_id and m.sequence=1))
+    or (n.event_code='dm_accepted' and d.state='accepted' and d.initiator_id=owner_id and n.source_id=d.generation_id)
+    or (n.event_code='dm_message' and d.state='accepted' and exists(select 1 from private.dm_messages m
+       where m.id=n.source_id and m.generation_id=d.generation_id and m.author_id=n.actor_id and m.sequence>1))))
+  and private.dm_eligible(n.actor_id)
+ when n.source_kind='hangout' then
+  not private.safety_pair_blocked(owner_id,n.actor_id) and (case when n.event_code='hangout_edited' then private.can_read_hangout(n.target_id)
+    and exists(select 1 from public.hangout_participants p where p.hangout_id=n.target_id and p.account_id=owner_id and p.state='joined')
+    and exists(select 1 from public.hangouts h where h.id=n.target_id
+      and (h.host_id=n.actor_id or private.can_read_hangout_roster(h.id,n.actor_id)))
+   when n.event_code='hangout_cancelled' then private.can_read_hangout(n.target_id)
+    and exists(select 1 from public.hangout_participants p where p.hangout_id=n.target_id and p.account_id=owner_id and p.state='joined')
+   when n.event_code in('hangout_joined','hangout_left') then private.can_read_hangout(n.target_id)
+    and exists(select 1 from public.hangouts h where h.id=n.target_id and h.host_id=owner_id)
+   else false end)
+ when n.source_kind='hangout_chat' then n.event_code='hangout_chat_message'
+  and private.chat_authorized(n.target_id)
+  and not private.safety_pair_blocked(owner_id,n.actor_id)
+  and exists(select 1 from private.hangout_conversations c join private.hangout_messages m on m.conversation_id=c.id
+   where c.hangout_id=n.target_id and m.id=n.source_id and m.author_id=n.actor_id)
+ else false end allowed from page n)
+ select n.id,case when n.allowed then n.source_kind else null::text end,
+ case when n.allowed then n.source_id else null::uuid end,
+ case when n.allowed then n.event_code else null::text end,
+ case when n.allowed and n.event_code not in('hangout_joined','hangout_left','hangout_chat_message') then n.actor_id else null::uuid end,
+ case when n.allowed then n.target_id else null::uuid end,
+ case when not n.allowed then 'Unavailable' when n.event_code='friend_request' then 'Friend request'
+ when n.event_code='friend_accepted' then 'Friend request accepted' when n.event_code='dm_request' then 'Message request'
+ when n.event_code='dm_accepted' then 'Message request accepted' when n.event_code='dm_message' then 'Direct message'
+ when n.event_code='hangout_edited' then 'Hangout updated' when n.event_code='hangout_cancelled' then 'Hangout cancelled'
+ when n.event_code='hangout_joined' then 'Someone joined your Hangout' when n.event_code='hangout_left' then 'Someone left your Hangout'
+ else 'Hangout message' end,
+ n.created_at,n.read_at from checked n order by n.created_at desc,n.id desc;
+end; $$;
+
 commit;
