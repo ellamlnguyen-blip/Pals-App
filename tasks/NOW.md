@@ -1,5 +1,9 @@
 # NOW
 
+## TASK-021 — reviewed planning; hosted rehearsal blocked
+
+TASK-021 planning contract and source-backed readiness/runbook are independently reviewed. Hosted rehearsal remains blocked: TASK-010 co-host implementation is absent, TASK-003 deployed HTTPS/real UNC delivery is unverified, hosted moderation/retention/photo-URL policy is unresolved, and TASK-020 has no accepted operational size-signal consumer. Remaining MVP access/friend-context/profile/measurement gaps are recorded. No hosted operation, runtime change or gate enablement occurred. See `tasks/active/TASK-021-staging-launch-rehearsal.md`, `docs/operations/TASK-021-STAGING-READINESS.md` and `agents/handoffs/TASK-021-CONTRACT.md`. Planning publication does not complete TASK-021; no completion-triggered successor yet.
+
 ## TASK-020 — local implementation complete
 
 Reviewed Stage A backend `06cae8d1472170eec99641d46181e3fa9b4d882c` and Stage B UI `65f0356c8cce888d769adcadcb41d050d78f40da` are integrated for disposable-local use under Accepted ADR-0024. Independent exact-tip security/design reviews found no remaining P0/P1/P2. Backend authorization, lock/race, SQL and real HTTP checks passed; the authenticated production-build UI covered 24/25 host awareness, nonhost privacy, joining close/reopen/stale/denied behavior, over-100 discovery ordering, gate-off behavior, phone layout and keyboard focus. The local reset left zero fixtures, ten gates false and owned services stopped. Stage handoffs and `agents/handoffs/TASK-020.md` record the evidence and limits. Hosted operation remains blocked on an accepted private-signal consumer and operational policy; TASK-021 staging planning is next. Canonical publication and remote receipt are recorded in the parent handoff.

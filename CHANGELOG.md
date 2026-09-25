@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-25 — TASK-021 staging rehearsal planning
+
+TASK-021 planning contract and source-backed readiness/runbook are independently reviewed. Hosted rehearsal remains blocked: TASK-010 co-host implementation is absent, TASK-003 deployed HTTPS/real UNC delivery is unverified, hosted moderation/retention/photo-URL policy is unresolved, and TASK-020 has no accepted operational size-signal consumer. Remaining MVP access/friend-context/profile/measurement gaps are recorded. No hosted operation, runtime change or gate enablement occurred. See `tasks/active/TASK-021-staging-launch-rehearsal.md`, `docs/operations/TASK-021-STAGING-READINESS.md` and `agents/handoffs/TASK-021-CONTRACT.md`. Planning publication does not complete TASK-021; no completion-triggered successor yet.
+
 ## 2026-09-25 — TASK-020 large-Hangout safeguards complete locally
 
 - Integrated reviewed Stage A backend and Stage B student UI under Accepted ADR-0024. A current host sees a coarse warning at 25 joined members and can close or reopen joining through existing authority; saved discovery prioritizes smaller viewer-visible groups before the 100-item display limit. The private size signal remains unconsumed. Independent exact-tip reviews, local backend checks and authenticated built-web checks passed within the handoff limits. Reset cleared fixtures and left ten gates false; no hosted operation occurred.
