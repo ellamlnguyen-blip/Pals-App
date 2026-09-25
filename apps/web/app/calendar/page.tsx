@@ -1,4 +1,5 @@
 import { Frame } from "../components";
+import { localAttendanceAvailable } from "../../lib/attendance";
 import { requireAccess } from "../../lib/access";
 import { requireLocalHangouts } from "../../lib/hangouts";
 import { queryCalendar } from "../../lib/calendar";
@@ -76,9 +77,16 @@ export default async function CalendarPage({
             <h1 id="calendar-title">Make time for a Hangout</h1>
             <p>See what’s happening, or find the plans you’ve joined.</p>
           </div>
-          <a className="button" href="/hangouts/new">
-            + Create Hangout
-          </a>
+          <div className="calendar-attendance-actions">
+            {localAttendanceAvailable() && (
+              <a className="quiet-button" href="/attendance">
+                Your attendance
+              </a>
+            )}
+            <a className="button" href="/hangouts/new">
+              + Create Hangout
+            </a>
+          </div>
         </div>
         <form className="calendar-controls" action="/calendar" method="get">
           <label>

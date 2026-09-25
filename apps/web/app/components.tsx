@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { localHangoutsAvailable } from "../lib/hangouts";
+import { localAttendanceAvailable } from "../lib/attendance";
 import { localPeopleAvailable } from "../lib/people";
 import { localNotificationsAvailable } from "../lib/notifications";
 import { StudentHeader, StudentNav } from "./student-shell";
@@ -17,7 +18,11 @@ export function Frame({
       <a className="skip-link" href="#main">
         Skip to content
       </a>
-      <StudentHeader signedIn={signedIn} accountReady={navigation} />
+      <StudentHeader
+        signedIn={signedIn}
+        accountReady={navigation}
+        attendanceAvailable={signedIn && localAttendanceAvailable()}
+      />
       {navigation && (
         <StudentNav
           available={{

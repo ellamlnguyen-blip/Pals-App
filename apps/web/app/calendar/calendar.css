@@ -143,3 +143,10 @@
   border: 1px solid var(--pals-line);
   border-radius: var(--pals-input-radius);
 }
+
+.calendar-attendance-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}

@@ -24,10 +24,12 @@ export function StudentHeader({
   signedIn = false,
   name,
   accountReady = false,
+  attendanceAvailable = false,
 }: {
   signedIn?: boolean;
   name?: string | null;
   accountReady?: boolean;
+  attendanceAvailable?: boolean;
 }) {
   return (
     <header className="student-header">
@@ -61,6 +63,9 @@ export function StudentHeader({
             <strong>{name ?? "Your account"}</strong>
             <p>UNC Chapel Hill</p>
             {accountReady && <Link href="/profile">Your profile</Link>}
+            {attendanceAvailable && (
+              <Link href="/attendance">Your attendance</Link>
+            )}
             <SignOutForm />
           </div>
         </details>
