@@ -1,5 +1,9 @@
 # NOW
 
+## TASK-018A backend dispatch
+
+ADR-0022 acceptance is on independently remote-verified canonical main `f728b08b53dc05508ec19744c9dc799557f4365e`; the acceptance task branch `5b6b14ad40a1003a5b0dba71b933717528e4a597` is also independently remote-verified. A fresh scoped GPT-6 Sol medium task agent is implementing only the disposable-local backend contract in `/private/tmp/pals-task-018a-attendance` on `agent/TASK-018A-attendance-backend` from that exact baseline. The dispatch tool exposes no Standard-speed selector to verify. Migration/tests, cleanup, handoff, task-branch publication, independent exact-tip security review and main integration remain pending. B UI remains undispatched; no hosted operation or gate enablement is authorized.
+
 ## TASK-018 ADR-0022 acceptance
 
 The user explicitly replied “accept” on 2026-09-24 to the published ADR-0022 attendance-policy prompt. This accepts only the reviewed disposable-local self-report/time/privacy/schedule policy. Publish this receipt on canonical main and independently remote-verify it before a fresh Stage A backend agent starts. Stage B remains dependent on reviewed/integrated A. All gates remain default off; no attendance code, hosted migration, production data or deployment is authorized by this acceptance alone.
