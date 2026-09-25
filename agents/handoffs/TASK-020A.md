@@ -1,0 +1,25 @@
+# TASK-020A handoff — disposable-local large-Hangout backend
+
+Status: implementation complete on the dedicated task branch; awaiting fresh exact-tip security review and coordinator integration. No hosted migration or gate enablement.
+
+Branch/worktree: `agent/TASK-020A-large-hangout-backend`, `/private/tmp/pals-task-020a-backend`. The branch incorporated reviewed canonical contract amendment `602a837a06330602d618942862096c26b9490c9b` before implementation publication. The implementation commit `0f2d3ae43444b3064d329cb6049a20c613006cb9` was independently verified at `origin/agent/TASK-020A-large-hangout-backend`; the final handoff tip is reported separately after publication because a commit cannot contain its own SHA. Canonical `origin/main` was independently verified at `602a837a06330602d618942862096c26b9490c9b` before handoff publication. Coordinator owns review, status records and main integration.
+
+## Result
+
+- One additive migration adds a private default-disabled safeguard gate, server-owned ranking epoch, 25-member policy version 1 and immutable four-field signal relation. The signal has no anon/authenticated/service-role table reader or client writer. It survives ordinary Hangout cancellation/disable and is cleared by disposable reset.
+- Existing `join_hangout` signature, social lock, parent/source checks, joined replay behavior, safety overlap and optional notification emission remain. Only a genuine admitted join checks the safeguard gate after source/participant locks, counts current joined rows including host under the parent lock and inserts the unique signal before notification emission. Gate-off never vetoes the join.
+- A caller-bound host RPC exposes only a current coarse boolean for a live-ready same-campus immutable host of a published, non-disabled Hangout while both gates are on. A caller-bound saved-discovery RPC validates UNC bounds and a two-minute cutoff, filters/authorizes before ranking, counts only roster rows visible to that viewer, orders before its 101-row probe, and returns exactly the ten existing `SavedPin` fields plus opaque epoch and `chronological|small_first` ranking mode. Gate-off ordering is chronological/ID.
+- Backend adapter contract for Stage B is recorded in `docs/engineering/LOCATION_AND_MAPS.md`: first projection, fresh `get_access_state`, identical second projection with the captured cutoff, full ordered 101-row/mode/epoch comparison, then release at most 100 items. Any failed/uncertain/mismatched step releases no previous items and never falls back to a less authorized reader. No web UI, operator reader, report/sanction, analytics field or hosted operation was added.
+
+## Verification
+
+- Two clean local migration resets and a true immediately prior-schema upgrade applied the new migration. Public/private schema lint reported no errors. The exact final migration passed all 59 focused actual-role SQL assertions, including 130 interleaved Hangouts, filtering before the 101-row probe, viewer A/B blocked-member differences, hidden/unready peer changes, host versus viewer/moderator/cross-campus/unready/disabled, signal immutability and cancellation retention. All 17 existing/new SQL fixtures passed on each full streamed pass with no `not ok` result.
+- Real local Auth/PostgREST checked the public projection/denials and exact two-RPC/fresh-access adapter sequence. Gate update or Hangout cancellation between reads discarded all first-read items. Existing Hangout notification HTTP regression passed with the changed join path. Observed-lock tests passed concurrent threshold crossing, disable-before-signal (join succeeds without signal), close/block-before-join (no membership or signal), stronger-isolation denial and a host size read waiting behind committed cancellation.
+- `CI=true NEXT_TELEMETRY_DISABLED=1 pnpm check` passed format, lint, typecheck, 45 Node tests and both production builds. One pre-existing browser-adapter test self-skipped because the unprivileged workspace-check sandbox blocks loopback listeners; this was not counted as a pass.
+- Final disposable reset/inspection found zero Auth users, Hangouts, private size signals, notification items and Storage objects, with all ten product gates false. Supabase and the owned Lima VM were stopped and Lima reported `Stopped`; temporary status/fixture output was removed.
+
+## Limits and next gate
+
+The pinned `supabase test db --local` wrapper could not mount this `/private/tmp` worktree into the existing Lima VM (`permission denied`), so it did not pass. Each same committed SQL fixture was streamed directly into the disposable local Postgres container with `ON_ERROR_STOP=1` and explicit TAP `not ok` checks. Local tests do not establish hosted migration, live-student behavior, threshold efficacy, staffed review or production retention. The signal remains an unconsumed private hook under Accepted ADR-0024.
+
+Obtain fresh exact-tip security review, then integrate accepted code and this handoff with coordinator-owned queue/current-state/changelog updates into remote-verified canonical main before dispatching Stage B. This task agent stops at its branch handoff.

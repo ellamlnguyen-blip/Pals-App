@@ -149,6 +149,24 @@ test("serialized crossing joins and gate/source revocations leave no partial sig
           where hangout_id='${hid(5)}'`), "0");
       } finally { await stop(attempt); }
     }
+    // A host read that begins behind the parent's row lock observes a
+    // committed cancellation and returns no stale size value.
+    const cancel = session("task020a_cancel_first");
+    const reader = session("task020a_size_waiter");
+    try {
+      cancel.send(`begin; ${auth(1)} select public.cancel_hangout('${hid(5)}',1);
+        select 'held';`);
+      await until(() => cancel.output().includes("held"));
+      reader.send(`begin; ${auth(1)} select * from public.get_hangout_large_state('${hid(5)}');
+        commit;`);
+      await observe("task020a_size_waiter");
+      cancel.send("commit;"); cancel.child.stdin.end(); reader.child.stdin.end();
+      await cancel.done; await reader.done;
+      assert.match(reader.output(), /Hangout size unavailable/);
+      assert.equal(sql(`select status from public.hangouts where id='${hid(5)}'`), "cancelled");
+      assert.equal(sql(`select count(*) from private.large_hangout_signals
+        where hangout_id='${hid(5)}'`), "0");
+    } finally { await stop(cancel, reader); }
   } finally {
     sql(`update private.large_hangout_feature_gate set enabled=false;
       update private.hangout_feature_gate set enabled=false;`);
