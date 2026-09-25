@@ -19,4 +19,4 @@ Documentation checks: `git diff --check`, source reference/path checks and scope
 Publish and verify this branch and canonical main, then report the A/B readiness to the existing TASK-021 task. A fresh TASK-010A implementation agent may be dispatched only from then-current verified main under its published contract, followed by exact-tip security review and reviewed integration. B is dependent on A. This planning substage does not create a duplicate product/successor task or authorize hosted execution.
 
 ## Publication receipt
-Pending independent remote branch/main verification.
+After independent review, the planning branch and canonical main were pushed and independently verified with `git ls-remote` at `10a3b6d409902988594776d2d468bf83e6a80777`. A subsequent documentation-only receipt may advance main; this immutable SHA records the reviewed contract integration. TASK-010A implementation remains undispatched, TASK-010B dependent, and both parent TASK-010 and TASK-021 incomplete.
