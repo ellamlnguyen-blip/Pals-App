@@ -24,6 +24,9 @@ export default async function Onboarding() {
           <p className="help">University of North Carolina at Chapel Hill</p>
           <p className="help">{user!.email}</p>
           <OnboardingForm profile={profile} />
+          <p>
+            <Link href="/account/analytics">Analytics choice</Link>
+          </p>
           {localPeopleAvailable() && (
             <p>
               <Link href="/people/privacy">Manage People sharing</Link>
