@@ -1,5 +1,9 @@
 # Current State
 
+## TASK-021 repository migration inventory
+
+TASK-021 now has a repository migration snapshot at `docs/operations/TASK-021-MIGRATION-INVENTORY.md`: 19 committed migrations, ten private gates, and 17 migrations not documented as hosted in the 2026-09-22 integration record. These are historical-document comparisons, not a current hosted pending list. The pinned CLI failed before a read-only listing, so live target state remains unverified. TASK-010A may add another migration; refresh from the exact release tip. No hosted operation occurred.
+
 ## TASK-021 size-signal decision brief
 
 A source-backed decision brief for TASK-020’s private size signal is independently reviewed and prepared for canonical publication at `docs/operations/TASK-021-SIZE-SIGNAL-DECISION.md`. It proposes a separate audited operator review flow with bounded current context, distinct review gate and pending-row handling, but remains **Proposed**: coverage, escalation/contact, retention/legal hold and failure owners are unchosen. Its operator access expansion requires a separately accepted ADR, reviewed implementation and target-specific hosted authorization. TASK-021 remains open and safeguard hosted use blocked. TASK-010A local backend implementation is dispatched from reviewed contracts; no result is claimed yet.
