@@ -43,3 +43,5 @@ Size-signal brief publication receipt: reviewed task branch `7117ad729c7c989caa2
 ## Repository migration inventory
 TASK-021 now has a repository migration snapshot at `docs/operations/TASK-021-MIGRATION-INVENTORY.md`: 19 committed migrations, ten private gates, and 17 migrations not documented as hosted in the 2026-09-22 integration record. These are historical-document comparisons, not a current hosted pending list. The pinned CLI failed before a read-only listing, so live target state remains unverified. TASK-010A may add another migration; refresh from the exact release tip. No hosted operation occurred.
 This is a read-only source audit and historical-document comparison, with no live hosted verification or runtime test. Branch/publication receipt follows.
+
+Migration-inventory publication receipt: the reviewed task branch `5756932e7e41a23bb21042767a5a90aaebb3b6dd` and canonical main integration `a75bd05d32bb24286bdbbfbd02b1db52516e849c` were independently remote-verified. The inventory remains a repository snapshot and historical-document comparison; no current hosted state was verified.
