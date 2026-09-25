@@ -4,6 +4,12 @@ export const UNC_BOUNDS = {
   east: -78.98,
   north: 35.97,
 };
+export function validSavedHangoutId(value: unknown): value is string {
+  return (
+    typeof value === "string" &&
+    /^[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}$/i.test(value)
+  );
+}
 export type Bounds = typeof UNC_BOUNDS;
 export type SavedFilter = { time: "upcoming" | "all"; joining: "any" | "open" };
 export type SavedPin = {
