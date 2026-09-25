@@ -65,13 +65,10 @@ export function HangoutsMap({
     async function initialize() {
       const mapbox = (await import("mapbox-gl")).default;
       if (disposed || !container.current) return;
-      const dark = window.matchMedia("(prefers-color-scheme: dark)").matches;
       map = new mapbox.Map({
         container: container.current,
         accessToken: token,
-        style: dark
-          ? "mapbox://styles/mapbox/dark-v11"
-          : "mapbox://styles/mapbox/light-v11",
+        style: "mapbox://styles/mapbox/light-v11",
         center: UNC_CENTER,
         zoom: 14,
         minZoom: 10,
