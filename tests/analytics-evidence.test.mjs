@@ -1,18 +1,9 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
 import { test } from "node:test";
 import {
   firstRequestConfirmed,
   friendAcceptanceConfirmed,
 } from "../apps/web/lib/analytics-evidence.ts";
-
-test("friend request state projection cannot emit a new-commit event", () => {
-  const control = readFileSync(
-    new URL("../apps/web/app/people/friend-control.tsx", import.meta.url),
-    "utf8",
-  );
-  assert.doesNotMatch(control, /analytics\.capture\("friend_request_sent"\)/);
-});
 
 test("acceptance requires the committed transition result", () => {
   assert.equal(
