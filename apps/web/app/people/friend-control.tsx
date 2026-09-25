@@ -2,6 +2,11 @@
 
 import { useEffect, useRef, useState } from "react";
 import { SafetyActions } from "../safety/safety-client";
+import { analytics } from "../../lib/analytics";
+import {
+  friendAcceptanceConfirmed,
+  newFriendRequestConfirmed,
+} from "../../lib/analytics-evidence";
 import {
   changeFriendship,
   createFriendRequest,
@@ -93,15 +98,23 @@ export function FriendControl({
       if (action === "create") {
         const key = requestKey ?? crypto.randomUUID();
         setRequestKey(key);
-        apply(await createFriendRequest(peerId, key));
+        const next = await createFriendRequest(peerId, key);
+        apply(next);
+        if (alive.current && newFriendRequestConfirmed(!!requestKey, next))
+          void analytics.capture("friend_request_sent");
       } else if (result.relationship) {
-        apply(
-          await changeFriendship(
-            peerId,
-            result.relationship.generation_id,
-            action,
-          ),
+        const next = await changeFriendship(
+          peerId,
+          result.relationship.generation_id,
+          action,
         );
+        apply(next);
+        if (
+          action === "accept" &&
+          alive.current &&
+          friendAcceptanceConfirmed(next)
+        )
+          void analytics.capture("friend_request_accepted");
         setRequestKey(null);
       }
     } catch {

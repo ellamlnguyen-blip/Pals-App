@@ -8,6 +8,7 @@ import { chatAccess, readChat } from "../../../../lib/chat";
 import { SafetyActions } from "../../../safety/safety-client";
 import "../../create.css";
 import "../saved.css";
+import { AnalyticsView } from "../../../analytics-view";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -52,6 +53,7 @@ export default async function SavedDetailPage({
       : null;
   return (
     <Frame signedIn navigation>
+      <AnalyticsView event="hangout_detail_viewed" />
       <div className="saved-detail">
         <Link href="/hangouts/saved">← Saved Hangouts</Link>
         <p className="badge">Saved Hangout · local only</p>
