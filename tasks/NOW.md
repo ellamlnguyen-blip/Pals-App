@@ -2,7 +2,9 @@
 
 ## TASK-020 — Stage A reviewed; Stage B pending
 
-Stage A reviewed integration: task tip `06cae8d1472170eec99641d46181e3fa9b4d882c` passed fresh exact-tip security review after missing host boundary and moderation-race evidence was added. All 64 focused SQL assertions, 17 fixtures, real Auth/PostgREST/notification HTTP, observed-lock checks, upgrade, lint and workspace checks passed within the documented Lima wrapper limitation. Zero fixtures, ten gates false, services stopped. Reviewed backend/handoff are merged into the coordinator branch; canonical publication/remote receipt remains. Stage B contract is a dependent draft awaiting A remote integration and exact RPC reconciliation.
+Stage B contract: exact integrated A RPCs and current host authority were reconciled in `active/TASK-020B-large-hangout-student-ui.md` and `docs/ux/TASK-020B-INTERACTION-PLAN.md`. Fresh independent design/security review found no remaining P0/P1/P2. Publish the reviewed B contract on canonical main and verify remote SHA before fresh isolated implementation dispatch. No B runtime change or gate enablement yet.
+
+Stage A publication: reviewed task `06cae8d1472170eec99641d46181e3fa9b4d882c` and canonical main `8d3c895d9093918d209c4e9aed3535ab108f19ae` were independently remote-verified. Exact-tip security review cleared after missing host boundary and moderation-race evidence was added. All 64 focused SQL assertions, 17 fixtures, real Auth/PostgREST/notification HTTP, observed-lock checks, upgrade, lint and workspace checks passed within the documented Lima wrapper limitation. Zero fixtures, ten gates false, services stopped. Stage A is complete locally; Stage B and parent TASK-020 remain open.
 
 Stage A response amendment: dependent B planning required an explicit non-sensitive ranking mode for truthful gate-on/off copy. The reviewed A contract now returns it with the 101 public rows and opaque gate epoch, and compares all three across the two reads. Independent re-review found no remaining P0/P1/P2. Publish the amendment on canonical main before A handoff; implementation remains isolated on its task branch.
 

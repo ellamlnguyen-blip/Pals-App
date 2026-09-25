@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-25 — TASK-020B reviewed UI contract
+
+- Defined the host-only warning and desired-state joining control, exact two-read saved-discovery adapter, access-loss masking and rendered QA matrix against reviewed Stage A RPCs. Final independent design/security contract review is clear; implementation remains pending.
+
 ## 2026-09-25 — TASK-020A local backend
 
 - Added a default-off large-Hangout gate, host coarse size reader, private append-once observation and viewer-safe saved-map ordering RPC. Exact-tip review cleared after focused threshold/revocation and moderation-race tests. Local fixture cleanup left all ten gates false; student UI and hosted review remain separate.
