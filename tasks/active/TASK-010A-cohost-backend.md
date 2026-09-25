@@ -1,6 +1,6 @@
 # TASK-010A — Local co-host authority backend
 
-Status: Independently reviewed planning contract; publication pending, implementation undispatched
+Status: Reviewed/published contract; fresh implementation dispatched, review and integration pending
 Date: 2026-09-25
 Parent: `tasks/active/TASK-010-host-cohost-management.md`
 Authority: Accepted ADR-0012 (2026-09-23), within Accepted ADR-0010 and later safety decisions
@@ -33,3 +33,6 @@ Student UI, peer identity/photos, invitations/restricted visibility/eligibility,
 
 ## Handoff
 Use `agents/HANDOFF_TEMPLATE.md`: exact migration and RPC signatures, authorization matrix, before/after lock diagram, test counts/logs, limitations, cleanup, branch and remote SHAs. Coordinator owns shared status/current-state/changelog and TASK-010B dispatch gate.
+
+## Dispatch receipt
+Reviewed contract and canonical main were independently remote-verified at `eccc3539aa0f2f70ccdafdfe11e2c97fbd7b0f55` before fresh TASK-010A agent dispatch. Implementation, tests, security review and integration are pending. Stage B remains blocked on reviewed A integration.

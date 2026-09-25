@@ -5,6 +5,8 @@ Accepted ADR-0012 remains authoritative. Stage A backend and dependent Stage B U
 
 TASK-010 planning publication receipt: reviewed branch and canonical main independently remote-verified at `10a3b6d409902988594776d2d468bf83e6a80777`. A/B implementation remains undispatched.
 
+TASK-010A dispatch: a fresh GPT-6 Sol medium scoped backend agent was dispatched from independently verified main `eccc3539aa0f2f70ccdafdfe11e2c97fbd7b0f55` under the reviewed local contract. Implementation branch SHA, tests and security review are pending. TASK-010B waits for A integration; TASK-010/TASK-021 remain incomplete. The dispatch tool has no Standard-speed selector to verify.
+
 ## TASK-021 plan accepted; TASK-010 prerequisite resumption
 
 On 2026-09-25 the user replied “accept” after the published TASK-021 readiness audit and rehearsal plan. This accepts the reviewed planning direction and prerequisite sequence. It does not select or accept any still-undefined hosted policy, authorize hosted execution, or complete TASK-021. Next, resume the existing TASK-010 task to reconcile and publish its narrower co-host contracts under already Accepted ADR-0012; no duplicate successor task is created.
