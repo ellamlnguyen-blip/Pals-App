@@ -2,7 +2,7 @@
 
 ## 2026-09-25 — TASK-021 size-signal decision planning
 
-A source-backed decision brief for TASK-020’s private size signal is independently reviewed and published at `docs/operations/TASK-021-SIZE-SIGNAL-DECISION.md`. It proposes a separate audited operator review flow with bounded current context, distinct review gate and pending-row handling, but remains **Proposed**: coverage, escalation/contact, retention/legal hold and failure owners are unchosen. Its operator access expansion requires a separately accepted ADR, reviewed implementation and target-specific hosted authorization. TASK-021 remains open and safeguard hosted use blocked. TASK-010A local backend implementation is dispatched from reviewed contracts; no result is claimed yet.
+A source-backed decision brief for TASK-020’s private size signal is independently reviewed and prepared for canonical publication at `docs/operations/TASK-021-SIZE-SIGNAL-DECISION.md`. It proposes a separate audited operator review flow with bounded current context, distinct review gate and pending-row handling, but remains **Proposed**: coverage, escalation/contact, retention/legal hold and failure owners are unchosen. Its operator access expansion requires a separately accepted ADR, reviewed implementation and target-specific hosted authorization. TASK-021 remains open and safeguard hosted use blocked. TASK-010A local backend implementation is dispatched from reviewed contracts; no result is claimed yet.
 
 ## 2026-09-25 — TASK-010 A/B contract reconciliation
 
