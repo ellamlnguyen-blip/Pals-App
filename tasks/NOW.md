@@ -1,5 +1,9 @@
 # NOW
 
+## TASK-018B student UI dispatch
+
+Reviewed Stage A and its handoff are on independently remote-verified canonical main `4179ca3399d0589829308dd8283bfdd48c6271ff`. A fresh scoped GPT-6 Sol medium agent is implementing the reviewed Stage B student UI contract in `/private/tmp/pals-task-018b-attendance` on `agent/TASK-018B-attendance-ui` from that exact baseline. The dispatch tool exposes no Standard-speed selector to verify. Local authenticated/rendered checks, handoff, task-branch publication, fresh exact-tip review and main integration remain pending. The TASK-018 parent is active; no hosted operation or gate enablement is authorized.
+
 ## TASK-018B UI ready for dispatch
 
 TASK-018A is complete for its bounded disposable-local backend scope. The corrected task tip `249efcc4214656a32beba49c13eb479b9e0c614b` and reviewed main integration `3cbf239b20098e49c58c5f3e50680bd0ac51fb41` are independently remote-verified and recorded in its handoff. The reviewed B UI contract has been reconciled to A's zero-row and non-actionable projection. Publish this receipt on canonical main, then dispatch a fresh scoped UI agent from that verified tip. TASK-018 parent remains active; no hosted operation or gate enablement occurred.
