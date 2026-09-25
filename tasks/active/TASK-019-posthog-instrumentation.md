@@ -1,6 +1,6 @@
 # TASK-019 — Minimal PostHog instrumentation
 
-Status: Planning; ADR-0023 accepted, implementation waits for reviewed narrow contract and published receipt
+Status: Local implementation integrated; authenticated event-flow acceptance pending under nine-gates-off constraint
 Date: 2026-09-25
 Planning baseline: independently queried remote `main` at `937672d184098d6f5cb8e5226d0bb84104fcf71e` (TASK-018 complete; nine local feature gates off)
 

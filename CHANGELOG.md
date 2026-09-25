@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-25 — TASK-019B reviewed local event wiring
+
+- Wired nine approved student-web events through the memory-only adapter. Five approved names remain unwired where existing results do not prove a new commit or no student cancel action exists. Exact-tip review and 46 workspace tests passed; a loopback sink confirmed the minimal personless envelope. Authenticated event-flow browser verification remains open with all nine local gates required to stay off. No hosted capture or deployment occurred.
+
 ## 2026-09-25 — TASK-019A local analytics foundation
 
 - Added a default-off, memory-only student analytics choice and 14-name PostHog-compatible adapter for an explicit loopback sink under Accepted ADR-0023. No product event is wired yet. Exact-tip review and workspace/authenticated local checks passed; fixtures were removed, nine gates remain false and services stopped. TASK-019B and canonical main publication are next; hosted capture remains out of scope.
