@@ -23,6 +23,9 @@ export function SavedDiscovery({ token }: { token: string }) {
     "loading",
   );
   const [truncated, setTruncated] = useState(false);
+  const [rankingMode, setRankingMode] = useState<
+    "small_first" | "chronological" | null
+  >(null);
   const [refresh, setRefresh] = useState(0);
   const generation = useRef(0);
   const trigger = useRef<HTMLElement | null>(null);
@@ -36,6 +39,7 @@ export function SavedDiscovery({ token }: { token: string }) {
     setStatus(value ? "loading" : "ok");
     setItems([]);
     setTruncated(false);
+    setRankingMode(null);
   }, []);
   const select = useCallback((id: string, element: HTMLElement) => {
     trigger.current = element;
@@ -53,10 +57,12 @@ export function SavedDiscovery({ token }: { token: string }) {
         if (result.kind === "ok") {
           setItems(result.items);
           setTruncated(result.truncated);
+          setRankingMode(result.rankingMode);
           setStatus("ok");
         } else {
           setItems([]);
           setTruncated(false);
+          setRankingMode(null);
           setStatus(result.kind === "denied" ? "denied" : "error");
         }
         setSelected(null);
@@ -64,6 +70,8 @@ export function SavedDiscovery({ token }: { token: string }) {
       .catch(() => {
         if (generation.current === seq) {
           setItems([]);
+          setTruncated(false);
+          setRankingMode(null);
           setStatus("error");
         }
       });
@@ -92,6 +100,7 @@ export function SavedDiscovery({ token }: { token: string }) {
               generation.current++;
               setItems([]);
               setTruncated(false);
+              setRankingMode(null);
               setSelected(null);
               setStatus("loading");
               setFilters((f) => ({
@@ -112,6 +121,7 @@ export function SavedDiscovery({ token }: { token: string }) {
               generation.current++;
               setItems([]);
               setTruncated(false);
+              setRankingMode(null);
               setSelected(null);
               setStatus("loading");
               setFilters((f) => ({
@@ -130,6 +140,7 @@ export function SavedDiscovery({ token }: { token: string }) {
             generation.current++;
             setItems([]);
             setTruncated(false);
+            setRankingMode(null);
             setSelected(null);
             setStatus("loading");
             setRefresh((v) => v + 1);
@@ -164,12 +175,25 @@ export function SavedDiscovery({ token }: { token: string }) {
                     ? "Move the map back toward UNC to see saved Hangouts."
                     : `${items.length} saved ${items.length === 1 ? "Hangout" : "Hangouts"} in this area.`}
           </p>
-          {truncated && (
-            <p className="saved-limit" role="status">
-              Showing the first 100 by scheduled start. Zoom in or narrow the
-              filters to see more.
-            </p>
-          )}
+          {status === "ok" &&
+            bounds &&
+            rankingMode === "small_first" &&
+            items.length > 0 && (
+              <p className="saved-limit" role="status">
+                {truncated
+                  ? "Showing up to 100 Hangouts in this area. Smaller groups appear first. Zoom in or narrow the filters to see more."
+                  : "Smaller groups appear first in this area."}
+              </p>
+            )}
+          {status === "ok" &&
+            bounds &&
+            rankingMode === "chronological" &&
+            truncated && (
+              <p className="saved-limit" role="status">
+                Showing the first 100 by scheduled start. Zoom in or narrow the
+                filters to see more.
+              </p>
+            )}
           {current && (
             <section
               className="hangout-preview"

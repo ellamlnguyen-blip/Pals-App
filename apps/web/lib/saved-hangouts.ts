@@ -4,6 +4,7 @@ import { access } from "./access";
 import { requireLocalHangouts } from "./hangouts";
 import {
   UNC_BOUNDS,
+  validSavedHangoutId,
   type Bounds,
   type SavedFilter,
   type SavedPin,
@@ -11,10 +12,51 @@ import {
   type ParticipantState,
 } from "./saved-hangouts-types";
 
-const uuid = /^[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}$/i;
 const pinFields =
   "id,title,description,starts_at,ends_at,public_place,public_latitude,public_longitude,campus_zone,joining_state";
 const detailFields = `${pinFields},host_id,status,revision`;
+type RankingMode = "small_first" | "chronological";
+type Projection = {
+  pins: SavedPin[];
+  epoch: string;
+  ranking_mode: RankingMode;
+};
+const pinKeys = pinFields.split(",").sort();
+
+function parseProjection(value: unknown): Projection | null {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return null;
+  const row = value as Record<string, unknown>;
+  if (
+    Object.keys(row).sort().join(",") !== "epoch,pins,ranking_mode" ||
+    typeof row.epoch !== "string" ||
+    !validSavedHangoutId(row.epoch) ||
+    (row.ranking_mode !== "small_first" &&
+      row.ranking_mode !== "chronological") ||
+    !Array.isArray(row.pins) ||
+    row.pins.length > 101
+  )
+    return null;
+  for (const pin of row.pins) {
+    if (!pin || typeof pin !== "object" || Array.isArray(pin)) return null;
+    const fields = pin as Record<string, unknown>;
+    if (
+      Object.keys(fields).sort().join(",") !== pinKeys.join(",") ||
+      typeof fields.id !== "string" ||
+      !validSavedHangoutId(fields.id) ||
+      typeof fields.title !== "string" ||
+      (fields.description !== null && typeof fields.description !== "string") ||
+      typeof fields.starts_at !== "string" ||
+      (fields.ends_at !== null && typeof fields.ends_at !== "string") ||
+      typeof fields.public_place !== "string" ||
+      !Number.isFinite(fields.public_latitude) ||
+      !Number.isFinite(fields.public_longitude) ||
+      (fields.campus_zone !== null && typeof fields.campus_zone !== "string") ||
+      (fields.joining_state !== "open" && fields.joining_state !== "closed")
+    )
+      return null;
+  }
+  return row as Projection;
+}
 
 function validBounds(value: Bounds): boolean {
   return (
@@ -30,6 +72,7 @@ function validBounds(value: Bounds): boolean {
 }
 
 export async function querySaved(bounds: Bounds, filters: SavedFilter) {
+  const cutoff = new Date().toISOString();
   requireLocalHangouts();
   if (
     !validBounds(bounds) ||
@@ -49,32 +92,27 @@ export async function querySaved(bounds: Bounds, filters: SavedFilter) {
       items: [] as SavedPin[],
       truncated: false,
     };
-  const cutoff = new Date().toISOString();
-  function visibleQuery() {
-    let query = client
-      .from("hangouts")
-      .select(pinFields)
-      .eq("status", "published")
-      .eq("visibility", "campus")
-      .gte("public_longitude", bounds.west)
-      .lte("public_longitude", bounds.east)
-      .gte("public_latitude", bounds.south)
-      .lte("public_latitude", bounds.north)
-      .order("starts_at", { ascending: true })
-      .order("id", { ascending: true })
-      .limit(101);
-    if (filters.time === "upcoming") query = query.gte("starts_at", cutoff);
-    if (filters.joining === "open") query = query.eq("joining_state", "open");
-    return query;
-  }
-  const { data, error } = await visibleQuery();
-  if (error)
+  const args = {
+    p_west: bounds.west,
+    p_south: bounds.south,
+    p_east: bounds.east,
+    p_north: bounds.north,
+    p_time_filter: filters.time,
+    p_joining_filter: filters.joining,
+    p_cutoff: cutoff,
+  };
+  const first = await client.rpc("query_saved_hangouts", args);
+  const initial = parseProjection(first.data);
+  if (first.error || !initial)
     return {
-      kind: "error" as const,
+      kind:
+        first.error?.code === "42501"
+          ? ("denied" as const)
+          : ("error" as const),
       items: [] as SavedPin[],
       truncated: false,
     };
-  // Verify readiness and RLS visibility again after the public read.
+  // A fresh caller check separates the two identical, source-authorized reads.
   const { data: live, error: liveError } = await client.rpc("get_access_state");
   if (liveError || live !== "ready")
     return {
@@ -82,13 +120,14 @@ export async function querySaved(bounds: Bounds, filters: SavedFilter) {
       items: [] as SavedPin[],
       truncated: false,
     };
-  // Requery the same bounded viewport rather than probing one ID. A
-  // cancellation, filter change or gate revocation in any returned row must
-  // invalidate the entire response before it reaches the map client.
-  const { data: verified, error: verifyError } = await visibleQuery();
+  const second = await client.rpc("query_saved_hangouts", args);
+  const verified = parseProjection(second.data);
   if (
-    verifyError ||
-    JSON.stringify(verified ?? []) !== JSON.stringify(data ?? [])
+    second.error ||
+    !verified ||
+    initial.epoch !== verified.epoch ||
+    initial.ranking_mode !== verified.ranking_mode ||
+    JSON.stringify(initial.pins) !== JSON.stringify(verified.pins)
   )
     return {
       kind: "error" as const,
@@ -97,8 +136,9 @@ export async function querySaved(bounds: Bounds, filters: SavedFilter) {
     };
   return {
     kind: "ok" as const,
-    items: (verified ?? []).slice(0, 100) as SavedPin[],
-    truncated: (verified?.length ?? 0) > 100,
+    items: verified.pins.slice(0, 100),
+    truncated: verified.pins.length > 100,
+    rankingMode: verified.ranking_mode,
   };
 }
 
@@ -106,7 +146,7 @@ export async function readSavedPublic(
   client: SupabaseClient,
   id: string,
 ): Promise<SavedDetail | null> {
-  if (!uuid.test(id)) return null;
+  if (!validSavedHangoutId(id)) return null;
   const { data, error } = await client
     .from("hangouts")
     .select(detailFields)
@@ -168,8 +208,26 @@ export async function readSavedDetail(id: string) {
     if (error) return { kind: "denied" as const };
     instructions = data?.instructions ?? null;
   }
-  // Public, roster and private reads are separate requests. Recheck all
-  // authorization facts immediately before rendering any private value.
+  let largeState: "large" | "small" | "unavailable" | null = null;
+  if (ownState === "host" && record.status === "published") {
+    largeState = "unavailable";
+    try {
+      const size = await client.rpc("get_hangout_large_state", {
+        p_hangout_id: id,
+      });
+      if (
+        !size.error &&
+        Array.isArray(size.data) &&
+        size.data.length === 1 &&
+        typeof size.data[0]?.is_large === "boolean"
+      )
+        largeState = size.data[0].is_large ? "large" : "small";
+    } catch {
+      // A failed size read is neither a small group nor an access proof.
+    }
+  }
+  // Public, roster, private and host-size reads are separate requests.
+  // Recheck all authorization facts after the last awaited read.
   const { data: live, error: liveError } = await client.rpc("get_access_state");
   const latest = await readSavedPublic(client, id);
   if (liveError || live !== "ready" || !latest)
@@ -190,5 +248,6 @@ export async function readSavedDetail(id: string) {
     roster,
     instructions,
     userId: user.id,
+    largeState,
   };
 }
