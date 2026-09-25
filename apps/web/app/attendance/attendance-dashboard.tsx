@@ -111,6 +111,10 @@ export function AttendanceDashboard({ actor }: { actor: string }) {
           setPhase("error");
           return;
         }
+        if (data.rows.length === 0) {
+          setCursor(null);
+          setHistory([]);
+        }
         setRows(data.rows);
         setPhase("ready");
       } catch {
@@ -226,6 +230,8 @@ export function AttendanceDashboard({ actor }: { actor: string }) {
       setEditing(null);
       setUncertain(null);
       if (!fresh.length) {
+        setCursor(null);
+        setHistory([]);
         setRows([]);
         setNotice("");
         return;
@@ -335,10 +341,7 @@ export function AttendanceDashboard({ actor }: { actor: string }) {
             <div className="attendance-state">
               <h2>No records available</h2>
               <p>No attendance records are available right now.</p>
-              <button
-                className="quiet-button"
-                onClick={() => void load(cursor, history)}
-              >
+              <button className="quiet-button" onClick={() => void load()}>
                 Retry
               </button>
             </div>
