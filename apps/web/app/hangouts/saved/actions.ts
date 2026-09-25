@@ -31,6 +31,10 @@ export async function changeSavedJoining(
     message:
       "We could not verify the outcome. Reload this Hangout before trying again.",
   };
+  const stale = {
+    kind: "stale" as const,
+    message: "This Hangout changed. Reload to see the latest joining state.",
+  };
   if (
     !validSavedHangoutId(id) ||
     !Number.isSafeInteger(expectedRevision) ||
@@ -55,7 +59,7 @@ export async function changeSavedJoining(
   if (!before || before.host_id !== user.id || before.status !== "published")
     return unavailable;
   if (before.revision !== expectedRevision || before.joining_state === desired)
-    return uncertain;
+    return stale;
 
   let nextRevision: unknown;
   let rpcSucceeded = false;
