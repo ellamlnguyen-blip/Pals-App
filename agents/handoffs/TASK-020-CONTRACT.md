@@ -19,6 +19,6 @@ Independent GPT-6 Sol medium planning/security review identified one P2 wording 
 
 ## Publication and next action
 
-Publication is pending. Publish the reviewed documentation task branch, integrate into canonical main without rewriting history, and independently query both remote SHAs. Then request explicit acceptance of ADR-0024. The parent TASK-020 remains incomplete; no successor task may be created on the basis of this planning milestone alone. After acceptance is published, prepare/review A's exact backend contract and lock/projection specification before dispatch; B waits for reviewed A integration.
+The independently reviewed documentation was committed and published on the task branch, then fast-forward integrated into canonical main. Both remote refs were independently queried and matched `0d6fa6686e7f94b11611695c9f1ace94291d4cb1`. This receipt changes documentation only; the proposed policy is not accepted. Request explicit acceptance of ADR-0024. The parent TASK-020 remains incomplete; no successor task may be created on the basis of this planning milestone alone. After acceptance is published, prepare/review A's exact backend contract and lock/projection specification before dispatch; B waits for reviewed A integration.
 
 Agents used GPT-6 Sol with medium reasoning as requested. Dispatch tools expose no Standard-speed selector; no speed configuration or verification is claimed.
