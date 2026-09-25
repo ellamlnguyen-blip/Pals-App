@@ -1,12 +1,12 @@
 # TASK-021 — Staging migration inventory snapshot
 
-Snapshot: reviewed canonical main `7e87a454c6985004ee05c5c084650eb04ddf52af`, 2026-09-25. Read-only repository inventory. This is **not** a migration plan or a fresh hosted database inspection. TASK-010A is implementing a later local migration; refresh this snapshot from the exact release tip before any staging package is proposed.
+Snapshot: canonical main `ac172980d4516ce54d3804c30393b225c0f5ea2c`, independently remote-verified by TASK-010, 2026-09-25. Read-only repository inventory refreshed after TASK-010 completion. This is **not** a migration plan or a fresh hosted database inspection. Refresh again from the exact release tip before any staging package is proposed.
 
 ## Repository versus last documented hosted state
 
-The repository contains 19 committed SQL migrations at this snapshot. `docs/operations/HOSTED_ENVIRONMENT.md` last recorded hosted application of `20260921000100_identity_foundation.sql` and `20260922000100_verified_onboarding.sql` on 2026-09-22. It also recorded a localhost Auth site URL and callback allowlist, no custom SMTP, and no deployed HTTPS frontend. That record is historical; no assertion is made about the target's current schema, users, gates or settings.
+The repository contains 20 committed SQL migrations at this snapshot. `docs/operations/HOSTED_ENVIRONMENT.md` last recorded hosted application of `20260921000100_identity_foundation.sql` and `20260922000100_verified_onboarding.sql` on 2026-09-22. It also recorded a localhost Auth site URL and callback allowlist, no custom SMTP, and no deployed HTTPS frontend. That record is historical; no assertion is made about the target's current schema, users, gates or settings.
 
-The following **17 repository migrations are not documented as applied to the hosted project**. They must not be described as a ready-to-run `db push` batch. Each was developed under local-only boundaries, and later migrations depend on predecessor schema and policies. The exact hosted pending set must come from a fresh target-specific migration-history/diff check, not subtraction from this historical record.
+The following **18 repository migrations are not documented as applied to the hosted project**. They must not be described as a ready-to-run `db push` batch. Each was developed under local-only boundaries, and later migrations depend on predecessor schema and policies. The exact hosted pending set must come from a fresh target-specific migration-history/diff check, not subtraction from this historical record.
 
 | Sequence | Migration | Local scope |
 | --- | --- | --- |
@@ -22,8 +22,9 @@ The following **17 repository migrations are not documented as applied to the ho
 | 15–17 | `20260924000100_local_moderation_review.sql`, `20260924000200_local_account_enforcement.sql`, `20260924000300_local_hangout_disable.sql` | Operator review and enforcement, moderation gate |
 | 18 | `20260924000400_local_attendance.sql` | Private attendance and gate |
 | 19 | `20260925000100_local_large_hangout_safeguards.sql` | Host size/discovery and private unconsumed signal/gate |
+| 20 | `20260925000200_local_cohost_authority.sql` | Local host/co-host assignment, authority and management RPCs; no new gate |
 
-Ten private feature gates are created in the repository migrations: Hangout, People, friendship, Hangout chat, DM, notifications, safety, moderation, attendance and large-Hangout safeguard. Local test cleanup found them disabled after TASK-020. That does not establish their value in any hosted project. TASK-010A may add role policy without a new gate; verify its actual migration after integration.
+Ten private feature gates are created in the repository migrations: Hangout, People, friendship, Hangout chat, DM, notifications, safety, moderation, attendance and large-Hangout safeguard. TASK-010 disposable-local cleanup left them disabled. That does not establish their value in any hosted project. The twentieth migration adds co-host authority without a new gate.
 
 Student web modules `apps/web/lib/hangouts.ts`, `people.ts`, `notifications.ts` and `safety.ts` require `APP_ENV=local` and loopback target checks for current saved feature routes. The admin config rejects nonlocal environments. Analytics capture is default-off; local tests used an optional configured loopback in-memory sink. These guards are a separate hosted release design dependency; changing only environment variables will not enable the complete app. Any guard change requires its own reviewed authorization and privacy contract, not a blanket string replacement.
 
@@ -31,7 +32,7 @@ Student web modules `apps/web/lib/hangouts.ts`, `people.ts`, `notifications.ts` 
 
 1. Verify the selected project is the authorized nonproduction target and independently inspect live migration history and checksums, Auth settings, callback list, storage policies, RLS/grants, feature-gate values, role assignments and data counts without exposing secrets or personal data in the evidence record.
 2. Compare every exact pending migration from the release tip with the live target. Review its default gate state, source authorization, client grants, dependency order, lock/runtime footprint, rollback/forward recovery and required retention/legal-hold policy. Resolve any drift before proposing an apply manifest.
-3. Resolve TASK-010 implementation, hosted moderation/size-signal policy and MVP scope decisions before presenting an exact hosted manifest. A passing local reset or the 2026-09-22 hosted note is insufficient.
+3. TASK-010 is complete for disposable-local scope, but its hosted release still requires target-specific review. Resolve hosted moderation/size-signal policy and MVP scope decisions before presenting an exact hosted manifest. A passing local reset or the 2026-09-22 hosted note is insufficient.
 4. Review exact app build SHA, HTTPS origin/redirects, SMTP sender/test mailbox, Mapbox, analytics capture state, operator bootstrap/MFA, backups and cleanup. Obtain target-specific hosted authorization only after the package is concrete and reviewable.
 
 A read-only attempt to invoke the pinned local Supabase CLI failed before producing command output in this task environment (Bun runtime error). No hosted inspection or migration was performed. The release preflight must use a working trusted CLI/session and retain sanitized evidence.

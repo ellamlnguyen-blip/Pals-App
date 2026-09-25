@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-25 — TASK-021 inventory refreshed after TASK-010
+
+- Refreshed the read-only repository migration snapshot from independently verified canonical main `ac172980d4516ce54d3804c30393b225c0f5ea2c`: 20 SQL migrations, ten private gates, and 18 migrations absent from the last documented hosted application record. Updated the TASK-021 readiness and task records to mark local co-host management complete. Hosted state was not inspected or changed; the historical comparison is not a pending-migration manifest.
+
 ## 2026-09-25 — TASK-010 local host/co-host management
 
 - Added the reviewed saved-Hangout host/co-host management UI on the accepted local backend. Hosts can manage current roles, retained co-host assignments, joining and cancellation; co-hosts can edit, manage ordinary participants and joining, and step down. Caller-bound actions and paginated ID-only readers recheck role, readiness and visibility, with private-content masking after revocation.
