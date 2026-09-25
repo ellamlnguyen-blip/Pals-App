@@ -14,6 +14,8 @@ fixtures require a final disposable database reset.
 
 # Database tests
 
+TASK-020A's `local_large_hangout_safeguards.test.sql` exercises actual SQL roles, the default-off gate, host-only coarse size through leave/rejoin/removal, the private append-once signal, over-100-row viewer-relative saved ordering, filters, revocation and gate epochs. `large-hangout-http.integration.mjs` uses real local Auth/PostgREST and executes the saved adapter's full first-RPC → fresh-access → identical second-RPC sequence with a gate flip and source mutation between reads. `large-hangout-concurrency.integration.mjs` observes lock waits for crossing joins, gate disable, close joining, blocking and moderation disable in both commit orders. Run the HTTP and concurrency suites serially after a clean local reset, and reset again afterward. No hosted endpoint is a test target.
+
 TASK-017B1's `local_account_enforcement.test.sql` exercises the caller-bound
 action, role matrix, exact retry/cross-RPC UUID boundary, linked sanction and
 case audit, restrictive deletion, reopen history and restricted notification
