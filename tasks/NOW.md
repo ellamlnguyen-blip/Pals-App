@@ -1,5 +1,9 @@
 # NOW
 
+## TASK-021 plan accepted; TASK-010 prerequisite resumption
+
+On 2026-09-25 the user replied “accept” after the published TASK-021 readiness audit and rehearsal plan. This accepts the reviewed planning direction and prerequisite sequence. It does not select or accept any still-undefined hosted policy, authorize hosted execution, or complete TASK-021. Next, resume the existing TASK-010 task to reconcile and publish its narrower co-host contracts under already Accepted ADR-0012; no duplicate successor task is created.
+
 ## TASK-021 — reviewed planning; hosted rehearsal blocked
 
 Publication: planning branch `dc9999068aeb29fa6bb8cd38fc1b30dcaac369a2` and reviewed main integration `b72fef8668272b0161a3aad2ec2c47eeeadf14fc` are independently remote-verified. The planning milestone is complete; full TASK-021 remains open.
