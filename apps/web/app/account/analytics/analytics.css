@@ -1,0 +1,44 @@
+.analytics-page {
+  max-width: 680px;
+  margin: 2rem auto 4rem;
+  padding: 0 1rem;
+}
+.analytics-page > a {
+  display: inline-block;
+  margin-bottom: 1.5rem;
+}
+.analytics-page h1 {
+  margin: 0 0 0.75rem;
+}
+.analytics-page > p {
+  color: var(--pals-muted);
+}
+.analytics-panel {
+  margin-top: 1.5rem;
+  padding: clamp(1.25rem, 4vw, 2rem);
+  border: 1px solid var(--pals-line);
+  border-radius: var(--pals-input-radius);
+  background: var(--pals-surface-raised);
+}
+.analytics-panel h2 {
+  margin-top: 0;
+}
+.analytics-panel p {
+  line-height: 1.55;
+}
+.analytics-choice {
+  border-top: 1px solid var(--pals-line);
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+}
+.analytics-choice button {
+  min-height: 44px;
+}
+@media (max-width: 560px) {
+  .analytics-page {
+    margin-top: 1rem;
+  }
+  .analytics-choice button {
+    width: 100%;
+  }
+}

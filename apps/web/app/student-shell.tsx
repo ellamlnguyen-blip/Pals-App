@@ -63,6 +63,7 @@ export function StudentHeader({
             <strong>{name ?? "Your account"}</strong>
             <p>UNC Chapel Hill</p>
             {accountReady && <Link href="/profile">Your profile</Link>}
+            <Link href="/account/analytics">Analytics choice</Link>
             {attendanceAvailable && (
               <Link href="/attendance">Your attendance</Link>
             )}
