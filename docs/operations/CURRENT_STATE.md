@@ -1,5 +1,9 @@
 # Current State
 
+## TASK-021 staging readiness
+
+TASK-021 planning contract and source-backed readiness/runbook are independently reviewed. Hosted rehearsal remains blocked: TASK-010 co-host implementation is absent, TASK-003 deployed HTTPS/real UNC delivery is unverified, hosted moderation/retention/photo-URL policy is unresolved, and TASK-020 has no accepted operational size-signal consumer. Remaining MVP access/friend-context/profile/measurement gaps are recorded. No hosted operation, runtime change or gate enablement occurred. See `tasks/active/TASK-021-staging-launch-rehearsal.md`, `docs/operations/TASK-021-STAGING-READINESS.md` and `agents/handoffs/TASK-021-CONTRACT.md`. Planning publication does not complete TASK-021; no completion-triggered successor yet.
+
 Last updated: 2026-09-25
 
 ## Product

@@ -19,7 +19,7 @@
 - TASK-019 PostHog instrumentation — complete for disposable-local scope; see `DONE.md` and `agents/handoffs/TASK-019.md`. Hosted release and five deliberately unwired events need separate reviewed work.
 - TASK-020 large-Hangout basic safeguards — complete for bounded disposable-local scope under Accepted ADR-0024; see `DONE.md` and A/B/parent handoffs. Hosted use and the private-signal review consumer remain separate.
 - Hosted large-Hangout review prerequisite — TASK-020 proposes only a private unconsumed size signal. Define and accept its operational consumer, audited operator access, retention and response policy before hosted use; ADR-0019 remains report-only. TASK-021 must account for this unresolved dependency.
-- TASK-021 staging launch rehearsal
+- TASK-021 staging launch rehearsal — planning contract/readiness runbook independently reviewed; hosted execution blocked on dependency/policy/target authorization. See `active/TASK-021-staging-launch-rehearsal.md` and `docs/operations/TASK-021-STAGING-READINESS.md`. Full task remains open.
 - TASK-022 domain migration/cutover
 
 Execution order note: TASK-023 is deliberately numbered after the existing launch tasks to avoid renumbering established contracts. Its dependency places it immediately after TASK-016C and before TASK-017; tasks 018–020 should use its shared design system for any student-facing UI they add. Staging still checks consistency across the complete product.
