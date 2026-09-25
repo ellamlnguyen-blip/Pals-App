@@ -27,3 +27,7 @@ TASK-021 contract, `docs/operations/TASK-021-STAGING-READINESS.md`, NOW, BACKLOG
 
 ## Publication receipt
 After final independent review cleared the exact documentation scope, `git ls-remote origin` independently returned the task/main SHAs above. All 12 checked contract/evidence paths exist and `git diff --check` passed. This receipt advances main beyond the reviewed integration; it adds no execution authorization. Planning milestone complete; full TASK-021 remains incomplete and hosted execution blocked.
+
+## Plan acceptance receipt
+On 2026-09-25 the user replied “accept” after the published TASK-021 readiness audit and rehearsal plan. This accepts the reviewed planning direction and prerequisite sequence. It does not select or accept any still-undefined hosted policy, authorize hosted execution, or complete TASK-021. Next, resume the existing TASK-010 task to reconcile and publish its narrower co-host contracts under already Accepted ADR-0012; no duplicate successor task is created.
+Acceptance-record branch: `agent/TASK-021-plan-acceptance`, based on remote-verified main `55a3cc0fb84d6e059381df7949a12da11797e231`. This is a documentation-only receipt; no runtime tests or hosted changes. The existing TASK-010 coordinator will receive the current baseline and bounded contract-reconciliation scope after publication.

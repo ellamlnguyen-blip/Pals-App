@@ -1,6 +1,6 @@
 # TASK-021 — Staging launch rehearsal
 
-Status: Planning; hosted execution blocked on prerequisite decisions and authorization
+Status: Planning accepted 2026-09-25; hosted execution blocked on prerequisite decisions and authorization
 Date: 2026-09-25
 Branch: `agent/TASK-021-staging-rehearsal`
 Baseline: remote main independently verified at `737ca32f1eefd4b347940e367b3923b47c2e0884`.
@@ -51,3 +51,6 @@ Coordinator owns NOW/BACKLOG/CURRENT_STATE/CHANGELOG and `agents/handoffs/TASK-0
 
 ## Successor workflow
 After full TASK-021 acceptance, review, publication and integration, create exactly one successor Codex task from current verified canonical main, checking for existing active work first. Use GPT-6 Sol medium and the app's Standard setting. Select the next ready dependency/task; TASK-022 cutover still requires its own authorized scope. Do not create a completion-triggered successor while TASK-021 is blocked or planning-only.
+
+## User plan acceptance
+On 2026-09-25 the user replied “accept” after the published TASK-021 readiness audit and rehearsal plan. This accepts the reviewed planning direction and prerequisite sequence. It does not select or accept any still-undefined hosted policy, authorize hosted execution, or complete TASK-021. Next, resume the existing TASK-010 task to reconcile and publish its narrower co-host contracts under already Accepted ADR-0012; no duplicate successor task is created.

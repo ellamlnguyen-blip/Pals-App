@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-25 — TASK-021 plan accepted
+
+On 2026-09-25 the user replied “accept” after the published TASK-021 readiness audit and rehearsal plan. This accepts the reviewed planning direction and prerequisite sequence. It does not select or accept any still-undefined hosted policy, authorize hosted execution, or complete TASK-021. Next, resume the existing TASK-010 task to reconcile and publish its narrower co-host contracts under already Accepted ADR-0012; no duplicate successor task is created.
+
 ## 2026-09-25 — TASK-021 staging rehearsal planning
 
 TASK-021 planning contract and source-backed readiness/runbook are independently reviewed. Hosted rehearsal remains blocked: TASK-010 co-host implementation is absent, TASK-003 deployed HTTPS/real UNC delivery is unverified, hosted moderation/retention/photo-URL policy is unresolved, and TASK-020 has no accepted operational size-signal consumer. Remaining MVP access/friend-context/profile/measurement gaps are recorded. No hosted operation, runtime change or gate enablement occurred. See `tasks/active/TASK-021-staging-launch-rehearsal.md`, `docs/operations/TASK-021-STAGING-READINESS.md` and `agents/handoffs/TASK-021-CONTRACT.md`. Planning publication does not complete TASK-021; no completion-triggered successor yet.
