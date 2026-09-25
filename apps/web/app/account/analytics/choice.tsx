@@ -26,11 +26,16 @@ export function AnalyticsChoice({ eligible }: { eligible: boolean }) {
         {text}
       </p>
       {status !== "off" ? (
-        <button type="button" onClick={() => analytics.optOut()}>
+        <button
+          className="button"
+          type="button"
+          onClick={() => analytics.optOut()}
+        >
           Turn off analytics
         </button>
       ) : (
         <button
+          className="button"
           type="button"
           onClick={() => void analytics.optIn()}
           disabled={!eligible}
