@@ -2,6 +2,8 @@
 
 ## TASK-019 analytics planning
 
+ADR-0023 acceptance receipt is on independently remote-verified canonical main `dad5a1a8c5a6607a4f440a5af8b120280ea24637`. Narrow TASK-019A adapter/consent and dependent TASK-019B event-wiring contracts passed independent privacy/security/design planning review with no remaining P0/P1/P2 blocker. Publish and verify the contracts on main, then dispatch a fresh A implementation agent from that exact tip. B waits for reviewed/integrated A. No runtime implementation or external ingest has begun.
+
 TASK-019's reviewed planning contract and Proposed ADR-0023 were published and independently remote-verified on canonical main `b10c924feb0ec174ad05f5c58aa48b223af0caea`. The user replied “acceot” to the explicit acceptance question on 2026-09-25, accepting the policy as written for disposable-local implementation. Publish and independently verify the acceptance receipt, then review/publish a narrower implementation contract before fresh agent dispatch. The event allowlist excludes private attendance and safety data; Postgres remains authoritative. No hosted PostHog change, ingest, live user, gate enablement or deployment is authorized. TASK-018 remains complete with nine local gates off.
 
 ## TASK-018 completion and successor

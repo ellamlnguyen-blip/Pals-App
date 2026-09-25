@@ -17,17 +17,17 @@ Explain where consenting students encounter friction in the accepted hangout loo
 
 ## Event contract
 
-PostHog receives only these exact event names, after an affirmative analytics opt-in. Every event has one application property, `schema_version: 1`. The necessary provider envelope includes the event name, a random visit `distinct_id` and transport fields; it is not an application-property exception. No dynamic application property, source UUID, free text or URL is allowed. View events fire at most once per successful surface opening in a browser visit; mutation events fire only after a confirmed committed success, never on a click, optimistic state, retry, error or uncertain response. The implementation must prevent duplicate events for rerenders and navigation races; PostHog counts are directional, not authoritative transaction counts.
+PostHog receives only these exact event names, after an affirmative analytics opt-in. Every event has one application property, `schema_version: 1`, plus the provider control property `$process_person_profile: false`. The necessary provider envelope includes the event name, a random visit `distinct_id` and transport fields; it is not an application-property exception. No dynamic application property, source UUID, free text or URL is allowed. View events fire at most once per successful surface opening in a browser visit; mutation events fire only after a confirmed **new** commit, never on a click, optimistic state, replay, retry, error or uncertain response. The implementation must prevent duplicate events for rerenders and navigation races; PostHog counts are directional, not authoritative transaction counts.
 
 | Event | Trigger | Authoritative record or limit |
 | --- | --- | --- |
 | `onboarding_completed` | Ready profile is confirmed after onboarding | `public.accounts`, `public.university_memberships`, `public.profiles`; verification and readiness come from Postgres |
-| `hangout_map_viewed` | Authenticated Hangouts map is usable | No view ledger; no map center, bounds, device location, filters or pin IDs |
+| `hangout_map_viewed` | Authorized saved-Hangout map discovery result is usable | No view ledger; mock examples do not count; no map center, bounds, device location, filters or pin IDs |
 | `hangout_detail_viewed` | An authorized saved Hangout detail is rendered | No view ledger; never send Hangout ID, title, visibility, place, roster or host |
 | `hangout_created` | Create RPC is confirmed committed | `public.hangouts`; no creation-request ID |
 | `hangout_joined` | Join RPC is confirmed committed | `public.hangout_participants`; no participant/Hangout ID |
 | `hangout_left` | Leave RPC is confirmed committed | `public.hangout_participants`; no reason or ID |
-| `hangout_cancelled` | Cancel RPC is confirmed committed | `public.hangouts`; no schedule or ID |
+| `hangout_cancelled` | Cancel RPC is confirmed newly committed; wiring deferred until an authorized student cancel call site exists | `public.hangouts`; no schedule or ID |
 | `calendar_viewed` | Authorized Calendar result is usable | No view ledger; no date range or attendance context |
 | `people_profile_viewed` | Authorized People profile is rendered | No view ledger; no peer ID or profile content |
 | `friend_request_sent` | Request RPC is confirmed committed | `private.friendships` and request ledger; no peer or generation ID |
@@ -37,6 +37,8 @@ PostHog receives only these exact event names, after an affirmative analytics op
 | `notifications_viewed` | Authorized Notifications inbox renders | `private.notification_items` remains authoritative for delivered/read state; no item, source, category or target ID |
 
 This is an explicit allowlist. No generic pageviews, autocapture, session replay, heatmaps, surveys, exception capture, form capture, group analytics or person profiles. In particular **no PostHog event** for an attendance prompt, answer, correction, answer value, retained Hangout ID, report, block, moderation action or safety feedback. There is no client-side export of private database records.
+
+The adapter allowlist contains all 14 names. Current Stage B wiring may leave `hangout_cancelled` unused because the student web has no cancel UI/call site. It must record that deferral rather than invent a new cancel action in analytics scope. `onboarding_completed` is also conditional on proving a one-shot newly completed save; do not substitute a ready-page view.
 
 ## Authoritative measurement
 

@@ -3,6 +3,7 @@
 ## 2026-09-25 — TASK-019 analytics policy accepted
 
 - The user accepted ADR-0023 as written for disposable-local implementation after independent planning review and publication. A narrower contract and fresh implementation review remain required. No hosted PostHog ingest, live user, gate enablement or deployment is authorized.
+- Independently reviewed separate A adapter/consent and dependent B event-wiring contracts; clarified account revalidation, personless payload, runtime allowlist, replay suppression and unavailable cancellation UI before implementation.
 
 ## 2026-09-25 — TASK-019 analytics policy proposed
 

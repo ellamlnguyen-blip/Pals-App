@@ -1,0 +1,9 @@
+# TASK-019A consent interaction plan
+
+Reading this as: a small privacy choice for UNC students inside Pals' existing account area, using the current friendly Carolina blue/white system and a quiet, clear control.
+
+The avatar menu gains one **Analytics choice** link. It is an account setting, not a sixth primary destination. Onboarding also offers a plain link to that choice, since an optional onboarding-completed event is only possible if the student opts in before finishing. The page has one concise explanation, a short list of what would be counted, and a clear statement that a Hangout chat send or first DM request may be counted but message contents and recipients are excluded. Attendance, safety activity and identifying details are excluded. Use equally plain **Turn on analytics** / **Turn off analytics** actions. Initial and post-reload state is off; the page states that this choice lasts only in the current tab until reload. It does not imply a saved account preference.
+
+On desktop the page uses the current narrow account-content width and shared rounded panel style. On phone it stacks text and controls with full-width tap targets, wrapping without horizontal overflow. The account menu remains keyboard operable; the page heading receives normal navigation focus order, controls use native buttons, and a live status sentence announces on/off/error changes. Light/dark colors and visible focus come from shared tokens. No animation or illustration is needed.
+
+When account status is uncertain, restricted or signed out, the page shows a neutral unavailable/off state and sends nothing. If the local test sink is absent, the control remains off and explains that analytics is unavailable here. Revocation takes effect before any success feedback. Reload resets the choice. Another tab's revocation or sign-out clears active capture and updates the current page. Avoid a confirmation modal, banner nag or auto-opt-in prompt.
