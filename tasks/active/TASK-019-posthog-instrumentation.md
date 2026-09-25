@@ -1,6 +1,6 @@
 # TASK-019 — Minimal PostHog instrumentation
 
-Status: Local implementation integrated; authenticated event-flow acceptance pending under nine-gates-off constraint
+Status: Complete for disposable-local scope; hosted release remains separately gated
 Date: 2026-09-25
 Planning baseline: independently queried remote `main` at `937672d184098d6f5cb8e5226d0bb84104fcf71e` (TASK-018 complete; nine local feature gates off)
 
@@ -56,6 +56,7 @@ The adapter allowlist contains all 14 names. Current Stage B wiring may leave `h
 
 ## Local-only verification and acceptance gates
 
+- 2026-09-25 acceptance resolution: the user explicitly authorized temporary enablement of only needed gates in disposable local Supabase for synthetic authenticated browser QA, followed by fixture deletion and restoration of all nine gates to false. The parent handoff records the completed run and cleanup. This narrow test authorization does not extend to hosted or default-on gates.
 - Deterministic adapter checks cover every allowed name, application properties and necessary protocol envelope, default-off/reload state, opt-in, same-tab and cross-tab revocation, sign-out/account switch, denial, retry and uncertain-result handling. Inspect actual outbound local sink requests, including URL and headers, for unwanted SDK defaults and dynamic fields.
 - Verify representative authenticated create → detail → join → chat, Calendar/People/notification navigation and onboarding readiness with the local sink; verify one private attendance answer and one safety/report flow emit **nothing**. Check hidden-source and rejected actions emit nothing.
 - Verify consent UI and responsive/keyboard/loading/error behavior on desktop and phone if the implementation adds UI. Local `pnpm check` and focused regressions pass within recorded limits. No external PostHog ingest is used for verification.
@@ -63,4 +64,4 @@ The adapter allowlist contains all 14 names. Current Stage B wiring may leave `h
 
 ## Exclusions and hosted release hold
 
-No hosted PostHog project creation/change, live student traffic, production data, hosted migration, gate enablement, deployment, export, warehouse sync, reverse ETL, dashboard launch or cohort/person import. No attendance/safety/moderation analytics events. No new DB schema, consent ledger or SDK in admin/mobile. A separate hosted-release task must verify vendor project region, retention, deletion, access, IP/geolocation handling, consent copy and outbound payloads before any real ingest. If the required provider controls cannot be verified, keep capture disabled.
+No hosted PostHog project creation/change, live student traffic, production data, hosted migration, persistent or hosted gate enablement, deployment, export, warehouse sync, reverse ETL, dashboard launch or cohort/person import. The explicitly authorized temporary disposable-local QA gates were restored to false. No attendance/safety/moderation analytics events. No new DB schema, consent ledger or SDK in admin/mobile. A separate hosted-release task must verify vendor project region, retention, deletion, access, IP/geolocation handling, consent copy and outbound payloads before any real ingest. If the required provider controls cannot be verified, keep capture disabled.

@@ -1,6 +1,6 @@
 # TASK-019A — Local analytics adapter and consent control
 
-Status: Implemented and reviewed for disposable-local scope; integrated on coordinator branch
+Status: Complete for disposable-local scope; integrated on canonical main
 Date: 2026-09-25
 Baseline: accepted ADR-0023 receipt on independently verified main `dad5a1a8c5a6607a4f440a5af8b120280ea24637`
 Parent: `TASK-019-posthog-instrumentation.md`

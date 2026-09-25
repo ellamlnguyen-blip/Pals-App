@@ -1,6 +1,6 @@
 # TASK-019B — Wire reviewed local analytics events
 
-Status: Implemented and exact-tip reviewed; authenticated event-to-sink acceptance pending under nine-gates-off constraint
+Status: Complete for disposable-local scope; authenticated event-to-sink acceptance recorded in the parent handoff
 Date: 2026-09-25
 Parent: `TASK-019-posthog-instrumentation.md`
 

@@ -16,7 +16,7 @@
 - TASK-024 Pals brand direction correction — follow-up to TASK-023. Use the supplied logo and an explicit Carolina light blue (`#7BAFD4`) and white system across the student web frontend while preserving all existing backend/schema/RLS/API/authorization behavior. Contract and implementation prompt: `active/TASK-024-pals-brand-direction-correction.md`.
 - TASK-017 admin moderation console — complete for disposable-local scope; see `DONE.md` and stage handoffs. Hosted staffing, retention and deployment remain separate.
 - TASK-018 attendance confirmation — complete for bounded disposable-local scope under Accepted ADR-0022; see `DONE.md`, its active contract and A/B/parent handoffs. Hosted work and gate enablement remain separate.
-- TASK-019 PostHog instrumentation — active planning; see `active/TASK-019-posthog-instrumentation.md`
+- TASK-019 PostHog instrumentation — complete for disposable-local scope; see `DONE.md` and `agents/handoffs/TASK-019.md`. Hosted release and five deliberately unwired events need separate reviewed work.
 - TASK-020 large-hangout basic safeguards
 - TASK-021 staging launch rehearsal
 - TASK-022 domain migration/cutover

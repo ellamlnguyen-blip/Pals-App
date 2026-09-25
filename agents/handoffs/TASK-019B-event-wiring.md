@@ -1,6 +1,6 @@
 # TASK-019B handoff — conservative local event wiring
 
-Status: exact-tip reviewed and integrated on coordinator branch; parent TASK-019 remains incomplete pending authenticated event-to-sink acceptance.
+Status: exact-tip reviewed and integrated on canonical main; parent TASK-019 disposable-local acceptance is complete. See `TASK-019.md` for the authenticated desktop/phone sink run and cleanup.
 
 ## Branch and scope
 
@@ -30,9 +30,6 @@ Status: exact-tip reviewed and integrated on coordinator branch; parent TASK-019
 - A's adapter tests still cover all 14 allowlist names, consent/revocation, access uncertainty and payload validation. No external PostHog ingest occurred.
 - No authenticated desktop or phone rendering was claimed in this isolated worktree. I started the existing disposable Lima/Supabase stack solely to inspect its live state. A direct database query returned `false` for all nine product gates (Hangouts, People, friendship, Hangout chat, DM, Notifications, safety, moderation and attendance), plus zero Auth users whose email begins `task019b-`. I created no fixture and changed no gate. With the relevant product gates false, the representative authorized map/detail/People/DM/chat/Notifications browser flows cannot be exercised without crossing the standing gates-off boundary. I did not launch a web server or claim a denied browser route check; A's default-off and denied-access tests provide only adapter-level evidence. Supabase was stopped, then Lima `pals-task002` was verified `Stopped`.
 
-## Remaining gates
+## Final acceptance
 
-Coordinator independently verified remote task tip `3ff4737e9eaa495e58f7c41659c9f2ff91fc20a6`; fresh exact-tip privacy/security/product review found no remaining P0/P1/P2 after removing the unproven `friend_request_sent` callsite. The final correction only removed a source-text test and updated this handoff. The reviewed branch is on independently remote-verified canonical main `51106b4195748076875b611dc7042c89675a360d`. Authenticated event-flow acceptance remains open.
-
-
-The coordinator owns fresh exact remote-tip privacy/security review, the unresolved authenticated desktop/phone sink-flow acceptance gate, shared NOW/CURRENT_STATE/CHANGELOG status, integration to main, remote SHA verification and final parent TASK-019 disposition. Hosted project controls and deployment remain separate. If full counts for the four deferred non-cancel events are required, review a new contract for commit evidence before changing server response shapes.
+Coordinator independently verified remote task tip `3ff4737e9eaa495e58f7c41659c9f2ff91fc20a6`; fresh exact-tip privacy/security/product review found no remaining P0/P1/P2 after removing the unproven `friend_request_sent` callsite. The reviewed branch is on canonical main. After the user's explicit authorization for temporary disposable-local gate enablement, the authenticated desktop/phone sink-flow acceptance passed for all nine wired names, consent-off and denied states, private attendance and safety exclusion, minimal envelopes and cleanup. See the parent `TASK-019.md` handoff for exact evidence. Hosted project controls and deployment remain separate. If full counts for the four deferred non-cancel events are required, review a new contract for commit evidence before changing server response shapes.

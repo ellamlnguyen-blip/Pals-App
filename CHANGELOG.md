@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-25 — TASK-019 local browser acceptance
+
+- With explicit authorization, temporarily enabled only necessary gates in disposable local Supabase and used three synthetic UNC accounts. Authenticated desktop flows sent all nine wired event names to an in-memory loopback sink with the approved minimal envelope; 390 px saved-Hangout and Notifications routes rendered and remained usable. Consent-off, denied Notifications, private attendance answer/correction and a safety report sent nothing. Reset verified zero fixtures and all nine gates false; local services stopped. TASK-019 is complete for local scope, with five conservative undercounts and a separate hosted-release hold.
+
 ## 2026-09-25 — TASK-019B reviewed local event wiring
 
 - Wired nine approved student-web events through the memory-only adapter. Five approved names remain unwired where existing results do not prove a new commit or no student cancel action exists. Exact-tip review and 46 workspace tests passed; a loopback sink confirmed the minimal personless envelope. Authenticated event-flow browser verification remains open with all nine local gates required to stay off. No hosted capture or deployment occurred.
