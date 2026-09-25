@@ -1,6 +1,6 @@
 # TASK-018A — Private attendance backend
 
-Status: Implementation and exact-tip security review accepted; canonical integration receipt pending
+Status: Complete for disposable-local Stage A; task tip and main integration remote-verified
 Date: 2026-09-24
 Parent: `tasks/active/TASK-018-attendance-confirmation.md`
 Baseline for contract: independently remote-verified canonical main `35092024a2b0be5132dd9ee8b84c746fb9c03d2c`

@@ -1,9 +1,13 @@
 # TASK-018A — Private attendance backend handoff
 
-Status: Implementation complete on task branch; awaiting independent exact-tip security review and coordinator integration.
+Status: Completed for disposable-local Stage A after fresh exact-tip security review and verified main integration.
 Baseline: independently remote-verified canonical `origin/main` `f728b08b53dc05508ec19744c9dc799557f4365e`.
 Branch: `agent/TASK-018A-attendance-backend`.
 Policy: Accepted ADR-0022, including the user acceptance receipt on the baseline. Disposable local only.
+
+## Coordinator publication receipt
+
+The corrected task tip `249efcc4214656a32beba49c13eb479b9e0c614b` was independently verified on `origin/agent/TASK-018A-attendance-backend`. A fresh GPT-6 Sol medium security reviewer checked that exact tip and found no concrete P0/P1/P2 issue; the reviewer inspected but did not rerun the stopped local services. The reviewed implementation and synchronized records reached independently verified canonical `origin/main` `3cbf239b20098e49c58c5f3e50680bd0ac51fb41`. The task and main remote SHAs were checked together. Stage B remains dependent and TASK-018 parent remains active. The dispatch tool did not expose a Standard-speed setting for verification.
 
 ## Outcome
 

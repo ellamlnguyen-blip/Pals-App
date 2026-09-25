@@ -1,5 +1,9 @@
 # NOW
 
+## TASK-018B UI ready for dispatch
+
+TASK-018A is complete for its bounded disposable-local backend scope. The corrected task tip `249efcc4214656a32beba49c13eb479b9e0c614b` and reviewed main integration `3cbf239b20098e49c58c5f3e50680bd0ac51fb41` are independently remote-verified and recorded in its handoff. The reviewed B UI contract has been reconciled to A's zero-row and non-actionable projection. Publish this receipt on canonical main, then dispatch a fresh scoped UI agent from that verified tip. TASK-018 parent remains active; no hosted operation or gate enablement occurred.
+
 ## TASK-018A reviewed backend integration
 
 The corrected backend task tip `249efcc4214656a32beba49c13eb479b9e0c614b` is independently remote-verified and passed fresh exact-tip security review with no P0/P1/P2 finding. Its private default-off gate, self-answer relation, caller-bound owner RPCs and schedule freeze are merged in the coordinator integration branch. All 16 local SQL suites, 65 attendance assertions, 21 two-session outcomes, local PostgREST, Auth regression, schema lint and workspace checks passed within handoff limits. The final reset found zero fixtures, nine gates false and stopped local services. Main publication/verification and a handoff SHA receipt precede Stage B dispatch; TASK-018 parent remains active. No hosted operation or gate enablement occurred.
