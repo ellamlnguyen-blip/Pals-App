@@ -1,5 +1,9 @@
 # NOW
 
+## TASK-021 size-signal operational proposal
+
+A source-backed decision brief for TASK-020’s private size signal is independently reviewed and published at `docs/operations/TASK-021-SIZE-SIGNAL-DECISION.md`. It proposes a separate audited operator review flow with bounded current context, distinct review gate and pending-row handling, but remains **Proposed**: coverage, escalation/contact, retention/legal hold and failure owners are unchosen. Its operator access expansion requires a separately accepted ADR, reviewed implementation and target-specific hosted authorization. TASK-021 remains open and safeguard hosted use blocked. TASK-010A local backend implementation is dispatched from reviewed contracts; no result is claimed yet.
+
 ## TASK-010 contracts reconciled for TASK-021
 Accepted ADR-0012 remains authoritative. Stage A backend and dependent Stage B UI planning contracts now reconcile co-host powers with implemented global blocking/provenance, notifications, moderation disable, attendance schedule freeze and TASK-020 host warning/joining control. See `tasks/active/TASK-010A-cohost-backend.md`, `TASK-010B-host-management-ui.md` and `agents/handoffs/TASK-010-RECONCILIATION.md`. This is a documentation-only prerequisite for accepted TASK-021 planning: no implementation, migration, gate or hosted operation. TASK-010 and TASK-021 both remain incomplete. A fresh scoped A implementation and exact-tip review must precede B dispatch; no duplicate product-task chat is created by this planning substage.
 
