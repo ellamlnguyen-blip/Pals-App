@@ -1,6 +1,6 @@
 # TASK-018A — Private attendance backend
 
-Status: Reviewed contract; implementation blocked on explicit ADR-0022 acceptance
+Status: Reviewed contract; implementation ready after acceptance receipt is remote-verified on main
 Date: 2026-09-24
 Parent: `tasks/active/TASK-018-attendance-confirmation.md`
 Baseline for contract: independently remote-verified canonical main `35092024a2b0be5132dd9ee8b84c746fb9c03d2c`
@@ -26,7 +26,7 @@ Implement only the database authority for a person's private, self-reported atte
 
 ## Exclusions and stop conditions
 
-No UI, safety questionnaire, report creation, peer result reader, public aggregate, notification event, PostHog, scheduled work, Realtime, geolocation, host override, hosted migration, production data, gate enablement or deployment. If implementing the accepted ID-only exception requires broader source disclosure or an edit restriction different from ADR-0022, stop that part and propose a reviewed policy amendment. Do not treat this draft or Proposed ADR-0022 as implementation authority.
+No UI, safety questionnaire, report creation, peer result reader, public aggregate, notification event, PostHog, scheduled work, Realtime, geolocation, host override, hosted migration, production data, gate enablement or deployment. If implementing the accepted ID-only exception requires broader source disclosure or an edit restriction different from ADR-0022, stop that part and propose a reviewed policy amendment. The accepted ADR and this contract authorize only this bounded disposable-local backend stage after the acceptance receipt reaches verified main.
 
 ## Contract review outcome
 

@@ -1,6 +1,6 @@
 # ADR-0022 — Private self-reported attendance
 
-Status: Proposed — explicit acceptance required before schema or permission work
+Status: Accepted — disposable-local TASK-018 stages only
 Date: 2026-09-24
 Task: TASK-018
 
@@ -22,6 +22,6 @@ The accepted MVP calls for attendance confirmation and an authoritative count of
 
 Self-reporting is useful for the product's outcome metric but cannot independently verify an offline meeting. The two-hour fallback can open before a long Hangout without an end time; it is a prompt-eligibility convention, not proof of completion. Freezing scheduled instants then prevents hosts from correcting an old time or extending an end, so the edit UI must explain that limit rather than silently fail. A 30-day correction window limits late changes but requires a future production retention policy. Safety comfort and “happened as described?” feedback need a separate privacy/moderation contract; the existing report flow is available now and an answer must never be treated as a safety finding.
 
-## Acceptance gate
+## Acceptance evidence and scope
 
-Publishing this proposal or the TASK-018 contract does not accept it. Explicit user acceptance of the exact policy is required before Stage A adds schema, RPCs or authorization exceptions. Material changes to the policy need a revised proposal and acceptance.
+On 2026-09-24 the user replied “accept” to the explicit question naming this published ADR and its private yes/no self-report, scheduled-end or start-plus-two-hours opening, 30-day correction window, and post-opening schedule freeze. This accepts the exact policy above for the reviewed disposable-local TASK-018 stages. It authorizes Stage A's bounded schema/RPC implementation after this receipt is published and independently remote-verified on canonical main. It does not enable a gate, authorize hosted migrations or production data, accept a future retention policy, or waive Stage A/B review and integration gates. Material changes need a revised proposal and explicit acceptance.

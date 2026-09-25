@@ -1,6 +1,6 @@
 # TASK-018 — Private attendance confirmation
 
-Status: Planning; ADR-0022 Proposed, no implementation authorized yet
+Status: Active; ADR-0022 Accepted for disposable-local stages, Stage A pending
 Date: 2026-09-24
 Planning branch: `agent/TASK-018-planning` from independently remote-verified `origin/main` `be0344ed8b1f9dbef49a6246575ca8d8dd3bccc6`
 
@@ -10,7 +10,7 @@ Let a student privately answer whether they attended a Hangout they joined, with
 
 ## Dependencies and policy gate
 
-TASK-017 is complete for disposable-local scope on canonical main. Read AGENTS, MVP, principles, architecture, data model, authorization, security/safety, Notifications, Hangout and safety contracts, and ADR-0010/0017/0018/0019. ADR-0022 proposes the missing time, correction, visibility and own-retained-ID policies. Publish and independently review the proposal and this contract on canonical main, then obtain explicit acceptance before attendance schema/RPC or UI authority work. Hosted work remains excluded.
+TASK-017 is complete for disposable-local scope on canonical main. Read AGENTS, MVP, principles, architecture, data model, authorization, security/safety, Notifications, Hangout and safety contracts, and ADR-0010/0017/0018/0019. ADR-0022 supplies the accepted time, correction, visibility and own-retained-ID policy. The reviewed proposal, parent and A/B contracts are on canonical main; the user explicitly accepted ADR-0022 on 2026-09-24. Publish and independently verify the acceptance receipt on main before Stage A implementation. Hosted work remains excluded.
 
 ## Bounded stages after acceptance
 

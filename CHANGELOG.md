@@ -2,6 +2,10 @@
 
 Record meaningful product, architecture, schema, safety, and release changes—not every commit.
 
+## 2026-09-24 — TASK-018 attendance policy accepted
+
+- The user explicitly accepted ADR-0022's private self-reported attendance, opening/correction time rule, post-opening schedule freeze and ID-only privacy path for disposable-local implementation. Stage A/B reviews and main integration remain required; no hosted operation or gate enablement follows from acceptance.
+
 ## 2026-09-24 — TASK-018 attendance policy proposed
 
 - Defined the bounded attendance-confirmation task and Proposed ADR-0022 for private self-reporting, time/correction limits and retained-ID privacy. Explicit acceptance is still required before any schema or permission change. No hosted operation or gate enablement occurred.
