@@ -72,6 +72,7 @@ function validBounds(value: Bounds): boolean {
 }
 
 export async function querySaved(bounds: Bounds, filters: SavedFilter) {
+  const cutoff = new Date().toISOString();
   requireLocalHangouts();
   if (
     !validBounds(bounds) ||
@@ -91,7 +92,6 @@ export async function querySaved(bounds: Bounds, filters: SavedFilter) {
       items: [] as SavedPin[],
       truncated: false,
     };
-  const cutoff = new Date().toISOString();
   const args = {
     p_west: bounds.west,
     p_south: bounds.south,
