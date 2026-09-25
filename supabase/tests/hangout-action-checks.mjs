@@ -311,7 +311,7 @@ export async function hangoutActionChecks(owner, peer, host, member, png, sql) {
     const closedRejoin = await actionArgs("changeSavedMembership", [id, "join"], peer.header(), `/hangouts/saved/${id}`);
     assert.equal(closedRejoin.result?.kind, "denied", "closed plan rejects rejoin");
     const peerId = (await peer.auth.auth.getUser()).data.user.id;
-    const removed = await owner.auth.rpc("remove_hangout_participant", { p_hangout_id: id, p_account_id: peerId });
+    const removed = await owner.auth.rpc("remove_hangout_participant", { p_hangout_id: id, p_account_id: peerId, p_expected_revision: 4 });
     assert.equal(removed.error, null, "host removes left participant");
     const removedPage = await fetch(`${origin}/hangouts/saved/${id}`, { headers: headers(peer.header()) });
     assert.ok((await removedPage.text()).includes("You were removed"), "removed state is visible without instructions");

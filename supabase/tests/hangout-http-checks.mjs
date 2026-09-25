@@ -62,10 +62,10 @@ export async function hangoutHttpChecks(owner, peer, host, member, sql, png, url
     assert.equal((await peer.auth.rpc("leave_hangout", { p_hangout_id: id })).error, null);
     assert.deepEqual((await peer.auth.from("hangout_private_locations").select("instructions")).data, [], "leave revokes private");
     assert.equal((await peer.auth.rpc("join_hangout", { p_hangout_id: id })).error, null);
-    assert.equal((await api.rpc("remove_hangout_participant", { p_hangout_id: id, p_account_id: member.id })).error, null);
+    assert.equal((await api.rpc("remove_hangout_participant", { p_hangout_id: id, p_account_id: member.id, p_expected_revision: 1 })).error, null);
     assert.deepEqual((await peer.auth.from("hangout_private_locations").select("instructions")).data, [], "removal revokes private");
     assert.ok((await peer.auth.rpc("join_hangout", { p_hangout_id: id })).error, "removed peer cannot rejoin");
-    assert.equal((await api.rpc("cancel_hangout", { p_hangout_id: id, p_expected_revision: 1 })).data, 2);
+    assert.equal((await api.rpc("cancel_hangout", { p_hangout_id: id, p_expected_revision: 2 })).data, 3);
     assert.deepEqual((await api.from("hangout_private_locations").select("instructions")).data, [], "cancel hides exact details from host");
     assert.deepEqual((await peer.auth.from("hangouts").select("id")).data, [], "cancel hides public row from removed peer");
     sql("update private.hangout_feature_gate set enabled=false");

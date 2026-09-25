@@ -51,8 +51,8 @@ test("observed parent-row and recipient/gate races preserve recipients", async (
     await race("hb_leave_edit", `${claims(peer)} select public.leave_hangout('${hangout}');`,
       `${claims(host)} select public.edit_hangout('${hangout}',1,'Edited', (select starts_at from public.hangouts where id='${hangout}'),'Area',35,-79);`);
     assert.equal(count("hangout_edited"), 0, "leave commits before edit recipient selection");
-    await race("hb_remove_edit", `${claims(host)} select public.remove_hangout_participant('${hangout}','${removed}');`,
-      `${claims(host)} select public.edit_hangout('${hangout}',2,'Edited again', (select starts_at from public.hangouts where id='${hangout}'),'Area',35,-79);`);
+    await race("hb_remove_edit", `${claims(host)} select public.remove_hangout_participant('${hangout}','${removed}',2);`,
+      `${claims(host)} select public.edit_hangout('${hangout}',3,'Edited again', (select starts_at from public.hangouts where id='${hangout}'),'Area',35,-79);`);
     assert.equal(Number(sql(`select count(*) from private.notification_items where recipient_id='${removed}' and event_code='hangout_edited'`)), 1,
       "removed attendee receives no post-removal edit item");
     join();
@@ -71,7 +71,7 @@ test("observed parent-row and recipient/gate races preserve recipients", async (
     await race("hb_send_gate", send(5), "update private.notification_feature_gate set enabled=false;");
     assert.equal(count("hangout_chat_message"), 2, "event holding gate lock commits before disable");
     sql("update private.notification_feature_gate set enabled=true");
-    await race("hb_cancel_send", `${claims(host)} select public.cancel_hangout('${hangout}',3);`, `${claims(peer)} select public.send_hangout_message('${hangout}','51500000-0000-4000-8002-000000000099','Denied');`, true);
+    await race("hb_cancel_send", `${claims(host)} select public.cancel_hangout('${hangout}',4);`, `${claims(peer)} select public.send_hangout_message('${hangout}','51500000-0000-4000-8002-000000000099','Denied');`, true);
     assert.equal(count("hangout_chat_message"), 2, "post-cancellation send creates no item");
     assert.equal(Number(sql(`select count(*) from private.hangout_messages m join private.hangout_conversations c on c.id=m.conversation_id where c.hangout_id='${hangout}' and m.author_id='${peer}'`)), 0);
   } finally {

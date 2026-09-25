@@ -122,7 +122,7 @@ test("local chat UI routes use caller authorization, no-store and stable send ke
     const leftPage = await page(`/chats/hangouts/${hangout}`, peer.header());
     assert.doesNotMatch(leftPage.text, /chat-message/);
     assert.equal((await peer.auth.rpc("join_hangout", { p_hangout_id: hangout })).error, null);
-    assert.equal((await host.auth.rpc("remove_hangout_participant", { p_hangout_id: hangout, p_account_id: peer.id })).error, null);
+    assert.equal((await host.auth.rpc("remove_hangout_participant", { p_hangout_id: hangout, p_account_id: peer.id, p_expected_revision: 1 })).error, null);
     assert.equal((await api(hangout, peer.header())).response.status, 403);
     sql(`update public.accounts set status='suspended' where id='${host.id}';`);
     assert.equal((await api(hangout, host.header())).response.status, 403);

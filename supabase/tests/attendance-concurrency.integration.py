@@ -111,7 +111,7 @@ def change(conn, kind, hangout):
         conn.execute("set local role authenticated")
         conn.execute("select set_config('request.jwt.claims',%s,true)",
                      (json.dumps({"sub": str(HOST), "role": "authenticated"}),))
-        conn.execute("select public.remove_hangout_participant(%s,%s)", (hangout, OWNER))
+        conn.execute("select public.remove_hangout_participant(%s,%s,1)", (hangout, OWNER))
     elif kind == "cancel":
         conn.execute("set local role authenticated")
         conn.execute("select set_config('request.jwt.claims',%s,true)",

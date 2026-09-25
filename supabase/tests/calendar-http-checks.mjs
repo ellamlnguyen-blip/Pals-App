@@ -41,10 +41,10 @@ export async function calendarHttpChecks(owner, peer, host, member, sql) {
     const removalId = sorted[0];
     sql(`update public.hangouts set title='Calendar removed plan',revision=revision+1 where id='${removalId}'`);
     assert.equal((await peer.auth.rpc("join_hangout", {p_hangout_id: removalId})).error, null);
-    assert.equal((await owner.auth.rpc("remove_hangout_participant", {p_hangout_id: removalId, p_account_id: member.id})).error, null);
+    assert.equal((await owner.auth.rpc("remove_hangout_participant", {p_hangout_id: removalId, p_account_id: member.id, p_expected_revision: 2})).error, null);
     assert.ok(!(await page("joined")).body.includes("Calendar removed plan"), "removed is not joined");
     assert.match((await page()).body, /Calendar removed plan/, "removed still has campus discovery");
-    assert.equal((await owner.auth.rpc("cancel_hangout", {p_hangout_id: removalId, p_expected_revision:2})).error, null);
+    assert.equal((await owner.auth.rpc("cancel_hangout", {p_hangout_id: removalId, p_expected_revision:3})).error, null);
     assert.ok(!(await page("joined")).body.includes("Calendar removed plan"), "removed cannot read cancellation");
     assert.match((await page("hosting", owner.header())).body, /Calendar removed plan/, "cancelled host remains in Hosting");
     const leftId = sorted[1];

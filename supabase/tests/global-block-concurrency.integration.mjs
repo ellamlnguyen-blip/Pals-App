@@ -100,7 +100,7 @@ const block = (actor, peer, value) => `${claims(actor)} select public.set_safety
 const join = (actor, hangout) => `${claims(actor)} select public.join_hangout('${hangout}');`;
 const sendChat = (actor, hangout, id) => `${claims(actor)} select message_id from public.send_hangout_message('${hangout}','${id}','Race text');`;
 const leave = (actor, hangout) => `${claims(actor)} select public.leave_hangout('${hangout}');`;
-const remove = (actor, hangout, peer) => `${claims(actor)} select public.remove_hangout_participant('${hangout}','${peer}');`;
+const remove = (actor, hangout, peer) => `${claims(actor)} select public.remove_hangout_participant('${hangout}','${peer}',(select revision from public.hangouts where id='${hangout}'));`;
 const edit = (actor, hangout, revision, title) => `${claims(actor)} select public.edit_hangout('${hangout}',${revision},'${title}',
   (select starts_at from public.hangouts where id='${hangout}'),'Area',35,-79);`;
 const joining = (actor, hangout, revision, value) => `${claims(actor)} select public.set_hangout_joining('${hangout}',${revision},'${value}');`;

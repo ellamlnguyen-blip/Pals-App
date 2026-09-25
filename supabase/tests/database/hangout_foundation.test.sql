@@ -142,7 +142,7 @@ select is((select count(*) from public.hangout_private_locations),0::bigint,'lef
 select is(public.get_hangout_participant_state(pg_temp.hid(),auth.uid()),'left','member sees own left state');
 select lives_ok($$select public.join_hangout(pg_temp.hid())$$,'left peer rejoins');
 select set_config('request.jwt.claims','{"sub":"50000000-0000-4000-8000-000000000001","role":"authenticated"}',true);
-select lives_ok($$select public.remove_hangout_participant(pg_temp.hid(),'50000000-0000-4000-8000-000000000002')$$,'host removes peer');
+select lives_ok($$select public.remove_hangout_participant(pg_temp.hid(),'50000000-0000-4000-8000-000000000002',4)$$,'host removes peer');
 select is(public.get_hangout_participant_state(pg_temp.hid(),'50000000-0000-4000-8000-000000000002'),'removed','host sees nonpublic removal');
 select set_config('request.jwt.claims','{"sub":"50000000-0000-4000-8000-000000000002","role":"authenticated"}',true);
 select is(public.get_hangout_participant_state(pg_temp.hid(),auth.uid()),'removed','removed member sees own state');
@@ -155,7 +155,7 @@ select set_config('request.jwt.claims','{"sub":"50000000-0000-4000-8000-00000000
 select is((select count(*) from public.hangout_private_locations),0::bigint,'admin no private bypass');
 select throws_ok($$select public.cancel_hangout(pg_temp.hid(),4)$$,'42501',null,'admin cannot cancel');
 select set_config('request.jwt.claims','{"sub":"50000000-0000-4000-8000-000000000001","role":"authenticated"}',true);
-select is(public.cancel_hangout(pg_temp.hid(),4),5::bigint,'host cancels with CAS');
+select is(public.cancel_hangout(pg_temp.hid(),5),6::bigint,'host cancels with CAS');
 select is((select joining_state from public.hangouts),'closed','cancel closes joining');
 select is((select count(*) from public.hangout_private_locations),0::bigint,'cancel revokes host private access');
 select throws_ok($$select public.edit_hangout(pg_temp.hid(),5,'Bad',pg_temp.st(),'Area',35,-79)$$,'42501',null,'cancelled edit denied');
@@ -200,7 +200,7 @@ select throws_ok($$select public.set_hangout_joining(pg_temp.hid(),5,'closed')$$
 select throws_ok($$select public.cancel_hangout(pg_temp.hid(),5)$$,'42501',null,'gate off denies lifecycle');
 select throws_ok($$select public.join_hangout(pg_temp.hid())$$,'42501',null,'gate off denies join');
 select throws_ok($$select public.leave_hangout(pg_temp.hid())$$,'42501',null,'gate off denies leave');
-select throws_ok($$select public.remove_hangout_participant(pg_temp.hid(),'50000000-0000-4000-8000-000000000002')$$,'42501',null,'gate off denies removal');
+select throws_ok($$select public.remove_hangout_participant(pg_temp.hid(),'50000000-0000-4000-8000-000000000002',1)$$,'42501',null,'gate off denies removal');
 select throws_ok($$select public.get_hangout_participant_state(pg_temp.hid(),'50000000-0000-4000-8000-000000000002')$$,'42501',null,'gate off denies state inspection');
 select * from finish();
 rollback;

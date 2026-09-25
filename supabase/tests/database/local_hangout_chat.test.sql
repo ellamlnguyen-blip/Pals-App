@@ -129,7 +129,7 @@ update public.profiles set primary_photo_path=user_id::text||'/primary.png'
   where user_id='51300000-0000-4000-8000-000000000002';
 set local role authenticated;
 select set_config('request.jwt.claims','{"sub":"51300000-0000-4000-8000-000000000001","role":"authenticated"}',true);
-select lives_ok($$select public.remove_hangout_participant(pg_temp.hid(),'51300000-0000-4000-8000-000000000002')$$,'host removes peer');
+select lives_ok($$select public.remove_hangout_participant(pg_temp.hid(),'51300000-0000-4000-8000-000000000002',1)$$,'host removes peer');
 select is((select author_id from public.read_hangout_messages(pg_temp.hid()) where sequence=2),
   null::uuid,'removed author ID withheld');
 select set_config('request.jwt.claims','{"sub":"51300000-0000-4000-8000-000000000002","role":"authenticated"}',true);
@@ -190,9 +190,9 @@ reset role;
 update private.hangout_chat_feature_gate set enabled=true;
 set local role authenticated;
 select set_config('request.jwt.claims','{"sub":"51300000-0000-4000-8000-000000000001","role":"authenticated"}',true);
-select is(public.set_hangout_joining(pg_temp.hid(),1,'closed'),2::bigint,'host closes joining');
+select is(public.set_hangout_joining(pg_temp.hid(),2,'closed'),3::bigint,'host closes joining');
 select is((select count(*) from public.read_hangout_messages(pg_temp.hid())),50::bigint,'closed joining retains chat');
-select is(public.cancel_hangout(pg_temp.hid(),2),3::bigint,'host cancels');
+select is(public.cancel_hangout(pg_temp.hid(),3),4::bigint,'host cancels');
 select throws_ok($$select public.read_hangout_messages(pg_temp.hid())$$,'42501',null,'cancel revokes host');
 select throws_ok($$select public.send_hangout_message(pg_temp.hid(),pg_temp.key(3),'No')$$,'42501',null,'cancel denies send');
 reset role;

@@ -96,9 +96,9 @@ test("Hangout create, join, removal, cancellation and revision races", async () 
     await overlap(`${auth(host)} select public.edit_hangout('${id}',1,'Edited',now()+interval '2 hours','Area',35,-79);`, `${auth(host)} select public.edit_hangout('${id}',1,'Stale',now()+interval '3 hours','Area',35,-79);`, "task005_stale", /Stale Hangout revision/);
     assert.equal(sql(`select title from public.hangouts where id='${id}';`), "Edited");
     sql(`begin; ${auth(peer)} select public.join_hangout('${id}'); commit;`);
-    await overlap(`${auth(host)} select public.remove_hangout_participant('${id}','${peer}');`, `${auth(peer)} select public.join_hangout('${id}');`, "task005_rejoin", /Hangout operation not permitted/);
+    await overlap(`${auth(host)} select public.remove_hangout_participant('${id}','${peer}',2);`, `${auth(peer)} select public.join_hangout('${id}');`, "task005_rejoin", /Hangout operation not permitted/);
     assert.equal(sql(`select state from public.hangout_participants where hangout_id='${id}' and account_id='${peer}';`), "removed");
-    await overlap(`${auth(host)} select public.cancel_hangout('${id}',2);`, `${auth(late)} select public.join_hangout('${id}');`, "task005_cancel_join", /Hangout operation not permitted/);
+    await overlap(`${auth(host)} select public.cancel_hangout('${id}',3);`, `${auth(late)} select public.join_hangout('${id}');`, "task005_cancel_join", /Hangout operation not permitted/);
     assert.equal(sql(`select count(*) from public.hangout_participants where hangout_id='${id}' and account_id='${late}';`), "0");
   } finally {
     sql(`update private.hangout_feature_gate set enabled=false; delete from private.hangout_create_requests where host_id in ('${host}','${peer}','${late}'); delete from public.hangouts where host_id in ('${host}','${peer}','${late}'); delete from auth.users where id in ('${host}','${peer}','${late}'); set storage.allow_delete_query='true'; delete from storage.objects where owner_id in ('${host}','${peer}','${late}');`);

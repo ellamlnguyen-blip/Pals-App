@@ -268,7 +268,8 @@ select is((select is_large from public.get_hangout_large_state(pg_temp.hid(2))),
   'host coarse flag rises again after genuine rejoin');
 select lives_ok($$select public.remove_hangout_participant(
   '52000000-0000-4000-8001-000000000002',
-  '52000000-0000-4000-8000-000000000025')$$,
+  '52000000-0000-4000-8000-000000000025',
+  (select revision from public.hangouts where id='52000000-0000-4000-8001-000000000002'))$$,
   'host removes the rejoined member');
 select is((select is_large from public.get_hangout_large_state(pg_temp.hid(2))),false,
   'host coarse flag excludes removed membership');

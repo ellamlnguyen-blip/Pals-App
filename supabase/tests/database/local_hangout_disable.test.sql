@@ -210,7 +210,7 @@ select throws_ok($$select public.edit_hangout(current_setting('b2.h1')::uuid,1,
  'Changed',now()+interval '1 hour','Area',35,-79)$$,
  '42501',null,'host edit denied');
 select throws_ok($$select public.remove_hangout_participant(current_setting('b2.h1')::uuid,
- '53200000-0000-4000-8000-000000000003')$$,
+ '53200000-0000-4000-8000-000000000003',1)$$,
  '42501',null,'host removal denied');
 select is(public.get_hangout_participant_state(current_setting('b2.h1')::uuid,auth.uid()),
  'joined','safety route reveals only own retained state');

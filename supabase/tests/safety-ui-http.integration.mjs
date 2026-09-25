@@ -157,10 +157,10 @@ test("built safety API binds the cookie actor, rejects stale writes and keeps re
     hangouts.push(hangoutId);
     assert.equal((await a.client.rpc("join_hangout", { p_hangout_id: hangoutId })).error, null);
     assert.equal((await b.client.rpc("remove_hangout_participant", {
-      p_hangout_id: hangoutId, p_account_id: a.id,
+      p_hangout_id: hangoutId, p_account_id: a.id, p_expected_revision: 1,
     })).error, null);
     assert.equal((await b.client.rpc("cancel_hangout", {
-      p_hangout_id: hangoutId, p_expected_revision: 1,
+      p_hangout_id: hangoutId, p_expected_revision: 2,
     })).error, null);
     db(`update private.hangout_feature_gate set enabled=false;
       update private.people_feature_gate set enabled=false;
