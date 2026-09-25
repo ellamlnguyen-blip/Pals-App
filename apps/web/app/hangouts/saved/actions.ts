@@ -166,11 +166,13 @@ export async function changeSavedMembership(
     !liveError &&
     live === "ready" &&
     (intent === "leave" || latest?.status === "published") &&
-    after === (intent === "join" ? "joined" : "left") &&
+    (after === (intent === "join" ? "joined" : "left") ||
+      (intent === "leave" && !latest)) &&
     !error
   ) {
     return {
       kind: "saved" as const,
+      redirectToSaved: intent === "leave" && !latest,
       message:
         intent === "join"
           ? "You joined this Hangout."

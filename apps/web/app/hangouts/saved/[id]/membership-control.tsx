@@ -63,7 +63,8 @@ export function MembershipControl({
                   // join. Leave success requires an actual joined-row update.
                   if (mounted.current && intent === "leave")
                     void analytics.capture("hangout_left");
-                  router.refresh();
+                  if (result.redirectToSaved) router.replace("/hangouts/saved");
+                  else router.refresh();
                 }
               } catch {
                 setMessage(

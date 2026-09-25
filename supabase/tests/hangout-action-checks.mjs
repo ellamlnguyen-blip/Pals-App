@@ -1,4 +1,5 @@
 import assert from "node:assert/strict";
+import { spawn } from "node:child_process";
 import { readFileSync, existsSync } from "node:fs";
 import { calendarHttpChecks } from "./calendar-http-checks.mjs";
 
@@ -296,6 +297,36 @@ export async function hangoutActionChecks(owner, peer, host, member, png, sql) {
     const peerJoinedBody = await peerJoined.text();
     assert.match(peerJoinedBody, /You&#x27;re joined|You’re joined|You're joined/);
     assert.ok(peerJoinedBody.includes("Meet by the broad path"), "joined member sees private instructions");
+    // Hold chat's message read after the first detail read, then revoke the
+    // caller. The final HTML must use a fresh sensitive detail check.
+    const chatLock = spawn("docker", ["exec", "-i", "supabase_db_pals-local", "psql", "-X", "-qAt", "-U", "postgres", "-d", "postgres", "-v", "ON_ERROR_STOP=1"], { stdio: ["pipe", "pipe", "pipe"] });
+    let lockOutput = "";
+    chatLock.stdout.on("data", (chunk) => { lockOutput += chunk; });
+    try {
+      chatLock.stdin.write("begin; lock table private.hangout_messages in access exclusive mode; select 'chat_lock_held';\n");
+      const deadline = Date.now() + 15_000;
+      while (!lockOutput.includes("chat_lock_held") && Date.now() < deadline)
+        await new Promise((resolve) => setTimeout(resolve, 25));
+      assert.ok(lockOutput.includes("chat_lock_held"), "chat barrier acquired");
+      const delayed = fetch(`${origin}/hangouts/saved/${id}`, { headers: headers(peer.header()) });
+      const chatDeadline = Date.now() + 15_000;
+      let waiting = false;
+      while (Date.now() < chatDeadline) {
+        waiting = Number(sql("select count(*) from pg_stat_activity where wait_event_type='Lock' and query ilike '%read_hangout_messages%';")) > 0;
+        if (waiting) break;
+        await new Promise((resolve) => setTimeout(resolve, 25));
+      }
+      assert.ok(waiting, "detail reached delayed chat read");
+      sql(`update public.accounts set status='suspended' where id='${member.id}'`);
+      chatLock.stdin.write("commit;\n");
+      const delayedHtml = await (await delayed).text();
+      assert.ok(!delayedHtml.includes("Meet by the broad path"), "post-chat revocation hides private HTML");
+      assert.ok(!delayedHtml.includes(host.id), "post-chat revocation hides roster and source IDs");
+    } finally {
+      chatLock.stdin.end();
+      chatLock.kill();
+      sql(`update public.accounts set status='active' where id='${member.id}'`);
+    }
     const left = await actionArgs("changeSavedMembership", [id, "leave"], peer.header(), `/hangouts/saved/${id}`);
     assert.equal(left.result?.kind, "saved", left.body.slice(0, 300));
     const peerLeft = await fetch(`${origin}/hangouts/saved/${id}`, { headers: headers(peer.header()) });
@@ -317,10 +348,27 @@ export async function hangoutActionChecks(owner, peer, host, member, png, sql) {
     assert.ok((await removedPage.text()).includes("You were removed"), "removed state is visible without instructions");
     const removedJoin = await actionArgs("changeSavedMembership", [id, "join"], peer.header(), `/hangouts/saved/${id}`);
     assert.equal(removedJoin.result?.kind, "denied", "removed participant cannot rejoin");
-    const cancelled = await owner.auth.rpc("cancel_hangout", { p_hangout_id: id, p_expected_revision: 4 });
+    const cancelled = await owner.auth.rpc("cancel_hangout", { p_hangout_id: id, p_expected_revision: 5 });
     assert.equal(cancelled.error, null, "host cancels plan");
     const cancelledPage = await fetch(`${origin}/hangouts/saved/${id}`, { headers: headers(owner.header()) });
     assert.ok(!(await cancelledPage.text()).includes("Meet by the broad path"), "cancellation revokes private instructions");
+    const cancelLeave = await owner.auth.rpc("create_hangout", {
+      p_request_id: crypto.randomUUID(),
+      p_title: "Cancelled leave check",
+      p_starts_at: new Date(Date.now() + 4 * 3600000).toISOString(),
+      p_public_place: "Around Polk Place",
+      p_public_latitude: 35.909,
+      p_public_longitude: -79.049,
+    });
+    assert.equal(cancelLeave.error, null, "host creates cancellable leave fixture");
+    assert.equal((await peer.auth.rpc("join_hangout", { p_hangout_id: cancelLeave.data })).error, null);
+    assert.equal((await owner.auth.rpc("cancel_hangout", {
+      p_hangout_id: cancelLeave.data, p_expected_revision: 1,
+    })).error, null);
+    const departed = await actionArgs("changeSavedMembership", [cancelLeave.data, "leave"], peer.header(), `/hangouts/saved/${cancelLeave.data}`);
+    assert.equal(departed.result?.kind, "saved", "successful cancelled leave is confirmed after source becomes unreadable");
+    assert.equal(departed.result?.redirectToSaved, true, "unreadable cancelled detail redirects to Saved Hangouts");
+    assert.deepEqual((await peer.auth.from("hangouts").select("id").eq("id", cancelLeave.data)).data, []);
     sql(`update private.hangout_feature_gate set enabled=false`);
     const gated = await actionArgs("searchSaved", [bounds, filters], peer.header());
     assert.equal(gated.result?.items.length, 0, "gate hides saved discovery");

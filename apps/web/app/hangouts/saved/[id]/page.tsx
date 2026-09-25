@@ -26,7 +26,23 @@ export default async function SavedDetailPage({
   requireLocalHangouts();
   await requireAccess("ready");
   const { id } = await params;
-  const result = await readSavedDetail(id);
+  let result = await readSavedDetail(id);
+  let chat: Awaited<ReturnType<typeof readChat>> | null = null;
+  let chatUserId: string | null = null;
+  if (
+    result.kind === "ok" &&
+    result.record.status === "published" &&
+    (result.ownState === "joined" || result.ownState === "host")
+  ) {
+    const chatCaller = await chatAccess();
+    if (chatCaller?.user.id === result.userId) {
+      chatUserId = chatCaller.user.id;
+      chat = await readChat(chatCaller.client, id);
+    }
+    // Chat reads are separate requests and can be slow. Keep the sensitive
+    // detail/role/roster check last before rendering either source.
+    result = await readSavedDetail(id);
+  }
   if (result.kind !== "ok")
     return (
       <Frame signedIn navigation>
@@ -52,11 +68,6 @@ export default async function SavedDetailPage({
   const { record, ownState, roster, instructions } = result;
   const cancelled = record.status === "cancelled";
   const joined = ownState === "joined" || ownState === "host";
-  const chatCaller = joined && !cancelled ? await chatAccess() : null;
-  const chat =
-    chatCaller?.user.id === result.userId
-      ? await readChat(chatCaller.client, id)
-      : null;
   return (
     <Frame signedIn navigation>
       <AnalyticsView event="hangout_detail_viewed" />
@@ -87,7 +98,7 @@ export default async function SavedDetailPage({
           {joined && !cancelled && (
             <section className="saved-chat-entry">
               <h2>Coordinate together</h2>
-              {chat?.kind === "ok" ? (
+              {chatUserId === result.userId && chat?.kind === "ok" ? (
                 <Link className="button" href={`/chats/hangouts/${id}`}>
                   Open Hangout chat
                 </Link>
