@@ -40,8 +40,14 @@ async function race(name, firstQuery, secondQuery, rejected) {
     first.send("commit;");
     first.child.stdin.end(); second.child.stdin.end();
     await first.done; await second.done;
-    assert.match(second.output(), rejected);
-    assert.doesNotMatch(second.output(), /waited/);
+    if (rejected) {
+      assert.match(second.output(), rejected);
+      assert.doesNotMatch(second.output(), /waited/);
+    } else {
+      assert.match(second.output(), /waited/);
+      assert.doesNotMatch(second.output(), /ERROR:/);
+    }
+    return { firstOutput: first.output(), secondOutput: second.output() };
   } finally { first.child.kill(); second.child.kill(); }
 }
 
@@ -64,11 +70,11 @@ test("observed social-lock waits recheck cohost membership, authority and lifecy
       select ('54010000-0000-4000-8001-'||lpad(n::text,12,'0'))::uuid,
         '00000000-0000-4000-8000-000000000001','${uid(1)}',
         'Race '||n,now()+interval '1 hour','Area',35,-79
-      from generate_series(1,11) n;
+      from generate_series(1,12) n;
     insert into public.hangout_participants(hangout_id,account_id,state)
       select ('54010000-0000-4000-8001-'||lpad(h::text,12,'0'))::uuid,
         ('54010000-0000-4000-8000-'||lpad(n::text,12,'0'))::uuid,'joined'
-      from generate_series(1,11) h cross join generate_series(1,3) n;
+      from generate_series(1,12) h cross join generate_series(1,3) n;
     commit;`);
   try {
     await race("cohost_leave_promote",
@@ -94,6 +100,20 @@ test("observed social-lock waits recheck cohost membership, authority and lifecy
       and account_id='${uid(3)}'`), "joined");
     sql(`begin; ${auth(1)} select public.remove_hangout_participant('${hid(3)}','${uid(2)}',3); commit;`);
     assert.equal(sql(`select count(*) from private.hangout_cohosts where hangout_id='${hid(3)}'`), "0");
+
+    const cancelledRemoval = await race("cohost_cancel_host_remove",
+      `${auth(1)} select public.cancel_hangout('${hid(12)}',1);
+        select 'CANCEL_TS='||extract(epoch from updated_at)::text
+          from public.hangouts where id='${hid(12)}';`,
+      `${auth(1)} select public.remove_hangout_participant('${hid(12)}','${uid(2)}',2);`,
+      null);
+    const cancellationStamp = cancelledRemoval.firstOutput.match(/CANCEL_TS=([^\s]+)/)?.[1];
+    assert.ok(cancellationStamp, "leader captured cancellation timestamp before queued host removal");
+    assert.equal(sql(`select extract(epoch from updated_at)::text
+      from public.hangouts where id='${hid(12)}'`), cancellationStamp);
+    assert.equal(sql(`select status||':'||revision from public.hangouts where id='${hid(12)}'`), "cancelled:3");
+    assert.equal(sql(`select state from public.hangout_participants where hangout_id='${hid(12)}'
+      and account_id='${uid(2)}'`), "removed");
 
     await race("cohost_remove_promote",
       `${auth(1)} select public.remove_hangout_participant('${hid(4)}','${uid(2)}',1);`,
