@@ -16,17 +16,17 @@ The owner route is `/attendance`, reachable from Calendar when ready and the acc
 | State | Presentation and action |
 | --- | --- |
 | Initial/loading | Mask prior actor content; show “Checking your attendance…” without source text. |
-| Empty | “No past Hangouts to confirm yet.” This describes the current owner list only. |
+| Empty or attendance gate off | “No attendance records are available right now.” Offer Retry. A's zero-row list cannot distinguish these cases, so do not claim the owner has no past Hangouts. |
 | Actionable, unanswered | “Did you attend this Hangout?” Two exclusive answers and Save. “Your answer is self-reported. Joining a plan does not confirm attendance.” |
 | Actionable, answered | “Your answer: I attended” or “I did not attend”; Change opens the same two choices. |
 | Window closed, answered | Show own saved answer read-only and explain that corrections are closed; never show an answer for another account. |
 | Window closed, unanswered | “No answer was saved. Answering has closed.” Keep the owner ID row visible and read-only. |
-| Window open, source gate off | “Answering is unavailable right now.” Keep any own saved state only if a fresh owner read permits it. |
+| Within window, not actionable | “Answering is unavailable for this Hangout.” The projection also covers pre-start cancellation, so give no reason or retry promise. Keep any own saved state only if a fresh owner read permits it. |
 | Hidden source | Show `Hangout ID` and exact UUID only. No title, host, time, place or deep link to denied detail. |
 | Gate/account denial | Remove all owner content and show a neutral unavailable state with sign-in or retry as appropriate. |
 | Stale or uncertain save | Recheck the exact own row. Show only confirmed saved state; otherwise ask for a fresh deliberate choice. |
 
-The general correction explanation is “You can change your answer for 30 days after attendance opens.” An exact deadline may be calculated from a currently authorized source schedule using ADR-0022's end-or-start-plus-two-hours opening and 30-day rule. Do not show that deadline when schedule or source access is unavailable, and do not add a new attendance timestamp projection. The database's open/closed flag remains authoritative if the clock boundary races the UI. A `/safety` link says “Report a concern separately” and never treats a response as a report.
+The general correction explanation is “You can change your answer for 30 days after attendance opens.” An exact deadline may be calculated from a currently authorized source schedule using ADR-0022's end-or-start-plus-two-hours opening and 30-day rule. Show it only when the row is currently actionable. Do not show that deadline when schedule or source access is unavailable, and do not add a new attendance timestamp projection. The database's open/closed flag remains authoritative if the clock boundary races the UI. A `/safety` link says “Report a concern separately” and never treats a response as a report.
 
 ## Interaction checks
 
