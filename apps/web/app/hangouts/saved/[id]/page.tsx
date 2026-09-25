@@ -9,7 +9,12 @@ import { SafetyActions } from "../../../safety/safety-client";
 import "../../create.css";
 import "../saved.css";
 import { AnalyticsView } from "../../../analytics-view";
-import { HostDetailBoundary, HostJoiningControl } from "./host-joining-control";
+import {
+  HostDetailBoundary,
+  HostJoiningControl,
+  PrivateDetail,
+} from "./host-joining-control";
+import { ManagementControls } from "./management-controls";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -93,14 +98,17 @@ export default async function SavedDetailPage({
           )}
           <div className="saved-detail-grid">
             <section>
-              {ownState === "host" && !cancelled && (
-                <HostJoiningControl
-                  id={id}
-                  revision={record.revision}
-                  joining={record.joining_state}
-                  largeState={result.largeState ?? "unavailable"}
-                />
-              )}
+              {(result.ownRole === "host" || result.ownRole === "cohost") &&
+                !cancelled && (
+                  <HostJoiningControl
+                    id={id}
+                    revision={record.revision}
+                    joining={record.joining_state}
+                    largeState={
+                      result.ownRole === "host" ? result.largeState : null
+                    }
+                  />
+                )}
               <h2>The plan</h2>
               <p>{record.description || "No description added."}</p>
               <dl>
@@ -120,13 +128,14 @@ export default async function SavedDetailPage({
                 <dt>Host account ID</dt>
                 <dd className="saved-id">{record.host_id}</dd>
               </dl>
-              {!cancelled && (
+              {(!cancelled || (ownState === "joined" && cancelled)) && (
                 <MembershipControl
                   key={`${id}:${ownState}`}
                   id={id}
                   state={ownState}
                   joining={record.joining_state}
                   instructions={ownState === "joined" ? instructions : null}
+                  cancelled={cancelled}
                 />
               )}
               {cancelled && (
@@ -136,45 +145,43 @@ export default async function SavedDetailPage({
               )}
             </section>
             <aside>
-              <h2>Who&apos;s joining</h2>
               {cancelled ? (
                 <p>The current roster is unavailable after cancellation.</p>
-              ) : roster.length ? (
-                <ul className="saved-roster">
-                  {roster.map((accountId) => (
-                    <li key={accountId}>
-                      {accountId === result.userId
-                        ? "You"
-                        : accountId === record.host_id
-                          ? "Host"
-                          : "Participant"}{" "}
-                      <span className="saved-id">{accountId}</span>
-                    </li>
-                  ))}
-                </ul>
               ) : (
-                <p>No current ready participants are visible.</p>
+                <ManagementControls
+                  key={record.revision}
+                  id={id}
+                  revision={record.revision}
+                  actorId={result.userId}
+                  role={
+                    result.ownRole === "host" || result.ownRole === "cohost"
+                      ? result.ownRole
+                      : null
+                  }
+                  roster={roster}
+                  rosterMore={result.rosterMore}
+                  assignments={result.assignments}
+                  assignmentsMore={result.assignmentsMore}
+                />
               )}
-              <p className="help">
-                Only account IDs for currently ready joined members are
-                available here. Names and photos are not part of this local
-                flow.
-              </p>
             </aside>
           </div>
           {ownState === "host" && joined && !cancelled && (
-            <section className="saved-private">
-              <h2>Private meeting instructions</h2>
-              <p>
-                {instructions || "The host has not added private instructions."}
-              </p>
-              <p className="help">
-                While this Hangout stays published, joined members can read
-                these instructions even after its scheduled end. Access ends if
-                you leave, are removed, lose account readiness or the host
-                cancels.
-              </p>
-            </section>
+            <PrivateDetail>
+              <section className="saved-private">
+                <h2>Private meeting instructions</h2>
+                <p>
+                  {instructions ||
+                    "The host has not added private instructions."}
+                </p>
+                <p className="help">
+                  While this Hangout stays published, joined members can read
+                  these instructions even after its scheduled end. Access ends
+                  if you leave, are removed, lose account readiness or the host
+                  cancels.
+                </p>
+              </section>
+            </PrivateDetail>
           )}
         </div>
       </HostDetailBoundary>

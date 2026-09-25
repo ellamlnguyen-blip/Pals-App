@@ -229,3 +229,36 @@
     padding: 0 0 3rem;
   }
 }
+.saved-management,
+.saved-management-roster {
+  margin-bottom: 1.5rem;
+}
+.saved-management h2,
+.saved-management-roster h2 {
+  margin: 0 0 0.5rem;
+}
+.saved-management-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin: 1rem 0;
+}
+.saved-management .saved-id {
+  display: block;
+}
+.saved-roster li .text-button {
+  display: inline-flex;
+  margin: 0.4rem 0.6rem 0 0;
+  min-height: 36px;
+  align-items: center;
+}
+@media (max-width: 700px) {
+  .saved-management-actions > * {
+    width: 100%;
+    justify-content: center;
+  }
+  .saved-roster li .text-button {
+    display: flex;
+    width: 100%;
+  }
+}

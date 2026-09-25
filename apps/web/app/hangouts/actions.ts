@@ -3,6 +3,7 @@ import { revalidatePath } from "next/cache";
 import { access } from "../../lib/access";
 import { campusLocal, resolveCampusLocal } from "../../lib/hangout-time";
 import { readOwnedHangout, requireLocalHangouts } from "../../lib/hangouts";
+import { readSavedDetail } from "../../lib/saved-hangouts";
 
 export type HangoutInput = {
   title: string;
@@ -179,6 +180,17 @@ export async function createHangout(
   revalidatePath("/hangouts");
   return { kind: "saved", id: record.id, revision: record.revision };
 }
+async function readEditableHangout(id: string) {
+  const detail = await readSavedDetail(id);
+  if (
+    detail.kind !== "ok" ||
+    (detail.ownRole !== "host" && detail.ownRole !== "cohost") ||
+    detail.record.status !== "published"
+  )
+    return null;
+  const row = detail.record;
+  return { ...row, private_instructions: detail.instructions ?? "" };
+}
 export async function editHangout(serialized: string): Promise<HangoutResult> {
   requireLocalHangouts();
   let id: string, revision: number, input: HangoutInput;
@@ -198,7 +210,7 @@ export async function editHangout(serialized: string): Promise<HangoutResult> {
       kind: "denied",
       message: "Your account is not ready to edit this Hangout.",
     };
-  const current = await readOwnedHangout(client, user.id, id);
+  const current = await readEditableHangout(id);
   if (!current || current.status !== "published")
     return {
       kind: "denied",
@@ -216,7 +228,7 @@ export async function editHangout(serialized: string): Promise<HangoutResult> {
     ...payload,
   });
   if (error) return failed(error);
-  const saved = await readOwnedHangout(client, user.id, id);
+  const saved = await readEditableHangout(id);
   if (
     !saved ||
     saved.revision !== data ||
@@ -229,5 +241,6 @@ export async function editHangout(serialized: string): Promise<HangoutResult> {
         "The edit may have saved. Reload this Hangout to review the latest details before another edit.",
     };
   revalidatePath(`/hangouts/owned/${id}`);
+  revalidatePath(`/hangouts/saved/${id}`);
   return { kind: "saved", id, revision: saved.revision };
 }

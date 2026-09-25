@@ -13,10 +13,22 @@ import {
 import { flushSync } from "react-dom";
 import { changeSavedJoining } from "../actions";
 
-const AccessLoss = createContext<() => void>(() => {});
+const AccessLoss = createContext<{
+  deny: () => void;
+  hidePrivate: () => void;
+  privateHidden: boolean;
+}>({ deny: () => {}, hidePrivate: () => {}, privateHidden: false });
+export function useDetailAccess() {
+  return useContext(AccessLoss);
+}
+export function PrivateDetail({ children }: { children: ReactNode }) {
+  const { privateHidden } = useDetailAccess();
+  return privateHidden ? null : <>{children}</>;
+}
 
 export function HostDetailBoundary({ children }: { children: ReactNode }) {
   const [masked, setMasked] = useState(false);
+  const [privateHidden, setPrivateHidden] = useState(false);
   function deny() {
     // A server refresh may be delayed. Remove the mounted source and private
     // details synchronously before leaving the page after an access loss.
@@ -30,7 +42,17 @@ export function HostDetailBoundary({ children }: { children: ReactNode }) {
         <p>Reload after checking your account.</p>
       </div>
     );
-  return <AccessLoss.Provider value={deny}>{children}</AccessLoss.Provider>;
+  return (
+    <AccessLoss.Provider
+      value={{
+        deny,
+        hidePrivate: () => flushSync(() => setPrivateHidden(true)),
+        privateHidden,
+      }}
+    >
+      {children}
+    </AccessLoss.Provider>
+  );
 }
 
 export function HostJoiningControl({
@@ -42,10 +64,10 @@ export function HostJoiningControl({
   id: string;
   revision: number;
   joining: string;
-  largeState: "large" | "small" | "unavailable";
+  largeState: "large" | "small" | "unavailable" | null;
 }) {
   const router = useRouter();
-  const deny = useContext(AccessLoss);
+  const { deny } = useDetailAccess();
   const [pending, startTransition] = useTransition();
   const [needsReload, setNeedsReload] = useState(false);
   const [message, setMessage] = useState("");

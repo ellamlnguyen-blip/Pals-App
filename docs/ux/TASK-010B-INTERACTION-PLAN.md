@@ -1,0 +1,7 @@
+# TASK-010B interaction plan
+
+Reading this as a compact campus Hangout management flow for a verified host or joined co-host. Keep the existing blue/white rounded panels and direct language; use role labels and account IDs only. The live reference inspection was attempted on 2026-09-25 but the URL did not load in the available web tool; `DESIGN_DIRECTION.md` records its earlier direct inspection.
+
+On desktop, keep the plan and management controls in the main column, with the current-ready roster beside them. On phones, stack sections in that order; account IDs wrap and each action is a full-width button at narrow widths. The current joining control is shared by host and co-host, but the coarse size warning remains inside its host-only branch. Editing uses the existing form and a co-host route; cancellation and removal use explicit confirmations. Host assignment history is a separate, paginated panel so a suspended assignment can be demoted without exposing it in the ordinary roster.
+
+Each management write carries the displayed revision. After a response, refresh current authority and data before claiming success; on stale, denial or response loss, lock the controls and offer reload. A leave or cancellation attempt immediately removes private instructions from the mounted view. Keyboard focus moves to result feedback and remains usable after refresh. Empty, loading and error copy must distinguish a lack of visible people from unavailable authorization.

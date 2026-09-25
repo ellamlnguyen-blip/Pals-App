@@ -10,11 +10,13 @@ export function MembershipControl({
   state,
   joining,
   instructions,
+  cancelled = false,
 }: {
   id: string;
   state: ParticipantState;
   joining: string;
   instructions: string | null;
+  cancelled?: boolean;
 }) {
   const router = useRouter();
   const [pending, startTransition] = useTransition();
@@ -95,7 +97,7 @@ export function MembershipControl({
           )}
         </p>
       )}
-      {state === "joined" && privateVisible && (
+      {state === "joined" && !cancelled && privateVisible && (
         <section className="saved-private">
           <h2>Private meeting instructions</h2>
           <p>

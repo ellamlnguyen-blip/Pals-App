@@ -5,6 +5,7 @@ import {
   querySaved,
   readOwnState,
   readSavedPublic,
+  readSavedRole,
 } from "../../../lib/saved-hangouts";
 import {
   validSavedHangoutId,
@@ -56,8 +57,12 @@ export async function changeSavedJoining(
   } catch {
     return unavailable;
   }
-  if (!before || before.host_id !== user.id || before.status !== "published")
-    return unavailable;
+  if (!before || before.status !== "published") return unavailable;
+  const actorRole =
+    before.host_id === user.id
+      ? "host"
+      : await readSavedRole(client, id, user.id);
+  if (actorRole !== "host" && actorRole !== "cohost") return unavailable;
   if (before.revision !== expectedRevision || before.joining_state === desired)
     return stale;
 
@@ -91,8 +96,9 @@ export async function changeSavedJoining(
     liveError ||
     live !== "ready" ||
     !latest ||
-    latest.host_id !== user.id ||
-    latest.status !== "published"
+    latest.status !== "published" ||
+    (latest.host_id !== user.id &&
+      (await readSavedRole(client, id, user.id)) !== "cohost")
   )
     return unavailable;
   if (
@@ -137,7 +143,7 @@ export async function changeSavedMembership(
     before === "unknown" ||
     before === "removed" ||
     before === "host" ||
-    current.status !== "published" ||
+    (intent === "join" && current.status !== "published") ||
     (intent === "join" && current.joining_state !== "open") ||
     (intent === "leave" && before !== "joined")
   )
@@ -159,7 +165,7 @@ export async function changeSavedMembership(
   if (
     !liveError &&
     live === "ready" &&
-    latest?.status === "published" &&
+    (intent === "leave" || latest?.status === "published") &&
     after === (intent === "join" ? "joined" : "left") &&
     !error
   ) {

@@ -177,6 +177,31 @@ export async function readOwnState(
   return fresh?.status === "published" ? "none" : "unknown";
 }
 
+export async function readSavedRole(
+  client: SupabaseClient,
+  id: string,
+  accountId: string,
+) {
+  if (!validSavedHangoutId(accountId)) return null;
+  const value = BigInt(`0x${accountId.replaceAll("-", "")}`);
+  const before =
+    value === 0n
+      ? null
+      : (() => {
+          const hex = (value - 1n).toString(16).padStart(32, "0");
+          return `${hex.slice(0, 8)}-${hex.slice(8, 12)}-${hex.slice(12, 16)}-${hex.slice(16, 20)}-${hex.slice(20)}`;
+        })();
+  const result = await client.rpc("list_hangout_roster_roles", {
+    p_hangout_id: id,
+    p_after_account_id: before,
+    p_limit: 1,
+  });
+  if (result.error) return null;
+  return result.data?.[0]?.account_id === accountId
+    ? (result.data[0].role_label as string)
+    : null;
+}
+
 export async function readSavedDetail(id: string) {
   requireLocalHangouts();
   const { client, user, state } = await access();
@@ -185,15 +210,32 @@ export async function readSavedDetail(id: string) {
   if (!record) return { kind: "missing" as const };
   const ownState = await readOwnState(client, id, user.id, record);
   if (ownState === "unknown") return { kind: "denied" as const };
-  let roster: string[] = [];
+  let roster: {
+    account_id: string;
+    role_label: "host" | "cohost" | "participant";
+  }[] = [];
+  let rosterMore = false;
+  let assignments: string[] = [];
+  let assignmentsMore = false;
   if (record.status === "published") {
-    const { data, error } = await client
-      .from("hangout_participants")
-      .select("account_id")
-      .eq("hangout_id", id)
-      .order("account_id");
+    const { data, error } = await client.rpc("list_hangout_roster_roles", {
+      p_hangout_id: id,
+      p_limit: 24,
+    });
     if (error) return { kind: "denied" as const };
-    roster = (data ?? []).map((row) => row.account_id);
+    roster = data ?? [];
+    rosterMore = roster.length === 24;
+    if (ownState === "host") {
+      const assigned = await client.rpc("list_hangout_cohosts", {
+        p_hangout_id: id,
+        p_limit: 24,
+      });
+      if (assigned.error) return { kind: "denied" as const };
+      assignments = (assigned.data ?? []).map(
+        (row: { account_id: string }) => row.account_id,
+      );
+      assignmentsMore = assignments.length === 24;
+    }
   }
   let instructions: string | null = null;
   if (
@@ -208,6 +250,12 @@ export async function readSavedDetail(id: string) {
     if (error) return { kind: "denied" as const };
     instructions = data?.instructions ?? null;
   }
+  const ownRole =
+    ownState === "host"
+      ? "host"
+      : ownState === "joined" && record.status === "published"
+        ? await readSavedRole(client, id, user.id)
+        : null;
   let largeState: "large" | "small" | "unavailable" | null = null;
   if (ownState === "host" && record.status === "published") {
     largeState = "unavailable";
@@ -234,10 +282,17 @@ export async function readSavedDetail(id: string) {
     return { kind: "denied" as const };
   const latestState = await readOwnState(client, id, user.id, latest);
   if (latestState === "unknown") return { kind: "denied" as const };
+  const latestRole =
+    latestState === "host"
+      ? "host"
+      : latestState === "joined" && latest.status === "published"
+        ? await readSavedRole(client, id, user.id)
+        : null;
   if (
     latest.status !== record.status ||
     latest.revision !== record.revision ||
-    latestState !== ownState
+    latestState !== ownState ||
+    latestRole !== ownRole
   )
     return { kind: "changed" as const };
   if (latest.status !== "published") instructions = null;
@@ -245,7 +300,11 @@ export async function readSavedDetail(id: string) {
     kind: "ok" as const,
     record: latest,
     ownState: latestState,
+    ownRole,
     roster,
+    rosterMore,
+    assignments,
+    assignmentsMore,
     instructions,
     userId: user.id,
     largeState,

@@ -14,7 +14,7 @@ import {
 } from "./actions";
 import { UNC_CENTER } from "./fixtures";
 
-type Props = { token: string; existing?: OwnedHangout };
+type Props = { token: string; existing?: OwnedHangout; returnHref?: string };
 function initial(existing?: OwnedHangout): HangoutInput {
   return {
     title: existing?.title ?? "",
@@ -159,7 +159,7 @@ function PublicAreaPicker({
     </div>
   );
 }
-export function HangoutEditor({ token, existing }: Props) {
+export function HangoutEditor({ token, existing, returnHref }: Props) {
   const router = useRouter();
   const [values, setValues] = useState<HangoutInput>(() => initial(existing));
   const [revision, setRevision] = useState(existing?.revision ?? 0);
@@ -170,7 +170,11 @@ export function HangoutEditor({ token, existing }: Props) {
   const feedback = useRef<HTMLDivElement>(null);
   const set = (key: keyof HangoutInput, value: string) =>
     setValues((old) => ({ ...old, [key]: value }));
-  const locked = result?.kind === "uncertain" && !existing;
+  const locked = existing
+    ? result?.kind === "uncertain" ||
+      result?.kind === "conflict" ||
+      result?.kind === "denied"
+    : result?.kind === "uncertain";
   function save(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
     if (pending) return;
@@ -195,16 +199,22 @@ export function HangoutEditor({ token, existing }: Props) {
               }),
             );
         setResult(response);
+        if (
+          existing &&
+          (response.kind === "denied" || response.kind === "uncertain")
+        )
+          setValues((old) => ({ ...old, privateInstructions: "" }));
         if (response.kind === "saved") {
           setRevision(response.revision);
           attempted.current = null;
-          router.push(`/hangouts/owned/${response.id}`);
+          router.push(returnHref ?? `/hangouts/owned/${response.id}`);
           router.refresh();
         } else if (response.kind !== "uncertain" && !existing && !replay) {
           request.current = null;
           attempted.current = null;
         }
       } catch {
+        if (existing) setValues((old) => ({ ...old, privateInstructions: "" }));
         setResult({
           kind: "uncertain",
           message: existing
@@ -367,7 +377,7 @@ export function HangoutEditor({ token, existing }: Props) {
           )}
           {result?.kind === "conflict" && existing && (
             <Link
-              href={`/hangouts/owned/${existing.id}`}
+              href={returnHref ?? `/hangouts/owned/${existing.id}`}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -376,7 +386,7 @@ export function HangoutEditor({ token, existing }: Props) {
           )}
           {result?.kind === "uncertain" && existing && (
             <Link
-              href={`/hangouts/owned/${existing.id}`}
+              href={returnHref ?? `/hangouts/owned/${existing.id}`}
               target="_blank"
               rel="noopener noreferrer"
             >
@@ -393,7 +403,7 @@ export function HangoutEditor({ token, existing }: Props) {
         <button
           className="button"
           type="submit"
-          disabled={pending || (existing && result?.kind === "uncertain")}
+          disabled={pending || (existing && locked)}
         >
           {pending
             ? "Saving…"
@@ -405,7 +415,11 @@ export function HangoutEditor({ token, existing }: Props) {
         </button>
         <Link
           className="quiet-button"
-          href={existing ? `/hangouts/owned/${existing.id}` : "/hangouts"}
+          href={
+            existing
+              ? (returnHref ?? `/hangouts/owned/${existing.id}`)
+              : "/hangouts"
+          }
         >
           Cancel and discard changes
         </Link>
