@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-25 — TASK-019A local analytics foundation
+
+- Added a default-off, memory-only student analytics choice and 14-name PostHog-compatible adapter for an explicit loopback sink under Accepted ADR-0023. No product event is wired yet. Exact-tip review and workspace/authenticated local checks passed; fixtures were removed, nine gates remain false and services stopped. TASK-019B and canonical main publication are next; hosted capture remains out of scope.
+
 ## 2026-09-25 — TASK-019 analytics policy accepted
 
 - The user accepted ADR-0023 as written for disposable-local implementation after independent planning review and publication. A narrower contract and fresh implementation review remain required. No hosted PostHog ingest, live user, gate enablement or deployment is authorized.

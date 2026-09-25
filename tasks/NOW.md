@@ -1,6 +1,8 @@
 # NOW
 
-## TASK-019 analytics planning
+## TASK-019 analytics implementation
+
+TASK-019A's final remote tip `f08bd5fe4741bd807ee42c92acb4ac14a7f14a91` passed fresh exact-tip privacy/security/design review with no P0/P1/P2 and is integrated on the coordinator branch. Full workspace checks and authenticated local desktop consent/reload/keyboard checks passed; the task handoff records the 390px agent render and dark-render limit. Disposable user zero, nine local gates false and services stopped. Publish and independently verify this integration on canonical main, then dispatch fresh TASK-019B from that exact tip. No hosted PostHog, live-user capture, gate enablement or deployment is authorized.
 
 TASK-019A implementation is dispatched to a fresh scoped GPT-6 Sol medium agent in isolated `/private/tmp/pals-task-019a-analytics` on `agent/TASK-019A-analytics-foundation`, starting from independently remote-verified canonical main `385c9ea155f06f3bdb379f05ee1f7613e92a4d87`. The dispatch tool has no Standard-speed selector to verify. Its local-only adapter/consent implementation, tests, handoff, task-tip publication and fresh exact-tip review remain pending. B waits for accepted A. No hosted PostHog, live-user capture, gate enablement or deployment is authorized.
 

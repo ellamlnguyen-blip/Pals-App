@@ -1,6 +1,6 @@
 # TASK-019A handoff — local analytics adapter and consent control
 
-Status: implementation on task branch; exact-tip review and authenticated rendered acceptance remain with coordinator. Stage B is not dispatched by this handoff.
+Status: reviewed at exact remote task tip and integrated on coordinator branch for disposable-local scope. Stage B follows independently verified main publication.
 
 ## Branch and baseline
 
@@ -17,6 +17,12 @@ Status: implementation on task branch; exact-tip review and authenticated render
 - Only raw `APP_ENV=local`, a canonical loopback HTTP `/capture/` URL with explicit port, and a nonsecret `local-test-…` token can enable capture. The private transport uses only `api_key`, event, random visit `distinct_id`, `schema_version: 1` and `$process_person_profile: false`; credentials and referrer are omitted, redirects error, and failures cause no retry or product error. No SDK, persistent storage, database migration, gate change or hosted target was introduced.
 - Added an Analytics choice link in the avatar menu and onboarding, with a small account page explaining counted categories, excluded content/recipients, attendance/safety/identifying exclusions, and current-tab/reload limits. The choice starts off and uses native buttons and live status text. Turn off remains available while a retained choice is checking, unavailable or in error. A stale stalled check cannot prevent a later fresh opt-in after turning off.
 - Coordinator's authenticated desktop review found the native buttons retained browser-default gray styling. Both Turn on and Turn off now use the existing Pals `.button` component class with equal visual prominence; the phone-width rule still gives the action a full-width target.
+
+## Coordinator acceptance
+
+- Independently remote-verified final task tip `f08bd5fe4741bd807ee42c92acb4ac14a7f14a91`; a fresh exact-tip privacy/security/design reviewer found no actionable P0/P1/P2. `pnpm check` passed at that tip with 43 tests and web/admin builds.
+- Using a disposable local UNC account and production web build, the coordinator observed eligible initial off, opt-in on, opt-out off, reload off, and keyboard Space toggling both actions. The final desktop page at 1280px had no horizontal overflow and rendered the shared button style. A 390px phone render and width measurement are recorded from the task agent; the coordinator's later browser viewport override remained at 1280px, so it did not count as a second phone inspection. Dark appearance was not directly rendered in this pass; shared dark tokens supply the action and panel colors.
+- The disposable account was deleted; a final database query returned zero `task019a%` Auth users and false for all nine product gates. The web server, local Supabase and Lima VM were stopped. No product event callsite, hosted capture or live account was used.
 
 ## Verification
 
