@@ -1,5 +1,9 @@
 # NOW
 
+## TASK-018 reviewed UI integration
+
+The final Stage B task tip `2c589da0d323ca2feeda6d9ce0bf11ace9b2324d` is independently remote-verified and passed fresh exact-tip design/security review with no P0/P1/P2 finding after both private pagination-ID fixes. The local-only attendance route, actor-bound server path and Calendar/account entries are merged in the coordinator integration branch. Full workspace checks, local Auth/API and rendered responsive/light/dark/keyboard/denial/uncertain/stale checks passed within the B handoff limits; all disposable fixtures are gone, nine gates false and services stopped. Canonical main publication/verification, stage/parent handoff SHA receipts and final task status remain before TASK-018 completion. No hosted operation or gate enablement occurred.
+
 ## TASK-018B student UI dispatch
 
 Reviewed Stage A and its handoff are on independently remote-verified canonical main `4179ca3399d0589829308dd8283bfdd48c6271ff`. A fresh scoped GPT-6 Sol medium agent is implementing the reviewed Stage B student UI contract in `/private/tmp/pals-task-018b-attendance` on `agent/TASK-018B-attendance-ui` from that exact baseline. The dispatch tool exposes no Standard-speed selector to verify. Local authenticated/rendered checks, handoff, task-branch publication, fresh exact-tip review and main integration remain pending. The TASK-018 parent is active; no hosted operation or gate enablement is authorized.

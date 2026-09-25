@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-25 — TASK-018B private attendance UI
+
+- Added a local-only owner attendance page, actor-bound no-store server route and small Calendar/account entries. The ID-only UI shows the caller's self-reported answer, actionable/closed states and separate safety link; stale, denied and uncertain saves recheck current owner authority. Fresh exact-tip review cleared the privacy fixes, and local authenticated responsive/light/dark/keyboard and failure checks passed within handoff limits. Main publication receipts remain; no hosted operation or gate enablement occurred.
+
 ## 2026-09-24 — TASK-018A private attendance backend
 
 - Added a default-off local attendance gate, private self-answer relation, caller-bound own read/list/write RPCs and a post-opening database schedule freeze under Accepted ADR-0022. The corrected task tip passed exact-tip security review and disposable-local authorization, race, boundary, API, lint and workspace checks. Stage B UI and canonical main publication receipts remain; no hosted operation or gate enablement occurred.

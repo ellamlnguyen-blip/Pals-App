@@ -1,6 +1,6 @@
 # TASK-018B attendance interaction plan
 
-Status: Reviewed dependent plan; implementation awaits ADR-0022 acceptance and TASK-018A
+Status: Implemented and exact-tip reviewed for disposable-local Stage B; main receipt pending
 Date: 2026-09-24
 
 ## Design read
