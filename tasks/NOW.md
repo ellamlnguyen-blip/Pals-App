@@ -1,5 +1,9 @@
 # NOW
 
+## TASK-020 policy planning — awaiting acceptance
+
+`active/TASK-020-large-hangout-safeguards.md` bounds disposable-local host awareness/control, a private unconsumed review signal and saved-map dampening. Proposed `decisions/ADR-0024-local-large-hangout-safeguards.md` specifies the provisional 25-joined-member threshold, host coarse flag, private signal and viewer-relative ordering before truncation. Explicit acceptance and narrower reviewed/published A/B contracts precede implementation. No migration, UI change, gate enablement or hosted operation has occurred. TASK-010 co-host work and operational moderation of size signals remain separate. Planning started from independently remote-verified main `8c087fa396475f966a3a783307719e4d625f60e2`; review/publication evidence is in `agents/handoffs/TASK-020-CONTRACT.md`.
+
 ## TASK-020 planning handoff
 
 TASK-019 is complete for disposable-local scope under Accepted ADR-0023. Authenticated desktop checks exercised all nine wired events against an in-memory loopback sink, while 390 px phone checks verified saved-Hangout and Notifications rendering; consent-off, denied, attendance and safety actions emitted nothing. The local database was reset to zero synthetic fixtures, all nine gates false, and services stopped. Five approved event names remain intentionally unwired where current actions cannot prove a new commit or no cancel UI exists. See `agents/handoffs/TASK-019.md`. Hosted analytics release remains separately gated.

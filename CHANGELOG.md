@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-25 — TASK-020 safeguards proposal
+
+- Defined a bounded disposable-local contract and Proposed ADR-0024 for a provisional 25-member host warning, voluntary joining control, a private unconsumed review hook and saved-map dampening. Explicit acceptance and reviewed stage contracts are required before implementation. No runtime or hosted state changed.
+
 ## 2026-09-25 — TASK-019 local browser acceptance
 
 - With explicit authorization, temporarily enabled only necessary gates in disposable local Supabase and used three synthetic UNC accounts. Authenticated desktop flows sent all nine wired event names to an in-memory loopback sink with the approved minimal envelope; 390 px saved-Hangout and Notifications routes rendered and remained usable. Consent-off, denied Notifications, private attendance answer/correction and a safety report sent nothing. Reset verified zero fixtures and all nine gates false; local services stopped. TASK-019 is complete for local scope, with five conservative undercounts and a separate hosted-release hold.
