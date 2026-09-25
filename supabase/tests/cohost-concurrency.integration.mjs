@@ -107,7 +107,7 @@ test("observed social-lock waits recheck cohost membership, authority and lifecy
           from public.hangouts where id='${hid(12)}';`,
       `${auth(1)} select public.remove_hangout_participant('${hid(12)}','${uid(2)}',2);`,
       null);
-    const cancellationStamp = cancelledRemoval.firstOutput.match(/CANCEL_TS=([^\s]+)/)?.[1];
+    const cancellationStamp = cancelledRemoval.firstOutput.match(/CANCEL_TS=([^\r\n]+)/)?.[1];
     assert.ok(cancellationStamp, "leader captured cancellation timestamp before queued host removal");
     assert.equal(sql(`select extract(epoch from updated_at)::text
       from public.hangouts where id='${hid(12)}'`), cancellationStamp);
