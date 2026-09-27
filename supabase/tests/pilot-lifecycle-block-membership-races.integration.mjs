@@ -118,11 +118,13 @@ test(
             const query = call(route);
             sql(`begin;${query}rollback;`);
             const loss = `${auth(direction === "actor-to-peer" ? actor : peer)}select public.set_safety_block('${direction === "actor-to-peer" ? peer : actor}',true);reset role;`;
-            // Nonhost blocking subject leaves. When peer is blocker it leaves itself;
-            // actor has no joined blocked peer afterward, so existing join/no-op is
-            // deliberately permitted. Host-block cases above always hide whole source.
+            // Reconciliation requires both subjects currently joined. Genuine join
+            // leaves actor outside that pair: peer-first block leaves peer joined and
+            // join denies. Mutation-first join creates the pair, so peer blocker leaves.
+            // Joined no-op also has the pair; peer blocker leaves and no-op remains allowed.
             const expectedDenial =
-              order === "loss-first" && direction === "actor-to-peer";
+              order === "loss-first" &&
+              (direction === "actor-to-peer" || route.id === "join");
             const record = await race(
               `b3a_${route.id}_${direction}_${order}`,
               order === "loss-first" ? loss : query,
@@ -132,7 +134,7 @@ test(
             );
             if (expectedDenial)
               assert.deepEqual(JSON.parse(census()), record.holder_snapshot);
-            if (direction === "actor-to-peer")
+            if (direction === "actor-to-peer" || expectedDenial)
               assert.throws(
                 () => sql(`begin;${query}rollback;`),
                 /42501:.*Hangout operation not permitted/,
@@ -144,9 +146,9 @@ test(
               direction,
               order,
               classification:
-                direction === "peer-to-actor"
-                  ? "lawful public block makes nonhost peer leave; no joined blocked peer remains, current actor join/noop is permitted"
-                  : "joined blocked peer remains; actor join/noop denies",
+                direction === "actor-to-peer" || expectedDenial
+                  ? "joined blocked peer remains; actor join/noop denies (genuine join loss-first has no shared-current pair to reconcile)"
+                  : "shared-current pair exists; peer blocker leaves itself, no joined blocked peer remains and actor join/noop is permitted",
             });
           }
       records.push({
