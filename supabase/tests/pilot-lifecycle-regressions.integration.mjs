@@ -67,17 +67,25 @@ test(
             join(directory, modulePath),
             readFileSync(`supabase/tests/${modulePath}`, "utf8"),
           );
+          // Node marks this outer process as a test child. Passing that internal
+          // marker to another --test runner skips its files; remove only the marker.
+          const childEnvironment = { ...process.env };
+          delete childEnvironment.NODE_TEST_CONTEXT;
           const result = spawnSync(
             process.execPath,
             ["--test", "--test-concurrency=1", join(directory, modulePath)],
-            { encoding: "utf8", env: process.env, maxBuffer: 20 * 1024 * 1024 },
+            { encoding: "utf8", env: childEnvironment, maxBuffer: 20 * 1024 * 1024 },
           );
           // Inherited outputs sanitize tokens; retain bounded test/evidence output.
           console.log(result.stdout);
+          assert.equal(
+            result.status,
+            0,
+            `${modulePath}: ${result.stderr}; spawn=${result.error?.message ?? "none"}`,
+          );
           assert.match(result.stdout, /# pass [1-9]\d*/);
           assert.match(result.stdout, /# fail 0\b/);
           assert.match(result.stdout, /# skipped 0\b/);
-          assert.equal(result.status, 0, `${modulePath}: ${result.stderr}`);
         }
       }
     } finally {
