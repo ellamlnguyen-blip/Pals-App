@@ -11,7 +11,8 @@
       "callers": [
         "public.get_access_state"
       ],
-      "allocation": "B1 unchanged owner/identity"
+      "allocation": "B1 unchanged owner/identity",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.advance_large_hangout_epoch",
@@ -20,7 +21,8 @@
       "returns": "returns trigger",
       "calls": [],
       "callers": [],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.bump_profile_revision",
@@ -29,7 +31,8 @@
       "returns": "returns trigger",
       "calls": [],
       "callers": [],
-      "allocation": "B1 unchanged owner/identity"
+      "allocation": "B1 unchanged owner/identity",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.can_read_hangout",
@@ -52,7 +55,8 @@
         "public.query_saved_hangouts",
         "public.submit_safety_report"
       ],
-      "allocation": "B2 source/retained projection"
+      "allocation": "B2 source/retained projection",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.can_read_hangout_roster",
@@ -69,7 +73,8 @@
         "public.list_notifications",
         "public.query_saved_hangouts"
       ],
-      "allocation": "B2 source/retained projection"
+      "allocation": "B2 source/retained projection",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.chat_authorized",
@@ -86,7 +91,8 @@
         "private.chat_require",
         "public.list_notifications"
       ],
-      "allocation": "B2 source/retained projection"
+      "allocation": "B2 source/retained projection",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.chat_immutable_message",
@@ -95,7 +101,8 @@
       "returns": "returns trigger",
       "calls": [],
       "callers": [],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.chat_lock_evidence",
@@ -106,7 +113,8 @@
       "callers": [
         "public.send_hangout_message"
       ],
-      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only"
+      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.chat_require",
@@ -120,7 +128,8 @@
         "public.read_hangout_messages",
         "public.send_hangout_message"
       ],
-      "allocation": "B2 source/retained projection"
+      "allocation": "B2 source/retained projection",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.check_hangout_revision",
@@ -137,7 +146,8 @@
         "public.set_hangout_joining",
         "public.step_down_hangout_cohost"
       ],
-      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only"
+      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.clear_departing_cohost",
@@ -146,7 +156,8 @@
       "returns": "returns trigger",
       "calls": [],
       "callers": [],
-      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only"
+      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.clear_reopened_case_sanction",
@@ -155,7 +166,8 @@
       "returns": "returns trigger",
       "calls": [],
       "callers": [],
-      "allocation": "B2 unchanged retained/operator"
+      "allocation": "B2 unchanged retained/operator",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.dm_active_caller",
@@ -169,7 +181,8 @@
         "private.dm_require",
         "public.transition_dm"
       ],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.dm_eligible",
@@ -191,7 +204,8 @@
         "public.send_dm_message",
         "public.transition_dm"
       ],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.dm_enabled",
@@ -205,7 +219,8 @@
         "public.list_notifications",
         "public.transition_dm"
       ],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.dm_immutable",
@@ -214,7 +229,8 @@
       "returns": "returns trigger",
       "calls": [],
       "callers": [],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.dm_lock_evidence",
@@ -227,7 +243,8 @@
         "public.send_dm_message",
         "public.transition_dm"
       ],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.dm_require",
@@ -243,7 +260,8 @@
         "public.list_dm_inbox",
         "public.read_dm_messages"
       ],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.effective_hangout_cohost",
@@ -263,7 +281,8 @@
         "public.set_hangout_joining",
         "public.step_down_hangout_cohost"
       ],
-      "allocation": "B2 source/retained projection"
+      "allocation": "B2 source/retained projection",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.enforce_hangout_ownership",
@@ -272,7 +291,8 @@
       "returns": "returns trigger",
       "calls": [],
       "callers": [],
-      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only"
+      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.enforce_joined_host",
@@ -281,7 +301,8 @@
       "returns": "returns trigger",
       "calls": [],
       "callers": [],
-      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only"
+      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.enforce_participant_transition",
@@ -290,7 +311,8 @@
       "returns": "returns trigger",
       "calls": [],
       "callers": [],
-      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only"
+      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.friendship_eligible",
@@ -307,7 +329,8 @@
         "public.list_notifications",
         "public.transition_friendship"
       ],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.friendship_enabled",
@@ -322,7 +345,8 @@
         "public.list_notifications",
         "public.transition_friendship"
       ],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.friendship_lock_eligibility",
@@ -334,7 +358,8 @@
         "public.create_friend_request",
         "public.transition_friendship"
       ],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.friendship_lock_pair",
@@ -351,7 +376,8 @@
         "public.transition_dm",
         "public.transition_friendship"
       ],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.hangouts_enabled",
@@ -367,7 +393,8 @@
         "public.query_saved_hangouts",
         "public.submit_safety_report"
       ],
-      "allocation": "B2 source/retained projection"
+      "allocation": "B2 source/retained projection",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.has_verified_membership",
@@ -378,7 +405,8 @@
       "callers": [
         "public.get_access_state"
       ],
-      "allocation": "B1 unchanged owner/identity"
+      "allocation": "B1 unchanged owner/identity",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.lock_hangout",
@@ -401,7 +429,8 @@
         "public.set_hangout_joining",
         "public.step_down_hangout_cohost"
       ],
-      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only"
+      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.moderation_actor",
@@ -416,7 +445,8 @@
         "public.list_moderation_reports",
         "public.transition_moderation_case"
       ],
-      "allocation": "B2 unchanged retained/operator"
+      "allocation": "B2 unchanged retained/operator",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.moderation_report_allowed",
@@ -430,7 +460,8 @@
         "public.list_moderation_reports",
         "public.transition_moderation_case"
       ],
-      "allocation": "B2 unchanged retained/operator"
+      "allocation": "B2 unchanged retained/operator",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.notification_chat_source",
@@ -441,7 +472,8 @@
         "private.notification_emit_hangout"
       ],
       "callers": [],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.notification_dm_message_source",
@@ -452,7 +484,8 @@
         "private.notification_emit"
       ],
       "callers": [],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.notification_dm_pair_source",
@@ -463,7 +496,8 @@
         "private.notification_emit"
       ],
       "callers": [],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.notification_emit",
@@ -472,7 +506,6 @@
       "returns": "returns void",
       "calls": [
         "private.notification_enabled",
-        "private.notification_items",
         "private.notification_lock_recipient"
       ],
       "callers": [
@@ -480,7 +513,10 @@
         "private.notification_dm_pair_source",
         "private.notification_friend_source"
       ],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": [
+        "private.notification_items"
+      ]
     },
     {
       "name": "private.notification_emit_hangout",
@@ -490,7 +526,6 @@
       "calls": [
         "private.hangouts_enabled",
         "private.notification_enabled",
-        "private.notification_items",
         "private.notification_lock_recipient"
       ],
       "callers": [
@@ -500,7 +535,10 @@
         "public.join_hangout",
         "public.leave_hangout"
       ],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": [
+        "private.notification_items"
+      ]
     },
     {
       "name": "private.notification_enabled",
@@ -515,7 +553,8 @@
         "public.mark_notification_read",
         "public.set_notification_preference"
       ],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.notification_friend_source",
@@ -526,7 +565,8 @@
         "private.notification_emit"
       ],
       "callers": [],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.notification_lock_recipient",
@@ -539,7 +579,8 @@
         "private.notification_emit_hangout",
         "public.set_notification_preference"
       ],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.notification_require_owner",
@@ -556,7 +597,8 @@
         "public.list_notifications",
         "public.mark_notification_read"
       ],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.people_active_owner",
@@ -582,7 +624,8 @@
         "public.submit_safety_report",
         "public.transition_friendship"
       ],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.people_enabled",
@@ -600,7 +643,8 @@
         "public.set_safety_block",
         "public.submit_safety_report"
       ],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.people_ready_campus",
@@ -622,7 +666,8 @@
         "public.submit_safety_report",
         "public.transition_friendship"
       ],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.people_require_read_committed",
@@ -647,7 +692,8 @@
         "public.transition_dm",
         "public.transition_friendship"
       ],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.people_visible",
@@ -665,7 +711,8 @@
         "public.set_safety_block",
         "public.submit_safety_report"
       ],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.pilot_caller_is_admitted",
@@ -678,7 +725,8 @@
       "callers": [
         "public.get_access_state"
       ],
-      "allocation": "A1a unchanged authority"
+      "allocation": "A1a unchanged authority",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.pilot_capability_enabled",
@@ -696,7 +744,8 @@
         "public.set_safety_block",
         "public.submit_safety_report"
       ],
-      "allocation": "A1a unchanged authority"
+      "allocation": "A1a unchanged authority",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.pilot_evidence_lock",
@@ -707,7 +756,8 @@
       "callers": [
         "private.pilot_lock_owner_evidence"
       ],
-      "allocation": "A1a unchanged authority"
+      "allocation": "A1a unchanged authority",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.pilot_evidence_write_lock",
@@ -720,7 +770,8 @@
       "callers": [
         "private.pilot_lock_management"
       ],
-      "allocation": "A1a unchanged authority"
+      "allocation": "A1a unchanged authority",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.pilot_is_available",
@@ -735,7 +786,8 @@
         "private.ready_subject_campus",
         "public.get_access_state"
       ],
-      "allocation": "A1a unchanged authority"
+      "allocation": "A1a unchanged authority",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.pilot_lock_management",
@@ -750,7 +802,8 @@
         "public.set_pilot_account_admission",
         "public.set_pilot_policy"
       ],
-      "allocation": "A1a unchanged authority"
+      "allocation": "A1a unchanged authority",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.pilot_lock_owner_evidence",
@@ -765,7 +818,8 @@
         "private.require_active_photo_write",
         "private.require_active_profile_write"
       ],
-      "allocation": "B1 unchanged owner/identity"
+      "allocation": "B1 unchanged owner/identity",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.pilot_onboarding_eligible",
@@ -776,7 +830,8 @@
         "private.pilot_owner_subject_eligible"
       ],
       "callers": [],
-      "allocation": "B1 unchanged owner/identity"
+      "allocation": "B1 unchanged owner/identity",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.pilot_owner_subject_eligible",
@@ -791,7 +846,8 @@
         "private.pilot_lock_owner_evidence",
         "private.pilot_onboarding_eligible"
       ],
-      "allocation": "B1 unchanged owner/identity"
+      "allocation": "B1 unchanged owner/identity",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.pilot_require_activation",
@@ -802,7 +858,8 @@
       "callers": [
         "public.set_pilot_account_admission"
       ],
-      "allocation": "A1a unchanged authority"
+      "allocation": "A1a unchanged authority",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.pilot_require_manager",
@@ -814,7 +871,8 @@
         "public.set_pilot_account_admission",
         "public.set_pilot_policy"
       ],
-      "allocation": "A1a unchanged authority"
+      "allocation": "A1a unchanged authority",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.profile_trim",
@@ -841,7 +899,8 @@
         "public.transition_dm",
         "public.transition_moderation_case"
       ],
-      "allocation": "B1 unchanged owner/identity"
+      "allocation": "B1 unchanged owner/identity",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.protect_profile_photo_delete",
@@ -850,19 +909,21 @@
       "returns": "returns trigger",
       "calls": [],
       "callers": [],
-      "allocation": "B1 unchanged owner/identity"
+      "allocation": "B1 unchanged owner/identity",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.provision_account",
       "arguments": "",
       "final_source": "20260921000100_identity_foundation.sql",
       "returns": "returns trigger",
-      "calls": [
+      "calls": [],
+      "callers": [],
+      "allocation": "B1 unchanged owner/identity",
+      "insert_table_dependencies": [
         "public.accounts",
         "public.profiles"
-      ],
-      "callers": [],
-      "allocation": "B1 unchanged owner/identity"
+      ]
     },
     {
       "name": "private.ready_campus",
@@ -884,7 +945,8 @@
         "public.list_hangout_cohosts",
         "public.query_saved_hangouts"
       ],
-      "allocation": "B2 source/retained projection"
+      "allocation": "B2 source/retained projection",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.ready_subject_campus",
@@ -904,20 +966,22 @@
         "public.read_hangout_messages",
         "public.remove_hangout_participant"
       ],
-      "allocation": "B1 unchanged owner/identity"
+      "allocation": "B1 unchanged owner/identity",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.record_large_hangout_join",
       "arguments": "p_hangout_id uuid",
       "final_source": "20260925000100_local_large_hangout_safeguards.sql",
       "returns": "returns void",
-      "calls": [
-        "private.large_hangout_signals"
-      ],
+      "calls": [],
       "callers": [
         "public.join_hangout"
       ],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": [
+        "private.large_hangout_signals"
+      ]
     },
     {
       "name": "private.reject_client_profile_photo_update",
@@ -926,7 +990,8 @@
       "returns": "returns trigger",
       "calls": [],
       "callers": [],
-      "allocation": "B1 unchanged owner/identity"
+      "allocation": "B1 unchanged owner/identity",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.reject_large_hangout_signal_change",
@@ -935,7 +1000,8 @@
       "returns": "returns trigger",
       "calls": [],
       "callers": [],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.reject_moderation_evidence_change",
@@ -944,7 +1010,8 @@
       "returns": "returns trigger",
       "calls": [],
       "callers": [],
-      "allocation": "B2 unchanged retained/operator"
+      "allocation": "B2 unchanged retained/operator",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.reject_pilot_evidence_change",
@@ -953,7 +1020,8 @@
       "returns": "returns trigger",
       "calls": [],
       "callers": [],
-      "allocation": "A1a unchanged authority"
+      "allocation": "A1a unchanged authority",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.require_active_photo_write",
@@ -964,7 +1032,8 @@
         "private.pilot_lock_owner_evidence"
       ],
       "callers": [],
-      "allocation": "B1 unchanged owner/identity"
+      "allocation": "B1 unchanged owner/identity",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.require_active_profile_write",
@@ -975,7 +1044,8 @@
         "private.pilot_lock_owner_evidence"
       ],
       "callers": [],
-      "allocation": "B1 unchanged owner/identity"
+      "allocation": "B1 unchanged owner/identity",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.require_active_student_source_write",
@@ -984,7 +1054,8 @@
       "returns": "returns trigger",
       "calls": [],
       "callers": [],
-      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only"
+      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.safety_enabled",
@@ -999,7 +1070,8 @@
         "public.set_safety_block",
         "public.submit_safety_report"
       ],
-      "allocation": "B2 unchanged retained/operator"
+      "allocation": "B2 unchanged retained/operator",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.safety_lock_hangout_evidence",
@@ -1016,7 +1088,8 @@
         "public.remove_hangout_participant",
         "public.submit_safety_report"
       ],
-      "allocation": "B2 unchanged retained/operator"
+      "allocation": "B2 unchanged retained/operator",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.safety_lock_visible_evidence",
@@ -1028,7 +1101,8 @@
         "public.set_safety_block",
         "public.submit_safety_report"
       ],
-      "allocation": "B2 unchanged retained/operator"
+      "allocation": "B2 unchanged retained/operator",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.safety_pair_blocked",
@@ -1048,7 +1122,8 @@
         "public.read_hangout_messages",
         "public.remove_hangout_participant"
       ],
-      "allocation": "B2 unchanged retained/operator"
+      "allocation": "B2 unchanged retained/operator",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.safety_peer_evidence",
@@ -1060,7 +1135,8 @@
         "public.set_safety_block",
         "public.submit_safety_report"
       ],
-      "allocation": "B2 unchanged retained/operator"
+      "allocation": "B2 unchanged retained/operator",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.safety_reconcile_existing_blocks",
@@ -1068,21 +1144,21 @@
       "final_source": "20260923000600_local_global_blocks.sql",
       "returns": "returns void",
       "calls": [
-        "private.safety_reconciliation_effects",
         "private.safety_record_joined_overlap",
         "private.social_hangout_mutation_lock"
       ],
       "callers": [],
-      "allocation": "B2 unchanged retained/operator"
+      "allocation": "B2 unchanged retained/operator",
+      "insert_table_dependencies": [
+        "private.safety_reconciliation_effects"
+      ]
     },
     {
       "name": "private.safety_record_joined_overlap",
       "arguments": "p_hangout uuid,p_actor uuid",
       "final_source": "20260923000600_local_global_blocks.sql",
       "returns": "returns void",
-      "calls": [
-        "private.hangout_peer_provenance"
-      ],
+      "calls": [],
       "callers": [
         "private.safety_reconcile_existing_blocks",
         "public.join_hangout",
@@ -1090,7 +1166,10 @@
         "public.remove_hangout_participant",
         "public.set_safety_block"
       ],
-      "allocation": "B2 unchanged retained/operator"
+      "allocation": "B2 unchanged retained/operator",
+      "insert_table_dependencies": [
+        "private.hangout_peer_provenance"
+      ]
     },
     {
       "name": "private.safety_report_peer_source",
@@ -1101,7 +1180,8 @@
       "callers": [
         "public.submit_safety_report"
       ],
-      "allocation": "B2 unchanged retained/operator"
+      "allocation": "B2 unchanged retained/operator",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.set_pilot_manager_fixture",
@@ -1109,13 +1189,15 @@
       "final_source": "20260927000100_private_pilot_admission_authority.sql",
       "returns": "returns bigint",
       "calls": [
-        "private.pilot_admission_managers",
         "private.pilot_lock_management",
-        "private.pilot_manager_audit",
         "private.profile_trim"
       ],
       "callers": [],
-      "allocation": "A1a unchanged authority"
+      "allocation": "A1a unchanged authority",
+      "insert_table_dependencies": [
+        "private.pilot_admission_managers",
+        "private.pilot_manager_audit"
+      ]
     },
     {
       "name": "private.social_hangout_mutation_lock",
@@ -1147,18 +1229,20 @@
         "public.transition_dm",
         "public.transition_friendship"
       ],
-      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only"
+      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.sync_confirmed_membership",
       "arguments": "",
       "final_source": "20260922000100_verified_onboarding.sql",
       "returns": "returns trigger",
-      "calls": [
-        "public.university_memberships"
-      ],
+      "calls": [],
       "callers": [],
-      "allocation": "B1 unchanged owner/identity"
+      "allocation": "B1 unchanged owner/identity",
+      "insert_table_dependencies": [
+        "public.university_memberships"
+      ]
     },
     {
       "name": "private.valid_profile_list",
@@ -1169,7 +1253,8 @@
         "private.profile_trim"
       ],
       "callers": [],
-      "allocation": "B1 unchanged owner/identity"
+      "allocation": "B1 unchanged owner/identity",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.valid_profile_prompts",
@@ -1180,7 +1265,8 @@
         "private.profile_trim"
       ],
       "callers": [],
-      "allocation": "B1 unchanged owner/identity"
+      "allocation": "B1 unchanged owner/identity",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.validate_hangout_input",
@@ -1194,7 +1280,8 @@
         "public.create_hangout",
         "public.edit_hangout"
       ],
-      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only"
+      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.validate_hangout_instructions",
@@ -1208,7 +1295,8 @@
         "public.create_hangout",
         "public.edit_hangout"
       ],
-      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only"
+      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only",
+      "insert_table_dependencies": []
     },
     {
       "name": "private.validate_profile_photos",
@@ -1217,7 +1305,8 @@
       "returns": "returns trigger",
       "calls": [],
       "callers": [],
-      "allocation": "B1 unchanged owner/identity"
+      "allocation": "B1 unchanged owner/identity",
+      "insert_table_dependencies": []
     },
     {
       "name": "public.accept_friend_request",
@@ -1228,7 +1317,8 @@
         "public.transition_friendship"
       ],
       "callers": [],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
     },
     {
       "name": "public.answer_own_attendance",
@@ -1239,7 +1329,8 @@
         "private.social_hangout_mutation_lock"
       ],
       "callers": [],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
     },
     {
       "name": "public.apply_account_moderation_action",
@@ -1247,15 +1338,17 @@
       "final_source": "20260924000200_local_account_enforcement.sql",
       "returns": "returns table(case_state text,revision bigint,account_status text)",
       "calls": [
-        "private.account_sanctions",
         "private.moderation_actor",
-        "private.moderation_audit",
         "private.moderation_report_allowed",
-        "private.moderation_requests",
         "private.profile_trim"
       ],
       "callers": [],
-      "allocation": "B2 unchanged retained/operator"
+      "allocation": "B2 unchanged retained/operator",
+      "insert_table_dependencies": [
+        "private.account_sanctions",
+        "private.moderation_audit",
+        "private.moderation_requests"
+      ]
     },
     {
       "name": "public.apply_hangout_moderation_action",
@@ -1263,15 +1356,17 @@
       "final_source": "20260924000300_local_hangout_disable.sql",
       "returns": "returns table(case_state text,revision bigint,target_disabled boolean)",
       "calls": [
-        "private.hangout_disables",
         "private.moderation_actor",
-        "private.moderation_audit",
-        "private.moderation_requests",
         "private.profile_trim",
         "private.social_hangout_mutation_lock"
       ],
       "callers": [],
-      "allocation": "B2 unchanged retained/operator"
+      "allocation": "B2 unchanged retained/operator",
+      "insert_table_dependencies": [
+        "private.hangout_disables",
+        "private.moderation_audit",
+        "private.moderation_requests"
+      ]
     },
     {
       "name": "public.browse_people",
@@ -1285,7 +1380,8 @@
         "private.people_visible"
       ],
       "callers": [],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
     },
     {
       "name": "public.cancel_friend_request",
@@ -1296,7 +1392,8 @@
         "public.transition_friendship"
       ],
       "callers": [],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
     },
     {
       "name": "public.cancel_hangout",
@@ -1310,7 +1407,8 @@
         "private.social_hangout_mutation_lock"
       ],
       "callers": [],
-      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only"
+      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only",
+      "insert_table_dependencies": []
     },
     {
       "name": "public.create_dm_request",
@@ -1320,9 +1418,6 @@
       "calls": [
         "private.dm_eligible",
         "private.dm_lock_evidence",
-        "private.dm_messages",
-        "private.dm_pairs",
-        "private.dm_retries",
         "private.friendship_lock_pair",
         "private.people_ready_campus",
         "private.people_require_read_committed",
@@ -1330,7 +1425,12 @@
         "private.social_hangout_mutation_lock"
       ],
       "callers": [],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": [
+        "private.dm_messages",
+        "private.dm_pairs",
+        "private.dm_retries"
+      ]
     },
     {
       "name": "public.create_friend_request",
@@ -1338,19 +1438,21 @@
       "final_source": "20260923000600_local_global_blocks.sql",
       "returns": "returns uuid",
       "calls": [
-        "private.friendship_create_requests",
         "private.friendship_eligible",
         "private.friendship_enabled",
         "private.friendship_lock_eligibility",
         "private.friendship_lock_pair",
-        "private.friendships",
         "private.people_active_owner",
         "private.people_ready_campus",
         "private.people_require_read_committed",
         "private.social_hangout_mutation_lock"
       ],
       "callers": [],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": [
+        "private.friendship_create_requests",
+        "private.friendships"
+      ]
     },
     {
       "name": "public.create_hangout",
@@ -1359,19 +1461,21 @@
       "returns": "returns uuid",
       "calls": [
         "private.can_read_hangout",
-        "private.hangout_create_requests",
         "private.profile_trim",
         "private.ready_campus",
         "private.safety_lock_hangout_evidence",
         "private.social_hangout_mutation_lock",
         "private.validate_hangout_input",
-        "private.validate_hangout_instructions",
+        "private.validate_hangout_instructions"
+      ],
+      "callers": [],
+      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only",
+      "insert_table_dependencies": [
+        "private.hangout_create_requests",
         "public.hangout_participants",
         "public.hangout_private_locations",
         "public.hangouts"
-      ],
-      "callers": [],
-      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only"
+      ]
     },
     {
       "name": "public.decline_friend_request",
@@ -1382,7 +1486,8 @@
         "public.transition_friendship"
       ],
       "callers": [],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
     },
     {
       "name": "public.demote_hangout_cohost",
@@ -1395,7 +1500,8 @@
         "private.social_hangout_mutation_lock"
       ],
       "callers": [],
-      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only"
+      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only",
+      "insert_table_dependencies": []
     },
     {
       "name": "public.edit_hangout",
@@ -1410,11 +1516,13 @@
         "private.profile_trim",
         "private.social_hangout_mutation_lock",
         "private.validate_hangout_input",
-        "private.validate_hangout_instructions",
-        "public.hangout_private_locations"
+        "private.validate_hangout_instructions"
       ],
       "callers": [],
-      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only"
+      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only",
+      "insert_table_dependencies": [
+        "public.hangout_private_locations"
+      ]
     },
     {
       "name": "public.get_access_state",
@@ -1431,7 +1539,8 @@
         "private.people_ready_campus",
         "private.ready_campus"
       ],
-      "allocation": "B1 unchanged owner/identity"
+      "allocation": "B1 unchanged owner/identity",
+      "insert_table_dependencies": []
     },
     {
       "name": "public.get_dm_status",
@@ -1442,7 +1551,8 @@
         "private.dm_require"
       ],
       "callers": [],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
     },
     {
       "name": "public.get_friendship",
@@ -1455,7 +1565,8 @@
         "private.people_require_read_committed"
       ],
       "callers": [],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
     },
     {
       "name": "public.get_hangout_large_state",
@@ -1468,7 +1579,8 @@
         "private.ready_campus"
       ],
       "callers": [],
-      "allocation": "B2 source/retained projection"
+      "allocation": "B2 source/retained projection",
+      "insert_table_dependencies": []
     },
     {
       "name": "public.get_hangout_participant_state",
@@ -1483,7 +1595,8 @@
         "private.safety_pair_blocked"
       ],
       "callers": [],
-      "allocation": "B2 source/retained projection"
+      "allocation": "B2 source/retained projection",
+      "insert_table_dependencies": []
     },
     {
       "name": "public.get_moderation_report",
@@ -1492,11 +1605,13 @@
       "returns": "returns table(report_id uuid,submitted_at timestamptz,target_type text,target_id uuid, reporter_id uuid,category text,case_state text,case_revision bigint,narrative text, provenance_kind text,provenance_ref_id uuid,case_note text,disposition text, target_status text,target_campus_id uuid,target_disabled boolean)",
       "calls": [
         "private.moderation_actor",
-        "private.moderation_audit",
         "private.moderation_report_allowed"
       ],
       "callers": [],
-      "allocation": "B2 unchanged retained/operator"
+      "allocation": "B2 unchanged retained/operator",
+      "insert_table_dependencies": [
+        "private.moderation_audit"
+      ]
     },
     {
       "name": "public.get_notification_preferences",
@@ -1507,7 +1622,8 @@
         "private.notification_require_owner"
       ],
       "callers": [],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
     },
     {
       "name": "public.get_own_attendance",
@@ -1516,7 +1632,8 @@
       "returns": "returns table(hangout_id uuid,attended boolean,revision bigint,answered_at timestamptz)",
       "calls": [],
       "callers": [],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
     },
     {
       "name": "public.get_people_detail",
@@ -1530,7 +1647,8 @@
         "private.people_visible"
       ],
       "callers": [],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
     },
     {
       "name": "public.get_people_preference",
@@ -1542,7 +1660,8 @@
         "private.people_require_read_committed"
       ],
       "callers": [],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
     },
     {
       "name": "public.join_hangout",
@@ -1555,11 +1674,13 @@
         "private.record_large_hangout_join",
         "private.safety_pair_blocked",
         "private.safety_record_joined_overlap",
-        "private.social_hangout_mutation_lock",
-        "public.hangout_participants"
+        "private.social_hangout_mutation_lock"
       ],
       "callers": [],
-      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only"
+      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only",
+      "insert_table_dependencies": [
+        "public.hangout_participants"
+      ]
     },
     {
       "name": "public.leave_hangout",
@@ -1573,7 +1694,8 @@
         "private.social_hangout_mutation_lock"
       ],
       "callers": [],
-      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only"
+      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only",
+      "insert_table_dependencies": []
     },
     {
       "name": "public.list_dm_inbox",
@@ -1585,7 +1707,8 @@
         "private.dm_require"
       ],
       "callers": [],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
     },
     {
       "name": "public.list_friendships",
@@ -1598,7 +1721,8 @@
         "private.people_require_read_committed"
       ],
       "callers": [],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
     },
     {
       "name": "public.list_hangout_cohosts",
@@ -1611,7 +1735,8 @@
         "private.safety_lock_hangout_evidence"
       ],
       "callers": [],
-      "allocation": "B2 source/retained projection"
+      "allocation": "B2 source/retained projection",
+      "insert_table_dependencies": []
     },
     {
       "name": "public.list_hangout_roster_roles",
@@ -1625,7 +1750,8 @@
         "private.safety_lock_hangout_evidence"
       ],
       "callers": [],
-      "allocation": "B2 source/retained projection"
+      "allocation": "B2 source/retained projection",
+      "insert_table_dependencies": []
     },
     {
       "name": "public.list_moderation_reports",
@@ -1634,11 +1760,13 @@
       "returns": "returns table(report_id uuid,submitted_at timestamptz,target_type text,target_id uuid, reporter_id uuid,category text,case_state text)",
       "calls": [
         "private.moderation_actor",
-        "private.moderation_audit",
         "private.moderation_report_allowed"
       ],
       "callers": [],
-      "allocation": "B2 unchanged retained/operator"
+      "allocation": "B2 unchanged retained/operator",
+      "insert_table_dependencies": [
+        "private.moderation_audit"
+      ]
     },
     {
       "name": "public.list_my_retained_hangout_ids",
@@ -1651,7 +1779,8 @@
         "private.safety_enabled"
       ],
       "callers": [],
-      "allocation": "B2 source/retained projection"
+      "allocation": "B2 source/retained projection",
+      "insert_table_dependencies": []
     },
     {
       "name": "public.list_notifications",
@@ -1671,7 +1800,8 @@
         "private.safety_pair_blocked"
       ],
       "callers": [],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
     },
     {
       "name": "public.list_own_attendance",
@@ -1680,7 +1810,8 @@
       "returns": "returns table(hangout_id uuid,attended boolean,revision bigint,answered_at timestamptz, within_window boolean,currently_actionable boolean)",
       "calls": [],
       "callers": [],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
     },
     {
       "name": "public.list_people_blocked_ids",
@@ -1693,7 +1824,8 @@
         "private.safety_enabled"
       ],
       "callers": [],
-      "allocation": "B2 source/retained projection"
+      "allocation": "B2 source/retained projection",
+      "insert_table_dependencies": []
     },
     {
       "name": "public.mark_notification_read",
@@ -1706,7 +1838,8 @@
         "private.people_active_owner"
       ],
       "callers": [],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
     },
     {
       "name": "public.promote_hangout_cohost",
@@ -1715,7 +1848,6 @@
       "returns": "returns bigint",
       "calls": [
         "private.check_hangout_revision",
-        "private.hangout_cohosts",
         "private.lock_hangout",
         "private.ready_subject_campus",
         "private.safety_lock_hangout_evidence",
@@ -1723,7 +1855,10 @@
         "private.social_hangout_mutation_lock"
       ],
       "callers": [],
-      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only"
+      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only",
+      "insert_table_dependencies": [
+        "private.hangout_cohosts"
+      ]
     },
     {
       "name": "public.query_saved_hangouts",
@@ -1737,7 +1872,8 @@
         "private.ready_campus"
       ],
       "callers": [],
-      "allocation": "B2 source/retained projection"
+      "allocation": "B2 source/retained projection",
+      "insert_table_dependencies": []
     },
     {
       "name": "public.read_dm_messages",
@@ -1749,7 +1885,8 @@
         "private.dm_require"
       ],
       "callers": [],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
     },
     {
       "name": "public.read_hangout_messages",
@@ -1762,7 +1899,8 @@
         "private.safety_pair_blocked"
       ],
       "callers": [],
-      "allocation": "B2 source/retained projection"
+      "allocation": "B2 source/retained projection",
+      "insert_table_dependencies": []
     },
     {
       "name": "public.remove_hangout_participant",
@@ -1780,7 +1918,8 @@
         "private.social_hangout_mutation_lock"
       ],
       "callers": [],
-      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only"
+      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only",
+      "insert_table_dependencies": []
     },
     {
       "name": "public.send_dm_message",
@@ -1790,15 +1929,17 @@
       "calls": [
         "private.dm_eligible",
         "private.dm_lock_evidence",
-        "private.dm_messages",
-        "private.dm_retries",
         "private.friendship_lock_pair",
         "private.people_require_read_committed",
         "private.profile_trim",
         "private.social_hangout_mutation_lock"
       ],
       "callers": [],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": [
+        "private.dm_messages",
+        "private.dm_retries"
+      ]
     },
     {
       "name": "public.send_hangout_message",
@@ -1808,15 +1949,17 @@
       "calls": [
         "private.chat_lock_evidence",
         "private.chat_require",
-        "private.hangout_conversations",
-        "private.hangout_message_requests",
-        "private.hangout_messages",
         "private.lock_hangout",
         "private.profile_trim",
         "private.social_hangout_mutation_lock"
       ],
       "callers": [],
-      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only"
+      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only",
+      "insert_table_dependencies": [
+        "private.hangout_conversations",
+        "private.hangout_message_requests",
+        "private.hangout_messages"
+      ]
     },
     {
       "name": "public.set_hangout_joining",
@@ -1830,7 +1973,8 @@
         "private.social_hangout_mutation_lock"
       ],
       "callers": [],
-      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only"
+      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only",
+      "insert_table_dependencies": []
     },
     {
       "name": "public.set_notification_preference",
@@ -1840,12 +1984,14 @@
       "calls": [
         "private.notification_enabled",
         "private.notification_lock_recipient",
-        "private.notification_preferences",
         "private.people_active_owner",
         "private.people_require_read_committed"
       ],
       "callers": [],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": [
+        "private.notification_preferences"
+      ]
     },
     {
       "name": "public.set_people_block",
@@ -1856,7 +2002,8 @@
         "public.set_safety_block"
       ],
       "callers": [],
-      "allocation": "B2 source/retained projection"
+      "allocation": "B2 source/retained projection",
+      "insert_table_dependencies": []
     },
     {
       "name": "public.set_people_preference",
@@ -1866,12 +2013,14 @@
       "calls": [
         "private.people_active_owner",
         "private.people_enabled",
-        "private.people_preferences",
         "private.people_ready_campus",
         "private.people_require_read_committed"
       ],
       "callers": [],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": [
+        "private.people_preferences"
+      ]
     },
     {
       "name": "public.set_pilot_account_admission",
@@ -1879,15 +2028,17 @@
       "final_source": "20260927000100_private_pilot_admission_authority.sql",
       "returns": "returns table(state text,revision bigint)",
       "calls": [
-        "private.pilot_account_admission",
         "private.pilot_lock_management",
-        "private.pilot_management_audit",
         "private.pilot_require_activation",
         "private.pilot_require_manager",
         "private.profile_trim"
       ],
       "callers": [],
-      "allocation": "A1a unchanged authority"
+      "allocation": "A1a unchanged authority",
+      "insert_table_dependencies": [
+        "private.pilot_account_admission",
+        "private.pilot_management_audit"
+      ]
     },
     {
       "name": "public.set_pilot_policy",
@@ -1896,12 +2047,14 @@
       "returns": "returns table(enabled boolean,revision bigint)",
       "calls": [
         "private.pilot_lock_management",
-        "private.pilot_management_audit",
         "private.pilot_require_manager",
         "private.profile_trim"
       ],
       "callers": [],
-      "allocation": "A1a unchanged authority"
+      "allocation": "A1a unchanged authority",
+      "insert_table_dependencies": [
+        "private.pilot_management_audit"
+      ]
     },
     {
       "name": "public.set_safety_block",
@@ -1911,7 +2064,6 @@
       "calls": [
         "private.friendship_lock_pair",
         "private.people_active_owner",
-        "private.people_blocks",
         "private.people_enabled",
         "private.people_ready_campus",
         "private.people_visible",
@@ -1925,7 +2077,10 @@
       "callers": [
         "public.set_people_block"
       ],
-      "allocation": "B2 source/retained projection"
+      "allocation": "B2 source/retained projection",
+      "insert_table_dependencies": [
+        "private.people_blocks"
+      ]
     },
     {
       "name": "public.step_down_hangout_cohost",
@@ -1939,7 +2094,8 @@
         "private.social_hangout_mutation_lock"
       ],
       "callers": [],
-      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only"
+      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only",
+      "insert_table_dependencies": []
     },
     {
       "name": "public.submit_safety_report",
@@ -1961,12 +2117,14 @@
         "private.safety_lock_visible_evidence",
         "private.safety_peer_evidence",
         "private.safety_report_peer_source",
-        "private.safety_report_requests",
-        "private.safety_reports",
         "private.social_hangout_mutation_lock"
       ],
       "callers": [],
-      "allocation": "B2 source/retained projection"
+      "allocation": "B2 source/retained projection",
+      "insert_table_dependencies": [
+        "private.safety_report_requests",
+        "private.safety_reports"
+      ]
     },
     {
       "name": "public.transition_dm",
@@ -1978,16 +2136,18 @@
         "private.dm_eligible",
         "private.dm_enabled",
         "private.dm_lock_evidence",
-        "private.dm_messages",
-        "private.dm_retries",
-        "private.dm_suppression",
         "private.friendship_lock_pair",
         "private.people_require_read_committed",
         "private.profile_trim",
         "private.social_hangout_mutation_lock"
       ],
       "callers": [],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": [
+        "private.dm_messages",
+        "private.dm_retries",
+        "private.dm_suppression"
+      ]
     },
     {
       "name": "public.transition_friendship",
@@ -1999,7 +2159,6 @@
         "private.friendship_enabled",
         "private.friendship_lock_eligibility",
         "private.friendship_lock_pair",
-        "private.friendship_suppression",
         "private.people_active_owner",
         "private.people_ready_campus",
         "private.people_require_read_committed",
@@ -2011,7 +2170,10 @@
         "public.decline_friend_request",
         "public.unfriend"
       ],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": [
+        "private.friendship_suppression"
+      ]
     },
     {
       "name": "public.transition_moderation_case",
@@ -2020,14 +2182,16 @@
       "returns": "returns table(case_state text,revision bigint)",
       "calls": [
         "private.moderation_actor",
-        "private.moderation_audit",
-        "private.moderation_cases",
         "private.moderation_report_allowed",
-        "private.moderation_requests",
         "private.profile_trim"
       ],
       "callers": [],
-      "allocation": "B2 unchanged retained/operator"
+      "allocation": "B2 unchanged retained/operator",
+      "insert_table_dependencies": [
+        "private.moderation_audit",
+        "private.moderation_cases",
+        "private.moderation_requests"
+      ]
     },
     {
       "name": "public.unfriend",
@@ -2038,7 +2202,8 @@
         "public.transition_friendship"
       ],
       "callers": [],
-      "allocation": "A1c deferred closure/legacy regression"
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
     }
   ],
   "removed_historical_definitions": [

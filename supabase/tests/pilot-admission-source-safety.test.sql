@@ -31,6 +31,10 @@ select throws_ok($$select public.read_hangout_messages('b2100000-0000-4000-8000-
 select is((select count(*) from public.hangouts)::integer,1,'S1 chat purpose does not hide source');
 reset role;
 update private.pilot_capabilities set enabled=true where key='hangout_chat';update private.pilot_capabilities set enabled=false where key='hangouts';
+set local role authenticated;set local request.jwt.claims='{"sub":"b2000000-0000-4000-8000-000000000005","role":"authenticated"}';
+select throws_ok($$select public.submit_safety_report('b2300000-0000-4000-8000-000000000090','hangout','b2100000-0000-4000-8000-000000000001','harassment')$$,'42501','Safety report unavailable','S8 ordinary current Hangout purpose off');
+reset role;
+
 set local role authenticated;set local request.jwt.claims='{"sub":"b2000000-0000-4000-8000-000000000002","role":"authenticated","admitted":true}';
 select is((select count(*) from public.hangouts)::integer,0,'S1 Hangouts purpose off');
 select throws_ok($$select public.read_hangout_messages('b2100000-0000-4000-8000-000000000001')$$,'42501','Hangout chat unavailable','S1 chat requires Hangouts purpose');
@@ -53,6 +57,10 @@ select throws_ok($$select public.list_hangout_roster_roles('b2100000-0000-4000-8
 select throws_ok($$select public.read_hangout_messages('b2100000-0000-4000-8000-000000000001',0,1)$$,'22023','Invalid Hangout chat page','S5 invalid sequence');
 reset role;
 update private.pilot_account_admission set state='revoked' where account_id='b2000000-0000-4000-8000-000000000001';
+set local role authenticated;set local request.jwt.claims='{"sub":"b2000000-0000-4000-8000-000000000005","role":"authenticated"}';
+select throws_ok($$select public.submit_safety_report('b2300000-0000-4000-8000-000000000090','hangout','b2100000-0000-4000-8000-000000000001','harassment')$$,'42501','Safety report unavailable','S8 ordinary current Hangout revoked host');
+reset role;
+
 set local role authenticated;set local request.jwt.claims='{"sub":"b2000000-0000-4000-8000-000000000002","role":"authenticated","admitted":true}';
 select is((select count(*) from public.hangouts)::integer,0,'S2 revoked host whole source');
 select is((select count(*) from public.hangout_private_locations)::integer,0,'S2 revoked host private');
@@ -66,6 +74,10 @@ reset role;
 update private.pilot_account_admission set state='active' where account_id='b2000000-0000-4000-8000-000000000001';
 set local role authenticated;set local request.jwt.claims='{"sub":"b2000000-0000-4000-8000-000000000002","role":"authenticated","admitted":true}';
 select is((select count(*) from public.hangouts)::integer,1,'S2 host readmission restores source without relationship rewrite');
+set local role authenticated;set local request.jwt.claims='{"sub":"b2000000-0000-4000-8000-000000000005","role":"authenticated"}';
+select lives_ok($$select public.submit_safety_report('b2300000-0000-4000-8000-000000000090','hangout','b2100000-0000-4000-8000-000000000001','harassment')$$,'S8 explicitly authorized nonretained current Hangout');
+set local role authenticated;set local request.jwt.claims='{"sub":"b2000000-0000-4000-8000-000000000002","role":"authenticated"}';
+
 reset role;
 reset role;
 delete from private.pilot_account_admission where account_id='b2000000-0000-4000-8000-000000000001';

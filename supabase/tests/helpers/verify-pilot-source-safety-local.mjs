@@ -171,8 +171,9 @@ if (mode === "reset") {
     }
     if (file === "local_large_hangout_safeguards.test.sql")
       input = input.replace(
-        "'all','any',now())",
-        "'all','any',clock_timestamp())",
+        "select is(jsonb_array_length(pg_temp.saved()->'pins'),0,\n  'ready different-campus viewer sees no UNC Hangouts');",
+        () =>
+          "select throws_ok($$select pg_temp.saved()$$,'42501','Saved Hangouts unavailable','B1 nonUNC campus denies source readiness');",
       );
     if (file === "hangout_foundation.test.sql")
       input = input.replace(

@@ -141,6 +141,75 @@ test(
           });
         }
       }
+      const ordinaryArgs = {
+        p_request_id: crypto.randomUUID(),
+        p_target_mode: "hangout",
+        p_target_id: hangout,
+        p_category: "harassment",
+      };
+      assert.equal(
+        sql(
+          `select count(*) from public.hangout_participants where hangout_id='${hangout}' and account_id='${unknown.id}'`,
+        ),
+        "0",
+        "ordinary reporter never participated",
+      );
+      const ordinaryReceipt = await allowed(
+        "submit_safety_report",
+        unknown,
+        ordinaryArgs,
+      );
+      assert.deepEqual(Object.keys(ordinaryReceipt[0]).sort(), [
+        "receipt_id",
+        "submitted_at",
+      ]);
+      assert.equal(
+        sql(
+          `select provenance_kind from private.safety_reports where id='${ordinaryReceipt[0].receipt_id}'`,
+        ),
+        "current_hangout",
+      );
+      const ordinaryCount = () =>
+        sql(
+          `select (select count(*) from private.safety_reports where reporter_id='${unknown.id}')||':'||(select count(*) from private.safety_report_requests where reporter_id='${unknown.id}')`,
+        );
+      assert.equal(ordinaryCount(), "1:1");
+      sql(
+        `update private.pilot_account_admission set state='revoked' where account_id='${host.id}'`,
+      );
+      await denied(
+        "submit_safety_report",
+        unknown,
+        { ...ordinaryArgs, p_request_id: crypto.randomUUID() },
+        "Safety report unavailable",
+      );
+      assert.equal(
+        ordinaryCount(),
+        "1:1",
+        "host revoke acquisition denial creates no report or ledger",
+      );
+      assert.deepEqual(
+        await allowed("submit_safety_report", unknown, ordinaryArgs),
+        ordinaryReceipt,
+        "exact existing receipt independent of host loss",
+      );
+      sql(
+        `delete from private.pilot_account_admission where account_id='${host.id}'`,
+      );
+      await denied(
+        "submit_safety_report",
+        unknown,
+        { ...ordinaryArgs, p_request_id: crypto.randomUUID() },
+        "Safety report unavailable",
+      );
+      assert.equal(
+        ordinaryCount(),
+        "1:1",
+        "host absent acquisition denial creates no report or ledger",
+      );
+      sql(
+        `insert into private.pilot_account_admission(account_id,state,revision) values('${host.id}','active',1)`,
+      );
       const detailPath = `hangouts?id=eq.${hangout}&select=*,hangout_participants(hangout_id,account_id),hangout_private_locations(instructions)`;
       let rows = await raw(caller, detailPath);
       assert.equal(rows.length, 1);
@@ -170,6 +239,38 @@ test(
       sql(
         "update private.pilot_capabilities set enabled=true where key='hangout_chat';update private.pilot_capabilities set enabled=false where key='hangouts'",
       );
+      await denied(
+        "submit_safety_report",
+        unknown,
+        { ...ordinaryArgs, p_request_id: crypto.randomUUID() },
+        "Safety report unavailable",
+      );
+      assert.equal(
+        ordinaryCount(),
+        "1:1",
+        "Hangouts purpose-off acquisition creates no report or ledger",
+      );
+      assert.deepEqual(
+        await allowed("submit_safety_report", unknown, ordinaryArgs),
+        ordinaryReceipt,
+        "exact existing receipt independent of source purpose",
+      );
+      assert.equal(
+        sql(
+          `select count(*) from public.hangout_participants where hangout_id='${hangout}' and account_id='${unknown.id}'`,
+        ),
+        "0",
+        "report acquisition did not join reporter",
+      );
+      evidence.cases.push({
+        case: "ordinary-current-hangout-report",
+        never_participated: true,
+        provenance: "current_hangout",
+        receipt_keys: Object.keys(ordinaryReceipt[0]).sort(),
+        host_revoke_absence_and_hangouts_off_new_acquisition_denied: true,
+        new_denial_report_ledger_growth: 0,
+        exact_receipt_independent: true,
+      });
       assert.deepEqual(await raw(caller, detailPath), []);
       await denied(
         "read_hangout_messages",

@@ -94,9 +94,8 @@ export function ok(result) {
 }
 export function resetDisposable() {
   localTarget();
-  let output;
   try {
-    output = execFileSync(
+    execFileSync(
       process.env.SUPABASE_CLI ?? "supabase",
       ["db", "reset", "--local", "--network-id", "pals-local-network"],
       { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] },
