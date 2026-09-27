@@ -20,6 +20,10 @@ Updated authoritative MVP/current scope summaries, task/readiness/decision packa
 - Admission mechanism/tester list, named human report handlers/coverage and hosted access/MFA/retention/recovery/photo bearer policy remain separately reviewed/unresolved. Admission candidate is Proposed and requires its own accepted ADR and reviewed bounded local contract before implementation.
 - Deferred-route/API gates remain planning requirements. `/chats` People dependency/DM inbox, inherited Calendar/attendance access and optional photo exposure need bounded preparation; existing global-block/audit/helper schema and schedule integrity must be preserved.
 
+## Independent review correction
+
+Clarified the UI-only co-host deferral: hide/deny co-host management pages, promotion/demotion controls and application server-action entry points while preserving backend roles, authorized RPC behavior and safety checks. Removed co-host behavior from the general deferred-data/API/RPC deny matrix. Backend authorization changes require a separately accepted contract. Documentation whitespace check passed; no runtime action.
+
 ## Publication and remaining work
 
 Local commit only under coordinator instruction; no push or integration claimed. Coordinator must independently review exact tip, publish approved docs and verify canonical remote main before dependent dispatch. Task/main remote SHAs for this increment: pending, not claimed. Do not mark TASK-021 complete or create a successor. Remaining gates: reviewed admission/capability contract and policy acceptance, accepted named safety owners/policies, exact target/migration/gate/app-guard/hosted authorization, actual controlled rehearsal/cleanup and independent evidence review.
