@@ -1,0 +1,242 @@
+{
+  "tested_commit": "725be840c0a575cce1d87cea00c14044e630d424",
+  "serial_node_results": {
+    "tests": 2,
+    "pass": 2,
+    "fail": 0,
+    "skip": 0
+  },
+  "current_migration_history": "23:20260927000300",
+  "records": [
+    {
+      "unchanged_lock_cases": [
+        {
+          "race": "b2_reader_account_loss_first",
+          "holder_pid": 445,
+          "waiter_pid": 446,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "b2_reader_first",
+          "holder_pid": 489,
+          "waiter_pid": 490,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "b2_retained_retry_gate_loss_first",
+          "holder_pid": 539,
+          "waiter_pid": 540,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "b2_retained_retry_first",
+          "holder_pid": 574,
+          "waiter_pid": 575,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "b2_operator_role_loss_first",
+          "holder_pid": 616,
+          "waiter_pid": 615,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "b2_operator_queue_first",
+          "holder_pid": 652,
+          "waiter_pid": 651,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        }
+      ],
+      "new_pilot_locks": false,
+      "scope": "existing source actor, retained exact retry safety gate, unadmitted operator role; no B3 admission/write claim"
+    },
+    {
+      "cases": [
+        {
+          "isolation": "repeatable read",
+          "message": "Hangout chat unavailable",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "isolation": "repeatable read",
+          "message": "Hangout operation not permitted",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "isolation": "repeatable read",
+          "message": "People operation unavailable",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "isolation": "repeatable read",
+          "message": "People operation unavailable",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "isolation": "repeatable read",
+          "message": "Hangout operation not permitted",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "isolation": "repeatable read",
+          "message": "Moderation unavailable",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "isolation": "serializable",
+          "message": "Hangout chat unavailable",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "isolation": "serializable",
+          "message": "Hangout operation not permitted",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "isolation": "serializable",
+          "message": "People operation unavailable",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "isolation": "serializable",
+          "message": "People operation unavailable",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "isolation": "serializable",
+          "message": "Hangout operation not permitted",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "isolation": "serializable",
+          "message": "Moderation unavailable",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "rpc": "read_hangout_messages",
+          "status": 403,
+          "code": "42501",
+          "message": "Hangout chat unavailable"
+        },
+        {
+          "rpc": "read_hangout_messages",
+          "status": 403,
+          "code": "42501",
+          "message": "Hangout chat unavailable"
+        },
+        {
+          "rpc": "read_hangout_messages",
+          "status": 403,
+          "code": "42501",
+          "message": "Hangout chat unavailable"
+        },
+        {
+          "rpc": "list_hangout_cohosts",
+          "status": 403,
+          "code": "42501",
+          "message": "Hangout operation not permitted"
+        },
+        {
+          "rpc": "submit_safety_report",
+          "status": 403,
+          "code": "42501",
+          "message": "Safety report unavailable"
+        },
+        {
+          "rpc": "submit_safety_report",
+          "status": 403,
+          "code": "42501",
+          "message": "Safety report unavailable"
+        },
+        {
+          "rpc": "submit_safety_report",
+          "status": 403,
+          "code": "42501",
+          "message": "Safety report unavailable"
+        },
+        {
+          "rpc": "list_moderation_reports",
+          "status": 403,
+          "code": "42501",
+          "message": "Moderation unavailable"
+        },
+        {
+          "rpc": "get_moderation_report",
+          "status": 403,
+          "code": "42501",
+          "message": "Moderation unavailable"
+        },
+        {
+          "rpc": "apply_hangout_moderation_action",
+          "status": 403,
+          "code": "42501",
+          "message": "Moderation unavailable"
+        },
+        {
+          "rpc": "submit_safety_report",
+          "status": 403,
+          "code": "42501",
+          "message": "Safety report unavailable"
+        },
+        {
+          "rpc": "list_my_retained_hangout_ids",
+          "status": 403,
+          "code": "42501",
+          "message": "Safety operation unavailable"
+        },
+        {
+          "rpc": "submit_safety_report",
+          "status": 403,
+          "code": "42501",
+          "message": "Safety report unavailable"
+        },
+        {
+          "case": "source-and-retained-output",
+          "roster_keys": [
+            "account_id",
+            "role_label"
+          ],
+          "receipt_keys": [
+            "receipt_id",
+            "submitted_at"
+          ],
+          "former_body_retained": true,
+          "former_author_id": null,
+          "blocked_body_omitted_before_limit": true,
+          "operator_detail_keys": [
+            "case_note",
+            "case_revision",
+            "case_state",
+            "category",
+            "disposition",
+            "narrative",
+            "provenance_kind",
+            "provenance_ref_id",
+            "report_id",
+            "reporter_id",
+            "submitted_at",
+            "target_campus_id",
+            "target_disabled",
+            "target_id",
+            "target_status",
+            "target_type"
+          ],
+          "old_tokens_used": true
+        }
+      ]
+    }
+  ],
+  "limits": "six successful existing-lock commit-order waits, not B3 admission or all-mutation serialization; SQL stronger isolation observations are not HTTP proof"
+}
