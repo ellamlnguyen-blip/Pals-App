@@ -1,6 +1,6 @@
 # TASK-021A — Pilot admission preparation parent
 
-Status: **Accepted-design planning parent — A1 contract review/publication pending; implementation not dispatched**
+Status: **Local preparation active — A1a complete, A1b contract reconciliation/review/publication next; A1c/A2 dependent**
 Date: 2026-09-27
 Parent: TASK-021 (incomplete)
 Proposed branch: `agent/TASK-021A-pilot-admission-capabilities`

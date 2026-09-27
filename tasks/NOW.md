@@ -1,5 +1,10 @@
 # NOW
 
+## 2026-09-27 — A1a integrated and remote-verified
+
+TASK-021A1a is complete for bounded disposable-local private admission/policy/manager/audit primitives. Independently reviewed implementation and handoff were published on `agent/TASK-021A1a-admission-authority` and integrated onto canonical main; both remote SHAs independently verified at `08199c743ea2a90c3bd0406057f3f98953e4ab69`. Two 1,089-assertion clean-reset suites, exact prior-schema upgrade, real Auth/API, 25 observed holder/waiter races and applicable static/lint/build checks passed with the documented unit skip and stopped-wrapper limitation; zero fixtures/defaults off/owned services stopped. This receipt follows. A1b contract reconciliation/review/publication is next before fresh implementation dispatch. Existing student enforcement remains unchanged; A1b/c/A2 and TASK-021 remain incomplete, with no hosted/pilot-ready claim or duplicate product successor.
+
+
 ## 2026-09-27 — A1a local implementation reviewed
 
 Private pilot admission authority/default-off policy/audited manager operations are locally implemented and independently reviewed at `85dca42f79973386e44769a3c81e5ac15dd7c68c`. Two clean-reset SQL runs passed 1,089 assertions each; exact prior-schema upgrade, real Auth/PostgREST, 25 exact-holder concurrency cases, lint and applicable static/build checks passed, with one existing sandbox unit-test skip. Final census has zero synthetic/evidence/authority records and all configurations/gates off; owned services and VM stopped, with the initial stop-wrapper failure and precise post-guest-shutdown orphan cleanup disclosed. Publication and remote-verified main integration are pending; latest implementation push: none yet. Existing student authorization remains unchanged at this intermediate stage. A1b/c and A2 are not dispatched; TASK-021 remains incomplete, with no hosted action or pilot-ready claim. See `agents/handoffs/TASK-021A1a.md`.

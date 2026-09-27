@@ -1,7 +1,7 @@
 # TASK-021A1a — Private admission authority handoff
 
 Date: 2026-09-27. Executor: fresh GPT-6 Sol, medium; dispatch cannot set or verify Standard speed.
-Status: **Local implementation and acceptance evidence prepared; final independent review cleared; task publication and canonical main integration pending. Task remains incomplete until coordinator receipts are recorded.**
+Status: **Complete for bounded disposable-local A1a scope — independently reviewed and task/main integration remote-verified; this receipt follows.**
 
 ## Outcome and boundary
 
@@ -79,3 +79,7 @@ Final independent exact-tip source/evidence review and coordinator-owned task/sh
 ## Coordinator final review
 
 Fresh independent Sol-medium exact-tip review cleared `85dca42f79973386e44769a3c81e5ac15dd7c68c` with no actionable source/handoff findings. The reviewer examined the reported runtime evidence in this handoff and source/assertion/census consistency; it did not independently rerun the runtime suites or find raw saved A1a logs. Earlier deletion/retry/lock-holder/original-role findings resolved. Coordinator accepts the bounded local implementation for publication/integration; task/main remote receipts remain pending.
+
+## Publication and integration receipt
+
+Reviewed implementation/status task branch and canonical main independently remote-verified at `08199c743ea2a90c3bd0406057f3f98953e4ab69` after standard non-force task publication and fast-forward main integration. This receipt follows that verified integration. A1a is complete for its bounded disposable-local authority-primitives scope; A1b contract reconciliation/review/publication is next. A1 parent, A2 and TASK-021 remain incomplete; no product successor or hosted action is triggered by this sub-stage. Earlier pending fields above are historical executor records superseded by this receipt.

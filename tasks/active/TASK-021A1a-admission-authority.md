@@ -1,7 +1,7 @@
 # TASK-021A1a — Private admission authority and policy primitives
 
 Date: 2026-09-27
-Status: **Local implementation independently reviewed — publication and remote-verified main integration pending**
+Status: **Complete for bounded disposable-local scope — task/main integration remote-verified at `08199c743ea2a90c3bd0406057f3f98953e4ab69`; receipt follows**
 Parent: [TASK-021A1](TASK-021A1-pilot-backend-authorization.md), under TASK-021A / incomplete TASK-021.
 Draft baseline: `ae7141f1f630fdb0eee2216ed1fe33dac6ee963e`; executor starts from latest verified `origin/main` containing its accepted prerequisites, not this historical draft SHA.
 
