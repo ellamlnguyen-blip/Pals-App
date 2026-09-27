@@ -61,15 +61,15 @@ test(
           .replaceAll("24:20260927000400", "25:20260927000500");
         assert.ok(source.includes('"TASK-021A1b3a"'));
         writeFileSync(join(directory, "helpers", helper), source);
-        for (const module of modules) {
+        for (const modulePath of modules) {
           resetDisposable();
           writeFileSync(
-            join(directory, module),
-            readFileSync(`supabase/tests/${module}`, "utf8"),
+            join(directory, modulePath),
+            readFileSync(`supabase/tests/${modulePath}`, "utf8"),
           );
           const result = spawnSync(
             process.execPath,
-            ["--test", "--test-concurrency=1", join(directory, module)],
+            ["--test", "--test-concurrency=1", join(directory, modulePath)],
             { encoding: "utf8", env: process.env, maxBuffer: 20 * 1024 * 1024 },
           );
           // Inherited outputs sanitize tokens; retain bounded test/evidence output.
@@ -77,7 +77,7 @@ test(
           assert.match(result.stdout, /# pass [1-9]\d*/);
           assert.match(result.stdout, /# fail 0\b/);
           assert.match(result.stdout, /# skipped 0\b/);
-          assert.equal(result.status, 0, `${module}: ${result.stderr}`);
+          assert.equal(result.status, 0, `${modulePath}: ${result.stderr}`);
         }
       }
     } finally {

@@ -82,7 +82,6 @@ test(
           prepare(route);
           const query = call(route);
           const loss = `select private.social_hangout_mutation_lock();update public.hangouts set status='cancelled',joining_state='closed',revision=revision+1,updated_at=clock_timestamp() where id='${hangout}';`;
-          const before = census();
           records.push({
             ...(await race(
               `b3a_${route.id}_cancelled_${order}`,

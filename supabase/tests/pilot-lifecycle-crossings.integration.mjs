@@ -11,7 +11,6 @@ import {
   resetDisposable,
 } from "./helpers/pilot-admission-lifecycle.mjs";
 import {
-  host,
   actor,
   routes,
   auth,
