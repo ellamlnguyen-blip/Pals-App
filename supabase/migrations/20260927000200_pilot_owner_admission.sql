@@ -94,15 +94,23 @@ declare subject uuid:=auth.uid(); campus uuid;
 begin
  perform private.pilot_evidence_lock();
  perform 1 from private.pilot_availability where singleton for share;
+ if not found then raise exception 'Owner operation unavailable' using errcode='42501'; end if;
  perform 1 from private.pilot_capabilities where key='onboarding' for share;
+ if not found then raise exception 'Owner operation unavailable' using errcode='42501'; end if;
  -- One involved account, hence trivially sorted UUID order.
  perform 1 from public.accounts where id=subject for share;
+ if not found then raise exception 'Owner operation unavailable' using errcode='42501'; end if;
  perform 1 from private.pilot_account_admission where account_id=subject for share;
+ if not found then raise exception 'Owner operation unavailable' using errcode='42501'; end if;
  perform 1 from auth.users where id=subject for share;
+ if not found then raise exception 'Owner operation unavailable' using errcode='42501'; end if;
  select university_id into campus from public.university_memberships where user_id=subject for share;
+ if not found then raise exception 'Owner operation unavailable' using errcode='42501'; end if;
  perform 1 from public.universities where id=campus for share;
+ if not found then raise exception 'Owner operation unavailable' using errcode='42501'; end if;
  -- This separate volatile statement receives a fresh READ COMMITTED snapshot.
- if subject is null or not private.pilot_onboarding_eligible() then
+ if subject is null or not private.pilot_onboarding_eligible()
+  or not exists(select 1 from public.university_memberships where user_id=subject and university_id=campus) then
   raise exception 'Owner operation unavailable' using errcode='42501'; end if;
 end; $$;
 revoke all on function private.pilot_lock_owner_evidence() from public,anon,authenticated,service_role;
