@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { readFileSync, readdirSync } from "node:fs";
 import test from "node:test";
 import { localTarget, sql } from "./helpers/pilot-admission-authority.mjs";
 
@@ -26,6 +26,18 @@ test(
       history.split(",").length,
       20,
       "exact preceding twenty migrations applied",
+    );
+    const expectedHistory = readdirSync(
+      new URL("../migrations/", import.meta.url),
+    )
+      .filter((name) => name.endsWith(".sql") && name < "20260927000100")
+      .sort()
+      .map((name) => name.split("_")[0]);
+    assert.equal(expectedHistory.length, 20);
+    assert.deepEqual(
+      history.split(","),
+      expectedHistory,
+      "exact twenty committed prior migration IDs match database history",
     );
     sql(`insert into auth.users(id,email,email_confirmed_at) values('${actor}','pilot-upgrade-${actor}@unc.edu',now()),('${peer}','pilot-upgrade-${peer}@unc.edu',now());
     insert into storage.objects(bucket_id,name,owner_id) values('profile-photos','${actor}/primary.png','${actor}');
