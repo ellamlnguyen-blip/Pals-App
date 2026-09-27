@@ -17,7 +17,7 @@ A1a is complete and independently remote-verified. A1b is now a nonexecutable al
 
 ## Acceptance authority and expected incompatibility
 
-The exact final ADR-0027 acceptance on 2026-09-27 is independently reviewed and durably published on verified main `ae7141f1f630fdb0eee2216ed1fe33dac6ee963e`. Verify this accepted unchanged design before implementation. A1a/B1 are implemented/reviewed/integrated; B2 requires independent reconciled contract review/publication, and later B3/A1c require reconciliation/review/publication after prerequisites. Accepted ADR-0026 alone is insufficient.
+The exact final ADR-0027 acceptance on 2026-09-27 is independently reviewed and durably published on verified main `ae7141f1f630fdb0eee2216ed1fe33dac6ee963e`. Verify this accepted unchanged design before implementation. A1a/B1 are implemented/reviewed/integrated; B2 reconciled contract independently reviewed at5c89db9, requires canonical publication/remote verification, and later B3/A1c require reconciliation/review/publication after prerequisites. Accepted ADR-0026 alone is insufficient.
 
 A1 intentionally changes the DB status contract and denies previously ungated owner/deferred paths. Current app access-state unions, redirect logic, profile editor, extra-photo slots, Calendar queries, People-dependent Chats and old test fixtures may fail closed or fail regression after A1b/c. Do not patch apps or weaken checks to conceal incompatibility. Record exact failing app checks as A2 dependencies. Backend-only test modules must run without Next.js. A1 completion does not require claiming current app behavior passes; incompatible application suites cannot be counted as backend evidence. A2 owns app reconciliation and full app E2E before any deployable pilot claim.
 
