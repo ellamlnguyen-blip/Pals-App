@@ -1,5 +1,10 @@
 # Current State
 
+## 2026-09-27 — First pilot backend contract reviewed
+
+A1 backend is split into sequential bounded units: TASK-021A1a authority/default-off policy/manager RPC/audit primitives, A1b live admission/core/onboarding/Storage/safety enforcement, A1c deferred capability denial and full backend closure. Fresh independent security/contract review cleared exact draft `953fa30ade9628810788a903261028c60a24e989`. A1a is ready for publication and fresh agent dispatch; its exact lock graph must be reviewed before implementation. A1b/c remain planning contracts reconciled/reviewed/published after preceding integration. No code/runtime evidence or pilot-ready claim. Coordinator owns shared records; TASK-021 remains incomplete.
+
+
 ## 2026-09-27 — Pilot admission design accepted
 
 The user replied “accept” to the explicit reviewed ADR-0027 technical decision on 2026-09-27. Accepted ADR-0027 authorizes staged disposable-local admission/capability implementation, including its exact revoked-subject privacy matrix and separate audited caller-bound admission-manager authority. A1 backend contract drafting/review/publication precedes implementation; A2 waits for reviewed remote-verified A1 integration. No code, tests, hosted operation or TASK-021 completion is claimed by this receipt. Hosted staffing/retention/photo/provider/target policies and operations remain separate.
