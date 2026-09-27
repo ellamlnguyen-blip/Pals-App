@@ -16,6 +16,8 @@ const args = [
   "postgres",
   "-v",
   "ON_ERROR_STOP=1",
+  "-v",
+  "VERBOSITY=verbose",
 ];
 export function sql(input) {
   try {
@@ -109,7 +111,7 @@ export function resetDisposable() {
     sql(
       "select count(*)||':'||max(version) from supabase_migrations.schema_migrations",
     ),
-    "23:20260927000300",
+    "24:20260927000400",
   );
   assertClean();
 }
@@ -156,7 +158,7 @@ export function session(name) {
     done: once(child, "exit"),
   };
 }
-async function until(check) {
+export async function until(check) {
   for (let n = 0; n < 240; n++) {
     if (check()) return;
     await new Promise((resolve) => setTimeout(resolve, 25));
@@ -190,6 +192,7 @@ export async function race(name, firstQuery, secondQuery, rejection = null) {
     assert.doesNotMatch(first.output(), /ERROR:/);
     if (rejection !== null) {
       assert.notEqual(secondResult[0], 0);
+      assert.match(second.output(), /42501:/, "exact SQLSTATE required");
       assert.ok(
         second.output().includes(rejection),
         "exact authority error required",

@@ -566,15 +566,63 @@ test(
         ),
         "1",
       );
-      sql(`delete from public.platform_roles where user_id='${operator.id}'`);
-      await denied(
-        "apply_hangout_moderation_action",
-        operator,
-        disableArgs,
-        "Moderation unavailable",
+      const operatorCensus = () =>
+        sql(
+          `select jsonb_build_object('cases',(select jsonb_agg(c order by report_id) from private.moderation_cases c),'requests',(select jsonb_agg(r order by operator_id,request_id) from private.moderation_requests r),'audit',(select jsonb_agg(a order by id) from private.moderation_audit a),'sanctions',(select jsonb_agg(a order by id) from private.account_sanctions a),'disables',(select jsonb_agg(a order by hangout_id) from private.hangout_disables a),'accounts',(select jsonb_agg(a order by id) from public.accounts a))`,
+        );
+      const affected = [
+        ["list_moderation_reports", { p_limit: 1 }],
+        ["get_moderation_report", { p_report_id: report }],
+        ["transition_moderation_case", startArgs],
+        ["apply_account_moderation_action", actionArgs],
+        ["apply_hangout_moderation_action", disableArgs],
+      ];
+      for (const [loss, restore] of [
+        [
+          `delete from public.platform_roles where user_id='${operator.id}'`,
+          `insert into public.platform_roles(user_id,role) values('${operator.id}','moderator')`,
+        ],
+        [
+          "delete from private.moderation_feature_gate where singleton",
+          "insert into private.moderation_feature_gate(singleton,enabled) values(true,true)",
+        ],
+        [
+          `update public.accounts set status='suspended' where id='${operator.id}'`,
+          `update public.accounts set status='active' where id='${operator.id}'`,
+        ],
+        [
+          "update private.moderation_feature_gate set enabled=false",
+          "update private.moderation_feature_gate set enabled=true",
+        ],
+      ]) {
+        sql(loss);
+        const before = operatorCensus();
+        for (const [name, parameters] of affected)
+          await denied(name, operator, parameters, "Moderation unavailable");
+        assert.equal(
+          operatorCensus(),
+          before,
+          "denied operators return no data and cause no writes",
+        );
+        sql(restore);
+      }
+      const beforeRetry = operatorCensus();
+      assert.deepEqual(
+        await allowed("transition_moderation_case", operator, startArgs),
+        started,
       );
-      sql(
-        `insert into public.platform_roles(user_id,role) values('${operator.id}','moderator')`,
+      assert.deepEqual(
+        await allowed("apply_account_moderation_action", operator, actionArgs),
+        action,
+      );
+      assert.deepEqual(
+        await allowed("apply_hangout_moderation_action", operator, disableArgs),
+        disabled,
+      );
+      assert.equal(
+        operatorCensus(),
+        beforeRetry,
+        "authorized exact retries add no action/audit",
       );
       sql(
         `update public.accounts set status='suspended' where id='${caller.id}'`,

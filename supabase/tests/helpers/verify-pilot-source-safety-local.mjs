@@ -13,7 +13,7 @@ const reset = (prior = false) => {
       "--local",
       "--network-id",
       "pals-local-network",
-      ...(prior ? ["--version", "20260927000200"] : []),
+      ...(prior ? ["--version", "20260927000300"] : []),
     ],
     { encoding: "utf8" },
   );
@@ -30,9 +30,9 @@ if (mode === "reset") {
     .filter((f) => f.endsWith(".sql"))
     .sort();
   const prior = files
-    .filter((f) => f < "20260927000300_pilot_source_safety.sql")
+    .filter((f) => f < "20260927000400_moderation_mandatory_lock_results.sql")
     .map((f) => f.split("_")[0]);
-  assert.equal(prior.length, 22);
+  assert.equal(prior.length, 23);
   assert.deepEqual(
     sql(
       "select version from supabase_migrations.schema_migrations order by version",
@@ -49,7 +49,7 @@ if (mode === "reset") {
   const storageBefore = sql("select jsonb_agg(o) from storage.objects o");
   sql(
     readFileSync(
-      "supabase/migrations/20260927000300_pilot_source_safety.sql",
+      "supabase/migrations/20260927000400_moderation_mandatory_lock_results.sql",
       "utf8",
     ),
   );
@@ -78,7 +78,7 @@ if (mode === "reset") {
     prior,
   );
   console.log(
-    "Prior22→onlyB2 upgrade retained profile/optional/object and defaults unchanged",
+    "Prior23→only mandatory-lock repair upgrade retained profile/optional/object and defaults unchanged",
   );
   reset();
 } else if (mode === "clean") {
@@ -195,6 +195,16 @@ if (mode === "reset") {
   assert.doesNotMatch(output, /^not ok\b/m);
   console.log(
     `pilot-admission-source-safety.test.sql: ${(output.match(/^ok\s+\d+/gm) ?? []).length} assertions pass`,
+  );
+  const mandatory = sql(
+    readFileSync(
+      "supabase/tests/pilot-moderation-lock-results.test.sql",
+      "utf8",
+    ),
+  );
+  assert.doesNotMatch(mandatory, /^not ok\b/m);
+  console.log(
+    `mandatory operator lock results: ${(mandatory.match(/^ok\s+\d+/gm) ?? []).length} assertions pass`,
   );
   const owner = sql(
     readFileSync("supabase/tests/pilot-admission-owner.test.sql", "utf8"),
