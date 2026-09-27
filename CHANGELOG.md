@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-27 — Source/safety schema correction reviewed
+
+First B2 install failed42703: draft d1d4abd referenced nonexistent h.eligibility. Initial source review missed this and did not prove migration installation; sequential legacy22 probes after that failed reset are not B2 evidence. Corrected source `04c4ca588b19944ad9b8ef40dd21d81c214667cc` independently cleared after all six referenced columns/row fields/signatures were checked against22-history DDL. Only three invalid predicates removed; unchanged create/edit input validation still rejects non-null eligibility, raw client DML denied, purpose/host/precision/privacy unchanged. Known normal local runtime started under B2-exclusive hostagent53315 after exact older residual retirement. Successful23 installation/catalog/SQL/HTTP/regressions/upgrade/cleanup and final review remain required; latest implementation push none. No hosted/pilot-ready claim.
+
 ## 2026-09-27 — Older runtime residual retired; B2 tests authorized
 
 Fresh exact-identity/disk/registration/owner audit and failed graceful TERM preceded coordinator-authorized exact SIGKILL of older hostagent35238. Immediate postcheck verified PID/control57157–58 gone, VMStopped, disk/vz-efi unheld, test54321/22/24 clear, no Pals hostagent/registration/Docker socket. Possible older stale disposable guest memory loss was explicitly acknowledged; no claim its state was inert. No other PID/files/volumes/hosted target changed. Coordinator read sanitized receipt and lifted only the B2 runtime pause: executor may start the known owned local VM after its fresh preflight, with serial exclusive fixture/reset/zero-off/owned-stop obligations. No B2 runtime pass yet. Source d1d4abd cleared; task remains incomplete. See `agents/handoffs/TASK-021A1b2-LOCAL-RUNTIME-RETIREMENT.md`.
