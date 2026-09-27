@@ -137,3 +137,22 @@ Baseline: `f4ba5cd6affdd8eae7611a15cbed39d33e39b756`. Documentation-only preimpl
 - Moderation actor: moderation advisory key `(17017,1)`, gate SHARE, actor account SHARE, platform role SHARE; target account UPDATE for sanctions. This path does not take the social boundary. Admission-manager status SHARE must conflict with this account UPDATE.
 - Trusted Auth email updates acquire Auth row before synchronization writes membership; account deletion cascades from Auth. Campus writes do not acquire the social key. Admission activation must lock these actual evidence rows, with safe abort where lock inversion occurs.
 - New A1a tables/functions/grants and test mappings will be added to the final implementation inventory after lock-review clearance. Existing function inventory is a declaration of unchanged scope, not a substitute for A1b/c tests.
+
+## Implemented A1a inventory and acceptance mapping
+
+Final implementation baseline is canonical `8e815e17cec573082a454e2a94468ea8fd53c244`; original audit source definitions above remain unchanged. Additive migration: `20260927000100_private_pilot_admission_authority.sql`. No historical migration, old helper/grant/RLS/trigger, app or queue source changed.
+
+| New surface | Grant / boundary | Assigned evidence |
+| --- | --- | --- |
+| Admission/managers, availability/capabilities | Private RLS; PUBLIC/anon/authenticated table revokes; empty authority / seeded off revision1 | Authority pgTAP defaults/grants/roles; prior-schema upgrade; final default census |
+| Management audit/ledger; manager audit | Private RLS/revokes; immutable UPDATE/DELETE triggers; historical UUIDs without live account FK | Authority pgTAP atomic/no-op/retry/denied changes/provenance/deletion; HTTP audit count |
+| `pilot_is_available()`, `pilot_capability_enabled(text)`, `pilot_caller_is_admitted()` | Internal only, fixed empty path, client/service EXECUTE revoked; missing rows closed | Authority pgTAP missing singleton/capability/caller; final off state |
+| `pilot_evidence_lock()`, `pilot_evidence_write_lock()`, `pilot_lock_management(uuid,uuid,text,boolean)` | Internal only; shared/exclusive transaction evidence key; existing social first for management, sorted UUID actual row evidence | Exact reviewed lock design; 25 exact holder/waiter pg_locks races; stronger isolation denial |
+| `pilot_require_manager()`, `pilot_require_activation(uuid)` | Internal only; caller-derived live authority; current locked membership campus/confirmed exact-domain evidence | Actual-role pgTAP active/inactive/campus/domain/incomplete checks; Auth/PostgREST old JWT; account/Auth/campus races |
+| `reject_pilot_evidence_change()` | Internal trigger only | Actual-role grant denial plus privileged UPDATE/DELETE rejection assertions |
+| `set_pilot_account_admission(uuid,text,bigint,text,uuid)` | Public authenticated EXECUTE only; derived manager; returns state/revision | SQL/HTTP manager/student/platform/actor signatures, CAS/no-op/retry/actor isolation/rollback; absent roster races |
+| `set_pilot_policy(text,boolean,bigint,text,uuid)` | Public authenticated EXECUTE only; fixed key allowlist, seeded presence/CAS | SQL/HTTP policy/capability/default/missing/no-op/retry; actual shutdown both orders and CAS races |
+| `set_pilot_manager_fixture(uuid,text,bigint,text,uuid)` | Private postgres original session/role only; PUBLIC/anon/authenticated/service_role EXECUTE revoked | Actual SET ROLE anon/authenticated/service_role probes including temporary rollback grants; immutable real SQL executor provenance; absent assignment/revoke races |
+| Existing 20 migration definitions / direct table/Storage paths | Unchanged intermediate stage, A1b/c allocations above preserved | All20 SQL files pass, unchanged access helper definition in true upgrade; manager grants no source profile/photo/chat/place read |
+
+No ordinary pilot admission/capability enforcement is asserted here. A1b/c and app reconciliation remain required; the final handoff records runtime results, cleanup and pending review/publication.
