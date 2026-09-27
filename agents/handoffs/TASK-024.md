@@ -1,6 +1,6 @@
 # TASK-024 brand correction handoff
 
-Status: implementation ready for independent design/security review; canonical integration pending.
+Status: implementation independently reviewed; local QA complete; publication and canonical integration pending.
 
 ## Scope and visual outcome
 
@@ -17,8 +17,21 @@ Status: implementation ready for independent design/security review; canonical i
 - Contrast calculations: ink on Carolina blue 5.55:1; ink on white 13.05:1; dark blue links on white 7.28:1; muted text on white 6.28:1; error on white 7.28:1. White text on Carolina blue would be 2.35:1, so primary buttons and the feature panel use dark ink. Dark accent surfaces, including map selections and admin controls, keep white text via the separate `--pals-button-ink` token.
 - `git diff` is confined to student presentation TSX/CSS, shared tokens, this design plan and handoff. `apps/web/lib`, API routes, server actions, validation, feature gates, `supabase/`, migrations and RLS were untouched. The original logo file is untouched.
 
-## Limits and follow-up
+## Restored local authenticated QA
 
-The disposable checkout has no local Supabase configuration or Docker runtime. Authenticated Hangout creation/editing/joining, Calendar, People/friendship, Chats/DMs, Notifications, Safety and their denied/gate-off/uncertain state transitions could not be exercised as live routed flows here. Opening `/hangouts` without a local publishable key rendered the existing error boundary, which was checked at 320 pixels. Existing logic tests and the presentation-only diff are the available regression evidence; a local-service authenticated route pass is still required before claiming full TASK-024 acceptance.
+The initial blocker was environmental: the existing isolated Lima VM was stopped, its pinned guest-agent/startup files were incomplete, and Docker was outside PATH. Restored official Lima 2.2.0 files after checksum verification and started the existing disposable `pals-task002` runtime. No hosted environment was contacted. The database was empty before QA; local publishable configuration remained ignored and no service secret was added to the web app.
 
-Independent final design/security review: pending. Task branch remote SHA: pending. Integrated `origin/main` SHA: pending.
+- Actual production-build sign-in, confirmed account onboarding/photo upload, Hangout creation at 1280 pixels and edit/save at 320 pixels succeeded. Loading and saving feedback were observed. Public/private location separation remained intact. The saved mobile page measured 320 pixels of document width in a 320-pixel viewport.
+- Actual Calendar empty/loading state at 390 pixels, People gate-off at 1280 and active empty directory at 320, Chats gate-off at 320 and active requests/direct-empty/Hangout list at 390, Notifications gate-off at 820 and active empty inbox/preferences at 390, Safety gate-off and active controls/report form at 390 were rendered. Shared logo, light surfaces and readable blue actions were consistent.
+- Original local Auth/storage suite passed 1/1 without its optional legacy web helpers. Original DM web, Notifications HTTP, caller-owned friendship HTTP and Safety HTTP suites passed. Authenticated web/onboarding/profile/Hangout create/edit/discovery/join/leave/Calendar and chat HTTP suites passed using temporary test-only copies: obsolete People `blockPerson` helpers were omitted after TASK-016 removed that action, and chat revision checks read the current database revision after TASK-010. Both temporary files were removed. Initial stale-helper failures are recorded separately, not claimed as passing unchanged tests.
+- Denied/gate-off/no-store/actor-binding/stale/revoked-action behavior has HTTP regression evidence. A delayed-network uncertain-action screenshot was not captured; existing uncertainty logic is unchanged and source-reviewed. Real Mapbox tiles were unavailable without a local token; manual approximate-location entry and honest fallback were verified.
+
+## Independent review and follow-up
+
+Fresh GPT-6 Sol medium reviewer inspected exact implementation `b12109fa0a53217f2637cd2ec50fcfc3bab5d9b0` against baseline `388ec4d763e7914cc75b377a880abbe360551396`. No actionable P0/P1/P2 findings, backend/authorization expansion or logo changes. Review did not independently render authenticated routes; coordinator evidence above supplies that coverage. Standard speed is not selectable or verifiable through the dispatch tool.
+
+Stale integration helpers belong to a separate bounded follow-up in BACKLOG. TASK-021 hosted policies/rehearsal remain incomplete; this visual correction does not close them.
+
+Cleanup: committed local database reset verified 0 Auth users, 0 Hangouts, 0 storage objects and all ten feature gates false. Both owned web servers stopped; isolated Supabase/VM shutdown follows. No disposable fixture or credential is committed.
+
+Task branch remote SHA: pending. Integrated `origin/main` SHA: pending.

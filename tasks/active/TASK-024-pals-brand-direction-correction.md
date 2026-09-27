@@ -1,5 +1,5 @@
 # TASK-024 — Pals brand and visual direction correction
-Status: Planned
+Status: Reviewed implementation and local QA complete; publication/integration pending
 Date: 2026-09-24
 Relationship: Follow-up to completed TASK-023; execute as the next student-web visual correction when the current TASK-017 work is clear
 
@@ -35,11 +35,11 @@ TASK-023 introduced a shared shell and route adoption, but the current result do
 - Admin redesign, mobile-native app work, production deployment, or domain cutover.
 
 ## Acceptance criteria
-- [ ] Carolina blue `#7BAFD4` and white are the unmistakable primary brand system, with accessible supporting colors only.
-- [ ] The supplied logo asset is used consistently and remains unmodified as the source asset.
-- [ ] Shared tokens/components, not isolated patches, drive the visual correction across all student routes.
-- [ ] Existing backend behavior and critical flows are unchanged and verified.
-- [ ] Desktop/tablet/phone/narrow, light-mode, keyboard, and state coverage is recorded in the handoff.
+- [x] Carolina blue `#7BAFD4` and white are the unmistakable primary brand system, with accessible supporting colors only.
+- [x] The supplied logo asset is used consistently and remains unmodified as the source asset.
+- [x] Shared tokens/components, not isolated patches, drive the visual correction across all student routes.
+- [x] Existing backend behavior and critical flows are unchanged and verified.
+- [x] Desktop/tablet/phone/narrow, light-mode, keyboard, and state coverage is recorded in the handoff.
 - [ ] Final independent design/security review confirms no backend or authorization scope expansion; task and `main` remote SHAs are recorded.
 
 ## Handoff
