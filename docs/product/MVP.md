@@ -1,42 +1,40 @@
 # MVP Scope
-Status: Accepted
+Status: Accepted; initial-release scope amended by ADR-0025 on 2026-09-26
 
 ## Goal
 Ship a public UNC web product that proves students will create casual hangouts, discover/join them, coordinate, attend offline, and form repeat social connections.
 
-## Included
+## Included for initial UNC release
+
 ### Identity/Profile
-UNC email verification; real name; verified badge; school/year/major/bio; primary photo; up to four extra photos; optional interests, down-to-do, favorite music/foods, weird facts/prompts, Instagram; extensible profile sections.
+Actual UNC email verification and deployed HTTPS callback; real name; verified badge; school/year/major/bio; required owner primary photo. Preserve rich owner editing with up to four private extra photos and existing optional fields. People peers receive only the current opt-in same-campus text allowlist; no peer photos or owner-only optional sections are shared.
 
-### Hangouts Discovery
-Hangouts tab opens to map; pan/zoom; pins; clustering; filters; preview/detail; friend-attendance context; create action; device location may orient discovery but is never broadcast.
-
-### Calendar
-Day/week temporal discovery, joined/hosted hangouts, friend context.
+### Hangouts Discovery and Calendar
+Hangouts opens to a map with pan/zoom, pins/clustering, filters, preview/detail and create action. Calendar provides chronological day/week temporal discovery and joined/hosted Hangouts. Device location may orient discovery but is never broadcast. Preserve source-authorized saved-map start-time/ID order with live revalidation.
 
 ### Hangouts
-Fast creation; loose details; approximate public place + optional private exact details; campus/friends/invite-only; optional eligibility filters; join/leave; open/close joining; host + host-promoted co-hosts; edit/cancel; attendee list; attendee removal; no default capacity requirement.
+Fast creation; loose details; approximate public place plus participant-authorized private exact instructions; campus-visible only; join/leave; voluntary open/close joining; host and host-promoted co-hosts; edit/cancel; source-authorized attendee list and removal; no default capacity requirement. Restricted visibility, invitations and eligibility modes stay disabled and fail-closed.
 
 ### People/Friends
-Separate People tab; browse/search/filter; DM request; friend requests; friendships; friend-aware hangout ranking; public attendance visible for public hangouts; restricted hangouts inherit their visibility.
+Dedicated People tab with opt-in same-campus text browse/search/filter; friend requests and accepted friendships; consent-based DM requests. Existing authorized current roster access remains. No friend-attendance badges/context, friend-aware ranking or new public attendance-history projection.
 
-### Messaging
-Hangout group chat; DM request; 1:1 messaging after reply/acceptance; blocking enforcement.
-
-### Notifications
-Dedicated Notifications tab; functional notifications; category preferences. Friend-activity push notifications may come after first launch.
+### Messaging and Notifications
+Hangout chat; DM request; 1:1 messaging after reply/acceptance; dedicated Notifications tab with current inbox and category preferences; blocking and fresh source authorization. Existing manual-refresh/polling delivery is accepted with accurate update expectations, without instant delivery or backfill promises. Optional notification email, push and Realtime are deferred; required Auth verification email is not deferred.
 
 ### Trust/Safety
-Report user/hangout; block; leave; attendee removal; basic admin console; moderation history; suspension/ban; attendance/safety feedback.
+Report user/Hangout; block; leave; attendee removal; moderation console/history; suspension/ban; auditable enforcement; private owner-only attendance self-report/correction; location privacy and RLS/permission verification. Hosted moderation staffing/access/MFA/retention/recovery and owner photo bearer/cache policy still require acceptance and evidence. Attendance is not verified physical presence; reports are allegations. No public ratings.
 
 ### Measurement
-Created/viewed/joined/left/cancelled/attendance-confirmed/friend-request/accepted/repeat attendance/repeat host.
+Authoritative Postgres state only where current records support an outcome. Keep private attendance answers owner-only. Hosted external analytics capture stays off; complete behavior funnel, repeat-attendance/repeat-host reports and new aggregate/export endpoints are deferred. Current records do not prove complete views, join/leave history, repeated joins or verified offline attendance. Preserve local analytics implementation under ADR-0023.
+
+## Accepted post-launch deferrals — 2026-09-26
+
+[ADR-0025](../../decisions/ADR-0025-initial-mvp-scope.md) accepts only the named narrower initial-scope bundle: friends-only/invite-only/direct invitations/eligibility; friend context/ranking; peer photos and broader peer presentation; Realtime/push/optional notification email; hosted behavior analytics/complete funnel/repeat-outcome reports; extra “happened as described?” and “comfortable attending again?” questions and aggregation. Rich owner onboarding/editing/photos, real UNC Auth email delivery, existing friendship/DM/attendance/safety/privacy remain required. See durable follow-ups in [BACKLOG](../../tasks/BACKLOG.md). These are deferred capability, not completed features or waived hosted policy.
+
+The independent accepted ADR-0024 amendment defers size/threshold awareness and warning, size-based map dampening and private size-signal creation/review. Keep the safeguard gate off; verify no warning/new signals and original authorized order before the 101-row probe/100-result display limit. Voluntary open/close joining remains required independently. Preserve local TASK-020 work; migration inclusion/dependencies and retained-row handling still need separate hosted review.
 
 ## Not MVP
-Posts, likes, comments, followers, public friend counts, public ratings, polls, waitlists, paid promotion, commercial hangouts, organization accounts, cross-campus discovery, sophisticated large-event automation, live user-location broadcasting.
+Posts, likes, comments, followers, public friend counts, public ratings, polls, waitlists, paid promotion, commercial Hangouts, organization accounts, cross-campus discovery, sophisticated large-event automation, live user-location broadcasting.
 
-## Accepted initial-release deferral — 2026-09-26
-Under the accepted ADR-0024 amendment, the hosted large-Hangout safeguard bundle is post-launch: size/threshold awareness and host warning, size-based map dampening, and private size-signal creation/review. Its gate stays off for initial MVP; saved-map discovery retains its original authorized start-time/ID order. The absent signal consumer is not a launch blocker for this narrower scope. Basic voluntary open/close joining remains included independently, as do all other Trust/Safety and release requirements. Disposable-local TASK-020 work is preserved; no hosted migration or enablement is authorized by this scope decision.
-
-## Launch Model
-Public UNC release, but do not launch an empty map. Seed genuine initial hangouts created by real students before broad promotion.
+## Launch Model and authorization boundary
+Public UNC release, with genuine initial Hangouts created by real students before broad promotion. Scope acceptance does not authorize hosted operations, live seeding/promotion or launch. TASK-021 remains incomplete until its policies, exact release/target authorization, deployed UNC identity, privacy/safety/recovery and actual rehearsal evidence are accepted. No DNS/cutover follows automatically.

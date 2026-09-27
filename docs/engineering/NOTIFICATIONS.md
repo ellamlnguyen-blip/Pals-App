@@ -1,4 +1,8 @@
 # Notifications
+
+## Initial-release scope amendment — 2026-09-26
+
+[Accepted ADR-0025](../../decisions/ADR-0025-initial-mvp-scope.md) narrows the initial UNC release only. Existing notification inbox/preferences and refresh/polling behavior are accepted; Realtime, push and optional notification email are deferred. No new category wiring, instant delivery or missed-event backfill is inferred. Current source-event implementation and neutral unavailable destinations must be verified in rehearsal. Actual UNC Auth email verification/delivery and HTTPS callback remain required and are distinct from notification email.
 Two layers: in-app Notifications tab and push.
 
 MVP in-app categories: friend request/accept, message request, direct/hangout message, hangout update/cancellation, host-relevant join/leave, reminder, safety/moderation, attendance prompt.

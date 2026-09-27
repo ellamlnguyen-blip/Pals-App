@@ -1,4 +1,17 @@
 # Backlog
+## Accepted initial-release deferrals — 2026-09-26
+
+Under Accepted ADR-0025, these remain post-launch capability work, not initial-release implementation blockers or completed features. Each needs a separately bounded accepted contract and reviewed implementation; no hosted authorization follows.
+
+- Initial-scope follow-up ACCESS: friends-only/invite-only Hangouts, direct invitations and deliberately supplied eligibility filters; authoritative access rules, block/moderation precedence and direct API/RPC/RLS tests. Keep unsupported modes disabled/fail-closed initially.
+- Initial-scope follow-up FRIEND-CONTEXT: friend-attendance context across Hangouts/Calendar/People and friend-aware ranking, with explicit source authorization/privacy and no hidden-member input or public attendance history. Existing friendship remains required.
+- Initial-scope follow-up PEER-PRESENTATION: peer photos and richer peer profile sections outside the People text allowlist; separately accepted metadata/delivery/block/revocation policy. Rich owner onboarding/photo editing stays required now; hosted bearer/cache policy is an independent unresolved launch gate.
+- Initial-scope follow-up DELIVERY: Realtime, push and optional notification email plus any backfill. Preserve current authorized refresh/polling chat/DM/inbox/preferences with truthful expectations. This never defers actual UNC Auth verification email delivery or deployed HTTPS callback.
+- Initial-scope follow-up MEASUREMENT: hosted external capture/complete funnel and repeat-attendance/repeat-host reports/aggregate endpoints, with ADR-0023 hosted region/access/deletion/consent/full-envelope/IP/geolocation/raw-retention review and separately authorized Postgres aggregates. Initial capture stays off; no private-answer export or complete-history claim.
+- Initial-scope follow-up FEEDBACK: extra “happened as described?” and “comfortable attending again?” questions and aggregation under separately bounded privacy/moderation policy. Keep existing private attendance/report/block; neither is a verified outcome or safety finding.
+
+Owner staffing/access/MFA/recovery, per-data retention/export/deletion/legal hold and owner-photo bearer/cache/incident policies remain separately Proposed and required before hosted use. TASK-021 is incomplete. Earlier backlog notes describe historical local increments; this section governs initial-release timing only, and accepted later block/moderation work takes precedence over old People-only limitations.
+
 ## Product Build
 - Integration-helper maintenance: local TASK-024 QA exposed optional Auth web helpers referencing the removed People `blockPerson` action and chat removal/cancellation probes assuming Hangout revision 1 after TASK-010. Update these helpers in a separately bounded test task; preserve actor binding and authorization assertions. Temporary TASK-024 probes exercised current contracts successfully.
 - Development-runtime investigation: on the TASK-023 disposable local setup, Next.js `dev --webpack` returned a `cookies` outside request scope error for Hangout chat API, and denied Notifications/Safety probes plus an email-confirmation callback error. The same signed-in account successfully loaded Safety/Notifications and sent a Hangout message under `next build --webpack` + `next start`. Reproduce from a clean local setup, isolate the dev-only cause, and add a focused regression check without changing authorization behavior.
@@ -31,7 +44,7 @@ Expo mobile; native release pipeline; organization accounts; polls; optional cap
 Unrelated technical debt discovered during work becomes a separate task here.
 
 ## Hangout access dependencies
-Friends-only, invite-only and eligibility-restricted Hangouts remain disabled until accepted, tested access rules use authoritative friendship, invitation and deliberately supplied profile attributes. TASK-012 supplies friendship; invitation/eligibility enforcement still needs separately bounded contracts. TASK-016 block precedence/private-access rules and TASK-017 audited moderation remain safety dependencies before launch. Accepted ADR-0010 permits only disposable local Hangout work until those hosted-use gates are resolved; do not infer access policy from absent data.
+Accepted ADR-0025 defers friends-only, invite-only, direct invitations and eligibility-restricted Hangouts from initial release. They remain disabled until accepted, tested access rules use authoritative friendship, invitation and deliberately supplied profile attributes. TASK-012 supplies friendship; invitation/eligibility enforcement still needs separately bounded contracts. TASK-016 block precedence/private-access rules and TASK-017 audited moderation remain safety dependencies before launch. Accepted ADR-0010 permits only disposable local Hangout work until those hosted-use gates are resolved; do not infer access policy from absent data.
 
 TASK-003 deployed HTTPS callback and real UNC email delivery acceptance remains independently open in NOW.
 

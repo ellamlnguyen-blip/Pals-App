@@ -1,4 +1,8 @@
 # Realtime and Messaging
+
+## Initial-release scope amendment — 2026-09-26
+
+[Accepted ADR-0025](../../decisions/ADR-0025-initial-mvp-scope.md) narrows the initial UNC release only. Existing refresh/polling Hangout chat and DMs are accepted initially with fresh access checks and accurate update expectations. Supabase Realtime remains a future delivery path; no raw channel publication, instant guarantee or backfill is implied. All membership/removal/block/server enforcement remains required. Hosted migration/release still needs separate authorization.
 Use Supabase database + Realtime for MVP; no custom WebSocket service without ADR.
 
 Every hangout has a dedicated group conversation so loose plans can be fleshed out naturally.

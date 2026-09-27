@@ -1,4 +1,8 @@
 # Product Principles
+
+## Initial-release timing amendment — 2026-09-26
+
+[Accepted ADR-0025](../../decisions/ADR-0025-initial-mvp-scope.md) narrows the initial UNC release only. Friends remain private coordination infrastructure. Friend-derived context/ranking is deferred initially while existing friendship and consent-based DMs remain required. No popularity score, public friend count or attendance-history projection is introduced. Verified identity, offline purpose, approximate location, safety and privacy remain authoritative.
 1. Real-world activity is the outcome.
 2. A hangout should be easier to create than a formal event.
 3. Meeting through an activity is less awkward than browsing strangers without context.

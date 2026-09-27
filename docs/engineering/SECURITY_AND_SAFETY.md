@@ -14,7 +14,7 @@ Commercial promotion is not allowed in MVP.
 
 Eligibility restrictions must use deliberately provided profile attributes and be transparent.
 
-Post-hangout feedback: attended? happened as described? comfortable attending again? report issue. No public ratings.
+Post-Hangout initial release: private owner attendance self-report/correction and independent report/block. Accepted ADR-0025 (2026-09-26) explicitly defers “happened as described?” and “comfortable attending again?” questions and aggregation to separately bounded post-launch privacy/moderation work. Neither attendance nor reports supplies those answers or a safety finding. No public ratings. All other launch safety requirements remain required; no hosted staffing/access/MFA/retention/recovery or photo-bearer policy is accepted by the scope decision.
 
 ## TASK-014A local DM retention and consent
 

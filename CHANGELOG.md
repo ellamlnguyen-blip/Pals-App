@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-26 — Initial UNC MVP scope accepted (TASK-021 documentation)
+
+The user replied “yes” directly to the reviewed narrower initial-MVP scope question. Accepted ADR-0025 records the exact question/response and qualifies only the six named product rows: campus-only Hangouts, current text People and refresh-based coordination; defer restricted access/eligibility/invitations, friend context/ranking, peer photos, hosted external analytics/complete funnel/repeat-outcome reports and extra expectation/comfort questions. Existing friendship, DMs, private attendance, verified identity/real UNC Auth email delivery, rich owner onboarding/photo editing, report/block, moderation and privacy remain required. Hosted owner staffing/access/MFA/retention/recovery and photo bearer/cache/incident policies remain Proposed; no target/hosted operations are authorized. All new rehearsal checks remain planned/unrun. Preserve local code and independent ADR-0024 gate-off safeguard deferral. TASK-021 remains incomplete; no successor is triggered.
+
+
 ## 2026-09-26 — TASK-021 initial-launch decision package proposed
 
 [The initial-launch decision package](docs/operations/TASK-021-INITIAL-LAUNCH-DECISIONS.md) proposes one narrower campus-only release bundle for remaining access, friend-context, peer-profile/photo, measurement and separate post-Hangout expectation/comfort-feedback gaps. Hosted moderation coverage/escalation/contact, operator MFA/bootstrap/recovery, per-data retention/export/deletion/legal hold and photo bearer/cache/incident inputs remain unchosen. Only the existing large-Hangout safeguard deferral is accepted; the new bundle remains Proposed. Documentation only; no hosted/runtime/gate action, acceptance or successor task. TASK-021 remains incomplete pending review, owner decisions and its separately authorized rehearsal.

@@ -1,5 +1,9 @@
 # Conceptual Data Model
 
+## Initial-release scope amendment — 2026-09-26
+
+[Accepted ADR-0025](../../decisions/ADR-0025-initial-mvp-scope.md) narrows the initial UNC release only. Restricted visibility/invitation/eligibility concepts below are future scope and stay disabled initially; no schema change follows. Retain existing owner profile/photos, friendship, DM, notification, private attendance and safety records with current privacy. No peer photo relation, comfort-answer aggregate or repeat-outcome endpoint is introduced.
+
 ## University
 id, name, slug, allowed email domains, active state, geographic center/bounds. Initial active campus: UNC Chapel Hill.
 

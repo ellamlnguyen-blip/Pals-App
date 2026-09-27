@@ -1,5 +1,9 @@
 # Location and Maps
 
+## Initial-release scope amendment — 2026-09-26
+
+[Accepted ADR-0025](../../decisions/ADR-0025-initial-mvp-scope.md) narrows the initial UNC release only. Friend-attendance context and friend-aware ranking below are post-launch scope. Initial saved map retains original authorized start-time/ID order before the 101-row probe/100-result limit and fresh revalidation. Calendar remains chronological. The independent ADR-0024 safeguard gate stays off. Approximate public place and participant-only private instructions remain required; no people tracking or hidden-member ranking input.
+
 ## Intent
 The map is a playful visualization of campus social activity, not live people tracking.
 

@@ -1,4 +1,8 @@
 # Authorization
+
+## Initial-release scope amendment — 2026-09-26
+
+[Accepted ADR-0025](../../decisions/ADR-0025-initial-mvp-scope.md) narrows the initial UNC release only. Campus-visible unrestricted Hangouts only; friends-only/invite-only/direct invitations and eligibility remain disabled and fail-closed. Friendship grants no new Hangout or photo permission. People remains opt-in same-campus allowlisted text; peer photos, broader peer fields and friend-derived context/ranking are deferred. Existing source-authorized roster reads, rich owner profile/photo editing, DM consent, private attendance, block/report and moderation permissions remain intact. No schema/grant/RLS change or hosted authority is created; operator and bearer-photo policies remain separate unresolved gates.
 Enforce authorization server/database-side wherever possible.
 
 ## Roles

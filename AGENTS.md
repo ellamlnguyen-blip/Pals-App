@@ -29,7 +29,7 @@ Coordination creates the inventory that powers discovery. Discovery creates the 
 ## MVP Boundary
 Authoritative scope: `docs/product/MVP.md`.
 
-Included: verified UNC identity, rich profiles, map + calendar discovery, quick hangout creation, visibility/eligibility controls, joining, host/co-host roles, people discovery, friendship, friend-aware ranking, hangout chat, DM requests, notifications, reporting/blocking/moderation, attendance confirmation, analytics.
+Initial release under Accepted ADR-0025: verified UNC identity and real Auth email delivery, rich owner profiles/photos, map + calendar, campus-visible Hangouts, joining, host/co-host roles, text People discovery, friendship, refresh-based chat/DM/notification inbox, report/block/moderation/privacy and private attendance. Restricted Hangouts/eligibility/invitations, friend context/ranking, peer photos, Realtime/push/optional notification email, hosted external analytics/repeat-outcome reports and extra expectation/comfort questions are post-launch. Accepted ADR-0024 separately keeps the large-Hangout safeguard bundle gate off. Hosted owner policies and operations remain separately gated; see authoritative MVP.
 
 Not MVP: posts, likes, comments, followers, public friend counts, waitlists, polls, paid promotion, organization accounts, cross-campus discovery, complex reputation, complex large-event automation.
 
