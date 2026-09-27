@@ -1,5 +1,11 @@
 # Current State
 
+## 2026-09-27 — B3a HTTP and crossing evidence passed; matrix rerunning
+
+Real Auth HTTP module passed1/1, zero fail/cancel/skip/TODO, with full guarded25 reset/clean census. Sanitized evidence records1087 allowed/denied/control/setup cases; not1087 concurrency tests. Actual SQL crossing module passed1/1: five observed waits covering owner assignment both orders, authenticated lawful detached-object Storage DELETE both orders and unsourced create Auth-deletion first, plus separately classified40P01 cycle survivor/rollback checks. Fresh B1 real Storage HTTP final-role regressions remain pending and distinct from direct SQL crossing.
+
+Fixture-only failures were excluded from module passes: Storage protection42501 in privileged detach/delete setup repaired by independently cleared628591317906de2c114b2559a7dbf26ab8030fc2 transaction-local synthetic delete context; main post-success eligibility control reused revision1 after edit advanced revision2, repaired by independently clearedad806b651aecea15dc6490d540ff55e81503432e, asserting business40001 separately then using current revision. No migration/production guard/constraint/RLS change. Each failed attempt completed guarded25 reset. Main full race matrix now reruns from clean25; source/state/block modules, upgrade/regressions/final cleanup/evidence review/publication/remote accepted integration remain. B3a/TASK-021 incomplete, no hosted/app/pilot readiness claim.
+
 ## 2026-09-27 — B3a initial runtime milestone and fixture repair
 
 Fresh global ownership preflight found known VM stopped, no named Pals hostagent/disk/vz-efi/registration/socket/test-port holder; historical non-hostagent limactl56460 remained qualified/untouched. Normal same mountless VM and six cached services started on reviewed loopback target without install/pull/recovery. Full25 reset compiled;986 actual SQL assertions across17 rollback-only suites passed complete TAP plans/no skip/TODO; inherited54 ABI/grant/untouched-body catalog checks passed. These do not establish full runtime acceptance.
