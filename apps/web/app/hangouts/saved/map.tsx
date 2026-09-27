@@ -54,9 +54,7 @@ export function SavedMap({
       map = new mapbox.Map({
         container: container.current,
         accessToken: token,
-        style: window.matchMedia("(prefers-color-scheme: dark)").matches
-          ? "mapbox://styles/mapbox/dark-v11"
-          : "mapbox://styles/mapbox/light-v11",
+        style: "mapbox://styles/mapbox/light-v11",
         center: UNC_CENTER,
         zoom: 14,
         minZoom: 10,

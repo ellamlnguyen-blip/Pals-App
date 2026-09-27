@@ -22,12 +22,18 @@ header {
   gap: var(--pals-space-4);
   border-bottom: 1px solid var(--pals-line);
 }
-.wordmark {
-  text-decoration: none;
-  font-size: 1.75rem;
-  font-weight: 900;
-  letter-spacing: -0.05em;
-  color: var(--pals-accent);
+.brand-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  min-width: 76px;
+  min-height: 76px;
+}
+.brand-link img {
+  display: block;
+  width: 68px;
+  height: auto;
 }
 a {
   color: var(--pals-accent);
@@ -51,8 +57,8 @@ button,
   padding: 0.75rem 1.5rem;
   border-radius: 999px;
   font-weight: 800;
-  background: var(--pals-accent);
-  color: var(--pals-button-ink);
+  background: var(--pals-brand);
+  color: var(--pals-ink);
   text-decoration: none;
 }
 .button:hover {
@@ -123,7 +129,7 @@ textarea {
   min-height: 48px;
   border: 1px solid var(--pals-muted);
   border-radius: var(--pals-input-radius);
-  background: var(--pals-canvas);
+  background: var(--pals-surface-raised);
   color: var(--pals-ink);
   padding: 0.7rem 0.85rem;
 }
@@ -282,8 +288,12 @@ h1 {
   section {
     padding: var(--pals-space-8) var(--pals-space-6);
   }
-  .wordmark {
-    font-size: 1.5rem;
+  .brand-link {
+    min-width: 64px;
+    min-height: 64px;
+  }
+  .brand-link img {
+    width: 58px;
   }
   .campus {
     font-size: 0.75rem;
@@ -434,21 +444,21 @@ h1 {
 }
 .welcome-hero h1 {
   max-width: 13ch;
-  color: #fff;
+  color: var(--pals-ink);
 }
 .welcome-hero .status,
 .welcome-hero .intro {
-  color: #fff;
+  color: var(--pals-ink);
 }
 .welcome-hero .intro {
   max-width: 43ch;
 }
 .welcome-hero .button {
-  background: #fff;
-  color: #174e79;
+  background: var(--pals-surface-raised);
+  color: var(--pals-ink);
 }
 .welcome-hero .actions > a:not(.button) {
-  color: #fff;
+  color: var(--pals-ink);
   font-weight: 800;
 }
 .notice {

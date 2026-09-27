@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useState } from "react";
 import { SignOutForm } from "./auth-change-signal";
 
 export type StudentDestinations = {
@@ -20,6 +21,20 @@ const destinations = [
   { label: "Notifications", href: "/notifications", key: "notifications" },
 ] as const;
 
+export function BrandLink({ href = "/" }: { href?: string }) {
+  return (
+    <Link className="brand-link" href={href} aria-label="Pals home">
+      <Image
+        src="/brand/pals-logo.png"
+        alt="Pals"
+        width={76}
+        height={70}
+        priority
+      />
+    </Link>
+  );
+}
+
 export function StudentHeader({
   signedIn = false,
   name,
@@ -31,11 +46,10 @@ export function StudentHeader({
   accountReady?: boolean;
   attendanceAvailable?: boolean;
 }) {
+  const [photoFailed, setPhotoFailed] = useState(false);
   return (
     <header className="student-header">
-      <Link className="wordmark" href={accountReady ? "/hangouts" : "/"}>
-        Pals
-      </Link>
+      <BrandLink href={accountReady ? "/hangouts" : "/"} />
       <span className="campus">UNC Chapel Hill</span>
       {signedIn && (
         <Link className="header-safety" href="/safety">
@@ -45,17 +59,18 @@ export function StudentHeader({
       {signedIn ? (
         <details className="account-menu">
           <summary aria-label="Your account">
-            {accountReady ? (
+            {accountReady && !photoFailed ? (
               <Image
                 src="/profile/photo"
                 alt=""
                 width={40}
                 height={40}
                 unoptimized
+                onError={() => setPhotoFailed(true)}
               />
             ) : (
               <span className="account-initial" aria-hidden="true">
-                P
+                {name?.charAt(0).toUpperCase() || "P"}
               </span>
             )}
           </summary>

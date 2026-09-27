@@ -64,9 +64,7 @@ function PublicAreaPicker({
         map = new mapbox.default.Map({
           container: element.current,
           accessToken: token,
-          style: window.matchMedia("(prefers-color-scheme: dark)").matches
-            ? "mapbox://styles/mapbox/dark-v11"
-            : "mapbox://styles/mapbox/light-v11",
+          style: "mapbox://styles/mapbox/light-v11",
           center: UNC_CENTER,
           zoom: 14,
           minZoom: 12,

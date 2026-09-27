@@ -1,5 +1,9 @@
 # Current State
 
+## 2026-09-26 — TASK-024 reviewed brand correction; publication pending
+
+Student presentation now uses the exact supplied logo, Carolina blue `#7BAFD4`, white surfaces and accessible ink through shared tokens/header. Independent exact-tip review found no actionable P0/P1/P2 or backend/authorization expansion. Full workspace checks and restored disposable-local authenticated browser/HTTP checks passed within the recorded stale-helper, uncertain-screenshot and missing-map-token limits. Canonical publication remains pending; TASK-021 hosted gates remain separate. See `agents/handoffs/TASK-024.md`.
+
 ## TASK-021 repository inventory refreshed after TASK-010
 
 Canonical main `ac172980d4516ce54d3804c30393b225c0f5ea2c` contains 20 committed SQL migrations, including the reviewed local co-host authority migration, and ten private feature gates. Eighteen repository migrations are absent from the last documented hosted application record dated 2026-09-22; that historical comparison is not a live pending list. The current hosted target remains uninspected, and TASK-021 still requires policy, HTTPS/UNC email, exact target and release-package decisions before any hosted rehearsal. See `docs/operations/TASK-021-MIGRATION-INVENTORY.md`.
