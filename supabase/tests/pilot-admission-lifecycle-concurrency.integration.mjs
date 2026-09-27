@@ -273,7 +273,25 @@ test(
               label,
               order: "mutation-first-then-new-replacement",
             });
-            sql(`begin;${call(route)}rollback;`);
+            if (route.id === "edit") {
+              assert.throws(
+                () => sql(`begin;${call(route)}rollback;`),
+                /40001:.*Stale Hangout revision/,
+              );
+              evidence.classifications.push({
+                cell: `${route.id}_${label}_${subject.slice(-1)}`,
+                classification:
+                  "authorized business 40001 Stale Hangout revision after committed edit, separate from PostgreSQL serialization abort",
+              });
+              const revision = sql(
+                `select revision from public.hangouts where id='${hangout}'`,
+              );
+              const current = call(route).replace(
+                `('${hangout}',1,`,
+                `('${hangout}',${revision},`,
+              );
+              sql(`begin;${current}rollback;`);
+            } else sql(`begin;${call(route)}rollback;`);
           }
         }
       }
