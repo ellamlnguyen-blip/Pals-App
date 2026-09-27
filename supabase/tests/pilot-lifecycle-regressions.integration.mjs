@@ -14,11 +14,11 @@ import {
   localTarget,
   resetDisposable,
 } from "./helpers/pilot-admission-lifecycle.mjs";
-// Run reviewed B1/B2 modules serially under the child's exact ownership guard.
+// Run reviewed A1a/B1/B2 modules serially under the child's exact ownership guard.
 // No inherited acknowledgement, wildcard, dependency/source edit or wider
 // historical-suite claim. Adapters are disposable text copies, never commits.
 test(
-  "B3a L6 reviewed B1 owner and B2 source/safety/operator module regressions",
+  "B3a L6 reviewed A1a management, B1 owner and B2 source/safety/operator module regressions",
   { concurrency: false, timeout: 1200000 },
   () => {
     localTarget();
@@ -26,6 +26,14 @@ test(
     try {
       mkdirSync(join(directory, "helpers"));
       for (const [stage, helper, modules] of [
+        [
+          "TASK-021A1a",
+          "pilot-admission-authority.mjs",
+          [
+            "pilot-admission-authority-concurrency.integration.mjs",
+            "pilot-admission-authority-http.integration.mjs",
+          ],
+        ],
         [
           "TASK-021A1b1",
           "pilot-admission-owner.mjs",

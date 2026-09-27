@@ -2,7 +2,11 @@ import assert from "node:assert/strict";
 import { readFileSync, readdirSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import { localTarget, sql } from "./pilot-admission-lifecycle.mjs";
-localTarget();
+localTarget(
+  ["upgrade", "reset"].includes(process.argv[2])
+    ? "prior24-upgrade"
+    : "current25",
+);
 const assertTap = (output, label) => {
   assert.doesNotMatch(output, /^not ok\b/m, label);
   assert.doesNotMatch(output, /#\s*(SKIP|TODO)\b/i, label + " no hidden skips");
@@ -46,6 +50,7 @@ if (mode === "reset") {
     .filter((f) => f < "20260927000500_pilot_ordinary_lifecycle.sql")
     .map((f) => f.split("_")[0]);
   assert.equal(prior.length, 24);
+  localTarget("prior24-upgrade");
   assert.deepEqual(
     sql(
       "select version from supabase_migrations.schema_migrations order by version",

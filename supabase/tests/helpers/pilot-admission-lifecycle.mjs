@@ -36,7 +36,11 @@ export function sql(input) {
     );
   }
 }
-export function localTarget() {
+export function localTarget(lane = "current25") {
+  assert.ok(
+    ["current25", "prior24-upgrade"].includes(lane),
+    "fixed history lane required",
+  );
   assert.equal(process.env.DO_NOT_TRACK, "1", "telemetry must remain disabled");
   assert.equal(
     process.env.DOCKER_HOST,
@@ -72,6 +76,20 @@ export function localTarget() {
     sql("select current_database()||':'||session_user"),
     "postgres:postgres",
   );
+  const history = sql(
+    "select count(*)||':'||max(version) from supabase_migrations.schema_migrations",
+  );
+  if (lane === "current25")
+    assert.equal(
+      history,
+      "25:20260927000500",
+      "exact current25 history required before any fixture mutation",
+    );
+  else
+    assert.ok(
+      ["24:20260927000400", "25:20260927000500"].includes(history),
+      "explicit true24 upgrade lane permits only exact known24/current25 manifest",
+    );
   const key = status.PUBLISHABLE_KEY ?? status.ANON_KEY;
   async function request(path, token, body) {
     const response = await fetch(`${status.API_URL}${path}`, {

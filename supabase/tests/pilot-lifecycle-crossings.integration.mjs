@@ -43,6 +43,50 @@ test(
       records.push(
         await race("b3a_ordinary_before_owner_assignment", call(edit), assign),
       );
+      // Actual authenticated Storage object DELETE follows object row→profile
+      // UPDATE→owner admission. Use a lawful detached object: primary deletion
+      // is forbidden rather than fabricated as a successful owner operation.
+      const unused = `${actor}/33333333.png`;
+      sql(
+        `insert into storage.objects(bucket_id,name,owner_id) values('profile-photos','${unused}','${actor}');`,
+      );
+      const deletion = `set local storage.allow_delete_query='true';${auth(actor)}delete from storage.objects where bucket_id='profile-photos' and name='${unused}';`;
+      prepare(edit);
+      records.push(
+        await race(
+          "b3a_authenticated_storage_delete_first",
+          deletion,
+          call(edit),
+        ),
+      );
+      assert.equal(
+        sql(
+          `select count(*) from storage.objects where bucket_id='profile-photos' and name='${unused}'`,
+        ),
+        "0",
+      );
+      sql(
+        `insert into storage.objects(bucket_id,name,owner_id) values('profile-photos','${unused}','${actor}');`,
+      );
+      prepare(edit);
+      records.push(
+        await race(
+          "b3a_ordinary_before_authenticated_storage_delete",
+          call(edit),
+          deletion,
+        ),
+      );
+      assert.equal(
+        sql(
+          `select count(*) from storage.objects where bucket_id='profile-photos' and name='${unused}'`,
+        ),
+        "0",
+      );
+      records.push({
+        cell: "ordinary edit↔Storage DELETE",
+        classification:
+          "actual authenticated direct object DELETE with lawful detached object; both profile-row waits; primary remains owned/ready. Real Storage API final service INSERT/authenticated DELETE context separately fresh B1 regression, not mislabeled this direct SQL crossing.",
+      });
       const old = "b3a00000-0000-4000-8000-000000000088",
         replacement = "b3a00000-0000-4000-8000-000000000089";
       sql(
