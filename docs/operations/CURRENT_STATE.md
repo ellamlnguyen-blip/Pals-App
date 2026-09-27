@@ -1,5 +1,9 @@
 # Current State
 
+## 2026-09-27 — Owner admission first source review
+
+Fresh independent security review of local unpushed `9470eb8b832c8e31811cb555647d509d33b8920f` found one P1: a missing locking membership lookup could later authorize against independently recreated, unlocked verification evidence. B1 is not cleared; correction and deletion/recreation regression evidence are required. Other reviewed source boundaries aligned with the contract. Runtime checks, actual Storage roles, observed waits, cleanup, final handoff and exact-tip review remain outstanding. Implementation stays on `agent/TASK-021A1b1-owner-admission`; latest implementation push: none. No hosted operation or pilot-ready claim. See `agents/handoffs/TASK-021A1b1-REVIEW.md`.
+
 ## 2026-09-27 — Owner admission contract reviewed
 
 A1a is complete at verified canonical main `776db8c648f339c8650f7e725108d2853a0859ba`. A1b live enforcement is bounded into B1 caller access-state/owner onboarding/primary Storage/direct-write locking, B2 host/source/retained peer/safety projections, and B3 core/co-host/chat mutation serialization. Independent contract review cleared exact `43ebf783055ca86ce848688850761319592da240`. Contract branch and canonical main were independently remote-verified at `4fc154306abd89a131f49832f97d51735da50f74`. Fresh Sol-medium agent `implement_pilot_owner_admission` is implementing only B1 on `agent/TASK-021A1b1-owner-admission`; latest implementation push: none. B2/B3 remain dependency planning and await reviewed prerequisite integration. The neutral `pilot_unavailable` ABI requires later A2 app reconciliation. No runtime/hosted action or deployable pilot claim; A1b/A1c/A2 and TASK-021 remain incomplete.
