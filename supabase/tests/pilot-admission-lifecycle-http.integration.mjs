@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { writeFileSync } from "node:fs";
 import {
   localTarget,
   sql,
@@ -573,7 +574,7 @@ test(
           ],
           [
             "owned-object-lawful-detach-delete",
-            `update public.profiles set primary_photo_path=null where user_id=${id}; delete from storage.objects where bucket_id='profile-photos' and name='${u.id}/b3a-http.png'`,
+            `begin;set local storage.allow_delete_query='true';update public.profiles set primary_photo_path=null where user_id=${id}; delete from storage.objects where bucket_id='profile-photos' and name='${u.id}/b3a-http.png';commit;`,
             `insert into storage.objects(bucket_id,name,owner_id) values('profile-photos','${u.id}/b3a-http.png','${u.id}'); update public.profiles set primary_photo_path='${u.id}/b3a-http.png' where user_id=${id}`,
           ],
           [
@@ -759,10 +760,23 @@ test(
         actor,
         { p_hangout_id: removedReadmission.id },
       );
+      writeFileSync(
+        "agents/handoffs/TASK-021A1b3a-HTTP-EVIDENCE.json",
+        JSON.stringify(
+          {
+            fixture: "B3a HTTP",
+            cases: evidence,
+            concurrency_claimed: false,
+            old_auth_tokens: true,
+          },
+          null,
+          2,
+        ) + "\n",
+      );
       console.log(
         JSON.stringify({
           fixture: "B3a HTTP",
-          cases: evidence,
+          verified_case_count: evidence.length,
           concurrency_claimed: false,
           old_auth_tokens: true,
         }),

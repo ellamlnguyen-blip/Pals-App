@@ -124,7 +124,7 @@ function identityLosses(subject) {
     // transaction; the profile lock is the observed boundary for this loss.
     [
       "object_detach_delete",
-      `update public.profiles set primary_photo_path=null where user_id='${subject}';delete from storage.objects where bucket_id='profile-photos' and name='${subject}/11111111.png';`,
+      `set local storage.allow_delete_query='true';update public.profiles set primary_photo_path=null where user_id='${subject}';delete from storage.objects where bucket_id='profile-photos' and name='${subject}/11111111.png';`,
       `insert into storage.objects(bucket_id,name,owner_id) values('profile-photos','${subject}/11111111.png','${subject}');update public.profiles set primary_photo_path='${subject}/11111111.png' where user_id='${subject}';`,
     ],
   ];
