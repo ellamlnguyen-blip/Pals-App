@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-27 — Source/safety integrated and remote-verified
+
+TASK-021A1b2 is complete for its bounded disposable-local source/purpose/immutable-host projections, retained safety and independent report-only operator authority. Reviewed final task branch independently remote-verified `a451242a2de454a41571ede7db72ed10faf79819`; accepted canonical main/integration branch independently remote-verified `172308d17cfdb4677a417d7b681f5c07372afa67`. Final source/evidence review has no unresolved finding;925 SQL assertions/three modules/14 actual-role waits plus separately labeled old-gap diagnostic, action-role replay/isolation/upgrade/catalog/lint/default cleanup and normal global shutdown passed within explicit reviewer-no-rerun/app/full-suite limits. This receipt follows verified code integration. B3 contract reconciliation/review/publication is next; B3/A1c/A2 and TASK-021 remain incomplete. No hosted/pilot-ready claim or product successor from this substage.
+
 ## 2026-09-27 — B2 final implementation reviewed and published
 
 Fresh independent final source/evidence review cleared exact task `a451242a2de454a41571ede7db72ed10faf79819`; task branch agent/TASK-021A1b2-operator-role-lock-repair independently remote-verified at that SHA. Accepted code includes source/purpose/immutable-host closure in00300 and narrow mandatory operator lock-result repair in00400; all24 migrations and earlier history preserved. 925 bounded SQL assertions, three integration modules,14 actual-role RPC wait pairs, separately labeled trusted-postgres old-gap diagnostic, admin downgrade exact-replay and eligible isolation controls, true23 upgrade, catalog/ACL/lint and empty/default-off normal global shutdown passed. Reviewer inspected committed artifacts and did not rerun runtime. No unresolved source/receipt finding remains.

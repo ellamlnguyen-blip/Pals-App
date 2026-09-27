@@ -1,5 +1,9 @@
 # Backlog
 
+## Current next dependency — B3 reconciliation
+
+B2 complete at remote-verified accepted main172308d17cfdb4677a417d7b681f5c07372afa67, all24 migrations. Earlier B2 role-lock blocker and repair queue entries below are historical and resolved. Next: freshly reconcile bounded core mutation graph/source to actual reviewed B1/B2, independently review/publish contract before implementation. Split if oversized; no automatic acceptance of graph changes. A1c/A2 and hosted operating prerequisites remain incomplete.
+
 ## Reviewed B2 role-lock repair — 2026-09-27
 
 Contract8395aa6 independently cleared and task-branch remote verified. Publish canonical reviewed contract, then fresh bounded repair executor; partial source branchba4344a is reviewed with unresolved inherited P1, clean local shutdown and no accepted main integration. Complete repair/evidence/review/publication/integration before B3.

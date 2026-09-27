@@ -1,16 +1,16 @@
 # TASK-021A1b — Live admission, core and retained safety enforcement
 
 Date: 2026-09-27
-Status: **Reconciled allocation parent — not executable; B1 complete and remote-verified; B2 independently reviewed contract; B3 dependency planning**
+Status: **Reconciled allocation parent — not executable; B1/B2 complete and remote-verified; B3 requires fresh contract reconciliation/review/publication**
 Parent: [TASK-021A1](TASK-021A1-pilot-backend-authorization.md), under TASK-021A / incomplete TASK-021.
-Current reconciliation input: canonical main `bb39f7a1fa2a97bfbf1223a4a9f99875c529ecee`, including completed reviewed B1 and all22 migrations. Historical parent allocation baseline was `776db8c648f339c8650f7e725108d2853a0859ba`. Executor starts from latest independently verified `origin/main` containing its reviewed contract; this SHA is the contract source baseline, not permission to use a stale checkout.
+Current reconciliation input: canonical main `172308d17cfdb4677a417d7b681f5c07372afa67`, including completed reviewed B1/B2 and all24 migrations. Historical parent allocation baseline was `776db8c648f339c8650f7e725108d2853a0859ba`. Executor starts from latest independently verified `origin/main` containing its reviewed contract; this SHA is the contract source baseline, not permission to use a stale checkout.
 
 ## Sequential bounded allocation
 
 The former single A1b implementation is too broad. Preserve its requirements below as combined acceptance allocation; dispatch only a child contract:
 
 1. [TASK-021A1b1](TASK-021A1b1-owner-admission.md): caller state, admitted incomplete owner/reference/primary Storage eligibility, independent peer readiness and direct-write evidence locking. Complete for bounded local scope: reviewed task82de4ed, accepted canonical main7844fba independently remote-verified; see handoff. B2 reconciliation follows.
-2. [TASK-021A1b2](TASK-021A1b2-source-projections-safety.md): immutable-host source/read/chat/retained peer projections plus exact safety/operator independence. Independent contract review cleared exact5c89db9 against completed B1; canonical publication/remote verification required before dispatch. Exact current source/purpose/retained matrix is in B2; no implementation at this documentation gate.
+2. [TASK-021A1b2](TASK-021A1b2-source-projections-safety.md): immutable-host source/read/chat/retained peer projections plus exact safety/operator independence. Complete bounded local scope: reviewed taska451242 and accepted canonical main172308d independently remote-verified, all24 migrations. Source/purpose/safety matrix and mandatory operator lock repair have passed final review and runtime evidence; see B2 handoff. B3 serialization remains unproved.
 3. [TASK-021A1b3](TASK-021A1b3-core-mutation-serialization.md): all ordinary core/co-host/chat mutations and retries with actor/host/target evidence serialization. Dependency planning only; reconcile/review/publish after B2 accepted remote-verified integration.
 
 Each child gets a fresh Sol-medium implementation agent and independent security reviewer, stops at its contract, and produces a separate handoff. Standard speed cannot be set/verified by the dispatch API. B1 changes shared readiness and owner authorization but does not secure whole sources, all mutation races or deferred paths; B2 read closure does not supply mutation serialization; B3 does not close A1c. No stage is deployable/pilot-ready. Coordinator publishes reviewed contracts/queue state before dispatch; this drafting increment changes no queue or runtime. No duplicate product successor follows these child stages.

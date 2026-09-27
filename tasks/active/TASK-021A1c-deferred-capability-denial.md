@@ -1,5 +1,7 @@
 # TASK-021A1c — Deferred capabilities and backend regression closure
 
+Dependency receipt: B2 complete at remote-verified accepted main172308d17cfdb4677a417d7b681f5c07372afa67 (24 migrations); B3 remains incomplete. Historical B2 candidate language below is superseded only for B2 status; this A1c contract requires actual combined B3 reconciliation/review/publication before dispatch.
+
 Date: 2026-09-27
 Status: **Dependency planning contract — reconcile against prior reviewed integration, then independently review/publish before dispatch**
 Parent: [TASK-021A1](TASK-021A1-pilot-backend-authorization.md), under TASK-021A / incomplete TASK-021.

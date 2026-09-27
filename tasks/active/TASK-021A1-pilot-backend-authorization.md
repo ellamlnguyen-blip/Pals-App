@@ -1,9 +1,9 @@
 # TASK-021A1 — Pilot backend authorization stage parent
 
 Date: 2026-09-27
-Status: **Allocation parent — A1a/B1 complete; B2 reconciled contract candidate; B3/A1c dependent, not executable as a whole**
+Status: **Allocation parent — A1a/B1/B2 complete; B3 reconciliation and A1c dependent, not executable as a whole**
 Parent: [TASK-021A](TASK-021A-pilot-admission-capabilities.md), incomplete TASK-021.
-Current contract reconciliation input: canonical main `bb39f7a1fa2a97bfbf1223a4a9f99875c529ecee` (reviewed completed B1,22 migrations). Historical allocation baseline: `776db8c648f339c8650f7e725108d2853a0859ba` (completed A1a,21 migrations).
+Current contract reconciliation input: canonical main `172308d17cfdb4677a417d7b681f5c07372afa67` (reviewed completed B1/B2,24 migrations). Historical allocation baseline: `776db8c648f339c8650f7e725108d2853a0859ba` (completed A1a,21 migrations).
 
 ## Goal and bounded split
 
@@ -13,7 +13,7 @@ Implement only the accepted private admission/capability database boundary using
 2. [TASK-021A1b](TASK-021A1b-live-admission-enforcement.md): ordinary admission/onboarding/Storage/source/peer enforcement and exact retained safety/operator semantics, with concurrency evidence.
 3. [TASK-021A1c](TASK-021A1c-deferred-capability-denial.md): deferred authoritative capabilities, safe required-field/primary-photo writes, legacy regression adaptation and complete backend closure.
 
-A1a is complete and independently remote-verified. A1b is now a nonexecutable allocation split into B1 owner/status/direct-write admission (complete, reviewed task82de4ed/accepted main7844fba independently remote-verified), B2 source projections/safety (reconciled contract candidate requiring independent review/publication) and B3 core mutation serialization (dependent planning). A1c remains dependent planning until the combined reviewed B1/B2/B3 integration. Independent review, remote-verified accepted integration and handoff of each unit gate reconciliation/review/publication/dispatch of the next. Do not dispatch dependents concurrently or mechanically extend an oversized unit; propose another bounded contract first. A1a primitives alone do not enforce admission; A1b alone does not close every deferred capability. Final A1 integration gates drafting/reconciliation of A2, which owns application types/access states/callbacks/routes/actions/API photo delivery/UI and complete app fixtures. No A2 dispatch until A1c and parent backend acceptance pass. Neither A1 nor A2 alone is a release.
+A1a is complete and independently remote-verified. A1b is now a nonexecutable allocation split into B1 owner/status/direct-write admission (complete, reviewed task82de4ed/accepted main7844fba independently remote-verified), B2 source projections/safety (complete, reviewed taska451242/accepted main172308d independently remote-verified) and B3 core mutation serialization (dependent planning). A1c remains dependent planning until the combined reviewed B1/B2/B3 integration. Independent review, remote-verified accepted integration and handoff of each unit gate reconciliation/review/publication/dispatch of the next. Do not dispatch dependents concurrently or mechanically extend an oversized unit; propose another bounded contract first. A1a primitives alone do not enforce admission; A1b alone does not close every deferred capability. Final A1 integration gates drafting/reconciliation of A2, which owns application types/access states/callbacks/routes/actions/API photo delivery/UI and complete app fixtures. No A2 dispatch until A1c and parent backend acceptance pass. Neither A1 nor A2 alone is a release.
 
 ## Acceptance authority and expected incompatibility
 
