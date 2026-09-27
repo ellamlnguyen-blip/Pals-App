@@ -18,7 +18,7 @@ Optional device location may center map, support near-me, and rank nearby hangou
 Pan/zoom; current location; pins; clustering; visible-region queries; filters; preview/detail; friend-attendance context; create action.
 
 ## Ranking Signals
-Time relevance, distance, friend attendance, interest relevance, freshness, and large-event dampening. Never popularity alone.
+Time relevance, distance, friend attendance, interest relevance and freshness. Large-event dampening is deferred from initial MVP under the accepted ADR-0024 amendment (2026-09-26); its gate stays off and the current saved-map start-time/ID order is preserved. Never popularity alone.
 
 ## TASK-020A disposable-local saved discovery
 

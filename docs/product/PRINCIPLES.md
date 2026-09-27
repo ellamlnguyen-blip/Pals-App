@@ -11,3 +11,6 @@
 10. Do not reward scale/popularity for its own sake.
 11. Organizations may exist later but should not turn Pals into a promotion board.
 12. New features should make a real hangout easier to create, discover, coordinate, or safely attend.
+
+## Accepted initial-MVP safety scope exception — 2026-09-26
+Principle 9 remains authoritative for verified identity, report/block, attendee removal, moderation, privacy and other accepted launch safety requirements. The accepted ADR-0024 amendment explicitly defers only the gate-coupled hosted large-Hangout bundle (size warning, map dampening, signal creation/review) to post-launch with its gate off. Voluntary open/close joining remains MVP. This exception supplies no threshold-review service and does not authorize hosted migration or gate enablement.

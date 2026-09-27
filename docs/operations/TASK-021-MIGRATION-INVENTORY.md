@@ -2,6 +2,9 @@
 
 Snapshot: canonical main `ac172980d4516ce54d3804c30393b225c0f5ea2c`, independently remote-verified by TASK-010, 2026-09-25. Read-only repository inventory refreshed after TASK-010 completion. This is **not** a migration plan or a fresh hosted database inspection. Refresh again from the exact release tip before any staging package is proposed.
 
+## Accepted scope note — 2026-09-26
+The accepted ADR-0024 amendment defers hosted safeguards to post-launch with the gate off. The historical inventory below is preserved; it is not an authorization or pending manifest. Inclusion of `20260925000100_local_large_hangout_safeguards.sql` still requires separate exact-target migration/dependency review, even if the gate stays off; do not apply the whole chain or omit a predecessor blindly. Reinventory any retained signals and resolve their handling separately. No target was inspected or changed by this scope update.
+
 ## Repository versus last documented hosted state
 
 The repository contains 20 committed SQL migrations at this snapshot. `docs/operations/HOSTED_ENVIRONMENT.md` last recorded hosted application of `20260921000100_identity_foundation.sql` and `20260922000100_verified_onboarding.sql` on 2026-09-22. It also recorded a localhost Auth site URL and callback allowlist, no custom SMTP, and no deployed HTTPS frontend. That record is historical; no assertion is made about the target's current schema, users, gates or settings.
@@ -32,7 +35,7 @@ Student web modules `apps/web/lib/hangouts.ts`, `people.ts`, `notifications.ts` 
 
 1. Verify the selected project is the authorized nonproduction target and independently inspect live migration history and checksums, Auth settings, callback list, storage policies, RLS/grants, feature-gate values, role assignments and data counts without exposing secrets or personal data in the evidence record.
 2. Compare every exact pending migration from the release tip with the live target. Review its default gate state, source authorization, client grants, dependency order, lock/runtime footprint, rollback/forward recovery and required retention/legal-hold policy. Resolve any drift before proposing an apply manifest.
-3. TASK-010 is complete for disposable-local scope, but its hosted release still requires target-specific review. Resolve hosted moderation/size-signal policy and MVP scope decisions before presenting an exact hosted manifest. A passing local reset or the 2026-09-22 hosted note is insufficient.
+3. TASK-010 is complete for disposable-local scope, but its hosted release still requires target-specific review. Resolve hosted moderation and remaining MVP scope decisions before presenting an exact hosted manifest. The size-signal consumer is deferred for initial gate-off MVP under the accepted ADR-0024 amendment; separately review safeguard migration inclusion/dependencies and any retained observations. A passing local reset or the 2026-09-22 hosted note is insufficient.
 4. Review exact app build SHA, HTTPS origin/redirects, SMTP sender/test mailbox, Mapbox, analytics capture state, operator bootstrap/MFA, backups and cleanup. Obtain target-specific hosted authorization only after the package is concrete and reviewable.
 
 A read-only attempt to invoke the pinned local Supabase CLI failed before producing command output in this task environment (Bun runtime error). No hosted inspection or migration was performed. The release preflight must use a working trusted CLI/session and retain sanitized evidence.

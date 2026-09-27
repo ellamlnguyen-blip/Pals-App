@@ -1,5 +1,11 @@
 # NOW
 
+## 2026-09-26 — TASK-021 initial-MVP safeguard deferral accepted
+
+The user explicitly accepted deferring the gate-coupled hosted large-Hangout size warning, map dampening and private signal creation/review bundle to post-launch. Accepted ADR-0024 is amended; initial MVP keeps the safeguard gate off and verifies no new signals/warning and original source-authorized saved-map order. Basic host/co-host open/close joining, report/block/moderation/privacy and every other applicable MVP/release requirement remain required. The absent consumer is no longer a launch blocker for this narrower scope. Local TASK-020 work is preserved; hosted migration inclusion/dependencies and any retained observations still need separate review. No runtime/schema/hosted change or gate write occurred. TASK-021 remains incomplete on its other decisions and unrun rehearsal. See `agents/handoffs/TASK-021-SAFEGUARD-DEFERRAL.md`.
+
+Earlier dated TASK-021 entries below are historical; the accepted amendment governs the current large-Hangout scope only.
+
 ## 2026-09-26 — TASK-024 brand correction complete
 
 Student presentation now uses the exact supplied logo, Carolina blue `#7BAFD4`, white surfaces and accessible ink through shared tokens/header. Independent exact-tip review found no actionable P0/P1/P2 or backend/authorization expansion. Full workspace checks and restored disposable-local authenticated browser/HTTP checks passed within the recorded stale-helper, uncertain-screenshot and missing-map-token limits. Reviewed implementation task publication is remote-verified at `a5ac861a186bae893b428f38f9cc16645e0553b1`, with branch receipt `285899c9ec65fa7267904b23f5101d40b4cfb905`. After explicit user approval, canonical main integration was remote-verified at `078be455c8d4e31a39b021d82993a8c367eb46ba`. TASK-024 is complete for its bounded visual scope; the initial automatic approval blocker is resolved. Test fixtures are zero, ten gates off and owned local services stopped. TASK-021 hosted gates remain separate. See `agents/handoffs/TASK-024.md`.

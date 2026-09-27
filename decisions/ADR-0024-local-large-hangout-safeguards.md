@@ -1,10 +1,20 @@
 # ADR-0024 — Disposable-local large-Hangout safeguards
 
-Status: Accepted — disposable-local TASK-020 only; explicit user acceptance recorded 2026-09-25
+Status: Accepted — disposable-local TASK-020 (2026-09-25), with accepted initial-MVP hosted deferral amendment (2026-09-26)
 Date: 2026-09-25
 Task: TASK-020
 
-## Context
+## Accepted amendment — initial MVP hosted deferral, 2026-09-26
+
+The user explicitly accepted the recommendation to defer hosted large-Hangout safeguards for the initial MVP, keep the safeguard gate off and move the feature to post-launch backlog. This amendment supersedes the original launch-dependency statement below for that narrower initial release only. It does not accept the proposed operator workflow in `docs/operations/TASK-021-SIZE-SIGNAL-DECISION.md`.
+
+The deferred bundle is threshold/size awareness and host warning, size-based saved-map dampening, and private size-signal creation/review. The initial MVP must keep the safeguard gate **off**: no new size signals, no size warning, and the original source-authorized saved-map start-time/ID ordering before the existing 101-row probe/100-result display limit, with live revalidation. Basic voluntary open/close joining under accepted host/co-host authority remains MVP independently of this gate. No automatic capacity limit, removal or closure is introduced.
+
+This is an explicit product-safety scope exception to the previous large-Hangout MVP requirement, not evidence that a gate-off product provides threshold awareness or review. Verified identity, reporting/blocking, attendee removal, moderation console/history/enforcement, privacy, RLS verification and all other accepted MVP/release requirements remain required. The absent size-signal operator consumer is no longer a launch blocker for this narrower scope; hosted safeguard enablement still requires a separately accepted consumer/access/retention/response policy, reviewed implementation and target-specific authorization.
+
+Preserve the reviewed disposable-local TASK-020 backend/UI, migration and historical verification. No code, schema, migration deletion, hosted operation or gate write follows from this amendment. Whether the existing safeguard migration belongs in a hosted release manifest remains a separate dependency and migration review: default-off does not authorize applying it or skipping its dependent schema. Any retained hosted observations discovered in a later inventory still require separately accepted handling; gate-off does not erase or resolve them. TASK-021 remains incomplete on its other product, policy, target and execution gates.
+
+## Context (original disposable-local decision)
 
 `SECURITY_AND_SAFETY.md` requires threshold awareness, host warning, close-joining control, moderation review hooks and ranking dampening. ADR-0004/0010 preserve open-by-default joining with no required capacity. No accepted source sets a numeric threshold, counting rule or dampening order. The saved map currently orders by start time and ID before a 100-result viewport limit. ADR-0019 permits only submitted safety reports in its audited operator queue. TASK-010's co-host policy is accepted but its implementation remains separately owned and undispatched.
 
@@ -26,7 +36,7 @@ Add one private server-authored signal per Hangout and threshold-policy version,
 
 Allowlist the signal fields: Hangout UUID, policy version, threshold value and server observation time. No exact observed count, member/host IDs, text, place, coordinates, attendance answer or allegation is copied. Retain it privately after the size falls, cancellation or moderation disable; it grants no source access and is cleared by the full disposable database reset. There is no client or platform-role table grant, student reader, operator queue/detail, notification, PostHog event, automatic report or sanction.
 
-This is an **unconsumed review hook**. It does not provide review, staffing or emergency response and does not complete the hosted review requirement. A separately accepted task must define its consumer, audited operator access, retention and response policy before any hosted use; TASK-021 must treat that as an unresolved launch dependency. ADR-0019's report-only queue and exact report-to-sanction binding remain unchanged.
+This is an **unconsumed review hook**. It does not provide review, staffing or emergency response and does not complete the hosted review requirement. A separately accepted task must define its consumer, audited operator access, retention and response policy before any hosted use; TASK-021 originally treated that as an unresolved launch dependency; the accepted 2026-09-26 amendment above removes it only for the initial gate-off MVP scope. ADR-0019's report-only queue and exact report-to-sanction binding remain unchanged.
 
 ### Discovery dampening without hidden-member disclosure
 

@@ -1,10 +1,13 @@
 # TASK-021 — Hosted large-Hangout signal decision brief
 
-Status: Proposed for review; no hosted policy accepted
+Status: Option 2 accepted for initial gate-off MVP on 2026-09-26; operator review policy below remains Proposed
 Date: 2026-09-25
 Scope: planning only, from reviewed TASK-021 readiness plan and Accepted ADR-0024
 
-## Decision needed
+## Selected initial-MVP option — 2026-09-26
+The user explicitly accepted the recommendation to defer hosted safeguards, keep the gate off and move the bundle to post-launch. Option 2 below is selected as amended by Accepted ADR-0024: size warning, map dampening and private signal creation/review are excluded from initial MVP. The absent consumer is not a launch blocker for that narrower scope; original saved-map order and no new signals must be verified in the separately authorized rehearsal. Basic open/close joining and all other safety/MVP/release gates remain required. No hosted migration, deployment or gate write is authorized. Existing local work and this unaccepted eventual-consumer proposal are preserved.
+
+## Decision needed for future hosted safeguard enablement
 ADR-0024 permits an unconsumed private size observation in disposable local tests only. It is written once per Hangout and policy version when a genuine admitted join first observes at least 25 joined memberships with the safeguard gate on. The row contains Hangout UUID, policy version, threshold value and server observation time. It is retained when size falls or a Hangout is cancelled/disabled. Existing moderator access is limited to submitted reports under ADR-0019. The safeguard gate cannot be used in hosted staging or live operation until a separately accepted consumer, access, retention and response policy exists and its implementation is reviewed.
 
 ## Recommended operating model for decision
@@ -30,7 +33,7 @@ Publish a narrow policy ADR and a separately reviewed backend/operator contract 
 
 ## Options
 1. **Audited human review** (recommended for eventual hosted safeguard use): accept and implement the bounded model above after choosing the missing values/owners. It preserves the provisional host warning and map dampening while giving the private observation a real consumer.
-2. **Defer hosted safeguard use:** leave its gate off and do not claim the launch large-Hangout review requirement is complete. This can support independent staging checks of other features, but TASK-021's full launch rehearsal remains incomplete.
+2. **Defer hosted safeguard use (selected for initial MVP, 2026-09-26):** keep its gate off and move the entire gate-coupled warning/dampening/signal creation/review bundle to post-launch under the accepted ADR-0024 amendment. The absent consumer is not a blocker for the narrower launch scope; no claim of threshold review is made. TASK-021 remains incomplete until all other applicable dependencies and rehearsal criteria pass.
 3. **Revise the size policy:** propose a replacement ADR with a different consumer or remove the observation, then re-review product and safety consequences before hosted use.
 
-No option is accepted by publishing this brief. The user's prior “accept” was for the TASK-021 planning sequence, not a choice of review workflow or retention values.
+The original 2026-09-25 publication accepted no option; that prior “accept” concerned TASK-021 planning only. The separate explicit 2026-09-26 acceptance selects Option 2 as recorded above. Option 1, its operator access expansion, workflow and retention values remain unaccepted.

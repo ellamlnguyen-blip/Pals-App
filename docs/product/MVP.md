@@ -35,5 +35,8 @@ Created/viewed/joined/left/cancelled/attendance-confirmed/friend-request/accepte
 ## Not MVP
 Posts, likes, comments, followers, public friend counts, public ratings, polls, waitlists, paid promotion, commercial hangouts, organization accounts, cross-campus discovery, sophisticated large-event automation, live user-location broadcasting.
 
+## Accepted initial-release deferral — 2026-09-26
+Under the accepted ADR-0024 amendment, the hosted large-Hangout safeguard bundle is post-launch: size/threshold awareness and host warning, size-based map dampening, and private size-signal creation/review. Its gate stays off for initial MVP; saved-map discovery retains its original authorized start-time/ID order. The absent signal consumer is not a launch blocker for this narrower scope. Basic voluntary open/close joining remains included independently, as do all other Trust/Safety and release requirements. Disposable-local TASK-020 work is preserved; no hosted migration or enablement is authorized by this scope decision.
+
 ## Launch Model
 Public UNC release, but do not launch an empty map. Seed genuine initial hangouts created by real students before broad promotion.
