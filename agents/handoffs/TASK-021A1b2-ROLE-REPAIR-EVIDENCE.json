@@ -1,0 +1,662 @@
+{
+  "tested_source": "6a692ffaf0d4d3f63e5603edde0522907008b70d",
+  "history": "24:20260927000400",
+  "sql_suites": [
+    {
+      "suite": "identity_rls.test.sql",
+      "assertions": 53
+    },
+    {
+      "suite": "onboarding.test.sql",
+      "assertions": 22
+    },
+    {
+      "suite": "profile_enrichment.test.sql",
+      "assertions": 37
+    },
+    {
+      "suite": "local_account_enforcement.test.sql",
+      "assertions": 33
+    },
+    {
+      "suite": "private_pilot_admission_authority.test.sql",
+      "assertions": 74
+    },
+    {
+      "suite": "hangout_foundation.test.sql",
+      "assertions": 114
+    },
+    {
+      "suite": "local_global_blocks.test.sql",
+      "assertions": 62
+    },
+    {
+      "suite": "local_hangout_chat.test.sql",
+      "assertions": 73
+    },
+    {
+      "suite": "local_safety_reports.test.sql",
+      "assertions": 43
+    },
+    {
+      "suite": "local_moderation_review.test.sql",
+      "assertions": 51
+    },
+    {
+      "suite": "local_hangout_disable.test.sql",
+      "assertions": 75
+    },
+    {
+      "suite": "local_cohost_authority.test.sql",
+      "assertions": 68
+    },
+    {
+      "suite": "local_large_hangout_safeguards.test.sql",
+      "assertions": 64
+    },
+    {
+      "suite": "pilot-admission-source-safety.test.sql",
+      "assertions": 94
+    },
+    {
+      "suite": "mandatory operator lock results",
+      "assertions": 13
+    },
+    {
+      "suite": "B1 owner",
+      "assertions": 49
+    }
+  ],
+  "sql_assertions": 925,
+  "serial_node": {
+    "tests": 3,
+    "pass": 3,
+    "fail": 0,
+    "skipped": 0,
+    "cancelled": 0,
+    "duration_ms": 78458.514583
+  },
+  "actual_role_concurrency": {
+    "observed_lock_cases": [
+      {
+        "race": "b2_reader_account_loss_first",
+        "holder_pid": 462,
+        "waiter_pid": 463,
+        "waiting_lock_types": ["transactionid"]
+      },
+      {
+        "race": "b2_reader_first",
+        "holder_pid": 504,
+        "waiter_pid": 505,
+        "waiting_lock_types": ["transactionid"]
+      },
+      {
+        "race": "b2_retained_retry_gate_loss_first",
+        "holder_pid": 553,
+        "waiter_pid": 554,
+        "waiting_lock_types": ["transactionid"]
+      },
+      {
+        "race": "b2_retained_retry_first",
+        "holder_pid": 590,
+        "waiter_pid": 589,
+        "waiting_lock_types": ["transactionid"]
+      },
+      {
+        "race": "b2_operator_role_loss_first",
+        "holder_pid": 639,
+        "waiter_pid": 640,
+        "waiting_lock_types": ["transactionid"]
+      },
+      {
+        "race": "b2_operator_queue_first",
+        "holder_pid": 684,
+        "waiter_pid": 683,
+        "waiting_lock_types": ["transactionid"]
+      },
+      {
+        "race": "b2_operator_gate_delete_loss_first",
+        "holder_pid": 727,
+        "waiter_pid": 726,
+        "waiting_lock_types": ["transactionid"]
+      },
+      {
+        "race": "b2_operator_gate_delete_operation_first",
+        "holder_pid": 765,
+        "waiter_pid": 766,
+        "waiting_lock_types": ["transactionid"]
+      },
+      {
+        "race": "b2_operator_gate_disable_loss_first",
+        "holder_pid": 808,
+        "waiter_pid": 809,
+        "waiting_lock_types": ["transactionid"]
+      },
+      {
+        "race": "b2_operator_gate_disable_operation_first",
+        "holder_pid": 849,
+        "waiter_pid": 850,
+        "waiting_lock_types": ["transactionid"]
+      },
+      {
+        "race": "b2_operator_account_suspend_loss_first",
+        "holder_pid": 893,
+        "waiter_pid": 894,
+        "waiting_lock_types": ["transactionid"]
+      },
+      {
+        "race": "b2_operator_account_suspend_operation_first",
+        "holder_pid": 933,
+        "waiter_pid": 934,
+        "waiting_lock_types": ["transactionid"]
+      },
+      {
+        "race": "b2_operator_account_delete_loss_first",
+        "holder_pid": 974,
+        "waiter_pid": 975,
+        "waiting_lock_types": ["transactionid"]
+      },
+      {
+        "race": "b2_operator_account_delete_operation_first",
+        "holder_pid": 1031,
+        "waiter_pid": 1030,
+        "waiting_lock_types": ["transactionid"]
+      }
+    ],
+    "new_pilot_locks": false,
+    "scope": "existing source actor, retained exact retry safety gate, unadmitted operator role; no B3 admission/write claim"
+  },
+  "real_auth_postgrest": {
+    "cases": [
+      {
+        "isolation": "repeatable read",
+        "message": "Hangout chat unavailable",
+        "kind": "actual authenticated SQL"
+      },
+      {
+        "isolation": "repeatable read",
+        "message": "Hangout operation not permitted",
+        "kind": "actual authenticated SQL"
+      },
+      {
+        "isolation": "repeatable read",
+        "message": "People operation unavailable",
+        "kind": "actual authenticated SQL"
+      },
+      {
+        "isolation": "repeatable read",
+        "message": "People operation unavailable",
+        "kind": "actual authenticated SQL"
+      },
+      {
+        "isolation": "repeatable read",
+        "message": "Hangout operation not permitted",
+        "kind": "actual authenticated SQL"
+      },
+      {
+        "isolation": "serializable",
+        "message": "Hangout chat unavailable",
+        "kind": "actual authenticated SQL"
+      },
+      {
+        "isolation": "serializable",
+        "message": "Hangout operation not permitted",
+        "kind": "actual authenticated SQL"
+      },
+      {
+        "isolation": "serializable",
+        "message": "People operation unavailable",
+        "kind": "actual authenticated SQL"
+      },
+      {
+        "isolation": "serializable",
+        "message": "People operation unavailable",
+        "kind": "actual authenticated SQL"
+      },
+      {
+        "isolation": "serializable",
+        "message": "Hangout operation not permitted",
+        "kind": "actual authenticated SQL"
+      },
+      {
+        "rpc": "submit_safety_report",
+        "status": 403,
+        "code": "42501",
+        "message": "Safety report unavailable"
+      },
+      {
+        "rpc": "submit_safety_report",
+        "status": 403,
+        "code": "42501",
+        "message": "Safety report unavailable"
+      },
+      {
+        "rpc": "read_hangout_messages",
+        "status": 403,
+        "code": "42501",
+        "message": "Hangout chat unavailable"
+      },
+      {
+        "rpc": "submit_safety_report",
+        "status": 403,
+        "code": "42501",
+        "message": "Safety report unavailable"
+      },
+      {
+        "case": "ordinary-current-hangout-report",
+        "never_participated": true,
+        "provenance": "current_hangout",
+        "receipt_keys": ["receipt_id", "submitted_at"],
+        "host_revoke_absence_and_hangouts_off_new_acquisition_denied": true,
+        "new_denial_report_ledger_growth": 0,
+        "exact_receipt_independent": true
+      },
+      {
+        "rpc": "read_hangout_messages",
+        "status": 403,
+        "code": "42501",
+        "message": "Hangout chat unavailable"
+      },
+      {
+        "rpc": "read_hangout_messages",
+        "status": 403,
+        "code": "42501",
+        "message": "Hangout chat unavailable"
+      },
+      {
+        "rpc": "list_hangout_cohosts",
+        "status": 403,
+        "code": "42501",
+        "message": "Hangout operation not permitted"
+      },
+      {
+        "rpc": "submit_safety_report",
+        "status": 403,
+        "code": "42501",
+        "message": "Safety report unavailable"
+      },
+      {
+        "rpc": "submit_safety_report",
+        "status": 403,
+        "code": "42501",
+        "message": "Safety report unavailable"
+      },
+      {
+        "rpc": "submit_safety_report",
+        "status": 403,
+        "code": "42501",
+        "message": "Safety report unavailable"
+      },
+      {
+        "rpc": "list_moderation_reports",
+        "status": 403,
+        "code": "42501",
+        "message": "Moderation unavailable"
+      },
+      {
+        "rpc": "get_moderation_report",
+        "status": 403,
+        "code": "42501",
+        "message": "Moderation unavailable"
+      },
+      {
+        "rpc": "list_moderation_reports",
+        "status": 403,
+        "code": "42501",
+        "message": "Moderation unavailable"
+      },
+      {
+        "rpc": "get_moderation_report",
+        "status": 403,
+        "code": "42501",
+        "message": "Moderation unavailable"
+      },
+      {
+        "rpc": "transition_moderation_case",
+        "status": 403,
+        "code": "42501",
+        "message": "Moderation unavailable"
+      },
+      {
+        "rpc": "apply_account_moderation_action",
+        "status": 403,
+        "code": "42501",
+        "message": "Moderation unavailable"
+      },
+      {
+        "rpc": "apply_hangout_moderation_action",
+        "status": 403,
+        "code": "42501",
+        "message": "Moderation unavailable"
+      },
+      {
+        "rpc": "list_moderation_reports",
+        "status": 403,
+        "code": "42501",
+        "message": "Moderation unavailable"
+      },
+      {
+        "rpc": "get_moderation_report",
+        "status": 403,
+        "code": "42501",
+        "message": "Moderation unavailable"
+      },
+      {
+        "rpc": "transition_moderation_case",
+        "status": 403,
+        "code": "42501",
+        "message": "Moderation unavailable"
+      },
+      {
+        "rpc": "apply_account_moderation_action",
+        "status": 403,
+        "code": "42501",
+        "message": "Moderation unavailable"
+      },
+      {
+        "rpc": "apply_hangout_moderation_action",
+        "status": 403,
+        "code": "42501",
+        "message": "Moderation unavailable"
+      },
+      {
+        "rpc": "list_moderation_reports",
+        "status": 403,
+        "code": "42501",
+        "message": "Moderation unavailable"
+      },
+      {
+        "rpc": "get_moderation_report",
+        "status": 403,
+        "code": "42501",
+        "message": "Moderation unavailable"
+      },
+      {
+        "rpc": "transition_moderation_case",
+        "status": 403,
+        "code": "42501",
+        "message": "Moderation unavailable"
+      },
+      {
+        "rpc": "apply_account_moderation_action",
+        "status": 403,
+        "code": "42501",
+        "message": "Moderation unavailable"
+      },
+      {
+        "rpc": "apply_hangout_moderation_action",
+        "status": 403,
+        "code": "42501",
+        "message": "Moderation unavailable"
+      },
+      {
+        "rpc": "list_moderation_reports",
+        "status": 403,
+        "code": "42501",
+        "message": "Moderation unavailable"
+      },
+      {
+        "rpc": "get_moderation_report",
+        "status": 403,
+        "code": "42501",
+        "message": "Moderation unavailable"
+      },
+      {
+        "rpc": "transition_moderation_case",
+        "status": 403,
+        "code": "42501",
+        "message": "Moderation unavailable"
+      },
+      {
+        "rpc": "apply_account_moderation_action",
+        "status": 403,
+        "code": "42501",
+        "message": "Moderation unavailable"
+      },
+      {
+        "rpc": "apply_hangout_moderation_action",
+        "status": 403,
+        "code": "42501",
+        "message": "Moderation unavailable"
+      },
+      {
+        "isolation": "repeatable read",
+        "kind": "eligible actual authenticated operator SQL",
+        "read_committed_control": "success",
+        "code": "42501",
+        "message": "Moderation unavailable"
+      },
+      {
+        "isolation": "serializable",
+        "kind": "eligible actual authenticated operator SQL",
+        "read_committed_control": "success",
+        "code": "42501",
+        "message": "Moderation unavailable"
+      },
+      {
+        "rpc": "apply_account_moderation_action",
+        "status": 403,
+        "code": "42501",
+        "message": "Moderation unavailable"
+      },
+      {
+        "rpc": "apply_account_moderation_action",
+        "status": 403,
+        "code": "42501",
+        "message": "Moderation unavailable"
+      },
+      {
+        "rpc": "submit_safety_report",
+        "status": 403,
+        "code": "42501",
+        "message": "Safety report unavailable"
+      },
+      {
+        "rpc": "list_my_retained_hangout_ids",
+        "status": 403,
+        "code": "42501",
+        "message": "Safety operation unavailable"
+      },
+      {
+        "rpc": "submit_safety_report",
+        "status": 403,
+        "code": "42501",
+        "message": "Safety report unavailable"
+      },
+      {
+        "case": "source-and-retained-output",
+        "roster_keys": ["account_id", "role_label"],
+        "receipt_keys": ["receipt_id", "submitted_at"],
+        "former_body_retained": true,
+        "former_author_id": null,
+        "blocked_body_omitted_before_limit": true,
+        "operator_detail_keys": [
+          "case_note",
+          "case_revision",
+          "case_state",
+          "category",
+          "disposition",
+          "narrative",
+          "provenance_kind",
+          "provenance_ref_id",
+          "report_id",
+          "reporter_id",
+          "submitted_at",
+          "target_campus_id",
+          "target_disabled",
+          "target_id",
+          "target_status",
+          "target_type"
+        ],
+        "old_tokens_used": true
+      }
+    ]
+  },
+  "negative_control_only": {
+    "negative_control_only": true,
+    "original_source": "20260924000100_local_moderation_review.sql",
+    "actual_sql_role": "postgres",
+    "synthetic_auth_uid": "b2600000-0000-4000-8000-000000000001",
+    "missing_role_lock_result": false,
+    "delete_wait": {
+      "holder_pid": 362,
+      "waiter_pid": 363,
+      "ungranted_lock_types": ["transactionid"]
+    },
+    "explicit_barrier_wait": {
+      "holder_pid": 360,
+      "waiter_pid": 363,
+      "ungranted_lock_types": ["advisory"]
+    },
+    "replacement_delete_committed_while_diagnostic_transaction_open": true,
+    "shipped_function_changed": false,
+    "grants_added": false
+  },
+  "eligible_operator_isolation": {
+    "read_committed_positive_control": true,
+    "repeatable_read_denial": "42501/Moderation unavailable",
+    "serializable_denial": "42501/Moderation unavailable",
+    "no_audit_or_state_change": true
+  },
+  "admin_action_retry": {
+    "ban_success_and_exact_retry": true,
+    "reinstate_success_and_exact_retry": true,
+    "each_admin_to_moderator_replay_denies": "HTTP403/42501/Moderation unavailable",
+    "active_valid_moderator_retained": true,
+    "no_added_action_audit_target_change": true
+  },
+  "five_caller_loss_matrix": {
+    "role_missing": 5,
+    "gate_missing": 5,
+    "actor_suspended": 5,
+    "gate_disabled": 5,
+    "three_exact_retries_included": true,
+    "exact_denials": "HTTP403/42501/Moderation unavailable",
+    "pre_post_exact_state_census_equal": true
+  },
+  "unexpected_abort_or_timeout_accepted_as_success": false,
+  "upgrade": {
+    "prior_history23_verified": true,
+    "only_new00400_streamed": true,
+    "profile_optional_storage_object_json_preserved": true,
+    "defaults_false_revision1_preserved": true,
+    "direct_SQL_did_not_add_CLI_receipt": true,
+    "subsequent_fresh24_reset_passed": true
+  },
+  "catalog": {
+    "functions": 140,
+    "relations": 52,
+    "all_inherited_function_ABI_path_volatility_security_client_service_EXECUTE_match": true,
+    "all_inherited_relation_RLS_client_table_SELECT_match": true,
+    "direct_callers": 5,
+    "mandatory_FOUND_checks": 3
+  },
+  "static": {
+    "changed_Node_ESLint": "pass",
+    "changed_files_Prettier": "pass",
+    "new_app_typecheck_or_build_claim": false
+  },
+  "db_lint": {
+    "repository_script": "pass",
+    "results": [],
+    "initial_default_pnpm_auto_install": "aborted before removal/install (noTTY); no dependency change",
+    "final_env": "pnpm_config_verify_deps_before_run=false"
+  },
+  "cleanup": {
+    "final_guarded_reset": "pass24/max00400",
+    "full_zero_fixture_census": true,
+    "all_original_and_pilot_gates_off": true,
+    "availability_and_thirteen_capability_revisions": 1,
+    "normal_supabase_stop": "success/backups enabled",
+    "containers_after_stop": 0,
+    "normal_existing_VM_stop": "VZ stopped2026-09-27T14:39:01-04:00; shutdown14:39:02",
+    "final_global_scan": "2026-09-27T14:39:20-04:00",
+    "VM": "Stopped",
+    "all_named_Pals_hostagents_absent": true,
+    "ha_pid_and_ha_sock_absent": true,
+    "actual_disk_vz_efi_unheld": true,
+    "API54321_DB54322_mail54324_unheld": true,
+    "historical_non_hostagent_limactl": "PID56460 since2026-09-23 untouched; no ownership/retirement claim"
+  },
+  "limitations": [
+    "B3 ordinary admission mutation serialization pending",
+    "A1c full deferred closure and historical db:verify pending",
+    "A2 app admission ABI pending",
+    "no new owner HTTP/Storage evidence",
+    "no pilot/hosted/deployable claim"
+  ],
+  "runtime": {
+    "CLI": "2.117.0",
+    "VM": "existing pals-task002",
+    "LIMA_HOME": "/private/tmp/pals-lima",
+    "mounts": [],
+    "networks": [],
+    "additional_disks": [],
+    "rootless_UID": 501,
+    "exclusive_owner_literal": "TASK-021A1b2",
+    "DO_NOT_TRACK": "1",
+    "fresh_preflight": "2026-09-27T14:29:32-04:00; globalhostagent/disk/EFI/ports/registrations absent",
+    "normal_VM_ready": "2026-09-27T14:29:48-04:00",
+    "new_images_mounts_recovery_or_hosted_actions": false,
+    "services": [
+      {
+        "name": "/supabase_db_pals-local",
+        "image": "public.ecr.aws/supabase/postgres:17.6.1.167",
+        "image_id": "sha256:6942962433a569e87f228b4d4ab7e11db5deca64e43babb3a038443ad6c4f1bb",
+        "mounts": [
+          {
+            "Type": "volume",
+            "Name": "supabase_db_pals-local",
+            "Source": "/home/ellanguyen.guest/.local/share/docker/volumes/supabase_db_pals-local/_data",
+            "Destination": "/var/lib/postgresql/data",
+            "Driver": "local",
+            "Mode": "z",
+            "RW": true,
+            "Propagation": ""
+          }
+        ]
+      },
+      {
+        "name": "/supabase_storage_pals-local",
+        "image": "public.ecr.aws/supabase/storage-api:v1.72.1",
+        "image_id": "sha256:105a2584129c9600aebed6f5ac49ca4371c92b996ecd1af7179750333e9e2120",
+        "mounts": [
+          {
+            "Type": "volume",
+            "Name": "supabase_storage_pals-local",
+            "Source": "/home/ellanguyen.guest/.local/share/docker/volumes/supabase_storage_pals-local/_data",
+            "Destination": "/mnt",
+            "Driver": "local",
+            "Mode": "z",
+            "RW": true,
+            "Propagation": ""
+          }
+        ]
+      },
+      {
+        "name": "/supabase_rest_pals-local",
+        "image": "public.ecr.aws/supabase/postgrest:v16.2",
+        "image_id": "sha256:85258123312dc496ad4c2ed832154a65e9746f84df0d6d09b44229ff9230c08e",
+        "mounts": []
+      },
+      {
+        "name": "/supabase_inbucket_pals-local",
+        "image": "public.ecr.aws/supabase/mailpit:v1.30.2",
+        "image_id": "sha256:37a38e48e9338cd7e89dfeb487f37b02ebfcd9cb23111bed2d345e79d37d6dd6",
+        "mounts": []
+      },
+      {
+        "name": "/supabase_auth_pals-local",
+        "image": "public.ecr.aws/supabase/gotrue:v2.196.0",
+        "image_id": "sha256:c0c25187a6b835e65a6f6e6c6b39d090e832d40e6de5186f2c038e0411944232",
+        "mounts": []
+      },
+      {
+        "name": "/supabase_kong_pals-local",
+        "image": "public.ecr.aws/supabase/kong:2.8.1",
+        "image_id": "sha256:1b53405d8680a09d6f44494b7990bf7da2ea43f84a258c59717d4539abf09f6d",
+        "mounts": []
+      }
+    ]
+  }
+}

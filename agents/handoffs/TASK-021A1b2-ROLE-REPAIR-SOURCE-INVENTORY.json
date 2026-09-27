@@ -1,0 +1,2073 @@
+{
+  "kind": "static final function/caller allocation for repaired24 history; runtime catalog verification recorded separately",
+  "migration_count": 24,
+  "functions": [
+    {
+      "name": "private.account_is_active",
+      "arguments": "",
+      "final_source": "20260921000100_identity_foundation.sql",
+      "returns": "returns boolean",
+      "calls": [],
+      "callers": ["public.get_access_state"],
+      "allocation": "B1 unchanged owner/identity",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.advance_large_hangout_epoch",
+      "arguments": "",
+      "final_source": "20260925000100_local_large_hangout_safeguards.sql",
+      "returns": "returns trigger",
+      "calls": [],
+      "callers": [],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.bump_profile_revision",
+      "arguments": "",
+      "final_source": "20260922000200_owner_profile_enrichment.sql",
+      "returns": "returns trigger",
+      "calls": [],
+      "callers": [],
+      "allocation": "B1 unchanged owner/identity",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.can_read_hangout",
+      "arguments": "target uuid, private_details boolean default false",
+      "final_source": "20260927000300_pilot_source_safety.sql",
+      "returns": "returns boolean",
+      "calls": [
+        "private.ready_campus",
+        "private.ready_subject_campus",
+        "private.safety_pair_blocked"
+      ],
+      "callers": [
+        "private.can_read_hangout_roster",
+        "public.create_hangout",
+        "public.get_hangout_large_state",
+        "public.get_hangout_participant_state",
+        "public.list_hangout_cohosts",
+        "public.list_hangout_roster_roles",
+        "public.list_notifications",
+        "public.query_saved_hangouts",
+        "public.submit_safety_report"
+      ],
+      "allocation": "B2 source/retained projection",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.can_read_hangout_roster",
+      "arguments": "target uuid, subject uuid",
+      "final_source": "20260923000600_local_global_blocks.sql",
+      "returns": "returns boolean",
+      "calls": [
+        "private.can_read_hangout",
+        "private.ready_subject_campus",
+        "private.safety_pair_blocked"
+      ],
+      "callers": [
+        "public.list_hangout_roster_roles",
+        "public.list_notifications",
+        "public.query_saved_hangouts"
+      ],
+      "allocation": "B2 source/retained projection",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.chat_authorized",
+      "arguments": "p_hangout_id uuid",
+      "final_source": "20260927000300_pilot_source_safety.sql",
+      "returns": "returns boolean",
+      "calls": [
+        "private.pilot_capability_enabled",
+        "private.ready_campus",
+        "private.ready_subject_campus",
+        "private.safety_pair_blocked"
+      ],
+      "callers": ["private.chat_require", "public.list_notifications"],
+      "allocation": "B2 source/retained projection",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.chat_immutable_message",
+      "arguments": "",
+      "final_source": "20260923000200_local_hangout_chat.sql",
+      "returns": "returns trigger",
+      "calls": [],
+      "callers": [],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.chat_lock_evidence",
+      "arguments": "p_hangout_id uuid, p_actor uuid, p_campus uuid",
+      "final_source": "20260923000200_local_hangout_chat.sql",
+      "returns": "returns void",
+      "calls": [],
+      "callers": ["public.send_hangout_message"],
+      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.chat_require",
+      "arguments": "p_hangout_id uuid",
+      "final_source": "20260923000200_local_hangout_chat.sql",
+      "returns": "returns boolean",
+      "calls": ["private.chat_authorized"],
+      "callers": [
+        "public.read_hangout_messages",
+        "public.send_hangout_message"
+      ],
+      "allocation": "B2 source/retained projection",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.check_hangout_revision",
+      "arguments": "h public.hangouts, expected bigint",
+      "final_source": "20260922000300_hangout_foundation.sql",
+      "returns": "returns void",
+      "calls": [],
+      "callers": [
+        "public.cancel_hangout",
+        "public.demote_hangout_cohost",
+        "public.edit_hangout",
+        "public.promote_hangout_cohost",
+        "public.remove_hangout_participant",
+        "public.set_hangout_joining",
+        "public.step_down_hangout_cohost"
+      ],
+      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.clear_departing_cohost",
+      "arguments": "",
+      "final_source": "20260925000200_local_cohost_authority.sql",
+      "returns": "returns trigger",
+      "calls": [],
+      "callers": [],
+      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.clear_reopened_case_sanction",
+      "arguments": "",
+      "final_source": "20260924000300_local_hangout_disable.sql",
+      "returns": "returns trigger",
+      "calls": [],
+      "callers": [],
+      "allocation": "B2 unchanged retained/operator",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.dm_active_caller",
+      "arguments": "",
+      "final_source": "20260923000300_local_direct_messages.sql",
+      "returns": "returns boolean",
+      "calls": ["private.people_active_owner"],
+      "callers": ["private.dm_require", "public.transition_dm"],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.dm_eligible",
+      "arguments": "p_peer uuid",
+      "final_source": "20260923000300_local_direct_messages.sql",
+      "returns": "returns boolean",
+      "calls": [
+        "private.dm_enabled",
+        "private.people_active_owner",
+        "private.people_enabled",
+        "private.people_ready_campus",
+        "private.people_visible"
+      ],
+      "callers": [
+        "public.create_dm_request",
+        "public.list_dm_inbox",
+        "public.list_notifications",
+        "public.read_dm_messages",
+        "public.send_dm_message",
+        "public.transition_dm"
+      ],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.dm_enabled",
+      "arguments": "",
+      "final_source": "20260923000300_local_direct_messages.sql",
+      "returns": "returns boolean",
+      "calls": [],
+      "callers": [
+        "private.dm_eligible",
+        "private.dm_require",
+        "public.list_notifications",
+        "public.transition_dm"
+      ],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.dm_immutable",
+      "arguments": "",
+      "final_source": "20260923000300_local_direct_messages.sql",
+      "returns": "returns trigger",
+      "calls": [],
+      "callers": [],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.dm_lock_evidence",
+      "arguments": "p_actor uuid,p_peer uuid",
+      "final_source": "20260923000300_local_direct_messages.sql",
+      "returns": "returns void",
+      "calls": [],
+      "callers": [
+        "public.create_dm_request",
+        "public.send_dm_message",
+        "public.transition_dm"
+      ],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.dm_require",
+      "arguments": "",
+      "final_source": "20260923000300_local_direct_messages.sql",
+      "returns": "returns boolean",
+      "calls": ["private.dm_active_caller", "private.dm_enabled"],
+      "callers": [
+        "public.get_dm_status",
+        "public.list_dm_inbox",
+        "public.read_dm_messages"
+      ],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.effective_hangout_cohost",
+      "arguments": "p_hangout_id uuid, p_actor uuid",
+      "final_source": "20260927000300_pilot_source_safety.sql",
+      "returns": "returns boolean",
+      "calls": [
+        "private.hangouts_enabled",
+        "private.pilot_capability_enabled",
+        "private.ready_subject_campus",
+        "private.safety_pair_blocked"
+      ],
+      "callers": [
+        "public.edit_hangout",
+        "public.list_hangout_roster_roles",
+        "public.remove_hangout_participant",
+        "public.set_hangout_joining",
+        "public.step_down_hangout_cohost"
+      ],
+      "allocation": "B2 source/retained projection",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.enforce_hangout_ownership",
+      "arguments": "",
+      "final_source": "20260925000200_local_cohost_authority.sql",
+      "returns": "returns trigger",
+      "calls": [],
+      "callers": [],
+      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.enforce_joined_host",
+      "arguments": "",
+      "final_source": "20260922000300_hangout_foundation.sql",
+      "returns": "returns trigger",
+      "calls": [],
+      "callers": [],
+      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.enforce_participant_transition",
+      "arguments": "",
+      "final_source": "20260922000300_hangout_foundation.sql",
+      "returns": "returns trigger",
+      "calls": [],
+      "callers": [],
+      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.friendship_eligible",
+      "arguments": "target uuid",
+      "final_source": "20260923000100_local_friendship.sql",
+      "returns": "returns boolean",
+      "calls": [
+        "private.people_enabled",
+        "private.people_ready_campus",
+        "private.people_visible"
+      ],
+      "callers": [
+        "public.create_friend_request",
+        "public.list_notifications",
+        "public.transition_friendship"
+      ],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.friendship_enabled",
+      "arguments": "",
+      "final_source": "20260923000100_local_friendship.sql",
+      "returns": "returns boolean",
+      "calls": [],
+      "callers": [
+        "public.create_friend_request",
+        "public.get_friendship",
+        "public.list_friendships",
+        "public.list_notifications",
+        "public.transition_friendship"
+      ],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.friendship_lock_eligibility",
+      "arguments": "actor uuid, target uuid",
+      "final_source": "20260923000100_local_friendship.sql",
+      "returns": "returns void",
+      "calls": [],
+      "callers": [
+        "public.create_friend_request",
+        "public.transition_friendship"
+      ],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.friendship_lock_pair",
+      "arguments": "a uuid, b uuid",
+      "final_source": "20260923000100_local_friendship.sql",
+      "returns": "returns void",
+      "calls": [],
+      "callers": [
+        "public.create_dm_request",
+        "public.create_friend_request",
+        "public.send_dm_message",
+        "public.set_safety_block",
+        "public.submit_safety_report",
+        "public.transition_dm",
+        "public.transition_friendship"
+      ],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.hangouts_enabled",
+      "arguments": "",
+      "final_source": "20260922000300_hangout_foundation.sql",
+      "returns": "returns boolean",
+      "calls": [],
+      "callers": [
+        "private.effective_hangout_cohost",
+        "private.notification_emit_hangout",
+        "private.ready_campus",
+        "public.get_hangout_large_state",
+        "public.query_saved_hangouts",
+        "public.submit_safety_report"
+      ],
+      "allocation": "B2 source/retained projection",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.has_verified_membership",
+      "arguments": "",
+      "final_source": "20260922000100_verified_onboarding.sql",
+      "returns": "returns boolean",
+      "calls": [],
+      "callers": ["public.get_access_state"],
+      "allocation": "B1 unchanged owner/identity",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.lock_hangout",
+      "arguments": "target uuid",
+      "final_source": "20260924000300_local_hangout_disable.sql",
+      "returns": "returns public.hangouts",
+      "calls": ["private.ready_campus", "private.safety_lock_hangout_evidence"],
+      "callers": [
+        "public.cancel_hangout",
+        "public.demote_hangout_cohost",
+        "public.edit_hangout",
+        "public.join_hangout",
+        "public.leave_hangout",
+        "public.promote_hangout_cohost",
+        "public.remove_hangout_participant",
+        "public.send_hangout_message",
+        "public.set_hangout_joining",
+        "public.step_down_hangout_cohost"
+      ],
+      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.moderation_actor",
+      "arguments": "",
+      "final_source": "20260927000400_moderation_mandatory_lock_results.sql",
+      "returns": "returns uuid",
+      "calls": [],
+      "callers": [
+        "public.apply_account_moderation_action",
+        "public.apply_hangout_moderation_action",
+        "public.get_moderation_report",
+        "public.list_moderation_reports",
+        "public.transition_moderation_case"
+      ],
+      "allocation": "B2 mandatory gate/account/role lock-result repair; existing graph and caller allowlists unchanged",
+      "insert_table_dependencies": [],
+      "source_sha256": "6806ae080cf3c68c1e5426fb15994523c210cba60597d5c6639d4cdd9ff60e47"
+    },
+    {
+      "name": "private.moderation_report_allowed",
+      "arguments": "p_actor uuid,p_report uuid, p_for_action boolean default false",
+      "final_source": "20260924000100_local_moderation_review.sql",
+      "returns": "returns boolean",
+      "calls": [],
+      "callers": [
+        "public.apply_account_moderation_action",
+        "public.get_moderation_report",
+        "public.list_moderation_reports",
+        "public.transition_moderation_case"
+      ],
+      "allocation": "B2 unchanged retained/operator",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.notification_chat_source",
+      "arguments": "",
+      "final_source": "20260923000500_local_notifications_hangouts.sql",
+      "returns": "returns trigger",
+      "calls": ["private.notification_emit_hangout"],
+      "callers": [],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.notification_dm_message_source",
+      "arguments": "",
+      "final_source": "20260923000400_local_notifications_social.sql",
+      "returns": "returns trigger",
+      "calls": ["private.notification_emit"],
+      "callers": [],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.notification_dm_pair_source",
+      "arguments": "",
+      "final_source": "20260923000400_local_notifications_social.sql",
+      "returns": "returns trigger",
+      "calls": ["private.notification_emit"],
+      "callers": [],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.notification_emit",
+      "arguments": "p_recipient uuid,p_kind text,p_source uuid,p_target uuid,p_code text,p_actor uuid,p_category text",
+      "final_source": "20260923000400_local_notifications_social.sql",
+      "returns": "returns void",
+      "calls": [
+        "private.notification_enabled",
+        "private.notification_lock_recipient"
+      ],
+      "callers": [
+        "private.notification_dm_message_source",
+        "private.notification_dm_pair_source",
+        "private.notification_friend_source"
+      ],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": ["private.notification_items"]
+    },
+    {
+      "name": "private.notification_emit_hangout",
+      "arguments": "p_event uuid,p_hangout uuid,p_actor uuid,p_code text",
+      "final_source": "20260923000500_local_notifications_hangouts.sql",
+      "returns": "returns void",
+      "calls": [
+        "private.hangouts_enabled",
+        "private.notification_enabled",
+        "private.notification_lock_recipient"
+      ],
+      "callers": [
+        "private.notification_chat_source",
+        "public.cancel_hangout",
+        "public.edit_hangout",
+        "public.join_hangout",
+        "public.leave_hangout"
+      ],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": ["private.notification_items"]
+    },
+    {
+      "name": "private.notification_enabled",
+      "arguments": "",
+      "final_source": "20260923000400_local_notifications_social.sql",
+      "returns": "returns boolean",
+      "calls": [],
+      "callers": [
+        "private.notification_emit",
+        "private.notification_emit_hangout",
+        "private.notification_require_owner",
+        "public.mark_notification_read",
+        "public.set_notification_preference"
+      ],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.notification_friend_source",
+      "arguments": "",
+      "final_source": "20260923000400_local_notifications_social.sql",
+      "returns": "returns trigger",
+      "calls": ["private.notification_emit"],
+      "callers": [],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.notification_lock_recipient",
+      "arguments": "p_recipient uuid",
+      "final_source": "20260923000400_local_notifications_social.sql",
+      "returns": "returns void",
+      "calls": [],
+      "callers": [
+        "private.notification_emit",
+        "private.notification_emit_hangout",
+        "public.set_notification_preference"
+      ],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.notification_require_owner",
+      "arguments": "",
+      "final_source": "20260923000400_local_notifications_social.sql",
+      "returns": "returns uuid",
+      "calls": [
+        "private.notification_enabled",
+        "private.people_active_owner",
+        "private.people_require_read_committed"
+      ],
+      "callers": [
+        "public.get_notification_preferences",
+        "public.list_notifications",
+        "public.mark_notification_read"
+      ],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.people_active_owner",
+      "arguments": "",
+      "final_source": "20260922000400_people_text_directory.sql",
+      "returns": "returns boolean",
+      "calls": [],
+      "callers": [
+        "private.dm_active_caller",
+        "private.dm_eligible",
+        "private.notification_require_owner",
+        "public.create_friend_request",
+        "public.get_friendship",
+        "public.get_hangout_participant_state",
+        "public.get_people_preference",
+        "public.list_friendships",
+        "public.list_my_retained_hangout_ids",
+        "public.list_people_blocked_ids",
+        "public.mark_notification_read",
+        "public.set_notification_preference",
+        "public.set_people_preference",
+        "public.set_safety_block",
+        "public.submit_safety_report",
+        "public.transition_friendship"
+      ],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.people_enabled",
+      "arguments": "",
+      "final_source": "20260922000400_people_text_directory.sql",
+      "returns": "returns boolean",
+      "calls": [],
+      "callers": [
+        "private.dm_eligible",
+        "private.friendship_eligible",
+        "public.browse_people",
+        "public.get_people_detail",
+        "public.list_notifications",
+        "public.set_people_preference",
+        "public.set_safety_block",
+        "public.submit_safety_report"
+      ],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.people_ready_campus",
+      "arguments": "",
+      "final_source": "20260922000400_people_text_directory.sql",
+      "returns": "returns uuid",
+      "calls": ["public.get_access_state"],
+      "callers": [
+        "private.dm_eligible",
+        "private.friendship_eligible",
+        "public.browse_people",
+        "public.create_dm_request",
+        "public.create_friend_request",
+        "public.get_people_detail",
+        "public.set_people_preference",
+        "public.set_safety_block",
+        "public.submit_safety_report",
+        "public.transition_friendship"
+      ],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.people_require_read_committed",
+      "arguments": "",
+      "final_source": "20260922000400_people_text_directory.sql",
+      "returns": "returns void",
+      "calls": [],
+      "callers": [
+        "private.notification_require_owner",
+        "public.browse_people",
+        "public.create_dm_request",
+        "public.create_friend_request",
+        "public.get_friendship",
+        "public.get_people_detail",
+        "public.get_people_preference",
+        "public.list_friendships",
+        "public.list_my_retained_hangout_ids",
+        "public.list_people_blocked_ids",
+        "public.send_dm_message",
+        "public.set_notification_preference",
+        "public.set_people_preference",
+        "public.transition_dm",
+        "public.transition_friendship"
+      ],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.people_visible",
+      "arguments": "subject uuid, campus uuid",
+      "final_source": "20260922000400_people_text_directory.sql",
+      "returns": "returns boolean",
+      "calls": ["private.ready_subject_campus"],
+      "callers": [
+        "private.dm_eligible",
+        "private.friendship_eligible",
+        "public.browse_people",
+        "public.get_people_detail",
+        "public.set_safety_block",
+        "public.submit_safety_report"
+      ],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.pilot_caller_is_admitted",
+      "arguments": "",
+      "final_source": "20260927000100_private_pilot_admission_authority.sql",
+      "returns": "returns boolean",
+      "calls": ["private.pilot_is_available"],
+      "callers": ["public.get_access_state"],
+      "allocation": "A1a unchanged authority",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.pilot_capability_enabled",
+      "arguments": "p_key text",
+      "final_source": "20260927000100_private_pilot_admission_authority.sql",
+      "returns": "returns boolean",
+      "calls": ["private.pilot_is_available"],
+      "callers": [
+        "private.chat_authorized",
+        "private.effective_hangout_cohost",
+        "private.pilot_owner_subject_eligible",
+        "private.ready_campus",
+        "public.set_safety_block",
+        "public.submit_safety_report"
+      ],
+      "allocation": "A1a unchanged authority",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.pilot_evidence_lock",
+      "arguments": "",
+      "final_source": "20260927000100_private_pilot_admission_authority.sql",
+      "returns": "returns void",
+      "calls": [],
+      "callers": ["private.pilot_lock_owner_evidence"],
+      "allocation": "A1a unchanged authority",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.pilot_evidence_write_lock",
+      "arguments": "",
+      "final_source": "20260927000100_private_pilot_admission_authority.sql",
+      "returns": "returns void",
+      "calls": ["private.social_hangout_mutation_lock"],
+      "callers": ["private.pilot_lock_management"],
+      "allocation": "A1a unchanged authority",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.pilot_is_available",
+      "arguments": "",
+      "final_source": "20260927000100_private_pilot_admission_authority.sql",
+      "returns": "returns boolean",
+      "calls": [],
+      "callers": [
+        "private.pilot_caller_is_admitted",
+        "private.pilot_capability_enabled",
+        "private.pilot_owner_subject_eligible",
+        "private.ready_subject_campus",
+        "public.get_access_state"
+      ],
+      "allocation": "A1a unchanged authority",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.pilot_lock_management",
+      "arguments": "p_actor uuid,p_target uuid,p_policy_key text,p_manager_write boolean default false",
+      "final_source": "20260927000100_private_pilot_admission_authority.sql",
+      "returns": "returns void",
+      "calls": ["private.pilot_evidence_write_lock"],
+      "callers": [
+        "private.set_pilot_manager_fixture",
+        "public.set_pilot_account_admission",
+        "public.set_pilot_policy"
+      ],
+      "allocation": "A1a unchanged authority",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.pilot_lock_owner_evidence",
+      "arguments": "subject uuid",
+      "final_source": "20260927000200_pilot_owner_admission.sql",
+      "returns": "returns void",
+      "calls": [
+        "private.pilot_evidence_lock",
+        "private.pilot_owner_subject_eligible"
+      ],
+      "callers": [
+        "private.require_active_photo_write",
+        "private.require_active_profile_write"
+      ],
+      "allocation": "B1 unchanged owner/identity",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.pilot_onboarding_eligible",
+      "arguments": "",
+      "final_source": "20260927000200_pilot_owner_admission.sql",
+      "returns": "returns boolean",
+      "calls": ["private.pilot_owner_subject_eligible"],
+      "callers": [],
+      "allocation": "B1 unchanged owner/identity",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.pilot_owner_subject_eligible",
+      "arguments": "subject uuid",
+      "final_source": "20260927000200_pilot_owner_admission.sql",
+      "returns": "returns boolean",
+      "calls": [
+        "private.pilot_capability_enabled",
+        "private.pilot_is_available"
+      ],
+      "callers": [
+        "private.pilot_lock_owner_evidence",
+        "private.pilot_onboarding_eligible"
+      ],
+      "allocation": "B1 unchanged owner/identity",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.pilot_require_activation",
+      "arguments": "p_target uuid",
+      "final_source": "20260927000100_private_pilot_admission_authority.sql",
+      "returns": "returns void",
+      "calls": [],
+      "callers": ["public.set_pilot_account_admission"],
+      "allocation": "A1a unchanged authority",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.pilot_require_manager",
+      "arguments": "",
+      "final_source": "20260927000100_private_pilot_admission_authority.sql",
+      "returns": "returns uuid",
+      "calls": [],
+      "callers": [
+        "public.set_pilot_account_admission",
+        "public.set_pilot_policy"
+      ],
+      "allocation": "A1a unchanged authority",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.profile_trim",
+      "arguments": "value text",
+      "final_source": "20260922000200_owner_profile_enrichment.sql",
+      "returns": "returns text",
+      "calls": [],
+      "callers": [
+        "private.set_pilot_manager_fixture",
+        "private.valid_profile_list",
+        "private.valid_profile_prompts",
+        "private.validate_hangout_input",
+        "private.validate_hangout_instructions",
+        "public.apply_account_moderation_action",
+        "public.apply_hangout_moderation_action",
+        "public.create_dm_request",
+        "public.create_hangout",
+        "public.edit_hangout",
+        "public.send_dm_message",
+        "public.send_hangout_message",
+        "public.set_pilot_account_admission",
+        "public.set_pilot_policy",
+        "public.submit_safety_report",
+        "public.transition_dm",
+        "public.transition_moderation_case"
+      ],
+      "allocation": "B1 unchanged owner/identity",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.protect_profile_photo_delete",
+      "arguments": "",
+      "final_source": "20260922000200_owner_profile_enrichment.sql",
+      "returns": "returns trigger",
+      "calls": [],
+      "callers": [],
+      "allocation": "B1 unchanged owner/identity",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.provision_account",
+      "arguments": "",
+      "final_source": "20260921000100_identity_foundation.sql",
+      "returns": "returns trigger",
+      "calls": [],
+      "callers": [],
+      "allocation": "B1 unchanged owner/identity",
+      "insert_table_dependencies": ["public.accounts", "public.profiles"]
+    },
+    {
+      "name": "private.ready_campus",
+      "arguments": "",
+      "final_source": "20260927000300_pilot_source_safety.sql",
+      "returns": "returns uuid",
+      "calls": [
+        "private.hangouts_enabled",
+        "private.pilot_capability_enabled",
+        "public.get_access_state"
+      ],
+      "callers": [
+        "private.can_read_hangout",
+        "private.chat_authorized",
+        "private.lock_hangout",
+        "public.create_hangout",
+        "public.get_hangout_large_state",
+        "public.get_hangout_participant_state",
+        "public.list_hangout_cohosts",
+        "public.query_saved_hangouts"
+      ],
+      "allocation": "B2 source/retained projection",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.ready_subject_campus",
+      "arguments": "subject uuid,campus uuid",
+      "final_source": "20260927000200_pilot_owner_admission.sql",
+      "returns": "returns boolean",
+      "calls": ["private.pilot_is_available"],
+      "callers": [
+        "private.can_read_hangout",
+        "private.can_read_hangout_roster",
+        "private.chat_authorized",
+        "private.effective_hangout_cohost",
+        "private.people_visible",
+        "public.promote_hangout_cohost",
+        "public.read_hangout_messages",
+        "public.remove_hangout_participant"
+      ],
+      "allocation": "B1 unchanged owner/identity",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.record_large_hangout_join",
+      "arguments": "p_hangout_id uuid",
+      "final_source": "20260925000100_local_large_hangout_safeguards.sql",
+      "returns": "returns void",
+      "calls": [],
+      "callers": ["public.join_hangout"],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": ["private.large_hangout_signals"]
+    },
+    {
+      "name": "private.reject_client_profile_photo_update",
+      "arguments": "",
+      "final_source": "20260927000200_pilot_owner_admission.sql",
+      "returns": "returns trigger",
+      "calls": [],
+      "callers": [],
+      "allocation": "B1 unchanged owner/identity",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.reject_large_hangout_signal_change",
+      "arguments": "",
+      "final_source": "20260925000100_local_large_hangout_safeguards.sql",
+      "returns": "returns trigger",
+      "calls": [],
+      "callers": [],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.reject_moderation_evidence_change",
+      "arguments": "",
+      "final_source": "20260924000200_local_account_enforcement.sql",
+      "returns": "returns trigger",
+      "calls": [],
+      "callers": [],
+      "allocation": "B2 unchanged retained/operator",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.reject_pilot_evidence_change",
+      "arguments": "",
+      "final_source": "20260927000100_private_pilot_admission_authority.sql",
+      "returns": "returns trigger",
+      "calls": [],
+      "callers": [],
+      "allocation": "A1a unchanged authority",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.require_active_photo_write",
+      "arguments": "",
+      "final_source": "20260927000200_pilot_owner_admission.sql",
+      "returns": "returns trigger",
+      "calls": ["private.pilot_lock_owner_evidence"],
+      "callers": [],
+      "allocation": "B1 unchanged owner/identity",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.require_active_profile_write",
+      "arguments": "",
+      "final_source": "20260927000200_pilot_owner_admission.sql",
+      "returns": "returns trigger",
+      "calls": ["private.pilot_lock_owner_evidence"],
+      "callers": [],
+      "allocation": "B1 unchanged owner/identity",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.require_active_student_source_write",
+      "arguments": "",
+      "final_source": "20260924000200_local_account_enforcement.sql",
+      "returns": "returns trigger",
+      "calls": [],
+      "callers": [],
+      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.safety_enabled",
+      "arguments": "",
+      "final_source": "20260923000600_local_global_blocks.sql",
+      "returns": "returns boolean",
+      "calls": [],
+      "callers": [
+        "public.get_hangout_participant_state",
+        "public.list_my_retained_hangout_ids",
+        "public.list_people_blocked_ids",
+        "public.set_safety_block",
+        "public.submit_safety_report"
+      ],
+      "allocation": "B2 unchanged retained/operator",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.safety_lock_hangout_evidence",
+      "arguments": "p_actor uuid,p_campus uuid",
+      "final_source": "20260923000600_local_global_blocks.sql",
+      "returns": "returns void",
+      "calls": [],
+      "callers": [
+        "private.lock_hangout",
+        "public.create_hangout",
+        "public.list_hangout_cohosts",
+        "public.list_hangout_roster_roles",
+        "public.promote_hangout_cohost",
+        "public.remove_hangout_participant",
+        "public.submit_safety_report"
+      ],
+      "allocation": "B2 unchanged retained/operator",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.safety_lock_visible_evidence",
+      "arguments": "p_actor uuid,p_peer uuid",
+      "final_source": "20260923000600_local_global_blocks.sql",
+      "returns": "returns void",
+      "calls": [],
+      "callers": ["public.set_safety_block", "public.submit_safety_report"],
+      "allocation": "B2 unchanged retained/operator",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.safety_pair_blocked",
+      "arguments": "a uuid,b uuid",
+      "final_source": "20260923000600_local_global_blocks.sql",
+      "returns": "returns boolean",
+      "calls": [],
+      "callers": [
+        "private.can_read_hangout",
+        "private.can_read_hangout_roster",
+        "private.chat_authorized",
+        "private.effective_hangout_cohost",
+        "public.get_hangout_participant_state",
+        "public.join_hangout",
+        "public.list_notifications",
+        "public.promote_hangout_cohost",
+        "public.read_hangout_messages",
+        "public.remove_hangout_participant"
+      ],
+      "allocation": "B2 unchanged retained/operator",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.safety_peer_evidence",
+      "arguments": "p_actor uuid,p_peer uuid",
+      "final_source": "20260923000600_local_global_blocks.sql",
+      "returns": "returns boolean",
+      "calls": [],
+      "callers": ["public.set_safety_block", "public.submit_safety_report"],
+      "allocation": "B2 unchanged retained/operator",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.safety_reconcile_existing_blocks",
+      "arguments": "",
+      "final_source": "20260923000600_local_global_blocks.sql",
+      "returns": "returns void",
+      "calls": [
+        "private.safety_record_joined_overlap",
+        "private.social_hangout_mutation_lock"
+      ],
+      "callers": [],
+      "allocation": "B2 unchanged retained/operator",
+      "insert_table_dependencies": ["private.safety_reconciliation_effects"]
+    },
+    {
+      "name": "private.safety_record_joined_overlap",
+      "arguments": "p_hangout uuid,p_actor uuid",
+      "final_source": "20260923000600_local_global_blocks.sql",
+      "returns": "returns void",
+      "calls": [],
+      "callers": [
+        "private.safety_reconcile_existing_blocks",
+        "public.join_hangout",
+        "public.leave_hangout",
+        "public.remove_hangout_participant",
+        "public.set_safety_block"
+      ],
+      "allocation": "B2 unchanged retained/operator",
+      "insert_table_dependencies": ["private.hangout_peer_provenance"]
+    },
+    {
+      "name": "private.safety_report_peer_source",
+      "arguments": "p_actor uuid,p_peer uuid",
+      "final_source": "20260923000700_local_safety_reports.sql",
+      "returns": "returns table(kind text,ref_id uuid)",
+      "calls": [],
+      "callers": ["public.submit_safety_report"],
+      "allocation": "B2 unchanged retained/operator",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.set_pilot_manager_fixture",
+      "arguments": "p_account_id uuid,p_state text,p_expected_revision bigint,p_reason text,p_request_id uuid",
+      "final_source": "20260927000100_private_pilot_admission_authority.sql",
+      "returns": "returns bigint",
+      "calls": ["private.pilot_lock_management", "private.profile_trim"],
+      "callers": [],
+      "allocation": "A1a unchanged authority",
+      "insert_table_dependencies": [
+        "private.pilot_admission_managers",
+        "private.pilot_manager_audit"
+      ]
+    },
+    {
+      "name": "private.social_hangout_mutation_lock",
+      "arguments": "",
+      "final_source": "20260923000600_local_global_blocks.sql",
+      "returns": "returns void",
+      "calls": [],
+      "callers": [
+        "private.pilot_evidence_write_lock",
+        "private.safety_reconcile_existing_blocks",
+        "public.answer_own_attendance",
+        "public.apply_hangout_moderation_action",
+        "public.cancel_hangout",
+        "public.create_dm_request",
+        "public.create_friend_request",
+        "public.create_hangout",
+        "public.demote_hangout_cohost",
+        "public.edit_hangout",
+        "public.join_hangout",
+        "public.leave_hangout",
+        "public.promote_hangout_cohost",
+        "public.remove_hangout_participant",
+        "public.send_dm_message",
+        "public.send_hangout_message",
+        "public.set_hangout_joining",
+        "public.set_safety_block",
+        "public.step_down_hangout_cohost",
+        "public.submit_safety_report",
+        "public.transition_dm",
+        "public.transition_friendship"
+      ],
+      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.sync_confirmed_membership",
+      "arguments": "",
+      "final_source": "20260922000100_verified_onboarding.sql",
+      "returns": "returns trigger",
+      "calls": [],
+      "callers": [],
+      "allocation": "B1 unchanged owner/identity",
+      "insert_table_dependencies": ["public.university_memberships"]
+    },
+    {
+      "name": "private.valid_profile_list",
+      "arguments": "items text[], maximum integer, item_limit integer",
+      "final_source": "20260922000200_owner_profile_enrichment.sql",
+      "returns": "returns boolean",
+      "calls": ["private.profile_trim"],
+      "callers": [],
+      "allocation": "B1 unchanged owner/identity",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.valid_profile_prompts",
+      "arguments": "items jsonb",
+      "final_source": "20260922000200_owner_profile_enrichment.sql",
+      "returns": "returns boolean",
+      "calls": ["private.profile_trim"],
+      "callers": [],
+      "allocation": "B1 unchanged owner/identity",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.validate_hangout_input",
+      "arguments": "p_title text,p_starts_at timestamptz,p_public_place text,p_public_latitude double precision,p_public_longitude double precision,p_description text,p_ends_at timestamptz,p_campus_zone text,p_visibility text,p_location_precision text,p_eligibility jsonb",
+      "final_source": "20260922000300_hangout_foundation.sql",
+      "returns": "returns void",
+      "calls": ["private.profile_trim"],
+      "callers": ["public.create_hangout", "public.edit_hangout"],
+      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.validate_hangout_instructions",
+      "arguments": "value text",
+      "final_source": "20260922000300_hangout_foundation.sql",
+      "returns": "returns void",
+      "calls": ["private.profile_trim"],
+      "callers": ["public.create_hangout", "public.edit_hangout"],
+      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "private.validate_profile_photos",
+      "arguments": "",
+      "final_source": "20260922000200_owner_profile_enrichment.sql",
+      "returns": "returns trigger",
+      "calls": [],
+      "callers": [],
+      "allocation": "B1 unchanged owner/identity",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "public.accept_friend_request",
+      "arguments": "p_peer_id uuid, p_generation_id uuid",
+      "final_source": "20260923000100_local_friendship.sql",
+      "returns": "returns boolean",
+      "calls": ["public.transition_friendship"],
+      "callers": [],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "public.answer_own_attendance",
+      "arguments": "p_hangout_id uuid,p_attended boolean, p_expected_revision bigint",
+      "final_source": "20260924000400_local_attendance.sql",
+      "returns": "returns table(hangout_id uuid,attended boolean,revision bigint,answered_at timestamptz)",
+      "calls": ["private.social_hangout_mutation_lock"],
+      "callers": [],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "public.apply_account_moderation_action",
+      "arguments": "p_report_id uuid,p_request_id uuid,p_expected_case_revision bigint, p_action text,p_reason text",
+      "final_source": "20260924000200_local_account_enforcement.sql",
+      "returns": "returns table(case_state text,revision bigint,account_status text)",
+      "calls": [
+        "private.moderation_actor",
+        "private.moderation_report_allowed",
+        "private.profile_trim"
+      ],
+      "callers": [],
+      "allocation": "B2 unchanged retained/operator",
+      "insert_table_dependencies": [
+        "private.account_sanctions",
+        "private.moderation_audit",
+        "private.moderation_requests"
+      ]
+    },
+    {
+      "name": "public.apply_hangout_moderation_action",
+      "arguments": "p_report_id uuid,p_request_id uuid,p_expected_case_revision bigint,p_reason text",
+      "final_source": "20260924000300_local_hangout_disable.sql",
+      "returns": "returns table(case_state text,revision bigint,target_disabled boolean)",
+      "calls": [
+        "private.moderation_actor",
+        "private.profile_trim",
+        "private.social_hangout_mutation_lock"
+      ],
+      "callers": [],
+      "allocation": "B2 unchanged retained/operator",
+      "insert_table_dependencies": [
+        "private.hangout_disables",
+        "private.moderation_audit",
+        "private.moderation_requests"
+      ]
+    },
+    {
+      "name": "public.browse_people",
+      "arguments": "p_search text default null, p_graduation_year integer default null, p_major text default null, p_after_name text default null, p_after_id uuid default null, p_limit integer default 24",
+      "final_source": "20260922000600_people_id_cursor.sql",
+      "returns": "returns table(account_id uuid, real_name text, campus_name text, graduation_year integer, major text)",
+      "calls": [
+        "private.people_enabled",
+        "private.people_ready_campus",
+        "private.people_require_read_committed",
+        "private.people_visible"
+      ],
+      "callers": [],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "public.cancel_friend_request",
+      "arguments": "p_peer_id uuid, p_generation_id uuid",
+      "final_source": "20260923000100_local_friendship.sql",
+      "returns": "returns boolean",
+      "calls": ["public.transition_friendship"],
+      "callers": [],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "public.cancel_hangout",
+      "arguments": "p_hangout_id uuid,p_expected_revision bigint",
+      "final_source": "20260923000600_local_global_blocks.sql",
+      "returns": "returns bigint",
+      "calls": [
+        "private.check_hangout_revision",
+        "private.lock_hangout",
+        "private.notification_emit_hangout",
+        "private.social_hangout_mutation_lock"
+      ],
+      "callers": [],
+      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "public.create_dm_request",
+      "arguments": "p_target_id uuid,p_request_id uuid,p_body text",
+      "final_source": "20260923000600_local_global_blocks.sql",
+      "returns": "returns uuid",
+      "calls": [
+        "private.dm_eligible",
+        "private.dm_lock_evidence",
+        "private.friendship_lock_pair",
+        "private.people_ready_campus",
+        "private.people_require_read_committed",
+        "private.profile_trim",
+        "private.social_hangout_mutation_lock"
+      ],
+      "callers": [],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": [
+        "private.dm_messages",
+        "private.dm_pairs",
+        "private.dm_retries"
+      ]
+    },
+    {
+      "name": "public.create_friend_request",
+      "arguments": "p_target_id uuid, p_request_id uuid",
+      "final_source": "20260923000600_local_global_blocks.sql",
+      "returns": "returns uuid",
+      "calls": [
+        "private.friendship_eligible",
+        "private.friendship_enabled",
+        "private.friendship_lock_eligibility",
+        "private.friendship_lock_pair",
+        "private.people_active_owner",
+        "private.people_ready_campus",
+        "private.people_require_read_committed",
+        "private.social_hangout_mutation_lock"
+      ],
+      "callers": [],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": [
+        "private.friendship_create_requests",
+        "private.friendships"
+      ]
+    },
+    {
+      "name": "public.create_hangout",
+      "arguments": "p_request_id uuid,p_title text,p_starts_at timestamptz,p_public_place text,p_public_latitude double precision,p_public_longitude double precision,p_description text default null,p_ends_at timestamptz default null,p_campus_zone text default null,p_private_instructions text default null,p_visibility text default 'campus',p_location_precision text default 'approximate_area',p_eligibility jsonb default null",
+      "final_source": "20260923000600_local_global_blocks.sql",
+      "returns": "returns uuid",
+      "calls": [
+        "private.can_read_hangout",
+        "private.profile_trim",
+        "private.ready_campus",
+        "private.safety_lock_hangout_evidence",
+        "private.social_hangout_mutation_lock",
+        "private.validate_hangout_input",
+        "private.validate_hangout_instructions"
+      ],
+      "callers": [],
+      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only",
+      "insert_table_dependencies": [
+        "private.hangout_create_requests",
+        "public.hangout_participants",
+        "public.hangout_private_locations",
+        "public.hangouts"
+      ]
+    },
+    {
+      "name": "public.decline_friend_request",
+      "arguments": "p_peer_id uuid, p_generation_id uuid",
+      "final_source": "20260923000100_local_friendship.sql",
+      "returns": "returns boolean",
+      "calls": ["public.transition_friendship"],
+      "callers": [],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "public.demote_hangout_cohost",
+      "arguments": "p_hangout_id uuid, p_account_id uuid, p_expected_revision bigint",
+      "final_source": "20260925000200_local_cohost_authority.sql",
+      "returns": "returns bigint",
+      "calls": [
+        "private.check_hangout_revision",
+        "private.lock_hangout",
+        "private.social_hangout_mutation_lock"
+      ],
+      "callers": [],
+      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "public.edit_hangout",
+      "arguments": "p_hangout_id uuid,p_expected_revision bigint,p_title text,p_starts_at timestamptz,p_public_place text,p_public_latitude double precision,p_public_longitude double precision,p_description text default null,p_ends_at timestamptz default null,p_campus_zone text default null,p_private_instructions text default null,p_visibility text default 'campus',p_location_precision text default 'approximate_area',p_eligibility jsonb default null",
+      "final_source": "20260925000200_local_cohost_authority.sql",
+      "returns": "returns bigint",
+      "calls": [
+        "private.check_hangout_revision",
+        "private.effective_hangout_cohost",
+        "private.lock_hangout",
+        "private.notification_emit_hangout",
+        "private.profile_trim",
+        "private.social_hangout_mutation_lock",
+        "private.validate_hangout_input",
+        "private.validate_hangout_instructions"
+      ],
+      "callers": [],
+      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only",
+      "insert_table_dependencies": ["public.hangout_private_locations"]
+    },
+    {
+      "name": "public.get_access_state",
+      "arguments": "",
+      "final_source": "20260927000200_pilot_owner_admission.sql",
+      "returns": "returns text",
+      "calls": [
+        "private.account_is_active",
+        "private.has_verified_membership",
+        "private.pilot_caller_is_admitted",
+        "private.pilot_is_available"
+      ],
+      "callers": ["private.people_ready_campus", "private.ready_campus"],
+      "allocation": "B1 unchanged owner/identity",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "public.get_dm_status",
+      "arguments": "p_peer_id uuid",
+      "final_source": "20260923000300_local_direct_messages.sql",
+      "returns": "returns table(peer_id uuid,generation_id uuid,direction text,state text)",
+      "calls": ["private.dm_require"],
+      "callers": [],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "public.get_friendship",
+      "arguments": "p_peer_id uuid",
+      "final_source": "20260923000100_local_friendship.sql",
+      "returns": "returns table(peer_id uuid, generation_id uuid, direction text, state text)",
+      "calls": [
+        "private.friendship_enabled",
+        "private.people_active_owner",
+        "private.people_require_read_committed"
+      ],
+      "callers": [],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "public.get_hangout_large_state",
+      "arguments": "p_hangout_id uuid",
+      "final_source": "20260925000100_local_large_hangout_safeguards.sql",
+      "returns": "returns table(is_large boolean)",
+      "calls": [
+        "private.can_read_hangout",
+        "private.hangouts_enabled",
+        "private.ready_campus"
+      ],
+      "callers": [],
+      "allocation": "B2 source/retained projection",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "public.get_hangout_participant_state",
+      "arguments": "p_hangout_id uuid,p_account_id uuid",
+      "final_source": "20260923000600_local_global_blocks.sql",
+      "returns": "returns text",
+      "calls": [
+        "private.can_read_hangout",
+        "private.people_active_owner",
+        "private.ready_campus",
+        "private.safety_enabled",
+        "private.safety_pair_blocked"
+      ],
+      "callers": [],
+      "allocation": "B2 source/retained projection",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "public.get_moderation_report",
+      "arguments": "p_report_id uuid",
+      "final_source": "20260924000300_local_hangout_disable.sql",
+      "returns": "returns table(report_id uuid,submitted_at timestamptz,target_type text,target_id uuid, reporter_id uuid,category text,case_state text,case_revision bigint,narrative text, provenance_kind text,provenance_ref_id uuid,case_note text,disposition text, target_status text,target_campus_id uuid,target_disabled boolean)",
+      "calls": [
+        "private.moderation_actor",
+        "private.moderation_report_allowed"
+      ],
+      "callers": [],
+      "allocation": "B2 unchanged retained/operator",
+      "insert_table_dependencies": ["private.moderation_audit"]
+    },
+    {
+      "name": "public.get_notification_preferences",
+      "arguments": "",
+      "final_source": "20260923000400_local_notifications_social.sql",
+      "returns": "returns table(category text,enabled boolean)",
+      "calls": ["private.notification_require_owner"],
+      "callers": [],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "public.get_own_attendance",
+      "arguments": "p_hangout_id uuid",
+      "final_source": "20260924000400_local_attendance.sql",
+      "returns": "returns table(hangout_id uuid,attended boolean,revision bigint,answered_at timestamptz)",
+      "calls": [],
+      "callers": [],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "public.get_people_detail",
+      "arguments": "p_account_id uuid",
+      "final_source": "20260922000400_people_text_directory.sql",
+      "returns": "returns table(account_id uuid, real_name text, campus_name text, graduation_year integer, major text, bio text, interests text[], down_to_do text[])",
+      "calls": [
+        "private.people_enabled",
+        "private.people_ready_campus",
+        "private.people_require_read_committed",
+        "private.people_visible"
+      ],
+      "callers": [],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "public.get_people_preference",
+      "arguments": "",
+      "final_source": "20260922000400_people_text_directory.sql",
+      "returns": "returns boolean",
+      "calls": [
+        "private.people_active_owner",
+        "private.people_require_read_committed"
+      ],
+      "callers": [],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "public.join_hangout",
+      "arguments": "p_hangout_id uuid",
+      "final_source": "20260925000100_local_large_hangout_safeguards.sql",
+      "returns": "returns void",
+      "calls": [
+        "private.lock_hangout",
+        "private.notification_emit_hangout",
+        "private.record_large_hangout_join",
+        "private.safety_pair_blocked",
+        "private.safety_record_joined_overlap",
+        "private.social_hangout_mutation_lock"
+      ],
+      "callers": [],
+      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only",
+      "insert_table_dependencies": ["public.hangout_participants"]
+    },
+    {
+      "name": "public.leave_hangout",
+      "arguments": "p_hangout_id uuid",
+      "final_source": "20260925000200_local_cohost_authority.sql",
+      "returns": "returns void",
+      "calls": [
+        "private.lock_hangout",
+        "private.notification_emit_hangout",
+        "private.safety_record_joined_overlap",
+        "private.social_hangout_mutation_lock"
+      ],
+      "callers": [],
+      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "public.list_dm_inbox",
+      "arguments": "p_after_created_at timestamptz default null, p_after_generation_id uuid default null,p_limit integer default 24",
+      "final_source": "20260923000300_local_direct_messages.sql",
+      "returns": "returns table(peer_id uuid,generation_id uuid,direction text,state text, created_at timestamptz,first_body text)",
+      "calls": ["private.dm_eligible", "private.dm_require"],
+      "callers": [],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "public.list_friendships",
+      "arguments": "p_after_peer_id uuid default null, p_limit integer default 24",
+      "final_source": "20260923000100_local_friendship.sql",
+      "returns": "returns table(peer_id uuid, generation_id uuid, direction text, state text)",
+      "calls": [
+        "private.friendship_enabled",
+        "private.people_active_owner",
+        "private.people_require_read_committed"
+      ],
+      "callers": [],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "public.list_hangout_cohosts",
+      "arguments": "p_hangout_id uuid, p_after_account_id uuid default null, p_limit integer default 24",
+      "final_source": "20260925000200_local_cohost_authority.sql",
+      "returns": "returns table(account_id uuid)",
+      "calls": [
+        "private.can_read_hangout",
+        "private.ready_campus",
+        "private.safety_lock_hangout_evidence"
+      ],
+      "callers": [],
+      "allocation": "B2 source/retained projection",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "public.list_hangout_roster_roles",
+      "arguments": "p_hangout_id uuid, p_after_account_id uuid default null, p_limit integer default 24",
+      "final_source": "20260925000200_local_cohost_authority.sql",
+      "returns": "returns table(account_id uuid, role_label text)",
+      "calls": [
+        "private.can_read_hangout",
+        "private.can_read_hangout_roster",
+        "private.effective_hangout_cohost",
+        "private.safety_lock_hangout_evidence"
+      ],
+      "callers": [],
+      "allocation": "B2 source/retained projection",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "public.list_moderation_reports",
+      "arguments": "p_after_submitted_at timestamptz default null,p_after_id uuid default null,p_limit integer default 24",
+      "final_source": "20260924000100_local_moderation_review.sql",
+      "returns": "returns table(report_id uuid,submitted_at timestamptz,target_type text,target_id uuid, reporter_id uuid,category text,case_state text)",
+      "calls": [
+        "private.moderation_actor",
+        "private.moderation_report_allowed"
+      ],
+      "callers": [],
+      "allocation": "B2 unchanged retained/operator",
+      "insert_table_dependencies": ["private.moderation_audit"]
+    },
+    {
+      "name": "public.list_my_retained_hangout_ids",
+      "arguments": "p_after_id uuid default null,p_limit integer default 24",
+      "final_source": "20260923000600_local_global_blocks.sql",
+      "returns": "returns table(hangout_id uuid,own_state text)",
+      "calls": [
+        "private.people_active_owner",
+        "private.people_require_read_committed",
+        "private.safety_enabled"
+      ],
+      "callers": [],
+      "allocation": "B2 source/retained projection",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "public.list_notifications",
+      "arguments": "p_after_created_at timestamptz default null,p_after_id uuid default null,p_limit integer default 24",
+      "final_source": "20260925000200_local_cohost_authority.sql",
+      "returns": "returns table(notification_id uuid,source_kind text,source_id uuid,event_code text,actor_id uuid,target_id uuid,label text,created_at timestamptz,read_at timestamptz)",
+      "calls": [
+        "private.can_read_hangout",
+        "private.can_read_hangout_roster",
+        "private.chat_authorized",
+        "private.dm_eligible",
+        "private.dm_enabled",
+        "private.friendship_eligible",
+        "private.friendship_enabled",
+        "private.notification_require_owner",
+        "private.people_enabled",
+        "private.safety_pair_blocked"
+      ],
+      "callers": [],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "public.list_own_attendance",
+      "arguments": "p_before_hangout_id uuid default null",
+      "final_source": "20260924000400_local_attendance.sql",
+      "returns": "returns table(hangout_id uuid,attended boolean,revision bigint,answered_at timestamptz, within_window boolean,currently_actionable boolean)",
+      "calls": [],
+      "callers": [],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "public.list_people_blocked_ids",
+      "arguments": "p_after_id uuid default null,p_limit integer default 24",
+      "final_source": "20260923000600_local_global_blocks.sql",
+      "returns": "returns table(account_id uuid)",
+      "calls": [
+        "private.people_active_owner",
+        "private.people_require_read_committed",
+        "private.safety_enabled"
+      ],
+      "callers": [],
+      "allocation": "B2 source/retained projection",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "public.mark_notification_read",
+      "arguments": "p_notification_id uuid",
+      "final_source": "20260923000400_local_notifications_social.sql",
+      "returns": "returns boolean",
+      "calls": [
+        "private.notification_enabled",
+        "private.notification_require_owner",
+        "private.people_active_owner"
+      ],
+      "callers": [],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "public.promote_hangout_cohost",
+      "arguments": "p_hangout_id uuid, p_account_id uuid, p_expected_revision bigint",
+      "final_source": "20260925000200_local_cohost_authority.sql",
+      "returns": "returns bigint",
+      "calls": [
+        "private.check_hangout_revision",
+        "private.lock_hangout",
+        "private.ready_subject_campus",
+        "private.safety_lock_hangout_evidence",
+        "private.safety_pair_blocked",
+        "private.social_hangout_mutation_lock"
+      ],
+      "callers": [],
+      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only",
+      "insert_table_dependencies": ["private.hangout_cohosts"]
+    },
+    {
+      "name": "public.query_saved_hangouts",
+      "arguments": "p_west double precision, p_south double precision, p_east double precision, p_north double precision, p_time_filter text, p_joining_filter text, p_cutoff timestamptz",
+      "final_source": "20260925000100_local_large_hangout_safeguards.sql",
+      "returns": "returns jsonb",
+      "calls": [
+        "private.can_read_hangout",
+        "private.can_read_hangout_roster",
+        "private.hangouts_enabled",
+        "private.ready_campus"
+      ],
+      "callers": [],
+      "allocation": "B2 source/retained projection",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "public.read_dm_messages",
+      "arguments": "p_peer_id uuid,p_generation_id uuid, p_after_sequence bigint default null,p_limit integer default 50",
+      "final_source": "20260923000300_local_direct_messages.sql",
+      "returns": "returns table(message_id uuid,sequence bigint,body text,created_at timestamptz,mine boolean)",
+      "calls": ["private.dm_eligible", "private.dm_require"],
+      "callers": [],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "public.read_hangout_messages",
+      "arguments": "p_hangout_id uuid, p_after_sequence bigint default null, p_limit integer default 50",
+      "final_source": "20260923000600_local_global_blocks.sql",
+      "returns": "returns table (message_id uuid, sequence bigint, body text, created_at timestamptz, mine boolean, author_id uuid, author_label text)",
+      "calls": [
+        "private.chat_require",
+        "private.ready_subject_campus",
+        "private.safety_pair_blocked"
+      ],
+      "callers": [],
+      "allocation": "B2 source/retained projection",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "public.remove_hangout_participant",
+      "arguments": "p_hangout_id uuid, p_account_id uuid, p_expected_revision bigint",
+      "final_source": "20260925000200_local_cohost_authority.sql",
+      "returns": "returns bigint",
+      "calls": [
+        "private.check_hangout_revision",
+        "private.effective_hangout_cohost",
+        "private.lock_hangout",
+        "private.ready_subject_campus",
+        "private.safety_lock_hangout_evidence",
+        "private.safety_pair_blocked",
+        "private.safety_record_joined_overlap",
+        "private.social_hangout_mutation_lock"
+      ],
+      "callers": [],
+      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "public.send_dm_message",
+      "arguments": "p_peer_id uuid,p_generation_id uuid, p_request_id uuid,p_body text",
+      "final_source": "20260923000600_local_global_blocks.sql",
+      "returns": "returns uuid",
+      "calls": [
+        "private.dm_eligible",
+        "private.dm_lock_evidence",
+        "private.friendship_lock_pair",
+        "private.people_require_read_committed",
+        "private.profile_trim",
+        "private.social_hangout_mutation_lock"
+      ],
+      "callers": [],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": ["private.dm_messages", "private.dm_retries"]
+    },
+    {
+      "name": "public.send_hangout_message",
+      "arguments": "p_hangout_id uuid, p_request_id uuid, p_body text",
+      "final_source": "20260923000600_local_global_blocks.sql",
+      "returns": "returns table (message_id uuid, sequence bigint, body text, created_at timestamptz, mine boolean, author_id uuid, author_label text)",
+      "calls": [
+        "private.chat_lock_evidence",
+        "private.chat_require",
+        "private.lock_hangout",
+        "private.profile_trim",
+        "private.social_hangout_mutation_lock"
+      ],
+      "callers": [],
+      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only",
+      "insert_table_dependencies": [
+        "private.hangout_conversations",
+        "private.hangout_message_requests",
+        "private.hangout_messages"
+      ]
+    },
+    {
+      "name": "public.set_hangout_joining",
+      "arguments": "p_hangout_id uuid,p_expected_revision bigint,p_joining_state text",
+      "final_source": "20260925000200_local_cohost_authority.sql",
+      "returns": "returns bigint",
+      "calls": [
+        "private.check_hangout_revision",
+        "private.effective_hangout_cohost",
+        "private.lock_hangout",
+        "private.social_hangout_mutation_lock"
+      ],
+      "callers": [],
+      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "public.set_notification_preference",
+      "arguments": "p_category text,p_enabled boolean",
+      "final_source": "20260923000400_local_notifications_social.sql",
+      "returns": "returns boolean",
+      "calls": [
+        "private.notification_enabled",
+        "private.notification_lock_recipient",
+        "private.people_active_owner",
+        "private.people_require_read_committed"
+      ],
+      "callers": [],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": ["private.notification_preferences"]
+    },
+    {
+      "name": "public.set_people_block",
+      "arguments": "p_account_id uuid,p_blocked boolean",
+      "final_source": "20260923000600_local_global_blocks.sql",
+      "returns": "returns boolean",
+      "calls": ["public.set_safety_block"],
+      "callers": [],
+      "allocation": "B2 source/retained projection",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "public.set_people_preference",
+      "arguments": "p_opted_in boolean",
+      "final_source": "20260922000400_people_text_directory.sql",
+      "returns": "returns boolean",
+      "calls": [
+        "private.people_active_owner",
+        "private.people_enabled",
+        "private.people_ready_campus",
+        "private.people_require_read_committed"
+      ],
+      "callers": [],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": ["private.people_preferences"]
+    },
+    {
+      "name": "public.set_pilot_account_admission",
+      "arguments": "p_account_id uuid,p_state text,p_expected_revision bigint,p_reason text,p_request_id uuid",
+      "final_source": "20260927000100_private_pilot_admission_authority.sql",
+      "returns": "returns table(state text,revision bigint)",
+      "calls": [
+        "private.pilot_lock_management",
+        "private.pilot_require_activation",
+        "private.pilot_require_manager",
+        "private.profile_trim"
+      ],
+      "callers": [],
+      "allocation": "A1a unchanged authority",
+      "insert_table_dependencies": [
+        "private.pilot_account_admission",
+        "private.pilot_management_audit"
+      ]
+    },
+    {
+      "name": "public.set_pilot_policy",
+      "arguments": "p_key text,p_enabled boolean,p_expected_revision bigint,p_reason text,p_request_id uuid",
+      "final_source": "20260927000100_private_pilot_admission_authority.sql",
+      "returns": "returns table(enabled boolean,revision bigint)",
+      "calls": [
+        "private.pilot_lock_management",
+        "private.pilot_require_manager",
+        "private.profile_trim"
+      ],
+      "callers": [],
+      "allocation": "A1a unchanged authority",
+      "insert_table_dependencies": ["private.pilot_management_audit"]
+    },
+    {
+      "name": "public.set_safety_block",
+      "arguments": "p_account_id uuid,p_blocked boolean",
+      "final_source": "20260927000300_pilot_source_safety.sql",
+      "returns": "returns boolean",
+      "calls": [
+        "private.friendship_lock_pair",
+        "private.people_active_owner",
+        "private.people_enabled",
+        "private.people_ready_campus",
+        "private.people_visible",
+        "private.pilot_capability_enabled",
+        "private.safety_enabled",
+        "private.safety_lock_visible_evidence",
+        "private.safety_peer_evidence",
+        "private.safety_record_joined_overlap",
+        "private.social_hangout_mutation_lock"
+      ],
+      "callers": ["public.set_people_block"],
+      "allocation": "B2 source/retained projection",
+      "insert_table_dependencies": ["private.people_blocks"]
+    },
+    {
+      "name": "public.step_down_hangout_cohost",
+      "arguments": "p_hangout_id uuid, p_expected_revision bigint",
+      "final_source": "20260925000200_local_cohost_authority.sql",
+      "returns": "returns bigint",
+      "calls": [
+        "private.check_hangout_revision",
+        "private.effective_hangout_cohost",
+        "private.lock_hangout",
+        "private.social_hangout_mutation_lock"
+      ],
+      "callers": [],
+      "allocation": "B3 ordinary mutation serialization; B2 inherited predicates only",
+      "insert_table_dependencies": []
+    },
+    {
+      "name": "public.submit_safety_report",
+      "arguments": "p_request_id uuid,p_target_mode text,p_target_id uuid, p_category text,p_narrative text default null",
+      "final_source": "20260927000300_pilot_source_safety.sql",
+      "returns": "returns table(receipt_id uuid,submitted_at timestamptz)",
+      "calls": [
+        "private.can_read_hangout",
+        "private.friendship_lock_pair",
+        "private.hangouts_enabled",
+        "private.people_active_owner",
+        "private.people_enabled",
+        "private.people_ready_campus",
+        "private.people_visible",
+        "private.pilot_capability_enabled",
+        "private.profile_trim",
+        "private.safety_enabled",
+        "private.safety_lock_hangout_evidence",
+        "private.safety_lock_visible_evidence",
+        "private.safety_peer_evidence",
+        "private.safety_report_peer_source",
+        "private.social_hangout_mutation_lock"
+      ],
+      "callers": [],
+      "allocation": "B2 source/retained projection",
+      "insert_table_dependencies": [
+        "private.safety_report_requests",
+        "private.safety_reports"
+      ]
+    },
+    {
+      "name": "public.transition_dm",
+      "arguments": "p_peer_id uuid,p_generation_id uuid,p_action text, p_reply_request_id uuid default null,p_reply_body text default null",
+      "final_source": "20260923000600_local_global_blocks.sql",
+      "returns": "returns boolean",
+      "calls": [
+        "private.dm_active_caller",
+        "private.dm_eligible",
+        "private.dm_enabled",
+        "private.dm_lock_evidence",
+        "private.friendship_lock_pair",
+        "private.people_require_read_committed",
+        "private.profile_trim",
+        "private.social_hangout_mutation_lock"
+      ],
+      "callers": [],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": [
+        "private.dm_messages",
+        "private.dm_retries",
+        "private.dm_suppression"
+      ]
+    },
+    {
+      "name": "public.transition_friendship",
+      "arguments": "p_peer_id uuid, p_generation_id uuid, p_action text",
+      "final_source": "20260923000600_local_global_blocks.sql",
+      "returns": "returns boolean",
+      "calls": [
+        "private.friendship_eligible",
+        "private.friendship_enabled",
+        "private.friendship_lock_eligibility",
+        "private.friendship_lock_pair",
+        "private.people_active_owner",
+        "private.people_ready_campus",
+        "private.people_require_read_committed",
+        "private.social_hangout_mutation_lock"
+      ],
+      "callers": [
+        "public.accept_friend_request",
+        "public.cancel_friend_request",
+        "public.decline_friend_request",
+        "public.unfriend"
+      ],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": ["private.friendship_suppression"]
+    },
+    {
+      "name": "public.transition_moderation_case",
+      "arguments": "p_report_id uuid,p_request_id uuid, p_expected_revision bigint,p_action text,p_note text default null, p_duplicate_report_id uuid default null",
+      "final_source": "20260924000100_local_moderation_review.sql",
+      "returns": "returns table(case_state text,revision bigint)",
+      "calls": [
+        "private.moderation_actor",
+        "private.moderation_report_allowed",
+        "private.profile_trim"
+      ],
+      "callers": [],
+      "allocation": "B2 unchanged retained/operator",
+      "insert_table_dependencies": [
+        "private.moderation_audit",
+        "private.moderation_cases",
+        "private.moderation_requests"
+      ]
+    },
+    {
+      "name": "public.unfriend",
+      "arguments": "p_peer_id uuid, p_generation_id uuid",
+      "final_source": "20260923000100_local_friendship.sql",
+      "returns": "returns boolean",
+      "calls": ["public.transition_friendship"],
+      "callers": [],
+      "allocation": "A1c deferred closure/legacy regression",
+      "insert_table_dependencies": []
+    }
+  ],
+  "removed_historical_definitions": [
+    {
+      "name": "private.validate_primary_photo",
+      "arguments": "",
+      "final_source": "20260922000100_verified_onboarding.sql",
+      "returns": "returns trigger",
+      "calls": [],
+      "callers": [],
+      "allocation": "A1c deferred closure/legacy regression"
+    }
+  ],
+  "source_commit": "6a692ffaf0d4d3f63e5603edde0522907008b70d",
+  "historical_inventory_source": "ba4344a3b9fb2b4cc6268833f57accf3718fcc64"
+}
