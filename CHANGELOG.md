@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-27 — Proposed pilot admission design
+
+Proposed ADR-0027 defines a private account-ID admission roster, separate caller-bound audited admission-manager authority, default-off pilot availability and authoritative capability checks. Revocation/shutdown denies ordinary pilot access while preserving existing narrow retained safety recovery and separately authorized operator handling. TASK-021A is a planning parent: A1 backend and A2 application contracts each need review/publication before their own dispatch, with reviewed integrated A1 required before A2. Technical acceptance is pending; no code, hosted action or TASK-021 completion is claimed. See `decisions/ADR-0027-closed-pilot-admission.md` and `tasks/active/TASK-021A-pilot-admission-capabilities.md`.
+
 ## 2026-09-27 — TASK-021 pilot scope accepted
 
 - Recorded Accepted ADR-0026 for a small admitted verified-UNC pilot before the later public MVP; preserved ADR-0025 history and all local code/backend safety.

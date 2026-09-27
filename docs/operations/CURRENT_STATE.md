@@ -1,5 +1,9 @@
 # Current State
 
+## TASK-021 pilot admission proposal
+
+Proposed ADR-0027 defines a private account-ID admission roster, separate caller-bound audited admission-manager authority, default-off pilot availability and authoritative capability checks. Revocation/shutdown denies ordinary pilot access while preserving existing narrow retained safety recovery and separately authorized operator handling. TASK-021A is a planning parent: A1 backend and A2 application contracts each need review/publication before their own dispatch, with reviewed integrated A1 required before A2. Technical acceptance is pending; no code, hosted action or TASK-021 completion is claimed. See `decisions/ADR-0027-closed-pilot-admission.md` and `tasks/active/TASK-021A-pilot-admission-capabilities.md`.
+
 ## 2026-09-27 — TASK-021 invite-only pilot product scope accepted
 
 The user accepted the recommended pilot with “then let's do the pilot scope.” Accepted ADR-0026 records a small nominated verified-UNC cohort before the later ADR-0025 public MVP. Retain required identity/onboarding/primary photo, campus-visible Hangout creation/time/approximate place, map/list join/leave, manual-refresh Hangout chat, host edit/cancel/close/removal and block/report/named human report handling with moderation audit/enforcement/privacy. Defer Calendar, People discovery, friendships, DMs, notifications, co-host UI, attendance surveys, optional rich profile/extra photos and analytics. Existing local code/backend safety remains preserved.
