@@ -1,6 +1,8 @@
 # TASK-021A1b2 — source projections and retained safety
 
-Status: **incomplete — inherited S9 operator role-lock finding requires a separately reviewed bounded amendment and repair.** Current implementation stage stopped after successful verification and normal local cleanup. No task branch push, accepted integration, task completion or pilot readiness is claimed.
+Status: **incomplete — mandatory operator lock-result repair is independently source-reviewed and runtime-verified; final evidence review, publication and canonical integration remain pending.** Current outcome is the [ROLE-REPAIR handoff](TASK-021A1b2-ROLE-REPAIR.md) and the dependent outcome appended below. Historical partial source/runtime/cleanup statements in this document remain separately attributed; no task completion or pilot readiness is claimed.
+
+Historical stopped partial-stage status at `ba4344a3b9fb2b4cc6268833f57accf3718fcc64`: inherited S9 finding required a reviewed amendment/repair; no task branch publication/integration then existed. That historical blocker is superseded only by the precisely attributed repair outcome below.
 Baseline: independently verified coordinator main c5c837af6046d2166c59c487e5a1683634140e4f; latest coordinator documentation/status main receipt2195fe2a0ea554f48dbf72e54c43161894c0cc42 is independently remote-verified by the coordinator; ancestor reconciliation remains pending before eventual publication. Contract 5c89db93947b0897d994503a8f6c3a809d58530a. Fresh Sol medium; Standard app setting not verifiable by tools.
 
 New migration: `20260927000300_pilot_source_safety.sql`, after unchanged22 historical migrations. No new locks, relations, RLS policies, triggers, overloads or field projections. No app, dependency, ADR or shared queue change. B1 Storage remains unchanged.
