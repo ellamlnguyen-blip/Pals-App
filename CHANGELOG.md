@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-27 — B3a full fixture review requires narrow corrections
+
+Fresh independent source/fixture review of unpushed90f306f6624aa05d60a85a19a20a9beacc0feb54 did not clear runtime release. Migration remains source-cleared9dbec14, unchanged. Four fixture gaps: mapping claimed A1a management actor/target regressions without dispatching that module; ordinary lifecycle↔Storage DELETE/profile crossing absent (inherited B1 is a different caller path); applicable bilateral host/peer block and joined-state loss races absent; installed exact25 history checked after reset rather than before every setup mutation. Narrow fixture/guard/mapping corrections are authorized within the existing contract; no runtime release until independent corrected-checkpoint review.
+
+Worker reconciled canonical docs-onlye3c8317 into task tip063d0e15b85f1a6ca8e252db94da187eda428565; coordinator verified only52 documentation/status lines changed after fixture checkpoint. No task push or executed B3a evidence. Common identity partition, missing/replacement probes, observed-lock primitives, error classification, HTTP and upgrade/catalog scaffolds otherwise source-consistent. All runtime/completion/publication/integration gates remain; B3b/c/A1c/A2/TASK-021 incomplete, no hosted/pilot-ready claim.
+
 ## 2026-09-27 — Lifecycle source review cleared; fixtures completing
 
 Fresh independent SOURCE review cleared unpushed9dbec14b2627eacc28f8e9de0c3f4b5b4a2fd633: only two revoked private ordinary helpers plus six inherited ABI-preserving lifecycle bodies, sorted mandatory identity locks with immediate missing denial/locked membership-photo-object binding and fresh authority before payload/conflict/revision/no-op/return/write. Existing shared/retained/operator/B1 functions and hooks preserved. Source-level common identity equivalence across new create/distinct co-host edit/exact retry is established; actual runtime/evidence mapping remains required. Exact child TASK-021A1b3a/history25 guard source inspected. No runtime release/pass yet.
