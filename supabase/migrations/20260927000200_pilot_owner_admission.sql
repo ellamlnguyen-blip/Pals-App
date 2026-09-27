@@ -1,14 +1,25 @@
 -- TASK-021A1b1 / ADR-0027: caller admission and required owner lifecycle only.
 begin;
 
+-- Internal subject check also guards Storage's final service-role write. No client grant.
+create function private.pilot_owner_subject_eligible(subject uuid) returns boolean
+language sql stable security definer set search_path='' as $$
+ select private.pilot_is_available() and private.pilot_capability_enabled('onboarding')
+ and exists(select 1 from public.accounts a
+ join private.pilot_account_admission r on r.account_id=a.id and r.state='active'
+ join auth.users u on u.id=a.id
+ join public.university_memberships m on m.user_id=a.id
+ join public.universities c on c.id=m.university_id
+ where a.id=subject and a.status='active' and c.slug='unc-chapel-hill' and c.active
+ and u.email_confirmed_at is not null and m.verified_at is not null
+ and lower(u.email)=lower(m.verification_email)
+ and u.email ~ '^[^@[:space:]]+@[^@[:space:]]+$'
+ and lower(split_part(u.email,'@',2))=any(c.allowed_email_domains));
+$$;
+revoke all on function private.pilot_owner_subject_eligible(uuid) from public,anon,authenticated,service_role;
 create function private.pilot_onboarding_eligible() returns boolean
 language sql stable security definer set search_path='' as $$
- select private.pilot_is_available() and private.pilot_caller_is_admitted()
-  and private.account_is_active() and private.has_verified_membership()
-  and private.pilot_capability_enabled('onboarding')
-  and exists(select 1 from public.university_memberships m
-    join public.universities c on c.id=m.university_id
-    where m.user_id=(select auth.uid()) and c.slug='unc-chapel-hill');
+ select private.pilot_owner_subject_eligible((select auth.uid()));
 $$;
 revoke all on function private.pilot_onboarding_eligible() from public,anon,authenticated,service_role;
 -- RLS invokes only this caller-bound boolean, never a subject/admission reader.
@@ -88,9 +99,9 @@ using(bucket_id='profile-photos' and owner_id=(select auth.uid())::text
  and (p.primary_photo_path=name or name=any(p.additional_photo_paths))));
 
 -- Direct rows are already acquired. Never take social after these rows.
-create function private.pilot_lock_owner_evidence() returns void
+create function private.pilot_lock_owner_evidence(subject uuid) returns void
 language plpgsql volatile security definer set search_path='' as $$
-declare subject uuid:=auth.uid(); campus uuid;
+declare campus uuid;
 begin
  perform private.pilot_evidence_lock();
  perform 1 from private.pilot_availability where singleton for share;
@@ -109,17 +120,17 @@ begin
  perform 1 from public.universities where id=campus for share;
  if not found then raise exception 'Owner operation unavailable' using errcode='42501'; end if;
  -- This separate volatile statement receives a fresh READ COMMITTED snapshot.
- if subject is null or not private.pilot_onboarding_eligible()
+ if subject is null or not private.pilot_owner_subject_eligible(subject)
   or not exists(select 1 from public.university_memberships where user_id=subject and university_id=campus) then
   raise exception 'Owner operation unavailable' using errcode='42501'; end if;
 end; $$;
-revoke all on function private.pilot_lock_owner_evidence() from public,anon,authenticated,service_role;
+revoke all on function private.pilot_lock_owner_evidence(uuid) from public,anon,authenticated,service_role;
 
 create or replace function private.require_active_profile_write() returns trigger
 language plpgsql volatile security definer set search_path='' as $$
 begin
  if current_setting('role',true)='authenticated' then
-  perform private.pilot_lock_owner_evidence();
+  perform private.pilot_lock_owner_evidence(auth.uid());
   if auth.uid() is distinct from new.user_id then
    raise exception 'Owner operation unavailable' using errcode='42501'; end if;
  end if;
@@ -127,13 +138,28 @@ begin
 end; $$;
 create or replace function private.require_active_photo_write() returns trigger
 language plpgsql volatile security definer set search_path='' as $$
-declare target storage.objects%rowtype;
+declare target storage.objects%rowtype; subject uuid; original_role text:=current_setting('role',true);
 begin
  target:=case when tg_op='DELETE' then old else new end;
- if target.bucket_id='profile-photos' and current_setting('role',true)='authenticated' then
-  perform private.pilot_lock_owner_evidence();
-  if target.owner_id is distinct from auth.uid()::text then
-   raise exception 'Owner operation unavailable' using errcode='42501'; end if;
+ if target.bucket_id='profile-photos' then
+  if original_role='authenticated' then
+   subject:=auth.uid();
+   if subject is null or target.owner_id is distinct from subject::text then
+    raise exception 'Owner operation unavailable' using errcode='42501'; end if;
+  elsif original_role='service_role' then
+   -- Real Storage first checks client permission separately, then persists as
+   -- supabase_storage_admin/service_role with auth.uid null. Guard that final
+   -- row through commit using its server-assigned owner; no service RPC grant.
+   if session_user<>'supabase_storage_admin' or target.owner_id is null
+    or target.owner_id !~ '^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$' then
+    raise exception 'Owner operation unavailable' using errcode='42501'; end if;
+   subject:=target.owner_id::uuid;
+  end if;
+  if original_role in ('authenticated','service_role') then
+   if target.name !~ ('^'||subject::text||'/[a-f0-9-]+\.(jpg|png|webp)$') then
+    raise exception 'Owner operation unavailable' using errcode='42501'; end if;
+   perform private.pilot_lock_owner_evidence(subject);
+  end if;
  end if;
  if tg_op='DELETE' then return old; end if;
  return new;
