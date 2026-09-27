@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-27 — B3a block fixture expectation corrected; incomplete run excluded
+
+Isolated block/current-membership attempt failed expected-allow in genuine join/peer-to-actor/loss-first after705 seconds, then completed full guarded25 reset. Actual lifecycle42501 correctly denies: existing final24 block reconciliation makes a nonhost blocker leave only when both subjects are currently joined; a left joiner has no shared-current pair, so its blocked peer remains joined. Mutation-first join creates that pair; joined no-op already has it, so peer departure can permit later actor join. No product source/graph conflict.
+
+Independent final24 source/delta review clearedd904b5380c9784194c387e62f14e36aaea9beab6 fixture/mapping correction, preserving exact denial/postloss census/PID/locks/timeouts/cleanup. Failed705-second attempt is excluded from complete evidence/pass counts. Unchanged reviewed A1a/B1/B2 serial regressions run first; affected34-cell block module reruns afterward. Main288/source23/HTTP/crossing evidence remains previously completed and reviewed; upgrade/final cleanup/exact handoff review/publication/main integration remain gates. Latest task push none; B3a/TASK-021 incomplete, no hosted/app/pilot readiness claim.
+
 ## 2026-09-27 — B3a immutable-source module passed and reviewed
 
 Isolated source-race module completed23 observed waits plus4 explicit allowed/impossible classifications,563 seconds, zero fail/timeout/cancel/skip and full guarded25 reset. Fresh bounded evidence review found no gap:14 immutable disable cells cover7 existing-source actions both orders,9 published-state cells plus correct terminal/new-create/cancelled-retry/leave partitions. Each observed holder/waiter blocked on ungranted advisory lock under cleared utility. Synthetic report/disable records are not reversed; real report/operator authority remains separately labeled HTTP/regression. Block/current-membership34-cell isolated module now runs serially, no completed count yet.
