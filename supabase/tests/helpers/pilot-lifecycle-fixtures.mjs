@@ -106,7 +106,5 @@ export function prepare(route) {
     );
 }
 export const call = (route) => `${auth(route.subject)}${route.query}`;
-export const census = () =>
-  sql(
-    `select jsonb_build_object('sources',(select jsonb_agg(h order by id) from public.hangouts h),'participants',(select jsonb_agg(p order by hangout_id,account_id) from public.hangout_participants p),'private',(select jsonb_agg(l order by hangout_id) from public.hangout_private_locations l),'ledger',(select jsonb_agg(r order by host_id,request_id) from private.hangout_create_requests r),'notifications',(select count(*) from private.notification_items))`,
-  );
+export const censusQuery = `select jsonb_build_object('sources',(select jsonb_agg(h order by id) from public.hangouts h),'participants',(select jsonb_agg(p order by hangout_id,account_id) from public.hangout_participants p),'private',(select jsonb_agg(l order by hangout_id) from public.hangout_private_locations l),'ledger',(select jsonb_agg(r order by host_id,request_id) from private.hangout_create_requests r),'notifications',(select jsonb_agg(n order by n.id) from private.notification_items n),'cohosts',(select jsonb_agg(c order by c.hangout_id,c.account_id) from private.hangout_cohosts c),'provenance',(select jsonb_agg(v order by v::text) from (select to_jsonb(p) v from private.hangout_peer_provenance p) rows))`;
+export const census = () => sql(censusQuery);

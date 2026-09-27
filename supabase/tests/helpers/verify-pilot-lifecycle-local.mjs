@@ -3,6 +3,19 @@ import { readFileSync, readdirSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import { localTarget, sql } from "./pilot-admission-lifecycle.mjs";
 localTarget();
+const assertTap = (output, label) => {
+  assert.doesNotMatch(output, /^not ok\b/m, label);
+  assert.doesNotMatch(output, /#\s*(SKIP|TODO)\b/i, label + " no hidden skips");
+  const plans = [...output.matchAll(/^1\.\.(\d+)$/gm)];
+  assert.equal(plans.length, 1, label + " exactly one completed plan");
+  const count = (output.match(/^ok\s+\d+/gm) ?? []).length;
+  assert.ok(count > 0, label + " actual assertions");
+  assert.equal(count, Number(plans[0][1]), label + " full plan completed");
+};
+const catalogShape = () =>
+  sql(
+    `select jsonb_build_object('tables',(select jsonb_agg(jsonb_build_object('name',n.nspname||'.'||c.relname,'acl',c.relacl,'rls',c.relrowsecurity,'forced',c.relforcerowsecurity,'columns',(select jsonb_agg(jsonb_build_object('name',a.attname,'type',format_type(a.atttypid,a.atttypmod),'notnull',a.attnotnull,'identity',a.attidentity,'generated',a.attgenerated,'acl',a.attacl,'default',pg_get_expr(d.adbin,d.adrelid)) order by a.attnum) from pg_attribute a left join pg_attrdef d on d.adrelid=a.attrelid and d.adnum=a.attnum where a.attrelid=c.oid and a.attnum>0 and not a.attisdropped)) order by n.nspname,c.relname) from pg_class c join pg_namespace n on n.oid=c.relnamespace where c.relkind='r' and (n.nspname in('public','private') or (n.nspname='storage' and c.relname='objects'))),'policies',(select jsonb_agg(to_jsonb(p) order by p.schemaname,p.tablename,p.policyname) from pg_policies p where p.schemaname in('public','private','storage')),'constraints',(select jsonb_agg(jsonb_build_object('table',c.conrelid::regclass::text,'name',c.conname,'definition',pg_get_constraintdef(c.oid)) order by c.conrelid,c.conname) from pg_constraint c join pg_namespace n on n.oid=c.connamespace where n.nspname in('public','private','storage')),'triggers',(select jsonb_agg(pg_get_triggerdef(t.oid) order by t.tgrelid,t.tgname) from pg_trigger t join pg_class c on c.oid=t.tgrelid join pg_namespace n on n.oid=c.relnamespace where not t.tgisinternal and n.nspname in('public','private','storage')),'default_acl',(select jsonb_agg(to_jsonb(a) order by oid) from pg_default_acl a))`,
+  );
 const mode = process.argv[2] ?? "suite";
 const reset = (prior = false) => {
   const r = spawnSync(
@@ -43,6 +56,22 @@ if (mode === "reset") {
   sql(
     `insert into auth.users(id,email,email_confirmed_at) values('${id}','prior-source-b2@unc.edu',now());insert into storage.objects(bucket_id,name,owner_id) values('profile-photos','${id}/11111111.png','${id}');update public.profiles set real_name='Prior retained',graduation_year=2028,major='Math',bio='Retained',favorite_music='Retained optional',primary_photo_path='${id}/11111111.png' where user_id='${id}';`,
   );
+  const source = "c2000000-0000-4000-8001-000000000001";
+  sql(
+    `insert into public.hangouts(id,host_id,university_id,title,starts_at,public_place,public_latitude,public_longitude) values('${source}','${id}','00000000-0000-4000-8000-000000000001','Retained source',now()+interval '1 day','Approximate',35.91,-79.05);insert into public.hangout_participants(hangout_id,account_id,state) values('${source}','${id}','joined');insert into public.hangout_private_locations(hangout_id,instructions) values('${source}','Retained private fixture');insert into private.safety_reports(reporter_id,target_type,target_id,category,provenance_kind,provenance_ref_id) values('${id}','hangout','${source}','harassment','retained_hangout','${source}');`,
+  );
+  const tables = sql(
+    "select table_schema||'.'||table_name from information_schema.tables where table_type='BASE TABLE' and (table_schema='private' or (table_schema='public' and table_name in ('accounts','profiles','university_memberships','hangouts','hangout_participants','hangout_private_locations'))) order by table_schema,table_name",
+  ).split("\n");
+  const values = () =>
+    tables.map((table) => [
+      table,
+      sql(
+        `select coalesce(jsonb_agg(v order by v::text),'[]') from (select to_jsonb(t) v from ${table} t) rows`,
+      ),
+    ]);
+  const retainedBefore = values();
+  const priorCatalog = catalogShape();
   const before = sql(
     `select row_to_json(p) from public.profiles p where user_id='${id}'`,
   );
@@ -52,6 +81,16 @@ if (mode === "reset") {
       "supabase/migrations/20260927000500_pilot_ordinary_lifecycle.sql",
       "utf8",
     ),
+  );
+  assert.equal(
+    catalogShape(),
+    priorCatalog,
+    "exact24→25 fields/types/defaults/ACL/RLS/policies/constraints/triggers/default ACL preserved",
+  );
+  assert.deepEqual(
+    values(),
+    retainedBefore,
+    "true24→25 preserves every retained source/private/safety/policy value",
   );
   assert.equal(
     sql(`select row_to_json(p) from public.profiles p where user_id='${id}'`),
@@ -181,7 +220,7 @@ if (mode === "reset") {
         "0::bigint,'B2 unready immutable host hides whole roster'",
       );
     const output = sql(input);
-    assert.doesNotMatch(output, /^not ok\b/m, file);
+    assertTap(output, file);
     console.log(
       `${file}: ${(output.match(/^ok\s+\d+/gm) ?? []).length} stage-adapted assertions pass`,
     );
@@ -192,7 +231,7 @@ if (mode === "reset") {
       "utf8",
     ),
   );
-  assert.doesNotMatch(output, /^not ok\b/m);
+  assertTap(output, "source safety");
   console.log(
     `pilot-admission-source-safety.test.sql: ${(output.match(/^ok\s+\d+/gm) ?? []).length} assertions pass`,
   );
@@ -202,21 +241,21 @@ if (mode === "reset") {
       "utf8",
     ),
   );
-  assert.doesNotMatch(mandatory, /^not ok\b/m);
+  assertTap(mandatory, "operator mandatory locks");
   console.log(
     `mandatory operator lock results: ${(mandatory.match(/^ok\s+\d+/gm) ?? []).length} assertions pass`,
   );
   const owner = sql(
     readFileSync("supabase/tests/pilot-admission-owner.test.sql", "utf8"),
   );
-  assert.doesNotMatch(owner, /^not ok\b/m);
+  assertTap(owner, "B1 owner");
   console.log(
     `B1 owner: ${(owner.match(/^ok\s+\d+/gm) ?? []).length} assertions pass`,
   );
   const lifecycle = sql(
     readFileSync("supabase/tests/pilot-admission-lifecycle.test.sql", "utf8"),
   );
-  assert.doesNotMatch(lifecycle, /^not ok\b/m);
+  assertTap(lifecycle, "B3a lifecycle");
   console.log(
     `Lifecycle: ${(lifecycle.match(/^ok\s+\d+/gm) ?? []).length} assertions pass`,
   );

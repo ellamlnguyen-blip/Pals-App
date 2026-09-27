@@ -37,6 +37,12 @@ export function sql(input) {
   }
 }
 export function localTarget() {
+  assert.equal(process.env.DO_NOT_TRACK, "1", "telemetry must remain disabled");
+  assert.equal(
+    process.env.DOCKER_HOST,
+    "unix:///private/tmp/pals-lima/pals-task002/sock/docker.sock",
+    "exact previously owned mountless disposable Docker socket required",
+  );
   assert.equal(
     process.env.PALS_PILOT_DISPOSABLE_OWNER,
     "TASK-021A1b3a",
@@ -165,11 +171,19 @@ export async function until(check) {
   }
   throw new Error("Observed database lock wait timed out");
 }
-export async function race(name, firstQuery, secondQuery, rejection = null) {
+export async function race(
+  name,
+  firstQuery,
+  secondQuery,
+  rejection = null,
+  holderSnapshotSQL = null,
+) {
   const first = session(`${name}_leader`);
   const second = session(`${name}_waiter`);
   try {
-    first.send(`begin; ${firstQuery} select 'HELD';`);
+    first.send(
+      `begin; ${firstQuery} ${holderSnapshotSQL ? `select 'B3A_CENSUS:'||(${holderSnapshotSQL})::text;` : ""} select 'HELD';`,
+    );
     await until(() => first.output().includes("HELD"));
     second.send(`begin; ${secondQuery} select 'COMPLETED'; commit;`);
     await until(
@@ -207,7 +221,20 @@ export async function race(name, firstQuery, secondQuery, rejection = null) {
       assert.match(second.output(), /COMPLETED/);
       assert.doesNotMatch(second.output(), /ERROR:/);
     }
-    return JSON.parse(evidence);
+    return {
+      ...JSON.parse(evidence),
+      ...(holderSnapshotSQL
+        ? {
+            holder_snapshot: JSON.parse(
+              first
+                .output()
+                .split("\n")
+                .find((v) => v.startsWith("B3A_CENSUS:"))
+                .slice(11),
+            ),
+          }
+        : {}),
+    };
   } catch (error) {
     throw new Error(
       `${name}: ${error.message}; leader=${first.output()}; waiter=${second.output()}`,
