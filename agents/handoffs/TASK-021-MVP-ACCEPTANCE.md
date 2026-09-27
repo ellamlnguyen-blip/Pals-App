@@ -1,7 +1,7 @@
 # TASK-021 — Initial-MVP product-scope acceptance handoff
 
 Date: 2026-09-26
-Status: Documentation implementation independently reviewed; publication/integration pending; parent TASK-021 incomplete
+Status: Documentation increment independently reviewed, published and integrated; parent TASK-021 incomplete
 Branch: `agent/TASK-021-mvp-acceptance`
 Baseline: coordinator-provided independently remote-verified canonical main `d05fff2b5532632463713eb75c193d2d3a3d6c95`; independent disposable clone used.
 Model: GPT-6 Sol, medium reasoning. Dispatch tool exposes no Standard-speed selector; no speed verification claim.
@@ -18,4 +18,4 @@ Verified all 22 changed files are Markdown only. Markdown file-reference validat
 
 ## Publication receipts and remaining work
 
-Local commit only per coordinator's bounded assignment. Task remote SHA: not published. Canonical integration SHA: pending independent review, coordinator publication/integration and remote verification. This handoff does not claim those gates passed. Coordinator must review this exact tip, publish accepted docs and record task/main remote receipts before this documentation increment is complete. Full TASK-021 still requires separately accepted owner policies, exact target/release authorization, deployed HTTPS/real UNC email and independent rehearsal/cleanup evidence.
+Reviewed task branch `origin/agent/TASK-021-mvp-acceptance` and canonical `origin/main` were independently remote-verified at `156d2c368ae4a199056f1c08d08bfc5b699e0615` after standard non-force publication and fast-forward integration. This documentation receipt follows that verified integration. Full TASK-021 still requires separately accepted owner policies, exact target/release authorization, deployed HTTPS/real UNC email and independent rehearsal/cleanup evidence.
