@@ -1,9 +1,9 @@
 # TASK-021A1b2 — Source projections and retained safety boundary
 
-Coordinator review milestone: the reviewed mandatory operator lock-result amendment is published at canonical main `6246a649949482cfa31ff4eacc4109c50c42b615`. Partial B2 `ba4344a3b9fb2b4cc6268833f57accf3718fcc64` remains incomplete; its successful pre-repair runtime and cleanup are historical evidence only. Fresh bounded repair executor prepares source for independent review before any runtime mutation.
+Coordinator review milestone: the reviewed mandatory operator lock-result amendment is published at canonical main `6246a649949482cfa31ff4eacc4109c50c42b615`. Partial B2 `ba4344a3b9fb2b4cc6268833f57accf3718fcc64` remains incomplete; its successful pre-repair runtime and cleanup are historical evidence only. Fresh bounded repair source `6a692ffaf0d4d3f63e5603edde0522907008b70d` was independently reviewed before coordinator runtime release; fresh24 repair evidence and normal cleanup are recorded in ROLE-REPAIR handoff. Final evidence review/publication/canonical integration remain pending.
 
 Date: 2026-09-27
-Status: **Repair implementation active — source review, fresh24 runtime, cleanup, publication and integration pending**
+Status: **Repair runtime verified — final evidence review, publication and integration pending; B2 incomplete**
 Parent: [TASK-021A1b](TASK-021A1b-live-admission-enforcement.md).
 Reconciliation baseline: canonical main `bb39f7a1fa2a97bfbf1223a4a9f99875c529ecee`, all22 committed migrations, through `20260927000200_pilot_owner_admission.sql`. B1 complete: reviewed task remote `82de4ed8a604b8af853cdb0e4413f7df82355a2c`, accepted integration remote `7844fbacead2b2eb42037dcc7e56d183fef419ae`, completion receipt `a0a32a16404cf61400781d84591565f0d3f80364`; the complete B1 handoff's bottom coordinator receipt supersedes historical pending fields. Implementation branch `agent/TASK-021A1b2-source-projections-safety` starts from latest independently remote-verified main containing this reviewed contract and queue entry. Recheck migration/source inventory before dispatch; reconcile differences, never mechanically use this baseline.
 
