@@ -1,5 +1,11 @@
 # NOW
 
+## 2026-09-27 — B3a corrected block module passed and reviewed
+
+Corrected block/current-membership module completed34 observed waits plus1 host-self/impossibility classification in823 seconds, no fail/timeout/cancel/skip, guarded25 reset clean. Fresh bounded evidence review found no gap:20 public host block cells,6 privileged parent-bound joined participant deletions,8 actual public peer block/reconciliation cells;16 loss-first denial holder snapshots match no-added-mutation census. Actor-left genuine join loss-first denies while paired peer departure permits applicable later joins/no-ops. Bothorders/PIDs/ungranted advisory locks and role/writer labels consistent. Failed705-second attempt remains excluded. New Hangout modules now total350 successful observed waits (288main+23source+34block+5crossing), with separate40P01 rollback and explicit classifications; inherited regressions not included in350.
+
+Serial regression wrapper initially failed before any inherited module ran due Node internal child-test marker. Independently cleared14db8371f1c04d878c8d3106709b226566dd1b79 removes only that marker from copied environment, retaining all guards and strict result checks;03a39e648373d75aab266b6b63479d4429ba7492 adds only explicit TAP reporter. Empty attempt excluded. Corrected A1a/B1/B2 regressions now run; no completed regression claim yet. True24 upgrade/final cleanup/exact handoff review/task push/remote accepted integration remain. B3a/TASK-021 incomplete; no hosted/app/pilot readiness claim.
+
 ## 2026-09-27 — B3a block fixture expectation corrected; incomplete run excluded
 
 Isolated block/current-membership attempt failed expected-allow in genuine join/peer-to-actor/loss-first after705 seconds, then completed full guarded25 reset. Actual lifecycle42501 correctly denies: existing final24 block reconciliation makes a nonhost blocker leave only when both subjects are currently joined; a left joiner has no shared-current pair, so its blocked peer remains joined. Mutation-first join creates that pair; joined no-op already has it, so peer departure can permit later actor join. No product source/graph conflict.
