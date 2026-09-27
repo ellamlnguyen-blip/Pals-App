@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-27 — Owner admission reviewed and published
+
+TASK-021A1b1 implementation/handoff passed fresh independent final security/evidence/receipt review at `82de4ed8a604b8af853cdb0e4413f7df82355a2c`; task branch independently remote-verified at that SHA.268 stage SQL assertions, serial backend tests2/2 plus corrected HTTP1/1,59 exact SQL waits,8 HTTP waits and separately classified40P01/stronger-isolation denial evidence passed; exact prior21 upgrade/current22 reset, lint/static/build, zero synthetic census/defaults off and normal owned shutdown recorded. Reviewer inspected source/committed evidence and did not rerun runtime. Accepted code is integrated locally with these shared records; canonical publication/remote verification follows. B2 source/host/retained safety, B3 mutations, A1c deferred closure and A2 app remain incomplete. No hosted or pilot-ready claim; no product successor from this substage.
+
 ## 2026-09-27 — Owner final-write correction reviewed; validation active
 
 Independent source review cleared `fb819d9de4f79ece57c63ee22eb0a2b812522d46`. Actual Storage role matching is protected through commit; a narrow immutable-object UPDATE guard closes a direct authenticated insert racing final privileged UPSERT. Executor reports a fresh22-migration reset with268 stage SQL assertions, real HTTP1/1 with8 exact waits (six post-precheck access-loss, same-name completion and raw-insert crossing), concurrency1/1 with59 exact waits, separately classified40P01 no-orphan proof and stronger-isolation denials. Static/build checks reportedly passed. Final serial fixtures, exact21-history upgrade, lint, cleanup/default census, source audit/handoff and final exact-tip evidence review remain pending; these reported runtime results have not been independently rerun. Implementation remains unpushed on `agent/TASK-021A1b1-owner-admission`; B1/TASK-021 incomplete, no hosted/pilot-ready claim.

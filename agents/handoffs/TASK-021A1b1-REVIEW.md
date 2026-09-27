@@ -1,7 +1,7 @@
 # TASK-021A1b1 independent source review
 
 Date: 2026-09-27
-Status: **Corrected source cleared at 8cc3480775687bcd679db086c6dc802bb4a3dc7b; final runtime/handoff/exact-tip review pending**
+Status: **Final review cleared at 82de4ed8a604b8af853cdb0e4413f7df82355a2c; task publication verified; canonical integration receipt pending**
 
 Reviewed exact local unpushed implementation `9470eb8b832c8e31811cb555647d509d33b8920f` in `/private/tmp/pals-task021a1b1-owner-admission`, branch `agent/TASK-021A1b1-owner-admission`. Fresh independent GPT-6 Sol medium agent `review_pilot_owner_admission_implementation`; Standard speed app-controlled, not verified by dispatch API. Read-only source review, no runtime operation. Reviewer could inspect committed predecessor definitions but did not have the later documentation-only dispatch receipt SHA locally.
 
@@ -24,3 +24,5 @@ Independent review cleared exact corrected source `ff114f729bee6722be5dd3b221081
 Immutable-name followup: source `488b96c942f7b971b9c2e212fdbf787b0e32d16b` was not cleared because a BEFORE INSERT existence check plus Storage object lock does not cover authenticated raw INSERT contenders. The privileged final UPSERT could overwrite the raw winning object. Exact `fb819d9de4f79ece57c63ee22eb0a2b812522d46` cleared after a narrow BEFORE UPDATE guard denied authenticated/service-role updates when OLD or NEW bucket is profile-photos. Private helper execution remains revoked, trusted postgres fixtures separate, no new student API or policy expansion.
 
 Executor reports fresh22-schema268 stage SQL assertions; real HTTP8 exact waits covering final INSERT/DELETE after precheck access loss, competing HTTP same-name completion and raw INSERT crossing with winning row preserved;59 successful observed concurrency waits plus separately classified40P01 no-orphan/stronger-isolation denial. Actual Storage INSERT original service_role/noUID and DELETE authenticated/ownerUID observed. Final serial pair, exact21-history upgrade, lint/cleanup/default census, final source audit/handoff and exact-tip review pending. Reviewer has not independently operated runtime.
+
+Final consolidated review initially found P2 at `2480318a12019b00911433f3fd428e70328f668f`: six HTTP final-write losses accepted generic >=400 and could count timeout/abort as intended authorization denial. Exact `7bf0e25d9986db94704114740441ec5223d462c2` cleared after exact HTTP400 message checks and explicit abort/timeout exclusion; artifact records match. Final `82de4ed8a604b8af853cdb0e4413f7df82355a2c` handoff/evidence-only cleanup/upgrade receipts passed independent review with no new actionable finding. Prior21 upgrade/current22 reset,268 rolled-back assertions, lint0errors, empty/default-off census and normal owned Supabase/VM shutdown consistent; no reviewer runtime rerun claimed. Task branch independently remote-verified at82de4ed. Accepted canonical integration/publication follows with coordinator records.
