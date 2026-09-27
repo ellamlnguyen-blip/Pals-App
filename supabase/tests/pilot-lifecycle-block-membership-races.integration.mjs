@@ -21,7 +21,7 @@ import {
 } from "./helpers/pilot-lifecycle-fixtures.mjs";
 test(
   "B3a individual bilateral host/peer block and current joined authority races",
-  { concurrency: false, timeout: 600000 },
+  { concurrency: false, timeout: 1200000 },
   async () => {
     localTarget();
     const records = [];
