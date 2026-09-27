@@ -196,16 +196,20 @@ test(
       }
       for (const policyFirst of [true, false]) {
         const { actor, target } = pair();
+        const initialRevision = Number(
+          sql(
+            "select revision from private.pilot_availability where singleton",
+          ),
+        );
+        sql(
+          `begin; ${auth(actor)} select * from public.set_pilot_policy('availability',true,${initialRevision},'Enable for shutdown race','${crypto.randomUUID()}'); commit;`,
+        );
         const revision = Number(
           sql(
             "select revision from private.pilot_availability where singleton",
           ),
         );
-        const desired =
-          sql(
-            "select enabled from private.pilot_availability where singleton",
-          ) !== "t";
-        const policy = `${auth(actor)} select * from public.set_pilot_policy('availability',${desired},${revision},'Local policy race','${crypto.randomUUID()}');`;
+        const policy = `${auth(actor)} select * from public.set_pilot_policy('availability',false,${revision},'Local shutdown race','${crypto.randomUUID()}');`;
         const operation = management(actor, target, "active", 0);
         if (policyFirst) await run(policy, operation);
         else await run(operation, policy);
