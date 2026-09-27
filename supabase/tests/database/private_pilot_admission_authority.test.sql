@@ -33,6 +33,26 @@ select throws_ok($$insert into private.pilot_admission_managers(account_id,state
 select set_config('request.jwt.claims','{"sub":"55000000-0000-4000-8000-000000000006","role":"authenticated"}',true);
 select throws_ok($$select * from public.set_pilot_policy('availability',true,1,'test',gen_random_uuid())$$,'42501','Pilot management unavailable','platform admin without manager denied');
 reset role;
+set local role anon;
+select throws_ok($$select private.set_pilot_manager_fixture('55000000-0000-4000-8000-000000000002','active',0,'forge',gen_random_uuid())$$,'42501',null,'actual anon role bootstrap denied');
+reset role;
+set local role service_role;
+select throws_ok($$select private.set_pilot_manager_fixture('55000000-0000-4000-8000-000000000002','active',0,'forge',gen_random_uuid())$$,'42501',null,'actual service_role bootstrap execute denied');
+reset role;
+grant usage on schema private to service_role;
+grant execute on function private.set_pilot_manager_fixture(uuid,text,bigint,text,uuid) to service_role;
+set local role service_role;
+select throws_ok($$select private.set_pilot_manager_fixture('55000000-0000-4000-8000-000000000002','active',0,'forge',gen_random_uuid())$$,'42501','Pilot management unavailable','original service_role guard independent of execute permission');
+reset role;
+revoke execute on function private.set_pilot_manager_fixture(uuid,text,bigint,text,uuid) from service_role;
+revoke usage on schema private from service_role;
+grant usage on schema private to anon;
+grant execute on function private.set_pilot_manager_fixture(uuid,text,bigint,text,uuid) to anon;
+set local role anon;
+select throws_ok($$select private.set_pilot_manager_fixture('55000000-0000-4000-8000-000000000002','active',0,'forge',gen_random_uuid())$$,'42501','Pilot management unavailable','original anon role guard independent of schema and execute permission');
+reset role;
+revoke execute on function private.set_pilot_manager_fixture(uuid,text,bigint,text,uuid) from anon;
+revoke usage on schema private from anon;
 -- Grant only inside rolled-back test to prove original-role guard independently
 -- of EXECUTE revokes under postgres session SET ROLE authenticated.
 grant execute on function private.set_pilot_manager_fixture(uuid,text,bigint,text,uuid) to authenticated;
