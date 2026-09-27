@@ -3,14 +3,56 @@ import { spawnSync } from "node:child_process";
 import { writeFileSync } from "node:fs";
 import { localTarget } from "./pilot-admission-lifecycle.mjs";
 localTarget();
-const args = ["db", "lint", "--local", "--schema", "public,private", "--level", "warning", "--fail-on", "warning"];
-const result = spawnSync(process.env.SUPABASE_CLI ?? "supabase", args, { encoding: "utf8" });
-const structured = (result.stdout + "\n" + result.stderr).split("\n").filter((line) => line.startsWith("{")).map((line) => JSON.parse(line));
+const args = [
+  "db",
+  "lint",
+  "--local",
+  "--schema",
+  "public,private",
+  "--level",
+  "warning",
+  "--fail-on",
+  "warning",
+];
+const result = spawnSync(process.env.SUPABASE_CLI ?? "supabase", args, {
+  encoding: "utf8",
+});
+const structured = (result.stdout + "\n" + result.stderr)
+  .split("\n")
+  .filter((line) => line.startsWith("{"))
+  .map((line) => JSON.parse(line));
 assert.equal(structured.length, 1);
-assert.equal(result.status, 1, "standard lint remains nonzero; no pass conversion");
+assert.equal(
+  result.status,
+  1,
+  "standard lint remains nonzero; no pass conversion",
+);
 const data = structured[0];
 assert.equal(data.results.length, 1);
 assert.equal(data.results[0].function, "private.pilot_lock_ordinary_lifecycle");
-assert.deepEqual(data.results[0].issues, [{ level: "warning extra", message: 'composite OUT variable "source_row" is not single argument', sqlState: "00000" }]);
-writeFileSync("agents/handoffs/TASK-021A1b3a-LINT-EVIDENCE.json", JSON.stringify({ command: "supabase " + args.join(" "), standard_exit_status: result.status, stdout: result.stdout, stderr: result.stderr, exact_compatibility_verification: "only prescribed helper structural composite OUT advisory; no other warning/error", diagnostics: data }, null, 2) + "\n");
-console.log("Standard lint exit1 preserved; exact one independently reviewed structural advisory verified, no other diagnostic");
+assert.deepEqual(data.results[0].issues, [
+  {
+    level: "warning extra",
+    message: 'composite OUT variable "source_row" is not single argument',
+    sqlState: "00000",
+  },
+]);
+writeFileSync(
+  "agents/handoffs/TASK-021A1b3a-LINT-EVIDENCE.json",
+  JSON.stringify(
+    {
+      command: "supabase " + args.join(" "),
+      standard_exit_status: result.status,
+      stdout: result.stdout,
+      stderr: result.stderr,
+      exact_compatibility_verification:
+        "only prescribed helper structural composite OUT advisory; no other warning/error",
+      diagnostics: data,
+    },
+    null,
+    2,
+  ) + "\n",
+);
+console.log(
+  "Standard lint exit1 preserved; exact one independently reviewed structural advisory verified, no other diagnostic",
+);
