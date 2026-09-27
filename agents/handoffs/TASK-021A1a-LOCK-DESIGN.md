@@ -1,6 +1,6 @@
 # TASK-021A1a exact lock design — review gate
 
-Baseline: `f4ba5cd6affdd8eae7611a15cbed39d33e39b756`. Status: proposed implementation design, independent review required. No schema/code or database mutation has occurred. A1a preserves current student authorization; these primitives alone are neither deployable nor pilot-ready. Source audit: `TASK-021A1a-SOURCE-AUDIT.md`.
+Baseline: `f4ba5cd6affdd8eae7611a15cbed39d33e39b756`. Status: independently reviewed design cleared for bounded A1a implementation. No schema/code or database mutation has occurred. A1a preserves current student authorization; these primitives alone are neither deployable nor pilot-ready. Source audit: `TASK-021A1a-SOURCE-AUDIT.md`.
 
 ## API and state design
 
@@ -46,3 +46,7 @@ No hosted bootstrap procedure or public manager RPC is introduced. Fixture-only 
 ## Planned evidence and limits
 
 No tests are run at this documentation gate. Implementation must supply final SQL tests, real local Auth/PostgREST and concurrency modules. Observe `pg_locks`/`pg_stat_activity` before releasing holders; cover manager revoke and account status loss/deletion versus new and exact retry, including historical bare-UUID audit preservation and live-row cascade without new deletion restrictions, roster absent activation/CAS, absent manager trusted assignment/revocation, policy changes, Auth evidence loss and campus changes in both successful commit orders, with safe abort classified. Test no-op/retry/actor reuse, immutable audit grants/roles, default off/empty roster/managers, fresh reset and genuine prior-schema upgrade. Before any runtime mutation independently prove named disposable `pals-local`, exact loopback URL, database/container identity and exclusive ownership. No runtime operation is authorized by this design document alone before independent clearance.
+
+## Independent review receipt
+
+Fresh GPT-6 Sol medium reviewer cleared exact design tip `5d567f318fa8d708931f093a88681929362f6e7d` after correcting the blanket account-deletion restriction. Follow-up `6439e68e74889368a4f431cdc80b0f06a7238583` documents the reviewer's existing requirements for original SQL role and locked membership campus selection. Coordinator dispatched implementation continuation only after clearance. Code, actual grants/locks, local tests/cleanup and independent exact-tip implementation review are outstanding; no hosted permission or deployable-pilot claim.

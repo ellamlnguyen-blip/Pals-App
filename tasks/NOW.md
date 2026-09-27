@@ -1,5 +1,10 @@
 # NOW
 
+## 2026-09-27 — A1a lock design reviewed; implementation active
+
+Independent lock-design review cleared exact `5d567f318fa8d708931f093a88681929362f6e7d` after resolving an account-deletion policy expansion; live authority rows follow existing cascades and audit/receipt UUIDs remain historical evidence. Fresh agent is implementing only private A1a primitives on `agent/TASK-021A1a-admission-authority` in `/private/tmp/pals-task021a1a-authority`; latest implementation push: none. Code/tests/runtime evidence and independent code review remain outstanding. A1b/c and A2 are dependent, unstarted; no hosted action or pilot-readiness claim. TASK-021 incomplete. This status-only branch publishes reviewed design without unreviewed implementation.
+
+
 ## 2026-09-27 — First pilot backend contract reviewed
 
 A1 backend is split into sequential bounded units: TASK-021A1a authority/default-off policy/manager RPC/audit primitives, A1b live admission/core/onboarding/Storage/safety enforcement, A1c deferred capability denial and full backend closure. Fresh independent security/contract review cleared exact draft `953fa30ade9628810788a903261028c60a24e989`. Contract branch and canonical main remotely verified at `f4ba5cd6affdd8eae7611a15cbed39d33e39b756`. Fresh Sol-medium A1a agent dispatched on `agent/TASK-021A1a-admission-authority`; exact lock graph review remains before implementation. Latest pushed implementation SHA: none yet. A1b/c remain planning contracts reconciled/reviewed/published after preceding integration. No code/runtime evidence or pilot-ready claim. Coordinator owns shared records; TASK-021 remains incomplete.
