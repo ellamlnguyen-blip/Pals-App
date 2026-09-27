@@ -4,11 +4,9 @@
 
 A1 backend is split into sequential bounded units: TASK-021A1a authority/default-off policy/manager RPC/audit primitives, A1b live admission/core/onboarding/Storage/safety enforcement, A1c deferred capability denial and full backend closure. Fresh independent security/contract review cleared exact draft `953fa30ade9628810788a903261028c60a24e989`. A1a is ready for publication and fresh agent dispatch; its exact lock graph must be reviewed before implementation. A1b/c remain planning contracts reconciled/reviewed/published after preceding integration. No code/runtime evidence or pilot-ready claim. Coordinator owns shared records; TASK-021 remains incomplete.
 
-
 ## 2026-09-27 — Pilot admission design accepted
 
 The user replied “accept” to the explicit reviewed ADR-0027 technical decision on 2026-09-27. Accepted ADR-0027 authorizes staged disposable-local admission/capability implementation, including its exact revoked-subject privacy matrix and separate audited caller-bound admission-manager authority. A1 backend contract drafting/review/publication precedes implementation; A2 waits for reviewed remote-verified A1 integration. No code, tests, hosted operation or TASK-021 completion is claimed by this receipt. Hosted staffing/retention/photo/provider/target policies and operations remain separate.
-
 
 ## 2026-09-27 — Proposed pilot admission design
 
@@ -20,11 +18,9 @@ Proposed ADR-0027 defines a private account-ID admission roster, separate caller
 - Kept the core Hangout/manual-refresh coordination and safety loop; deferred extra product surfaces with fail-closed route/API preparation requirements. Required onboarding/photo policy remains intact.
 - Added bounded admission, exposure/gate, privacy and hosted preparation/test plan. Admission/owner policies and exact hosted authorization remain unresolved; every test is planned/unrun. TASK-021 remains open; no runtime/hosted/gate/SMTP/DNS action or successor.
 
-
 ## 2026-09-26 — Initial UNC MVP scope accepted (TASK-021 documentation)
 
 The user replied “yes” directly to the reviewed narrower initial-MVP scope question. Accepted ADR-0025 records the exact question/response and qualifies only the six named product rows: campus-only Hangouts, current text People and refresh-based coordination; defer restricted access/eligibility/invitations, friend context/ranking, peer photos, hosted external analytics/complete funnel/repeat-outcome reports and extra expectation/comfort questions. Existing friendship, DMs, private attendance, verified identity/real UNC Auth email delivery, rich owner onboarding/photo editing, report/block, moderation and privacy remain required. Hosted owner staffing/access/MFA/retention/recovery and photo bearer/cache/incident policies remain Proposed; no target/hosted operations are authorized. All new rehearsal checks remain planned/unrun. Preserve local code and independent ADR-0024 gate-off safeguard deferral. TASK-021 remains incomplete; no successor is triggered.
-
 
 ## 2026-09-26 — TASK-021 initial-launch decision package proposed
 

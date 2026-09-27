@@ -1,5 +1,10 @@
 # Current State
 
+## 2026-09-27 — Local test runtime restored; A1a source review active
+
+Missing disposable VM configuration reconstructed from saved evidence and independently reviewed; disk/metadata byte backups verified, precise stale-process shutdown completed, existing VM verified mountless/rootless/loopback with only Pals-owned test volumes. A1a runtime tests now authorized exclusively after executor target revalidation; no database pass is claimed yet. Source review of `8eac56b` found no authorization defect and required stronger deletion/retry/lock/actual-role evidence; fixes are being reviewed. Implementation is unpushed and incomplete. See `agents/handoffs/TASK-021-LOCAL-RUNTIME-RECOVERY.md`. No hosted operation or pilot-ready claim.
+
+
 ## 2026-09-27 — A1a lock design reviewed; implementation active
 
 Independent lock-design review cleared exact `5d567f318fa8d708931f093a88681929362f6e7d` after resolving an account-deletion policy expansion; live authority rows follow existing cascades and audit/receipt UUIDs remain historical evidence. Fresh agent is implementing only private A1a primitives on `agent/TASK-021A1a-admission-authority` in `/private/tmp/pals-task021a1a-authority`; latest implementation push: none. Code/tests/runtime evidence and independent code review remain outstanding. A1b/c and A2 are dependent, unstarted; no hosted action or pilot-readiness claim. TASK-021 incomplete. This status-only branch publishes reviewed design without unreviewed implementation.

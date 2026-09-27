@@ -50,3 +50,5 @@ No tests are run at this documentation gate. Implementation must supply final SQ
 ## Independent review receipt
 
 Fresh GPT-6 Sol medium reviewer cleared exact design tip `5d567f318fa8d708931f093a88681929362f6e7d` after correcting the blanket account-deletion restriction. Follow-up `6439e68e74889368a4f431cdc80b0f06a7238583` documents the reviewer's existing requirements for original SQL role and locked membership campus selection. Coordinator dispatched implementation continuation only after clearance. Code, actual grants/locks, local tests/cleanup and independent exact-tip implementation review are outstanding; no hosted permission or deployable-pilot claim.
+
+Design/status task branch and canonical main were independently remote-verified at `c3b6befd4ce7a36a62b46f6044ae19498ff043b1`; this runtime/status record follows.
