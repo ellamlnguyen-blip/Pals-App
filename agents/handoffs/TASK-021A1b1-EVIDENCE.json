@@ -592,7 +592,46 @@
       }
     }
   ],
-  "cleanup": "pending; final receipt will follow",
+  "cleanup": {
+    "final_census": {
+      "counts": {
+        "auth.users": 0,
+        "public.accounts": 0,
+        "public.profiles": 0,
+        "public.university_memberships": 0,
+        "public.platform_roles": 0,
+        "public.hangouts": 0,
+        "public.hangout_participants": 0,
+        "storage.objects": 0,
+        "private.pilot_account_admission": 0,
+        "private.pilot_admission_managers": 0,
+        "private.pilot_management_audit": 0,
+        "private.pilot_management_requests": 0,
+        "private.pilot_manager_audit": 0
+      },
+      "availability": "false:1",
+      "disabled_capabilities_revision1": 13,
+      "committed_history": 22,
+      "nonconfig_private_tables": "all empty; independently asserted by clean mode",
+      "original_feature_gates": "all off; independently asserted by clean mode"
+    },
+    "shutdown": {
+      "vm": "pals-task002",
+      "status": "Stopped",
+      "supabase_stop_exit": 0,
+      "supabase_project_filter": "pals-local",
+      "limactl_stop_exit": 0,
+      "orphan_cleanup": "not needed",
+      "owned_hostagent_38713": "absent",
+      "disk_and_efi_holders": 0,
+      "test_port_listeners": 0
+    },
+    "final_rolled_back_sql_assertions": 268,
+    "db_lint": {
+      "result": "No schema errors found",
+      "results": []
+    }
+  },
   "http_denial_followup": {
     "pass": 1,
     "fail": 0,
@@ -610,5 +649,6 @@
     "required_optional_owned_primary_preserved": true,
     "default_off_denies": true,
     "current22_reset": true
-  }
+  },
+  "consolidated_review_tip": "7bf0e25d9986db94704114740441ec5223d462c2"
 }
