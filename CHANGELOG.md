@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-27 — Owner admission contract reviewed
+
+A1a is complete at verified canonical main `776db8c648f339c8650f7e725108d2853a0859ba`. A1b live enforcement is bounded into B1 caller access-state/owner onboarding/primary Storage/direct-write locking, B2 host/source/retained peer/safety projections, and B3 core/co-host/chat mutation serialization. Independent contract review cleared exact `43ebf783055ca86ce848688850761319592da240`. B1 is ready for reviewed canonical publication before fresh implementation dispatch; B2/B3 remain dependency planning. The neutral `pilot_unavailable` ABI requires later A2 app reconciliation. No runtime/hosted action or deployable pilot claim; A1b/A1c/A2 and TASK-021 remain incomplete.
+
 ## 2026-09-27 — A1a integrated and remote-verified
 
 TASK-021A1a is complete for bounded disposable-local private admission/policy/manager/audit primitives. Independently reviewed implementation and handoff were published on `agent/TASK-021A1a-admission-authority` and integrated onto canonical main; both remote SHAs independently verified at `08199c743ea2a90c3bd0406057f3f98953e4ab69`. Two 1,089-assertion clean-reset suites, exact prior-schema upgrade, real Auth/API, 25 observed holder/waiter races and applicable static/lint/build checks passed with the documented unit skip and stopped-wrapper limitation; zero fixtures/defaults off/owned services stopped. This receipt follows. A1b contract reconciliation/review/publication is next before fresh implementation dispatch. Existing student enforcement remains unchanged; A1b/c/A2 and TASK-021 remain incomplete, with no hosted/pilot-ready claim or duplicate product successor.
