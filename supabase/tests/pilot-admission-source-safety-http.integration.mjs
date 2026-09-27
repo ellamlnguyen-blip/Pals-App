@@ -126,7 +126,6 @@ test(
             `select public.get_hangout_participant_state('${hangout}','${caller.id}')`,
             "Hangout operation not permitted",
           ],
-          [`select public.list_moderation_reports()`, "Moderation unavailable"],
         ]) {
           assert.throws(
             () => sql(`${prefix}${query};rollback;`),
@@ -624,6 +623,95 @@ test(
         beforeRetry,
         "authorized exact retries add no action/audit",
       );
+      // Eligible operator READ COMMITTED success is the control for isolation denial.
+      const operatorClaims = `set local role authenticated;set local request.jwt.claims=${quote(JSON.stringify({ sub: operator.id, role: "authenticated" }))};`;
+      sql(
+        `begin;${operatorClaims}select * from public.list_moderation_reports(null,null,1);commit;`,
+      );
+      for (const isolation of ["repeatable read", "serializable"]) {
+        const before = operatorCensus();
+        assert.throws(
+          () =>
+            sql(
+              `begin isolation level ${isolation};${operatorClaims}select * from public.list_moderation_reports(null,null,1);rollback;`,
+            ),
+          /42501:.*Moderation unavailable/,
+        );
+        assert.equal(operatorCensus(), before);
+        evidence.cases.push({
+          isolation,
+          kind: "eligible actual authenticated operator SQL",
+          read_committed_control: "success",
+          code: "42501",
+          message: "Moderation unavailable",
+        });
+      }
+      // Admin-only new actions and exact retries retain action-specific current authority.
+      for (const [adminAction, reopenRevision, nextStatus] of [
+        ["ban", 2, "banned"],
+        ["reinstate", 4, "active"],
+      ]) {
+        sql(
+          `update public.platform_roles set role='admin' where user_id='${operator.id}'`,
+        );
+        assert.deepEqual(
+          await allowed("transition_moderation_case", operator, {
+            p_report_id: report,
+            p_request_id: crypto.randomUUID(),
+            p_expected_revision: reopenRevision,
+            p_action: "reopen",
+            p_note: "Synthetic action-role review",
+          }),
+          [{ case_state: "in_review", revision: reopenRevision + 1 }],
+        );
+        const adminArgs = {
+          p_report_id: report,
+          p_request_id: crypto.randomUUID(),
+          p_expected_case_revision: reopenRevision + 1,
+          p_action: adminAction,
+          p_reason: "Synthetic admin authority",
+        };
+        const adminResult = await allowed(
+          "apply_account_moderation_action",
+          operator,
+          adminArgs,
+        );
+        assert.deepEqual(adminResult, [
+          {
+            case_state: "closed",
+            revision: reopenRevision + 2,
+            account_status: nextStatus,
+          },
+        ]);
+        const beforeAdminReplay = operatorCensus();
+        assert.deepEqual(
+          await allowed("apply_account_moderation_action", operator, adminArgs),
+          adminResult,
+        );
+        assert.equal(operatorCensus(), beforeAdminReplay);
+        sql(
+          `update public.platform_roles set role='moderator' where user_id='${operator.id}'`,
+        );
+        // Account remains active and a valid moderation role remains; only admin authority is lost.
+        assert.equal(
+          sql(
+            `select status||':'||role from public.accounts a join public.platform_roles r on r.user_id=a.id where a.id='${operator.id}'`,
+          ),
+          "active:moderator",
+        );
+        const beforeDowngradedReplay = operatorCensus();
+        await denied(
+          "apply_account_moderation_action",
+          operator,
+          adminArgs,
+          "Moderation unavailable",
+        );
+        assert.equal(
+          operatorCensus(),
+          beforeDowngradedReplay,
+          "admin role downgrade retry adds no action/audit/target change",
+        );
+      }
       sql(
         `update public.accounts set status='suspended' where id='${caller.id}'`,
       );
