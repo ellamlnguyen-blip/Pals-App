@@ -1,7 +1,7 @@
 # TASK-021 initial-launch decisions — planning handoff
 
 Date: 2026-09-26
-Status: Proposed documentation increment; independently reviewed; publication/integration pending; TASK-021 incomplete
+Status: Proposed documentation increment; independently reviewed, published and integrated; TASK-021 incomplete
 Branch: `agent/TASK-021-launch-decisions`
 Baseline: `8fd8200ec446855d5cea4895f447290b83a0c520` (canonical main independently remote-verified by coordinator before dispatch)
 
@@ -22,3 +22,7 @@ Independent review raised a P2 omission of the structured safety-feedback gap. T
 Review this exact documentation tip; record any explicit user scope acceptance and synchronize specifications/backlog only afterward. Collect real owner inputs and prepare separately reviewed/accepted hosted policies, then the target-specific release contract and authorization. TASK-021 cannot complete until its required rehearsal, cleanup, evidence review and remote publication/integration gates pass. No completion-triggered successor is due.
 
 Independent review: initial tip identified missing safety-feedback scope; corrected exact tip `7ee2a4b67c5f3545813816d03c33bcd649968c78` passed targeted re-review with no remaining blocking findings. The package remains Proposed.
+
+## Publication receipts
+
+Reviewed task branch `origin/agent/TASK-021-launch-decisions` and canonical `origin/main` were independently remote-verified at `dafd4ca999dbc4ff257221c62b9b0b60167b32f8` after standard non-force publication and fast-forward integration. This receipt follows that verified integration. The package remains Proposed; TASK-021 remains incomplete.
