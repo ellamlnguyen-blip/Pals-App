@@ -73,7 +73,7 @@ test(
           delete childEnvironment.NODE_TEST_CONTEXT;
           const result = spawnSync(
             process.execPath,
-            ["--test", "--test-concurrency=1", join(directory, modulePath)],
+            ["--test", "--test-reporter=tap", "--test-concurrency=1", join(directory, modulePath)],
             { encoding: "utf8", env: childEnvironment, maxBuffer: 20 * 1024 * 1024 },
           );
           // Inherited outputs sanitize tokens; retain bounded test/evidence output.
