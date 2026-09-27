@@ -17,17 +17,26 @@ const args = [
 const result = spawnSync(process.env.SUPABASE_CLI ?? "supabase", args, {
   encoding: "utf8",
 });
-const structured = (result.stdout + "\n" + result.stderr)
-  .split("\n")
-  .filter((line) => line.startsWith("{"))
-  .map((line) => JSON.parse(line));
-assert.equal(structured.length, 1);
+assert.equal(result.error, undefined, "spawn error cannot be accepted");
+assert.equal(result.signal, null, "signal termination cannot be accepted");
+assert.deepEqual(
+  result.stderr.trim().split(/\r?\n/),
+  [
+    "Connecting to local database...",
+    "Linting schema: public",
+    "Linting schema: private",
+  ],
+  "only exact benign captured stderr lines permitted",
+);
+// Parse the entire stdout. Any plaintext, second JSON record or empty output fails.
+const data = JSON.parse(result.stdout.trim());
+assert.deepEqual(Object.keys(data).sort(), ["message", "results"]);
+assert.equal(data.message, "db lint");
 assert.equal(
   result.status,
   1,
   "standard lint remains nonzero; no pass conversion",
 );
-const data = structured[0];
 assert.equal(data.results.length, 1);
 assert.equal(data.results[0].function, "private.pilot_lock_ordinary_lifecycle");
 assert.deepEqual(data.results[0].issues, [
