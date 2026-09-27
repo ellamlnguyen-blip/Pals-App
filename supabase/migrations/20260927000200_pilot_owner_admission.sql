@@ -150,7 +150,7 @@ begin
    -- Real Storage first checks client permission separately, then persists as
    -- supabase_storage_admin/service_role with auth.uid null. Guard that final
    -- row through commit using its server-assigned owner; no service RPC grant.
-   if session_user<>'supabase_storage_admin' or target.owner_id is null
+   if tg_op<>'INSERT' or session_user<>'supabase_storage_admin' or target.owner_id is null
     or target.owner_id !~ '^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$' then
     raise exception 'Owner operation unavailable' using errcode='42501'; end if;
    subject:=target.owner_id::uuid;
