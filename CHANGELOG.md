@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-27 — Source/safety source reviewed; runtime ownership recovery
+
+Independent source security review cleared local unpushed B2 `d1d4abd05d54bebd7271d8f3316b82f4382314a4`: six replacements close ordinary caller/purpose/immutable-host surfaces while retained safety and operator authority stay independent. No runtime/catalog/test pass yet. B2 preflight found older orphan hostagent35238 (10:37 start) holding stale control sockets/listeners; current VMStopped, currentdisk/vz-efi/testports unheld, final B1 hostagent38713 absent. Fresh independent read-only audit separated old/current generations; precise SIGTERM did not retire35238. Runtime startup withheld pending narrow exact residual retirement with immediate identity/holder revalidation; possible older disposable guest memory/control state cannot be proved inert. B1 normal cleanup receipt covers its final generation and does not establish absence of older hostagents. Source/test preparation continues; latest implementation push none; B2/TASK-021 incomplete, no hosted/pilot-ready claim.
+
 ## 2026-09-27 — Source/safety implementation dispatched
 
 Reviewed B2 contract/task branch independently remote-verified `5c89db93947b0897d994503a8f6c3a809d58530a`; canonical contract/shared queue and publication branch independently remote-verified `c5c837af6046d2166c59c487e5a1683634140e4f`. Fresh bounded Sol-medium agent `implement_pilot_source_safety` implementing only B2 on `agent/TASK-021A1b2-source-projections-safety` from that reviewed main. Latest implementation push: none. Source/runtime evidence, fresh review, zero/off cleanup/handoff/publication/main integration remain required. B3/A1c/A2 and TASK-021 incomplete; no hosted/pilot-ready claim or duplicate product successor. Standard speed app-controlled, not verified by dispatch tool.
