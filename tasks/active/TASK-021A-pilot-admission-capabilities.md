@@ -1,6 +1,6 @@
 # TASK-021A — Pilot admission preparation parent
 
-Status: **Proposed planning parent — implementation blocked on ADR-0027 acceptance and independent contract review/publication**
+Status: **Accepted-design planning parent — A1 contract review/publication pending; implementation not dispatched**
 Date: 2026-09-27
 Parent: TASK-021 (incomplete)
 Proposed branch: `agent/TASK-021A-pilot-admission-capabilities`
@@ -8,7 +8,7 @@ Planning baseline: canonical main `8e49922c5cb9d5331ca6c0b01fcf49c34541a6ae`; ex
 
 ## Goal and gates
 
-Plan the local closed-pilot boundary selected by Accepted ADR-0026 and the exact mechanism in [ADR-0027](../../decisions/ADR-0027-closed-pilot-admission.md) **after explicit acceptance**. Product acceptance does not accept this schema/auth change. This parent is not an executable implementation contract. Publish this reviewed parent on main, then independently review/publish the A1 contract before A1 dispatch. After reviewed A1 integration, reconcile and independently review/publish A2 against that baseline before A2 dispatch; future A2 contract publication is not a prerequisite to A1. Resolve any ADR-0026/0027/contract conflict before changing code. Use a fresh task-specific GPT-6 Sol medium agent and fresh independent security reviewer; Standard speed is app-controlled and cannot be verified by dispatch tools.
+Plan the local closed-pilot boundary selected by Accepted ADR-0026 and the exact mechanism in [ADR-0027](../../decisions/ADR-0027-closed-pilot-admission.md) (explicitly accepted 2026-09-27). The separate ADR-0027 acceptance authorizes staged disposable-local implementation after each stage contract is reviewed and published. This parent is not an executable implementation contract. Publish this reviewed parent on main, then independently review/publish the A1 contract before A1 dispatch. After reviewed A1 integration, reconcile and independently review/publish A2 against that baseline before A2 dispatch; future A2 contract publication is not a prerequisite to A1. Resolve any ADR-0026/0027/contract conflict before changing code. Use a fresh task-specific GPT-6 Sol medium agent and fresh independent security reviewer; Standard speed is app-controlled and cannot be verified by dispatch tools.
 
 ## Required reading
 
