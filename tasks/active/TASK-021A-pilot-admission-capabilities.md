@@ -8,7 +8,7 @@ Planning baseline: canonical main `8e49922c5cb9d5331ca6c0b01fcf49c34541a6ae`; ex
 
 ## Goal and gates
 
-Plan the local closed-pilot boundary selected by Accepted ADR-0026 and the exact mechanism in [ADR-0027](../../decisions/ADR-0027-closed-pilot-admission.md) **after explicit acceptance**. Product acceptance does not accept this schema/auth change. This parent is not an executable implementation contract. Do not dispatch implementation until the coordinator independently reviews/publishes the parent and the applicable narrow A1/A2 contract on main. Resolve any ADR-0026/0027/contract conflict before changing code. Use a fresh task-specific GPT-6 Sol medium agent and fresh independent security reviewer; Standard speed is app-controlled and cannot be verified by dispatch tools.
+Plan the local closed-pilot boundary selected by Accepted ADR-0026 and the exact mechanism in [ADR-0027](../../decisions/ADR-0027-closed-pilot-admission.md) **after explicit acceptance**. Product acceptance does not accept this schema/auth change. This parent is not an executable implementation contract. Publish this reviewed parent on main, then independently review/publish the A1 contract before A1 dispatch. After reviewed A1 integration, reconcile and independently review/publish A2 against that baseline before A2 dispatch; future A2 contract publication is not a prerequisite to A1. Resolve any ADR-0026/0027/contract conflict before changing code. Use a fresh task-specific GPT-6 Sol medium agent and fresh independent security reviewer; Standard speed is app-controlled and cannot be verified by dispatch tools.
 
 ## Required reading
 
@@ -20,7 +20,7 @@ AGENTS; accepted ADR-0026 and accepted final ADR-0027; TASK-021/readiness/initia
 
 **TASK-021A2 — Application access/capability surfaces and integration.** A fresh separately published contract depends on accepted ADRs and A1's reviewed integrated main SHA. Implement typed access-state/callback/redirect handling, admitted incomplete onboarding/primary-photo flow, Hangout-only Chats, deferred routes/actions/APIs/controls, UI-only co-host deferral, navigation and current-field projections. Adapt full application regression fixtures to synthetic admissions/capabilities and verify desktop/mobile/loading/empty/error/denied flows plus stale session/direct app entry. Preserve local-only hosted guards. Independent app/security review, cleanup and remote-verified integration required.
 
-The coordinator must review and publish each detailed bounded contract before its own implementation dispatch. Do not dispatch A2 concurrently with unreviewed A1; no release/deployment or pilot-readiness claim until both stages pass and remaining hosted gates are separately accepted/authorized. The combined requirements below are the allocation/checklist for drafting those contracts, not authorization to implement this whole parent in one task.
+The coordinator must review and publish each detailed bounded contract before its own implementation dispatch: A1 first; A2 drafted/reconciled against reviewed integrated A1 and reviewed/published before A2 starts. Do not dispatch A2 concurrently with unreviewed A1; no release/deployment or pilot-readiness claim until both stages pass and remaining hosted gates are separately accepted/authorized. The combined requirements below are the allocation/checklist for drafting those contracts, not authorization to implement this whole parent in one task.
 
 ## Combined requirement allocation
 
