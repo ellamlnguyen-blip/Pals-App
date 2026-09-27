@@ -5,9 +5,9 @@
 The user replied “accept” to the explicit reviewed ADR-0027 technical decision on 2026-09-27. Accepted ADR-0027 authorizes staged disposable-local admission/capability implementation, including its exact revoked-subject privacy matrix and separate audited caller-bound admission-manager authority. A1 backend contract drafting/review/publication precedes implementation; A2 waits for reviewed remote-verified A1 integration. No code, tests, hosted operation or TASK-021 completion is claimed by this receipt. Hosted staffing/retention/photo/provider/target policies and operations remain separate.
 
 
-## TASK-021 closed-pilot admission design — Proposed
+## Historical proposal — superseded by 2026-09-27 acceptance
 
-Proposed ADR-0027 defines a private account-ID admission roster, separate caller-bound audited admission-manager authority, default-off pilot availability and authoritative capability checks. Revocation/shutdown denies ordinary pilot access while preserving existing narrow retained safety recovery and separately authorized operator handling. TASK-021A is a planning parent: A1 backend and A2 application contracts each need review/publication before their own dispatch, with reviewed integrated A1 required before A2. Technical acceptance is pending; no code, hosted action or TASK-021 completion is claimed. See `decisions/ADR-0027-closed-pilot-admission.md` and `tasks/active/TASK-021A-pilot-admission-capabilities.md`.
+Proposed ADR-0027 defines a private account-ID admission roster, separate caller-bound audited admission-manager authority, default-off pilot availability and authoritative capability checks. Revocation/shutdown denies ordinary pilot access while preserving existing narrow retained safety recovery and separately authorized operator handling. TASK-021A is a planning parent: A1 backend and A2 application contracts each need review/publication before their own dispatch, with reviewed integrated A1 required before A2. At this earlier proposal milestone technical acceptance was pending; the acceptance receipt above now governs. No code, hosted action or TASK-021 completion is claimed. See `decisions/ADR-0027-closed-pilot-admission.md` and `tasks/active/TASK-021A-pilot-admission-capabilities.md`.
 
 ## 2026-09-27 — TASK-021 invite-only pilot product scope accepted
 
