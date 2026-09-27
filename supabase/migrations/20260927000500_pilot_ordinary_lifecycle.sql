@@ -33,7 +33,7 @@ create function private.pilot_lock_ordinary_lifecycle(p_operation text,p_hangout
 returns table(actor_id uuid,host_id uuid,campus_id uuid,source_row public.hangouts,prior_hangout_id uuid,prior_payload_fingerprint text,locked_subject_bindings jsonb)
 language plpgsql volatile security definer set search_path='' as $$
 declare subjects uuid[]; subject uuid; campus uuid; photo text; object_id uuid; binding jsonb;
- memberships jsonb:='{}'; photos jsonb:='{}'; objects jsonb:='{}';
+ memberships jsonb:='{}'::jsonb; photos jsonb:='{}'::jsonb; objects jsonb:='{}'::jsonb;
 begin
  -- Social is first, including its established stronger-isolation error.
  perform private.social_hangout_mutation_lock();
