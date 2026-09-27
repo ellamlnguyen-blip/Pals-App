@@ -1,5 +1,12 @@
 # TASK-021 — Initial-launch decisions
 
+## Current pilot phase — 2026-09-27
+
+[Accepted ADR-0026](../../decisions/ADR-0026-invite-only-pilot-scope.md) adds a small nominated verified-UNC pilot before the later public ADR-0025 MVP preserved below. Keep existing required identity/onboarding/primary photo, campus-visible Hangout/time/approximate place, map/list join/leave, manual-refresh Hangout chat, host edit/cancel/close/removal and block/report/named human handling with report-only moderation/audit/enforcement/privacy. Defer Calendar/People discovery/friendships/DMs/notifications/co-host UI/attendance surveys/optional rich profile/extra photos/analytics from the pilot.
+
+Admission means cohort access, not restricted Hangout visibility; tester list and enforceable mechanism remain separately reviewed, and a hidden link is not enforcement. Owner safety/access/MFA/retention/recovery/photo policies below remain Proposed/unresolved. Existing backend/local code and ADR-0025 history are preserved. Deferred routes/actions/APIs must fail closed without breaking retained safety. [Pilot preparation](TASK-021-PILOT-PREPARATION.md) remains planned/unrun; exact target/migration/gate/app-guard and hosted operations require separate review/authorization. TASK-021 stays open; no successor.
+
+
 Status: **Product-scope bundle Accepted under ADR-0025; owner/hosted policies still Proposed; no hosted authorization**
 Date: 2026-09-26
 Repository baseline: canonical main `8fd8200ec446855d5cea4895f447290b83a0c520`, independently remote-verified by the coordinator. Hosted state was not inspected.

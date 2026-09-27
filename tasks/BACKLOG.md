@@ -1,4 +1,16 @@
 # Backlog
+
+## Current pilot phase follow-ups — 2026-09-27
+
+Accepted ADR-0026 governs the phase before the later public ADR-0025 MVP. TASK-021 remains open. Next authorized work is planning a narrower reviewed pilot preparation contract, not hosted execution.
+
+- Pilot admission: name testers/cohort and owner; separately accept/review enforceable admission and removal across app/API/data paths. Hidden links are not access control; verified UNC alone is not admission.
+- Pilot exposure preparation: audit exact routes/actions/APIs/RPCs and shared gate dependencies; contract fail-closed deferred surfaces while retaining block/report, removal, Hangout chat and moderation audit/enforcement/privacy. No implementation/gate change accepted by this docs plan.
+- Later public-MVP re-enablement: Calendar, People discovery, friendship, DM, notifications, co-host UI, private attendance and optional rich profile/extra photos require separately reviewed release/gate/evidence packages. Preserve local implementations; pilot deferral does not mark these incomplete locally or remove backend safety.
+- Analytics/safeguard and ADR-0025 post-launch deferrals retain their separate existing policy gates. Named human report handling, operator access/MFA/recovery, retention/legal hold/photo bearer policy, real UNC delivery/HTTPS callback and exact nonproduction manifest authorization remain pilot prerequisites.
+
+See `docs/operations/TASK-021-PILOT-PREPARATION.md` for planned/unrun admission/deferred-route/privacy/gate/hosted tests. Older launch queue rows below describe the later public product unless still independently required for the pilot.
+
 ## Accepted initial-release deferrals — 2026-09-26
 
 Under Accepted ADR-0025, these remain post-launch capability work, not initial-release implementation blockers or completed features. Each needs a separately bounded accepted contract and reviewed implementation; no hosted authorization follows.

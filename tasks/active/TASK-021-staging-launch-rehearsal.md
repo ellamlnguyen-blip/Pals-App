@@ -1,5 +1,12 @@
 # TASK-021 — Staging launch rehearsal
 
+## Current scope amendment — accepted pilot phase, 2026-09-27
+
+Accepted ADR-0026 introduces a small nominated verified-UNC pilot before the later ADR-0025 public MVP. Current readiness is governed by `docs/operations/TASK-021-PILOT-PREPARATION.md`: retain existing required identity/profile/primary photo, campus-visible Hangout map/list/create/time/approximate place/join/leave, manual-refresh chat, host edit/cancel/close/remove and block/report/named human handling with audited report-only moderation/privacy. Calendar/People discovery/friendship/DM/notifications/co-host UI/attendance surveys/optional rich profile/extra photos/analytics are deferred from the pilot. Backend safety/local code is preserved.
+
+Admission mechanism/cohort list and hosted owner policies remain separately reviewed/unresolved; scope acceptance is neither access-policy nor hosted authorization. Deferred routes/actions/APIs require fail-closed preparation that preserves retained safety. All admission/exposure/privacy/gate/hosted tests are planned/unrun. Earlier public-MVP dependencies below apply to that later phase unless retained by ADR-0026; essential safety and exact hosted authorization still apply now. TASK-021 remains incomplete; no successor.
+
+
 Status: Planning accepted 2026-09-25; hosted execution blocked on prerequisite decisions and authorization
 Date: 2026-09-25
 Branch: `agent/TASK-021-staging-rehearsal`

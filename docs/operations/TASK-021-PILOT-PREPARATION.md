@@ -1,0 +1,49 @@
+# TASK-021 — Bounded pilot preparation plan
+
+Status: product scope accepted in ADR-0026; preparation contract and all execution remain pending
+Date: 2026-09-27
+Baseline: canonical main `7f2bea3dc52475748b482490a161f55b9e7789f9`; hosted state uninspected.
+
+## Outcome and boundaries
+
+Prepare a separately reviewable release package for the small nominated verified-UNC pilot in [ADR-0026](../../decisions/ADR-0026-invite-only-pilot-scope.md), ahead of the later public MVP. This is a docs-only plan; no implementation or hosted execution is authorized here. TASK-021 remains open and no successor is triggered.
+
+Retain required identity/onboarding fields and primary photo, campus-visible Hangout creation/time/approximate public place, participant-only private instructions, saved map/list discovery, join/leave, manual-refresh Hangout chat, host edit/cancel/close/removal and safety/report-only moderation. Optional rich profile/extra photos, Calendar, People discovery, friendship, DMs, notifications, co-host UI, attendance surveys and analytics are deferred. Existing backend safety/roles and local implementation remain intact.
+
+## Preparation stages
+
+1. **Admission decision:** name the cohort/testers and responsible admission owner, size and enrollment/removal process; specify separately reviewed enforceable admission policy across application and direct data/API paths. Keep UNC verification independent. A hidden URL and a UI-only allowlist are not enforcement. Any auth/authorization change needs its own reviewed policy/ADR before implementation.
+2. **Source exposure and gate audit:** inventory retained/deferred routes, actions, APIs/RPCs, Storage and shared gates at the exact tip. Define fail-closed denies and expected UX for direct deferred entry, stale links and existing data. Identify shared gate dependencies for block/report, roster/removal, Hangout chat and moderation audit/enforcement before proposing changes. Publish a narrow local preparation contract; independent security review precedes implementation. Co-host UI deferral does not authorize removing role/backend safeguards or treating existing roles as hosts.
+3. **Owner policies:** assign named report handlers and backup/coverage, response wording, escalation/appeals; accept least-privilege operator bootstrap/MFA/revocation/recovery; per-data retention/deletion/export/legal hold; required-photo bearer/cache/incident policy. Preserve ADR-0019 report-only authority and ADR-0021's hosted uncertainty. No staffing promises, durations or URL lifetimes selected by this plan.
+4. **Exact release package:** select nonproduction target and HTTPS origin; fresh authorized inventory; exact migrations/dependencies, local-only app guard changes, provider configuration, cohort mechanism, temporary/final gate manifest, backups/rollback and tagged-test cleanup/retention. Deferred source migration inclusion is reviewed, not inferred from gate-off. Review and obtain explicit authorization for the exact hosted operations only after the package is concrete.
+5. **Controlled rehearsal and independent review:** execute only the separately authorized contract on its named target/build/test identities; capture sanitized evidence; stop on admission/permission leak, environment drift or unexpected data/traffic. Confirm cleanup/final gate state and independent go/no-go. Neither documentation acceptance nor task-branch publication completes TASK-021, launches the pilot or authorizes public/DNS cutover.
+
+## Source-audit constraints for the narrower contract
+
+The repository audit found `/chats` currently checks People availability and mounts the DM inbox, while Hangout chat access itself is independent. A future contract must decouple the retained Hangout-chat page from People availability and omit DM inbox exposure; enabling People to make chat work would violate pilot scope. Calendar and attendance inherit Hangout availability, and optional extra-photo routes/actions also need explicit capability checks. Navigation hiding and source gates alone are insufficient.
+
+Preserve migration predecessors and safety/global-block/notification helper schema. Notification mutation helpers may remain because emission returns early when its source gate is off; attendance schedule-freeze integrity remains backend behavior despite attendance UI/read/write deferral. Safety retains peer-evidence block/report paths without People discovery. Any relevant profile/roster/chat projection must stay within its current authorized fields.
+
+Intended future release-gate planning: Hangout/chat/safety and necessary report-only moderation gates available only after explicit authorized release; People/friendship/DM/notification/attendance/safeguard gates off. This is a candidate manifest, not a gate write or complete release manifest; exact names/dependencies/final values need review. Feature exposure must be tested independently of database gates.
+
+## Admission candidate — Proposed, not accepted by pilot-scope instruction
+
+For a reviewable technical decision, propose a private default-deny admission roster keyed by exact Auth account IDs with active/revoked state, managed outside student clients. Enforce admission in both caller `get_access_state` and subject `ready_subject_campus` paths, then review all direct RLS/RPC/Storage, session/email-change and concurrent revocation paths. Exclude unadmitted subjects from retained discovery/roster/chat projections as well as denying their own feature access. Preserve verification/profile/status checks; admission never turns an unverified or suspended account ready.
+
+Operator access must remain separately scoped to accepted report-only authority; no accidental student admission bypass follows from an operator role. Signup/provider restrictions are defense in depth, not the sole admission guard. No administrative broad student/photo/message reader is proposed. Exact administration/verification/revocation policy, schema, controls, audit/retention and any handling of existing data require a separately Proposed authorization ADR and bounded disposable-local contract, independent review and explicit acceptance before implementation. Hosted admission/operations remain separately authorized. This plan selects no roster values, tester identities or administrative account.
+
+## Required verification — all planned/unrun
+
+| Boundary | Required cases and evidence |
+| --- | --- |
+| Admission and identity | Admitted verified/complete tester succeeds; unadmitted verified UNC, unverified, cross-campus, signed-out, suspended/banned and revoked admission deny applicable retained app/data/API entry. Probe direct REST/RPC/action, known-ID, stale session and concurrent revocation paths. Verify real authorized UNC inbox confirmation/resend through deployed HTTPS callback; do not conflate invitation with verification. Exact admission mechanism is unresolved. |
+| Required onboarding/photo | Existing required fields/primary photo remain readiness requirements; incomplete/changed-email access denies. Owner-only Storage/photo and nonowner denial, no peer URL reuse, access loss, preissued bearer URL expiry/cache exposure under separately accepted hosted policy; optional rich/extra-photo routes/actions/APIs fail closed. |
+| Retained core loop | Admitted accounts create time/approximate location, map/list discover, join/leave, manual-refresh chat, host edit/cancel/close/reopen/remove. Verify persistence/retry/stale revisions, authorized roster/private instructions and source revocation after leave/removal/cancel/block/disable; no exact location in public pins/URLs/logs/caches. |
+| Deferred exposure | Calendar/People browse/detail, friend writes/reads, DM requests/text, notification inbox/preferences/delivery, co-host UI/actions, attendance read/write/surveys and optional profile/photo routes deny at every proposed exposed route/action/API/RPC, including direct/stale links and old source endpoints. Retained roster/chat/safety projections may use only their existing authorized fields. Define the exact deny matrix in the narrower contract; existing safety teardown must still work when deferred sources/gates are off. |
+| Safety/operations | Confirm block separation/non-restoration, retained-ID reporting and attendee removal with deferred gates off. Current operator/role/MFA/conflict denial, report-to-subject binding, audit/enforcement, suspension/ban/disable revocation; no broad readers. Named report-handler/coverage/escalation/appeal procedure evidence and accepted retention/recovery/legal-hold handling. |
+| Gates and outbound traffic | Exact pre/post temporary/final gates from reviewed manifest. No analytics/optional notification sends or forbidden deferred source access; safeguard off means no warnings/new signals and original RLS-authorized map start-time/ID order before 101-row probe/100-result limit with live revalidation. Gate-off alone does not close ungated routes or clean retained data. |
+| Hosted and UI/recovery | Exact target/build/config/migration receipt, TLS/callback/SMTP authorization, backups/rollback, desktop/phone/keyboard loading/empty/error/denied/manual-refresh/network states, private-data leak checks and preapproved tagged cleanup preserving audit/holds. Final target/data/services/gates independently verified. No current hosted or runtime evidence claimed. |
+
+## Handoff gates
+
+Independent docs review and canonical publication precede a narrower preparation contract. The coordinator owns shared queue/state records. Safety/access audit findings must be resolved in that contract before dependent implementation. Public-MVP re-enablement is later reviewed work; preserve ADR-0025 and all historical local handoffs.

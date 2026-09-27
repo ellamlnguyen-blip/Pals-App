@@ -3,6 +3,20 @@ Date: 2026-09-25
 Evidence baseline: original audit at `737ca32f1eefd4b347940e367b3923b47c2e0884`; TASK-010 repository status refreshed from independently verified canonical main `ac172980d4516ce54d3804c30393b225c0f5ea2c`. Hosted state remains uninspected.
 Disposition: **not ready for hosted rehearsal or launch**. This is a repository audit, not a current hosted inspection or a new runtime test result.
 
+## Current pilot readiness — 2026-09-27
+
+[Accepted ADR-0026](../../decisions/ADR-0026-invite-only-pilot-scope.md) adds a small admitted verified-UNC pilot before the later public ADR-0025 MVP. The current phase retains required onboarding fields/primary photo, campus-visible Hangout creation/time/approximate place, map/list join/leave, manual-refresh chat, host edit/cancel/close/removal and block/report/named human handling with moderation audit/enforcement/privacy. Calendar/People discovery/friendships/DMs/notifications/co-host UI/attendance surveys/optional rich profile/extra photos/analytics are deferred from pilot exposure. Earlier matrices below preserve the later public rehearsal; they are not the current pilot feature checklist.
+
+Current disposition remains **not ready**. Admission/tester list, safety staffing/access/MFA/retention/recovery/photo bearer policies and exact hosted target/migration/gate/app-guard manifest remain unresolved. [Pilot preparation plan](TASK-021-PILOT-PREPARATION.md) is the current bounded checklist. All pilot cases are planned/unrun; no runtime/hosted inventory/config/gate action occurred and TASK-021 remains incomplete.
+
+| Current pilot blocker | Closure required before rehearsal |
+| --- | --- |
+| Enforceable nominated-cohort admission | Separately reviewed policy/ADR and contract; named testers and admission/removal owner; deny unadmitted verified accounts at app, data/API and Storage paths. Hidden links/public signup settings are insufficient enforcement. |
+| Deferred feature exposure/shared gates | Exact source audit and narrower contract for direct routes/actions/API/RPC denial; retain chat, roster/private instructions, host removal, global block/report and moderation/audit. Shared-gate coupling cannot be resolved by wholesale deletion or switching off safety. |
+| Identity/required profile/photo | Real authorized UNC Auth inbox/HTTPS callback and existing required fields/primary photo; owner-only access and separately accepted hosted bearer/cache/incident policy. No primary-photo reduction accepted. |
+| Safety owners and policy | Named human report handlers/coverage/escalation/appeals, operator bootstrap/MFA/revocation/recovery and per-data retention/deletion/export/legal hold; report-only authority unchanged. No concrete owner values selected. |
+| Exact hosted release | Fresh authorized target inventory, migration predecessors/dependencies, guard/gate/provider/backup/cleanup manifest, explicit target-specific operations authorization and actual rehearsal/evidence review. Local history supplies no current hosted pass. |
+
 ## Initial-MVP scope update — 2026-09-26
 The accepted ADR-0024 amendment selects gate-off deferral of the full hosted large-Hangout bundle. The size-signal consumer is not a launch blocker for this narrower scope. This documentation update uses canonical repository baseline `4a6519d0afc0d314b95f8dd5d51684a5f0fbffbd`; hosted state remains uninspected and every rehearsal check below remains unrun. All other unresolved requirements remain blockers as applicable; TASK-021 is incomplete. Migration inclusion is independently reviewed, never inferred from default-off.
 

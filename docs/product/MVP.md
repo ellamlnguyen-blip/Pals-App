@@ -1,10 +1,21 @@
 # MVP Scope
-Status: Accepted; initial-release scope amended by ADR-0025 on 2026-09-26
+
+## Current phase — invite-only UNC pilot before public MVP
+
+[Accepted ADR-0026](../../decisions/ADR-0026-invite-only-pilot-scope.md) introduces a small nominated verified-UNC cohort before public campus launch. “Invite-only” means pilot admission; retained Hangouts are campus-visible within admitted students, not invite-only Hangout visibility. Tester list and enforceable admission mechanism remain separately reviewed/unselected; a hidden link is not enforcement.
+
+Keep existing required UNC identity/onboarding fields and primary owner photo; create Hangout with time/approximate public location and separate participant-authorized private instructions; map/list discovery, join/leave, manual-refresh Hangout chat, host edit/cancel/close/reopen/remove; block/report and named human report handling with report-only moderation, auditable enforcement and all privacy/RLS protections. “Minimal profile” does not reduce existing required fields/photo.
+
+Defer Calendar, dedicated People discovery, friendships, DMs, notifications, co-host UI, attendance confirmation/surveys, optional rich profile/extra photos and analytics. Existing local code/backend safety and role rules are preserved. Deferred routes/actions/APIs must fail closed while retained safety flows remain available; exact gates/manifest need review. Named operators, admission policy/testers, retention/photo policy and exact hosted release authorization remain unresolved. [Pilot preparation](../operations/TASK-021-PILOT-PREPARATION.md) tests are planned/unrun. TASK-021 remains incomplete; no hosted action or public/DNS launch follows.
+
+The sections below preserve the accepted later public MVP and ADR-0025 history; requirements deferred from the pilot return only through separately reviewed release work.
+
+Status: Accepted; current pilot phase under ADR-0026 (2026-09-27), later public MVP under ADR-0025 (2026-09-26)
 
 ## Goal
 Ship a public UNC web product that proves students will create casual hangouts, discover/join them, coordinate, attend offline, and form repeat social connections.
 
-## Included for initial UNC release
+## Included for later public UNC MVP (ADR-0025)
 
 ### Identity/Profile
 Actual UNC email verification and deployed HTTPS callback; real name; verified badge; school/year/major/bio; required owner primary photo. Preserve rich owner editing with up to four private extra photos and existing optional fields. People peers receive only the current opt-in same-campus text allowlist; no peer photos or owner-only optional sections are shared.
@@ -37,4 +48,4 @@ The independent accepted ADR-0024 amendment defers size/threshold awareness and 
 Posts, likes, comments, followers, public friend counts, public ratings, polls, waitlists, paid promotion, commercial Hangouts, organization accounts, cross-campus discovery, sophisticated large-event automation, live user-location broadcasting.
 
 ## Launch Model and authorization boundary
-Public UNC release, with genuine initial Hangouts created by real students before broad promotion. Scope acceptance does not authorize hosted operations, live seeding/promotion or launch. TASK-021 remains incomplete until its policies, exact release/target authorization, deployed UNC identity, privacy/safety/recovery and actual rehearsal evidence are accepted. No DNS/cutover follows automatically.
+The current phase is the admitted pilot above, followed by the later public UNC release, with genuine initial Hangouts created by real students before broad promotion. Scope acceptance does not authorize hosted operations, live seeding/promotion or launch. TASK-021 remains incomplete until its policies, exact release/target authorization, deployed UNC identity, privacy/safety/recovery and actual rehearsal evidence are accepted. No DNS/cutover follows automatically.

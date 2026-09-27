@@ -1,5 +1,12 @@
 # Current State
 
+## 2026-09-27 — TASK-021 invite-only pilot product scope accepted
+
+The user accepted the recommended pilot with “then let's do the pilot scope.” Accepted ADR-0026 records a small nominated verified-UNC cohort before the later ADR-0025 public MVP. Retain required identity/onboarding/primary photo, campus-visible Hangout creation/time/approximate place, map/list join/leave, manual-refresh Hangout chat, host edit/cancel/close/removal and block/report/named human report handling with moderation audit/enforcement/privacy. Defer Calendar, People discovery, friendships, DMs, notifications, co-host UI, attendance surveys, optional rich profile/extra photos and analytics. Existing local code/backend safety remains preserved.
+
+Admission is cohort access, not invite-only Hangout visibility. Exact enforceable admission mechanism/tester list, hosted safety/access/retention/photo policies and migration/gate/app-guard/target manifest remain separately reviewed and unresolved. No hidden-link enforcement, staff values, runtime evidence or hosted authorization is implied. Preparation and boundary tests in `docs/operations/TASK-021-PILOT-PREPARATION.md` are planned/unrun; TASK-021 stays incomplete, with no successor. Local docs handoff: `agents/handoffs/TASK-021-PILOT-SCOPE.md`; independent review/publication/remote integration pending. Earlier dated entries preserve prior scope history.
+
+
 ## 2026-09-26 — TASK-021 narrower initial-MVP product scope accepted
 
 The user replied “yes” directly to the reviewed narrower initial-MVP scope question. Accepted ADR-0025 records the exact question/response and qualifies only the six named product rows: campus-only Hangouts, current text People and refresh-based coordination; defer restricted access/eligibility/invitations, friend context/ranking, peer photos, hosted external analytics/complete funnel/repeat-outcome reports and extra expectation/comfort questions. Existing friendship, DMs, private attendance, verified identity/real UNC Auth email delivery, rich owner onboarding/photo editing, report/block, moderation and privacy remain required. Hosted owner staffing/access/MFA/retention/recovery and photo bearer/cache/incident policies remain Proposed; no target/hosted operations are authorized. All new rehearsal checks remain planned/unrun. Preserve local code and independent ADR-0024 gate-off safeguard deferral. TASK-021 remains incomplete; no successor is triggered.

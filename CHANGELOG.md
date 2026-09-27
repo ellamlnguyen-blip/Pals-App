@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-09-27 — TASK-021 pilot scope accepted
+
+- Recorded Accepted ADR-0026 for a small admitted verified-UNC pilot before the later public MVP; preserved ADR-0025 history and all local code/backend safety.
+- Kept the core Hangout/manual-refresh coordination and safety loop; deferred extra product surfaces with fail-closed route/API preparation requirements. Required onboarding/photo policy remains intact.
+- Added bounded admission, exposure/gate, privacy and hosted preparation/test plan. Admission/owner policies and exact hosted authorization remain unresolved; every test is planned/unrun. TASK-021 remains open; no runtime/hosted/gate/SMTP/DNS action or successor.
+
+
 ## 2026-09-26 — Initial UNC MVP scope accepted (TASK-021 documentation)
 
 The user replied “yes” directly to the reviewed narrower initial-MVP scope question. Accepted ADR-0025 records the exact question/response and qualifies only the six named product rows: campus-only Hangouts, current text People and refresh-based coordination; defer restricted access/eligibility/invitations, friend context/ranking, peer photos, hosted external analytics/complete funnel/repeat-outcome reports and extra expectation/comfort questions. Existing friendship, DMs, private attendance, verified identity/real UNC Auth email delivery, rich owner onboarding/photo editing, report/block, moderation and privacy remain required. Hosted owner staffing/access/MFA/retention/recovery and photo bearer/cache/incident policies remain Proposed; no target/hosted operations are authorized. All new rehearsal checks remain planned/unrun. Preserve local code and independent ADR-0024 gate-off safeguard deferral. TASK-021 remains incomplete; no successor is triggered.
