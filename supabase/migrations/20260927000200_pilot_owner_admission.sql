@@ -169,6 +169,20 @@ begin
  return new;
 end; $$;
 revoke all on function private.require_active_profile_write(),private.require_active_photo_write() from public,anon,authenticated,service_role;
+-- Supabase finalization uses privileged ON CONFLICT UPDATE. Reject UPDATE in
+-- the database itself, including a raw owner INSERT that wins after the final
+-- INSERT trigger's existence check. No advisory participation is assumed.
+create function private.reject_client_profile_photo_update() returns trigger
+language plpgsql volatile security definer set search_path='' as $$
+begin
+ if (old.bucket_id='profile-photos' or new.bucket_id='profile-photos')
+  and current_setting('role',true) in ('authenticated','service_role') then
+  raise exception 'Profile photos are immutable' using errcode='42501'; end if;
+ return new;
+end; $$;
+revoke all on function private.reject_client_profile_photo_update() from public,anon,authenticated,service_role;
+create trigger pals_reject_client_profile_photo_update before update on storage.objects
+ for each row execute function private.reject_client_profile_photo_update();
 -- Existing trigger bindings/order, revision and reference checks remain intact.
 -- Auth provision/sync and trusted profile INSERT remain unchanged.
 commit;
