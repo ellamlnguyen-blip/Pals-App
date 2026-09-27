@@ -137,8 +137,11 @@ export async function race(name, firstQuery, secondQuery, rejection = false) {
     await until(
       () =>
         sql(
-          `select count(*) from pg_stat_activity where application_name=${quote(`${name}_waiter`)} and wait_event_type='Lock'`,
+          `select count(*) from pg_stat_activity w join pg_stat_activity h on h.application_name=${quote(`${name}_leader`)} where w.application_name=${quote(`${name}_waiter`)} and w.wait_event_type='Lock' and h.pid=any(pg_blocking_pids(w.pid)) and exists(select 1 from pg_locks l where l.pid=w.pid and not l.granted)`,
         ) === "1",
+    );
+    const evidence = sql(
+      `select jsonb_build_object('race',${quote(name)},'holder_pid',h.pid,'waiter_pid',w.pid,'waiting_lock_types',(select jsonb_agg(distinct l.locktype) from pg_locks l where l.pid=w.pid and not l.granted)) from pg_stat_activity w join pg_stat_activity h on h.application_name=${quote(`${name}_leader`)} where w.application_name=${quote(`${name}_waiter`)} and h.pid=any(pg_blocking_pids(w.pid))`,
     );
     first.send("commit;");
     first.child.stdin.end();
@@ -158,6 +161,7 @@ export async function race(name, firstQuery, secondQuery, rejection = false) {
       assert.match(second.output(), /COMPLETED/);
       assert.doesNotMatch(second.output(), /ERROR:/);
     }
+    return JSON.parse(evidence);
   } finally {
     first.child.kill();
     second.child.kill();

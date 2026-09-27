@@ -13,7 +13,7 @@ import {
 test(
   "observed waits serialize admission authority, absent rows, policies and live account/Auth/campus evidence",
   { concurrency: false, timeout: 300_000 },
-  async () => {
+  async (t) => {
     localTarget();
     const users = [];
     let sequence = 0;
@@ -34,7 +34,11 @@ test(
       return { actor, target };
     }
     async function run(first, second, rejection = false) {
-      await race(`pilot_${++sequence}`, first, second, rejection);
+      t.diagnostic(
+        JSON.stringify(
+          await race(`pilot_${++sequence}`, first, second, rejection),
+        ),
+      );
       observed++;
     }
     try {
@@ -78,24 +82,35 @@ test(
           );
         }
       }
-      for (const writerFirst of [true, false]) {
-        const { actor, target } = pair();
-        const operation = management(actor, target, "active", 0);
-        const loss = `delete from auth.users where id='${actor}';`;
-        if (writerFirst) await run(loss, operation, true);
-        else await run(operation, loss);
-        assert.equal(
-          sql(
-            `select count(*) from private.pilot_admission_managers where account_id='${actor}'`,
-          ),
-          "0",
-        );
-        assert.equal(
-          sql(
-            `select count(*) from private.pilot_management_audit where actor_id='${actor}'`,
-          ),
-          writerFirst ? "0" : "1",
-        );
+      for (const retry of [false, true]) {
+        for (const writerFirst of [true, false]) {
+          const { actor, target } = pair();
+          const request = crypto.randomUUID();
+          const operation = management(actor, target, "active", 0, request);
+          if (retry) sql(`begin; ${operation} commit;`);
+          const loss = `delete from auth.users where id='${actor}';`;
+          if (writerFirst) await run(loss, operation, true);
+          else await run(operation, loss);
+          assert.equal(
+            sql(
+              `select count(*) from private.pilot_admission_managers where account_id='${actor}'`,
+            ),
+            "0",
+          );
+          assert.equal(
+            sql(
+              `select count(*) from private.pilot_management_audit where actor_id='${actor}'`,
+            ),
+            retry || !writerFirst ? "1" : "0",
+          );
+          assert.equal(
+            sql(
+              `select count(*) from private.pilot_management_requests where actor_id='${actor}'`,
+            ),
+            retry || !writerFirst ? "1" : "0",
+            "private historical receipt remains after deletion",
+          );
+        }
       }
       // Both writers use common keys even with no manager or roster tuple yet.
       {
@@ -220,7 +235,7 @@ test(
           "t",
         );
       }
-      assert.equal(observed, 23, "all planned lock waits observed");
+      assert.equal(observed, 25, "all planned lock waits observed");
       const isolationActor = pair().actor;
       for (const isolation of ["repeatable read", "serializable"]) {
         assert.throws(
