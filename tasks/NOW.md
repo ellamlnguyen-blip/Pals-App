@@ -1,5 +1,11 @@
 # NOW
 
+## 2026-09-27 — B3a corrected fixtures cleared for guarded local verification
+
+Fresh independent correction review cleared67fc3126870ac797a2764d043fbd8cff073a5908, unchanged source-cleared migration9dbec14. All four prior fixture gaps closed: fresh A1a authority HTTP/concurrency under exact child guard, actual authenticated lawful detached-object Storage DELETE↔ordinary cohost edit crossing,34 host/peer block/current-participant cells with inherited reconciliation semantics, exact25 pre-setup check and fixed prior24 upgrade lane. Root verified reconciled task tipd848e0684d3d0b13deda3f5ad6d65210b143640a adds only coordinator documentation after67fc. Runtime source/fixture gate is cleared, not executed evidence acceptance.
+
+Coordinator authorizes the existing worker as sole executor only after fresh ownership/preflight of the previously reviewed stopped mountless disposable VM, cached images and loopback pals-local target. No recovery/new install/image pull/hosted operation. Execute exact-child25 tests/true24 upgrade/regressions/catalog; failures require correction and review where material. Full guarded reset/census and normal global ownership/ports/disk/VM cleanup precede final evidence review, publication and remote-verified accepted integration. No B3a runtime pass or completion yet; B3b/c/A1c/A2/TASK-021 incomplete.
+
 ## 2026-09-27 — B3a full fixture review requires narrow corrections
 
 Fresh independent source/fixture review of unpushed90f306f6624aa05d60a85a19a20a9beacc0feb54 did not clear runtime release. Migration remains source-cleared9dbec14, unchanged. Four fixture gaps: mapping claimed A1a management actor/target regressions without dispatching that module; ordinary lifecycle↔Storage DELETE/profile crossing absent (inherited B1 is a different caller path); applicable bilateral host/peer block and joined-state loss races absent; installed exact25 history checked after reset rather than before every setup mutation. Narrow fixture/guard/mapping corrections are authorized within the existing contract; no runtime release until independent corrected-checkpoint review.
