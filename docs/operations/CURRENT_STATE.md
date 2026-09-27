@@ -1,5 +1,11 @@
 # Current State
 
+## 2026-09-27 — B3a main matrix passed; preliminary evidence review consistent
+
+Corrected main concurrency module passed288 observed waits:160 actual route cells and128 common identity cells, without fail/skip/cancel. Fresh read-only evidence review found no actionable gap in completed main/HTTP/crossing/catalog artifacts: unique holder/waiter IDs and ungranted locks, exact blocking membership enforced by cleared utility,136 loss-first holder snapshots/equality assertions; common identity actual create32/retry32/distinct cohost edit64, not an all-route identity-race claim. Four stale-revision business controls remain separate from aborts. HTTP1087 entries partition636 setup/178 controls/273 other cases, with250 precise failure records and3 raw-DML zero-delta cells; no credentials. Five crossing waits and separate40P01 ordinary rollback retained correct direct SQL versus B1 API labels. Catalog54 interfaces and48 untouched body hashes match.
+
+Source-disable/state and block/membership isolated modules, fresh A1a/B1/B2 regressions, true24 upgrade, final cleanup/evidence review/publication/main integration remain gates. Independently clearedba2fc3464168189a54b5390ac0134135d342aca6 increases only isolated block/membership outer budget10→20 minutes; lock-wait limits/assertions/guards unchanged, timeout remains failure. Latest implementation push none. B3a/TASK-021 incomplete; no hosted/app/pilot readiness claim.
+
 ## 2026-09-27 — B3a HTTP and crossing evidence passed; matrix rerunning
 
 Real Auth HTTP module passed1/1, zero fail/cancel/skip/TODO, with full guarded25 reset/clean census. Sanitized evidence records1087 allowed/denied/control/setup cases; not1087 concurrency tests. Actual SQL crossing module passed1/1: five observed waits covering owner assignment both orders, authenticated lawful detached-object Storage DELETE both orders and unsourced create Auth-deletion first, plus separately classified40P01 cycle survivor/rollback checks. Fresh B1 real Storage HTTP final-role regressions remain pending and distinct from direct SQL crossing.
