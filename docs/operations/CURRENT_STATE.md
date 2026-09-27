@@ -1,5 +1,11 @@
 # Current State
 
+## 2026-09-27 — B2 final implementation reviewed and published
+
+Fresh independent final source/evidence review cleared exact task `a451242a2de454a41571ede7db72ed10faf79819`; task branch agent/TASK-021A1b2-operator-role-lock-repair independently remote-verified at that SHA. Accepted code includes source/purpose/immutable-host closure in00300 and narrow mandatory operator lock-result repair in00400; all24 migrations and earlier history preserved. 925 bounded SQL assertions, three integration modules,14 actual-role RPC wait pairs, separately labeled trusted-postgres old-gap diagnostic, admin downgrade exact-replay and eligible isolation controls, true23 upgrade, catalog/ACL/lint and empty/default-off normal global shutdown passed. Reviewer inspected committed artifacts and did not rerun runtime. No unresolved source/receipt finding remains.
+
+Accepted implementation is integrated locally with this review/shared-record update; canonical push and independent main-SHA verification are the remaining completion gates. B3 must freshly reconcile its actual24-migration graph after verified integration; A1c full deferred/historical closure and A2 app remain required. No hosted operation, pilot-ready claim or product successor from this substage.
+
 ## 2026-09-27 — Mandatory operator lock-result source/fixture review cleared
 
 Fresh independent source/fixture review cleared unpushed repair `6a692ffaf0d4d3f63e5603edde0522907008b70d`: additive24th migration changes only private.moderation_actor immediate missing gate/account/role lock-result denial, preserving five caller paths, existing locks/ACL/ABI/independent authority. Review requested and then cleared eligible-operator isolation controls and successful admin action followed by valid moderator downgrade exact-replay denial. Separately labeled anonymous trusted-postgres pre-repair diagnostic is not actual RPC/HTTP evidence and installs no hook/grant/function replacement. No runtime pass or completion yet.
