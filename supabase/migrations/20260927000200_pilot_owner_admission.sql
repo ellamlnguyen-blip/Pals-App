@@ -154,6 +154,10 @@ begin
     or target.owner_id !~ '^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$' then
     raise exception 'Owner operation unavailable' using errcode='42501'; end if;
    subject:=target.owner_id::uuid;
+   -- Storage finalizes via UPSERT even for a create request. Never let its
+   -- privileged final insert overwrite an already committed immutable name.
+   if exists(select 1 from storage.objects o where o.bucket_id=target.bucket_id and o.name=target.name) then
+    raise exception 'Owner operation unavailable' using errcode='42501'; end if;
   end if;
   if original_role in ('authenticated','service_role') then
    if target.name !~ ('^'||subject::text||'/[a-f0-9-]+\.(jpg|png|webp)$') then
