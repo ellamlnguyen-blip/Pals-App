@@ -579,5 +579,40 @@
       "image_id": "sha256:1b53405d8680a09d6f44494b7990bf7da2ea43f84a258c59717d4539abf09f6d",
       "mounts": []
     }
-  ]
+  ],
+  "implementation_stage_status": {
+    "status": "incomplete",
+    "tested_tip": "3f169719e20033aaefbf0f975091ee4063dfc132",
+    "source_tip": "04c4ca588b19944ad9b8ef40dd21d81c214667cc",
+    "blocker": "Inherited moderation_actor locking platform_roles SELECT may return no tuple after waiting on DELETE; later EXISTS can accept unlocked replacement INSERT. DELETE/reINSERT through-commit evidence and reviewed bounded repair remain pending.",
+    "role_wait_evidence_limit": "Existing observed role DELETE waits do not prove replacement-row through-commit safety.",
+    "repair_performed": false,
+    "published": false
+  },
+  "final_cleanup": {
+    "date": "2026-09-27",
+    "lint_schema_errors": [],
+    "current_migration_history": "23:20260927000300",
+    "guarded_reset": "passed",
+    "fixture_census": "zero",
+    "original_and_pilot_gates": "off",
+    "availability_revision": 1,
+    "all_thirteen_capability_revisions": 1,
+    "supabase_stop": "normal, backup true, project pals-local",
+    "remaining_containers": 0,
+    "remaining_named_volumes": [
+      "supabase_db_pals-local",
+      "supabase_storage_pals-local"
+    ],
+    "vm_stop": "normal existing VM",
+    "current_hostagent": 53315,
+    "stop_signal_time": "14:13:36",
+    "vz_stopped_time": "14:13:38",
+    "vm_state": "Stopped",
+    "all_named_pals_hostagents": "absent",
+    "ha_pid_and_socket": "absent",
+    "actual_disk_and_vz_efi_holders": [],
+    "tcp_54321_54322_54324_holders": [],
+    "forced_current_guest_stop": false
+  }
 }
