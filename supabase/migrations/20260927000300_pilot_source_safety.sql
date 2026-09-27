@@ -12,7 +12,7 @@ create or replace function private.can_read_hangout(target uuid, private_details
 language sql stable security definer set search_path='' as $$
  select exists(select 1 from public.hangouts h
  where h.id=target and h.university_id=private.ready_campus() and h.visibility='campus'
- and h.location_precision='approximate_area' and h.eligibility is null
+ and h.location_precision='approximate_area'
  and private.ready_subject_campus(h.host_id,h.university_id)
  and not exists(select 1 from private.hangout_disables d where d.hangout_id=h.id)
  and not private.safety_pair_blocked(auth.uid(),h.host_id)
@@ -34,7 +34,7 @@ language sql stable security definer set search_path='' as $$
     and exists(select 1 from public.hangouts h
       join public.hangout_participants p on p.hangout_id=h.id
       where h.id=p_hangout_id and h.status='published' and h.visibility='campus'
-        and h.location_precision='approximate_area' and h.eligibility is null
+        and h.location_precision='approximate_area'
         and h.university_id=private.ready_campus()
         and private.ready_subject_campus(h.host_id,h.university_id)
         and not exists(select 1 from private.hangout_disables d where d.hangout_id=h.id)
@@ -54,7 +54,7 @@ returns boolean language sql stable security definer set search_path = '' as $$
       and not exists(select 1 from private.hangout_disables d where d.hangout_id = h.id)
       and private.hangouts_enabled()
       and private.pilot_capability_enabled('hangouts')
-      and h.location_precision='approximate_area' and h.eligibility is null
+      and h.location_precision='approximate_area'
       and private.ready_subject_campus(h.host_id,h.university_id)
       and private.ready_subject_campus(p_actor, h.university_id)
       and not private.safety_pair_blocked(p_actor, h.host_id));
