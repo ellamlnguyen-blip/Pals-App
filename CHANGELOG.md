@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-27 — Owner final-write correction reviewed; validation active
+
+Independent source review cleared `fb819d9de4f79ece57c63ee22eb0a2b812522d46`. Actual Storage role matching is protected through commit; a narrow immutable-object UPDATE guard closes a direct authenticated insert racing final privileged UPSERT. Executor reports a fresh22-migration reset with268 stage SQL assertions, real HTTP1/1 with8 exact waits (six post-precheck access-loss, same-name completion and raw-insert crossing), concurrency1/1 with59 exact waits, separately classified40P01 no-orphan proof and stronger-isolation denials. Static/build checks reportedly passed. Final serial fixtures, exact21-history upgrade, lint, cleanup/default census, source audit/handoff and final exact-tip evidence review remain pending; these reported runtime results have not been independently rerun. Implementation remains unpushed on `agent/TASK-021A1b1-owner-admission`; B1/TASK-021 incomplete, no hosted/pilot-ready claim.
+
 ## 2026-09-27 — Actual Storage final-write boundary
 
 Real local instrumentation found upload final persistence uses `supabase_storage_admin` with original `service_role` and no auth.uid, so earlier HTTP success was lifecycle/precheck evidence, not final-write serialization. Exact installed Storage source derives owner from verified JWT subject. Narrow internal owner-evidence correction at `ff114f729bee6722be5dd3b2210819ae8790d19a` passed independent source review, conditional on pending actual-role evidence. Caller-only public/RLS predicate remains; internal subject helpers stay client/service EXECUTE revoked; service-role DELETE denies. Instrumented DELETE and real HTTP precheck/final-write barriers, final regression/upgrade/static/cleanup/handoff review remain outstanding. Implementation unpushed; B1/TASK-021 incomplete, no hosted/pilot-ready claim.
