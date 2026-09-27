@@ -1,7 +1,7 @@
 # TASK-021A1b contract reconciliation handoff
 
 Date: 2026-09-27
-Status: **B1 contract independently reviewed — publication pending; B2/B3 remain dependency planning; no implementation/runtime evidence**
+Status: **B1 contract published, integrated and remotely verified; fresh B1 implementation dispatched; B2/B3 remain dependency planning; no implementation/runtime evidence**
 Source: independently verified canonical main `776db8c648f339c8650f7e725108d2853a0859ba`; isolated clone `/private/tmp/pals-task021a1b-contract`, branch `agent/TASK-021A1b-contract`. Fresh GPT-6 Sol medium; dispatch API cannot verify Standard speed.
 
 Read completed A1a handoff/lock/source audit and actual additive migration, Accepted ADR-0026/0027, A1b/A1/A parent. Reconciled to21 committed migrations and actual shared/exclusive `(16027,1)` evidence primitives. A1a remains complete for authority primitives; old source enforcement remains deliberately unchanged. Old historical pending fields in its handoff are superseded by published completion receipt and supplied canonical baseline.
@@ -15,3 +15,5 @@ Changed only contracts/allocation parents and this draft handoff. No code/migrat
 Fresh independent Sol-medium security/contract review cleared exact `43ebf783055ca86ce848688850761319592da240` with no actionable findings. Current owner/source/trigger and A1a definitions were examined; B1 may dispatch only after this reviewed contract/queue publication, while B2/B3 await preceding reviewed integrations.
 
 A1a final completion receipt task and main independently remote-verified at `776db8c648f339c8650f7e725108d2853a0859ba`; this dependent contract record follows that completed prerequisite.
+
+Publication receipt: contract branch `agent/TASK-021A1b-contract` and canonical main independently matched `4fc154306abd89a131f49832f97d51735da50f74`. Fresh bounded GPT-6 Sol medium agent `implement_pilot_owner_admission` dispatched only B1 from this baseline; app-controlled Standard speed cannot be verified by dispatch API. Latest implementation push: none. Review, local evidence and remote-verified integration remain required before B1 completion or B2 dispatch. TASK-021 remains incomplete.

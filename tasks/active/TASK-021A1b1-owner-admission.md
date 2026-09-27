@@ -1,7 +1,7 @@
 # TASK-021A1b1 — Caller admission and owner onboarding boundary
 
 Date: 2026-09-27
-Status: **Independently reviewed contract — canonical publication required before fresh B1 implementation dispatch**
+Status: **Implementation active — reviewed contract published and remote-verified at 4fc154306abd89a131f49832f97d51735da50f74; no implementation push or runtime result yet**
 Parent: [TASK-021A1b](TASK-021A1b-live-admission-enforcement.md).
 Source baseline: independently verified canonical main `776db8c648f339c8650f7e725108d2853a0859ba` (completed A1a,21 migrations).
 Branch on dispatch: `agent/TASK-021A1b1-owner-admission` from latest verified main containing this reviewed contract. Dependency: reviewed remote-verified A1a complete. Only this child is immediate; B2/B3 remain planning.

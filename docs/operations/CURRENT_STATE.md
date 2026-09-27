@@ -1,8 +1,20 @@
 # Current State
 
+## 2026-09-27 — Owner final-write correction reviewed; validation active
+
+Independent source review cleared `fb819d9de4f79ece57c63ee22eb0a2b812522d46`. Actual Storage role matching is protected through commit; a narrow immutable-object UPDATE guard closes a direct authenticated insert racing final privileged UPSERT. Executor reports a fresh22-migration reset with268 stage SQL assertions, real HTTP1/1 with8 exact waits (six post-precheck access-loss, same-name completion and raw-insert crossing), concurrency1/1 with59 exact waits, separately classified40P01 no-orphan proof and stronger-isolation denials. Static/build checks reportedly passed. Final serial fixtures, exact21-history upgrade, lint, cleanup/default census, source audit/handoff and final exact-tip evidence review remain pending; these reported runtime results have not been independently rerun. Implementation remains unpushed on `agent/TASK-021A1b1-owner-admission`; B1/TASK-021 incomplete, no hosted/pilot-ready claim.
+
+## 2026-09-27 — Actual Storage final-write boundary
+
+Real local instrumentation found upload final persistence uses `supabase_storage_admin` with original `service_role` and no auth.uid, so earlier HTTP success was lifecycle/precheck evidence, not final-write serialization. Exact installed Storage source derives owner from verified JWT subject. Narrow internal owner-evidence correction at `ff114f729bee6722be5dd3b2210819ae8790d19a` passed independent source review, conditional on pending actual-role evidence. Caller-only public/RLS predicate remains; internal subject helpers stay client/service EXECUTE revoked; service-role DELETE denies. Instrumented DELETE and real HTTP precheck/final-write barriers, final regression/upgrade/static/cleanup/handoff review remain outstanding. Implementation unpushed; B1/TASK-021 incomplete, no hosted/pilot-ready claim.
+
+## 2026-09-27 — Owner admission first source review
+
+Fresh independent re-review cleared corrected source `8cc3480775687bcd679db086c6dc802bb4a3dc7b`: all required locking lookups fail closed on absence, and final verification binds the locked campus. Executor reports first SQL32/32, real HTTP1/1 and59 exact holder/waiter observations; these runtime claims await final handoff/evidence review. Prior-schema upgrade, affected regressions, lint/static/build, safe-abort evidence, cleanup and final exact-tip review remain outstanding. Implementation stays on `agent/TASK-021A1b1-owner-admission`; latest implementation push: none. No hosted operation or pilot-ready claim. See `agents/handoffs/TASK-021A1b1-REVIEW.md`.
+
 ## 2026-09-27 — Owner admission contract reviewed
 
-A1a is complete at verified canonical main `776db8c648f339c8650f7e725108d2853a0859ba`. A1b live enforcement is bounded into B1 caller access-state/owner onboarding/primary Storage/direct-write locking, B2 host/source/retained peer/safety projections, and B3 core/co-host/chat mutation serialization. Independent contract review cleared exact `43ebf783055ca86ce848688850761319592da240`. B1 is ready for reviewed canonical publication before fresh implementation dispatch; B2/B3 remain dependency planning. The neutral `pilot_unavailable` ABI requires later A2 app reconciliation. No runtime/hosted action or deployable pilot claim; A1b/A1c/A2 and TASK-021 remain incomplete.
+A1a is complete at verified canonical main `776db8c648f339c8650f7e725108d2853a0859ba`. A1b live enforcement is bounded into B1 caller access-state/owner onboarding/primary Storage/direct-write locking, B2 host/source/retained peer/safety projections, and B3 core/co-host/chat mutation serialization. Independent contract review cleared exact `43ebf783055ca86ce848688850761319592da240`. Contract branch and canonical main were independently remote-verified at `4fc154306abd89a131f49832f97d51735da50f74`. Fresh Sol-medium agent `implement_pilot_owner_admission` is implementing only B1 on `agent/TASK-021A1b1-owner-admission`; latest implementation push: none. B2/B3 remain dependency planning and await reviewed prerequisite integration. The neutral `pilot_unavailable` ABI requires later A2 app reconciliation. No runtime/hosted action or deployable pilot claim; A1b/A1c/A2 and TASK-021 remain incomplete.
 
 
 ## 2026-09-27 — A1a integrated and remote-verified
