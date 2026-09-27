@@ -7,9 +7,11 @@ Baseline: canonical main `8e49922c5cb9d5331ca6c0b01fcf49c34541a6ae` supplied and
 
 ## Outcome
 
-Drafted Proposed ADR-0027 and Proposed TASK-021A only. User-selected pilot product scope is published separately in Accepted ADR-0026; no technical choice has been accepted here. Proposed private account-UUID admission roster, default-off pilot availability, live caller/subject/onboarding/Storage enforcement, capability gates, audited trusted management and narrow retained-evidence safety recovery. Co-host is explicitly UI/application-entry-only deferral; existing authorized backend role behavior remains unchanged.
+Drafted Proposed ADR-0027 and Proposed TASK-021A planning parent only. Independent-review corrections specify separate caller-bound admission-manager authority/actor audit and required A1 backend then A2 application split, each with separately reviewed published contract. User-selected pilot product scope is published separately in Accepted ADR-0026; no technical choice has been accepted here. Proposed private account-UUID admission roster, default-off pilot availability, live caller/subject/onboarding/Storage enforcement, capability gates, audited trusted management and narrow retained-evidence safety recovery. Co-host is explicitly UI/application-entry-only deferral; existing authorized backend role behavior remains unchanged.
 
 Source findings: verified onboarding migration's `get_access_state()` accepts any ready UNC account; Hangout foundation independently mirrors readiness in `ready_subject_campus()`; identity foundation owner policies and verified-owner Storage need explicit admission audit. Global-block evidence lock helpers and retained safety/report exceptions need preservation. `/chats` currently depends on People and renders DmInbox while `lib/chat.ts` is independently Hangout-based. Calendar/navigation/attendance currently inherit Hangout availability. Deferred feature gates cannot be treated as migration-removal permission.
+
+Explicit Proposed subject matrix retains current authorized former-nonhost-author chat body while masking identity, current host known retained state/assignment-ID projections, and independent report-only operator handling for active unadmitted operators during pilot shutdown; ordinary revoked-host source is hidden. These semantics are awaiting acceptance, not inferred from pilot selection.
 
 ## Evidence and limits
 
