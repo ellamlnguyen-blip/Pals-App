@@ -2,7 +2,7 @@
 
 ## 2026-09-27 — Owner admission contract reviewed
 
-A1a is complete at verified canonical main `776db8c648f339c8650f7e725108d2853a0859ba`. A1b live enforcement is bounded into B1 caller access-state/owner onboarding/primary Storage/direct-write locking, B2 host/source/retained peer/safety projections, and B3 core/co-host/chat mutation serialization. Independent contract review cleared exact `43ebf783055ca86ce848688850761319592da240`. B1 is ready for reviewed canonical publication before fresh implementation dispatch; B2/B3 remain dependency planning. The neutral `pilot_unavailable` ABI requires later A2 app reconciliation. No runtime/hosted action or deployable pilot claim; A1b/A1c/A2 and TASK-021 remain incomplete.
+A1a is complete at verified canonical main `776db8c648f339c8650f7e725108d2853a0859ba`. A1b live enforcement is bounded into B1 caller access-state/owner onboarding/primary Storage/direct-write locking, B2 host/source/retained peer/safety projections, and B3 core/co-host/chat mutation serialization. Independent contract review cleared exact `43ebf783055ca86ce848688850761319592da240`. Contract branch and canonical main were independently remote-verified at `4fc154306abd89a131f49832f97d51735da50f74`. Fresh Sol-medium agent `implement_pilot_owner_admission` is implementing only B1 on `agent/TASK-021A1b1-owner-admission`; latest implementation push: none. B2/B3 remain dependency planning and await reviewed prerequisite integration. The neutral `pilot_unavailable` ABI requires later A2 app reconciliation. No runtime/hosted action or deployable pilot claim; A1b/A1c/A2 and TASK-021 remain incomplete.
 
 ## 2026-09-27 — A1a integrated and remote-verified
 
