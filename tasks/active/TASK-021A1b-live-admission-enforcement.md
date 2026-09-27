@@ -1,7 +1,7 @@
 # TASK-021A1b — Live admission, core and retained safety enforcement
 
 Date: 2026-09-27
-Status: **Reconciled allocation parent — not executable; B1 immediate independent review candidate, B2/B3 dependency planning**
+Status: **Reconciled allocation parent — not executable; B1 complete and remote-verified; B2/B3 dependency planning**
 Parent: [TASK-021A1](TASK-021A1-pilot-backend-authorization.md), under TASK-021A / incomplete TASK-021.
 Reconciled baseline: canonical main `776db8c648f339c8650f7e725108d2853a0859ba`, including completed reviewed A1a and all21 migrations. Executor starts from latest independently verified `origin/main` containing its reviewed contract; this SHA is the contract source baseline, not permission to use a stale checkout.
 
@@ -9,7 +9,7 @@ Reconciled baseline: canonical main `776db8c648f339c8650f7e725108d2853a0859ba`, 
 
 The former single A1b implementation is too broad. Preserve its requirements below as combined acceptance allocation; dispatch only a child contract:
 
-1. [TASK-021A1b1](TASK-021A1b1-owner-admission.md): caller state, admitted incomplete owner/reference/primary Storage eligibility, independent peer readiness and direct-write evidence locking. Immediate independent contract review candidate; not yet dispatched.
+1. [TASK-021A1b1](TASK-021A1b1-owner-admission.md): caller state, admitted incomplete owner/reference/primary Storage eligibility, independent peer readiness and direct-write evidence locking. Complete for bounded local scope: reviewed task82de4ed, accepted canonical main7844fba independently remote-verified; see handoff. B2 reconciliation follows.
 2. [TASK-021A1b2](TASK-021A1b2-source-projections-safety.md): immutable-host source/read/chat/retained peer projections plus exact safety/operator independence. Dependency planning only; reconcile/review/publish after B1 accepted remote-verified integration.
 3. [TASK-021A1b3](TASK-021A1b3-core-mutation-serialization.md): all ordinary core/co-host/chat mutations and retries with actor/host/target evidence serialization. Dependency planning only; reconcile/review/publish after B2 accepted remote-verified integration.
 
