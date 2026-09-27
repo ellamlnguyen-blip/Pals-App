@@ -1,6 +1,6 @@
 # TASK-021 — Pilot admission proposal handoff
 
-Status: Local draft only; independent security review, explicit ADR acceptance and canonical publication pending
+Status: Independently reviewed Proposed design; explicit ADR acceptance and canonical publication pending
 Date: 2026-09-27
 Branch: `agent/TASK-021-pilot-admission-plan`
 Baseline: canonical main `8e49922c5cb9d5331ca6c0b01fcf49c34541a6ae` supplied and checked out locally.
@@ -20,3 +20,5 @@ Read AGENTS/TASK-021, product principles, current authorization/data model/safet
 ## Remaining gates
 
 Coordinator: obtain fresh independent security review of exact draft tip; resolve findings; review/publish Proposed records and shared status without treating publication as acceptance; request the concise ADR-0027 technical choice. After explicit acceptance, independently review/publish final narrow contract before fresh local implementation dispatch. No push or integration performed by this draft agent; no task/main remote SHA claimed. Hosted operating policies, target manifest/app guards/providers/SMTP/rehearsal remain separate. Parent TASK-021 remains incomplete; no successor created.
+
+Fresh independent Sol-medium security/contract review cleared exact corrected documentation tip `57748beb5c8a4766a1aeee4181b7627e5ed83189` with no remaining blocking findings. Publication does not accept this design.
