@@ -2,7 +2,7 @@
 
 ## 2026-09-27 — Owner admission first source review
 
-Fresh independent security review of local unpushed `9470eb8b832c8e31811cb555647d509d33b8920f` found one P1: a missing locking membership lookup could later authorize against independently recreated, unlocked verification evidence. B1 is not cleared; correction and deletion/recreation regression evidence are required. Other reviewed source boundaries aligned with the contract. Runtime checks, actual Storage roles, observed waits, cleanup, final handoff and exact-tip review remain outstanding. Implementation stays on `agent/TASK-021A1b1-owner-admission`; latest implementation push: none. No hosted operation or pilot-ready claim. See `agents/handoffs/TASK-021A1b1-REVIEW.md`.
+Fresh independent re-review cleared corrected source `8cc3480775687bcd679db086c6dc802bb4a3dc7b`: all required locking lookups fail closed on absence, and final verification binds the locked campus. Executor reports first SQL32/32, real HTTP1/1 and59 exact holder/waiter observations; these runtime claims await final handoff/evidence review. Prior-schema upgrade, affected regressions, lint/static/build, safe-abort evidence, cleanup and final exact-tip review remain outstanding. Implementation stays on `agent/TASK-021A1b1-owner-admission`; latest implementation push: none. No hosted operation or pilot-ready claim. See `agents/handoffs/TASK-021A1b1-REVIEW.md`.
 
 ## 2026-09-27 — Owner admission contract reviewed
 
