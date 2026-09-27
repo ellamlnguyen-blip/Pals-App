@@ -1,5 +1,9 @@
 # Current State
 
+## 2026-09-27 — Older runtime residual retired; B2 tests authorized
+
+Fresh exact-identity/disk/registration/owner audit and failed graceful TERM preceded coordinator-authorized exact SIGKILL of older hostagent35238. Immediate postcheck verified PID/control57157–58 gone, VMStopped, disk/vz-efi unheld, test54321/22/24 clear, no Pals hostagent/registration/Docker socket. Possible older stale disposable guest memory loss was explicitly acknowledged; no claim its state was inert. No other PID/files/volumes/hosted target changed. Coordinator read sanitized receipt and lifted only the B2 runtime pause: executor may start the known owned local VM after its fresh preflight, with serial exclusive fixture/reset/zero-off/owned-stop obligations. No B2 runtime pass yet. Source d1d4abd cleared; task remains incomplete. See `agents/handoffs/TASK-021A1b2-LOCAL-RUNTIME-RETIREMENT.md`.
+
 ## 2026-09-27 — Source/safety source reviewed; runtime ownership recovery
 
 Independent source security review cleared local unpushed B2 `d1d4abd05d54bebd7271d8f3316b82f4382314a4`: six replacements close ordinary caller/purpose/immutable-host surfaces while retained safety and operator authority stay independent. No runtime/catalog/test pass yet. B2 preflight found older orphan hostagent35238 (10:37 start) holding stale control sockets/listeners; current VMStopped, currentdisk/vz-efi/testports unheld, final B1 hostagent38713 absent. Fresh independent read-only audit separated old/current generations; precise SIGTERM did not retire35238. Runtime startup withheld pending narrow exact residual retirement with immediate identity/holder revalidation; possible older disposable guest memory/control state cannot be proved inert. B1 normal cleanup receipt covers its final generation and does not establish absence of older hostagents. Source/test preparation continues; latest implementation push none; B2/TASK-021 incomplete, no hosted/pilot-ready claim.
