@@ -1,5 +1,9 @@
 # Backlog
 
+## B2 operator-role repair dependency — 2026-09-27
+
+B2 S9 is blocked by the inherited unlocked role replacement gap in private.moderation_actor. Review and publish a bounded no-new-graph mandatory-lock-row contract amendment, then fresh repair/review/runtime evidence and complete cleanup/publication/integration before B3 dispatch. Existing stage evidence is a milestone, not acceptance. No hosted or product successor dispatch.
+
 ## Current pilot phase follow-ups — 2026-09-27
 
 Accepted ADR-0026 governs the phase before the later public ADR-0025 MVP. TASK-021 remains open. Next authorized work is planning a narrower reviewed pilot preparation contract, not hosted execution.
