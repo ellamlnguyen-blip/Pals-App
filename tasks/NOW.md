@@ -2,7 +2,7 @@
 
 ## 2026-09-27 — First pilot backend contract reviewed
 
-A1 backend is split into sequential bounded units: TASK-021A1a authority/default-off policy/manager RPC/audit primitives, A1b live admission/core/onboarding/Storage/safety enforcement, A1c deferred capability denial and full backend closure. Fresh independent security/contract review cleared exact draft `953fa30ade9628810788a903261028c60a24e989`. A1a is ready for publication and fresh agent dispatch; its exact lock graph must be reviewed before implementation. A1b/c remain planning contracts reconciled/reviewed/published after preceding integration. No code/runtime evidence or pilot-ready claim. Coordinator owns shared records; TASK-021 remains incomplete.
+A1 backend is split into sequential bounded units: TASK-021A1a authority/default-off policy/manager RPC/audit primitives, A1b live admission/core/onboarding/Storage/safety enforcement, A1c deferred capability denial and full backend closure. Fresh independent security/contract review cleared exact draft `953fa30ade9628810788a903261028c60a24e989`. Contract branch and canonical main remotely verified at `f4ba5cd6affdd8eae7611a15cbed39d33e39b756`. Fresh Sol-medium A1a agent dispatched on `agent/TASK-021A1a-admission-authority`; exact lock graph review remains before implementation. Latest pushed implementation SHA: none yet. A1b/c remain planning contracts reconciled/reviewed/published after preceding integration. No code/runtime evidence or pilot-ready claim. Coordinator owns shared records; TASK-021 remains incomplete.
 
 
 ## 2026-09-27 — Pilot admission design accepted

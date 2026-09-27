@@ -1,7 +1,7 @@
 # TASK-021A1 — Backend contract drafting handoff
 
 Date: 2026-09-27
-Status: A1a/parent independently reviewed at `953fa30ade9628810788a903261028c60a24e989`; canonical publication pending, implementation not started.
+Status: A1a/parent independently reviewed at `953fa30ade9628810788a903261028c60a24e989`; canonical publication verified; A1a agent dispatched for mandatory lock-design review before code.
 Branch: `agent/TASK-021A1-contract`
 Clone: `/private/tmp/pals-task021a1-contract`
 Baseline: accepted ADR-0027 canonical main `ae7141f1f630fdb0eee2216ed1fe33dac6ee963e`, fetched from coordinator's canonical local clone and rebased after its acceptance publication. Coordinator supplied independent remote verification; drafter did not perform an additional network verification.
@@ -23,3 +23,7 @@ Read AGENTS, parent, final ADR-0027 and accepted ADR-0026, required relevant doc
 Fresh independent A1a/parent security-contract review, resolve findings, coordinator publishes contracts/status records on canonical main and remote-verifies receipts, then dispatch a fresh GPT-6 Sol medium implementation agent. Standard speed is app-controlled and was not verified by dispatch tools. Do not dispatch A1b/c from these planning drafts or create duplicate product successor chats for drafting/sub-stage receipts.
 
 Fresh independent Sol-medium review cleared exact final draft tip with no blocking findings. Exact lock-graph design remains independently reviewed before implementation; A1b/c remain dependency planning only.
+
+## Publication and dispatch receipt
+
+Contract task branch and canonical main independently remote-verified at `f4ba5cd6affdd8eae7611a15cbed39d33e39b756`. This receipt follows that verified integration. Fresh GPT-6 Sol medium A1a agent dispatched with only its bounded contract/context on `agent/TASK-021A1a-admission-authority`, planned isolated clone `/private/tmp/pals-task021a1a-authority`. It must stop for independent exact lock-graph review before schema/code implementation. Standard speed is app-controlled and not exposed for verification. No runtime evidence or later-stage dispatch; TASK-021 incomplete.
