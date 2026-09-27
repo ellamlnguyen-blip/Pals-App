@@ -1,6 +1,6 @@
 # TASK-024 brand correction handoff
 
-Status: implementation independently reviewed; local QA complete; publication and canonical integration pending.
+Status: complete for the bounded student-web brand correction; reviewed implementation and canonical integration remotely verified.
 
 ## Scope and visual outcome
 
@@ -36,6 +36,6 @@ Cleanup: committed local database reset verified 0 Auth users, 0 Hangouts, 0 sto
 
 Published task branch: `origin/agent/TASK-024-brand-direction-correction`, independently remote-verified at `a5ac861a186bae893b428f38f9cc16645e0553b1` (reviewed source `b12109f`). The pre-existing planning tip `eb55cf9` was verified as an ancestor; publication was a normal fast-forward.
 
-Reviewed local integration merge: `078be455c8d4e31a39b021d82993a8c367eb46ba`, based on unchanged remote main `388ec4d763e7914cc75b377a880abbe360551396`. Automatic approval review rejected pushing this merge to canonical main, saying the current fix request did not clearly authorize that high-impact default-branch mutation. No alternate publication or main mutation occurred. Explicit user approval for this exact merge/destination is required to finish publication. Task remains incomplete pending canonical integration; no successor is dispatched.
+Canonical integration: the user explicitly approved exact reviewed merge `078be455c8d4e31a39b021d82993a8c367eb46ba` after automatic approval review blocked the first attempt. A normal main push then succeeded and `origin/main` was independently read back at that exact SHA on 2026-09-26. The prior approval blocker is resolved. Task branch's documentation receipt was remote-verified at `285899c9ec65fa7267904b23f5101d40b4cfb905`; reviewed implementation publication remains `a5ac861`. This documentation-only completion receipt follows the verified integration and does not change tested source.
 
 The next product task is existing TASK-021 (already owned and hosted-policy/target/rehearsal blocked); TASK-022 cutover depends on that readiness. No duplicate or invented successor is created.

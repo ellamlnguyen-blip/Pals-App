@@ -8,4 +8,4 @@ No actionable P0/P1/P2 findings. Diff retains backend/schema/RLS/API/server-acti
 
 Documentation-only tip `a5ac861` was independently reviewed with no actionable P0/P1/P2 or new acceptance blocker. Local logs support the reported passing/adapted checks; stale helpers and rendering limits are accurately disclosed. Cleanup verified zero users/Hangouts/photos, ten gates off and owned servers/Supabase/Lima stopped.
 
-Task publication verified at `a5ac861`. Main integration is blocked by automatic approval review; see parent handoff. Completion is not claimed.
+Task publication verified at `a5ac861`. The user explicitly approved the exact merge after the automatic approval blocker; canonical main was remote-verified at `078be455c8d4e31a39b021d82993a8c367eb46ba`. The blocker is resolved. Source remains unchanged from the reviewed tip.
