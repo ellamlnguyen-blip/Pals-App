@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-26 — TASK-021 initial-launch decision package proposed
+
+[The initial-launch decision package](docs/operations/TASK-021-INITIAL-LAUNCH-DECISIONS.md) proposes one narrower campus-only release bundle for remaining access, friend-context, peer-profile/photo and measurement gaps. Hosted moderation coverage/escalation/contact, operator MFA/bootstrap/recovery, per-data retention/export/deletion/legal hold and photo bearer/cache/incident inputs remain unchosen. Only the existing large-Hangout safeguard deferral is accepted; the new bundle remains Proposed. Documentation only; no hosted/runtime/gate action, acceptance or successor task. TASK-021 remains incomplete pending review, owner decisions and its separately authorized rehearsal.
+
 ## 2026-09-26 — TASK-021 initial-MVP safeguard deferral accepted
 
 The user explicitly accepted deferring the gate-coupled hosted large-Hangout size warning, map dampening and private signal creation/review bundle to post-launch. Accepted ADR-0024 is amended; initial MVP keeps the safeguard gate off and verifies no new signals/warning and original source-authorized saved-map order. Basic host/co-host open/close joining, report/block/moderation/privacy and every other applicable MVP/release requirement remain required. The absent consumer is no longer a launch blocker for this narrower scope. Local TASK-020 work is preserved; hosted migration inclusion/dependencies and any retained observations still need separate review. No runtime/schema/hosted change or gate write occurred. TASK-021 remains incomplete on its other decisions and unrun rehearsal. See `agents/handoffs/TASK-021-SAFEGUARD-DEFERRAL.md`.
