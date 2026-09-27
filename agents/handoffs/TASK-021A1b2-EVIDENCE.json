@@ -1,0 +1,618 @@
+{
+  "tested_commit": "725be840c0a575cce1d87cea00c14044e630d424",
+  "serial_node_results": {
+    "tests": 2,
+    "pass": 2,
+    "fail": 0,
+    "skip": 0
+  },
+  "current_migration_history": "23:20260927000300",
+  "records": [
+    {
+      "unchanged_lock_cases": [
+        {
+          "race": "b2_reader_account_loss_first",
+          "holder_pid": 445,
+          "waiter_pid": 446,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "b2_reader_first",
+          "holder_pid": 489,
+          "waiter_pid": 490,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "b2_retained_retry_gate_loss_first",
+          "holder_pid": 539,
+          "waiter_pid": 540,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "b2_retained_retry_first",
+          "holder_pid": 574,
+          "waiter_pid": 575,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "b2_operator_role_loss_first",
+          "holder_pid": 616,
+          "waiter_pid": 615,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "b2_operator_queue_first",
+          "holder_pid": 652,
+          "waiter_pid": 651,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        }
+      ],
+      "new_pilot_locks": false,
+      "scope": "existing source actor, retained exact retry safety gate, unadmitted operator role; no B3 admission/write claim"
+    },
+    {
+      "cases": [
+        {
+          "isolation": "repeatable read",
+          "message": "Hangout chat unavailable",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "isolation": "repeatable read",
+          "message": "Hangout operation not permitted",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "isolation": "repeatable read",
+          "message": "People operation unavailable",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "isolation": "repeatable read",
+          "message": "People operation unavailable",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "isolation": "repeatable read",
+          "message": "Hangout operation not permitted",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "isolation": "repeatable read",
+          "message": "Moderation unavailable",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "isolation": "serializable",
+          "message": "Hangout chat unavailable",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "isolation": "serializable",
+          "message": "Hangout operation not permitted",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "isolation": "serializable",
+          "message": "People operation unavailable",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "isolation": "serializable",
+          "message": "People operation unavailable",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "isolation": "serializable",
+          "message": "Hangout operation not permitted",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "isolation": "serializable",
+          "message": "Moderation unavailable",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "rpc": "read_hangout_messages",
+          "status": 403,
+          "code": "42501",
+          "message": "Hangout chat unavailable"
+        },
+        {
+          "rpc": "read_hangout_messages",
+          "status": 403,
+          "code": "42501",
+          "message": "Hangout chat unavailable"
+        },
+        {
+          "rpc": "read_hangout_messages",
+          "status": 403,
+          "code": "42501",
+          "message": "Hangout chat unavailable"
+        },
+        {
+          "rpc": "list_hangout_cohosts",
+          "status": 403,
+          "code": "42501",
+          "message": "Hangout operation not permitted"
+        },
+        {
+          "rpc": "submit_safety_report",
+          "status": 403,
+          "code": "42501",
+          "message": "Safety report unavailable"
+        },
+        {
+          "rpc": "submit_safety_report",
+          "status": 403,
+          "code": "42501",
+          "message": "Safety report unavailable"
+        },
+        {
+          "rpc": "submit_safety_report",
+          "status": 403,
+          "code": "42501",
+          "message": "Safety report unavailable"
+        },
+        {
+          "rpc": "list_moderation_reports",
+          "status": 403,
+          "code": "42501",
+          "message": "Moderation unavailable"
+        },
+        {
+          "rpc": "get_moderation_report",
+          "status": 403,
+          "code": "42501",
+          "message": "Moderation unavailable"
+        },
+        {
+          "rpc": "apply_hangout_moderation_action",
+          "status": 403,
+          "code": "42501",
+          "message": "Moderation unavailable"
+        },
+        {
+          "rpc": "submit_safety_report",
+          "status": 403,
+          "code": "42501",
+          "message": "Safety report unavailable"
+        },
+        {
+          "rpc": "list_my_retained_hangout_ids",
+          "status": 403,
+          "code": "42501",
+          "message": "Safety operation unavailable"
+        },
+        {
+          "rpc": "submit_safety_report",
+          "status": 403,
+          "code": "42501",
+          "message": "Safety report unavailable"
+        },
+        {
+          "case": "source-and-retained-output",
+          "roster_keys": [
+            "account_id",
+            "role_label"
+          ],
+          "receipt_keys": [
+            "receipt_id",
+            "submitted_at"
+          ],
+          "former_body_retained": true,
+          "former_author_id": null,
+          "blocked_body_omitted_before_limit": true,
+          "operator_detail_keys": [
+            "case_note",
+            "case_revision",
+            "case_state",
+            "category",
+            "disposition",
+            "narrative",
+            "provenance_kind",
+            "provenance_ref_id",
+            "report_id",
+            "reporter_id",
+            "submitted_at",
+            "target_campus_id",
+            "target_disabled",
+            "target_id",
+            "target_status",
+            "target_type"
+          ],
+          "old_tokens_used": true
+        }
+      ]
+    }
+  ],
+  "limits": "six successful existing-lock commit-order waits, not B3 admission or all-mutation serialization; SQL stronger isolation observations are not HTTP proof",
+  "final_s8_http_result": {
+    "tests": 1,
+    "pass": 1,
+    "fail": 0,
+    "skip": 0
+  },
+  "final_s8_http_records": [
+    {
+      "cases": [
+        {
+          "isolation": "repeatable read",
+          "message": "Hangout chat unavailable",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "isolation": "repeatable read",
+          "message": "Hangout operation not permitted",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "isolation": "repeatable read",
+          "message": "People operation unavailable",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "isolation": "repeatable read",
+          "message": "People operation unavailable",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "isolation": "repeatable read",
+          "message": "Hangout operation not permitted",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "isolation": "repeatable read",
+          "message": "Moderation unavailable",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "isolation": "serializable",
+          "message": "Hangout chat unavailable",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "isolation": "serializable",
+          "message": "Hangout operation not permitted",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "isolation": "serializable",
+          "message": "People operation unavailable",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "isolation": "serializable",
+          "message": "People operation unavailable",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "isolation": "serializable",
+          "message": "Hangout operation not permitted",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "isolation": "serializable",
+          "message": "Moderation unavailable",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "rpc": "submit_safety_report",
+          "status": 403,
+          "code": "42501",
+          "message": "Safety report unavailable"
+        },
+        {
+          "rpc": "submit_safety_report",
+          "status": 403,
+          "code": "42501",
+          "message": "Safety report unavailable"
+        },
+        {
+          "rpc": "read_hangout_messages",
+          "status": 403,
+          "code": "42501",
+          "message": "Hangout chat unavailable"
+        },
+        {
+          "rpc": "submit_safety_report",
+          "status": 403,
+          "code": "42501",
+          "message": "Safety report unavailable"
+        },
+        {
+          "case": "ordinary-current-hangout-report",
+          "never_participated": true,
+          "provenance": "current_hangout",
+          "receipt_keys": [
+            "receipt_id",
+            "submitted_at"
+          ],
+          "host_revoke_absence_and_hangouts_off_new_acquisition_denied": true,
+          "new_denial_report_ledger_growth": 0,
+          "exact_receipt_independent": true
+        },
+        {
+          "rpc": "read_hangout_messages",
+          "status": 403,
+          "code": "42501",
+          "message": "Hangout chat unavailable"
+        },
+        {
+          "rpc": "read_hangout_messages",
+          "status": 403,
+          "code": "42501",
+          "message": "Hangout chat unavailable"
+        },
+        {
+          "rpc": "list_hangout_cohosts",
+          "status": 403,
+          "code": "42501",
+          "message": "Hangout operation not permitted"
+        },
+        {
+          "rpc": "submit_safety_report",
+          "status": 403,
+          "code": "42501",
+          "message": "Safety report unavailable"
+        },
+        {
+          "rpc": "submit_safety_report",
+          "status": 403,
+          "code": "42501",
+          "message": "Safety report unavailable"
+        },
+        {
+          "rpc": "submit_safety_report",
+          "status": 403,
+          "code": "42501",
+          "message": "Safety report unavailable"
+        },
+        {
+          "rpc": "list_moderation_reports",
+          "status": 403,
+          "code": "42501",
+          "message": "Moderation unavailable"
+        },
+        {
+          "rpc": "get_moderation_report",
+          "status": 403,
+          "code": "42501",
+          "message": "Moderation unavailable"
+        },
+        {
+          "rpc": "apply_hangout_moderation_action",
+          "status": 403,
+          "code": "42501",
+          "message": "Moderation unavailable"
+        },
+        {
+          "rpc": "submit_safety_report",
+          "status": 403,
+          "code": "42501",
+          "message": "Safety report unavailable"
+        },
+        {
+          "rpc": "list_my_retained_hangout_ids",
+          "status": 403,
+          "code": "42501",
+          "message": "Safety operation unavailable"
+        },
+        {
+          "rpc": "submit_safety_report",
+          "status": 403,
+          "code": "42501",
+          "message": "Safety report unavailable"
+        },
+        {
+          "case": "source-and-retained-output",
+          "roster_keys": [
+            "account_id",
+            "role_label"
+          ],
+          "receipt_keys": [
+            "receipt_id",
+            "submitted_at"
+          ],
+          "former_body_retained": true,
+          "former_author_id": null,
+          "blocked_body_omitted_before_limit": true,
+          "operator_detail_keys": [
+            "case_note",
+            "case_revision",
+            "case_state",
+            "category",
+            "disposition",
+            "narrative",
+            "provenance_kind",
+            "provenance_ref_id",
+            "report_id",
+            "reporter_id",
+            "submitted_at",
+            "target_campus_id",
+            "target_disabled",
+            "target_id",
+            "target_status",
+            "target_type"
+          ],
+          "old_tokens_used": true
+        }
+      ]
+    }
+  ],
+  "sql_suites": [
+    {
+      "name": "identity_rls.test.sql",
+      "assertions": 53
+    },
+    {
+      "name": "onboarding.test.sql",
+      "assertions": 22
+    },
+    {
+      "name": "profile_enrichment.test.sql",
+      "assertions": 37
+    },
+    {
+      "name": "local_account_enforcement.test.sql",
+      "assertions": 33
+    },
+    {
+      "name": "private_pilot_admission_authority.test.sql",
+      "assertions": 74
+    },
+    {
+      "name": "hangout_foundation.test.sql",
+      "assertions": 114
+    },
+    {
+      "name": "local_global_blocks.test.sql",
+      "assertions": 62
+    },
+    {
+      "name": "local_hangout_chat.test.sql",
+      "assertions": 73
+    },
+    {
+      "name": "local_safety_reports.test.sql",
+      "assertions": 43
+    },
+    {
+      "name": "local_moderation_review.test.sql",
+      "assertions": 51
+    },
+    {
+      "name": "local_hangout_disable.test.sql",
+      "assertions": 75
+    },
+    {
+      "name": "local_cohost_authority.test.sql",
+      "assertions": 68
+    },
+    {
+      "name": "local_large_hangout_safeguards.test.sql",
+      "assertions": 64
+    },
+    {
+      "name": "pilot-admission-source-safety.test.sql",
+      "assertions": 94
+    },
+    {
+      "name": "B1 owner",
+      "assertions": 49
+    }
+  ],
+  "sql_assertion_total": 912,
+  "fixture_sha256": {
+    "supabase/tests/pilot-admission-source-safety-concurrency.integration.mjs": "730fa189bbbc6e7525ab353e3c5902815a5223c741eeeb25c32b52baf3a4db48",
+    "supabase/tests/pilot-admission-source-safety-http.integration.mjs": "6aef88e01f06f766ea56f83dd4a78d67fabc3769884101db92d1f599d8ac0645",
+    "supabase/tests/pilot-admission-source-safety.test.sql": "a297ce38fa91f9248239879bd4218056ac6f1250bd482d0f5dc2418aef3556d3"
+  },
+  "actual_services": [
+    {
+      "container": "/supabase_db_pals-local",
+      "configured_image": "public.ecr.aws/supabase/postgres:17.6.1.167",
+      "image_id": "sha256:6942962433a569e87f228b4d4ab7e11db5deca64e43babb3a038443ad6c4f1bb",
+      "mounts": [
+        {
+          "Type": "volume",
+          "Name": "supabase_db_pals-local",
+          "Source": "/home/ellanguyen.guest/.local/share/docker/volumes/supabase_db_pals-local/_data",
+          "Destination": "/var/lib/postgresql/data",
+          "Driver": "local",
+          "Mode": "z",
+          "RW": true,
+          "Propagation": ""
+        }
+      ]
+    },
+    {
+      "container": "/supabase_storage_pals-local",
+      "configured_image": "public.ecr.aws/supabase/storage-api:v1.72.1",
+      "image_id": "sha256:105a2584129c9600aebed6f5ac49ca4371c92b996ecd1af7179750333e9e2120",
+      "mounts": [
+        {
+          "Type": "volume",
+          "Name": "supabase_storage_pals-local",
+          "Source": "/home/ellanguyen.guest/.local/share/docker/volumes/supabase_storage_pals-local/_data",
+          "Destination": "/mnt",
+          "Driver": "local",
+          "Mode": "z",
+          "RW": true,
+          "Propagation": ""
+        }
+      ]
+    },
+    {
+      "container": "/supabase_rest_pals-local",
+      "configured_image": "public.ecr.aws/supabase/postgrest:v16.2",
+      "image_id": "sha256:85258123312dc496ad4c2ed832154a65e9746f84df0d6d09b44229ff9230c08e",
+      "mounts": []
+    },
+    {
+      "container": "/supabase_inbucket_pals-local",
+      "configured_image": "public.ecr.aws/supabase/mailpit:v1.30.2",
+      "image_id": "sha256:37a38e48e9338cd7e89dfeb487f37b02ebfcd9cb23111bed2d345e79d37d6dd6",
+      "mounts": []
+    },
+    {
+      "container": "/supabase_auth_pals-local",
+      "configured_image": "public.ecr.aws/supabase/gotrue:v2.196.0",
+      "image_id": "sha256:c0c25187a6b835e65a6f6e6c6b39d090e832d40e6de5186f2c038e0411944232",
+      "mounts": []
+    },
+    {
+      "container": "/supabase_kong_pals-local",
+      "configured_image": "public.ecr.aws/supabase/kong:2.8.1",
+      "image_id": "sha256:1b53405d8680a09d6f44494b7990bf7da2ea43f84a258c59717d4539abf09f6d",
+      "mounts": []
+    }
+  ],
+  "implementation_stage_status": {
+    "status": "incomplete",
+    "tested_tip": "3f169719e20033aaefbf0f975091ee4063dfc132",
+    "source_tip": "04c4ca588b19944ad9b8ef40dd21d81c214667cc",
+    "blocker": "Inherited moderation_actor locking platform_roles SELECT may return no tuple after waiting on DELETE; later EXISTS can accept unlocked replacement INSERT. DELETE/reINSERT through-commit evidence and reviewed bounded repair remain pending.",
+    "role_wait_evidence_limit": "Existing observed role DELETE waits do not prove replacement-row through-commit safety.",
+    "repair_performed": false,
+    "published": false
+  },
+  "final_cleanup": {
+    "date": "2026-09-27",
+    "lint_schema_errors": [],
+    "current_migration_history": "23:20260927000300",
+    "guarded_reset": "passed",
+    "fixture_census": "zero",
+    "original_and_pilot_gates": "off",
+    "availability_revision": 1,
+    "all_thirteen_capability_revisions": 1,
+    "supabase_stop": "normal, backup true, project pals-local",
+    "remaining_containers": 0,
+    "remaining_named_volumes": [
+      "supabase_db_pals-local",
+      "supabase_storage_pals-local"
+    ],
+    "vm_stop": "normal existing VM",
+    "current_hostagent": 53315,
+    "stop_signal_time": "14:13:36",
+    "vz_stopped_time": "14:13:38",
+    "vm_state": "Stopped",
+    "all_named_pals_hostagents": "absent",
+    "ha_pid_and_socket": "absent",
+    "actual_disk_and_vz_efi_holders": [],
+    "tcp_54321_54322_54324_holders": [],
+    "forced_current_guest_stop": false
+  }
+}

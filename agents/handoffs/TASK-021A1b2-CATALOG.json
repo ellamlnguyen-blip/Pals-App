@@ -1,0 +1,2139 @@
+{
+  "history": "[\"20260921000100\", \"20260922000100\", \"20260922000200\", \"20260922000300\", \"20260922000400\", \"20260922000500\", \"20260922000600\", \"20260923000100\", \"20260923000200\", \"20260923000300\", \"20260923000400\", \"20260923000500\", \"20260923000600\", \"20260923000700\", \"20260924000100\", \"20260924000200\", \"20260924000300\", \"20260924000400\", \"20260925000100\", \"20260925000200\", \"20260927000100\", \"20260927000200\", \"20260927000300\"]",
+  "functions": [
+    {
+      "name": "private.account_is_active",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "volatility": "s",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "private.advance_large_hangout_epoch",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "trigger",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.bump_profile_revision",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "trigger",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.can_read_hangout",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "volatility": "s",
+      "anon_execute": false,
+      "identity_args": "target uuid, private_details boolean",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "private.can_read_hangout_roster",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "volatility": "s",
+      "anon_execute": false,
+      "identity_args": "target uuid, subject uuid",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "private.chat_authorized",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "volatility": "s",
+      "anon_execute": false,
+      "identity_args": "p_hangout_id uuid",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.chat_immutable_message",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "trigger",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.chat_lock_evidence",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "void",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_hangout_id uuid, p_actor uuid, p_campus uuid",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.chat_require",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "volatility": "s",
+      "anon_execute": false,
+      "identity_args": "p_hangout_id uuid",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.check_hangout_revision",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "void",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "h hangouts, expected bigint",
+      "service_execute": false,
+      "security_definer": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.clear_departing_cohost",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "trigger",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.clear_reopened_case_sanction",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "trigger",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.dm_active_caller",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.dm_eligible",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_peer uuid",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.dm_enabled",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.dm_immutable",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "trigger",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.dm_lock_evidence",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "void",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_actor uuid, p_peer uuid",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.dm_require",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.effective_hangout_cohost",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "volatility": "s",
+      "anon_execute": false,
+      "identity_args": "p_hangout_id uuid, p_actor uuid",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.enforce_hangout_ownership",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "trigger",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.enforce_joined_host",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "trigger",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.enforce_participant_transition",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "trigger",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.friendship_eligible",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "target uuid",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.friendship_enabled",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.friendship_lock_eligibility",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "void",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "actor uuid, target uuid",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.friendship_lock_pair",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "void",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "a uuid, b uuid",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.hangouts_enabled",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "volatility": "s",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.has_verified_membership",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "volatility": "s",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "private.lock_hangout",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "hangouts",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "target uuid",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.moderation_actor",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "uuid",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.moderation_report_allowed",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_actor uuid, p_report uuid, p_for_action boolean",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.notification_chat_source",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "trigger",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.notification_dm_message_source",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "trigger",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.notification_dm_pair_source",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "trigger",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.notification_emit",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "void",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_recipient uuid, p_kind text, p_source uuid, p_target uuid, p_code text, p_actor uuid, p_category text",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.notification_emit_hangout",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "void",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_event uuid, p_hangout uuid, p_actor uuid, p_code text",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.notification_enabled",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.notification_friend_source",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "trigger",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.notification_lock_recipient",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "void",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_recipient uuid",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.notification_require_owner",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "uuid",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.people_active_owner",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.people_enabled",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.people_ready_campus",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "uuid",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.people_require_read_committed",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "void",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.people_visible",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "subject uuid, campus uuid",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.pilot_caller_is_admitted",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "volatility": "s",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.pilot_capability_enabled",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "volatility": "s",
+      "anon_execute": false,
+      "identity_args": "p_key text",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.pilot_evidence_lock",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "void",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.pilot_evidence_write_lock",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "void",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.pilot_is_available",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "volatility": "s",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.pilot_lock_management",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "void",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_actor uuid, p_target uuid, p_policy_key text, p_manager_write boolean",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.pilot_lock_owner_evidence",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "void",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "subject uuid",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.pilot_onboarding_eligible",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "volatility": "s",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "private.pilot_owner_subject_eligible",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "volatility": "s",
+      "anon_execute": false,
+      "identity_args": "subject uuid",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.pilot_require_activation",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "void",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_target uuid",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.pilot_require_manager",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "uuid",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.profile_trim",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "text",
+      "volatility": "i",
+      "anon_execute": false,
+      "identity_args": "value text",
+      "service_execute": false,
+      "security_definer": false,
+      "authenticated_execute": true
+    },
+    {
+      "name": "private.protect_profile_photo_delete",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "trigger",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.provision_account",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "trigger",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.ready_campus",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "uuid",
+      "volatility": "s",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "private.ready_subject_campus",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "volatility": "s",
+      "anon_execute": false,
+      "identity_args": "subject uuid, campus uuid",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.record_large_hangout_join",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "void",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_hangout_id uuid",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.reject_client_profile_photo_update",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "trigger",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.reject_large_hangout_signal_change",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "trigger",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.reject_moderation_evidence_change",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "trigger",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.reject_pilot_evidence_change",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "trigger",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.require_active_photo_write",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "trigger",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.require_active_profile_write",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "trigger",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.require_active_student_source_write",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "trigger",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.safety_enabled",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.safety_lock_hangout_evidence",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "void",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_actor uuid, p_campus uuid",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.safety_lock_visible_evidence",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "void",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_actor uuid, p_peer uuid",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.safety_pair_blocked",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "volatility": "s",
+      "anon_execute": false,
+      "identity_args": "a uuid, b uuid",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.safety_peer_evidence",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "volatility": "s",
+      "anon_execute": false,
+      "identity_args": "p_actor uuid, p_peer uuid",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.safety_reconcile_existing_blocks",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "void",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.safety_record_joined_overlap",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "void",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_hangout uuid, p_actor uuid",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.safety_report_peer_source",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "TABLE(kind text, ref_id uuid)",
+      "volatility": "s",
+      "anon_execute": false,
+      "identity_args": "p_actor uuid, p_peer uuid",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.set_pilot_manager_fixture",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "bigint",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_account_id uuid, p_state text, p_expected_revision bigint, p_reason text, p_request_id uuid",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.social_hangout_mutation_lock",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "void",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.sync_confirmed_membership",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "trigger",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.valid_profile_list",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "volatility": "i",
+      "anon_execute": false,
+      "identity_args": "items text[], maximum integer, item_limit integer",
+      "service_execute": false,
+      "security_definer": false,
+      "authenticated_execute": true
+    },
+    {
+      "name": "private.valid_profile_prompts",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "volatility": "i",
+      "anon_execute": false,
+      "identity_args": "items jsonb",
+      "service_execute": false,
+      "security_definer": false,
+      "authenticated_execute": true
+    },
+    {
+      "name": "private.validate_hangout_input",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "void",
+      "volatility": "s",
+      "anon_execute": false,
+      "identity_args": "p_title text, p_starts_at timestamp with time zone, p_public_place text, p_public_latitude double precision, p_public_longitude double precision, p_description text, p_ends_at timestamp with time zone, p_campus_zone text, p_visibility text, p_location_precision text, p_eligibility jsonb",
+      "service_execute": false,
+      "security_definer": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.validate_hangout_instructions",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "void",
+      "volatility": "s",
+      "anon_execute": false,
+      "identity_args": "value text",
+      "service_execute": false,
+      "security_definer": false,
+      "authenticated_execute": false
+    },
+    {
+      "name": "private.validate_profile_photos",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "trigger",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "public.accept_friend_request",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_peer_id uuid, p_generation_id uuid",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.answer_own_attendance",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "TABLE(hangout_id uuid, attended boolean, revision bigint, answered_at timestamp with time zone)",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_hangout_id uuid, p_attended boolean, p_expected_revision bigint",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.apply_account_moderation_action",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "TABLE(case_state text, revision bigint, account_status text)",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_report_id uuid, p_request_id uuid, p_expected_case_revision bigint, p_action text, p_reason text",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.apply_hangout_moderation_action",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "TABLE(case_state text, revision bigint, target_disabled boolean)",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_report_id uuid, p_request_id uuid, p_expected_case_revision bigint, p_reason text",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.browse_people",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "TABLE(account_id uuid, real_name text, campus_name text, graduation_year integer, major text)",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_search text, p_graduation_year integer, p_major text, p_after_name text, p_after_id uuid, p_limit integer",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.cancel_friend_request",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_peer_id uuid, p_generation_id uuid",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.cancel_hangout",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "bigint",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_hangout_id uuid, p_expected_revision bigint",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.create_dm_request",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "uuid",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_target_id uuid, p_request_id uuid, p_body text",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.create_friend_request",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "uuid",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_target_id uuid, p_request_id uuid",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.create_hangout",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "uuid",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_request_id uuid, p_title text, p_starts_at timestamp with time zone, p_public_place text, p_public_latitude double precision, p_public_longitude double precision, p_description text, p_ends_at timestamp with time zone, p_campus_zone text, p_private_instructions text, p_visibility text, p_location_precision text, p_eligibility jsonb",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.decline_friend_request",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_peer_id uuid, p_generation_id uuid",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.demote_hangout_cohost",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "bigint",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_hangout_id uuid, p_account_id uuid, p_expected_revision bigint",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.edit_hangout",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "bigint",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_hangout_id uuid, p_expected_revision bigint, p_title text, p_starts_at timestamp with time zone, p_public_place text, p_public_latitude double precision, p_public_longitude double precision, p_description text, p_ends_at timestamp with time zone, p_campus_zone text, p_private_instructions text, p_visibility text, p_location_precision text, p_eligibility jsonb",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.get_access_state",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "text",
+      "volatility": "s",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.get_dm_status",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "TABLE(peer_id uuid, generation_id uuid, direction text, state text)",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_peer_id uuid",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.get_friendship",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "TABLE(peer_id uuid, generation_id uuid, direction text, state text)",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_peer_id uuid",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.get_hangout_large_state",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "TABLE(is_large boolean)",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_hangout_id uuid",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.get_hangout_participant_state",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "text",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_hangout_id uuid, p_account_id uuid",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.get_moderation_report",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "TABLE(report_id uuid, submitted_at timestamp with time zone, target_type text, target_id uuid, reporter_id uuid, category text, case_state text, case_revision bigint, narrative text, provenance_kind text, provenance_ref_id uuid, case_note text, disposition text, target_status text, target_campus_id uuid, target_disabled boolean)",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_report_id uuid",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.get_notification_preferences",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "TABLE(category text, enabled boolean)",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.get_own_attendance",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "TABLE(hangout_id uuid, attended boolean, revision bigint, answered_at timestamp with time zone)",
+      "volatility": "s",
+      "anon_execute": false,
+      "identity_args": "p_hangout_id uuid",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.get_people_detail",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "TABLE(account_id uuid, real_name text, campus_name text, graduation_year integer, major text, bio text, interests text[], down_to_do text[])",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_account_id uuid",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.get_people_preference",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.join_hangout",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "void",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_hangout_id uuid",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.leave_hangout",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "void",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_hangout_id uuid",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.list_dm_inbox",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "TABLE(peer_id uuid, generation_id uuid, direction text, state text, created_at timestamp with time zone, first_body text)",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_after_created_at timestamp with time zone, p_after_generation_id uuid, p_limit integer",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.list_friendships",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "TABLE(peer_id uuid, generation_id uuid, direction text, state text)",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_after_peer_id uuid, p_limit integer",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.list_hangout_cohosts",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "TABLE(account_id uuid)",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_hangout_id uuid, p_after_account_id uuid, p_limit integer",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.list_hangout_roster_roles",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "TABLE(account_id uuid, role_label text)",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_hangout_id uuid, p_after_account_id uuid, p_limit integer",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.list_moderation_reports",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "TABLE(report_id uuid, submitted_at timestamp with time zone, target_type text, target_id uuid, reporter_id uuid, category text, case_state text)",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_after_submitted_at timestamp with time zone, p_after_id uuid, p_limit integer",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.list_my_retained_hangout_ids",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "TABLE(hangout_id uuid, own_state text)",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_after_id uuid, p_limit integer",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.list_notifications",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "TABLE(notification_id uuid, source_kind text, source_id uuid, event_code text, actor_id uuid, target_id uuid, label text, created_at timestamp with time zone, read_at timestamp with time zone)",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_after_created_at timestamp with time zone, p_after_id uuid, p_limit integer",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.list_own_attendance",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "TABLE(hangout_id uuid, attended boolean, revision bigint, answered_at timestamp with time zone, within_window boolean, currently_actionable boolean)",
+      "volatility": "s",
+      "anon_execute": false,
+      "identity_args": "p_before_hangout_id uuid",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.list_people_blocked_ids",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "TABLE(account_id uuid)",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_after_id uuid, p_limit integer",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.mark_notification_read",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_notification_id uuid",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.promote_hangout_cohost",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "bigint",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_hangout_id uuid, p_account_id uuid, p_expected_revision bigint",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.query_saved_hangouts",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "jsonb",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_west double precision, p_south double precision, p_east double precision, p_north double precision, p_time_filter text, p_joining_filter text, p_cutoff timestamp with time zone",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.read_dm_messages",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "TABLE(message_id uuid, sequence bigint, body text, created_at timestamp with time zone, mine boolean)",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_peer_id uuid, p_generation_id uuid, p_after_sequence bigint, p_limit integer",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.read_hangout_messages",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "TABLE(message_id uuid, sequence bigint, body text, created_at timestamp with time zone, mine boolean, author_id uuid, author_label text)",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_hangout_id uuid, p_after_sequence bigint, p_limit integer",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.remove_hangout_participant",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "bigint",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_hangout_id uuid, p_account_id uuid, p_expected_revision bigint",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.send_dm_message",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "uuid",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_peer_id uuid, p_generation_id uuid, p_request_id uuid, p_body text",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.send_hangout_message",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "TABLE(message_id uuid, sequence bigint, body text, created_at timestamp with time zone, mine boolean, author_id uuid, author_label text)",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_hangout_id uuid, p_request_id uuid, p_body text",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.set_hangout_joining",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "bigint",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_hangout_id uuid, p_expected_revision bigint, p_joining_state text",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.set_notification_preference",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_category text, p_enabled boolean",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.set_people_block",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_account_id uuid, p_blocked boolean",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.set_people_preference",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_opted_in boolean",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.set_pilot_account_admission",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "TABLE(state text, revision bigint)",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_account_id uuid, p_state text, p_expected_revision bigint, p_reason text, p_request_id uuid",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.set_pilot_policy",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "TABLE(enabled boolean, revision bigint)",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_key text, p_enabled boolean, p_expected_revision bigint, p_reason text, p_request_id uuid",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.set_safety_block",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_account_id uuid, p_blocked boolean",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.step_down_hangout_cohost",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "bigint",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_hangout_id uuid, p_expected_revision bigint",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.submit_safety_report",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "TABLE(receipt_id uuid, submitted_at timestamp with time zone)",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_request_id uuid, p_target_mode text, p_target_id uuid, p_category text, p_narrative text",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.transition_dm",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_peer_id uuid, p_generation_id uuid, p_action text, p_reply_request_id uuid, p_reply_body text",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.transition_friendship",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_peer_id uuid, p_generation_id uuid, p_action text",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": false
+    },
+    {
+      "name": "public.transition_moderation_case",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "TABLE(case_state text, revision bigint)",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_report_id uuid, p_request_id uuid, p_expected_revision bigint, p_action text, p_note text, p_duplicate_report_id uuid",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    },
+    {
+      "name": "public.unfriend",
+      "config": [
+        "search_path=\"\""
+      ],
+      "result": "boolean",
+      "volatility": "v",
+      "anon_execute": false,
+      "identity_args": "p_peer_id uuid, p_generation_id uuid",
+      "service_execute": false,
+      "security_definer": true,
+      "authenticated_execute": true
+    }
+  ],
+  "relations": [
+    {
+      "name": "private.account_sanctions",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": false
+    },
+    {
+      "name": "private.attendance_answers",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": false
+    },
+    {
+      "name": "private.attendance_feature_gate",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": false
+    },
+    {
+      "name": "private.dm_feature_gate",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": false
+    },
+    {
+      "name": "private.dm_messages",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": false
+    },
+    {
+      "name": "private.dm_pairs",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": false
+    },
+    {
+      "name": "private.dm_retries",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": false
+    },
+    {
+      "name": "private.dm_suppression",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": false
+    },
+    {
+      "name": "private.friendship_create_requests",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": false
+    },
+    {
+      "name": "private.friendship_feature_gate",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": false
+    },
+    {
+      "name": "private.friendship_suppression",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": false
+    },
+    {
+      "name": "private.friendships",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": false
+    },
+    {
+      "name": "private.hangout_chat_feature_gate",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": false
+    },
+    {
+      "name": "private.hangout_cohosts",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": false
+    },
+    {
+      "name": "private.hangout_conversations",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": false
+    },
+    {
+      "name": "private.hangout_create_requests",
+      "anon_select": false,
+      "rls_enabled": false,
+      "authenticated_select": false
+    },
+    {
+      "name": "private.hangout_disables",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": false
+    },
+    {
+      "name": "private.hangout_feature_gate",
+      "anon_select": false,
+      "rls_enabled": false,
+      "authenticated_select": false
+    },
+    {
+      "name": "private.hangout_message_requests",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": false
+    },
+    {
+      "name": "private.hangout_messages",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": false
+    },
+    {
+      "name": "private.hangout_peer_provenance",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": false
+    },
+    {
+      "name": "private.large_hangout_feature_gate",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": false
+    },
+    {
+      "name": "private.large_hangout_signals",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": false
+    },
+    {
+      "name": "private.moderation_audit",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": false
+    },
+    {
+      "name": "private.moderation_cases",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": false
+    },
+    {
+      "name": "private.moderation_feature_gate",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": false
+    },
+    {
+      "name": "private.moderation_requests",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": false
+    },
+    {
+      "name": "private.notification_feature_gate",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": false
+    },
+    {
+      "name": "private.notification_items",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": false
+    },
+    {
+      "name": "private.notification_preferences",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": false
+    },
+    {
+      "name": "private.people_blocks",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": false
+    },
+    {
+      "name": "private.people_feature_gate",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": false
+    },
+    {
+      "name": "private.people_preferences",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": false
+    },
+    {
+      "name": "private.pilot_account_admission",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": false
+    },
+    {
+      "name": "private.pilot_admission_managers",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": false
+    },
+    {
+      "name": "private.pilot_availability",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": false
+    },
+    {
+      "name": "private.pilot_capabilities",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": false
+    },
+    {
+      "name": "private.pilot_management_audit",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": false
+    },
+    {
+      "name": "private.pilot_management_requests",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": false
+    },
+    {
+      "name": "private.pilot_manager_audit",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": false
+    },
+    {
+      "name": "private.safety_feature_gate",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": false
+    },
+    {
+      "name": "private.safety_reconciliation_effects",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": false
+    },
+    {
+      "name": "private.safety_report_requests",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": false
+    },
+    {
+      "name": "private.safety_reports",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": false
+    },
+    {
+      "name": "public.accounts",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": true
+    },
+    {
+      "name": "public.hangout_participants",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": false
+    },
+    {
+      "name": "public.hangout_private_locations",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": true
+    },
+    {
+      "name": "public.hangouts",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": true
+    },
+    {
+      "name": "public.platform_roles",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": true
+    },
+    {
+      "name": "public.profiles",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": true
+    },
+    {
+      "name": "public.universities",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": true
+    },
+    {
+      "name": "public.university_memberships",
+      "anon_select": false,
+      "rls_enabled": true,
+      "authenticated_select": true
+    }
+  ]
+}
