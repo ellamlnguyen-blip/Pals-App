@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-27 — Core mutation contract reconciliation active
+
+B2 completion receipt independently remote-verified on canonical main `bb2b97e70c6641c44b9f5fa7343baa301c7ada8d` (final taska451242, accepted code/shared integration172308d). Fresh Sol-medium contract-only agent reconcile_pilot_core_mutation_contract works in /private/tmp/pals-task021a1b3-contract on agent/TASK-021A1b3-contract from that actual24-migration baseline. It will reconcile final core/cohost/chat/current-source safety mutation signatures and lock graph, owner/manager/operator crossings and exact evidence allocation; split oversized work before independent review/publication. No B3 implementation/runtime/push yet. A1c/A2/TASK-021 remain dependent and incomplete; no hosted/pilot-ready claim or duplicate product successor. App Standard speed is not tool-verifiable.
+
 ## 2026-09-27 — Source/safety integrated and remote-verified
 
 TASK-021A1b2 is complete for its bounded disposable-local source/purpose/immutable-host projections, retained safety and independent report-only operator authority. Reviewed final task branch independently remote-verified `a451242a2de454a41571ede7db72ed10faf79819`; accepted canonical main/integration branch independently remote-verified `172308d17cfdb4677a417d7b681f5c07372afa67`. Final source/evidence review has no unresolved finding;925 SQL assertions/three modules/14 actual-role waits plus separately labeled old-gap diagnostic, action-role replay/isolation/upgrade/catalog/lint/default cleanup and normal global shutdown passed within explicit reviewer-no-rerun/app/full-suite limits. This receipt follows verified code integration. B3 contract reconciliation/review/publication is next; B3/A1c/A2 and TASK-021 remain incomplete. No hosted/pilot-ready claim or product successor from this substage.
