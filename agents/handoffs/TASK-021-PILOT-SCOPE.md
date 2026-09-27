@@ -1,7 +1,7 @@
 # TASK-021 — Accepted pilot scope documentation handoff
 
 Date: 2026-09-27
-Status: docs increment prepared locally; independent review/publication/integration pending; TASK-021 incomplete
+Status: docs increment independently reviewed; publication/integration pending; TASK-021 incomplete
 Baseline: canonical main `7f2bea3dc52475748b482490a161f55b9e7789f9`
 Branch: `agent/TASK-021-pilot-scope`
 Worktree: `/private/tmp/pals-task021-pilot-scope`
@@ -27,3 +27,5 @@ Clarified the UI-only co-host deferral: hide/deny co-host management pages, prom
 ## Publication and remaining work
 
 Local commit only under coordinator instruction; no push or integration claimed. Coordinator must independently review exact tip, publish approved docs and verify canonical remote main before dependent dispatch. Task/main remote SHAs for this increment: pending, not claimed. Do not mark TASK-021 complete or create a successor. Remaining gates: reviewed admission/capability contract and policy acceptance, accepted named safety owners/policies, exact target/migration/gate/app-guard/hosted authorization, actual controlled rehearsal/cleanup and independent evidence review.
+
+Fresh independent Sol-medium review cleared corrected exact tip `febace262c455c6c780ab59e24e3e5e9e386ff54` with no remaining findings.
