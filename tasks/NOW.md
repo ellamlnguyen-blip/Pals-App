@@ -1,5 +1,9 @@
 # NOW
 
+## 2026-09-27 — B3a disjoint HTTP fixture assignment
+
+Within the already reviewed/published B3a implementation contract, a fresh Sol-medium fixture agent will own only supabase/tests/pilot-admission-lifecycle-http.integration.mjs and its bounded HTTP handoff on the same parent task branch. The main implementation executor reserves that file and continues migration/SQL/concurrency/shared helper ownership; no concurrent file editing or Git/runtime mutation by the fixture agent. Existing helper interface exports and exact child ownership/history remain authority: TASK-021A1b3a /25:max20260927000500. Coordinator/main executor review its handoff before combining and committing source/tests for fresh independent source review. This assignment changes no acceptance/security/API scope and is not another product task or successor. No runtime release or completed evidence yet.
+
 ## 2026-09-27 — B3a lifecycle implementation dispatched
 
 Reviewed B3 contract branch independently remote-verified68f639ed8a3dcadd0a82f83d30caddf8a2ac703b; canonical reviewed contract/shared records independently remote-verified936b784ed2ae6965b4251fe9c6195b8f63671f2e. Fresh Sol-medium implement_pilot_lifecycle_admission owns only B3a six ordinary lifecycle RPCs/private evidence boundary in /private/tmp/pals-task021a1b3a-lifecycle on agent/TASK-021A1b3a-ordinary-lifecycle from that baseline. Source/tests first, fresh independent source/fixture review before sole disposable-runtime release; no B3a push/runtime yet. Explicit child ownership/history guard reconciliation is required for inherited regressions, with no wildcard/B2 acknowledgement inheritance. No shared read/retained/operator helper replacement or B3b/c change authorized. App Standard speed is not tool-verifiable.
