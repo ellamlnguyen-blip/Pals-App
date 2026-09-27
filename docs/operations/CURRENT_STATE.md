@@ -1,5 +1,11 @@
 # Current State
 
+## 2026-09-27 — B3a lifecycle implementation dispatched
+
+Reviewed B3 contract branch independently remote-verified68f639ed8a3dcadd0a82f83d30caddf8a2ac703b; canonical reviewed contract/shared records independently remote-verified936b784ed2ae6965b4251fe9c6195b8f63671f2e. Fresh Sol-medium implement_pilot_lifecycle_admission owns only B3a six ordinary lifecycle RPCs/private evidence boundary in /private/tmp/pals-task021a1b3a-lifecycle on agent/TASK-021A1b3a-ordinary-lifecycle from that baseline. Source/tests first, fresh independent source/fixture review before sole disposable-runtime release; no B3a push/runtime yet. Explicit child ownership/history guard reconciliation is required for inherited regressions, with no wildcard/B2 acknowledgement inheritance. No shared read/retained/operator helper replacement or B3b/c change authorized. App Standard speed is not tool-verifiable.
+
+B3b/c remain dependent planning, each requiring accepted predecessor reconciliation/review/publication. B3a acceptance, runtime/cleanup/handoff/security review/publication/remote main integration, then B3 combined/A1c/A2/TASK-021 remain incomplete. No hosted operation, pilot-ready claim or product successor from this substage.
+
 ## 2026-09-27 — B3 split and B3a lifecycle contract reviewed
 
 Fresh independent contract/graph review cleared exact `68f639ed8a3dcadd0a82f83d30caddf8a2ac703b`; contract branch independently remote-verified at that SHA. B3 is a nonexecutable combined-acceptance parent with sequential B3a six lifecycle RPCs/private ordinary boundary, B3b five co-host/chat RPCs and B3c two current-source safety branches. Only B3a is reviewed for canonical publication then fresh bounded implementation dispatch; B3b/c remain dependent planning with fresh predecessor reconciliation gates.
