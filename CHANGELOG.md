@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-27 — B3 split and B3a lifecycle contract reviewed
+
+Fresh independent contract/graph review cleared exact `68f639ed8a3dcadd0a82f83d30caddf8a2ac703b`; contract branch independently remote-verified at that SHA. B3 is a nonexecutable combined-acceptance parent with sequential B3a six lifecycle RPCs/private ordinary boundary, B3b five co-host/chat RPCs and B3c two current-source safety branches. Only B3a is reviewed for canonical publication then fresh bounded implementation dispatch; B3b/c remain dependent planning with fresh predecessor reconciliation gates.
+
+Review verified54 final function ABI/ACL/body extractions, social→pilot policy/source/evidence ordering, immediate missing-row denial/locked-campus-photo binding, authority-before-errors/returns, unchanged retained/operator lanes and ruled-out queued-manager candidate. Real owner Storage/profile and external writer conflicts retain separately classified rollback requirements. Concrete helper interface and actual-public common identity test partition were clarified; all six caller controls remain and final source/evidence equivalence review is mandatory. No B3 code/runtime evidence, hosted authorization or pilot-ready claim; B3/A1c/A2/TASK-021 incomplete. Standard speed remains app-controlled and tool-unverifiable.
+
 ## 2026-09-27 — Core mutation contract reconciliation active
 
 B2 completion receipt independently remote-verified on canonical main `bb2b97e70c6641c44b9f5fa7343baa301c7ada8d` (final taska451242, accepted code/shared integration172308d). Fresh Sol-medium contract-only agent reconcile_pilot_core_mutation_contract works in /private/tmp/pals-task021a1b3-contract on agent/TASK-021A1b3-contract from that actual24-migration baseline. It will reconcile final core/cohost/chat/current-source safety mutation signatures and lock graph, owner/manager/operator crossings and exact evidence allocation; split oversized work before independent review/publication. No B3 implementation/runtime/push yet. A1c/A2/TASK-021 remain dependent and incomplete; no hosted/pilot-ready claim or duplicate product successor. App Standard speed is not tool-verifiable.

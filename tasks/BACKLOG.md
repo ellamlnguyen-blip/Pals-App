@@ -1,5 +1,9 @@
 # Backlog
 
+## Current B3 sequential dependency
+
+Reviewed contract68f639e allocates B3a six lifecycle RPCs first; canonical publication precedes fresh bounded implementation. B3b five co-host/chat RPCs and B3c two current-source safety branches remain dependent planning; each requires actual accepted predecessor reconciliation/review/publication. B3 is not complete or executable as one implementation. A1c/A2/TASK-021 incomplete.
+
 ## Current next dependency — B3 reconciliation
 
 B2 complete at remote-verified accepted main172308d17cfdb4677a417d7b681f5c07372afa67, all24 migrations. Earlier B2 role-lock blocker and repair queue entries below are historical and resolved. Next: freshly reconcile bounded core mutation graph/source to actual reviewed B1/B2, independently review/publish contract before implementation. Split if oversized; no automatic acceptance of graph changes. A1c/A2 and hosted operating prerequisites remain incomplete.

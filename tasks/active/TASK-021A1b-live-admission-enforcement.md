@@ -1,7 +1,7 @@
 # TASK-021A1b — Live admission, core and retained safety enforcement
 
 Date: 2026-09-27
-Status: **Reconciled allocation parent — not executable; B1/B2 complete and remote-verified; B3 requires fresh contract reconciliation/review/publication**
+Status: **Reconciled allocation parent — not executable; B1/B2 complete and remote-verified; B3 split; B3a contract independently reviewed, publication/implementation pending**
 Parent: [TASK-021A1](TASK-021A1-pilot-backend-authorization.md), under TASK-021A / incomplete TASK-021.
 Current reconciliation input: canonical main `172308d17cfdb4677a417d7b681f5c07372afa67`, including completed reviewed B1/B2 and all24 migrations. Historical parent allocation baseline was `776db8c648f339c8650f7e725108d2853a0859ba`. Executor starts from latest independently verified `origin/main` containing its reviewed contract; this SHA is the contract source baseline, not permission to use a stale checkout.
 
@@ -11,7 +11,7 @@ The former single A1b implementation is too broad. Preserve its requirements bel
 
 1. [TASK-021A1b1](TASK-021A1b1-owner-admission.md): caller state, admitted incomplete owner/reference/primary Storage eligibility, independent peer readiness and direct-write evidence locking. Complete for bounded local scope: reviewed task82de4ed, accepted canonical main7844fba independently remote-verified; see handoff. B2 reconciliation follows.
 2. [TASK-021A1b2](TASK-021A1b2-source-projections-safety.md): immutable-host source/read/chat/retained peer projections plus exact safety/operator independence. Complete bounded local scope: reviewed taska451242 and accepted canonical main172308d independently remote-verified, all24 migrations. Source/purpose/safety matrix and mandatory operator lock repair have passed final review and runtime evidence; see B2 handoff. B3 serialization remains unproved.
-3. [TASK-021A1b3](TASK-021A1b3-core-mutation-serialization.md): all ordinary core/co-host/chat mutations and retries with actor/host/target evidence serialization. Dependency planning only; reconcile/review/publish after B2 accepted remote-verified integration.
+3. [TASK-021A1b3](TASK-021A1b3-core-mutation-serialization.md): all ordinary core/co-host/chat mutations and retries with actor/host/target evidence serialization. Reconciled sequential six/five/two allocation after B2; B3a contract independently reviewed68f639e and publication gates implementation, B3b/c remain dependent planning.
 
 Each child gets a fresh Sol-medium implementation agent and independent security reviewer, stops at its contract, and produces a separate handoff. Standard speed cannot be set/verified by the dispatch API. B1 changes shared readiness and owner authorization but does not secure whole sources, all mutation races or deferred paths; B2 read closure does not supply mutation serialization; B3 does not close A1c. No stage is deployable/pilot-ready. Coordinator publishes reviewed contracts/queue state before dispatch; this drafting increment changes no queue or runtime. No duplicate product successor follows these child stages.
 
