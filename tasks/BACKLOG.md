@@ -1,5 +1,9 @@
 # Backlog
 
+## Reviewed B2 role-lock repair — 2026-09-27
+
+Contract8395aa6 independently cleared and task-branch remote verified. Publish canonical reviewed contract, then fresh bounded repair executor; partial source branchba4344a is reviewed with unresolved inherited P1, clean local shutdown and no accepted main integration. Complete repair/evidence/review/publication/integration before B3.
+
 ## B2 operator-role repair dependency — 2026-09-27
 
 B2 S9 is blocked by the inherited unlocked role replacement gap in private.moderation_actor. Review and publish a bounded no-new-graph mandatory-lock-row contract amendment, then fresh repair/review/runtime evidence and complete cleanup/publication/integration before B3 dispatch. Existing stage evidence is a milestone, not acceptance. No hosted or product successor dispatch.

@@ -1,5 +1,11 @@
 # NOW
 
+## 2026-09-27 — B2 mandatory operator lock-result contract reviewed
+
+Fresh independent review cleared bounded repair contract `8395aa6b11e502a58dcd7f7049576b26e3639ad2`; contract branch independently remote-verified at that SHA. It authorizes only additive private.moderation_actor immediate missing mandatory gate/account/role lock-result denial with unchanged existing graph, ABI/ACL, fresh current authority and report-only exceptions, plus deterministic replacement-race and regression evidence. This is within Accepted ADR-0027 disposable-local B2 S9; no hosted/bootstrap policy change or new lock is authorized. Canonical publication precedes a fresh bounded repair executor.
+
+Partial B2 task branch independently remote-verified `ba4344a3b9fb2b4cc6268833f57accf3718fcc64`: consolidated source/evidence review cleared S8/inventory/912 SQL attribution and cleanup receipt, explicitly preserving inherited P1 and incomplete status. Final lint/current23 empty/default-off/revision1 reset and normal service/VM shutdown14:13:38 verified global Pals hostagent absence, unheld actual disk/vz-efi and test ports. Reviewer did not rerun runtime. Partial code is not integrated on main; repair/runtime/review/publication/accepted integration remain required. B3/A1c/A2/TASK-021 incomplete; no product successor.
+
 ## 2026-09-27 — Source/safety regression evidence; inherited operator role blocker
 
 Unpushed B2 implementation milestone `3f169719e20033aaefbf0f975091ee4063dfc132` reports successful current23 installation, 912 bounded SQL assertions, real-Auth source/safety cases including never-participated current Hangout reporting, six observed existing-lock outcomes and stronger-isolation denial checks. Final lint/reset/global normal shutdown and consolidated review remain pending; no remote implementation SHA or completion is claimed. Existing five-state app reconciliation remains A2 and full deferred/historical closure remains A1c.

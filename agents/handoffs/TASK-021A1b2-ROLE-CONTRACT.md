@@ -17,3 +17,7 @@ Read AGENTS, assigned B2 contract, Accepted ADR-0027, relevant AUTHORIZATION/SEC
 ## Review/publication gates
 
 Fresh independent contract review must precede coordinator publication on main and repair dispatch. Coordinator owns NOW/BACKLOG/CURRENT_STATE/CHANGELOG and remote SHA receipts. Repair needs a bounded fresh Sol-medium implementation agent, fresh security review, complete new-source rerun and cleanup receipt; no product successor is created by this amendment. This branch is an independent no-hardlinks clone with canonical GitHub origin; local draft commit is not a remote publication or task completion. Exact commit SHA is supplied out of band to avoid a self-referential hash. Stop after this contract.
+
+## Coordinator review/publication receipt
+
+Fresh independent reviewer cleared exact8395aa6b11e502a58dcd7f7049576b26e3639ad2 after correcting evidence attribution and existing DELETE fixture wording. Contract branch independently remote-verified at that SHA. This documentation-only canonical publication preserves incomplete B2 and authorizes only the reviewed bounded repair after remote verification; no partial code is integrated. Existing partial task branchba4344a3b9fb2b4cc6268833f57accf3718fcc64 independently remote-verified with cleanup receipt and unresolved P1.
