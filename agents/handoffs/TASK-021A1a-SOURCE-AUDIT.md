@@ -1,6 +1,6 @@
 # TASK-021A1a final-definition source audit
 
-Baseline: `f4ba5cd6affdd8eae7611a15cbed39d33e39b756`. Documentation-only preimplementation audit. Latest CREATE/REPLACE function definition across all 20 migrations is listed; historical definitions remain unchanged. No runtime evidence is claimed. This stage adds authority primitives only; all existing functions, student RLS, grants, triggers, Storage and operator behavior remain unchanged. A1b owns live enforcement; A1c owns deferred capabilities.
+Baseline: `f4ba5cd6affdd8eae7611a15cbed39d33e39b756`. Documentation-only preimplementation audit. Latest CREATE/REPLACE function definition across all 20 migrations is listed; historical definitions remain unchanged. Dropped `private.validate_primary_photo()` is excluded; dropped/recreated moderation and participant functions are represented by their replacement final signatures. No runtime evidence is claimed. This stage adds authority primitives only; all existing functions, student RLS, grants, triggers, Storage and operator behavior remain unchanged. A1b owns live enforcement; A1c owns deferred capabilities.
 
 | Final function and arguments | Final migration | A1 allocation |
 | --- | --- | --- |
@@ -74,7 +74,6 @@ Baseline: `f4ba5cd6affdd8eae7611a15cbed39d33e39b756`. Documentation-only preimpl
 | `private.valid_profile_prompts(items jsonb)` | `20260922000200_owner_profile_enrichment.sql` | c: deferred capability audit (b also owns live caller/peer checks) |
 | `private.validate_hangout_input(p_title text,p_starts_at timestamptz,p_public_place text,p_public_latitude double precision,p_public_longitude double precision,p_description text,p_ends_at timestamptz,p_campus_zone text,p_visibility text,p_location_precision text,p_eligibility jsonb)` | `20260922000300_hangout_foundation.sql` | b: ordinary/source or retained safety/operator audit |
 | `private.validate_hangout_instructions(value text)` | `20260922000300_hangout_foundation.sql` | b: ordinary/source or retained safety/operator audit |
-| `private.validate_primary_photo()` | `20260922000100_verified_onboarding.sql` | b: ordinary/source or retained safety/operator audit |
 | `private.validate_profile_photos()` | `20260922000200_owner_profile_enrichment.sql` | b: ordinary/source or retained safety/operator audit |
 | `public.accept_friend_request(p_peer_id uuid, p_generation_id uuid)` | `20260923000100_local_friendship.sql` | c: deferred capability audit (b also owns live caller/peer checks) |
 | `public.answer_own_attendance(p_hangout_id uuid,p_attended boolean, p_expected_revision bigint)` | `20260924000400_local_attendance.sql` | c: deferred capability audit (b also owns live caller/peer checks) |
