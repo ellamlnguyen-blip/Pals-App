@@ -1,7 +1,7 @@
 # TASK-021A1a — Private admission authority and policy primitives
 
 Date: 2026-09-27
-Status: **Independently reviewed contract — canonical publication before dispatch; exact lock graph review before implementation**
+Status: **Local implementation independently reviewed — publication and remote-verified main integration pending**
 Parent: [TASK-021A1](TASK-021A1-pilot-backend-authorization.md), under TASK-021A / incomplete TASK-021.
 Draft baseline: `ae7141f1f630fdb0eee2216ed1fe33dac6ee963e`; executor starts from latest verified `origin/main` containing its accepted prerequisites, not this historical draft SHA.
 

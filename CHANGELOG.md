@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-09-27 — A1a local implementation reviewed
+
+Private pilot admission authority/default-off policy/audited manager operations are locally implemented and independently reviewed at `85dca42f79973386e44769a3c81e5ac15dd7c68c`. Two clean-reset SQL runs passed 1,089 assertions each; exact prior-schema upgrade, real Auth/PostgREST, 25 exact-holder concurrency cases, lint and applicable static/build checks passed, with one existing sandbox unit-test skip. Final census has zero synthetic/evidence/authority records and all configurations/gates off; owned services and VM stopped, with the initial stop-wrapper failure and precise post-guest-shutdown orphan cleanup disclosed. Publication and remote-verified main integration are pending; latest implementation push: none yet. Existing student authorization remains unchanged at this intermediate stage. A1b/c and A2 are not dispatched; TASK-021 remains incomplete, with no hosted action or pilot-ready claim. See `agents/handoffs/TASK-021A1a.md`.
+
 ## 2026-09-27 — First pilot backend contract reviewed
 
 A1 backend is split into sequential bounded units: TASK-021A1a authority/default-off policy/manager RPC/audit primitives, A1b live admission/core/onboarding/Storage/safety enforcement, A1c deferred capability denial and full backend closure. Fresh independent security/contract review cleared exact draft `953fa30ade9628810788a903261028c60a24e989`. A1a is ready for publication and fresh agent dispatch; its exact lock graph must be reviewed before implementation. A1b/c remain planning contracts reconciled/reviewed/published after preceding integration. No code/runtime evidence or pilot-ready claim. Coordinator owns shared records; TASK-021 remains incomplete.

@@ -1,5 +1,10 @@
 # Current State
 
+## 2026-09-27 — A1a local implementation reviewed
+
+Private pilot admission authority/default-off policy/audited manager operations are locally implemented and independently reviewed at `85dca42f79973386e44769a3c81e5ac15dd7c68c`. Two clean-reset SQL runs passed 1,089 assertions each; exact prior-schema upgrade, real Auth/PostgREST, 25 exact-holder concurrency cases, lint and applicable static/build checks passed, with one existing sandbox unit-test skip. Final census has zero synthetic/evidence/authority records and all configurations/gates off; owned services and VM stopped, with the initial stop-wrapper failure and precise post-guest-shutdown orphan cleanup disclosed. Publication and remote-verified main integration are pending; latest implementation push: none yet. Existing student authorization remains unchanged at this intermediate stage. A1b/c and A2 are not dispatched; TASK-021 remains incomplete, with no hosted action or pilot-ready claim. See `agents/handoffs/TASK-021A1a.md`.
+
+
 ## 2026-09-27 — Local test runtime restored; A1a source review active
 
 Missing disposable VM configuration reconstructed from saved evidence and independently reviewed; disk/metadata byte backups verified, precise stale-process shutdown completed, existing VM verified mountless/rootless/loopback with only Pals-owned test volumes. A1a runtime tests now authorized exclusively after executor target revalidation; no database pass is claimed yet. Source review of `8eac56b` found no authorization defect and required stronger deletion/retry/lock/actual-role evidence; fixes are being reviewed. Implementation is unpushed and incomplete. See `agents/handoffs/TASK-021-LOCAL-RUNTIME-RECOVERY.md`. No hosted operation or pilot-ready claim.
