@@ -1,8 +1,8 @@
 # NOW
 
-## 2026-09-26 — TASK-024 reviewed brand correction; publication pending
+## 2026-09-26 — TASK-024 reviewed brand correction; main push blocked
 
-Student presentation now uses the exact supplied logo, Carolina blue `#7BAFD4`, white surfaces and accessible ink through shared tokens/header. Independent exact-tip review found no actionable P0/P1/P2 or backend/authorization expansion. Full workspace checks and restored disposable-local authenticated browser/HTTP checks passed within the recorded stale-helper, uncertain-screenshot and missing-map-token limits. Canonical publication remains pending; TASK-021 hosted gates remain separate. See `agents/handoffs/TASK-024.md`.
+Student presentation now uses the exact supplied logo, Carolina blue `#7BAFD4`, white surfaces and accessible ink through shared tokens/header. Independent exact-tip review found no actionable P0/P1/P2 or backend/authorization expansion. Full workspace checks and restored disposable-local authenticated browser/HTTP checks passed within the recorded stale-helper, uncertain-screenshot and missing-map-token limits. Task branch is remote-verified at `a5ac861a186bae893b428f38f9cc16645e0553b1`; automatic approval review rejected main integration merge `078be455c8d4e31a39b021d82993a8c367eb46ba` for lack of clear current authorization. Main remains at `388ec4d763e7914cc75b377a880abbe360551396`. Explicit approval is required; full TASK-024 remains incomplete. Test fixtures are zero, ten gates off and owned local services stopped. TASK-021 hosted gates remain separate. See `agents/handoffs/TASK-024.md`.
 
 ## TASK-021 repository snapshot refreshed; hosted rehearsal still blocked
 

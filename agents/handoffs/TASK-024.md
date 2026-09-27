@@ -32,6 +32,10 @@ Fresh GPT-6 Sol medium reviewer inspected exact implementation `b12109fa0a53217f
 
 Stale integration helpers belong to a separate bounded follow-up in BACKLOG. TASK-021 hosted policies/rehearsal remain incomplete; this visual correction does not close them.
 
-Cleanup: committed local database reset verified 0 Auth users, 0 Hangouts, 0 storage objects and all ten feature gates false. Both owned web servers stopped; isolated Supabase/VM shutdown follows. No disposable fixture or credential is committed.
+Cleanup: committed local database reset verified 0 Auth users, 0 Hangouts, 0 storage objects and all ten feature gates false. Both owned web servers stopped; isolated Supabase and Lima VM were stopped. No disposable fixture or credential is committed.
 
-Task branch remote SHA: pending. Integrated `origin/main` SHA: pending.
+Published task branch: `origin/agent/TASK-024-brand-direction-correction`, independently remote-verified at `a5ac861a186bae893b428f38f9cc16645e0553b1` (reviewed source `b12109f`). The pre-existing planning tip `eb55cf9` was verified as an ancestor; publication was a normal fast-forward.
+
+Reviewed local integration merge: `078be455c8d4e31a39b021d82993a8c367eb46ba`, based on unchanged remote main `388ec4d763e7914cc75b377a880abbe360551396`. Automatic approval review rejected pushing this merge to canonical main, saying the current fix request did not clearly authorize that high-impact default-branch mutation. No alternate publication or main mutation occurred. Explicit user approval for this exact merge/destination is required to finish publication. Task remains incomplete pending canonical integration; no successor is dispatched.
+
+The next product task is existing TASK-021 (already owned and hosted-policy/target/rehearsal blocked); TASK-022 cutover depends on that readiness. No duplicate or invented successor is created.
