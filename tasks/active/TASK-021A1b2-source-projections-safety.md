@@ -1,7 +1,7 @@
 # TASK-021A1b2 — Source projections and retained safety boundary
 
 Date: 2026-09-27
-Status: **Independently reviewed contract at 5c89db93947b0897d994503a8f6c3a809d58530a — canonical publication/remote verification required before fresh implementation dispatch**
+Status: **Implementation active — reviewed contract remotely verified on canonical main c5c837af6046d2166c59c487e5a1683634140e4f before fresh dispatch; no implementation push or runtime result yet**
 Parent: [TASK-021A1b](TASK-021A1b-live-admission-enforcement.md).
 Reconciliation baseline: canonical main `bb39f7a1fa2a97bfbf1223a4a9f99875c529ecee`, all22 committed migrations, through `20260927000200_pilot_owner_admission.sql`. B1 complete: reviewed task remote `82de4ed8a604b8af853cdb0e4413f7df82355a2c`, accepted integration remote `7844fbacead2b2eb42037dcc7e56d183fef419ae`, completion receipt `a0a32a16404cf61400781d84591565f0d3f80364`; the complete B1 handoff's bottom coordinator receipt supersedes historical pending fields. Implementation branch `agent/TASK-021A1b2-source-projections-safety` starts from latest independently remote-verified main containing this reviewed contract and queue entry. Recheck migration/source inventory before dispatch; reconcile differences, never mechanically use this baseline.
 

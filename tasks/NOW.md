@@ -1,5 +1,9 @@
 # NOW
 
+## 2026-09-27 — Source/safety implementation dispatched
+
+Reviewed B2 contract/task branch independently remote-verified `5c89db93947b0897d994503a8f6c3a809d58530a`; canonical contract/shared queue and publication branch independently remote-verified `c5c837af6046d2166c59c487e5a1683634140e4f`. Fresh bounded Sol-medium agent `implement_pilot_source_safety` implementing only B2 on `agent/TASK-021A1b2-source-projections-safety` from that reviewed main. Latest implementation push: none. Source/runtime evidence, fresh review, zero/off cleanup/handoff/publication/main integration remain required. B3/A1c/A2 and TASK-021 incomplete; no hosted/pilot-ready claim or duplicate product successor. Standard speed app-controlled, not verified by dispatch tool.
+
 ## 2026-09-27 — Source/safety contract independently reviewed
 
 Fresh independent contract security review cleared exact `5c89db93947b0897d994503a8f6c3a809d58530a` after correcting Hangout-operator social→moderation lock order. Reviewed source/purpose/retained peer/safety/operator matrix matches completed22-migration B1; task contract branch independently remote-verified at that SHA. B2 is ready for canonical contract/queue publication before fresh bounded implementation dispatch. B3/A1c/A2 remain dependent. This is documentation evidence only, no B2 code/runtime or hosted/pilot-ready claim; TASK-021 remains incomplete.
