@@ -1,9 +1,21 @@
 # TASK-021A1b — Live admission, core and retained safety enforcement
 
 Date: 2026-09-27
-Status: **Dependency planning contract — reconcile against prior reviewed integration, then independently review/publish before dispatch**
+Status: **Reconciled allocation parent — not executable; B1 immediate independent review candidate, B2/B3 dependency planning**
 Parent: [TASK-021A1](TASK-021A1-pilot-backend-authorization.md), under TASK-021A / incomplete TASK-021.
-Draft baseline: `ae7141f1f630fdb0eee2216ed1fe33dac6ee963e`; executor starts from latest verified `origin/main` containing its accepted prerequisites, not this historical draft SHA.
+Reconciled baseline: canonical main `776db8c648f339c8650f7e725108d2853a0859ba`, including completed reviewed A1a and all21 migrations. Executor starts from latest independently verified `origin/main` containing its reviewed contract; this SHA is the contract source baseline, not permission to use a stale checkout.
+
+## Sequential bounded allocation
+
+The former single A1b implementation is too broad. Preserve its requirements below as combined acceptance allocation; dispatch only a child contract:
+
+1. [TASK-021A1b1](TASK-021A1b1-owner-admission.md): caller state, admitted incomplete owner/reference/primary Storage eligibility, independent peer readiness and direct-write evidence locking. Immediate independent contract review candidate; not yet dispatched.
+2. [TASK-021A1b2](TASK-021A1b2-source-projections-safety.md): immutable-host source/read/chat/retained peer projections plus exact safety/operator independence. Dependency planning only; reconcile/review/publish after B1 accepted remote-verified integration.
+3. [TASK-021A1b3](TASK-021A1b3-core-mutation-serialization.md): all ordinary core/co-host/chat mutations and retries with actor/host/target evidence serialization. Dependency planning only; reconcile/review/publish after B2 accepted remote-verified integration.
+
+Each child gets a fresh Sol-medium implementation agent and independent security reviewer, stops at its contract, and produces a separate handoff. Standard speed cannot be set/verified by the dispatch API. B1 changes shared readiness and owner authorization but does not secure whole sources, all mutation races or deferred paths; B2 read closure does not supply mutation serialization; B3 does not close A1c. No stage is deployable/pilot-ready. Coordinator publishes reviewed contracts/queue state before dispatch; this drafting increment changes no queue or runtime. No duplicate product successor follows these child stages.
+
+A1a is complete at the independently verified baseline above. Its actual primitives are `private.pilot_is_available()`, `pilot_capability_enabled(text)`, `pilot_caller_is_admitted()`, `pilot_evidence_lock()` (shared `(16027,1)`), `pilot_evidence_write_lock()` (exclusive), `pilot_lock_management(uuid,uuid,text,boolean)` and audited management RPCs. Reuse these fixed-path private primitives; do not replace their meaning, backfill authority or expose subject admission. Preserve all21 historical migrations, cascade live roster/manager references and immutable bare-UUID receipts. The exact source inventory/graph in A1a source-audit and lock-design documents is required reading; child inventories reconcile each final signature and grant against this completed migration, not its old draft.
 
 ## Authority and dispatch gates
 

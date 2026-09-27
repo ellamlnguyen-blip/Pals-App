@@ -1,6 +1,6 @@
 # TASK-021A — Pilot admission preparation parent
 
-Status: **Local preparation active — A1a complete, A1b contract reconciliation/review/publication next; A1c/A2 dependent**
+Status: **Local preparation active — A1a complete, A1b split reconciled: B1 contract review/publication next; B2/B3/A1c/A2 dependent**
 Date: 2026-09-27
 Parent: TASK-021 (incomplete)
 Proposed branch: `agent/TASK-021A-pilot-admission-capabilities`
@@ -17,6 +17,8 @@ AGENTS; accepted ADR-0026 and accepted final ADR-0027; TASK-021/readiness/initia
 ## Required bounded split and dependency order
 
 **TASK-021A1 — Private backend/schema/database authorization.** A fresh separately published contract implements the private roster, separate admission-manager authority/live actor checks/attributable audit, default-off policy/capability data, RLS/Storage/helper/RPC admission checks, exact revoked-subject matrix and concurrency/idempotency semantics. Its source inventory includes deferred backend operations, safe primary/required-profile updates and co-host backend preservation. It uses standalone disposable synthetic database/API fixtures, appropriate pgTAP/HTTP/concurrency tests and independent security review. Complete reviewed remote-verified integration and backend handoff before A2 dispatch. Existing app incompatibility is recorded; A1 is not a deployable pilot release.
+
+A1a is complete at independently verified canonical `776db8c648f339c8650f7e725108d2853a0859ba`. A1b is a nonexecutable allocation: B1 owner/state/direct-write boundary is the immediate contract review candidate, B2 source projections/safety and B3 core mutation serialization follow sequential reviewed integrations. A1c remains dependent deferred-capability/full-backend closure. No partial child stage is deployable and no child completion triggers a duplicate product task.
 
 **TASK-021A2 — Application access/capability surfaces and integration.** A fresh separately published contract depends on accepted ADRs and A1's reviewed integrated main SHA. Implement typed access-state/callback/redirect handling, admitted incomplete onboarding/primary-photo flow, Hangout-only Chats, deferred routes/actions/APIs/controls, UI-only co-host deferral, navigation and current-field projections. Adapt full application regression fixtures to synthetic admissions/capabilities and verify desktop/mobile/loading/empty/error/denied flows plus stale session/direct app entry. Preserve local-only hosted guards. Independent app/security review, cleanup and remote-verified integration required.
 
