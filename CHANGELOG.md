@@ -2,7 +2,7 @@
 
 ## 2026-09-26 — TASK-021 initial-launch decision package proposed
 
-[The initial-launch decision package](docs/operations/TASK-021-INITIAL-LAUNCH-DECISIONS.md) proposes one narrower campus-only release bundle for remaining access, friend-context, peer-profile/photo and measurement gaps. Hosted moderation coverage/escalation/contact, operator MFA/bootstrap/recovery, per-data retention/export/deletion/legal hold and photo bearer/cache/incident inputs remain unchosen. Only the existing large-Hangout safeguard deferral is accepted; the new bundle remains Proposed. Documentation only; no hosted/runtime/gate action, acceptance or successor task. TASK-021 remains incomplete pending review, owner decisions and its separately authorized rehearsal.
+[The initial-launch decision package](docs/operations/TASK-021-INITIAL-LAUNCH-DECISIONS.md) proposes one narrower campus-only release bundle for remaining access, friend-context, peer-profile/photo, measurement and separate post-Hangout expectation/comfort-feedback gaps. Hosted moderation coverage/escalation/contact, operator MFA/bootstrap/recovery, per-data retention/export/deletion/legal hold and photo bearer/cache/incident inputs remain unchosen. Only the existing large-Hangout safeguard deferral is accepted; the new bundle remains Proposed. Documentation only; no hosted/runtime/gate action, acceptance or successor task. TASK-021 remains incomplete pending review, owner decisions and its separately authorized rehearsal.
 
 ## 2026-09-26 — TASK-021 initial-MVP safeguard deferral accepted
 
