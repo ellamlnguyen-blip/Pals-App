@@ -255,7 +255,21 @@ test(
             holder.send("commit;");
             holder.child.stdin.end();
             assert.equal((await holder.done)[0], 0);
-            denied(await pending);
+            const denial = await pending;
+            denied(denial);
+            assert.equal(
+              denial.body?.message,
+              "Owner operation unavailable",
+              "final write failed authorization, not an unrelated failure",
+            );
+            assert.doesNotMatch(
+              JSON.stringify(denial.body),
+              /deadlock|40P01|serialization|40001|timeout|timed out|57014|55P03/i,
+            );
+            Object.assign(waitEvidence.at(-1), {
+              response_status: denial.status,
+              response_message: denial.body.message,
+            });
             assert.equal(
               sql(
                 `select count(*) from storage.objects where name='${racePath}'`,

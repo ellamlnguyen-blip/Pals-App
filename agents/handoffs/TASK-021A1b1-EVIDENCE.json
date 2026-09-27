@@ -522,8 +522,8 @@
         "lock": [
           "advisory"
         ],
-        "holder_pid": 8127,
-        "waiter_pid": 8469
+        "holder_pid": 375,
+        "waiter_pid": 731
       }
     },
     {
@@ -532,53 +532,83 @@
           "lock": "advisory",
           "loss": "revoke",
           "operation": "INSERT",
-          "holder_pid": 8196,
-          "waiter_pid": 8127
+          "holder_pid": 445,
+          "waiter_pid": 375,
+          "response_status": 400,
+          "response_message": "Owner operation unavailable"
         },
         {
           "lock": "advisory",
           "loss": "shutdown",
           "operation": "INSERT",
-          "holder_pid": 8239,
-          "waiter_pid": 8127
+          "holder_pid": 490,
+          "waiter_pid": 375,
+          "response_status": 400,
+          "response_message": "Owner operation unavailable"
         },
         {
           "lock": "advisory",
           "loss": "email",
           "operation": "INSERT",
-          "holder_pid": 8280,
-          "waiter_pid": 8127
+          "holder_pid": 534,
+          "waiter_pid": 375,
+          "response_status": 400,
+          "response_message": "Owner operation unavailable"
         },
         {
           "lock": "advisory",
           "loss": "revoke",
           "operation": "DELETE",
-          "holder_pid": 8321,
-          "waiter_pid": 8127
+          "holder_pid": 576,
+          "waiter_pid": 375,
+          "response_status": 400,
+          "response_message": "Owner operation unavailable"
         },
         {
           "lock": "advisory",
           "loss": "shutdown",
           "operation": "DELETE",
-          "holder_pid": 8361,
-          "waiter_pid": 8127
+          "holder_pid": 626,
+          "waiter_pid": 375,
+          "response_status": 400,
+          "response_message": "Owner operation unavailable"
         },
         {
           "lock": "advisory",
           "loss": "email",
           "operation": "DELETE",
-          "holder_pid": 8404,
-          "waiter_pid": 8127
+          "holder_pid": 667,
+          "waiter_pid": 375,
+          "response_status": 400,
+          "response_message": "Owner operation unavailable"
         }
       ]
     },
     {
       "raw_insert_final_upsert_wait": {
         "lock": "advisory",
-        "holder_pid": 8509,
-        "waiter_pid": 8469
+        "holder_pid": 773,
+        "waiter_pid": 731
       }
     }
   ],
-  "cleanup": "pending; final receipt will follow"
+  "cleanup": "pending; final receipt will follow",
+  "http_denial_followup": {
+    "pass": 1,
+    "fail": 0,
+    "skip": 0,
+    "exact_expected_response": {
+      "status": 400,
+      "message": "Owner operation unavailable"
+    },
+    "excluded": "40P01/40001/deadlock/serialization/timeout/57014/55P03"
+  },
+  "prior_upgrade": {
+    "preceding_committed_migrations": 21,
+    "applied": "only 20260927000200_pilot_owner_admission.sql",
+    "prior_history_unchanged": true,
+    "required_optional_owned_primary_preserved": true,
+    "default_off_denies": true,
+    "current22_reset": true
+  }
 }
