@@ -1,5 +1,7 @@
 # TASK-021A1b3a — Ordinary Hangout lifecycle evidence boundary
 
+Disjoint implementation assignment: main executor owns migration/helper/SQL/concurrency; fresh fixture agent owns only pilot-admission-lifecycle-http.integration.mjs and TASK-021A1b3a-HTTP-FIXTURE handoff. No fixture-agent Git/runtime/shared-queue edits. Main executor reviews handoff before committing combined source for independent source review; acceptance unchanged.
+
 Date: 2026-09-27
 Status: **Independent contract/graph review cleared68f639e; canonical publication/remote verification precedes fresh bounded implementation.**
 Parent: [B3 combined acceptance](TASK-021A1b3-core-mutation-serialization.md). All its execution/exclusion/completion gates apply.

@@ -22,3 +22,5 @@ Fresh reviewer inspected exact86d8da515d884759e3105e7cd63f88ab88607de9, verified
 ## Coordinator contract review/publication
 
 Fresh independent review cleared exact68f639ed8a3dcadd0a82f83d30caddf8a2ac703b after concrete authority interface/error ordering/evidence partition correction; no remaining actionable finding. Contract branch independently remote-verified at that SHA. Only B3a may dispatch after canonical publication/remote verification; B3b/c remain dependent planning. No runtime/source implementation or parent completion is claimed.
+
+Canonical reviewed contract/shared-record publication independently remote-verified936b784ed2ae6965b4251fe9c6195b8f63671f2e. Fresh bounded B3a implementation dispatched with source-review-before-runtime and explicit child owner/history guards; no B3 implementation/runtime pass yet. B3b/c remain dependent planning.
