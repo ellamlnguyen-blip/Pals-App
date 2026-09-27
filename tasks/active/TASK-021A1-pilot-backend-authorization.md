@@ -1,9 +1,9 @@
 # TASK-021A1 — Pilot backend authorization stage parent
 
 Date: 2026-09-27
-Status: **Allocation parent — A1a complete; reconciled B1 review candidate; B2/B3/A1c dependent, not executable as a whole**
+Status: **Allocation parent — A1a/B1 complete; B2 reconciled contract candidate; B3/A1c dependent, not executable as a whole**
 Parent: [TASK-021A](TASK-021A-pilot-admission-capabilities.md), incomplete TASK-021.
-Reconciliation baseline: canonical main `776db8c648f339c8650f7e725108d2853a0859ba` (reviewed completed A1a,21 migrations).
+Current contract reconciliation input: canonical main `bb39f7a1fa2a97bfbf1223a4a9f99875c529ecee` (reviewed completed B1,22 migrations). Historical allocation baseline: `776db8c648f339c8650f7e725108d2853a0859ba` (completed A1a,21 migrations).
 
 ## Goal and bounded split
 
@@ -13,17 +13,17 @@ Implement only the accepted private admission/capability database boundary using
 2. [TASK-021A1b](TASK-021A1b-live-admission-enforcement.md): ordinary admission/onboarding/Storage/source/peer enforcement and exact retained safety/operator semantics, with concurrency evidence.
 3. [TASK-021A1c](TASK-021A1c-deferred-capability-denial.md): deferred authoritative capabilities, safe required-field/primary-photo writes, legacy regression adaptation and complete backend closure.
 
-A1a is complete and independently remote-verified. A1b is now a nonexecutable allocation split into B1 owner/status/direct-write admission (immediate independent review candidate), B2 source projections/safety and B3 core mutation serialization (dependent planning). A1c remains dependent planning until the combined reviewed B1/B2/B3 integration. Independent review, remote-verified accepted integration and handoff of each unit gate reconciliation/review/publication/dispatch of the next. Do not dispatch dependents concurrently or mechanically extend an oversized unit; propose another bounded contract first. A1a primitives alone do not enforce admission; A1b alone does not close every deferred capability. Final A1 integration gates drafting/reconciliation of A2, which owns application types/access states/callbacks/routes/actions/API photo delivery/UI and complete app fixtures. No A2 dispatch until A1c and parent backend acceptance pass. Neither A1 nor A2 alone is a release.
+A1a is complete and independently remote-verified. A1b is now a nonexecutable allocation split into B1 owner/status/direct-write admission (complete, reviewed task82de4ed/accepted main7844fba independently remote-verified), B2 source projections/safety (reconciled contract candidate requiring independent review/publication) and B3 core mutation serialization (dependent planning). A1c remains dependent planning until the combined reviewed B1/B2/B3 integration. Independent review, remote-verified accepted integration and handoff of each unit gate reconciliation/review/publication/dispatch of the next. Do not dispatch dependents concurrently or mechanically extend an oversized unit; propose another bounded contract first. A1a primitives alone do not enforce admission; A1b alone does not close every deferred capability. Final A1 integration gates drafting/reconciliation of A2, which owns application types/access states/callbacks/routes/actions/API photo delivery/UI and complete app fixtures. No A2 dispatch until A1c and parent backend acceptance pass. Neither A1 nor A2 alone is a release.
 
 ## Acceptance authority and expected incompatibility
 
-The exact final ADR-0027 acceptance on 2026-09-27 is independently reviewed and durably published on verified main `ae7141f1f630fdb0eee2216ed1fe33dac6ee963e`. Verify this accepted unchanged design before implementation. A1a is implemented/reviewed/integrated; B1 requires independent contract review/publication, and later B2/B3/A1c require reconciliation/review/publication after prerequisites. Accepted ADR-0026 alone is insufficient.
+The exact final ADR-0027 acceptance on 2026-09-27 is independently reviewed and durably published on verified main `ae7141f1f630fdb0eee2216ed1fe33dac6ee963e`. Verify this accepted unchanged design before implementation. A1a/B1 are implemented/reviewed/integrated; B2 requires independent reconciled contract review/publication, and later B3/A1c require reconciliation/review/publication after prerequisites. Accepted ADR-0026 alone is insufficient.
 
 A1 intentionally changes the DB status contract and denies previously ungated owner/deferred paths. Current app access-state unions, redirect logic, profile editor, extra-photo slots, Calendar queries, People-dependent Chats and old test fixtures may fail closed or fail regression after A1b/c. Do not patch apps or weaken checks to conceal incompatibility. Record exact failing app checks as A2 dependencies. Backend-only test modules must run without Next.js. A1 completion does not require claiming current app behavior passes; incompatible application suites cannot be counted as backend evidence. A2 owns app reconciliation and full app E2E before any deployable pilot claim.
 
 ## Source inventory and ownership
 
-Executor must expand this seed inventory into a final source-to-check table of **final definitions**, exact signatures, grants/RLS/triggers, helper callers, test IDs and outcomes; inventory replacements across all21 historical migrations at this reconciliation baseline, not just first definitions. All public executable functions/private auth helpers and direct table/Storage paths need an assigned check or justified unchanged classification.
+Executor must expand this seed inventory into a final source-to-check table of **final definitions**, exact signatures, grants/RLS/triggers, helper callers, test IDs and outcomes; inventory replacements across all22 historical migrations at the current B2 reconciliation input, not just first definitions. All public executable functions/private auth helpers and direct table/Storage paths need an assigned check or justified unchanged classification.
 
 | Surface / source migration suffix | Assigned stage and required authorization check |
 | --- | --- |
