@@ -14,7 +14,7 @@ Only named product timing changes are accepted. Existing friendship, DMs, privat
 
 ## Verification and limits
 
-Docs-only diff and Markdown file-reference validation; `git diff --check`. No new runtime tests or hosted inventory/evidence. Rehearsal checks are planned/unrun. No runtime/schema/hosted/gate/SMTP/analytics/DNS operation, parent completion or successor.
+Verified all 22 changed files are Markdown only. Markdown file-reference validation passed: 44 references checked, zero missing. `git diff --check` passed. No new runtime tests or hosted inventory/evidence. Rehearsal checks are planned/unrun. No runtime/schema/hosted/gate/SMTP/analytics/DNS operation, parent completion or successor.
 
 ## Publication receipts and remaining work
 
