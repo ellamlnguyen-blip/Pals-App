@@ -3,11 +3,11 @@ import {
   census,
   capabilityKeys,
 } from "./pilot-current-safety-fixtures.mjs";
-import { once } from "node:events";
 import { createHash } from "node:crypto";
 import { readFileSync, readdirSync, lstatSync, realpathSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { resolve } from "node:path";
+import { performance } from "node:perf_hooks";
 import assert from "node:assert/strict";
 import { execFileSync, spawn } from "node:child_process";
 
@@ -17,10 +17,235 @@ export const supabaseBinary = "/private/tmp/pals-runtime/bin/supabase";
 export const socket =
   "unix:///private/tmp/pals-lima/pals-task002/sock/docker.sock";
 const root = fileURLToPath(new URL("../../../", import.meta.url));
+// PRIVATE TRANSPORT START: offline verifier isolates this unit; no public injection.
+const transportBudgets = Object.freeze({
+  metadata: 10_000,
+  sql: 30_000,
+  reset: 180_000,
+  session: 90_000,
+  write: 2_000,
+  close: 10_000,
+  exit: 5_000,
+  module: 30 * 60_000,
+});
+const transportLimit = 20 * 1024 * 1024;
+function nodeStartupGuard(environment) {
+  for (const key of ["NODE_OPTIONS", "NODE_PATH"])
+    if (Object.hasOwn(environment, key))
+      throw new Error("Node startup override forbidden; module uncredited");
+}
+function command(binary, argv, options, budget) {
+  // Node synchronously waits for the directly spawned child's exit after SIGKILL.
+  // This does not establish Docker-exec/server/descendant cleanup. OS-level
+  // uninterruptible exit is not a finite guarantee of execFileSync; the separate
+  // runner supplies the module process deadline and reports interruption honestly.
+  return execFileSync(binary, argv, {
+    ...options,
+    timeout: budget,
+    killSignal: "SIGKILL",
+    maxBuffer: transportLimit,
+  });
+}
+function ownedSession(binary, argv, initialInput) {
+  const child = spawn(binary, argv, { stdio: ["pipe", "pipe", "pipe"] });
+  let output = "",
+    failure = null,
+    exited = false,
+    closing = null;
+  const timers = new Set();
+  const clear = (timer) => {
+    clearTimeout(timer);
+    timers.delete(timer);
+  };
+  const timer = (ms, callback) => {
+    const handle = setTimeout(() => {
+      timers.delete(handle);
+      callback();
+    }, ms);
+    timers.add(handle);
+    return handle;
+  };
+  let resolveDone, rejectDone;
+  const done = new Promise((resolve, reject) => {
+    resolveDone = resolve;
+    rejectDone = reject;
+  });
+  done.catch(() => {});
+  let resolveExit;
+  const observedExit = new Promise((resolve) => {
+    resolveExit = resolve;
+  });
+  function stop(reason) {
+    failure ??= new Error(reason);
+    if (exited) return;
+    child.stdin.destroy();
+    // Only this exact ChildProcess handle, never a PID lookup or process group.
+    if (child.pid !== undefined) child.kill("SIGKILL");
+    timer(transportBudgets.exit, () => {
+      if (!exited)
+        rejectDone(
+          new Error("Owned SQL process exit unobserved; cleanup incomplete"),
+        );
+    });
+  }
+  child.once("error", () => {
+    failure ??= new Error(
+      "Owned SQL process spawn/transport failed; cleanup incomplete",
+    );
+    stop(failure.message);
+  });
+  child.once("close", (code, signal) => {
+    exited = true;
+    for (const handle of timers) clearTimeout(handle);
+    timers.clear();
+    if (signal !== null || !Number.isInteger(code))
+      failure ??= new Error(
+        "Owned SQL process interrupted; cleanup incomplete",
+      );
+    resolveExit([code, signal]);
+    if (failure) rejectDone(failure);
+    else resolveDone([code, signal]);
+  });
+  for (const stream of [child.stdout, child.stderr]) {
+    stream.on("data", (value) => {
+      if (Buffer.byteLength(output) + value.length > transportLimit)
+        stop("Owned SQL output limit exceeded; cleanup incomplete");
+      else output += value;
+    });
+    stream.on("error", () =>
+      stop("Owned SQL output failed; cleanup incomplete"),
+    );
+  }
+  child.stdin.on("error", () =>
+    stop("Owned SQL input failed; cleanup incomplete"),
+  );
+  function write(input) {
+    if (failure || exited || child.stdin.destroyed || child.stdin.writableEnded)
+      throw new Error("Owned SQL input unavailable; cleanup incomplete");
+    if (
+      Buffer.byteLength(input) > transportLimit ||
+      child.stdin.writableLength > transportLimit
+    )
+      throw new Error("Owned SQL input limit exceeded; cleanup incomplete");
+    const flushed = timer(transportBudgets.write, () =>
+      stop("Owned SQL input timed out; cleanup incomplete"),
+    );
+    return child.stdin.write(input, (error) => {
+      clear(flushed);
+      if (error) stop("Owned SQL input failed; cleanup incomplete");
+    });
+  }
+  // Construction includes an asynchronous bounded spawn+initial-input receipt.
+  const startup = timer(transportBudgets.exit, () =>
+    stop("Owned SQL startup timed out; cleanup incomplete"),
+  );
+  child.once("spawn", () => clear(startup));
+  timer(transportBudgets.session, () =>
+    stop("Owned SQL lifetime timed out; cleanup incomplete"),
+  );
+  try {
+    write(initialInput);
+  } catch {
+    stop("Owned SQL startup input failed; cleanup incomplete");
+  }
+  return {
+    child,
+    send: write,
+    output: () => redact(output),
+    done,
+    close: () => {
+      if (closing) return closing;
+      closing = (async () => {
+        if (!exited && !child.stdin.destroyed && !child.stdin.writableEnded)
+          child.stdin.end("rollback;\n");
+        let deadline;
+        const clean = await Promise.race([
+          observedExit.then(() => true),
+          new Promise((resolve) => {
+            deadline = timer(transportBudgets.close, () => resolve(false));
+          }),
+        ]);
+        clear(deadline);
+        if (!clean) {
+          stop("Owned SQL close timed out; cleanup incomplete");
+          let exitDeadline;
+          const observed = await Promise.race([
+            observedExit.then(() => true),
+            new Promise((resolve) => {
+              exitDeadline = timer(transportBudgets.exit, () => resolve(false));
+            }),
+          ]);
+          clear(exitDeadline);
+          if (!observed)
+            throw new Error(
+              "Owned SQL process exit unobserved; cleanup incomplete",
+            );
+        }
+        if (failure) throw failure;
+      })();
+      closing.catch(() => {});
+      return closing;
+    },
+  };
+}
+async function runOwnedProcess(binary, argv, options, budget) {
+  nodeStartupGuard(options.env ?? process.env);
+  const child = spawn(binary, argv, {
+    ...options,
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+  let output = "",
+    failure = null,
+    exited = false,
+    timer,
+    exitTimer;
+  return new Promise((resolve, reject) => {
+    const stop = (reason) => {
+      failure ??= new Error(reason);
+      if (exited) return;
+      if (child.pid !== undefined) child.kill("SIGKILL");
+      exitTimer ??= setTimeout(() => {
+        reject(new Error("Owned module exit unobserved; cleanup incomplete"));
+      }, transportBudgets.exit);
+    };
+    child.once("error", () =>
+      stop("Owned module spawn failed; cleanup incomplete"),
+    );
+    child.once("close", (code, signal) => {
+      exited = true;
+      clearTimeout(timer);
+      clearTimeout(exitTimer);
+      if (failure) reject(failure);
+      else if (code !== 0 || signal !== null)
+        reject(
+          new Error("Owned module failed; output withheld; cleanup unverified"),
+        );
+      else resolve(redact(output));
+    });
+    for (const stream of [child.stdout, child.stderr]) {
+      stream.on("data", (value) => {
+        if (Buffer.byteLength(output) + value.length > transportLimit)
+          stop("Owned module output exceeded limit; cleanup incomplete");
+        else output += value;
+      });
+      stream.on("error", () =>
+        stop("Owned module output failed; cleanup incomplete"),
+      );
+    }
+    timer = setTimeout(
+      () =>
+        stop("Owned module deadline interrupted execution; cleanup incomplete"),
+      budget,
+    );
+  });
+}
+// PRIVATE TRANSPORT END
 const args = [
   "--host",
   socket,
   "exec",
+  "-e",
+  "PGOPTIONS=-c statement_timeout=30000 -c lock_timeout=20000 -c idle_in_transaction_session_timeout=90000 -c idle_session_timeout=90000",
   "-i",
   "supabase_db_pals-local",
   "psql",
@@ -37,13 +262,21 @@ const args = [
 ];
 function rawSql(input) {
   try {
-    return execFileSync(dockerBinary, args, {
-      input,
-      encoding: "utf8",
-      stdio: ["pipe", "pipe", "pipe"],
-      maxBuffer: 20 * 1024 * 1024,
-    }).trim();
+    return command(
+      dockerBinary,
+      args,
+      {
+        input,
+        encoding: "utf8",
+        stdio: ["pipe", "pipe", "pipe"],
+      },
+      transportBudgets.sql,
+    ).trim();
   } catch (error) {
+    if (!Number.isInteger(error.status) || error.signal || error.code)
+      throw new Error(
+        "Disposable SQL transport failed/interrupted; cleanup unverified",
+      );
     const diagnostic = /ERROR:\s+([A-Z0-9]{5}):\s*([^\r\n]*)/.exec(
       String(error.stderr ?? ""),
     );
@@ -158,6 +391,7 @@ const redact = (value) =>
     )
     .replace(/(postgres(?:ql)?:\/\/)[^@\s]+@/gi, "$1<redacted>@");
 function environmentGuard() {
+  nodeStartupGuard(process.env);
   assert.equal(process.env.DO_NOT_TRACK, "1", "telemetry must remain disabled");
   assert.equal(process.env.DOCKER_HOST, socket, "exact owned socket required");
   assert.equal(
@@ -242,17 +476,19 @@ function targetGuard(lane) {
   let container, image;
   try {
     container = JSON.parse(
-      execFileSync(
+      command(
         dockerBinary,
         ["--host", socket, "inspect", "supabase_db_pals-local"],
         { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] },
+        transportBudgets.metadata,
       ),
     )[0];
     image = JSON.parse(
-      execFileSync(
+      command(
         dockerBinary,
         ["--host", socket, "image", "inspect", container.Config.Image],
         { encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] },
+        transportBudgets.metadata,
       ),
     )[0];
   } catch {
@@ -301,12 +537,17 @@ export function localTarget(lane = "current27") {
   let status;
   try {
     status = JSON.parse(
-      execFileSync(supabaseBinary, ["status", "--output", "json"], {
-        cwd: root,
-        env: cliEnvironment(),
-        encoding: "utf8",
-        stdio: ["ignore", "pipe", "pipe"],
-      }),
+      command(
+        supabaseBinary,
+        ["status", "--output", "json"],
+        {
+          cwd: root,
+          env: cliEnvironment(),
+          encoding: "utf8",
+          stdio: ["ignore", "pipe", "pipe"],
+        },
+        transportBudgets.metadata,
+      ),
     );
   } catch {
     throw new Error("Exact disposable CLI status unavailable");
@@ -395,7 +636,7 @@ export function ok(result) {
 export function resetDisposable(lane = "current27") {
   localTarget(lane);
   try {
-    execFileSync(
+    command(
       supabaseBinary,
       ["db", "reset", "--local", "--network-id", "pals-local-network"],
       {
@@ -403,8 +644,8 @@ export function resetDisposable(lane = "current27") {
         env: cliEnvironment(),
         encoding: "utf8",
         stdio: ["ignore", "pipe", "pipe"],
-        maxBuffer: 20 * 1024 * 1024,
       },
+      transportBudgets.reset,
     );
   } catch {
     throw new Error("Owned full27 reset failed; task incomplete");
@@ -456,59 +697,27 @@ export function assertClean() {
 export function session(name) {
   assert.equal(guardedLane, "current27", "held SQL session requires current27");
   targetGuard("current27");
-  const child = spawn(dockerBinary, args, {
-    stdio: ["pipe", "pipe", "pipe"],
-  });
-  let output = "";
-  child.stdout.on("data", (v) => {
-    output += v;
-  });
-  child.stderr.on("data", (v) => {
-    output += v;
-  });
-  // Stream/spawn failure is observed through the session result. Prevent an
-  // unhandled rejection while a second guarded session is being constructed.
-  child.stdin.on("error", () => {});
-  const done = once(child, "exit");
-  done.catch(() => {});
-  child.stdin.write(`set application_name=${quote(name)};\n`);
+  const owned = ownedSession(
+    dockerBinary,
+    args,
+    `set application_name=${quote(name)};\n`,
+  );
   return {
-    child,
+    ...owned,
     send: (query) => {
       assert.equal(guardedLane, "current27");
       targetGuard("current27");
-      return child.stdin.write(`${query}\n`);
-    },
-    output: () => redact(output),
-    done,
-    close: async () => {
-      if (!child.stdin.destroyed && !child.stdin.writableEnded)
-        child.stdin.end("rollback;\n");
-      let timer;
-      try {
-        await Promise.race([
-          done,
-          new Promise((_, reject) => {
-            timer = setTimeout(
-              () =>
-                reject(
-                  new Error(
-                    "Owned SQL session did not exit; cleanup incomplete",
-                  ),
-                ),
-              10_000,
-            );
-          }),
-        ]);
-      } finally {
-        clearTimeout(timer);
-      }
+      return owned.send(`${query}\n`);
     },
   };
 }
+
 export async function until(check) {
-  for (let n = 0; n < 240; n++) {
-    if (check()) return;
+  const deadline = performance.now() + 6_000;
+  for (let n = 0; n < 240 && performance.now() < deadline; n++) {
+    const observed = check();
+    if (performance.now() >= deadline) break;
+    if (observed) return;
     await new Promise((resolve) => setTimeout(resolve, 25));
   }
   throw new Error("Observed database lock wait timed out");
@@ -617,5 +826,55 @@ export async function race(
       throw new Error(
         `${name}: owned SQL session closure failed; cleanup incomplete`,
       );
+  }
+}
+
+// Explicit process runner. Importing this module never dispatches anything.
+// The invocation is reserved for a later separately released exclusive executor.
+const runnerModules = Object.freeze([
+  "pilot-admission-current-safety-http.integration.mjs",
+  "pilot-admission-current-safety-concurrency.integration.mjs",
+  "pilot-admission-current-safety-absence.integration.mjs",
+  "pilot-admission-current-safety-identity-races.integration.mjs",
+]);
+if (
+  process.argv[1] &&
+  resolve(process.argv[1]) === fileURLToPath(import.meta.url)
+) {
+  try {
+    assert.equal(process.argv.length, 4, "explicit runner invocation required");
+    assert.equal(
+      process.argv[2],
+      "--run-exclusive-current27",
+      "explicit released current27 runner required",
+    );
+    assert.ok(
+      runnerModules.includes(process.argv[3]),
+      "reviewed fixture module required",
+    );
+    environmentGuard();
+    const modulePath = resolve(root, "supabase/tests", process.argv[3]);
+    assert.equal(
+      realpathSync(modulePath),
+      modulePath,
+      "nonredirected fixture required",
+    );
+    const result = await runOwnedProcess(
+      process.execPath,
+      ["--unhandled-rejections=strict", modulePath],
+      {
+        cwd: root,
+        env: cliEnvironment(),
+      },
+      transportBudgets.module,
+    );
+    process.stdout.write(result);
+  } catch {
+    process.stderr.write(
+      "Bounded current27 module failed/uncredited; cleanup unverified; fresh guarded owner/census review required; no reset/retry authorized.\n",
+    );
+    // A missing child-exit receipt must not keep this supervisor alive forever.
+    // Exit is failed/uncredited; it does not prove any descendant/server cleanup.
+    process.exit(1);
   }
 }
