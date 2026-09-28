@@ -1,5 +1,9 @@
 # Backlog
 
+## 2026-09-28 — B3c retained-lane fixture contract proposed
+
+Reviewed documentation receipt0b2691a integrated on exact remote-verified mainb3de7a9ed296912a0f7673c741c449aed59c2987; HTTPe751/state89 reviewed task-only checkpoints remain unexecuted. Read-only final-source feasibility assessment supports a proposed37-cell retained/frozen-lane/isolation contract:3 late-proof+availability-loss waits,6 sole-proof-loss waits,6 unchanged retained positives,4 lawful alternative-proof reselections and18 actual-public stronger-isolation denials. Late proof alone is not denial; surviving alternative proof is lawful retained success; CH introduction must occur before parent acquisition to avoid FK crossing. Independent contract review/publication precedes fresh author. Operator111 author continues separately. Main code26; remaining fixtures/runner/ownership/runtime/security/cleanup/parent gates incomplete, no target release. See `tasks/active/TASK-021A1b3c-retained-fixture.md`.
+
 ## 2026-09-28 — B3c HTTP adoption and full state checkpoint published
 
 Supersedes the earlier active/pending HTTP adoption and state reconciliation statuses below. Fresh independent full static review clears HTTP adoption `e751bf4c9a8b21d64f783c6b760b8d193a428449` and state fixture `89a0525d63130cf7f0eb79259e9bd1cd164ee727`; both assigned task branches were pushed and exact remote SHAs verified against canonical main `994a47063fdb0fa728a6a9988b46db3f031a1cd6`. HTTP keeps904 genuine signup/login identities, conservative65-minute quiet/65-second settlement-anchored spacing, fixed24-hour ceiling and awaited validated pre-cleanup failure delivery. State implements all24 L5 allocations under the published22-new-loss/one-retained-repair/one-expected-writer-rejection qualification; neither special outcome gets committed-loss credit. Offline examples are author evidence only, not independently rerun target evidence.
