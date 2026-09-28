@@ -29,6 +29,11 @@ const transportBudgets = Object.freeze({
   module: 30 * 60_000,
 });
 const transportLimit = 20 * 1024 * 1024;
+function nodeStartupGuard(environment) {
+  for (const key of ["NODE_OPTIONS", "NODE_PATH"])
+    if (Object.hasOwn(environment, key))
+      throw new Error("Node startup override forbidden; module uncredited");
+}
 function command(binary, argv, options, budget) {
   // Node synchronously waits for the directly spawned child's exit after SIGKILL.
   // This does not establish Docker-exec/server/descendant cleanup. OS-level
@@ -93,6 +98,10 @@ function ownedSession(binary, argv, initialInput) {
     exited = true;
     for (const handle of timers) clearTimeout(handle);
     timers.clear();
+    if (signal !== null || !Number.isInteger(code))
+      failure ??= new Error(
+        "Owned SQL process interrupted; cleanup incomplete",
+      );
     resolveExit([code, signal]);
     if (failure) rejectDone(failure);
     else resolveDone([code, signal]);
@@ -180,6 +189,7 @@ function ownedSession(binary, argv, initialInput) {
   };
 }
 async function runOwnedProcess(binary, argv, options, budget) {
+  nodeStartupGuard(options.env ?? process.env);
   const child = spawn(binary, argv, {
     ...options,
     stdio: ["ignore", "pipe", "pipe"],
@@ -381,6 +391,7 @@ const redact = (value) =>
     )
     .replace(/(postgres(?:ql)?:\/\/)[^@\s]+@/gi, "$1<redacted>@");
 function environmentGuard() {
+  nodeStartupGuard(process.env);
   assert.equal(process.env.DO_NOT_TRACK, "1", "telemetry must remain disabled");
   assert.equal(process.env.DOCKER_HOST, socket, "exact owned socket required");
   assert.equal(

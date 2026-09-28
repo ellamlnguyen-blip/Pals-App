@@ -48,6 +48,7 @@ try {
 }
 const context = vm.createContext({
   spawn: originalSpawn,
+  process: { env: {} },
   execFileSync: originalExec,
   Buffer,
   setTimeout,
@@ -114,6 +115,64 @@ try {
   await good.close();
   assert.equal((await good.done)[0], 0);
   assert.equal(good.output(), "complete");
+  checks++;
+  const interrupted = unit.ownedSession(
+    executable,
+    nodeArgs(
+      "process.stdin.once('data',()=>process.stderr.write('ERROR: 42501: Safety report unavailable\\n',()=>process.kill(process.pid,'SIGKILL')))",
+    ),
+    "initial\n",
+  );
+  await assert.rejects(interrupted.done, /process interrupted/);
+  assert.equal(interrupted.child.signalCode, "SIGKILL");
+  assert.match(interrupted.output(), /42501: Safety report unavailable/);
+  await assert.rejects(interrupted.close(), /process interrupted/);
+  checks++;
+  const denied = unit.ownedSession(
+    executable,
+    nodeArgs(
+      "process.stdin.once('data',()=>process.stderr.write('ERROR: 42501: Safety report unavailable\\n',()=>process.exit(1)))",
+    ),
+    "initial\n",
+  );
+  assert.equal((await denied.done)[0], 1);
+  assert.match(denied.output(), /42501: Safety report unavailable/);
+  await denied.close();
+  checks++;
+  let startupAttempts = 0;
+  context.spawn = () => {
+    startupAttempts++;
+    throw new Error("Injection reached spawn");
+  };
+  for (const key of ["NODE_OPTIONS", "NODE_PATH"]) {
+    await assert.rejects(
+      unit.runOwnedProcess(
+        executable,
+        nodeArgs("process.exit(0)"),
+        {
+          cwd: directory,
+          env: {
+            [key]:
+              key === "NODE_OPTIONS"
+                ? "--require=/synthetic/injection.cjs"
+                : "/synthetic/injection",
+          },
+        },
+        1000,
+      ),
+      /Node startup override forbidden/,
+    );
+    await assert.rejects(
+      unit.runOwnedProcess(executable, [], { env: { [key]: "" } }, 1000),
+      /Node startup override forbidden/,
+    );
+  }
+  assert.equal(
+    startupAttempts,
+    0,
+    "startup override rejected before owned child spawn",
+  );
+  context.spawn = originalSpawn;
   checks++;
   const blocked = unit.ownedSession(
     executable,
@@ -217,6 +276,8 @@ try {
   assert.equal((source.match(/execFileSync\(/g) ?? []).length, 1);
   assert.equal((source.match(/spawn\(/g) ?? []).length, 2);
   for (const fragment of [
+    "nodeStartupGuard(process.env);",
+    "nodeStartupGuard(options.env ?? process.env);",
     "transportBudgets.sql",
     "transportBudgets.metadata",
     "transportBudgets.reset",
