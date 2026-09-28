@@ -7,6 +7,8 @@ Date:2026-09-28. All source27/fixture code remains task-only and unexecuted; can
 | Identity | `4d702510378280f1c4cd74af8515cb51d8eceb0d` | `agent/TASK-021A1b3c-identity-fixture`, exact same SHA |
 | Policy/absence | `cad9a596b76dac2f0dbe2b51908ca2899ba6c915` | `agent/TASK-021A1b3c-policy-fixture`, exact same SHA |
 | HTTP evidence/redaction | `5f428bc7f0d2ea75cef069526029cd745357ccea` | `agent/TASK-021A1b3c-http-fixture`, exact same SHA |
+| HTTP paced/channel adoption | `e751bf4c9a8b21d64f783c6b760b8d193a428449` | `agent/TASK-021A1b3c-http-adoption`, exact same SHA |
+| State full fixture | `89a0525d63130cf7f0eb79259e9bd1cd164ee727` | `agent/TASK-021A1b3c-state-fixture`, exact same SHA |
 | HTTP failure transport | `c7fb19092224d816025ed41712164e5da6486bcf` | `agent/TASK-021A1b3c-http-transport`, exact same SHA |
 | Bounded transport | `404edfabae9ede3a80aa4350937302b989339c20` | `agent/TASK-021A1b3c-bounded-transport`, exact same SHA |
 
@@ -21,3 +23,13 @@ Remaining: HTTP corrections/review/publication; exact reviewed transport adoptio
 ## Later reviewed checkpoints
 
 HTTP evidence/redaction5f428bc7 independently clears original failurecaptureP1 plus newP2 unknown-key/five-character private-value projection. Exact remote SHA verified, static-only;904 signup/cadence/helperdelivery gates remain until adoption. HTTP transportc7fb190 independently reviewed/remote-verified: fixedfd3 strict framing/schema, unavailable on corruption/overflow/truncation, child-reported failed/uncredited records survive rejected child exit and never establish cleanup;27 offline synthetic groups/zero target attempts. Fresh bounded HTTP adoption author active from main7b8078d plus these exact reviewed dependencies at preparedc6dd76a. No runtime release.
+
+## Current adoption/state publication receipt
+
+Supersedes preceding historical pending adoption/state amendment text. Fresh independent full source/git review clears exact HTTPe751bf4c against preparedc6dd76a and exact state89a0525d including reviewed coordinator reconciliation from main994a470. Assigned task branches pushed and exact remote SHAs independently verified on2026-09-28; canonical main at verification was994a47063fdb0fa728a6a9988b46db3f031a1cd6. No task code integrated to main.
+
+HTTP:904 genuine Auth signup/login identities and226fixture/522outcome allocations remain. Conservative65-minute initial quiet and65-second signup settlement-anchored cadence prevent catch-up bursts with unchanged local configuration;24-hour HTTP ceiling only. Strict helper failure framing/schema matches c7fb190; original failure is awaited before cleanup, cleanup error is separately classified, unrepresentable evidence honestly unavailable, uncertain settlement forbids reset. Independent review inspected inert examples only, did not rerun them or import target modules.
+
+State: actual24 L5 writers, companion People/target opt-in preparation separate from absent/false current rollback prechecks, exact wait/order/source/full54 outcome assertions. Published reconciliation yields22 planned new losses, one outbound owned-retained idempotent repair and one inbound competing-writer exact42501 rejection/full rollback; both specialized orders zero committed-loss credit. Initial intentional contract-gap throw is resolved by reviewed explicit allocation. State not yet runner-allowlisted; unconditional precontact refusal remains. Full static reviewer found no actionable issues; author offline examples are not independent runtime proof.
+
+Operator author active at prepared3a141e399f4d1a52940c88f82c143dedc538ce82 under published111-cell contract; no checkpoint yet. Remaining mandatory retained/frozen-lane/isolation/retry/rate/crossing/upgrade/catalog/regression/runner adoption, combined fixture/ownership review, explicit serial release/fresh ownership preflight, actual outcomes/security/cleanup and accepted main-code integration remain. Main26, all task source27/fixture code unexecuted. All parents incomplete; no inherited force/release or hosted/pilot-ready/product successor.
