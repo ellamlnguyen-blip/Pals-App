@@ -1,6 +1,6 @@
 # B3c operator fixtures — static authoring only
 
-Status: proposed bounded assignment; independent review and canonical publication precede fresh author dispatch. Required existing M allocation,111 unexecuted cells; no product successor or runtime release. Main code26/source27 task-only. Fresh Sol-medium author/reviewer; Standard app-controlled/unverified. Start latest verified canonical main plus exact reviewed policycad9a596 and transport404edfaba supplied by coordinator (includes foundation3e9973/source17b). Do not use unreviewed HTTP transport interfaces.
+Status: independently reviewed corrected bounded contract atff2e76e; canonical publication precedes fresh author dispatch. Required existing M allocation,111 unexecuted cells; no product successor or runtime release. Main code26/source27 task-only. Fresh Sol-medium author/reviewer; Standard app-controlled/unverified. Start latest verified canonical main plus exact reviewed policycad9a596 and transport404edfaba supplied by coordinator (includes foundation3e9973/source17b). Do not use unreviewed HTTP transport interfaces.
 
 Read AGENTS, parent current-source-safety, Accepted ADR-0026/0027, DATA_MODEL/AUTHORIZATION/SECURITY_AND_SAFETY, final26 moderation bodies/migration24 mandatory lock repair and final27 source, foundation/review/SQL verifier, policy/handoff, LOCK-GRAPH/FIXTURE-MATRIX/MATRIX.json111 operator_cells and retry_account_deletion_classification. Inspect actual signatures/revision/result/conflict/target-role/FK rules; no guessed overload or permission.
 
