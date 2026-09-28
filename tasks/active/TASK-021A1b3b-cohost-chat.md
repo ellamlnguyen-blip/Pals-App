@@ -1,5 +1,7 @@
 # TASK-021A1b3b — Co-host management and Hangout chat serialization
 
+Disjoint fixture assignment: main executor owns helpers/SQL/concurrency/catalog/upgrade/regressions; fresh HTTP author owns only `pilot-admission-cohost-chat-http.integration.mjs` and `TASK-021A1b3b-HTTP-FIXTURE.md`. No HTTP-author Git/runtime/shared-queue/source/helper edits. Executor reviews handoff before combined local fixture checkpoint; acceptance unchanged.
+
 Date: 2026-09-27
 Status: **Local unpushed source aeeb67a independently cleared; bounded fixture authoring active. Fixture/ownership review and explicit runtime release remain; execution/publication/integration incomplete.**
 Parent: [B3](TASK-021A1b3-core-mutation-serialization.md), [A1b](TASK-021A1b-live-admission-enforcement.md), [A1](TASK-021A1-pilot-backend-authorization.md); their scope, authorization and completion gates apply.
