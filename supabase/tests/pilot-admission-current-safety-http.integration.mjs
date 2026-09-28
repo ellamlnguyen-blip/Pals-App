@@ -972,7 +972,8 @@ export function normalizeHttpFailure(
     : null;
   const after = completeSnapshot(failureCensus)
     ? failureCensus
-    : completeSnapshot(context.snapshots?.at(-1))
+    : context.snapshots?.length >= 2 &&
+        completeSnapshot(context.snapshots.at(-1))
       ? context.snapshots.at(-1)
       : null;
   const counts = (snapshot) =>
