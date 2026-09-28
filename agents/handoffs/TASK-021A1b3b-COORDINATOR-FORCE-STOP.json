@@ -1,0 +1,11 @@
+{
+  "at": "2026-09-28T12:09:20Z",
+  "user_authorization": "Explicit yes in root conversation after forced-shutdown explanation",
+  "operation": "Exact reviewed limactl2.2.0 stop --force pals-task002",
+  "approval_context": "Child tool rejection preserved; root direct invocation accepted with actual user context",
+  "chunk_id": "2f8625",
+  "wall_time_seconds": 0.000013083,
+  "exit_code": 0,
+  "original_token_count": 240,
+  "output": "time=\"2026-09-28T08:09:20-04:00\" level=info msg=\"Sending SIGKILL to the vz driver process 4100\"\ntime=\"2026-09-28T08:09:20-04:00\" level=info msg=\"Sending SIGKILL to the host agent process 4100\"\ntime=\"2026-09-28T08:09:20-04:00\" level=info msg=\"Removing *.pid *.sock *.tmp under `/private/tmp/pals-lima/pals-task002`\"\ntime=\"2026-09-28T08:09:20-04:00\" level=info msg=\"Removing `/private/tmp/pals-lima/pals-task002/default_ep.sock`\"\ntime=\"2026-09-28T08:09:20-04:00\" level=info msg=\"Removing `/private/tmp/pals-lima/pals-task002/default_fd.sock`\"\ntime=\"2026-09-28T08:09:20-04:00\" level=info msg=\"Removing `/private/tmp/pals-lima/pals-task002/ha.pid`\"\ntime=\"2026-09-28T08:09:20-04:00\" level=info msg=\"Removing `/private/tmp/pals-lima/pals-task002/ha.sock`\"\ntime=\"2026-09-28T08:09:20-04:00\" level=info msg=\"Removing `/private/tmp/pals-lima/pals-task002/ssh.sock`\"\ntime=\"2026-09-28T08:09:20-04:00\" level=info msg=\"Removing `/private/tmp/pals-lima/pals-task002/vz.pid`\"\n"
+}
