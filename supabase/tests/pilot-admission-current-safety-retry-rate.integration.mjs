@@ -3,6 +3,7 @@ import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { performance } from "node:perf_hooks";
+import { isDeepStrictEqual } from "node:util";
 import { test } from "node:test";
 import {
   sql,
@@ -31,8 +32,6 @@ import {
 import {
   bounds,
   assertCaseSetup,
-  exactSnapshot,
-  verifiedOutcome,
 } from "./pilot-admission-current-safety-concurrency.integration.mjs";
 
 export const retryRateManifest = Object.freeze(
@@ -281,65 +280,242 @@ function added(before, after, route, result, options, window) {
     ),
   });
 }
-// Do not reuse the policy diagnostic dumper: it emits raw private census values.
-// Only exact neutral business diagnostics are permitted out of owned transcripts.
-function diagnostics(output) {
-  return [...output.matchAll(/ERROR:\s+([A-Z0-9]{5}):\s*([^\r\n]*)/g)].map(
-    (m) => ({
-      code: m[1],
-      message:
-        m[1] === "42501" && m[2].trim() === "Safety report unavailable"
-          ? "Safety report unavailable"
-          : "<withheld>",
-    }),
-  );
+// Raw differences remain private until paths and original values are digested.
+// Never hash the inherited walker's already-redacted placeholders.
+const privateDifferences = Symbol("original raw full54 differences");
+const originalFailure = Symbol("original private failure");
+const tableNames = new Set(censusTables);
+const knownCodes = new Set([
+  "42501",
+  "40P01",
+  "40001",
+  "57014",
+  "55P03",
+  "23503",
+  "23514",
+  "23505",
+  "P0001",
+]);
+const neutralMessages = new Set([
+  "Safety report unavailable",
+  "Safety operation unavailable",
+  "Hangout operation not permitted",
+  "Hangout chat unavailable",
+  "Moderation unavailable",
+  "Pilot management unavailable",
+]);
+function knownDiagnostic(code, message) {
+  if (!knownCodes.has(code)) return null;
+  return {
+    code,
+    message:
+      code === "42501" && neutralMessages.has(message) ? message : "<withheld>",
+  };
 }
-function redactedDifferences(rows = []) {
+export function parseSQLWrapper(message) {
+  if (typeof message !== "string" || /[\r\n]/.test(message)) return [];
+  const match = /^Disposable SQL error: ([A-Z0-9]{5}): ([^\r\n]*)$/.exec(
+    message,
+  );
+  const diagnostic = match && knownDiagnostic(match[1], match[2]);
+  return diagnostic ? [diagnostic] : [];
+}
+function diagnostics(output) {
+  return output.split("\n").flatMap((line) => {
+    const match = /^ERROR:\s+([A-Z0-9]{5}):[ \t]*([^\r\n]*)$/.exec(line);
+    const diagnostic = match && knownDiagnostic(match[1], match[2]);
+    return diagnostic ? [diagnostic] : [];
+  });
+}
+function valueType(value) {
+  return value === null
+    ? "null"
+    : Array.isArray(value)
+      ? "array"
+      : typeof value;
+}
+function valueDigest(value, present) {
+  return createHash("sha256")
+    .update(JSON.stringify({ present, type: valueType(value), value }))
+    .digest("hex");
+}
+function safeSegment(key, array, root) {
+  if (array && /^(0|[1-9]\d*)$/.test(key)) return `[${key}]`;
+  if (root && tableNames.has(key)) return `[${JSON.stringify(key)}]`;
+  return `[key-sha256:${createHash("sha256").update(key).digest("hex")}]`;
+}
+export function structuralDifferences(expected, actual) {
+  const rows = [];
+  function walk(e, a, path, ep = true, ap = true, root = false) {
+    if (ep === ap && isDeepStrictEqual(e, a)) return;
+    if (
+      ep &&
+      ap &&
+      e !== null &&
+      a !== null &&
+      typeof e === "object" &&
+      typeof a === "object" &&
+      Array.isArray(e) === Array.isArray(a)
+    ) {
+      const keys = new Set([...Object.keys(e), ...Object.keys(a)]);
+      if (Array.isArray(e) && e.length !== a.length)
+        rows.push({
+          path: `${path}.length`,
+          expected: e.length,
+          actual: a.length,
+          expectedPresent: true,
+          actualPresent: true,
+        });
+      for (const key of keys)
+        walk(
+          e[key],
+          a[key],
+          `${path}${safeSegment(key, Array.isArray(e), root)}`,
+          Object.hasOwn(e, key),
+          Object.hasOwn(a, key),
+        );
+    } else
+      rows.push({
+        path,
+        expected: e,
+        actual: a,
+        expectedPresent: ep,
+        actualPresent: ap,
+      });
+  }
+  walk(expected, actual, "$", true, true, true);
+  return rows;
+}
+export function safeDifferenceReceipt(rows) {
   return rows.map((row) => ({
-    field: row.field,
-    expected_sha256: hash(row.expected),
-    actual_sha256: hash(row.actual),
+    path: row.path,
+    expected_present: row.expectedPresent,
+    actual_present: row.actualPresent,
+    expected_type: valueType(row.expected),
+    actual_type: valueType(row.actual),
+    expected_sha256: valueDigest(row.expected, row.expectedPresent),
+    actual_sha256: valueDigest(row.actual, row.actualPresent),
   }));
 }
-const originalFailure = Symbol("original private failure");
-function recordFailure(error, context) {
-  if (error.failureRecorded) return;
-  // Known normal SQL errors and assertion failures can be diagnosed. Unknown
-  // transport/guard/exit errors conservatively prohibit any reset/retry.
-  if (!(
-    error.name === "AssertionError" ||
-    error.preciseDifferences ||
-    /^Disposable SQL error: [A-Z0-9]{5}: /.test(error.message)
-  ))
+function mismatch(expected, actual) {
+  const error = new Error("Exact full54 outcome mismatch");
+  Object.defineProperty(error, privateDifferences, {
+    value: structuralDifferences(expected, actual),
+  });
+  return error;
+}
+function exactSnapshot(before, after, replacements) {
+  const expected = structuredClone(before);
+  for (const [table, rows] of Object.entries(replacements)) {
+    if (rows.length !== after[table].length)
+      throw mismatch({ [table]: rows }, { [table]: after[table] });
+    const used = new Set();
+    expected[table] = after[table].map((actual) => {
+      const index = rows.findIndex(
+        (row, i) => !used.has(i) && isDeepStrictEqual(row, actual),
+      );
+      if (index < 0)
+        throw mismatch({ [table]: rows }, { [table]: after[table] });
+      used.add(index);
+      return rows[index];
+    });
+  }
+  return expected;
+}
+function verifiedOutcome(input) {
+  const expected = input.expectedAfter ?? input.before;
+  for (const snapshot of [input.before, input.after, expected])
+    assert.deepEqual(Object.keys(snapshot).sort(), censusTables.slice().sort());
+  if (!isDeepStrictEqual(expected, input.after))
+    throw mismatch(expected, input.after);
+  // Preserve strict actual comparisons; diagnostic hashing never supplies equality.
+  assert.deepEqual(input.after, expected);
+  assert.deepEqual(input.result, input.expectedResult);
+  return { full54_values_verified: true };
+}
+export function failureReceipt(error, context, snapshot = null) {
+  const wrapped = parseSQLWrapper(error.message);
+  const available = (error.sqlDiagnostics ?? []).flatMap((row) => {
+    const diagnostic = knownDiagnostic(row.code, row.message);
+    return diagnostic ? [diagnostic] : [];
+  });
+  // Every unexpected SQL failure needs recovery review; an expected denial is
+  // handled and certified by deny(), never routed through this failure path.
+  if (
+    wrapped.length ||
+    !(error.name === "AssertionError" || error[privateDifferences])
+  )
     error.cleanupIncomplete = true;
   if (context.phase === "guarded-case-reset") error.cleanupIncomplete = true;
+  return {
+    id: context.id,
+    phase: context.phase,
+    partition: "failed-no-success-credit",
+    observed_wait_credit: 0,
+    reset_forbidden: Boolean(error.cleanupIncomplete),
+    original_error_preserved: true,
+    lock_observation: context.observation ?? null,
+    diagnostics: [...available, ...wrapped].filter(
+      (row, index, rows) =>
+        rows.findIndex((other) => isDeepStrictEqual(row, other)) === index,
+    ),
+    differences: safeDifferenceReceipt(error[privateDifferences] ?? []),
+    table_summaries: snapshot
+      ? Object.fromEntries(
+          censusTables.map((t) => [
+            t,
+            { count: snapshot[t].length, sha256: hash(snapshot[t]) },
+          ]),
+        )
+      : null,
+    private_assertion_details_withheld: true,
+    private_difference_precision: error[privateDifferences]
+      ? "original-raw-values-digested"
+      : error.preciseDifferences
+        ? "inherited-original-values-unavailable"
+        : "no-owned-raw-difference",
+  };
+}
+function recordFailure(error, context) {
+  if (error.failureRecorded) return;
   let snapshot;
   try {
     snapshot = census();
-  } catch {
-    /* Failure receipt remains available without a census. */
+  } catch (cause) {
+    error.sqlDiagnostics = [
+      ...(error.sqlDiagnostics ?? []),
+      ...parseSQLWrapper(cause.message),
+    ];
+    error.cleanupIncomplete = true;
   }
-  console.error(
-    JSON.stringify({
-      id: context.id,
-      phase: context.phase,
-      partition: "failed-no-success-credit",
-      observed_wait_credit: 0,
-      lock_observation: context.observation ?? null,
-      diagnostics: error.sqlDiagnostics ?? [],
-      differences: redactedDifferences(error.preciseDifferences),
-      table_summaries: snapshot
-        ? Object.fromEntries(
-            censusTables.map((t) => [
-              t,
-              { count: snapshot[t].length, sha256: hash(snapshot[t]) },
-            ]),
-          )
-        : null,
-      private_assertion_details_withheld: true,
-    }),
-  );
+  console.error(JSON.stringify(failureReceipt(error, context, snapshot)));
   error.failureRecorded = true;
+}
+export function assertOwnedSuccess(exit, output, prefixes) {
+  try {
+    assert.deepEqual(
+      exit,
+      [0, null],
+      "known normal successful owned exit required",
+    );
+    assert.deepEqual(diagnostics(output), []);
+    assert.doesNotMatch(
+      output,
+      /ERROR:/,
+      "any unaccepted SQL diagnostic forbids success",
+    );
+    assert.equal(
+      output.split("\n").filter((line) => line === "COMPLETED").length,
+      1,
+      "complete successful transaction transcript required",
+    );
+    for (const prefix of prefixes) marker(output, prefix);
+  } catch (error) {
+    // Do this before any AssertionError escapes to the reset-safe partition.
+    error.cleanupIncomplete = true;
+    error.sqlDiagnostics = diagnostics(output);
+    throw error;
+  }
 }
 async function closeOwned(owned, error, context) {
   const closed = await Promise.allSettled(
@@ -379,16 +555,11 @@ async function serial(
   try {
     owned = session(applicationName(cell, "s"));
     owned.send(
-      `${bounds}begin;${operationSQL(route, options)}${rollback ? "rollback" : "commit"};`,
+      `${bounds}begin;${operationSQL(route, options)}${rollback ? "rollback" : "commit"};select 'COMPLETED';`,
     );
     owned.child.stdin.end();
     const exit = await owned.done;
-    assert.deepEqual(
-      exit,
-      [0, null],
-      "known normal successful owned exit required",
-    );
-    assert.deepEqual(diagnostics(owned.output()), []);
+    assertOwnedSuccess(exit, owned.output(), ["RESULT:", "SNAPSHOT:"]);
     const end = wall(),
       result = marker(owned.output(), "RESULT:"),
       snapshot = marker(owned.output(), "SNAPSHOT:");
@@ -449,20 +620,6 @@ function deny(route, context, options = {}) {
     caught.message !== "Disposable SQL error: 42501: Safety report unavailable"
   ) {
     const failure = caught ?? new Error("Expected neutral denial absent");
-    const m = /^Disposable SQL error: ([A-Z0-9]{5}): (.*)$/.exec(
-      failure.message,
-    );
-    failure.sqlDiagnostics = m
-      ? [
-          {
-            code: m[1],
-            message:
-              m[1] === "42501" && m[2] === "Safety report unavailable"
-                ? m[2]
-                : "<withheld>",
-          },
-        ]
-      : [];
     recordFailure(failure, context);
     throw failure;
   }
@@ -768,7 +925,9 @@ async function waitPair(
       ? "account-share-wait-before-expiry"
       : "same-key-social-wait";
     const waiterStarted = performance.now();
-    waiter.send(`${bounds}begin;${operationSQL(route, {})}commit;`);
+    waiter.send(
+      `${bounds}begin;${operationSQL(route, {})}commit;select 'COMPLETED';`,
+    );
     const condition = expiry
       ? "exists(select 1 from pg_locks l where l.pid=w.pid and not l.granted and l.locktype='transactionid' and l.mode='ShareLock' and l.transactionid=h.backend_xid)"
       : "exists(select 1 from pg_locks l where l.pid=w.pid and not l.granted and l.locktype='advisory' and l.classid=16016 and l.objid=1 and l.objsubid=2 and l.mode='ExclusiveLock')";
@@ -841,20 +1000,16 @@ async function waitPair(
           timestampMicros(releaseClock) < timestampMicros(expiry) + 1000000n,
         "actual release clock within finite boundary margin required",
       );
-    holder.send("commit;");
+    holder.send("commit;select 'COMPLETED';");
     holder.child.stdin.end();
     waiter.child.stdin.end();
     const exits = await Promise.all([holder.done, waiter.done]);
-    assert.deepEqual(
-      exits,
-      [
-        [0, null],
-        [0, null],
-      ],
-      "both normal owned exits required; no abort/timeout credit",
+    assertOwnedSuccess(
+      exits[0],
+      holder.output(),
+      expiry ? ["SNAPSHOT:"] : ["RESULT:", "SNAPSHOT:"],
     );
-    assert.deepEqual(diagnostics(holder.output()), []);
-    assert.deepEqual(diagnostics(waiter.output()), []);
+    assertOwnedSuccess(exits[1], waiter.output(), ["RESULT:", "SNAPSHOT:"]);
     const result = marker(waiter.output(), "RESULT:"),
       after = marker(waiter.output(), "SNAPSHOT:"),
       end = wall();
@@ -953,6 +1108,234 @@ function seedExpiry(route, slots) {
   );
   countAt(route, initial, 5);
   return { expiry, seeds };
+}
+// Committed pure examples. Explicit invocation performs only memory operations
+// and mock session closure; it never invokes a fixture suite or target guard.
+export async function runRetryRateInertExamples() {
+  const privateKey = "unknown-auth-provider-key-with-private-uuid-5a5a";
+  const expected = {
+    "auth.users": [
+      {
+        [privateKey]: "11111111-1111-4111-8111-111111111111",
+        secret: "private-secret-one",
+      },
+    ],
+  };
+  const actual = {
+    "auth.users": [
+      {
+        [privateKey]: "22222222-2222-4222-8222-222222222222",
+        secret: "private-secret-two",
+      },
+    ],
+  };
+  const raw = structuralDifferences(expected, actual);
+  const receipt = safeDifferenceReceipt(raw),
+    rendered = JSON.stringify(receipt);
+  assert.equal(raw.length, 2);
+  assert.doesNotMatch(
+    rendered,
+    /unknown-auth-provider|11111111|22222222|private-secret|"secret"/,
+  );
+  assert.ok(
+    receipt.every(
+      (row) =>
+        row.expected_type === "string" &&
+        row.actual_type === "string" &&
+        row.expected_sha256 !== row.actual_sha256,
+    ),
+  );
+  assert.match(rendered, /key-sha256:/);
+  assert.deepEqual(
+    parseSQLWrapper("Disposable SQL error: 42501: Safety report unavailable"),
+    [{ code: "42501", message: "Safety report unavailable" }],
+  );
+  assert.deepEqual(
+    parseSQLWrapper("Disposable SQL error: 40P01: operation failed"),
+    [{ code: "40P01", message: "<withheld>" }],
+  );
+  for (const message of [
+    "prefix Disposable SQL error: 42501: Safety report unavailable",
+    "Disposable SQL error: 42501: Safety report unavailable\n",
+    "Disposable SQL error: 40P01: hidden\rdata",
+    "Disposable SQL error: ZZZZZ: private",
+    "Disposable SQL error: 42501",
+    "Disposable SQL error: 42501: private\nDisposable SQL error: 40P01: private",
+  ])
+    assert.deepEqual(parseSQLWrapper(message), []);
+  const complete = 'RESULT:{"receipt_id":"opaque"}\nSNAPSHOT:{}\nCOMPLETED\n';
+  const scenarios = [
+    { exit: [3, null], output: complete },
+    { exit: [null, null], output: complete },
+    { exit: [0, null], output: 'RESULT:{"receipt_id":"opaque"}\nSNAPSHOT:{' },
+    { exit: [0, null], output: complete + "ERROR: ZZZZZ: private\n" },
+  ];
+  let closed = 0;
+  for (const scenario of scenarios) {
+    const mock = {
+      done: Promise.resolve(scenario.exit),
+      output: () => scenario.output,
+      close: async () => {
+        closed++;
+      },
+    };
+    let original;
+    try {
+      assertOwnedSuccess(await mock.done, mock.output(), [
+        "RESULT:",
+        "SNAPSHOT:",
+      ]);
+    } catch (error) {
+      original = error;
+    }
+    assert.ok(original && original.cleanupIncomplete);
+    const failure = failureReceipt(original, {
+      id: "<inert>",
+      phase: "mock-exit",
+    });
+    assert.equal(failure.reset_forbidden, true);
+    assert.equal(failure.original_error_preserved, true);
+    await closeOwned([mock], original, { id: "<inert>", phase: "mock-close" });
+    assert.equal(original.cleanupIncomplete, true);
+  }
+  assert.equal(closed, scenarios.length);
+  const original = new Error("private original failure");
+  original.cleanupIncomplete = true;
+  original.sqlDiagnostics = [{ code: "40P01", message: "<withheld>" }];
+  const priorDiagnostic = failureReceipt(original, {
+    id: "<inert>",
+    phase: "mock-before-cleanup",
+  }).diagnostics;
+  await assert.rejects(
+    closeOwned(
+      [
+        {
+          close: async () => {
+            throw new Error("private cleanup failure");
+          },
+        },
+      ],
+      original,
+      { id: "<inert>", phase: "mock-cleanup-failure" },
+    ),
+    (error) => error === original && error.cleanupIncomplete,
+  );
+  assert.deepEqual(
+    failureReceipt(original, { id: "<inert>", phase: "mock-after-cleanup" })
+      .diagnostics,
+    priorDiagnostic,
+  );
+  const context = { id: "<inert>", phase: "mock-setup-clock-count-seed" };
+  for (const code of ["42501", "40P01"]) {
+    const error = new Error(
+      `Disposable SQL error: ${code}: ${code === "42501" ? "Safety report unavailable" : "operation failed"}`,
+    );
+    const failure = failureReceipt(error, context);
+    assert.equal(failure.diagnostics[0].code, code);
+    assert.equal(failure.reset_forbidden, true);
+  }
+  assert.deepEqual(
+    failureReceipt(
+      new Error("Disposable SQL error: 42501: private\nraw"),
+      context,
+    ).diagnostics,
+    [],
+  );
+  const before = Object.fromEntries(censusTables.map((table) => [table, []]));
+  const after = structuredClone(before);
+  after["auth.users"] = [{ [privateKey]: "private-secret" }];
+  assert.throws(() =>
+    verifiedOutcome({ result: true, expectedResult: true, before, after }),
+  );
+  assert.throws(() =>
+    verifiedOutcome({
+      result: { private: "wrong" },
+      expectedResult: { private: "expected" },
+      before,
+      after: before,
+    }),
+  );
+  const ids = caseIds("L1R.retained.mode_distinction");
+  const route = {
+    ...ids,
+    id: "CH",
+    mode: "hangout_host",
+    target: ids.source,
+    provenance: "retained_host",
+  };
+  const result = {
+    receipt_id: fixtureBindings(retryRateManifest[16]).seedReport1,
+    submitted_at: "2026-09-28T12:00:00.123456+00:00",
+  };
+  const report = {
+    id: result.receipt_id,
+    submitted_at: result.submitted_at,
+    reporter_id: ids.actor,
+    target_type: "user",
+    target_id: ids.host,
+    category: "harassment",
+    narrative: null,
+    provenance_kind: "retained_host",
+    provenance_ref_id: ids.source,
+  };
+  const ledger = {
+    reporter_id: ids.actor,
+    request_id: ids.request,
+    input_fingerprint: createHash("md5")
+      .update(`["hangout_host", "${ids.source}", "harassment", null]`)
+      .digest("hex"),
+    report_id: result.receipt_id,
+  };
+  const reportAfter = {
+    ...structuredClone(before),
+    "private.safety_reports": [report],
+    "private.safety_report_requests": [ledger],
+  };
+  const window = {
+    start: "2026-09-28T12:00:00.123455+00:00",
+    end: "2026-09-28T12:00:00.123457+00:00",
+  };
+  assert.deepEqual(
+    expectedAddition(before, reportAfter, route, result, {}, window),
+    reportAfter,
+  );
+  for (const [table, field, wrong] of [
+    ["private.safety_reports", "target_type", "hangout"],
+    ["private.safety_reports", "target_id", ids.source],
+    ["private.safety_reports", "category", "other"],
+    ["private.safety_reports", "reporter_id", ids.host],
+    ["private.safety_report_requests", "request_id", ids.host],
+    ["private.safety_report_requests", "input_fingerprint", "wrong"],
+  ]) {
+    const wrongAfter = structuredClone(reportAfter);
+    wrongAfter[table][0][field] = wrong;
+    assert.throws(() =>
+      expectedAddition(before, wrongAfter, route, result, {}, window),
+    );
+  }
+  assert.throws(() =>
+    expectedAddition(
+      before,
+      reportAfter,
+      route,
+      { ...result, private_extra: "private" },
+      {},
+      window,
+    ),
+  );
+  const error = mismatch(expected, actual);
+  assert.deepEqual(failureReceipt(error, context).differences, receipt);
+  return {
+    examples: "passed",
+    raw_private_values_distinct: true,
+    unknown_keys_hashed: true,
+    strict_wrappers: true,
+    unexpected_exits_reset_forbidden: true,
+    original_failures_preserved: true,
+    mock_sessions_closed: closed,
+    target_attempts: 0,
+    fixture_suites_invoked: 0,
+  };
 }
 export function requireReviewedRetryRateRelease() {
   throw new Error(
