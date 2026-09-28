@@ -1,0 +1,38 @@
+# TASK-021A1b3c documentation reconciliation handoff
+
+2026-09-28. Status: **Local documentation proposal for independent review; implementation/runtime/publication/integration not complete.** Author model GPT-6 Sol medium; Standard speed is app controlled, not set or verified by dispatch. Assigned contract `tasks/active/TASK-021A1b3c-contract-reconciliation.md`; no expansion into source/runtime. Coordinator-supplied independently remote-verified baseline is canonical main `f156dcd08590577a62aaafe01c460b920ee58aed`, accepted B3b task `dabd1530257a937ad15004e666910c0f08cdbd57` / main `2c648bc1649ceef0b61b96065e6028837c1d05a9`, completion `27a1e3521fddbe8515a20244dcc2c506a738bda7`. Author verified local HEAD and clean initial status; no network/push/remote re-verification performed by author.
+
+## Delivered proposal
+
+Six permitted files only:
+
+- `tasks/active/TASK-021A1b3c-current-source-safety.md`: executable proposal with exact ABI/error/authority interface, selected lanes, phased current evidence, sequential source/fixture/executor assignments and preserved runtime/publication gates.
+- `agents/handoffs/TASK-021A1b3c-SOURCE-INVENTORY.json`: final26 full144 function ABI/default/result/ACL/owner/path/calls/writers/body hashes, exact inherited catalog/source equality, 34 source trigger bindings, 39 function DML writers and trusted external writers.
+- `agents/handoffs/TASK-021A1b3c-LOCK-GRAPH.md`: actual final26 vs proposed current CH/CP/CB, retained/replay/unblock/global/operator independence, combined B1/B2/B3a/B3b/direct writer edges and explicit crossings/safe-abort limits.
+- `agents/handoffs/TASK-021A1b3c-FIXTURE-MATRIX.md`: actual public/real Auth controls, current/replay/retained/global/clock/rate/writer allocation, expanded mandatory all-five operator caller repair regression, full combined exact suite/true26-only27/catalog/lint/cleanup obligations.
+- `agents/handoffs/TASK-021A1b3c-MATRIX.json`: 300 planned current wait cells (72 policy/roster,204 identity,24 state),24 serial absence/later activation cells,32 additional route-control IDs,11 impossible classifications,111 separate operator allocations (35 serial,76 waits); zero conditional mappings. All unexecuted. Extra crossings/retry/rate/control subcases stay individually required by narrative;300 is not an exhaustive runtime assertion count.
+- This reconciliation handoff.
+
+Actual history has26 SQL migrations through `20260927000600_pilot_cohost_chat.sql`; reserve only new27 `20260928000100_pilot_current_safety.sql`. No migration created. Inventory drops superseded `private.validate_primary_photo`, uses accepted full26 catalog144 to prevent stale overload/name extraction, and matches every final source body byte-for-byte to inherited catalog. This is static source reconciliation with inherited accepted runtime catalog, not fresh DB evidence. All functions/tables/triggers/defaults/grants require fresh27 verification.
+
+## Important resolved source nuances
+
+Social `(16016,1)` is exclusive advisory, despite historical prose calling it shared; pilot readers shared `(16027,1)`. Current CH actor/immutable host evidence is held independently; People requires eligible actor/peer and **peer-only** opt-in. Actor absent/false preference remains allowed. Ready subjects do not require onboarding capability. Actual-purpose gate/capability is required, so generic ready status cannot authorize People/Hangouts.
+
+Exact report retry is early caller-owned ledger/fingerprint path and its **body stays exact final23**. Proposed immediate FOUND/binding repairs apply new current helper; existing moderation24 repair stays intact. No new retained/replay immediate-FOUND or stronger tuple-replacement guarantee is smuggled in. Retained selected lane changes only classification-before-lower-lock and task-required fresh provenance revalidation/no late current fallback; no pilot/roster/ordinary purpose added. Selected current cannot upgrade inside the call. Replay still does no target resolution/rate slot; missing/off safety/inactive account serial behavior remains.
+
+A current-only CB pair cannot have shared joined parents because those supply retained evidence. Preserve full sorted discovery/teardown step anyway; multi-parent teardown is a separate retained control. Actor outbound block committed **before a later call** creates retained evidence; later CP/CB success is lawful and recorded as retained, not current denial. CB's own intentional block makes People visibility false, so final current guard belongs before insert with held evidence, not a new post-insert blanket visibility rejection. Inbound-only block lacks owned outbound proof; exact provenance predicates still decide authority.
+
+Mandatory moderation regression cannot rely on inherited missing gate/account/role test through queue only. Explicit all-five actual caller serial/required-lookup wait allocation, three exact action-retry routes and permission-specific admin downgrade are added. Final26 Hangout disable permits moderator/admin, so admin→moderator remains a positive control; account ban/reinstate needs admin while suspend remains moderator allowed. Source hashes/helper ACL/FOUND body unchanged.
+
+## Validation performed and limits
+
+Read assigned contract/seed/parents, accepted ADR0026/0027 and relevant product/authorization/data/safety/messaging source, accepted B1/B2/B3a/B3b handoffs/graph/catalog and final migrations. Static extraction compared all144 source bodies to accepted26 catalog with zero mismatch, catalogued34 trigger bindings/39 DML function writers, parsed/checked unique matrix IDs/counts and Markdown local links, reviewed scope/diff whitespace. No SQL/HTTP/concurrency/reset/lint/app/runtime tests were run; all fixture/test allocations are planned. Source graph extraction is lexical with provider operations separately listed; fresh catalog/direct-writer graph review remains a gate.
+
+Inherited lint is qualified standard exit1 with exactly the accepted lifecycle composite OUT structural advisory, not clean pass. Strict exact-diagnostic verifier must rerun27; no new helper warning waiver. Snapshot/bearer/delivered-data limits remain; no universal deadlock freedom. B1 profile/object row-first crossings require real locks or separate safe abort, not assumed success; approved manager social ordering rules out only the documented queued-exclusive three-party cycle.
+
+## Remaining gates / stop
+
+Fresh independent Sol-medium contract/security/graph review and coordinator publication before source dispatch; sequential bounded source and fixture reviews, immutable source/fixture SHAs, exact new B3c full26/full27 guarded owner, fresh global ownership preflight and explicit coordinator serial runtime release; actual300 current allocations plus all control/crossing/retained/operator/combined regression/true26-only27/catalog/lint/static/cleanup evidence; independent final review; coordinator shared records, reviewed task push+remote SHA, accepted main integration+remote SHA/completion receipt. This local commit is not remote-published or accepted and finishes no B3c/B3/A1c/A2/TASK-021 parent or product successor.
+
+Previous stopped/unheld UID501 mountless target/approved cleanup are historical only. No B3b owner/release or prior user-approved force exception inherited. No code/migration/tests/schema/provider/hosted/config/runtime/start/reset/install/pull/recovery/force/sharedqueue/push/dependentdispatch/completion action performed. Coordinator owns all publication/status/integration. Author stops at local immutable commit for review; commit SHA delivered separately to avoid a self-referential receipt.

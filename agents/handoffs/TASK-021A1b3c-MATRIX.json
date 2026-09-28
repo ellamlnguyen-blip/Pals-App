@@ -1,0 +1,3975 @@
+{
+  "kind": "planned source-to-fixture allocation, never execution evidence",
+  "baseline": "f156dcd08590577a62aaafe01c460b920ee58aed",
+  "routes": {
+    "CH": {
+      "public_rpc": "submit_safety_report",
+      "mode": "hangout",
+      "provenance": "current_hangout",
+      "purpose": "hangouts",
+      "subjects": [
+        "actor",
+        "immutable_host"
+      ]
+    },
+    "CP": {
+      "public_rpc": "submit_safety_report",
+      "mode": "user",
+      "provenance": "current_people",
+      "purpose": "people",
+      "subjects": [
+        "actor",
+        "peer"
+      ]
+    },
+    "CB": {
+      "public_rpc": "set_safety_block",
+      "mode": "true",
+      "provenance": "current_visible_new_block",
+      "purpose": "people",
+      "subjects": [
+        "actor",
+        "peer"
+      ]
+    }
+  },
+  "identity_loss_dimensions": [
+    "suspended",
+    "banned",
+    "email_confirmation",
+    "email_domain",
+    "email_equality",
+    "membership_verification",
+    "membership_delete",
+    "membership_campus",
+    "campus_active",
+    "campus_unc",
+    "campus_allowlist",
+    "profile_missing",
+    "profile_required",
+    "profile_primary",
+    "object_detach_delete",
+    "membership_delete_replace",
+    "profile_delete_replace"
+  ],
+  "cells": [
+    {
+      "id": "L2.CH.availability_off.loss-first",
+      "route": "CH",
+      "loss": "availability_off",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CH.availability_off.operation-first",
+      "route": "CH",
+      "loss": "availability_off",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CH.availability_missing.loss-first",
+      "route": "CH",
+      "loss": "availability_missing",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CH.availability_missing.operation-first",
+      "route": "CH",
+      "loss": "availability_missing",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CH.purpose_off.loss-first",
+      "route": "CH",
+      "loss": "purpose_off",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CH.purpose_off.operation-first",
+      "route": "CH",
+      "loss": "purpose_off",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CH.purpose_missing.loss-first",
+      "route": "CH",
+      "loss": "purpose_missing",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CH.purpose_missing.operation-first",
+      "route": "CH",
+      "loss": "purpose_missing",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CH.source_gate_off.loss-first",
+      "route": "CH",
+      "loss": "source_gate_off",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CH.source_gate_off.operation-first",
+      "route": "CH",
+      "loss": "source_gate_off",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CH.source_gate_missing.loss-first",
+      "route": "CH",
+      "loss": "source_gate_missing",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CH.source_gate_missing.operation-first",
+      "route": "CH",
+      "loss": "source_gate_missing",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CH.safety_gate_off.loss-first",
+      "route": "CH",
+      "loss": "safety_gate_off",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CH.safety_gate_off.operation-first",
+      "route": "CH",
+      "loss": "safety_gate_off",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CH.safety_gate_missing.loss-first",
+      "route": "CH",
+      "loss": "safety_gate_missing",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CH.safety_gate_missing.operation-first",
+      "route": "CH",
+      "loss": "safety_gate_missing",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CH.actor.roster_revoke.loss-first",
+      "route": "CH",
+      "subject": "actor",
+      "loss": "roster_revoke",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CH.actor.roster_revoke.operation-first",
+      "route": "CH",
+      "subject": "actor",
+      "loss": "roster_revoke",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CH.actor.roster_delete.loss-first",
+      "route": "CH",
+      "subject": "actor",
+      "loss": "roster_delete",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CH.actor.roster_delete.operation-first",
+      "route": "CH",
+      "subject": "actor",
+      "loss": "roster_delete",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.actor.suspended.loss-first",
+      "route": "CH",
+      "subject": "actor",
+      "loss": "suspended",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.actor.suspended.operation-first",
+      "route": "CH",
+      "subject": "actor",
+      "loss": "suspended",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.actor.banned.loss-first",
+      "route": "CH",
+      "subject": "actor",
+      "loss": "banned",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.actor.banned.operation-first",
+      "route": "CH",
+      "subject": "actor",
+      "loss": "banned",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.actor.email_confirmation.loss-first",
+      "route": "CH",
+      "subject": "actor",
+      "loss": "email_confirmation",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.actor.email_confirmation.operation-first",
+      "route": "CH",
+      "subject": "actor",
+      "loss": "email_confirmation",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.actor.email_domain.loss-first",
+      "route": "CH",
+      "subject": "actor",
+      "loss": "email_domain",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.actor.email_domain.operation-first",
+      "route": "CH",
+      "subject": "actor",
+      "loss": "email_domain",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.actor.email_equality.loss-first",
+      "route": "CH",
+      "subject": "actor",
+      "loss": "email_equality",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.actor.email_equality.operation-first",
+      "route": "CH",
+      "subject": "actor",
+      "loss": "email_equality",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.actor.membership_verification.loss-first",
+      "route": "CH",
+      "subject": "actor",
+      "loss": "membership_verification",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.actor.membership_verification.operation-first",
+      "route": "CH",
+      "subject": "actor",
+      "loss": "membership_verification",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.actor.membership_delete.loss-first",
+      "route": "CH",
+      "subject": "actor",
+      "loss": "membership_delete",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.actor.membership_delete.operation-first",
+      "route": "CH",
+      "subject": "actor",
+      "loss": "membership_delete",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.actor.membership_campus.loss-first",
+      "route": "CH",
+      "subject": "actor",
+      "loss": "membership_campus",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.actor.membership_campus.operation-first",
+      "route": "CH",
+      "subject": "actor",
+      "loss": "membership_campus",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.actor.campus_active.loss-first",
+      "route": "CH",
+      "subject": "actor",
+      "loss": "campus_active",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.actor.campus_active.operation-first",
+      "route": "CH",
+      "subject": "actor",
+      "loss": "campus_active",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.actor.campus_unc.loss-first",
+      "route": "CH",
+      "subject": "actor",
+      "loss": "campus_unc",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.actor.campus_unc.operation-first",
+      "route": "CH",
+      "subject": "actor",
+      "loss": "campus_unc",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.actor.campus_allowlist.loss-first",
+      "route": "CH",
+      "subject": "actor",
+      "loss": "campus_allowlist",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.actor.campus_allowlist.operation-first",
+      "route": "CH",
+      "subject": "actor",
+      "loss": "campus_allowlist",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.actor.profile_missing.loss-first",
+      "route": "CH",
+      "subject": "actor",
+      "loss": "profile_missing",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.actor.profile_missing.operation-first",
+      "route": "CH",
+      "subject": "actor",
+      "loss": "profile_missing",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.actor.profile_required.loss-first",
+      "route": "CH",
+      "subject": "actor",
+      "loss": "profile_required",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.actor.profile_required.operation-first",
+      "route": "CH",
+      "subject": "actor",
+      "loss": "profile_required",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.actor.profile_primary.loss-first",
+      "route": "CH",
+      "subject": "actor",
+      "loss": "profile_primary",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.actor.profile_primary.operation-first",
+      "route": "CH",
+      "subject": "actor",
+      "loss": "profile_primary",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.actor.object_detach_delete.loss-first",
+      "route": "CH",
+      "subject": "actor",
+      "loss": "object_detach_delete",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.actor.object_detach_delete.operation-first",
+      "route": "CH",
+      "subject": "actor",
+      "loss": "object_detach_delete",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.actor.membership_delete_replace.loss-first",
+      "route": "CH",
+      "subject": "actor",
+      "loss": "membership_delete_replace",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.actor.membership_delete_replace.operation-first",
+      "route": "CH",
+      "subject": "actor",
+      "loss": "membership_delete_replace",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.actor.profile_delete_replace.loss-first",
+      "route": "CH",
+      "subject": "actor",
+      "loss": "profile_delete_replace",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.actor.profile_delete_replace.operation-first",
+      "route": "CH",
+      "subject": "actor",
+      "loss": "profile_delete_replace",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CH.immutable_host.roster_revoke.loss-first",
+      "route": "CH",
+      "subject": "immutable_host",
+      "loss": "roster_revoke",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CH.immutable_host.roster_revoke.operation-first",
+      "route": "CH",
+      "subject": "immutable_host",
+      "loss": "roster_revoke",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CH.immutable_host.roster_delete.loss-first",
+      "route": "CH",
+      "subject": "immutable_host",
+      "loss": "roster_delete",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CH.immutable_host.roster_delete.operation-first",
+      "route": "CH",
+      "subject": "immutable_host",
+      "loss": "roster_delete",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.immutable_host.suspended.loss-first",
+      "route": "CH",
+      "subject": "immutable_host",
+      "loss": "suspended",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.immutable_host.suspended.operation-first",
+      "route": "CH",
+      "subject": "immutable_host",
+      "loss": "suspended",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.immutable_host.banned.loss-first",
+      "route": "CH",
+      "subject": "immutable_host",
+      "loss": "banned",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.immutable_host.banned.operation-first",
+      "route": "CH",
+      "subject": "immutable_host",
+      "loss": "banned",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.immutable_host.email_confirmation.loss-first",
+      "route": "CH",
+      "subject": "immutable_host",
+      "loss": "email_confirmation",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.immutable_host.email_confirmation.operation-first",
+      "route": "CH",
+      "subject": "immutable_host",
+      "loss": "email_confirmation",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.immutable_host.email_domain.loss-first",
+      "route": "CH",
+      "subject": "immutable_host",
+      "loss": "email_domain",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.immutable_host.email_domain.operation-first",
+      "route": "CH",
+      "subject": "immutable_host",
+      "loss": "email_domain",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.immutable_host.email_equality.loss-first",
+      "route": "CH",
+      "subject": "immutable_host",
+      "loss": "email_equality",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.immutable_host.email_equality.operation-first",
+      "route": "CH",
+      "subject": "immutable_host",
+      "loss": "email_equality",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.immutable_host.membership_verification.loss-first",
+      "route": "CH",
+      "subject": "immutable_host",
+      "loss": "membership_verification",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.immutable_host.membership_verification.operation-first",
+      "route": "CH",
+      "subject": "immutable_host",
+      "loss": "membership_verification",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.immutable_host.membership_delete.loss-first",
+      "route": "CH",
+      "subject": "immutable_host",
+      "loss": "membership_delete",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.immutable_host.membership_delete.operation-first",
+      "route": "CH",
+      "subject": "immutable_host",
+      "loss": "membership_delete",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.immutable_host.membership_campus.loss-first",
+      "route": "CH",
+      "subject": "immutable_host",
+      "loss": "membership_campus",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.immutable_host.membership_campus.operation-first",
+      "route": "CH",
+      "subject": "immutable_host",
+      "loss": "membership_campus",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.immutable_host.campus_active.loss-first",
+      "route": "CH",
+      "subject": "immutable_host",
+      "loss": "campus_active",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.immutable_host.campus_active.operation-first",
+      "route": "CH",
+      "subject": "immutable_host",
+      "loss": "campus_active",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.immutable_host.campus_unc.loss-first",
+      "route": "CH",
+      "subject": "immutable_host",
+      "loss": "campus_unc",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.immutable_host.campus_unc.operation-first",
+      "route": "CH",
+      "subject": "immutable_host",
+      "loss": "campus_unc",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.immutable_host.campus_allowlist.loss-first",
+      "route": "CH",
+      "subject": "immutable_host",
+      "loss": "campus_allowlist",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.immutable_host.campus_allowlist.operation-first",
+      "route": "CH",
+      "subject": "immutable_host",
+      "loss": "campus_allowlist",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.immutable_host.profile_missing.loss-first",
+      "route": "CH",
+      "subject": "immutable_host",
+      "loss": "profile_missing",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.immutable_host.profile_missing.operation-first",
+      "route": "CH",
+      "subject": "immutable_host",
+      "loss": "profile_missing",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.immutable_host.profile_required.loss-first",
+      "route": "CH",
+      "subject": "immutable_host",
+      "loss": "profile_required",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.immutable_host.profile_required.operation-first",
+      "route": "CH",
+      "subject": "immutable_host",
+      "loss": "profile_required",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.immutable_host.profile_primary.loss-first",
+      "route": "CH",
+      "subject": "immutable_host",
+      "loss": "profile_primary",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.immutable_host.profile_primary.operation-first",
+      "route": "CH",
+      "subject": "immutable_host",
+      "loss": "profile_primary",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.immutable_host.object_detach_delete.loss-first",
+      "route": "CH",
+      "subject": "immutable_host",
+      "loss": "object_detach_delete",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.immutable_host.object_detach_delete.operation-first",
+      "route": "CH",
+      "subject": "immutable_host",
+      "loss": "object_detach_delete",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.immutable_host.membership_delete_replace.loss-first",
+      "route": "CH",
+      "subject": "immutable_host",
+      "loss": "membership_delete_replace",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.immutable_host.membership_delete_replace.operation-first",
+      "route": "CH",
+      "subject": "immutable_host",
+      "loss": "membership_delete_replace",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.immutable_host.profile_delete_replace.loss-first",
+      "route": "CH",
+      "subject": "immutable_host",
+      "loss": "profile_delete_replace",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CH.immutable_host.profile_delete_replace.operation-first",
+      "route": "CH",
+      "subject": "immutable_host",
+      "loss": "profile_delete_replace",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CP.availability_off.loss-first",
+      "route": "CP",
+      "loss": "availability_off",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CP.availability_off.operation-first",
+      "route": "CP",
+      "loss": "availability_off",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CP.availability_missing.loss-first",
+      "route": "CP",
+      "loss": "availability_missing",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CP.availability_missing.operation-first",
+      "route": "CP",
+      "loss": "availability_missing",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CP.purpose_off.loss-first",
+      "route": "CP",
+      "loss": "purpose_off",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CP.purpose_off.operation-first",
+      "route": "CP",
+      "loss": "purpose_off",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CP.purpose_missing.loss-first",
+      "route": "CP",
+      "loss": "purpose_missing",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CP.purpose_missing.operation-first",
+      "route": "CP",
+      "loss": "purpose_missing",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CP.source_gate_off.loss-first",
+      "route": "CP",
+      "loss": "source_gate_off",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CP.source_gate_off.operation-first",
+      "route": "CP",
+      "loss": "source_gate_off",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CP.source_gate_missing.loss-first",
+      "route": "CP",
+      "loss": "source_gate_missing",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CP.source_gate_missing.operation-first",
+      "route": "CP",
+      "loss": "source_gate_missing",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CP.safety_gate_off.loss-first",
+      "route": "CP",
+      "loss": "safety_gate_off",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CP.safety_gate_off.operation-first",
+      "route": "CP",
+      "loss": "safety_gate_off",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CP.safety_gate_missing.loss-first",
+      "route": "CP",
+      "loss": "safety_gate_missing",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CP.safety_gate_missing.operation-first",
+      "route": "CP",
+      "loss": "safety_gate_missing",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CP.actor.roster_revoke.loss-first",
+      "route": "CP",
+      "subject": "actor",
+      "loss": "roster_revoke",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CP.actor.roster_revoke.operation-first",
+      "route": "CP",
+      "subject": "actor",
+      "loss": "roster_revoke",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CP.actor.roster_delete.loss-first",
+      "route": "CP",
+      "subject": "actor",
+      "loss": "roster_delete",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CP.actor.roster_delete.operation-first",
+      "route": "CP",
+      "subject": "actor",
+      "loss": "roster_delete",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.actor.suspended.loss-first",
+      "route": "CP",
+      "subject": "actor",
+      "loss": "suspended",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.actor.suspended.operation-first",
+      "route": "CP",
+      "subject": "actor",
+      "loss": "suspended",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.actor.banned.loss-first",
+      "route": "CP",
+      "subject": "actor",
+      "loss": "banned",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.actor.banned.operation-first",
+      "route": "CP",
+      "subject": "actor",
+      "loss": "banned",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.actor.email_confirmation.loss-first",
+      "route": "CP",
+      "subject": "actor",
+      "loss": "email_confirmation",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.actor.email_confirmation.operation-first",
+      "route": "CP",
+      "subject": "actor",
+      "loss": "email_confirmation",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.actor.email_domain.loss-first",
+      "route": "CP",
+      "subject": "actor",
+      "loss": "email_domain",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.actor.email_domain.operation-first",
+      "route": "CP",
+      "subject": "actor",
+      "loss": "email_domain",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.actor.email_equality.loss-first",
+      "route": "CP",
+      "subject": "actor",
+      "loss": "email_equality",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.actor.email_equality.operation-first",
+      "route": "CP",
+      "subject": "actor",
+      "loss": "email_equality",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.actor.membership_verification.loss-first",
+      "route": "CP",
+      "subject": "actor",
+      "loss": "membership_verification",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.actor.membership_verification.operation-first",
+      "route": "CP",
+      "subject": "actor",
+      "loss": "membership_verification",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.actor.membership_delete.loss-first",
+      "route": "CP",
+      "subject": "actor",
+      "loss": "membership_delete",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.actor.membership_delete.operation-first",
+      "route": "CP",
+      "subject": "actor",
+      "loss": "membership_delete",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.actor.membership_campus.loss-first",
+      "route": "CP",
+      "subject": "actor",
+      "loss": "membership_campus",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.actor.membership_campus.operation-first",
+      "route": "CP",
+      "subject": "actor",
+      "loss": "membership_campus",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.actor.campus_active.loss-first",
+      "route": "CP",
+      "subject": "actor",
+      "loss": "campus_active",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.actor.campus_active.operation-first",
+      "route": "CP",
+      "subject": "actor",
+      "loss": "campus_active",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.actor.campus_unc.loss-first",
+      "route": "CP",
+      "subject": "actor",
+      "loss": "campus_unc",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.actor.campus_unc.operation-first",
+      "route": "CP",
+      "subject": "actor",
+      "loss": "campus_unc",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.actor.campus_allowlist.loss-first",
+      "route": "CP",
+      "subject": "actor",
+      "loss": "campus_allowlist",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.actor.campus_allowlist.operation-first",
+      "route": "CP",
+      "subject": "actor",
+      "loss": "campus_allowlist",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.actor.profile_missing.loss-first",
+      "route": "CP",
+      "subject": "actor",
+      "loss": "profile_missing",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.actor.profile_missing.operation-first",
+      "route": "CP",
+      "subject": "actor",
+      "loss": "profile_missing",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.actor.profile_required.loss-first",
+      "route": "CP",
+      "subject": "actor",
+      "loss": "profile_required",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.actor.profile_required.operation-first",
+      "route": "CP",
+      "subject": "actor",
+      "loss": "profile_required",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.actor.profile_primary.loss-first",
+      "route": "CP",
+      "subject": "actor",
+      "loss": "profile_primary",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.actor.profile_primary.operation-first",
+      "route": "CP",
+      "subject": "actor",
+      "loss": "profile_primary",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.actor.object_detach_delete.loss-first",
+      "route": "CP",
+      "subject": "actor",
+      "loss": "object_detach_delete",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.actor.object_detach_delete.operation-first",
+      "route": "CP",
+      "subject": "actor",
+      "loss": "object_detach_delete",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.actor.membership_delete_replace.loss-first",
+      "route": "CP",
+      "subject": "actor",
+      "loss": "membership_delete_replace",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.actor.membership_delete_replace.operation-first",
+      "route": "CP",
+      "subject": "actor",
+      "loss": "membership_delete_replace",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.actor.profile_delete_replace.loss-first",
+      "route": "CP",
+      "subject": "actor",
+      "loss": "profile_delete_replace",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.actor.profile_delete_replace.operation-first",
+      "route": "CP",
+      "subject": "actor",
+      "loss": "profile_delete_replace",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CP.peer.roster_revoke.loss-first",
+      "route": "CP",
+      "subject": "peer",
+      "loss": "roster_revoke",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CP.peer.roster_revoke.operation-first",
+      "route": "CP",
+      "subject": "peer",
+      "loss": "roster_revoke",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CP.peer.roster_delete.loss-first",
+      "route": "CP",
+      "subject": "peer",
+      "loss": "roster_delete",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CP.peer.roster_delete.operation-first",
+      "route": "CP",
+      "subject": "peer",
+      "loss": "roster_delete",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.peer.suspended.loss-first",
+      "route": "CP",
+      "subject": "peer",
+      "loss": "suspended",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.peer.suspended.operation-first",
+      "route": "CP",
+      "subject": "peer",
+      "loss": "suspended",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.peer.banned.loss-first",
+      "route": "CP",
+      "subject": "peer",
+      "loss": "banned",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.peer.banned.operation-first",
+      "route": "CP",
+      "subject": "peer",
+      "loss": "banned",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.peer.email_confirmation.loss-first",
+      "route": "CP",
+      "subject": "peer",
+      "loss": "email_confirmation",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.peer.email_confirmation.operation-first",
+      "route": "CP",
+      "subject": "peer",
+      "loss": "email_confirmation",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.peer.email_domain.loss-first",
+      "route": "CP",
+      "subject": "peer",
+      "loss": "email_domain",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.peer.email_domain.operation-first",
+      "route": "CP",
+      "subject": "peer",
+      "loss": "email_domain",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.peer.email_equality.loss-first",
+      "route": "CP",
+      "subject": "peer",
+      "loss": "email_equality",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.peer.email_equality.operation-first",
+      "route": "CP",
+      "subject": "peer",
+      "loss": "email_equality",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.peer.membership_verification.loss-first",
+      "route": "CP",
+      "subject": "peer",
+      "loss": "membership_verification",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.peer.membership_verification.operation-first",
+      "route": "CP",
+      "subject": "peer",
+      "loss": "membership_verification",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.peer.membership_delete.loss-first",
+      "route": "CP",
+      "subject": "peer",
+      "loss": "membership_delete",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.peer.membership_delete.operation-first",
+      "route": "CP",
+      "subject": "peer",
+      "loss": "membership_delete",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.peer.membership_campus.loss-first",
+      "route": "CP",
+      "subject": "peer",
+      "loss": "membership_campus",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.peer.membership_campus.operation-first",
+      "route": "CP",
+      "subject": "peer",
+      "loss": "membership_campus",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.peer.campus_active.loss-first",
+      "route": "CP",
+      "subject": "peer",
+      "loss": "campus_active",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.peer.campus_active.operation-first",
+      "route": "CP",
+      "subject": "peer",
+      "loss": "campus_active",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.peer.campus_unc.loss-first",
+      "route": "CP",
+      "subject": "peer",
+      "loss": "campus_unc",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.peer.campus_unc.operation-first",
+      "route": "CP",
+      "subject": "peer",
+      "loss": "campus_unc",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.peer.campus_allowlist.loss-first",
+      "route": "CP",
+      "subject": "peer",
+      "loss": "campus_allowlist",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.peer.campus_allowlist.operation-first",
+      "route": "CP",
+      "subject": "peer",
+      "loss": "campus_allowlist",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.peer.profile_missing.loss-first",
+      "route": "CP",
+      "subject": "peer",
+      "loss": "profile_missing",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.peer.profile_missing.operation-first",
+      "route": "CP",
+      "subject": "peer",
+      "loss": "profile_missing",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.peer.profile_required.loss-first",
+      "route": "CP",
+      "subject": "peer",
+      "loss": "profile_required",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.peer.profile_required.operation-first",
+      "route": "CP",
+      "subject": "peer",
+      "loss": "profile_required",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.peer.profile_primary.loss-first",
+      "route": "CP",
+      "subject": "peer",
+      "loss": "profile_primary",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.peer.profile_primary.operation-first",
+      "route": "CP",
+      "subject": "peer",
+      "loss": "profile_primary",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.peer.object_detach_delete.loss-first",
+      "route": "CP",
+      "subject": "peer",
+      "loss": "object_detach_delete",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.peer.object_detach_delete.operation-first",
+      "route": "CP",
+      "subject": "peer",
+      "loss": "object_detach_delete",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.peer.membership_delete_replace.loss-first",
+      "route": "CP",
+      "subject": "peer",
+      "loss": "membership_delete_replace",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.peer.membership_delete_replace.operation-first",
+      "route": "CP",
+      "subject": "peer",
+      "loss": "membership_delete_replace",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.peer.profile_delete_replace.loss-first",
+      "route": "CP",
+      "subject": "peer",
+      "loss": "profile_delete_replace",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CP.peer.profile_delete_replace.operation-first",
+      "route": "CP",
+      "subject": "peer",
+      "loss": "profile_delete_replace",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CB.availability_off.loss-first",
+      "route": "CB",
+      "loss": "availability_off",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CB.availability_off.operation-first",
+      "route": "CB",
+      "loss": "availability_off",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CB.availability_missing.loss-first",
+      "route": "CB",
+      "loss": "availability_missing",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CB.availability_missing.operation-first",
+      "route": "CB",
+      "loss": "availability_missing",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CB.purpose_off.loss-first",
+      "route": "CB",
+      "loss": "purpose_off",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CB.purpose_off.operation-first",
+      "route": "CB",
+      "loss": "purpose_off",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CB.purpose_missing.loss-first",
+      "route": "CB",
+      "loss": "purpose_missing",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CB.purpose_missing.operation-first",
+      "route": "CB",
+      "loss": "purpose_missing",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CB.source_gate_off.loss-first",
+      "route": "CB",
+      "loss": "source_gate_off",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CB.source_gate_off.operation-first",
+      "route": "CB",
+      "loss": "source_gate_off",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CB.source_gate_missing.loss-first",
+      "route": "CB",
+      "loss": "source_gate_missing",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CB.source_gate_missing.operation-first",
+      "route": "CB",
+      "loss": "source_gate_missing",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CB.safety_gate_off.loss-first",
+      "route": "CB",
+      "loss": "safety_gate_off",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CB.safety_gate_off.operation-first",
+      "route": "CB",
+      "loss": "safety_gate_off",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CB.safety_gate_missing.loss-first",
+      "route": "CB",
+      "loss": "safety_gate_missing",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CB.safety_gate_missing.operation-first",
+      "route": "CB",
+      "loss": "safety_gate_missing",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CB.actor.roster_revoke.loss-first",
+      "route": "CB",
+      "subject": "actor",
+      "loss": "roster_revoke",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CB.actor.roster_revoke.operation-first",
+      "route": "CB",
+      "subject": "actor",
+      "loss": "roster_revoke",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CB.actor.roster_delete.loss-first",
+      "route": "CB",
+      "subject": "actor",
+      "loss": "roster_delete",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CB.actor.roster_delete.operation-first",
+      "route": "CB",
+      "subject": "actor",
+      "loss": "roster_delete",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.actor.suspended.loss-first",
+      "route": "CB",
+      "subject": "actor",
+      "loss": "suspended",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.actor.suspended.operation-first",
+      "route": "CB",
+      "subject": "actor",
+      "loss": "suspended",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.actor.banned.loss-first",
+      "route": "CB",
+      "subject": "actor",
+      "loss": "banned",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.actor.banned.operation-first",
+      "route": "CB",
+      "subject": "actor",
+      "loss": "banned",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.actor.email_confirmation.loss-first",
+      "route": "CB",
+      "subject": "actor",
+      "loss": "email_confirmation",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.actor.email_confirmation.operation-first",
+      "route": "CB",
+      "subject": "actor",
+      "loss": "email_confirmation",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.actor.email_domain.loss-first",
+      "route": "CB",
+      "subject": "actor",
+      "loss": "email_domain",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.actor.email_domain.operation-first",
+      "route": "CB",
+      "subject": "actor",
+      "loss": "email_domain",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.actor.email_equality.loss-first",
+      "route": "CB",
+      "subject": "actor",
+      "loss": "email_equality",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.actor.email_equality.operation-first",
+      "route": "CB",
+      "subject": "actor",
+      "loss": "email_equality",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.actor.membership_verification.loss-first",
+      "route": "CB",
+      "subject": "actor",
+      "loss": "membership_verification",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.actor.membership_verification.operation-first",
+      "route": "CB",
+      "subject": "actor",
+      "loss": "membership_verification",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.actor.membership_delete.loss-first",
+      "route": "CB",
+      "subject": "actor",
+      "loss": "membership_delete",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.actor.membership_delete.operation-first",
+      "route": "CB",
+      "subject": "actor",
+      "loss": "membership_delete",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.actor.membership_campus.loss-first",
+      "route": "CB",
+      "subject": "actor",
+      "loss": "membership_campus",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.actor.membership_campus.operation-first",
+      "route": "CB",
+      "subject": "actor",
+      "loss": "membership_campus",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.actor.campus_active.loss-first",
+      "route": "CB",
+      "subject": "actor",
+      "loss": "campus_active",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.actor.campus_active.operation-first",
+      "route": "CB",
+      "subject": "actor",
+      "loss": "campus_active",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.actor.campus_unc.loss-first",
+      "route": "CB",
+      "subject": "actor",
+      "loss": "campus_unc",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.actor.campus_unc.operation-first",
+      "route": "CB",
+      "subject": "actor",
+      "loss": "campus_unc",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.actor.campus_allowlist.loss-first",
+      "route": "CB",
+      "subject": "actor",
+      "loss": "campus_allowlist",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.actor.campus_allowlist.operation-first",
+      "route": "CB",
+      "subject": "actor",
+      "loss": "campus_allowlist",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.actor.profile_missing.loss-first",
+      "route": "CB",
+      "subject": "actor",
+      "loss": "profile_missing",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.actor.profile_missing.operation-first",
+      "route": "CB",
+      "subject": "actor",
+      "loss": "profile_missing",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.actor.profile_required.loss-first",
+      "route": "CB",
+      "subject": "actor",
+      "loss": "profile_required",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.actor.profile_required.operation-first",
+      "route": "CB",
+      "subject": "actor",
+      "loss": "profile_required",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.actor.profile_primary.loss-first",
+      "route": "CB",
+      "subject": "actor",
+      "loss": "profile_primary",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.actor.profile_primary.operation-first",
+      "route": "CB",
+      "subject": "actor",
+      "loss": "profile_primary",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.actor.object_detach_delete.loss-first",
+      "route": "CB",
+      "subject": "actor",
+      "loss": "object_detach_delete",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.actor.object_detach_delete.operation-first",
+      "route": "CB",
+      "subject": "actor",
+      "loss": "object_detach_delete",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.actor.membership_delete_replace.loss-first",
+      "route": "CB",
+      "subject": "actor",
+      "loss": "membership_delete_replace",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.actor.membership_delete_replace.operation-first",
+      "route": "CB",
+      "subject": "actor",
+      "loss": "membership_delete_replace",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.actor.profile_delete_replace.loss-first",
+      "route": "CB",
+      "subject": "actor",
+      "loss": "profile_delete_replace",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.actor.profile_delete_replace.operation-first",
+      "route": "CB",
+      "subject": "actor",
+      "loss": "profile_delete_replace",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CB.peer.roster_revoke.loss-first",
+      "route": "CB",
+      "subject": "peer",
+      "loss": "roster_revoke",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CB.peer.roster_revoke.operation-first",
+      "route": "CB",
+      "subject": "peer",
+      "loss": "roster_revoke",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CB.peer.roster_delete.loss-first",
+      "route": "CB",
+      "subject": "peer",
+      "loss": "roster_delete",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L2.CB.peer.roster_delete.operation-first",
+      "route": "CB",
+      "subject": "peer",
+      "loss": "roster_delete",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.peer.suspended.loss-first",
+      "route": "CB",
+      "subject": "peer",
+      "loss": "suspended",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.peer.suspended.operation-first",
+      "route": "CB",
+      "subject": "peer",
+      "loss": "suspended",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.peer.banned.loss-first",
+      "route": "CB",
+      "subject": "peer",
+      "loss": "banned",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.peer.banned.operation-first",
+      "route": "CB",
+      "subject": "peer",
+      "loss": "banned",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.peer.email_confirmation.loss-first",
+      "route": "CB",
+      "subject": "peer",
+      "loss": "email_confirmation",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.peer.email_confirmation.operation-first",
+      "route": "CB",
+      "subject": "peer",
+      "loss": "email_confirmation",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.peer.email_domain.loss-first",
+      "route": "CB",
+      "subject": "peer",
+      "loss": "email_domain",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.peer.email_domain.operation-first",
+      "route": "CB",
+      "subject": "peer",
+      "loss": "email_domain",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.peer.email_equality.loss-first",
+      "route": "CB",
+      "subject": "peer",
+      "loss": "email_equality",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.peer.email_equality.operation-first",
+      "route": "CB",
+      "subject": "peer",
+      "loss": "email_equality",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.peer.membership_verification.loss-first",
+      "route": "CB",
+      "subject": "peer",
+      "loss": "membership_verification",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.peer.membership_verification.operation-first",
+      "route": "CB",
+      "subject": "peer",
+      "loss": "membership_verification",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.peer.membership_delete.loss-first",
+      "route": "CB",
+      "subject": "peer",
+      "loss": "membership_delete",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.peer.membership_delete.operation-first",
+      "route": "CB",
+      "subject": "peer",
+      "loss": "membership_delete",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.peer.membership_campus.loss-first",
+      "route": "CB",
+      "subject": "peer",
+      "loss": "membership_campus",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.peer.membership_campus.operation-first",
+      "route": "CB",
+      "subject": "peer",
+      "loss": "membership_campus",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.peer.campus_active.loss-first",
+      "route": "CB",
+      "subject": "peer",
+      "loss": "campus_active",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.peer.campus_active.operation-first",
+      "route": "CB",
+      "subject": "peer",
+      "loss": "campus_active",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.peer.campus_unc.loss-first",
+      "route": "CB",
+      "subject": "peer",
+      "loss": "campus_unc",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.peer.campus_unc.operation-first",
+      "route": "CB",
+      "subject": "peer",
+      "loss": "campus_unc",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.peer.campus_allowlist.loss-first",
+      "route": "CB",
+      "subject": "peer",
+      "loss": "campus_allowlist",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.peer.campus_allowlist.operation-first",
+      "route": "CB",
+      "subject": "peer",
+      "loss": "campus_allowlist",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.peer.profile_missing.loss-first",
+      "route": "CB",
+      "subject": "peer",
+      "loss": "profile_missing",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.peer.profile_missing.operation-first",
+      "route": "CB",
+      "subject": "peer",
+      "loss": "profile_missing",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.peer.profile_required.loss-first",
+      "route": "CB",
+      "subject": "peer",
+      "loss": "profile_required",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.peer.profile_required.operation-first",
+      "route": "CB",
+      "subject": "peer",
+      "loss": "profile_required",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.peer.profile_primary.loss-first",
+      "route": "CB",
+      "subject": "peer",
+      "loss": "profile_primary",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.peer.profile_primary.operation-first",
+      "route": "CB",
+      "subject": "peer",
+      "loss": "profile_primary",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.peer.object_detach_delete.loss-first",
+      "route": "CB",
+      "subject": "peer",
+      "loss": "object_detach_delete",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.peer.object_detach_delete.operation-first",
+      "route": "CB",
+      "subject": "peer",
+      "loss": "object_detach_delete",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.peer.membership_delete_replace.loss-first",
+      "route": "CB",
+      "subject": "peer",
+      "loss": "membership_delete_replace",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.peer.membership_delete_replace.operation-first",
+      "route": "CB",
+      "subject": "peer",
+      "loss": "membership_delete_replace",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.peer.profile_delete_replace.loss-first",
+      "route": "CB",
+      "subject": "peer",
+      "loss": "profile_delete_replace",
+      "order": "loss-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L3.CB.peer.profile_delete_replace.operation-first",
+      "route": "CB",
+      "subject": "peer",
+      "loss": "profile_delete_replace",
+      "order": "operation-first",
+      "partition": "actual-observed-wait-required",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L5.CH.source_disable.loss-first",
+      "route": "CH",
+      "loss": "source_disable",
+      "order": "loss-first",
+      "partition": "actual-state-wait-required",
+      "status": "unexecuted",
+      "outcome_classification": "CH cancel/disable terminal; CP/CB block loss-first can select retained if own outbound evidence now exists: enforce frozen-lane and separate retained controls, never label lawful retained success current denial"
+    },
+    {
+      "id": "L5.CH.source_disable.operation-first",
+      "route": "CH",
+      "loss": "source_disable",
+      "order": "operation-first",
+      "partition": "actual-state-wait-required",
+      "status": "unexecuted",
+      "outcome_classification": "CH cancel/disable terminal; CP/CB block loss-first can select retained if own outbound evidence now exists: enforce frozen-lane and separate retained controls, never label lawful retained success current denial"
+    },
+    {
+      "id": "L5.CH.source_cancel.loss-first",
+      "route": "CH",
+      "loss": "source_cancel",
+      "order": "loss-first",
+      "partition": "actual-state-wait-required",
+      "status": "unexecuted",
+      "outcome_classification": "CH cancel/disable terminal; CP/CB block loss-first can select retained if own outbound evidence now exists: enforce frozen-lane and separate retained controls, never label lawful retained success current denial"
+    },
+    {
+      "id": "L5.CH.source_cancel.operation-first",
+      "route": "CH",
+      "loss": "source_cancel",
+      "order": "operation-first",
+      "partition": "actual-state-wait-required",
+      "status": "unexecuted",
+      "outcome_classification": "CH cancel/disable terminal; CP/CB block loss-first can select retained if own outbound evidence now exists: enforce frozen-lane and separate retained controls, never label lawful retained success current denial"
+    },
+    {
+      "id": "L5.CH.actor_host_block_outbound.loss-first",
+      "route": "CH",
+      "loss": "actor_host_block_outbound",
+      "order": "loss-first",
+      "partition": "actual-state-wait-required",
+      "status": "unexecuted",
+      "outcome_classification": "CH cancel/disable terminal; CP/CB block loss-first can select retained if own outbound evidence now exists: enforce frozen-lane and separate retained controls, never label lawful retained success current denial"
+    },
+    {
+      "id": "L5.CH.actor_host_block_outbound.operation-first",
+      "route": "CH",
+      "loss": "actor_host_block_outbound",
+      "order": "operation-first",
+      "partition": "actual-state-wait-required",
+      "status": "unexecuted",
+      "outcome_classification": "CH cancel/disable terminal; CP/CB block loss-first can select retained if own outbound evidence now exists: enforce frozen-lane and separate retained controls, never label lawful retained success current denial"
+    },
+    {
+      "id": "L5.CH.actor_host_block_inbound.loss-first",
+      "route": "CH",
+      "loss": "actor_host_block_inbound",
+      "order": "loss-first",
+      "partition": "actual-state-wait-required",
+      "status": "unexecuted",
+      "outcome_classification": "CH cancel/disable terminal; CP/CB block loss-first can select retained if own outbound evidence now exists: enforce frozen-lane and separate retained controls, never label lawful retained success current denial"
+    },
+    {
+      "id": "L5.CH.actor_host_block_inbound.operation-first",
+      "route": "CH",
+      "loss": "actor_host_block_inbound",
+      "order": "operation-first",
+      "partition": "actual-state-wait-required",
+      "status": "unexecuted",
+      "outcome_classification": "CH cancel/disable terminal; CP/CB block loss-first can select retained if own outbound evidence now exists: enforce frozen-lane and separate retained controls, never label lawful retained success current denial"
+    },
+    {
+      "id": "L5.CP.peer_opt_out.loss-first",
+      "route": "CP",
+      "loss": "peer_opt_out",
+      "order": "loss-first",
+      "partition": "actual-state-wait-required",
+      "status": "unexecuted",
+      "outcome_classification": "CH cancel/disable terminal; CP/CB block loss-first can select retained if own outbound evidence now exists: enforce frozen-lane and separate retained controls, never label lawful retained success current denial"
+    },
+    {
+      "id": "L5.CP.peer_opt_out.operation-first",
+      "route": "CP",
+      "loss": "peer_opt_out",
+      "order": "operation-first",
+      "partition": "actual-state-wait-required",
+      "status": "unexecuted",
+      "outcome_classification": "CH cancel/disable terminal; CP/CB block loss-first can select retained if own outbound evidence now exists: enforce frozen-lane and separate retained controls, never label lawful retained success current denial"
+    },
+    {
+      "id": "L5.CP.peer_preference_delete.loss-first",
+      "route": "CP",
+      "loss": "peer_preference_delete",
+      "order": "loss-first",
+      "partition": "actual-state-wait-required",
+      "status": "unexecuted",
+      "outcome_classification": "CH cancel/disable terminal; CP/CB block loss-first can select retained if own outbound evidence now exists: enforce frozen-lane and separate retained controls, never label lawful retained success current denial"
+    },
+    {
+      "id": "L5.CP.peer_preference_delete.operation-first",
+      "route": "CP",
+      "loss": "peer_preference_delete",
+      "order": "operation-first",
+      "partition": "actual-state-wait-required",
+      "status": "unexecuted",
+      "outcome_classification": "CH cancel/disable terminal; CP/CB block loss-first can select retained if own outbound evidence now exists: enforce frozen-lane and separate retained controls, never label lawful retained success current denial"
+    },
+    {
+      "id": "L5.CP.actor_peer_block_outbound.loss-first",
+      "route": "CP",
+      "loss": "actor_peer_block_outbound",
+      "order": "loss-first",
+      "partition": "actual-state-wait-required",
+      "status": "unexecuted",
+      "outcome_classification": "CH cancel/disable terminal; CP/CB block loss-first can select retained if own outbound evidence now exists: enforce frozen-lane and separate retained controls, never label lawful retained success current denial"
+    },
+    {
+      "id": "L5.CP.actor_peer_block_outbound.operation-first",
+      "route": "CP",
+      "loss": "actor_peer_block_outbound",
+      "order": "operation-first",
+      "partition": "actual-state-wait-required",
+      "status": "unexecuted",
+      "outcome_classification": "CH cancel/disable terminal; CP/CB block loss-first can select retained if own outbound evidence now exists: enforce frozen-lane and separate retained controls, never label lawful retained success current denial"
+    },
+    {
+      "id": "L5.CP.actor_peer_block_inbound.loss-first",
+      "route": "CP",
+      "loss": "actor_peer_block_inbound",
+      "order": "loss-first",
+      "partition": "actual-state-wait-required",
+      "status": "unexecuted",
+      "outcome_classification": "CH cancel/disable terminal; CP/CB block loss-first can select retained if own outbound evidence now exists: enforce frozen-lane and separate retained controls, never label lawful retained success current denial"
+    },
+    {
+      "id": "L5.CP.actor_peer_block_inbound.operation-first",
+      "route": "CP",
+      "loss": "actor_peer_block_inbound",
+      "order": "operation-first",
+      "partition": "actual-state-wait-required",
+      "status": "unexecuted",
+      "outcome_classification": "CH cancel/disable terminal; CP/CB block loss-first can select retained if own outbound evidence now exists: enforce frozen-lane and separate retained controls, never label lawful retained success current denial"
+    },
+    {
+      "id": "L5.CB.peer_opt_out.loss-first",
+      "route": "CB",
+      "loss": "peer_opt_out",
+      "order": "loss-first",
+      "partition": "actual-state-wait-required",
+      "status": "unexecuted",
+      "outcome_classification": "CH cancel/disable terminal; CP/CB block loss-first can select retained if own outbound evidence now exists: enforce frozen-lane and separate retained controls, never label lawful retained success current denial"
+    },
+    {
+      "id": "L5.CB.peer_opt_out.operation-first",
+      "route": "CB",
+      "loss": "peer_opt_out",
+      "order": "operation-first",
+      "partition": "actual-state-wait-required",
+      "status": "unexecuted",
+      "outcome_classification": "CH cancel/disable terminal; CP/CB block loss-first can select retained if own outbound evidence now exists: enforce frozen-lane and separate retained controls, never label lawful retained success current denial"
+    },
+    {
+      "id": "L5.CB.peer_preference_delete.loss-first",
+      "route": "CB",
+      "loss": "peer_preference_delete",
+      "order": "loss-first",
+      "partition": "actual-state-wait-required",
+      "status": "unexecuted",
+      "outcome_classification": "CH cancel/disable terminal; CP/CB block loss-first can select retained if own outbound evidence now exists: enforce frozen-lane and separate retained controls, never label lawful retained success current denial"
+    },
+    {
+      "id": "L5.CB.peer_preference_delete.operation-first",
+      "route": "CB",
+      "loss": "peer_preference_delete",
+      "order": "operation-first",
+      "partition": "actual-state-wait-required",
+      "status": "unexecuted",
+      "outcome_classification": "CH cancel/disable terminal; CP/CB block loss-first can select retained if own outbound evidence now exists: enforce frozen-lane and separate retained controls, never label lawful retained success current denial"
+    },
+    {
+      "id": "L5.CB.actor_peer_block_outbound.loss-first",
+      "route": "CB",
+      "loss": "actor_peer_block_outbound",
+      "order": "loss-first",
+      "partition": "actual-state-wait-required",
+      "status": "unexecuted",
+      "outcome_classification": "CH cancel/disable terminal; CP/CB block loss-first can select retained if own outbound evidence now exists: enforce frozen-lane and separate retained controls, never label lawful retained success current denial"
+    },
+    {
+      "id": "L5.CB.actor_peer_block_outbound.operation-first",
+      "route": "CB",
+      "loss": "actor_peer_block_outbound",
+      "order": "operation-first",
+      "partition": "actual-state-wait-required",
+      "status": "unexecuted",
+      "outcome_classification": "CH cancel/disable terminal; CP/CB block loss-first can select retained if own outbound evidence now exists: enforce frozen-lane and separate retained controls, never label lawful retained success current denial"
+    },
+    {
+      "id": "L5.CB.actor_peer_block_inbound.loss-first",
+      "route": "CB",
+      "loss": "actor_peer_block_inbound",
+      "order": "loss-first",
+      "partition": "actual-state-wait-required",
+      "status": "unexecuted",
+      "outcome_classification": "CH cancel/disable terminal; CP/CB block loss-first can select retained if own outbound evidence now exists: enforce frozen-lane and separate retained controls, never label lawful retained success current denial"
+    },
+    {
+      "id": "L5.CB.actor_peer_block_inbound.operation-first",
+      "route": "CB",
+      "loss": "actor_peer_block_inbound",
+      "order": "operation-first",
+      "partition": "actual-state-wait-required",
+      "status": "unexecuted",
+      "outcome_classification": "CH cancel/disable terminal; CP/CB block loss-first can select retained if own outbound evidence now exists: enforce frozen-lane and separate retained controls, never label lawful retained success current denial"
+    }
+  ],
+  "serial_cells": [
+    {
+      "id": "L4.CH.availability_missing.serial",
+      "route": "CH",
+      "loss": "availability_missing",
+      "partition": "serial-absence-denial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L4.CH.purpose_missing.serial",
+      "route": "CH",
+      "loss": "purpose_missing",
+      "partition": "serial-absence-denial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L4.CH.source_gate_missing.serial",
+      "route": "CH",
+      "loss": "source_gate_missing",
+      "partition": "serial-absence-denial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L4.CH.safety_gate_missing.serial",
+      "route": "CH",
+      "loss": "safety_gate_missing",
+      "partition": "serial-absence-denial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L4.CH.actor.roster_missing.serial",
+      "route": "CH",
+      "loss": "actor.roster_missing",
+      "partition": "serial-absence-denial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L4.CH.immutable_host.roster_missing.serial",
+      "route": "CH",
+      "loss": "immutable_host.roster_missing",
+      "partition": "serial-absence-denial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L4.CH.actor.activate_later",
+      "route": "CH",
+      "subject": "actor",
+      "partition": "serial-authorized-manager-activation-after-denial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L4.CH.immutable_host.activate_later",
+      "route": "CH",
+      "subject": "immutable_host",
+      "partition": "serial-authorized-manager-activation-after-denial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L4.CP.availability_missing.serial",
+      "route": "CP",
+      "loss": "availability_missing",
+      "partition": "serial-absence-denial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L4.CP.purpose_missing.serial",
+      "route": "CP",
+      "loss": "purpose_missing",
+      "partition": "serial-absence-denial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L4.CP.source_gate_missing.serial",
+      "route": "CP",
+      "loss": "source_gate_missing",
+      "partition": "serial-absence-denial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L4.CP.safety_gate_missing.serial",
+      "route": "CP",
+      "loss": "safety_gate_missing",
+      "partition": "serial-absence-denial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L4.CP.actor.roster_missing.serial",
+      "route": "CP",
+      "loss": "actor.roster_missing",
+      "partition": "serial-absence-denial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L4.CP.peer.roster_missing.serial",
+      "route": "CP",
+      "loss": "peer.roster_missing",
+      "partition": "serial-absence-denial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L4.CP.actor.activate_later",
+      "route": "CP",
+      "subject": "actor",
+      "partition": "serial-authorized-manager-activation-after-denial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L4.CP.peer.activate_later",
+      "route": "CP",
+      "subject": "peer",
+      "partition": "serial-authorized-manager-activation-after-denial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L4.CB.availability_missing.serial",
+      "route": "CB",
+      "loss": "availability_missing",
+      "partition": "serial-absence-denial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L4.CB.purpose_missing.serial",
+      "route": "CB",
+      "loss": "purpose_missing",
+      "partition": "serial-absence-denial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L4.CB.source_gate_missing.serial",
+      "route": "CB",
+      "loss": "source_gate_missing",
+      "partition": "serial-absence-denial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L4.CB.safety_gate_missing.serial",
+      "route": "CB",
+      "loss": "safety_gate_missing",
+      "partition": "serial-absence-denial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L4.CB.actor.roster_missing.serial",
+      "route": "CB",
+      "loss": "actor.roster_missing",
+      "partition": "serial-absence-denial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L4.CB.peer.roster_missing.serial",
+      "route": "CB",
+      "loss": "peer.roster_missing",
+      "partition": "serial-absence-denial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L4.CB.actor.activate_later",
+      "route": "CB",
+      "subject": "actor",
+      "partition": "serial-authorized-manager-activation-after-denial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L4.CB.peer.activate_later",
+      "route": "CB",
+      "subject": "peer",
+      "partition": "serial-authorized-manager-activation-after-denial",
+      "status": "unexecuted"
+    }
+  ],
+  "controls": [
+    {
+      "id": "L1.report_exact_retry_shutdown",
+      "partition": "actual SQL and real-Auth route control; concurrency where specified by FIXTURE-MATRIX",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L1.report_exact_retry_absent_roster",
+      "partition": "actual SQL and real-Auth route control; concurrency where specified by FIXTURE-MATRIX",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L1.report_exact_retry_no_target_resolution",
+      "partition": "actual SQL and real-Auth route control; concurrency where specified by FIXTURE-MATRIX",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L1.report_retry_fingerprint_mismatch",
+      "partition": "actual SQL and real-Auth route control; concurrency where specified by FIXTURE-MATRIX",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L1.report_retry_safety_loss",
+      "partition": "actual SQL and real-Auth route control; concurrency where specified by FIXTURE-MATRIX",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L1.report_retry_actor_inactive",
+      "partition": "actual SQL and real-Auth route control; concurrency where specified by FIXTURE-MATRIX",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L1.report_retained_peer_each_provenance",
+      "partition": "actual SQL and real-Auth route control; concurrency where specified by FIXTURE-MATRIX",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L1.report_retained_hangout",
+      "partition": "actual SQL and real-Auth route control; concurrency where specified by FIXTURE-MATRIX",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L1.report_retained_host_private_resolution",
+      "partition": "actual SQL and real-Auth route control; concurrency where specified by FIXTURE-MATRIX",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L1.report_retained_disappears_no_fallback",
+      "partition": "actual SQL and real-Auth route control; concurrency where specified by FIXTURE-MATRIX",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L1.block_retained_shutdown",
+      "partition": "actual SQL and real-Auth route control; concurrency where specified by FIXTURE-MATRIX",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L1.block_retained_absent_roster",
+      "partition": "actual SQL and real-Auth route control; concurrency where specified by FIXTURE-MATRIX",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L1.unblock_shutdown_absent_roster",
+      "partition": "actual SQL and real-Auth route control; concurrency where specified by FIXTURE-MATRIX",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L1.unblock_restores_nothing",
+      "partition": "actual SQL and real-Auth route control; concurrency where specified by FIXTURE-MATRIX",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L1.global_teardown_cancelled_disabled_unready_host",
+      "partition": "actual SQL and real-Auth route control; concurrency where specified by FIXTURE-MATRIX",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L1.global_teardown_all_sorted_parents",
+      "partition": "actual SQL and real-Auth route control; concurrency where specified by FIXTURE-MATRIX",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L1.global_teardown_cohost_clear",
+      "partition": "actual SQL and real-Auth route control; concurrency where specified by FIXTURE-MATRIX",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L1.current_hangout_host_denied",
+      "partition": "actual SQL and real-Auth route control; concurrency where specified by FIXTURE-MATRIX",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L1.report_shape_normalization_boundary",
+      "partition": "actual SQL and real-Auth route control; concurrency where specified by FIXTURE-MATRIX",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L1.report_inclusive_five_per_hour",
+      "partition": "actual SQL and real-Auth route control; concurrency where specified by FIXTURE-MATRIX",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L1.report_clock_after_wait",
+      "partition": "actual SQL and real-Auth route control; concurrency where specified by FIXTURE-MATRIX",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L1.report_same_key_exact_and_mismatch",
+      "partition": "actual SQL and real-Auth route control; concurrency where specified by FIXTURE-MATRIX",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L1.people_actor_not_opted_in_allowed",
+      "partition": "actual SQL and real-Auth route control; concurrency where specified by FIXTURE-MATRIX",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L1.people_onboarding_off_allowed",
+      "partition": "actual SQL and real-Auth route control; concurrency where specified by FIXTURE-MATRIX",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L1.hangout_onboarding_people_chat_off_allowed",
+      "partition": "actual SQL and real-Auth route control; concurrency where specified by FIXTURE-MATRIX",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L1.people_hangouts_off_allowed",
+      "partition": "actual SQL and real-Auth route control; concurrency where specified by FIXTURE-MATRIX",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L1.neutral_nonexistent_crosscampus_self_unknown",
+      "partition": "actual SQL and real-Auth route control; concurrency where specified by FIXTURE-MATRIX",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L1.stronger_isolation_CH_CP_CB_and_retained",
+      "partition": "actual SQL and real-Auth route control; concurrency where specified by FIXTURE-MATRIX",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L1.retained_gate_account_serial_missing",
+      "partition": "actual SQL and real-Auth route control; concurrency where specified by FIXTURE-MATRIX",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L1.current_report_does_not_mutate_source",
+      "partition": "actual SQL and real-Auth route control; concurrency where specified by FIXTURE-MATRIX",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L1.block_no_notification_report",
+      "partition": "actual SQL and real-Auth route control; concurrency where specified by FIXTURE-MATRIX",
+      "status": "unexecuted"
+    },
+    {
+      "id": "L1.current_lane_no_late_retained_upgrade",
+      "partition": "actual SQL and real-Auth route control; concurrency where specified by FIXTURE-MATRIX",
+      "status": "unexecuted"
+    }
+  ],
+  "impossible": [
+    {
+      "id": "I.CH.actor_is_host",
+      "reason": "Host has own participant source and therefore retained lane; nonretained CH uses distinct nonparticipant actor/host",
+      "status": "classification-only"
+    },
+    {
+      "id": "I.CB.current_shared_joined_parents",
+      "reason": "A shared joined parent already supplies retained evidence; use retained multi-parent teardown control, not claim current-only teardown wait",
+      "status": "classification-only"
+    },
+    {
+      "id": "I.primary_referenced_delete",
+      "reason": "Referenced primary object deletion denied by protection; lawful detach\u2192delete allocation instead",
+      "status": "classification-only"
+    },
+    {
+      "id": "I.sourced_account_auth_delete",
+      "reason": "Successful deletion retaining live source/role FK dependents is not an eligible race; inspect actual FK/cascade and use lawful status/email changes",
+      "status": "classification-only"
+    },
+    {
+      "id": "I.absent_roster_phantom_lock",
+      "reason": "No tuple exists; absent-first denial then later activation is serial, not two observed row-lock orders",
+      "status": "classification-only"
+    },
+    {
+      "id": "I.missing_config_manager_recreate",
+      "reason": "Approved policy API cannot recreate absent mandatory config; privileged fixture restore is labeled",
+      "status": "classification-only"
+    },
+    {
+      "id": "I.terminal_source_reverse",
+      "reason": "Cancel/disable cannot be reversed to manufacture second order; fresh fixtures per order",
+      "status": "classification-only"
+    },
+    {
+      "id": "I.late_replacement_authorizes_waiter",
+      "reason": "Failed required lookup must immediately deny; fresh later call may qualify lawful replacement",
+      "status": "classification-only"
+    },
+    {
+      "id": "I.report_retry_second_slot",
+      "reason": "Exact retry never creates second slot/report/ledger or resolves target",
+      "status": "classification-only"
+    },
+    {
+      "id": "I.inbound_only_block_retained",
+      "reason": "Peer inbound block alone is not actor-owned retained block; private safety_peer_evidence exact predicates decide lane",
+      "status": "classification-only"
+    },
+    {
+      "id": "I.role_account_replacement",
+      "reason": "Role FK prevents role insertion with absent account; use repaired mandatory serial denial and lawful downgrade actual races",
+      "status": "classification-only"
+    }
+  ],
+  "counts": {
+    "L2_actual": 72,
+    "L3_actual": 204,
+    "L5_state_actual": 24,
+    "observed_wait_planned": 300,
+    "serial_cells": 24,
+    "controls": 32,
+    "impossible": 11,
+    "conditional_mapped": 0,
+    "operator_allocations": 111,
+    "operator_serial": 35,
+    "operator_wait": 76
+  },
+  "coverage_rule": "Each observed cell requires eligible actual RPC control, holder/waiter PID + pg_blocking_pids + ungranted pg_locks, successful outcome and full census; timeout/40P01/40001 do not credit either commit order. State block lane switches are classified separately, not force-fit to current denial. All counts are planning allocations; final source/fixture review freezes exact assertion totals.",
+  "operator_cells": [
+    {
+      "id": "M.list_moderation_reports.gate_missing.serial",
+      "caller": "list_moderation_reports",
+      "loss": "gate_missing",
+      "partition": "actual-public-serial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.list_moderation_reports.account_missing.serial",
+      "caller": "list_moderation_reports",
+      "loss": "account_missing",
+      "partition": "actual-public-serial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.list_moderation_reports.role_missing.serial",
+      "caller": "list_moderation_reports",
+      "loss": "role_missing",
+      "partition": "actual-public-serial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.list_moderation_reports.gate_off.serial",
+      "caller": "list_moderation_reports",
+      "loss": "gate_off",
+      "partition": "actual-public-serial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.list_moderation_reports.account_suspended.serial",
+      "caller": "list_moderation_reports",
+      "loss": "account_suspended",
+      "partition": "actual-public-serial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.list_moderation_reports.account_banned.serial",
+      "caller": "list_moderation_reports",
+      "loss": "account_banned",
+      "partition": "actual-public-serial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.list_moderation_reports.role_nonoperator.serial",
+      "caller": "list_moderation_reports",
+      "loss": "role_nonoperator",
+      "partition": "actual-public-serial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.list_moderation_reports.gate_delete_replace.loss-first",
+      "caller": "list_moderation_reports",
+      "loss": "gate_delete_replace",
+      "order": "loss-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.list_moderation_reports.gate_delete_replace.operation-first",
+      "caller": "list_moderation_reports",
+      "loss": "gate_delete_replace",
+      "order": "operation-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.list_moderation_reports.role_delete_replace.loss-first",
+      "caller": "list_moderation_reports",
+      "loss": "role_delete_replace",
+      "order": "loss-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.list_moderation_reports.role_delete_replace.operation-first",
+      "caller": "list_moderation_reports",
+      "loss": "role_delete_replace",
+      "order": "operation-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.list_moderation_reports.account_suspended.loss-first",
+      "caller": "list_moderation_reports",
+      "loss": "account_suspended",
+      "order": "loss-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.list_moderation_reports.account_suspended.operation-first",
+      "caller": "list_moderation_reports",
+      "loss": "account_suspended",
+      "order": "operation-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.list_moderation_reports.account_banned.loss-first",
+      "caller": "list_moderation_reports",
+      "loss": "account_banned",
+      "order": "loss-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.list_moderation_reports.account_banned.operation-first",
+      "caller": "list_moderation_reports",
+      "loss": "account_banned",
+      "order": "operation-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.list_moderation_reports.role_nonoperator.loss-first",
+      "caller": "list_moderation_reports",
+      "loss": "role_nonoperator",
+      "order": "loss-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.list_moderation_reports.role_nonoperator.operation-first",
+      "caller": "list_moderation_reports",
+      "loss": "role_nonoperator",
+      "order": "operation-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.get_moderation_report.gate_missing.serial",
+      "caller": "get_moderation_report",
+      "loss": "gate_missing",
+      "partition": "actual-public-serial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.get_moderation_report.account_missing.serial",
+      "caller": "get_moderation_report",
+      "loss": "account_missing",
+      "partition": "actual-public-serial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.get_moderation_report.role_missing.serial",
+      "caller": "get_moderation_report",
+      "loss": "role_missing",
+      "partition": "actual-public-serial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.get_moderation_report.gate_off.serial",
+      "caller": "get_moderation_report",
+      "loss": "gate_off",
+      "partition": "actual-public-serial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.get_moderation_report.account_suspended.serial",
+      "caller": "get_moderation_report",
+      "loss": "account_suspended",
+      "partition": "actual-public-serial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.get_moderation_report.account_banned.serial",
+      "caller": "get_moderation_report",
+      "loss": "account_banned",
+      "partition": "actual-public-serial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.get_moderation_report.role_nonoperator.serial",
+      "caller": "get_moderation_report",
+      "loss": "role_nonoperator",
+      "partition": "actual-public-serial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.get_moderation_report.gate_delete_replace.loss-first",
+      "caller": "get_moderation_report",
+      "loss": "gate_delete_replace",
+      "order": "loss-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.get_moderation_report.gate_delete_replace.operation-first",
+      "caller": "get_moderation_report",
+      "loss": "gate_delete_replace",
+      "order": "operation-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.get_moderation_report.role_delete_replace.loss-first",
+      "caller": "get_moderation_report",
+      "loss": "role_delete_replace",
+      "order": "loss-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.get_moderation_report.role_delete_replace.operation-first",
+      "caller": "get_moderation_report",
+      "loss": "role_delete_replace",
+      "order": "operation-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.get_moderation_report.account_suspended.loss-first",
+      "caller": "get_moderation_report",
+      "loss": "account_suspended",
+      "order": "loss-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.get_moderation_report.account_suspended.operation-first",
+      "caller": "get_moderation_report",
+      "loss": "account_suspended",
+      "order": "operation-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.get_moderation_report.account_banned.loss-first",
+      "caller": "get_moderation_report",
+      "loss": "account_banned",
+      "order": "loss-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.get_moderation_report.account_banned.operation-first",
+      "caller": "get_moderation_report",
+      "loss": "account_banned",
+      "order": "operation-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.get_moderation_report.role_nonoperator.loss-first",
+      "caller": "get_moderation_report",
+      "loss": "role_nonoperator",
+      "order": "loss-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.get_moderation_report.role_nonoperator.operation-first",
+      "caller": "get_moderation_report",
+      "loss": "role_nonoperator",
+      "order": "operation-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.transition_moderation_case.gate_missing.serial",
+      "caller": "transition_moderation_case",
+      "loss": "gate_missing",
+      "partition": "actual-public-serial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.transition_moderation_case.account_missing.serial",
+      "caller": "transition_moderation_case",
+      "loss": "account_missing",
+      "partition": "actual-public-serial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.transition_moderation_case.role_missing.serial",
+      "caller": "transition_moderation_case",
+      "loss": "role_missing",
+      "partition": "actual-public-serial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.transition_moderation_case.gate_off.serial",
+      "caller": "transition_moderation_case",
+      "loss": "gate_off",
+      "partition": "actual-public-serial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.transition_moderation_case.account_suspended.serial",
+      "caller": "transition_moderation_case",
+      "loss": "account_suspended",
+      "partition": "actual-public-serial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.transition_moderation_case.account_banned.serial",
+      "caller": "transition_moderation_case",
+      "loss": "account_banned",
+      "partition": "actual-public-serial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.transition_moderation_case.role_nonoperator.serial",
+      "caller": "transition_moderation_case",
+      "loss": "role_nonoperator",
+      "partition": "actual-public-serial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.transition_moderation_case.gate_delete_replace.loss-first",
+      "caller": "transition_moderation_case",
+      "loss": "gate_delete_replace",
+      "order": "loss-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.transition_moderation_case.gate_delete_replace.operation-first",
+      "caller": "transition_moderation_case",
+      "loss": "gate_delete_replace",
+      "order": "operation-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.transition_moderation_case.role_delete_replace.loss-first",
+      "caller": "transition_moderation_case",
+      "loss": "role_delete_replace",
+      "order": "loss-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.transition_moderation_case.role_delete_replace.operation-first",
+      "caller": "transition_moderation_case",
+      "loss": "role_delete_replace",
+      "order": "operation-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.transition_moderation_case.account_suspended.loss-first",
+      "caller": "transition_moderation_case",
+      "loss": "account_suspended",
+      "order": "loss-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.transition_moderation_case.account_suspended.operation-first",
+      "caller": "transition_moderation_case",
+      "loss": "account_suspended",
+      "order": "operation-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.transition_moderation_case.account_banned.loss-first",
+      "caller": "transition_moderation_case",
+      "loss": "account_banned",
+      "order": "loss-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.transition_moderation_case.account_banned.operation-first",
+      "caller": "transition_moderation_case",
+      "loss": "account_banned",
+      "order": "operation-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.transition_moderation_case.role_nonoperator.loss-first",
+      "caller": "transition_moderation_case",
+      "loss": "role_nonoperator",
+      "order": "loss-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.transition_moderation_case.role_nonoperator.operation-first",
+      "caller": "transition_moderation_case",
+      "loss": "role_nonoperator",
+      "order": "operation-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.apply_account_moderation_action.gate_missing.serial",
+      "caller": "apply_account_moderation_action",
+      "loss": "gate_missing",
+      "partition": "actual-public-serial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.apply_account_moderation_action.account_missing.serial",
+      "caller": "apply_account_moderation_action",
+      "loss": "account_missing",
+      "partition": "actual-public-serial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.apply_account_moderation_action.role_missing.serial",
+      "caller": "apply_account_moderation_action",
+      "loss": "role_missing",
+      "partition": "actual-public-serial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.apply_account_moderation_action.gate_off.serial",
+      "caller": "apply_account_moderation_action",
+      "loss": "gate_off",
+      "partition": "actual-public-serial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.apply_account_moderation_action.account_suspended.serial",
+      "caller": "apply_account_moderation_action",
+      "loss": "account_suspended",
+      "partition": "actual-public-serial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.apply_account_moderation_action.account_banned.serial",
+      "caller": "apply_account_moderation_action",
+      "loss": "account_banned",
+      "partition": "actual-public-serial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.apply_account_moderation_action.role_nonoperator.serial",
+      "caller": "apply_account_moderation_action",
+      "loss": "role_nonoperator",
+      "partition": "actual-public-serial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.apply_account_moderation_action.gate_delete_replace.loss-first",
+      "caller": "apply_account_moderation_action",
+      "loss": "gate_delete_replace",
+      "order": "loss-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.apply_account_moderation_action.gate_delete_replace.operation-first",
+      "caller": "apply_account_moderation_action",
+      "loss": "gate_delete_replace",
+      "order": "operation-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.apply_account_moderation_action.role_delete_replace.loss-first",
+      "caller": "apply_account_moderation_action",
+      "loss": "role_delete_replace",
+      "order": "loss-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.apply_account_moderation_action.role_delete_replace.operation-first",
+      "caller": "apply_account_moderation_action",
+      "loss": "role_delete_replace",
+      "order": "operation-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.apply_account_moderation_action.account_suspended.loss-first",
+      "caller": "apply_account_moderation_action",
+      "loss": "account_suspended",
+      "order": "loss-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.apply_account_moderation_action.account_suspended.operation-first",
+      "caller": "apply_account_moderation_action",
+      "loss": "account_suspended",
+      "order": "operation-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.apply_account_moderation_action.account_banned.loss-first",
+      "caller": "apply_account_moderation_action",
+      "loss": "account_banned",
+      "order": "loss-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.apply_account_moderation_action.account_banned.operation-first",
+      "caller": "apply_account_moderation_action",
+      "loss": "account_banned",
+      "order": "operation-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.apply_account_moderation_action.role_nonoperator.loss-first",
+      "caller": "apply_account_moderation_action",
+      "loss": "role_nonoperator",
+      "order": "loss-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.apply_account_moderation_action.role_nonoperator.operation-first",
+      "caller": "apply_account_moderation_action",
+      "loss": "role_nonoperator",
+      "order": "operation-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.apply_hangout_moderation_action.gate_missing.serial",
+      "caller": "apply_hangout_moderation_action",
+      "loss": "gate_missing",
+      "partition": "actual-public-serial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.apply_hangout_moderation_action.account_missing.serial",
+      "caller": "apply_hangout_moderation_action",
+      "loss": "account_missing",
+      "partition": "actual-public-serial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.apply_hangout_moderation_action.role_missing.serial",
+      "caller": "apply_hangout_moderation_action",
+      "loss": "role_missing",
+      "partition": "actual-public-serial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.apply_hangout_moderation_action.gate_off.serial",
+      "caller": "apply_hangout_moderation_action",
+      "loss": "gate_off",
+      "partition": "actual-public-serial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.apply_hangout_moderation_action.account_suspended.serial",
+      "caller": "apply_hangout_moderation_action",
+      "loss": "account_suspended",
+      "partition": "actual-public-serial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.apply_hangout_moderation_action.account_banned.serial",
+      "caller": "apply_hangout_moderation_action",
+      "loss": "account_banned",
+      "partition": "actual-public-serial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.apply_hangout_moderation_action.role_nonoperator.serial",
+      "caller": "apply_hangout_moderation_action",
+      "loss": "role_nonoperator",
+      "partition": "actual-public-serial",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.apply_hangout_moderation_action.gate_delete_replace.loss-first",
+      "caller": "apply_hangout_moderation_action",
+      "loss": "gate_delete_replace",
+      "order": "loss-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.apply_hangout_moderation_action.gate_delete_replace.operation-first",
+      "caller": "apply_hangout_moderation_action",
+      "loss": "gate_delete_replace",
+      "order": "operation-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.apply_hangout_moderation_action.role_delete_replace.loss-first",
+      "caller": "apply_hangout_moderation_action",
+      "loss": "role_delete_replace",
+      "order": "loss-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.apply_hangout_moderation_action.role_delete_replace.operation-first",
+      "caller": "apply_hangout_moderation_action",
+      "loss": "role_delete_replace",
+      "order": "operation-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.apply_hangout_moderation_action.account_suspended.loss-first",
+      "caller": "apply_hangout_moderation_action",
+      "loss": "account_suspended",
+      "order": "loss-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.apply_hangout_moderation_action.account_suspended.operation-first",
+      "caller": "apply_hangout_moderation_action",
+      "loss": "account_suspended",
+      "order": "operation-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.apply_hangout_moderation_action.account_banned.loss-first",
+      "caller": "apply_hangout_moderation_action",
+      "loss": "account_banned",
+      "order": "loss-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.apply_hangout_moderation_action.account_banned.operation-first",
+      "caller": "apply_hangout_moderation_action",
+      "loss": "account_banned",
+      "order": "operation-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.apply_hangout_moderation_action.role_nonoperator.loss-first",
+      "caller": "apply_hangout_moderation_action",
+      "loss": "role_nonoperator",
+      "order": "loss-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.apply_hangout_moderation_action.role_nonoperator.operation-first",
+      "caller": "apply_hangout_moderation_action",
+      "loss": "role_nonoperator",
+      "order": "operation-first",
+      "partition": "actual-public-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.retry.transition_moderation_case.gate_off.loss-first",
+      "caller": "transition_moderation_case",
+      "loss": "gate_off",
+      "order": "loss-first",
+      "partition": "actual-exact-retry-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.retry.transition_moderation_case.gate_off.operation-first",
+      "caller": "transition_moderation_case",
+      "loss": "gate_off",
+      "order": "operation-first",
+      "partition": "actual-exact-retry-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.retry.transition_moderation_case.account_suspended.loss-first",
+      "caller": "transition_moderation_case",
+      "loss": "account_suspended",
+      "order": "loss-first",
+      "partition": "actual-exact-retry-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.retry.transition_moderation_case.account_suspended.operation-first",
+      "caller": "transition_moderation_case",
+      "loss": "account_suspended",
+      "order": "operation-first",
+      "partition": "actual-exact-retry-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.retry.transition_moderation_case.role_missing.loss-first",
+      "caller": "transition_moderation_case",
+      "loss": "role_missing",
+      "order": "loss-first",
+      "partition": "actual-exact-retry-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.retry.transition_moderation_case.role_missing.operation-first",
+      "caller": "transition_moderation_case",
+      "loss": "role_missing",
+      "order": "operation-first",
+      "partition": "actual-exact-retry-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.retry.apply_account_moderation_action.gate_off.loss-first",
+      "caller": "apply_account_moderation_action",
+      "loss": "gate_off",
+      "order": "loss-first",
+      "partition": "actual-exact-retry-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.retry.apply_account_moderation_action.gate_off.operation-first",
+      "caller": "apply_account_moderation_action",
+      "loss": "gate_off",
+      "order": "operation-first",
+      "partition": "actual-exact-retry-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.retry.apply_account_moderation_action.account_suspended.loss-first",
+      "caller": "apply_account_moderation_action",
+      "loss": "account_suspended",
+      "order": "loss-first",
+      "partition": "actual-exact-retry-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.retry.apply_account_moderation_action.account_suspended.operation-first",
+      "caller": "apply_account_moderation_action",
+      "loss": "account_suspended",
+      "order": "operation-first",
+      "partition": "actual-exact-retry-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.retry.apply_account_moderation_action.role_missing.loss-first",
+      "caller": "apply_account_moderation_action",
+      "loss": "role_missing",
+      "order": "loss-first",
+      "partition": "actual-exact-retry-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.retry.apply_account_moderation_action.role_missing.operation-first",
+      "caller": "apply_account_moderation_action",
+      "loss": "role_missing",
+      "order": "operation-first",
+      "partition": "actual-exact-retry-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.retry.apply_hangout_moderation_action.gate_off.loss-first",
+      "caller": "apply_hangout_moderation_action",
+      "loss": "gate_off",
+      "order": "loss-first",
+      "partition": "actual-exact-retry-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.retry.apply_hangout_moderation_action.gate_off.operation-first",
+      "caller": "apply_hangout_moderation_action",
+      "loss": "gate_off",
+      "order": "operation-first",
+      "partition": "actual-exact-retry-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.retry.apply_hangout_moderation_action.account_suspended.loss-first",
+      "caller": "apply_hangout_moderation_action",
+      "loss": "account_suspended",
+      "order": "loss-first",
+      "partition": "actual-exact-retry-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.retry.apply_hangout_moderation_action.account_suspended.operation-first",
+      "caller": "apply_hangout_moderation_action",
+      "loss": "account_suspended",
+      "order": "operation-first",
+      "partition": "actual-exact-retry-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.retry.apply_hangout_moderation_action.role_missing.loss-first",
+      "caller": "apply_hangout_moderation_action",
+      "loss": "role_missing",
+      "order": "loss-first",
+      "partition": "actual-exact-retry-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.retry.apply_hangout_moderation_action.role_missing.operation-first",
+      "caller": "apply_hangout_moderation_action",
+      "loss": "role_missing",
+      "order": "operation-first",
+      "partition": "actual-exact-retry-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.new.apply_account_moderation_action.admin_to_moderator.loss-first",
+      "caller": "apply_account_moderation_action",
+      "loss": "admin_to_moderator",
+      "order": "loss-first",
+      "expected": "account ban/reinstate deny; Hangout disable allowed under final26",
+      "partition": "actual-authority-specific-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.new.apply_account_moderation_action.admin_to_moderator.operation-first",
+      "caller": "apply_account_moderation_action",
+      "loss": "admin_to_moderator",
+      "order": "operation-first",
+      "expected": "account ban/reinstate deny; Hangout disable allowed under final26",
+      "partition": "actual-authority-specific-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.retry.apply_account_moderation_action.admin_to_moderator.loss-first",
+      "caller": "apply_account_moderation_action",
+      "loss": "admin_to_moderator",
+      "order": "loss-first",
+      "expected": "account ban/reinstate deny; Hangout disable allowed under final26",
+      "partition": "actual-authority-specific-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.retry.apply_account_moderation_action.admin_to_moderator.operation-first",
+      "caller": "apply_account_moderation_action",
+      "loss": "admin_to_moderator",
+      "order": "operation-first",
+      "expected": "account ban/reinstate deny; Hangout disable allowed under final26",
+      "partition": "actual-authority-specific-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.new.apply_hangout_moderation_action.admin_to_moderator.loss-first",
+      "caller": "apply_hangout_moderation_action",
+      "loss": "admin_to_moderator",
+      "order": "loss-first",
+      "expected": "account ban/reinstate deny; Hangout disable allowed under final26",
+      "partition": "actual-authority-specific-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.new.apply_hangout_moderation_action.admin_to_moderator.operation-first",
+      "caller": "apply_hangout_moderation_action",
+      "loss": "admin_to_moderator",
+      "order": "operation-first",
+      "expected": "account ban/reinstate deny; Hangout disable allowed under final26",
+      "partition": "actual-authority-specific-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.retry.apply_hangout_moderation_action.admin_to_moderator.loss-first",
+      "caller": "apply_hangout_moderation_action",
+      "loss": "admin_to_moderator",
+      "order": "loss-first",
+      "expected": "account ban/reinstate deny; Hangout disable allowed under final26",
+      "partition": "actual-authority-specific-wait",
+      "status": "unexecuted"
+    },
+    {
+      "id": "M.retry.apply_hangout_moderation_action.admin_to_moderator.operation-first",
+      "caller": "apply_hangout_moderation_action",
+      "loss": "admin_to_moderator",
+      "order": "operation-first",
+      "expected": "account ban/reinstate deny; Hangout disable allowed under final26",
+      "partition": "actual-authority-specific-wait",
+      "status": "unexecuted"
+    }
+  ]
+}
