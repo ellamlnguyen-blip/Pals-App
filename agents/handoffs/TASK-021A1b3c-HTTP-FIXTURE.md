@@ -1,0 +1,80 @@
+# TASK-021A1b3c HTTP fixture — static author checkpoint, execution blocked
+
+2026-09-28. Fresh GPT-6 Sol medium author; Standard speed is app controlled and unverified. Authoring only, no runtime evidence or task completion. Prepared isolated `/private/tmp/pals-task021-resume-http`, branch `agent/TASK-021A1b3c-http-fixture`, clean baseline `0788300bfe8e2a91141af0296724712e87e6de11`: coordinator-supplied canonical main `c74beae0f50b42e048dd643b137f55ab84d32e96` plus exact independently reviewed foundation `3e9973ce573a48c9879286624b92fb2d72ca7769`, containing source `17b72001c3c76d2002b320d92df32703141bb88e`. The immutable local author commit is supplied externally with this handoff to avoid a self-referential SHA. No push, integration, shared-record edit or dependent dispatch.
+
+Exactly two owned files: this handoff and `supabase/tests/pilot-admission-current-safety-http.integration.mjs`. Helpers, source27, baseSQL, matrix, original fixtures and configuration remain frozen. Canonical main still has26 migration code; source27 and this fixture are unexecuted task-only work. Read AGENTS, assigned HTTP/parent/foundation contracts, foundation/source reviews, SOURCE/RECONCILIATION/LOCK-GRAPH/MATRIX, Accepted ADR-0026/0027, DATA_MODEL/AUTHORIZATION/SECURITY_AND_SAFETY and relevant final migration bodies/schema. Requirements, not plan hashes, govern the assertions.
+
+## Concrete shared transport blocker
+
+The frozen guard performs synchronous `execFileSync` calls for SQL, target inspection/status and reset without a finite child timeout. A timer around the async HTTP module cannot interrupt those synchronous calls. Killing a wrapper worker could orphan Docker/SQL descendants and supply false cleanup evidence. Coordinator confirmed this shared foundation limitation and requires a separately reviewed transport amendment before repair/runtime; this author may not edit helpers.
+
+Both exported executable entry functions explicitly refuse **before `localTarget` or any target contact**. `runSerialHttp` checks the literal nonnull `executionBlocker` before its first guard; `runBoundedChild` rejects without spawning anything. The source declares planned30s per-request/30min whole-module/10s child-exit budgets, but implements no whole-module watchdog and claims no whole-module bound. The frozen API request already bounds fetch/body consumption; synchronous target rechecks remain unbounded. No nested-process kill, signal, service recovery, force cleanup or event-loop-timer assurance was introduced. This fixture cannot be released merely by removing its refusal: reviewed shared finite transport, actual descendant exit/cleanup semantics and independent combined fixture review are prerequisites. Author assignment and parent remain incomplete.
+
+## Real Auth adapter and authority
+
+The frozen `prepare/setup` always inserts synthetic `auth.users`, so it cannot prepare existing signup identities. Coordinator expressly clarified that a module-local adapter in this assigned HTTP file is allowed: use actual local Auth signup/password login, preserve server UUID and signup email, label privileged setup, mirror reviewed setup, retain all frozen guards/census/assertions and never modify shared helpers, credentials or triggers.
+
+Each fresh literal fixture key has four actual signup/login users: actor, immutable host, peer and manager. Auth-confirmation SQL, owned synthetic Storage object/profile/admission, manager fixture writer, alternate campus, source/gates/preference are privileged preparation only. Passwords/tokens/status keys remain in memory and are never logged. No Auth row is inserted/replaced/deleted by the adapter and no fabricated JWT student proof is used. The invalid-signature ACL test mutates an actual issued signature solely to require authentication rejection. Explicit metadata plus privileged platform-admin setup tests no-admission denial; it claims no operator permission.
+
+Source/request/alternate-campus IDs come from frozen deterministic case IDs; actual Auth UUIDs come from signup. CH uses a distinct nonparticipant actor, published source and immutable joined host. CP/CB call frozen `assertCurrentOnly` to prove all seven retained proofs absent and no shared joined parents. Only peer preference is required. Actor preference absent/false stays allowed. Only the actual capability is on (Hangouts CH, People CP/CB); onboarding/chat/unrelated purpose remain off. No current helper is invoked as student permission.
+
+The frozen identity builder hardcodes its synthetic email. The adapter replaces only that exact fixture-email text with the corresponding actual signup email in preparation/restoration SQL. Auth email is never changed merely to fit the helper. Both delete/replacement serial guards deliberately leave replacements ineligible (unverified membership or missing required bio); lawful setup restores eligibility afterwards. These are serial guards with zero old-tuple wait credit. Lawful object detach/delete is profile preparation followed by formerly referenced object deletion; no referenced-primary DELETE success or orphan-host fixture exists.
+
+## Exact source-backed outcomes and ABI
+
+All operation/permission calls use per-request frozen fixed-origin B3c `request`, including signup/login/PostgREST, under exact current27 owner/history/socket/binary/container checks. Student reports use the untouched original five-argument ABI; default narrative is omitted in the normal request. Report success is HTTP200 and exactly one row with only `receipt_id`/`submitted_at`; block and compatibility `set_people_block` return exact HTTP200 JSON booleans. Server-generated report ID/time are bound to the public receipt and complete stored report/ledger. Expected normalized payload/fingerprint uses unchanged PostgreSQL `profile_trim`, lower/null equivalence and original mode/input UUID; expected target/provenance fields are independently source-derived.
+
+Every outcome captures frozen54-table values in memory and compares the complete independently expected after-state; evidence contains only table counts/digests, verified result, generated opaque reference/receipt values and literal unique IDs. Report changes exactly one independently expected report and ledger. Current block has exactly `{blocker_id,blocked_id}` and no other change; own-block later authority is labeled retained. Unblock changes exactly the caller's outbound row, restoring no friendship/DM/participation/cohost/notification/report. Retained teardown expects all participants, cohost deletion, immutable unordered overlap rows, friendship deletion and active DM state `blocked`, while preserving all other54 values. Only generated transition timestamps are observed after independent lower/upper DB-clock bounds; every other expected field is source-derived. Hash-only acceptance and automatic observed-row expectations are absent.
+
+Neutral authority errors require exact HTTP403/42501 and exact `Safety report unavailable` CH/CP or `Safety operation unavailable` CB, four standard error fields with null details/hint, no UUID/source/receipt/private projection, and full54 zero delta. Separate transport/ACL cases pin status/code/message: anon401 and service403/42501 `permission denied for function <actual route>`; invalid signature401/PGRST301 `JWSError JWSInvalidSignature`; typed malformed UUID400/22P02 `invalid input syntax for type uuid: "not-a-uuid"`; unknown overload/forged actor/private helper404/PGRST202 exact public function signature-cache message; private table404/PGRST205 exact public table-cache message. Public argument names in transport diagnostics are distinguished from private details. These are **authored expectations, unexecuted**, requiring actual frozen PostgREST outcome review rather than broad error-family acceptance. Raw private table/helper endpoints are actually requested in the authored code, not presumed hidden without a response.
+
+## Planned serial allocation and totals
+
+Source loops freeze **522 verified HTTP outcomes,226 unique fresh fixture keys,904 signup/login users,114 serial identity/admission denial IDs**. These are planned source totals, never pass counts. The final module asserts exact outcome/key totals before issuing a completed receipt; actual completed count is emitted only after all assertions and guarded reset. The114 are CH/CP/CB × actor/immutable-host-or-peer ×17 identity dimensions plus revoked/missing admission. Each negative case first executes an eligible actual HTTP positive; CB additionally performs actual authorized outbound unblock and reasserts current-only before loss. New request IDs do not reset a reporter's rate budget. Fresh reporters per case avoid accidental five/hour exhaustion; deliberate retries/capacity reuse only their own reporter.
+
+Other allocation:24 serial policy denials (three routes × availability/actual purpose/actual source/safety × off/missing), four required peer-preference denials, separate per-route ACL/signature/argument/overload/helper/table/UUID and metadata/platform-role controls, compatibility booleans/ACL/no-purpose-bypass, neutral nonexistent/self/cross-campus comparisons,15 report normalization/shape cases plus all category positives, original retry/shutdown/absent-admission/deleted-target/mismatch/safety/inactive-actor/caller-isolation, seven individual retained peer proofs plus all seven priority suffix controls, participant/privately resolved host reports, touching/nonoverlapping interval denial, fresh missing actor accounts, retained block/repair/unblock, bilateral state classification, terminal current CH cancel/disable, and three-parent retained teardown. Terminal sources are fresh and never reversed. Source disable uses an explicitly labeled direct synthetic record referencing an actual report; it adds no moderator permission fixture.
+
+All32 matrix L1 IDs are explicitly allocated in the exported `allocation`:
+
+| L1 ID suffix | HTTP allocation / limitation |
+| --- | --- |
+| report_exact_retry_shutdown | Original receipt/time; zero54 delta |
+| report_exact_retry_absent_roster | Original receipt/time; zero54 delta |
+| report_exact_retry_no_target_resolution | Exact replay after deleted Hangout; zero54 delta |
+| report_retry_fingerprint_mismatch | Exact neutral denial |
+| report_retry_safety_loss | Off and missing safety denial |
+| report_retry_actor_inactive | Suspended and banned actor denial |
+| report_retained_peer_each_provenance | Seven exact sources plus priority suffix controls |
+| report_retained_hangout | Own retained participant report during shutdown |
+| report_retained_host_private_resolution | Host resolved privately, original mode/input fingerprint and mismatch |
+| report_retained_disappears_no_fallback | Unclaimed; separate original-tuple race |
+| block_retained_shutdown | Retained block/repair with ordinary shutdown |
+| block_retained_absent_roster | Retained block/repair with absent admission |
+| unblock_shutdown_absent_roster | Actual outbound removal |
+| unblock_restores_nothing | Exact only-outbound-row removal after teardown |
+| global_teardown_cancelled_disabled_unready_host | Retained teardown over explicit synthetic states |
+| global_teardown_all_sorted_parents | All three parents' exact outcomes; sorting wait proof unclaimed |
+| global_teardown_cohost_clear | Exact trigger cohost removal |
+| current_hangout_host_denied | Nonparticipant hangout_host neutral denial |
+| report_shape_normalization_boundary | Original default/null/empty/Unicode/category/2000/2001 |
+| report_inclusive_five_per_hour | **Unclaimed**; five successes/sixth denial prove capacity only |
+| report_clock_after_wait | **Unclaimed**; later bounded rate assignment |
+| report_same_key_exact_and_mismatch | Serial exact/mismatch; concurrent same-key unclaimed |
+| people_actor_not_opted_in_allowed | Absent and false actor preference |
+| people_onboarding_off_allowed | People actual purpose and onboarding off |
+| hangout_onboarding_people_chat_off_allowed | Hangouts actual purpose, unrelated purposes off |
+| people_hangouts_off_allowed | People actual purpose, Hangouts off |
+| neutral_nonexistent_crosscampus_self_unknown | Separate neutral target/business-shape cases |
+| stronger_isolation_CH_CP_CB_and_retained | Unclaimed; separate SQL assignment |
+| retained_gate_account_serial_missing | Missing safety/inactive actor; fresh missing actor tested separately, retained missing-account promise unclaimed |
+| current_report_does_not_mutate_source | Exact report+ledger-only54-table delta |
+| block_no_notification_report | Exact block/teardown54-table delta |
+| current_lane_no_late_retained_upgrade | Unclaimed; separate frozen-lane race |
+
+No time rewrites/deletion of immutable reports/ledger/audit, no SQL permission proxy, no report-hour inclusive/older-excluded/post-wait-clock credit, no source-hash coverage credit, no inherited regression/race/operator/upgrade/catalog credit. Each emit has explicit zero concurrency credit. The reporter capacity case intentionally stores five permitted reports and requires sixth neutral denial while preserving all five.
+
+## Static evidence and remaining gates
+
+Node24.18 syntax check passed. Existing cached Prettier3.9.8 API formatted the owned module; existing ESLint9 narrow no-unused-vars/no-unreachable/no-undef rules passed with zero diagnostics. Inert import under trapped `execFileSync/spawn/execSync/execFile/fetch` passed: zero contact attempts,32 allocation IDs,17 dimensions, literal execution blocker and zero concurrency-credit plan. Diff whitespace check passed. No entrypoint, refusal function, Auth/API/SQL/CLI/preflight/start/reset/db-lint/runtime/container/VM/provider/hosted call was executed. No installs/pulls/dependency updates/config or migration changes. Static checks prove neither PostgreSQL compilation nor live HTTP policy/error/outcome/cleanup behavior.
+
+After the shared guard transport amendment: fresh exact independent source/fixture/ownership review, combined immutable freeze, explicit exclusive serial release, actual execution/full outcomes/TAP or equivalent completed manifest, strict catalog/true26→only27 preservation, standard lint qualification, full27 reset/zero54/original gates/pilot availability+13 capabilities off/revision1, normal owned services/VM stop and independently verified stopped/unheld/empty endpoints, fresh independent security/evidence review, coordinator publication and remote-verified accepted main integration remain. The authored finally uses guarded full27 reset and clean assertion only; it does not claim service/VM stop or external cleanup ownership proof. Timeout/transport/reset failure is incomplete and supplies no successful cleanup receipt. No parent/task completion, pilot-ready, hosted or successor claim.
