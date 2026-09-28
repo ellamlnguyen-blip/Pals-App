@@ -1,5 +1,7 @@
 # TASK-021A1b3c HTTP fixture — static author checkpoint, execution blocked
 
+**Current checkpoint:** reviewed HTTP cadence/failure-pipe adoption is authored at the final section below. Earlier sections preserve historical checkpoints; no runtime release or target evidence exists.
+
 2026-09-28. Fresh GPT-6 Sol medium author; Standard speed is app controlled and unverified. Authoring only, no runtime evidence or task completion. Prepared isolated `/private/tmp/pals-task021-resume-http`, branch `agent/TASK-021A1b3c-http-fixture`, clean baseline `0788300bfe8e2a91141af0296724712e87e6de11`: coordinator-supplied canonical main `c74beae0f50b42e048dd643b137f55ab84d32e96` plus exact independently reviewed foundation `3e9973ce573a48c9879286624b92fb2d72ca7769`, containing source `17b72001c3c76d2002b320d92df32703141bb88e`. The immutable local author commit is supplied externally with this handoff to avoid a self-referential SHA. No push, integration, shared-record edit or dependent dispatch.
 
 Exactly two owned files: this handoff and `supabase/tests/pilot-admission-current-safety-http.integration.mjs`. Helpers, source27, baseSQL, matrix, original fixtures and configuration remain frozen. Canonical main still has26 migration code; source27 and this fixture are unexecuted task-only work. Read AGENTS, assigned HTTP/parent/foundation contracts, foundation/source reviews, SOURCE/RECONCILIATION/LOCK-GRAPH/MATRIX, Accepted ADR-0026/0027, DATA_MODEL/AUTHORIZATION/SECURITY_AND_SAFETY and relevant final migration bodies/schema. Requirements, not plan hashes, govern the assertions.
@@ -36,40 +38,40 @@ Other allocation:24 serial policy denials (three routes × availability/actual p
 
 All32 matrix L1 IDs are explicitly allocated in the exported `allocation`:
 
-| L1 ID suffix | HTTP allocation / limitation |
-| --- | --- |
-| report_exact_retry_shutdown | Original receipt/time; zero54 delta |
-| report_exact_retry_absent_roster | Original receipt/time; zero54 delta |
-| report_exact_retry_no_target_resolution | Exact replay after deleted Hangout; zero54 delta |
-| report_retry_fingerprint_mismatch | Exact neutral denial |
-| report_retry_safety_loss | Off and missing safety denial |
-| report_retry_actor_inactive | Suspended and banned actor denial |
-| report_retained_peer_each_provenance | Seven exact sources plus priority suffix controls |
-| report_retained_hangout | Own retained participant report during shutdown |
-| report_retained_host_private_resolution | Host resolved privately, original mode/input fingerprint and mismatch |
-| report_retained_disappears_no_fallback | Unclaimed; separate original-tuple race |
-| block_retained_shutdown | Retained block/repair with ordinary shutdown |
-| block_retained_absent_roster | Retained block/repair with absent admission |
-| unblock_shutdown_absent_roster | Actual outbound removal |
-| unblock_restores_nothing | Exact only-outbound-row removal after teardown |
-| global_teardown_cancelled_disabled_unready_host | Retained teardown over explicit synthetic states |
-| global_teardown_all_sorted_parents | All three parents' exact outcomes; sorting wait proof unclaimed |
-| global_teardown_cohost_clear | Exact trigger cohost removal |
-| current_hangout_host_denied | Nonparticipant hangout_host neutral denial |
-| report_shape_normalization_boundary | Original default/null/empty/Unicode/category/2000/2001 |
-| report_inclusive_five_per_hour | **Unclaimed**; five successes/sixth denial prove capacity only |
-| report_clock_after_wait | **Unclaimed**; later bounded rate assignment |
-| report_same_key_exact_and_mismatch | Serial exact/mismatch; concurrent same-key unclaimed |
-| people_actor_not_opted_in_allowed | Absent and false actor preference |
-| people_onboarding_off_allowed | People actual purpose and onboarding off |
-| hangout_onboarding_people_chat_off_allowed | Hangouts actual purpose, unrelated purposes off |
-| people_hangouts_off_allowed | People actual purpose, Hangouts off |
-| neutral_nonexistent_crosscampus_self_unknown | Separate neutral target/business-shape cases |
-| stronger_isolation_CH_CP_CB_and_retained | Unclaimed; separate SQL assignment |
-| retained_gate_account_serial_missing | Missing safety/inactive actor; fresh missing actor tested separately, retained missing-account promise unclaimed |
-| current_report_does_not_mutate_source | Exact report+ledger-only54-table delta |
-| block_no_notification_report | Exact block/teardown54-table delta |
-| current_lane_no_late_retained_upgrade | Unclaimed; separate frozen-lane race |
+| L1 ID suffix                                    | HTTP allocation / limitation                                                                                     |
+| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| report_exact_retry_shutdown                     | Original receipt/time; zero54 delta                                                                              |
+| report_exact_retry_absent_roster                | Original receipt/time; zero54 delta                                                                              |
+| report_exact_retry_no_target_resolution         | Exact replay after deleted Hangout; zero54 delta                                                                 |
+| report_retry_fingerprint_mismatch               | Exact neutral denial                                                                                             |
+| report_retry_safety_loss                        | Off and missing safety denial                                                                                    |
+| report_retry_actor_inactive                     | Suspended and banned actor denial                                                                                |
+| report_retained_peer_each_provenance            | Seven exact sources plus priority suffix controls                                                                |
+| report_retained_hangout                         | Own retained participant report during shutdown                                                                  |
+| report_retained_host_private_resolution         | Host resolved privately, original mode/input fingerprint and mismatch                                            |
+| report_retained_disappears_no_fallback          | Unclaimed; separate original-tuple race                                                                          |
+| block_retained_shutdown                         | Retained block/repair with ordinary shutdown                                                                     |
+| block_retained_absent_roster                    | Retained block/repair with absent admission                                                                      |
+| unblock_shutdown_absent_roster                  | Actual outbound removal                                                                                          |
+| unblock_restores_nothing                        | Exact only-outbound-row removal after teardown                                                                   |
+| global_teardown_cancelled_disabled_unready_host | Retained teardown over explicit synthetic states                                                                 |
+| global_teardown_all_sorted_parents              | All three parents' exact outcomes; sorting wait proof unclaimed                                                  |
+| global_teardown_cohost_clear                    | Exact trigger cohost removal                                                                                     |
+| current_hangout_host_denied                     | Nonparticipant hangout_host neutral denial                                                                       |
+| report_shape_normalization_boundary             | Original default/null/empty/Unicode/category/2000/2001                                                           |
+| report_inclusive_five_per_hour                  | **Unclaimed**; five successes/sixth denial prove capacity only                                                   |
+| report_clock_after_wait                         | **Unclaimed**; later bounded rate assignment                                                                     |
+| report_same_key_exact_and_mismatch              | Serial exact/mismatch; concurrent same-key unclaimed                                                             |
+| people_actor_not_opted_in_allowed               | Absent and false actor preference                                                                                |
+| people_onboarding_off_allowed                   | People actual purpose and onboarding off                                                                         |
+| hangout_onboarding_people_chat_off_allowed      | Hangouts actual purpose, unrelated purposes off                                                                  |
+| people_hangouts_off_allowed                     | People actual purpose, Hangouts off                                                                              |
+| neutral_nonexistent_crosscampus_self_unknown    | Separate neutral target/business-shape cases                                                                     |
+| stronger_isolation_CH_CP_CB_and_retained        | Unclaimed; separate SQL assignment                                                                               |
+| retained_gate_account_serial_missing            | Missing safety/inactive actor; fresh missing actor tested separately, retained missing-account promise unclaimed |
+| current_report_does_not_mutate_source           | Exact report+ledger-only54-table delta                                                                           |
+| block_no_notification_report                    | Exact block/teardown54-table delta                                                                               |
+| current_lane_no_late_retained_upgrade           | Unclaimed; separate frozen-lane race                                                                             |
 
 No time rewrites/deletion of immutable reports/ledger/audit, no SQL permission proxy, no report-hour inclusive/older-excluded/post-wait-clock credit, no source-hash coverage credit, no inherited regression/race/operator/upgrade/catalog credit. Each emit has explicit zero concurrency credit. The reporter capacity case intentionally stores five permitted reports and requires sixth neutral denial while preserving all five.
 
@@ -100,3 +102,49 @@ Only the same two owned files change. `safeKey` now uses a finite source-backed 
 Code passthrough is restricted to the known `code`/`sqlstate` fields, strict entire-string code format and the finite source-backed expected SQLSTATE/PostgREST/abort code set. A five-character string elsewhere, an unknown code-shaped value, or a code in narrative/credential content is redacted. Known42501/40P01/PGRST202 code fields, source-backed status/provenance differences and exact neutral safety literals remain readable. Existing Auth rate-code diagnostics remain their separate exact known two-value allowlist, with no Auth behavior change.
 
 Reusable exported `verifyFailureRedactionProjection` is pure and inert: it checks the unknown five-character private message/value/key, sensitive/code-shaped values, exact known code-field retention, unknown-key difference paths, status/provenance expected-versus-actual fields and neutral literals. Invoked under trapped child-process/fetch functions, it passes with zero contact attempts. Node syntax, cached Prettier/narrow ESLint and diff whitespace checks pass. This is static/pure regression evidence only; no target/Pals binary/HTTP/Auth/SQL/reset/runtime or entrypoint was invoked. Planned522/226/904 totals, fixture schedule/configuration, execution refusal, original failure/cleanup separation and pending Auth pacing/transport/failure-pipe delivery/adoption gates remain unchanged. Freeze this exact local corrective commit for fresh independent delta review; no completion, push, helper/interface adoption or dependent dispatch.
+
+## Reviewed HTTP correction adoption — current static checkpoint
+
+2026-09-28. **Authored locally; every target-exercising path remains unexecuted and refused. Independent exact-tip combined-adoption review is required. Parent/task incomplete.** The previous transport/rate-gap descriptions above are historical checkpoints, superseded by this reviewed interface adoption; they are not current assertions that the helper remains unbounded.
+
+Fresh scoped GPT-6 Sol medium author; Standard speed app-controlled/unverified. Checkout `/private/tmp/pals-task021-http-adoption`, branch `agent/TASK-021A1b3c-http-adoption`. Coordinator-prepared clean baseline `c6dd76ab9595585f372ee7dd9affaa26a6c9f992` contains latest coordinator remote-verified canonical main `7b8078d07d5a90cd7ad40e9d4255c3f3bb803146`, exact reviewed/published HTTP `5f428bc7f0d2ea75cef069526029cd745357ccea`, and exact reviewed/published transport `c7fb19092224d816025ed41712164e5da6486bcf` (foundation `3e9973ce573a48c9879286624b92fb2d72ca7769`, source `17b72001c3c76d2002b320d92df32703141bb88e` included). Implementation commits: `cc7d7ea8d826378929f0b13ba5fb0849a9fe58f8` and final code checkpoint **`a1d4067617b8a3c3733cf0e9660d4f3bb8089152`** (after-census remains unavailable when only before was observed). This following handoff-only commit is the final checkpoint; its immutable SHA is supplied externally to avoid a self-reference. No author push/integration or remote adoption receipt exists.
+
+Read AGENTS, assigned HTTP fixture/correction contract and correction contract review, parent/foundation/source contracts and source/reconciliation/lock graph, relevant actual final27 source, DATA_MODEL/AUTHORIZATION/SECURITY_AND_SAFETY, Accepted ADR-0026/0027, HTTP history and the corrected BOUNDED-TRANSPORT handoff plus actual writer/receiver schema. Exactly two owned files change: this handoff and `supabase/tests/pilot-admission-current-safety-http.integration.mjs`. No helper, migration/source, base SQL, other module, configuration, shared record, target guard, credential or permission changes.
+
+### Monotonic real-Auth schedule
+
+The authored serial module retains **522 planned outcomes, 226 fresh fixture keys, 904 genuine signup/password-login users, 114 serial identity/admission denials, and zero concurrency credit**. Allocation loops, IDs, ABI/outcome/permission assertions and fresh reporter/host/peer/manager identities are unchanged. There is no Auth Admin substitute, token fabrication, credential rewrite, identity reuse, rate/config override, forwarded IP, retry or rate-bucket reset. Privileged confirmation remains setup; each actual signup's password login still follows serially before another identity.
+
+After later proven exclusive ownership and the current27 target guard, a monotonic schedule begins an initial **65-minute quiet period**. Every subsequent signup waits at least **65 seconds after the previous signup request settles**. This deliberately conservative anchor accounts for variable synchronous target guards between the cadence check and actual fetch: prior settlement is after its actual start, and the next guarded fetch cannot start before the required later time. Timestamping before an earlier variable guard alone would not prove spacing. The minimum start-only arithmetic remains 17h23m15s; settlement/guard/login/SQL overhead extends it, and actual cached-provider rate feasibility remains unproved.
+
+Waits recheck monotonic elapsed time, cancellation and a fixed finite **24-hour** module deadline. Early wakes and delayed work cannot release a catch-up burst; after every signup settlement the next deadline is freshly anchored to settlement. The actual request signal combines the module cancellation/deadline and existing 30-second request budget; the mandatory independently reviewed helper runner selects the same fixed 24-hour HTTP ceiling and observes owned-child exit within its unchanged five-second limit. Other modules retain their 30-minute runner ceilings. No environment budget selector, silent extension or resumed recovery is added. Any429, unexpected response, abort, timeout or guard failure remains failed/uncredited; none supplies permission or retry credit.
+
+### Strict failure-only writer adoption
+
+The catch retains its original internal full54/redacted case/phase/status/code/expected discrepancies, then **awaits `writeHttpFailureEvidence(normalizedRecord)` before finally can attempt cleanup**. The internal precise redacted evidence remains separate from the narrower wire representation. Cleanup refusal/error diagnostics are separately awaited and cannot replace the original. HTTP, SQL/census, generic helper or deadline uncertainty still forbids further census/reset when target ownership or child/transaction settlement is unproven. Writer failure changes only channel availability; it never proves settlement, replaces the original failure or authorizes cleanup.
+
+Normalization uses the reviewed fixed phase/operation/code/message/value/known-field enums. Existing phase suffixes map only known SQL/census/result or fixed allocated Auth/RPC/table operations; unrepresentable suffixes fail. HTTP status is preserved only as a valid100–599 integer; allowed codes are exact, unknown codes explicitly classify as `unknown-code`, and messages use neutral safety literals or fixed permission/signature/UUID/cache/unknown-shape classifications. No raw provider/assertion/private string, unknown key, credential, row identity or private-hash fallback enters the pipe. Provenance/state/type values survive only in their known source-backed fields; sensitive fields classify their values even if their strings equal an allowed enum.
+
+Every available census is exactly54 bounded counts in exported table order. Missing/partial/unavailable census uses54 nulls and explicit unavailable status. A single before snapshot is never relabeled as an after observation. Differences qualify scope, exact census table, known field or `other-field`, bounded row index, fixed kind and classified expected/observed value. Unknown field names and private values never appear. The adopted writer validates exact literal case allocation and schema again before framing, including its **1,447** exact IDs. No failure wire field grants pass/completion or successful cleanup credit.
+
+The normalizer rejects more than128 differences or a payload over64KiB instead of trimming. Unrepresentable/overflow normalization passes only the reviewed invalid-record sentinel to invalidate the entire channel; writer/flush errors remain unavailable without raw fallback. The helper owns its unchanged maximum four records, total byte ceiling and two-second flush bound. Ordinary failure plus separate cleanup diagnostic uses at most two records. Absence, invalidation, overflow, truncation or unproved EOF cannot establish success or cleanup. Internal original evidence remains retained if channel delivery fails.
+
+### Pure offline verification and limitations
+
+Only Node24.18 source syntax, cached formatting/narrow lint and inert examples executed. Dependencies were exclusively existing `/private/tmp/pals-task024/node_modules`; no install or Pals binary occurred. Cached Prettier3.9.8 actual check with ignore exclusions disabled passed; ESLint9 `no-unused-vars`/`no-unreachable`/`no-undef` passed with zero errors/warnings; whitespace check passed. The temporary verifier is `/private/tmp/pals-http-adoption-offline.mjs` and uses only in-memory clocks/requests and the literal private allocation/schema region isolated in a VM. No actual transport process is spawned. An initial verifier-only allocation assertion used `.length` on the helper's Sets, was corrected to `.size`, and the full final example run passed.
+
+Final inert examples prove authored properties only:
+
+- Trapped child-process/fetch imports: **0 target attempts, 0 real waits, 0 runtime credit**. No executable entry/refusal function was invoked.
+- 904 fake signup settlements and inert fetch-start observations, variable pre-fetch guards, initial65 minutes, at least65-second actual-start spacing, conservative settlement anchoring, early wake recheck, delayed-clock no-burst, cancellation and exact24-hour deadline rejection.
+- Reviewed literal allocation:226 fixture keys,522 outcome IDs,904 Auth slots and1,447 unique wire IDs; planned totals unchanged.
+- Actual reviewed private wire validator accepts normalized429/full54/provenance/private-value discrepancy records and separate reset-error/unavailable-census records, including before-only/after-unavailable; unknown case/field and unknown suffix reject. Unknown keys/private values/hashes never appear in encoded wire examples; current_people versus retained_host remains readable.
+- 129 discrepancies reject without truncation. The actual pure publisher, with an inert injected writer, awaits the original write before the inert cleanup marker; rejected writer preserves the original internal record and marks unavailable; normalization overflow invokes only the invalidating sentinel. Original internal case/full54 evidence remains independent of cleanup error diagnostics.
+
+These examples do not establish live provider rate behavior, true request/SQL/server settlement, authentication/permissions, source27 compilation, actual HTTP expectations/522 outcomes, PostgreSQL locks/races, reset, cleanup, upgrade/catalog/lint or runtime security. They do not start a 65-minute or24-hour rehearsal.
+
+### Freeze and remaining gates
+
+Both `runSerialHttp` and `runBoundedChild` keep an unconditional nonnull execution refusal **before target contact or child start**. The blocker now accurately states combined HTTP/transport adoption review, fresh exclusive ownership review and explicit serial release remain absent; the reviewed helper correction does not itself release execution.
+
+Stop at this clean immutable local checkpoint for fresh independent combined-adoption review. Coordinator owns shared status/publication. Remaining: exact frozen adoption/interface and combined fixture review; independently proven current ownership/exclusive serial release; actual source/fixture/Auth/rate/runtime/security/regression/true26→only27/catalog/lint evidence; guarded full27 reset/zero54/original gates and pilot off/revision1, normally stopped owned services/VM and independent stopped/unheld/empty-endpoint audit; reviewed publication and remote-verified integration. No reset after uncertain owned settlement, force/unknown kill, target/socket/CLI/API/DB/preflight/start/service/VM, hosted/provider/config operation, push, dependent dispatch or completion occurred. B3c/B3/A1c/A2/TASK-021 remain incomplete; no pilot-ready/hosted/successor claim.
