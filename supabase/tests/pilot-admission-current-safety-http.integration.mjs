@@ -1,17 +1,18 @@
 import assert from "node:assert/strict";
-import { randomUUID } from "node:crypto";
+import { createHash, randomUUID } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { resolve } from "node:path";
 import {
   localTarget,
-  sql,
+  sql as frozenSql,
   quote,
   ok,
   resetDisposable,
   assertClean,
 } from "./helpers/pilot-admission-current-safety.mjs";
 import {
-  census,
+  census as frozenCensus,
+  sanitized,
   assertOutcome,
   caseIds,
   routes,
@@ -157,10 +158,297 @@ const currentDefinition = (id) => routes.find((r) => r.id === id);
 const expectedRpcMissing = (name, body) =>
   `Could not find the function public.${name}(${Object.keys(body).sort().join(", ")}) in the schema cache`;
 
+// Failure projections are pure and inert. Arbitrary strings are represented by
+// type/length/hash; never serialize AssertionError.message/stack or raw bodies.
+const digest = (value) =>
+  createHash("sha256").update(String(value)).digest("hex");
+const hiddenField =
+  /^(?:title|body|narrative|instructions|real_name|bio|major|email|verification_email|password|encrypted_password|access_token|refresh_token|token|raw_user_meta_data|raw_app_meta_data|data|user|session|authorization|apikey)$/i;
+const safeLiteral = new Set([
+  "receipt_id",
+  "submitted_at",
+  "code",
+  "details",
+  "hint",
+  "message",
+  "Safety report unavailable",
+  "Safety operation unavailable",
+  "active",
+  "revoked",
+  "suspended",
+  "banned",
+  "joined",
+  "left",
+  "removed",
+  "pending",
+  "accepted",
+  "blocked",
+  "closed",
+  "published",
+  "cancelled",
+  "current_people",
+  "current_hangout",
+  "owned_block",
+  "friendship",
+  "friend_request",
+  "dm_generation",
+  "hangout_host",
+  "hangout_overlap",
+  "retained_hangout",
+  "retained_host",
+  "user",
+  "hangout",
+  "hangout_host",
+]);
+const safeKey = (key) =>
+  key.length <= 64 &&
+  !/eyJ[A-Za-z0-9_-]+\./.test(key) &&
+  /^[A-Za-z_][A-Za-z0-9_.]*$/.test(key)
+    ? key
+    : `<key-sha256:${digest(key)}>`;
+export function redactedValue(value, field = "") {
+  if (value === undefined) return { type: "undefined" };
+  if (value === null || typeof value === "boolean" || typeof value === "number")
+    return value;
+  if (hiddenField.test(field))
+    return {
+      type: Array.isArray(value) ? "array" : typeof value,
+      sha256: digest(JSON.stringify(stable(value))),
+      redacted: true,
+    };
+  if (typeof value === "string") {
+    if (
+      safeLiteral.has(value) ||
+      uuidPattern.test(value) ||
+      /^\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}(?::?\d{2})?)$/.test(
+        value,
+      ) ||
+      /^(?:[A-Z0-9]{5}|PGRST\d{3})$/.test(value)
+    )
+      return value;
+    return {
+      type: "string",
+      characters: Array.from(value).length,
+      sha256: digest(value),
+      redacted: true,
+    };
+  }
+  if (Array.isArray(value))
+    return {
+      type: "array",
+      length: value.length,
+      items: value.map((item) => redactedValue(item, field)),
+    };
+  if (typeof value === "object")
+    return {
+      type: "object",
+      keys: Object.keys(value).map(safeKey).sort(),
+      fields: Object.fromEntries(
+        Object.entries(value).map(([key, item]) => [
+          safeKey(key),
+          redactedValue(item, key),
+        ]),
+      ),
+    };
+  return { type: typeof value, redacted: true };
+}
+export function redactedDifferences(expected, actual, path = "$", field = "") {
+  if (JSON.stringify(stable(expected)) === JSON.stringify(stable(actual)))
+    return [];
+  // Keep full precise field/index differences but redact private value content.
+  if (
+    !hiddenField.test(field) &&
+    expected &&
+    actual &&
+    typeof expected === "object" &&
+    typeof actual === "object" &&
+    Array.isArray(expected) === Array.isArray(actual)
+  ) {
+    return Array.from(
+      new Set([...Object.keys(expected), ...Object.keys(actual)]),
+    )
+      .sort()
+      .flatMap((key) =>
+        redactedDifferences(
+          expected[key],
+          actual[key],
+          `${path}.${safeKey(key)}`,
+          key,
+        ),
+      );
+  }
+  return [
+    {
+      path,
+      expected: redactedValue(expected, field),
+      actual: redactedValue(actual, field),
+    },
+  ];
+}
+export function redactedHttp(response) {
+  const body = response?.body;
+  const message =
+    body && !Array.isArray(body) ? (body.message ?? body.msg) : undefined;
+  return {
+    status: typeof response?.status === "number" ? response.status : null,
+    code:
+      typeof body?.code === "string" &&
+      /^(?:[A-Z0-9]{5}|PGRST\d{3})$/.test(body.code)
+        ? body.code
+        : null,
+    auth_error_code:
+      typeof body?.error_code === "string" &&
+      ["over_email_send_rate_limit", "over_request_rate_limit"].includes(
+        body.error_code,
+      )
+        ? body.error_code
+        : redactedValue(body?.error_code),
+    neutral_error:
+      safeLiteral.has(message) && String(message).startsWith("Safety ")
+        ? message
+        : null,
+    message: redactedValue(message),
+    body_shape: {
+      type:
+        body === null ? "null" : Array.isArray(body) ? "array" : typeof body,
+      ...(Array.isArray(body)
+        ? {
+            length: body.length,
+            row_keys: body.map((row) =>
+              row && typeof row === "object"
+                ? Object.keys(row).map(safeKey).sort()
+                : [],
+            ),
+          }
+        : body && typeof body === "object"
+          ? { keys: Object.keys(body).map(safeKey).sort() }
+          : {}),
+    },
+  };
+}
+const freshFailureContext = () => ({
+  caseId: "HTTP.execution-gate",
+  fixtureKey: null,
+  phase: "execution-blocked-before-target",
+  expectedHttp: null,
+  actualHttp: null,
+  snapshots: [],
+  targetEstablished: false,
+  transportUnproven: false,
+  httpInFlight: false,
+  verifiedOutcomes: 0,
+  fixtureCount: 0,
+});
+let failureContext = freshFailureContext();
+function beginCase(id, phase, expectedHttp = null) {
+  failureContext.caseId = id;
+  failureContext.phase = phase;
+  failureContext.expectedHttp = expectedHttp;
+  failureContext.actualHttp = null;
+  failureContext.snapshots = [];
+}
+function sql(input, options) {
+  if (
+    /\b(?:insert|update|delete)\b/i.test(input) &&
+    !failureContext.phase.includes("real-Auth")
+  ) {
+    failureContext.caseId = failureContext.fixtureKey ?? failureContext.caseId;
+    failureContext.phase = "privileged-fixture-mutation-or-restoration";
+    failureContext.expectedHttp = null;
+    failureContext.actualHttp = null;
+  }
+  const priorPhase = failureContext.phase;
+  failureContext.phase = `${priorPhase}:privileged-sql`;
+  try {
+    const result = frozenSql(input, options);
+    failureContext.phase = priorPhase;
+    return result;
+  } catch (error) {
+    failureContext.transportUnproven = true;
+    throw error;
+  }
+}
+function census() {
+  const priorPhase = failureContext.phase;
+  failureContext.phase = `${priorPhase}:full54-census`;
+  try {
+    const snapshot = frozenCensus();
+    failureContext.snapshots.push(snapshot);
+    failureContext.phase = priorPhase;
+    return snapshot;
+  } catch (error) {
+    failureContext.transportUnproven = true;
+    throw error;
+  }
+}
+export function failureRecord(
+  error,
+  context = failureContext,
+  failureCensus = null,
+  censusError = null,
+) {
+  const snapshots = context.snapshots;
+  return {
+    id: "HTTP.original-failure",
+    case_id: context.caseId,
+    fixture_key: context.fixtureKey,
+    phase: context.phase,
+    actual_http: context.actualHttp,
+    expected_http: redactedValue(context.expectedHttp),
+    assertion: {
+      name: typeof error?.name === "string" ? safeKey(error.name) : "Error",
+      operator:
+        typeof error?.operator === "string" ? safeKey(error.operator) : null,
+      differences: redactedDifferences(error?.expected, error?.actual),
+      message: redactedValue(error?.message),
+    },
+    full54_census_before_cleanup: {
+      available_snapshots: snapshots.map(sanitized),
+      failure_snapshot: failureCensus ? sanitized(failureCensus) : null,
+      changes_from_before:
+        snapshots.length && failureCensus
+          ? redactedDifferences(
+              canonical(structuredClone(snapshots[0])),
+              canonical(structuredClone(failureCensus)),
+            )
+          : [],
+      census_failure: censusError
+        ? {
+            name: safeKey(censusError.name ?? "Error"),
+            message: redactedValue(censusError.message),
+          }
+        : null,
+    },
+    transport_settlement_proven:
+      !context.transportUnproven && !context.httpInFlight,
+    target_established: context.targetEstablished,
+    verified_before_failure: context.verifiedOutcomes,
+    fixture_keys_before_failure: context.fixtureCount,
+    credited_outcomes: 0,
+    concurrency_credit: 0,
+    failed_case_credit: 0,
+    task_incomplete: true,
+  };
+}
+function evidenceError(record, cleanup) {
+  const error = new Error("Redacted fixture failure evidence retained");
+  error.safeEvidence = {
+    original_failure: record,
+    cleanup,
+    credited_outcomes: 0,
+    concurrency_credit: 0,
+    task_incomplete: true,
+  };
+  return error;
+}
+
 export async function runSerialHttp() {
+  failureContext = freshFailureContext();
   // Fail BEFORE any contact; authoring cannot waive the shared transport blocker.
   assert.equal(executionBlocker, null, executionBlocker);
+  failureContext.phase = "target-current27-guard";
   const target = localTarget("current27");
+  failureContext.targetEstablished = true;
   const evidence = [];
   const emittedIds = new Set();
   const fixtureIds = new Set();
@@ -174,17 +462,38 @@ export async function runSerialHttp() {
       ...record,
     };
     evidence.push(safe);
+    failureContext.verifiedOutcomes = evidence.length;
+    failureContext.fixtureCount = fixtureIds.size;
     console.log(JSON.stringify(safe));
   };
   // Frozen request rechecks fixed origin/owner/full27 before EACH Auth/REST call.
-  const request = (path, token, body, options = {}) =>
-    target.request(path, token, body, {
-      ...options,
-      signal: AbortSignal.timeout(budgets.requestMs),
-    });
+  const request = async (path, token, body, options = {}) => {
+    failureContext.httpInFlight = true;
+    failureContext.actualHttp = null;
+    const priorPhase = failureContext.phase;
+    failureContext.phase = `${priorPhase}:HTTP:${path.split("?")[0]}`;
+    try {
+      const response = await target.request(path, token, body, {
+        ...options,
+        signal: AbortSignal.timeout(budgets.requestMs),
+      });
+      failureContext.httpInFlight = false;
+      failureContext.actualHttp = redactedHttp(response);
+      failureContext.phase = `${priorPhase}:HTTP-result-assertion`;
+      return response;
+    } catch (error) {
+      // Aborted fetch/unobserved target children may still be executing. A reset
+      // must not run while their termination/transaction settlement is unproven.
+      failureContext.transportUnproven = true;
+      throw error;
+    }
+  };
   const rpc = (name, token, body) =>
     request(`/rest/v1/rpc/${name}`, token, body);
   const signup = async (key, slot, metadata = {}) => {
+    beginCase(`${key}.Auth.${slot}`, "real-Auth-signup", {
+      accepted_statuses: [200, 204],
+    });
     const address = email(caseIds(`${key}.${slot}`).actor);
     const password = `Local-only-${randomUUID()}`;
     const created = ok(
@@ -200,6 +509,9 @@ export async function runSerialHttp() {
     sql(
       `update auth.users set email_confirmed_at=now() where id=${quote(id)};`,
     );
+    beginCase(`${key}.Auth.${slot}`, "real-Auth-password-login", {
+      accepted_statuses: [200, 204],
+    });
     const login = ok(
       await request("/auth/v1/token?grant_type=password", null, {
         email: address,
@@ -228,12 +540,16 @@ export async function runSerialHttp() {
       "fresh reporter/source/peer/manager per case",
     );
     fixtureIds.add(key);
+    failureContext.fixtureKey = key;
+    failureContext.fixtureCount = fixtureIds.size;
+    beginCase(key, "privileged-fixture-preparation");
     const ids = { ...caseIds(`HTTP.${key}`) };
     const users = {};
     for (const slot of ["actor", "host", "peer", "manager"]) {
       users[slot] = await signup(key, slot, slot === "actor" ? metadata : {});
       ids[slot] = users[slot].id;
     }
+    beginCase(key, "privileged-existing-Auth-fixture-preparation");
     // Adapter mirrors frozen setup except Auth users already exist via signup.
     // Never INSERT/replace/delete Auth users, credentials or triggers.
     const ready = [ids.actor, ids.host, ids.peer];
@@ -267,6 +583,7 @@ export async function runSerialHttp() {
     return r;
   };
   const denyResponse = async (id, invoke, expected) => {
+    beginCase(id, "denial-outcome", expected);
     const before = census();
     const response = await invoke();
     assert.equal(response.status, expected.status, id);
@@ -320,6 +637,11 @@ export async function runSerialHttp() {
       message: neutral(r),
     });
   const allowedReport = async (id, r, overrides = {}, provenance = null) => {
+    beginCase(id, "report-result-provenance-full54", {
+      status: 200,
+      result_keys: ["receipt_id", "submitted_at"],
+      provenance: provenance ?? { kind: r.provenance, target_id: r.target },
+    });
     const body = argsFor(r, overrides);
     const before = census();
     const response = await rpc(r.rpc, r.users.actor.token, body);
@@ -407,6 +729,10 @@ export async function runSerialHttp() {
     blocked,
     { name = r.rpc, teardown = null } = {},
   ) => {
+    beginCase(id, "block-result-teardown-full54", {
+      status: 200,
+      body: blocked,
+    });
     const before = census();
     const response = await rpc(name, r.users.actor.token, {
       p_account_id: r.peer,
@@ -466,6 +792,7 @@ export async function runSerialHttp() {
     return response.body;
   };
   const positive = async (id, r) => {
+    beginCase(`${id}.positive`, "current-only-positive-guard");
     assertCurrentOnly(r);
     if (r.id === "CB") {
       await changeBlock(`${id}.positive`, r, true);
@@ -478,6 +805,10 @@ export async function runSerialHttp() {
       });
   };
   const replay = async (id, r, receipt, overrides = {}) => {
+    beginCase(id, "report-exact-replay-full54", {
+      status: 200,
+      body: [receipt],
+    });
     const before = census();
     const response = await rpc(
       r.rpc,
@@ -553,6 +884,8 @@ export async function runSerialHttp() {
     };
   };
   let completed = false;
+  let originalFailure = null;
+  let cleanup = null;
   try {
     assertClean();
     for (const routeId of ["CH", "CP", "CB"]) {
@@ -723,19 +1056,18 @@ export async function runSerialHttp() {
               ? `update ${table} set enabled=false where ${where};`
               : `delete from ${table} where ${where};`,
           );
-          try {
-            await denied(id, r);
-          } finally {
-            sql(
-              loss === "off"
-                ? `update ${table} set enabled=true where ${where};`
-                : restoreRow(
-                    table,
-                    beforeSetup,
-                    (row) => tableKind !== "purpose" || row.key === r.purpose,
-                  ),
-            );
-          }
+          await denied(id, r);
+          // On failure, preserve live loss and its census until the outer catch;
+          // a restoration failure cannot overwrite the original assertion.
+          sql(
+            loss === "off"
+              ? `update ${table} set enabled=true where ${where};`
+              : restoreRow(
+                  table,
+                  beforeSetup,
+                  (row) => tableKind !== "purpose" || row.key === r.purpose,
+                ),
+          );
         }
       for (const subjectLabel of routeId === "CH"
         ? ["actor", "immutable_host"]
@@ -788,11 +1120,10 @@ export async function runSerialHttp() {
             }
           }
           sql(`begin;${plan.loss}commit;`);
-          try {
-            await denied(id, r);
-          } finally {
-            if (plan.restore) sql(`begin;${plan.restore}commit;`);
-          }
+          await denied(id, r);
+          // Restore only after the denial passes. Failure evidence precedes any
+          // later reset; unproven transport forbids further fixture writes.
+          if (plan.restore) sql(`begin;${plan.restore}commit;`);
         }
       }
       if (routeId !== "CH")
@@ -972,6 +1303,11 @@ export async function runSerialHttp() {
     const saved = await allowedReport(
       "L1.retry.caller-isolation.saved",
       isolation,
+    );
+    beginCase(
+      "L1.retry.caller-isolation",
+      "separate-caller-receipt-provenance-full54",
+      { status: 200, different_receipt_required: true },
     );
     const beforeCaller = census();
     const otherResponse = await rpc(
@@ -1295,6 +1631,8 @@ export async function runSerialHttp() {
       },
     });
     await changeBlock("L1.global_teardown.unblock-restores-nothing", td, false);
+    failureContext.caseId = "HTTP.planned-completion-totals";
+    failureContext.phase = "exact-total-assertions";
     assert.equal(
       evidence.length,
       plannedTotals.verifiedHttpOutcomes,
@@ -1306,22 +1644,88 @@ export async function runSerialHttp() {
       "exact fresh fixture total",
     );
     completed = true;
-  } finally {
-    // Never delete/retime immutable report/audit/ledger evidence. Guarded full27
-    // reset + exact zero54/original gates/pilot revision1 required after execution.
-    resetDisposable("current27");
-    assertClean();
-    console.log(
-      JSON.stringify({
-        id: "HTTP.cleanup",
-        guarded_full27_reset: true,
-        zero54: true,
-        defaults_revision1: true,
-        completed,
-        concurrency_credit: 0,
-      }),
+  } catch (error) {
+    // Capture the original case and available full54 evidence BEFORE any reset.
+    // Preserve its phase even if collecting one more census itself fails.
+    // Frozen helper internal SQL failures expose no child-exit contract. Fail
+    // conservatively; do not infer settlement from a redacted Error string.
+    if (error?.name === "Error") failureContext.transportUnproven = true;
+    const originalContext = {
+      ...failureContext,
+      snapshots: failureContext.snapshots.slice(),
+    };
+    let failureCensus = null;
+    let censusError = null;
+    if (
+      failureContext.targetEstablished &&
+      !failureContext.transportUnproven &&
+      !failureContext.httpInFlight
+    ) {
+      try {
+        failureCensus = census();
+      } catch (errorDuringCensus) {
+        censusError = errorDuringCensus;
+      }
+    }
+    originalContext.transportUnproven = failureContext.transportUnproven;
+    originalFailure = failureRecord(
+      error,
+      originalContext,
+      failureCensus,
+      censusError,
     );
+    console.error(JSON.stringify(originalFailure));
+  } finally {
+    if (
+      !failureContext.targetEstablished ||
+      failureContext.transportUnproven ||
+      failureContext.httpInFlight
+    ) {
+      cleanup = {
+        id: "HTTP.cleanup-not-attempted",
+        case_id: failureContext.caseId,
+        reason:
+          "Target ownership or transport/child exit/transaction settlement unproven; reset forbidden",
+        guarded_full27_reset: false,
+        zero54: false,
+        task_incomplete: true,
+        concurrency_credit: 0,
+      };
+      console.error(JSON.stringify(cleanup));
+    } else {
+      // Never delete/retime immutable evidence. Cleanup errors are a separate
+      // record, never a replacement for the original failing case/census.
+      try {
+        beginCase("HTTP.cleanup", "guarded-full27-reset-and-zero54");
+        resetDisposable("current27");
+        assertClean();
+        cleanup = {
+          id: "HTTP.cleanup",
+          guarded_full27_reset: true,
+          zero54: true,
+          defaults_revision1: true,
+          completed,
+          concurrency_credit: 0,
+        };
+        console.log(JSON.stringify(cleanup));
+      } catch (cleanupError) {
+        cleanup = {
+          id: "HTTP.cleanup-failure",
+          case_id: "HTTP.cleanup",
+          phase: failureContext.phase,
+          error: failureRecord(cleanupError),
+          guarded_full27_reset: false,
+          zero54: false,
+          credited_outcomes: 0,
+          concurrency_credit: 0,
+          task_incomplete: true,
+        };
+        console.error(JSON.stringify(cleanup));
+      }
+    }
   }
+  if (originalFailure || cleanup?.task_incomplete)
+    throw evidenceError(originalFailure, cleanup);
   console.log(
     JSON.stringify({
       id: "HTTP.completed",
@@ -1362,10 +1766,23 @@ if (direct) {
       assert.equal(process.argv.length, 2, "no unknown execution flags");
       await runBoundedChild();
     }
-  } catch {
-    // Suppress credentials/Auth provider bodies/assertion row dumps on failure.
+  } catch (error) {
+    // Structured original evidence survives cleanup errors; never print raw
+    // Auth/provider bodies, assertion messages/stacks or credential-bearing rows.
     console.error(
-      "B3c serial HTTP fixture failed; task/evidence/cleanup remain incomplete.",
+      JSON.stringify({
+        id: "HTTP.direct-failure",
+        ...(error.safeEvidence ?? {
+          original_failure: failureRecord(error),
+          cleanup: {
+            attempted: false,
+            reason: "Execution refused before target contact",
+          },
+        }),
+        credited_outcomes: 0,
+        concurrency_credit: 0,
+        task_incomplete: true,
+      }),
     );
     process.exitCode = 1;
   }
