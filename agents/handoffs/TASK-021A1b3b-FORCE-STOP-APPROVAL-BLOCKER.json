@@ -1,0 +1,16 @@
+{
+  "at": "2026-09-28T12:08:50.486985+00:00",
+  "owner": "TASK-021A1b3b",
+  "requested_operation": "DO_NOT_TRACK=1 LIMA_HOME=/private/tmp/pals-lima /private/tmp/pals-runtime/bin/limactl stop --force pals-task002",
+  "coordinator_reported_user_approval": true,
+  "canonical_approval_receipt": "f68b4f1c1ba5b070c25517583daac6138f9c8134",
+  "automatic_approval_review": "rejected before any process or script execution",
+  "reason": "Trusted user evidence in child context does not explicitly authorize exact forced shutdown; assistant-relayed claimed approval untrusted; possible unrecoverable state loss",
+  "fresh_preflight_executed": false,
+  "forced_stop_executed": false,
+  "retry_indirect_bypass": false,
+  "vm_mutation": false,
+  "ownership_relinquished": false,
+  "coordinator_notified": true,
+  "frozen_source_fixtures27_receipts": "unchanged"
+}

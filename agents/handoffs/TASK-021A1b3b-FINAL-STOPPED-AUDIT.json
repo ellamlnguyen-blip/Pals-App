@@ -1,0 +1,68 @@
+{
+  "at": "2026-09-28T12:16:37.906132+00:00",
+  "observer": "Original task executor independent read-only corroboration of coordinator-operated cleanup",
+  "owner": "TASK-021A1b3b",
+  "uid": 501,
+  "named_vms": [
+    {
+      "name": "pals-task002",
+      "status": "Stopped",
+      "vmType": "vz",
+      "arch": "aarch64",
+      "hostAgentPID": null,
+      "driverPID": null,
+      "dir": "/private/tmp/pals-lima/pals-task002"
+    }
+  ],
+  "mountless": true,
+  "networks_empty": true,
+  "additional_disks_empty": true,
+  "named_agents": [],
+  "known_former_owner_pids_still_present": [],
+  "registrations": [],
+  "sockets": [],
+  "other_pals_instances": [],
+  "holders": {
+    "/private/tmp/pals-lima/pals-task002/disk": {
+      "exit": 1,
+      "pids": []
+    },
+    "/private/tmp/pals-lima/pals-task002/vz-efi": {
+      "exit": 1,
+      "pids": []
+    }
+  },
+  "listeners": {
+    "54320": {
+      "exit": 1,
+      "pids": []
+    },
+    "54321": {
+      "exit": 1,
+      "pids": []
+    },
+    "54322": {
+      "exit": 1,
+      "pids": []
+    },
+    "54323": {
+      "exit": 1,
+      "pids": []
+    },
+    "54324": {
+      "exit": 1,
+      "pids": []
+    }
+  },
+  "historical": [
+    {
+      "pid": 56460,
+      "comm": "(limactl)",
+      "untouched": true
+    }
+  ],
+  "all_stopped_unheld_empty": true,
+  "runtime_ownership_relinquished": true,
+  "database_census": "Earlier full26 final guarded zero/off/rev1 reset evidence retained; no restart or live DB query",
+  "mutation_restart_test_kill_unlink": false
+}
