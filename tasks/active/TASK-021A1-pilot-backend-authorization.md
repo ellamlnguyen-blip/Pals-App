@@ -1,7 +1,7 @@
 # TASK-021A1 — Pilot backend authorization stage parent
 
 Date: 2026-09-27
-Status: **Allocation parent incomplete; A1a/B1/B2 complete; B3a reviewed/published task awaiting canonical integration; B3b/c/A1c dependent.**
+Status: **Allocation parent incomplete; A1a/B1/B2/B3a complete; B3b/c/A1c dependent.**
 Parent: [TASK-021A](TASK-021A-pilot-admission-capabilities.md), incomplete TASK-021.
 Current contract reconciliation input: canonical main `172308d17cfdb4677a417d7b681f5c07372afa67` (reviewed completed B1/B2,24 migrations). Historical allocation baseline: `776db8c648f339c8650f7e725108d2853a0859ba` (completed A1a,21 migrations).
 

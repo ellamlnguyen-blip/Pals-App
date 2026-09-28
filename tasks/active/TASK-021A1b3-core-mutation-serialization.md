@@ -1,7 +1,7 @@
 # TASK-021A1b3 — Core mutation serialization allocation
 
 Date: 2026-09-27
-Status: **Nonexecutable combined parent; B3a reviewed/published task, canonical integration pending; B3b/c require fresh predecessor reconciliation/review/publication.**
+Status: **Nonexecutable allocation parent; B3a complete on remote-verified main 62e47dc; B3b contract reconciliation next, B3b/c incomplete.**
 Parent: [TASK-021A1b](TASK-021A1b-live-admission-enforcement.md).
 Source baseline: completed B2 canonical `bb2b97e70c6641c44b9f5fa7343baa301c7ada8d`, all24 migrations. B2 reviewed task `a451242a2de454a41571ede7db72ed10faf79819`, accepted code/shared main `172308d17cfdb4677a417d7b681f5c07372afa67`. Planning receipt `18da6e38a99e3119b045a0e9f02737816ac95423` changes shared records only and is reconciled here.
 

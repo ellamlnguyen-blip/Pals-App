@@ -1,5 +1,12 @@
 # Backlog
 
+## 2026-09-27 — B3a complete after verified canonical integration
+
+Reviewed task `fe4f23c5b43b4b042c3a8e8a99f38da412d4f3fa` and accepted canonical integration `62e47dc8908d6486e544333b169147ee4e735524` are independently remote-verified. B3a is complete only for its six disposable-local Hangout lifecycle mutations and private evidence helpers. Fresh final review has no unresolved finding; 350 new observed waits, bounded SQL/HTTP, inherited regressions, true24 upgrade, catalog and static evidence are accepted with the exact single structural lint advisory recorded as an incompatible-check exception (standard db:lint exit1, not clean/pass). Normal final reset/shutdown and coordinator read-only ownership audit are verified; no runtime remains active.
+
+Next: reconcile B3b co-host/chat contract against accepted25 source, independently review and publish it before fresh implementation dispatch. B3b/c, combined B3, A1c, A2 and TASK-021 remain incomplete. No hosted operations, pilot-ready claim or product successor from this sub-stage. See B3a ORDINARY-LIFECYCLE and REVIEW handoffs for evidence limits and both remote receipts.
+
+
 ## Current next dependency — accepted B3a integration then B3b contract
 
 B3a final task fe4f23c is reviewed and remotely verified; canonical integration/completion remains pending. Next ready work only after that receipt: fresh B3b planning reconciliation to actual migration25, five final management/chat RPCs and sorted eligible-target/actor/immutable-host graph; independent contract review and canonical publication precede implementation. B3c follows accepted B3b, then A1c/A2. Earlier B3a contract/source/runtime planning rows below are historical milestones.

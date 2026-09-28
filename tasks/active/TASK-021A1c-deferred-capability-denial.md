@@ -1,5 +1,7 @@
 # TASK-021A1c — Deferred capabilities and backend regression closure
 
+Dependency receipt 2026-09-27: B3a reviewed task `fe4f23c5b43b4b042c3a8e8a99f38da412d4f3fa` integrated at independently remote-verified main `62e47dc8908d6486e544333b169147ee4e735524` with25 migrations. This closes only B3a; B3b/c and combined B3 acceptance remain required before A1c reconciliation/dispatch.
+
 Dependency receipt: B2 complete at remote-verified accepted main172308d17cfdb4677a417d7b681f5c07372afa67 (24 migrations); B3 remains incomplete. Historical B2 candidate language below is superseded only for B2 status; this A1c contract requires actual combined B3 reconciliation/review/publication before dispatch.
 
 Date: 2026-09-27

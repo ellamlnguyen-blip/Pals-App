@@ -1,6 +1,6 @@
 # TASK-021A1b3a ordinary lifecycle handoff
 
-Status: final independent review cleared `fe4f23c5b43b4b042c3a8e8a99f38da412d4f3fa` and task branch is remotely verified. Coordinator accepts bounded code/evidence including explicit lint compatibility exception; canonical integration publication/verification and completion receipt remain pending.
+Status: Complete for bounded disposable-local scope after final independent review and independently remote-verified task/main publication.
 
 Branch: `agent/TASK-021A1b3a-ordinary-lifecycle`, independent no-hardlinks clone `/private/tmp/pals-task021a1b3a-lifecycle`. Canonical contract baseline was `936b784ed2ae6965b4251fe9c6195b8f63671f2e`; coordinator documentation through `1605684bafbb20129af537ec079ef2b8c4abaea6` was reconciled conflict-free. Source was independently cleared at `9dbec14`; complete corrected fixtures at `67fc312`; subsequent narrow corrections were independently reviewed. The final migration initializer-only delta is `40a2143`; reproducible lint verifier source was `ce9b4be`, followed by the strict result-shape correction described below.
 
@@ -63,8 +63,8 @@ Only previously reviewed mountless rootless UID501 `pals-task002` and six cached
 
 Final full25 reset and zero synthetic census pass: Auth/accounts/profiles/memberships/roles/Hangouts/participants/objects empty, private synthetic evidence empty, all pilot/original gates off, availability and13 capability revisions1. Supabase stopped normally with backups enabled; no service containers remained running. The same VM stopped normally through VZ at `2026-09-27T16:39:18-04:00`. Fresh global audit finds no Pals agents, registrations, sockets, actual `disk`/`vz-efi` holders or listeners on54321/54322/54324. Historical non-hostagent limactl PID56460 remains untouched. The coordinator independently corroborated stopped VM, missing registrations/socket, unheld exact disk/EFI, empty ports and no named Pals hostagents in a separate read-only audit. CLEANUP-EVIDENCE.json contains only narrowly filtered Pals ownership outcomes.
 
-Remaining: final independent source/evidence review including the lint compatibility exception and corrected verifier; authorized task-branch push and remote SHA verification; accepted coordinator canonical integration/shared records and verified main SHA. Do not dispatch B3b/B3c on this handoff before accepted B3a reconciliation. The child stops at this bounded stage and does not self-declare completion.
+Completed: final independent source/evidence review including the lint compatibility exception and corrected verifier; task-branch publication/remote verification; accepted coordinator integration/shared records and remote-verified main. Do not dispatch B3b/B3c on this handoff before accepted B3a reconciliation. The child stops at this bounded stage and does not self-declare completion.
 
 ## Coordinator reviewed publication receipt
 
-Reviewed task branch remotely verified `fe4f23c5b43b4b042c3a8e8a99f38da412d4f3fa`; see REVIEW.md for exact acceptance, lint qualification and independent cleanup. Accepted main SHA is pending the prepared integration push. No dependent implementation dispatch or completion yet.
+Reviewed task branch remotely verified `fe4f23c5b43b4b042c3a8e8a99f38da412d4f3fa`; see REVIEW.md for exact acceptance, lint qualification and independent cleanup. Accepted main independently remote-verified `62e47dc8908d6486e544333b169147ee4e735524`. This completion receipt follows verification. B3b contract reconciliation may begin; dependent implementation still requires its fresh reviewed/published contract.
