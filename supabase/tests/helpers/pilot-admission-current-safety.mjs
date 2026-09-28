@@ -357,6 +357,10 @@ export function localTarget(lane = "current27") {
     try {
       response = await fetch(url, {
         method: options.method ?? (body === undefined ? "GET" : "POST"),
+        signal: AbortSignal.any([
+          AbortSignal.timeout(30_000),
+          ...(options.signal === undefined ? [] : [options.signal]),
+        ]),
         redirect: "error",
         headers: {
           apikey: key,
@@ -462,6 +466,11 @@ export function session(name) {
   child.stderr.on("data", (v) => {
     output += v;
   });
+  // Stream/spawn failure is observed through the session result. Prevent an
+  // unhandled rejection while a second guarded session is being constructed.
+  child.stdin.on("error", () => {});
+  const done = once(child, "exit");
+  done.catch(() => {});
   child.stdin.write(`set application_name=${quote(name)};\n`);
   return {
     child,
@@ -471,7 +480,30 @@ export function session(name) {
       return child.stdin.write(`${query}\n`);
     },
     output: () => redact(output),
-    done: once(child, "exit"),
+    done,
+    close: async () => {
+      if (!child.stdin.destroyed && !child.stdin.writableEnded)
+        child.stdin.end("rollback;\n");
+      let timer;
+      try {
+        await Promise.race([
+          done,
+          new Promise((_, reject) => {
+            timer = setTimeout(
+              () =>
+                reject(
+                  new Error(
+                    "Owned SQL session did not exit; cleanup incomplete",
+                  ),
+                ),
+              10_000,
+            );
+          }),
+        ]);
+      } finally {
+        clearTimeout(timer);
+      }
+    },
   };
 }
 export async function until(check) {
@@ -489,9 +521,10 @@ export async function race(
   holderSnapshotSQL = null,
   receiptPrefix = null,
 ) {
-  const first = session(`${name}_leader`);
-  const second = session(`${name}_waiter`);
+  let first, second;
   try {
+    first = session(`${name}_leader`);
+    second = session(`${name}_waiter`);
     first.send(
       `begin; ${firstQuery} ${holderSnapshotSQL ? `select 'B3C_CENSUS:'||(${holderSnapshotSQL})::text;` : ""} select 'HELD';`,
     );
@@ -577,7 +610,12 @@ export async function race(
       `${name}: ${redact(error.message)}; session transcripts withheld from error logs`,
     );
   } finally {
-    if (!first.child.stdin.destroyed) first.child.stdin.end("rollback;\n");
-    if (!second.child.stdin.destroyed) second.child.stdin.end("rollback;\n");
+    const closed = await Promise.allSettled(
+      [first, second].filter(Boolean).map((owned) => owned.close()),
+    );
+    if (closed.some((result) => result.status === "rejected"))
+      throw new Error(
+        `${name}: owned SQL session closure failed; cleanup incomplete`,
+      );
   }
 }
