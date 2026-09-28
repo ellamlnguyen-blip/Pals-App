@@ -1,5 +1,7 @@
 # Current State
 
+B3b runtime monitoring: all11 regression result pending; exact owned accepted B3a block child/reset progressing, transient status recovered without recovery. Coordinator firm05:55UTC cutoff; no source/timeout edit or partial pass credit. See [monitoring receipt](../../agents/handoffs/TASK-021A1b3b-REGRESSION-MONITOR.md).
+
 ## 2026-09-28 — B3b crossing outcome correction source cleared; serial rerun released
 
 Independent bounded correction review clears exact local/unpushed45a075acc14a1a2a49023c8606873c79833d84e5 with no new finding. Exactly crossing module/mapping changed; shared guard/migration/source/other modules frozen. Complete54-table safe census now constructs only exact intended owner and operation changes: P/RC profile primary/revision, parent result/revision/bounded server timestamp, assignment/removal and RC exact departing-target provenance; S one conversation/message/scoped ledger; SR original7field replay and detached-deletion-only census. Unrelated rows/fields/notifications remain equal. Guarded crossing-local one-sided receipt observer verifies named distinct blocking PIDs/ungranted locks, commits/no signals/errors/abort and owned teardown. Syntax/ESLint/whitespace passed only; corrected runtime unrun.
