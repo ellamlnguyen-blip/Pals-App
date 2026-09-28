@@ -1,7 +1,7 @@
 # TASK-021A1b3c — Current-source safety acquisition and combined B3 closure
 
 Date: 2026-09-28.
-Status: **Reconciled documentation proposal; implementation/runtime awaits independent contract review and coordinator publication. Not complete or an execution release.**
+Status: **Contract independently reviewed at162c1f5c769453339ecbe90f8550f64eaf8c6b0c; source-only assignment ready after canonical publication/remote verification. Runtime requires later source/fixture/ownership review and explicit serial release. Not complete.**
 Parent: [B3 combined acceptance](TASK-021A1b3-core-mutation-serialization.md). Accepted backend: reviewed B3b task `dabd1530257a937ad15004e666910c0f08cdbd57`, accepted main `2c648bc1649ceef0b61b96065e6028837c1d05a9`; completion record `27a1e3521fddbe8515a20244dcc2c506a738bda7`. This reconciliation starts from coordinator-verified canonical main `f156dcd08590577a62aaafe01c460b920ee58aed`, all 26 migrations through `20260927000600_pilot_cohost_chat.sql`.
 
 Read AGENTS, this contract, B3/A1b/A1 parents, Accepted ADR-0026/0027, DATA_MODEL/AUTHORIZATION/SECURITY_AND_SAFETY/REALTIME_AND_MESSAGING, accepted B1/B2/B3a/B3b handoffs and the final source [inventory](../../agents/handoffs/TASK-021A1b3c-SOURCE-INVENTORY.json), [graph](../../agents/handoffs/TASK-021A1b3c-LOCK-GRAPH.md), [fixture allocation](../../agents/handoffs/TASK-021A1b3c-FIXTURE-MATRIX.md) and [expanded matrix](../../agents/handoffs/TASK-021A1b3c-MATRIX.json). These are source-backed plans, not executed evidence. The documentation-only author assignment changes no source/runtime and cannot dispatch implementation.

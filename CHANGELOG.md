@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-28 — B3c contract cleared; source-only assignment
+
+Fresh independent contract/graph review clears author162c1f5c769453339ecbe90f8550f64eaf8c6b0c, taskbranch independently remote-verified. Three documentation findings corrected: BEFORE departing-cohost trigger; lawful detach/delete profile-wait classification versus rejected referenced-primary DELETE; per-route account-FK limits on saved moderation retries. Exact144 bodies/catalog/34triggers and478 unique planned IDs verified;300current/24serial/32controls/11impossible/111operator allocations are unexecuted. No source/runtime/policy change or inherited force release.
+
+Reviewed contract plus bounded TASK-021A1b3c-source assignment published together; canonical remote SHA verification precedes fresh Sol-medium source author. Only migration27/baseSQLsource/handoff, no runtime. Independent source/fixture/ownership review, explicit serial release, fresh combined execution/true26-only27/catalog/lint/static/cleanup/security review and final task/main publication remain. B3c/B3/A1c/A2/TASK-021 incomplete; no hosted/pilot-ready or product successor claim. See TASK-021A1b3c-CONTRACT-REVIEW.md.
+
 ## 2026-09-28 — B3b complete for bounded local scope
 
 Final reviewed task dabd1530257a937ad15004e666910c0f08cdbd57 and accepted canonical main 2c648bc1649ceef0b61b96065e6028837c1d05a9 independently remote-verified. Migration26/two privatehelpers/five preserved publicinterfaces,1388SQLassertions,577new observedwaits,170conditional mappings,11actual inheritedmodules, catalog/true25upgrade/static and independentlycorroborated approvedcleanup complete with documented lint/format/snapshot limits.26 frozen evidenceJSONs/source/fixtures preserved; no unresolved review finding. RuntimeStopped/unheld/empty endpoints, ownership relinquished; legacy56460untouched. Historical normal-stop failure/childapprovalrejection and explicituser-approved rootcleanup remain recorded, not silently converted into normal success.

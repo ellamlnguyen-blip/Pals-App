@@ -1,5 +1,11 @@
 # Backlog
 
+## 2026-09-28 — B3c contract cleared; source-only assignment
+
+Fresh independent contract/graph review clears author162c1f5c769453339ecbe90f8550f64eaf8c6b0c, taskbranch independently remote-verified. Three documentation findings corrected: BEFORE departing-cohost trigger; lawful detach/delete profile-wait classification versus rejected referenced-primary DELETE; per-route account-FK limits on saved moderation retries. Exact144 bodies/catalog/34triggers and478 unique planned IDs verified;300current/24serial/32controls/11impossible/111operator allocations are unexecuted. No source/runtime/policy change or inherited force release.
+
+Reviewed contract plus bounded TASK-021A1b3c-source assignment published together; canonical remote SHA verification precedes fresh Sol-medium source author. Only migration27/baseSQLsource/handoff, no runtime. Independent source/fixture/ownership review, explicit serial release, fresh combined execution/true26-only27/catalog/lint/static/cleanup/security review and final task/main publication remain. B3c/B3/A1c/A2/TASK-021 incomplete; no hosted/pilot-ready or product successor claim. See TASK-021A1b3c-CONTRACT-REVIEW.md.
+
 Next ready: documentation-only TASK-021A1b3c-contract-reconciliation against completed26, fresh contract-author assignment. Existing B3c seed is input, not implementation/runtime authorization. Independent review/publication must precede fresh implementation. Coordinator owns sharedrecords; no duplicate product successor.
 
 ## 2026-09-28 — B3b complete for bounded local scope
