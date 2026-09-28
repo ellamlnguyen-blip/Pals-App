@@ -1293,6 +1293,139 @@ export function lossExpected(before, after, loss, f) {
   exact54(e, after);
   return e;
 }
+// Arbitrary AssertionError values are not trusted field-level census differences.
+// They may include SQL message strings or private values under arbitrary keys.
+// Preserve only a finite type and digest; never serialize their keys or values.
+export function assertionProjection(value) {
+  const type =
+    value === null ? "null" : Array.isArray(value) ? "array" : typeof value;
+  const safeType = [
+    "null",
+    "array",
+    "object",
+    "string",
+    "number",
+    "boolean",
+    "undefined",
+    "bigint",
+    "symbol",
+    "function",
+  ].includes(type)
+    ? type
+    : "unknown";
+  let digest = "<unavailable>";
+  try {
+    const serialized = JSON.stringify(value);
+    if (typeof serialized === "string")
+      digest = createHash("sha256").update(serialized).digest("hex");
+  } catch {
+    /* Cyclic/nonserializable values remain withheld. */
+  }
+  return { type: safeType, sha256: digest };
+}
+export function safeDiagnostic(diagnostic) {
+  // SQLSTATE parser output may contain arbitrary five-character private text.
+  // Only the existing finite business/abort/timeout classes leave memory.
+  const categories = {
+    42501: "authority-denial",
+    "40P01": "deadlock-abort",
+    40001: "serialization-abort",
+    57014: "query-cancellation",
+    "55P03": "lock-timeout-or-unavailable",
+  };
+  const code = Object.hasOwn(categories, diagnostic?.code)
+    ? diagnostic.code
+    : "<withheld>";
+  return {
+    code,
+    classification:
+      code === "<withheld>" ? "unclassified-withheld" : categories[code],
+    message:
+      code === "42501" && diagnostic?.message === "Moderation unavailable"
+        ? "Moderation unavailable"
+        : "<withheld diagnostic>",
+  };
+}
+export function assertionEvidence(error) {
+  return Object.hasOwn(error, "expected") || Object.hasOwn(error, "actual")
+    ? [
+        {
+          field: "$.assertion",
+          expected: assertionProjection(error.expected),
+          actual: assertionProjection(error.actual),
+        },
+      ]
+    : [];
+}
+// Explicit pure offline examples. Importing the module does not execute them,
+// register target tests, invoke preserveFailure/census, or contact any transport.
+export function verifyFailureProjectionOffline() {
+  const privateMessage =
+    "silver private narrative person@unc.edu eyJabcdefgh.abcdefgh.abcdefgh";
+  const unexpected = diagnostics(`ERROR:  ABCDE: ${privateMessage}\n`);
+  const examples = [
+    { expected: [], actual: unexpected },
+    { expected: [], actual: [{ code: "40P01", message: privateMessage }] },
+    { expected: "expected-neutral", actual: "silver" },
+    { expected: {}, actual: { silver: "ABCDE" } },
+    { expected: { silver: privateMessage }, actual: { silver: "silver" } },
+    {
+      expected: undefined,
+      actual: {
+        anotherArbitraryKey: [{ code: "ABCDE", message: privateMessage }],
+      },
+    },
+  ];
+  for (const example of examples) {
+    const evidence = {
+      differences: assertionEvidence(example),
+      diagnostics: [
+        ...unexpected,
+        { code: "42501", message: "Moderation unavailable" },
+        { code: "40P01", message: privateMessage },
+      ].map(safeDiagnostic),
+    };
+    const output = JSON.stringify(evidence);
+    for (const secret of [
+      "silver",
+      "ABCDE",
+      "person@unc.edu",
+      "eyJabcdefgh",
+      "anotherArbitraryKey",
+    ])
+      assert.ok(
+        !output.includes(secret),
+        "private assertion/diagnostic text must stay withheld",
+      );
+    assert.equal(evidence.diagnostics[1].code, "42501");
+    assert.equal(evidence.diagnostics[1].message, "Moderation unavailable");
+    assert.equal(evidence.diagnostics[2].code, "40P01");
+    assert.equal(evidence.diagnostics[2].classification, "deadlock-abort");
+    for (const side of ["expected", "actual"])
+      assert.deepEqual(Object.keys(evidence.differences[0][side]).sort(), [
+        "sha256",
+        "type",
+      ]);
+  }
+  const cyclic = {};
+  cyclic.self = cyclic;
+  assert.deepEqual(assertionProjection(cyclic), {
+    type: "object",
+    sha256: "<unavailable>",
+  });
+  assert.equal(
+    safeDiagnostic({
+      code: "42501",
+      message: "Moderation unavailable " + privateMessage,
+    }).message,
+    "<withheld diagnostic>",
+  );
+  return {
+    examples: examples.length,
+    cyclic_projection_finite: true,
+    known_diagnostic_classes_preserved: true,
+  };
+}
 export function preserveFailure(error, context) {
   if (error.failureRecorded) return;
   let snapshot = null,
@@ -1306,13 +1439,7 @@ export function preserveFailure(error, context) {
     } catch {
       censusFailure = "Full54 census unavailable";
     }
-  const safeDiagnostics = (context.diagnostics ?? []).map((d) => ({
-    code: d.code,
-    message:
-      d.message === "Moderation unavailable"
-        ? d.message
-        : "<withheld diagnostic>",
-  }));
+  const safeDiagnostics = (context.diagnostics ?? []).map(safeDiagnostic);
   console.error(
     JSON.stringify({
       id: context.id,
@@ -1328,11 +1455,7 @@ export function preserveFailure(error, context) {
       result_fields: context.result
         ? Object.keys(context.result[0] ?? {}).sort()
         : null,
-      differences:
-        error.preciseDifferences ??
-        (Object.hasOwn(error, "expected") || Object.hasOwn(error, "actual")
-          ? preciseDifferences(error.expected, error.actual, "$.assertion")
-          : []),
+      differences: error.preciseDifferences ?? assertionEvidence(error),
       committed_census: snapshot ? redacted(snapshot) : null,
       committed_summary: snapshot ? sanitized(snapshot) : null,
       holder_snapshot: context.held ? redacted(context.held) : null,
