@@ -258,13 +258,26 @@ test("B3b real Auth HTTP ABI, guards, roles, targets and retry controls", { conc
       await denied(`L1.${action}.source.cancelled`, s, hostilePayload(s), ["S", "SR"].includes(action) ? chatError : baseError);
       if (action === "SR") await denied("L1.SR.cancelled.saved-body-denied", s, s.args, chatError);
     }
-    for (const action of ["RC", "SD", "S", "SR"]) for (const departure of ["leave", "remove", "demote"]) {
+    for (const action of ["RC", "SD", "S", "SR"]) for (const departure of ["leave", "remove", "demote", "stepdown"]) {
       const s = await scenario(action);
       if (["S", "SR"].includes(action)) await observed("SETUP.send-role", actions.P, host, { p_hangout_id: s.id, p_account_id: actor.id, p_expected_revision: row(s.id).revision });
+      const retainedChat = action === "SR" ? Object.fromEntries(Object.entries(JSON.parse(census())).filter(([name]) => ["private.hangout_conversations", "private.hangout_messages", "private.hangout_message_requests", "private.notification_items"].includes(name))) : null;
       if (departure === "leave") await observed("SETUP.actor-leave", "leave_hangout", actor, { p_hangout_id: s.id });
+      else if (departure === "stepdown") await observed("SETUP.actor-stepdown", actions.SD, actor, { p_hangout_id: s.id, p_expected_revision: row(s.id).revision });
       else await observed(`SETUP.actor-${departure}`, departure === "remove" ? actions.RH : actions.D, host, { p_hangout_id: s.id, p_account_id: actor.id, p_expected_revision: row(s.id).revision });
       assert.equal(assignment(s.id, actor), "0");
-      if (departure === "demote" && ["S", "SR"].includes(action)) await allowed(`L1.${action}.role-only-loss-still-joined`, s);
+      if (["demote", "stepdown"].includes(departure) && ["S", "SR"].includes(action)) {
+        assert.equal(state(s.id, actor), "joined");
+        const before = census();
+        const receipt = await allowed(`L1.${action}.${departure}.role-only-loss-still-joined`, s);
+        assert.equal(receipt.length, 1);
+        assert.deepEqual(Object.keys(receipt[0]).sort(), ["message_id", "sequence", "body", "created_at", "mine", "author_id", "author_label"].sort());
+        assert.equal(receipt[0].body, s.args.p_body); assert.equal(receipt[0].mine, true); assert.equal(receipt[0].author_id, actor.id); assert.equal(receipt[0].author_label, null);
+        if (action === "SR") {
+          same(receipt, s.saved, "role-only loss preserves exact original seven fields"); assert.ok(census() === before, "role-only loss exact retry changes no complete census");
+          same(Object.fromEntries(Object.entries(JSON.parse(census())).filter(([name]) => Object.hasOwn(retainedChat, name))), retainedChat, "role-only public writer/retry retains chat/sequence/ledger/inbox values");
+        }
+      }
       else await denied(`L1.${action}.actor.${departure}`, s, hostilePayload(s), ["S", "SR"].includes(action) ? chatError : baseError);
       if (["RC", "SD"].includes(action)) {
         const before = census(); const acceptedEdit = await rpc("set_hangout_joining", actor.token, { p_hangout_id: s.id, p_expected_revision: 0, p_joining_state: "invalid" });

@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { readFileSync, writeFileSync, readdirSync } from "node:fs";
+import { createHash } from "node:crypto";
 import { execFileSync } from "node:child_process";
 import {
   localTarget,
@@ -53,6 +54,13 @@ try {
     prior,
     "true25 initial manifest",
   );
+  const priorHistoryQuery = `select jsonb_agg(to_jsonb(m) order by version) from supabase_migrations.schema_migrations m where version=any(array[${prior.map(quote).join(",")}]);`;
+  const priorHistory = sql(priorHistoryQuery);
+  assert.equal(
+    JSON.parse(priorHistory).length,
+    25,
+    "snapshot every complete prior history row",
+  );
   const id = "b3b00000-0000-4000-8099-000000000001",
     peer = "b3b00000-0000-4000-8099-000000000002",
     source = "b3b00000-0000-4000-8199-000000000001";
@@ -80,6 +88,11 @@ try {
     `begin;${body}\ninsert into supabase_migrations.schema_migrations(version,name,statements) values('20260927000600','pilot_cohost_chat',array[${quote(migration)}]);commit;`,
   );
   localTarget("current26");
+  assert.equal(
+    sql(priorHistoryQuery),
+    priorHistory,
+    "every complete prior25 migration history row including names/statements unchanged",
+  );
   assert.deepEqual(
     shape(),
     catalog,
@@ -128,6 +141,12 @@ try {
     JSON.stringify(
       {
         prior_manifest: prior,
+        prior_history_row_count: JSON.parse(priorHistory).length,
+        prior_history_fields: Object.keys(JSON.parse(priorHistory)[0]).sort(),
+        prior_history_sha256: createHash("sha256")
+          .update(priorHistory)
+          .digest("hex"),
+        prior_history_full_rows_equal: true,
         final_manifest: expectedMigrationVersions,
         retained_tables: tables,
         prior_function_count: before.length,

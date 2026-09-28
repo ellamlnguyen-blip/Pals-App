@@ -24,7 +24,11 @@ import {
 } from "./helpers/pilot-cohost-chat-fixtures.mjs";
 const currentRevision = (r) =>
   `(select revision from public.hangouts where id='${r.source}')`;
-const wrapped = (id, body) => `${auth(id)}${body}reset role;`;
+// Separate privileged serialization statement precedes argument evaluation.
+// The actual writer RPC still runs as its authenticated subject, using a fresh
+// READ COMMITTED statement snapshot after the public social prefix is held.
+const wrapped = (id, body) =>
+  `select private.social_hangout_mutation_lock();${auth(id)}${body}reset role;`;
 test(
   "B3b actual source, role, participant, assignment and bilateral-block transitions",
   { concurrency: false, timeout: 600000 },
@@ -46,6 +50,69 @@ test(
             `begin;${auth(from)}select public.set_safety_block('${to}',false);commit;`,
           );
       }
+      const receipt = (r) =>
+        JSON.parse(
+          sql(
+            `begin;${call(r).replace("select * from public.send_hangout_message", "select jsonb_agg(m) from public.send_hangout_message").replace(/;$/, " m;")}rollback;`,
+          ),
+        );
+      const chatCensus = () => {
+        const state = JSON.parse(census());
+        return JSON.stringify(
+          Object.fromEntries(
+            ["conversations", "messages", "requests", "notifications"].map(
+              (key) => [key, state[key]],
+            ),
+          ),
+        );
+      };
+      function retainedSendPositive(r, original, chatBefore) {
+        assert.equal(
+          sql(
+            `select state from public.hangout_participants where hangout_id='${r.source}' and account_id='${actor}'`,
+          ),
+          "joined",
+        );
+        assert.equal(
+          sql(
+            `select count(*) from private.hangout_cohosts where hangout_id='${r.source}' and account_id='${actor}'`,
+          ),
+          "0",
+        );
+        const before = census(),
+          result = receipt(r);
+        assert.equal(result.length, 1);
+        assert.deepEqual(
+          Object.keys(result[0]).sort(),
+          [
+            "message_id",
+            "sequence",
+            "body",
+            "created_at",
+            "mine",
+            "author_id",
+            "author_label",
+          ].sort(),
+        );
+        assert.equal(result[0].body, "Original fixture message");
+        assert.equal(result[0].mine, true);
+        assert.equal(result[0].author_id, actor);
+        assert.equal(result[0].author_label, null);
+        assert.ok(
+          census() === before,
+          "positive fresh rollback receipt changes no census",
+        );
+        if (r.id === "SR") {
+          assert.ok(
+            JSON.stringify(result) === JSON.stringify(original),
+            "exact original seven-field retry after role-only loss",
+          );
+          assert.ok(
+            chatCensus() === chatBefore,
+            "retry and role-only writer change no chat/ledger/sequence/inbox state",
+          );
+        }
+      }
       async function cell(
         definition,
         label,
@@ -56,6 +123,12 @@ test(
           clearBlocks();
           restoreTarget();
           const r = prepare(definition, { inactiveTarget: false });
+          if (survives && ["S", "SR"].includes(r.id))
+            sql(
+              `insert into private.hangout_cohosts(hangout_id,account_id) values('${r.source}','${actor}');`,
+            );
+          const original = survives && r.id === "SR" ? receipt(r) : null;
+          const chatBefore = survives ? chatCensus() : null;
           const operation = call(r);
           sql(`begin;${operation}rollback;`);
           const loss = writer(r);
@@ -78,6 +151,7 @@ test(
               result.holder_snapshot,
               label + " denial changes no retained records",
             );
+          if (survives) retainedSendPositive(r, original, chatBefore);
           records.push({
             id: `L3.state.${label}.${r.id}.${order}`,
             action: r.id,
@@ -212,6 +286,8 @@ test(
               `insert into private.hangout_cohosts(hangout_id,account_id) values('${r.source}','${actor}');`,
             );
           sql(`begin;${call(r)}rollback;`);
+          const original = d.id === "SR" ? receipt(r) : null;
+          const chatBefore = ["S", "SR"].includes(d.id) ? chatCensus() : null;
           const loss = wrapped(
             host,
             `select public.demote_hangout_cohost('${r.source}','${actor}',${currentRevision(r)});`,
@@ -228,6 +304,7 @@ test(
                 ? "Hangout operation not permitted"
                 : null,
           );
+          if (survives) retainedSendPositive(r, original, chatBefore);
           records.push({
             id: `L3.state.public_demote.${d.id}.${order}`,
             ...result,
@@ -239,17 +316,17 @@ test(
                   : "effective role revocation enforced",
           });
         }
+        await cell(
+          d,
+          "public_step_down",
+          (r) =>
+            wrapped(
+              actor,
+              `select public.step_down_hangout_cohost('${r.source}',${currentRevision(r)});`,
+            ),
+          { terminal: d.id === "SD", survives: ["S", "SR"].includes(d.id) },
+        );
         if (!["S", "SR"].includes(d.id)) {
-          await cell(
-            d,
-            "public_step_down",
-            (r) =>
-              wrapped(
-                actor,
-                `select public.step_down_hangout_cohost('${r.source}',${currentRevision(r)});`,
-              ),
-            { terminal: d.id === "SD" },
-          );
           await cell(
             d,
             "required_assignment_delete",
