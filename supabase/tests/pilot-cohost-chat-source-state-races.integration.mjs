@@ -38,6 +38,7 @@ test(
     try {
       setup();
       function clearBlocks() {
+        restoreTarget(); // Ready cleanup caller before actual public unblocks.
         for (const [from, to] of [
           [actor, host],
           [host, actor],
