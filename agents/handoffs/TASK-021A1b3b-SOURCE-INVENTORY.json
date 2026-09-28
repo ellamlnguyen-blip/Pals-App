@@ -1,0 +1,973 @@
+{
+  "kind": "docs-only source extraction + inherited accepted25 catalog; no runtime rerun",
+  "baseline": "255cc7c2a15d5063a8706a9c3208dbf277ef9abc",
+  "migration_count": 25,
+  "migration_manifest": [
+    "20260921000100_identity_foundation.sql",
+    "20260922000100_verified_onboarding.sql",
+    "20260922000200_owner_profile_enrichment.sql",
+    "20260922000300_hangout_foundation.sql",
+    "20260922000400_people_text_directory.sql",
+    "20260922000500_people_raw_name_cursor.sql",
+    "20260922000600_people_id_cursor.sql",
+    "20260923000100_local_friendship.sql",
+    "20260923000200_local_hangout_chat.sql",
+    "20260923000300_local_direct_messages.sql",
+    "20260923000400_local_notifications_social.sql",
+    "20260923000500_local_notifications_hangouts.sql",
+    "20260923000600_local_global_blocks.sql",
+    "20260923000700_local_safety_reports.sql",
+    "20260924000100_local_moderation_review.sql",
+    "20260924000200_local_account_enforcement.sql",
+    "20260924000300_local_hangout_disable.sql",
+    "20260924000400_local_attendance.sql",
+    "20260925000100_local_large_hangout_safeguards.sql",
+    "20260925000200_local_cohost_authority.sql",
+    "20260927000100_private_pilot_admission_authority.sql",
+    "20260927000200_pilot_owner_admission.sql",
+    "20260927000300_pilot_source_safety.sql",
+    "20260927000400_moderation_mandatory_lock_results.sql",
+    "20260927000500_pilot_ordinary_lifecycle.sql"
+  ],
+  "functions": [
+    {
+      "name": "public.remove_hangout_participant",
+      "final_source": "20260925000200_local_cohost_authority.sql",
+      "source_line": 258,
+      "arguments_source": "p_hangout_id uuid,\n  p_account_id uuid, p_expected_revision bigint",
+      "attributes_source": "returns bigint\nlanguage plpgsql volatile security definer set search_path = ''",
+      "body_sha256": "98fe12d8683dcf255f03a96316f2a65217986d92e63e97662d66acda192ba3ce",
+      "calls": [
+        "private.check_hangout_revision",
+        "private.effective_hangout_cohost",
+        "private.lock_hangout",
+        "private.ready_subject_campus",
+        "private.safety_lock_hangout_evidence",
+        "private.safety_pair_blocked",
+        "private.safety_record_joined_overlap",
+        "private.social_hangout_mutation_lock"
+      ],
+      "lock_statements_source": [
+        "perform private.social_hangout_mutation_lock();"
+      ],
+      "callers_final25": [],
+      "catalog_inherited25": {
+        "acl": [
+          "postgres=X/postgres",
+          "authenticated=X/postgres"
+        ],
+        "name": "public.remove_hangout_participant",
+        "config": [
+          "search_path=\"\""
+        ],
+        "result": "bigint",
+        "volatility": "v",
+        "anon_execute": false,
+        "identity_args": "p_hangout_id uuid, p_account_id uuid, p_expected_revision bigint",
+        "service_execute": false,
+        "security_definer": true,
+        "authenticated_execute": true,
+        "arguments_with_defaults": "p_hangout_id uuid, p_account_id uuid, p_expected_revision bigint"
+      },
+      "allocation": "replace public body only"
+    },
+    {
+      "name": "public.promote_hangout_cohost",
+      "final_source": "20260925000200_local_cohost_authority.sql",
+      "source_line": 69,
+      "arguments_source": "p_hangout_id uuid,\n  p_account_id uuid, p_expected_revision bigint",
+      "attributes_source": "returns bigint\nlanguage plpgsql volatile security definer set search_path = ''",
+      "body_sha256": "12c1d6076d140ae94973b8c0d7e8b4004d3fabb770ed0495f81f994a04aaa665",
+      "calls": [
+        "private.check_hangout_revision",
+        "private.hangout_cohosts",
+        "private.lock_hangout",
+        "private.ready_subject_campus",
+        "private.safety_lock_hangout_evidence",
+        "private.safety_pair_blocked",
+        "private.social_hangout_mutation_lock"
+      ],
+      "lock_statements_source": [
+        "perform private.social_hangout_mutation_lock();"
+      ],
+      "callers_final25": [],
+      "catalog_inherited25": {
+        "acl": [
+          "postgres=X/postgres",
+          "authenticated=X/postgres"
+        ],
+        "name": "public.promote_hangout_cohost",
+        "config": [
+          "search_path=\"\""
+        ],
+        "result": "bigint",
+        "volatility": "v",
+        "anon_execute": false,
+        "identity_args": "p_hangout_id uuid, p_account_id uuid, p_expected_revision bigint",
+        "service_execute": false,
+        "security_definer": true,
+        "authenticated_execute": true,
+        "arguments_with_defaults": "p_hangout_id uuid, p_account_id uuid, p_expected_revision bigint"
+      },
+      "allocation": "replace public body only"
+    },
+    {
+      "name": "public.demote_hangout_cohost",
+      "final_source": "20260925000200_local_cohost_authority.sql",
+      "source_line": 97,
+      "arguments_source": "p_hangout_id uuid,\n  p_account_id uuid, p_expected_revision bigint",
+      "attributes_source": "returns bigint\nlanguage plpgsql volatile security definer set search_path = ''",
+      "body_sha256": "5d45d650542d2ec194c3a49c6806854777356c89676aa44d3336e925986c8f91",
+      "calls": [
+        "private.check_hangout_revision",
+        "private.lock_hangout",
+        "private.social_hangout_mutation_lock"
+      ],
+      "lock_statements_source": [
+        "perform private.social_hangout_mutation_lock();"
+      ],
+      "callers_final25": [],
+      "catalog_inherited25": {
+        "acl": [
+          "postgres=X/postgres",
+          "authenticated=X/postgres"
+        ],
+        "name": "public.demote_hangout_cohost",
+        "config": [
+          "search_path=\"\""
+        ],
+        "result": "bigint",
+        "volatility": "v",
+        "anon_execute": false,
+        "identity_args": "p_hangout_id uuid, p_account_id uuid, p_expected_revision bigint",
+        "service_execute": false,
+        "security_definer": true,
+        "authenticated_execute": true,
+        "arguments_with_defaults": "p_hangout_id uuid, p_account_id uuid, p_expected_revision bigint"
+      },
+      "allocation": "replace public body only"
+    },
+    {
+      "name": "public.step_down_hangout_cohost",
+      "final_source": "20260925000200_local_cohost_authority.sql",
+      "source_line": 118,
+      "arguments_source": "p_hangout_id uuid,\n  p_expected_revision bigint",
+      "attributes_source": "returns bigint\nlanguage plpgsql volatile security definer set search_path = ''",
+      "body_sha256": "1ad439ffaf12967c0974692623c7b6344e8a40577645e27aa17400ce707c6e81",
+      "calls": [
+        "private.check_hangout_revision",
+        "private.effective_hangout_cohost",
+        "private.lock_hangout",
+        "private.social_hangout_mutation_lock"
+      ],
+      "lock_statements_source": [
+        "perform private.social_hangout_mutation_lock();"
+      ],
+      "callers_final25": [],
+      "catalog_inherited25": {
+        "acl": [
+          "postgres=X/postgres",
+          "authenticated=X/postgres"
+        ],
+        "name": "public.step_down_hangout_cohost",
+        "config": [
+          "search_path=\"\""
+        ],
+        "result": "bigint",
+        "volatility": "v",
+        "anon_execute": false,
+        "identity_args": "p_hangout_id uuid, p_expected_revision bigint",
+        "service_execute": false,
+        "security_definer": true,
+        "authenticated_execute": true,
+        "arguments_with_defaults": "p_hangout_id uuid, p_expected_revision bigint"
+      },
+      "allocation": "replace public body only"
+    },
+    {
+      "name": "public.send_hangout_message",
+      "final_source": "20260923000600_local_global_blocks.sql",
+      "source_line": 796,
+      "arguments_source": "p_hangout_id uuid, p_request_id uuid, p_body text",
+      "attributes_source": "returns table (message_id uuid, sequence bigint, body text, created_at timestamptz,\n  mine boolean, author_id uuid, author_label text)\nlanguage plpgsql volatile security definer set search_path = ''",
+      "body_sha256": "315d22905969c66c5dc2573505849d948c692d0d5a333130edb370b73d5f667e",
+      "calls": [
+        "private.chat_lock_evidence",
+        "private.chat_require",
+        "private.hangout_conversations",
+        "private.hangout_message_requests",
+        "private.hangout_messages",
+        "private.lock_hangout",
+        "private.profile_trim",
+        "private.social_hangout_mutation_lock"
+      ],
+      "lock_statements_source": [
+        "perform private.social_hangout_mutation_lock();"
+      ],
+      "callers_final25": [],
+      "catalog_inherited25": {
+        "acl": [
+          "postgres=X/postgres",
+          "authenticated=X/postgres"
+        ],
+        "name": "public.send_hangout_message",
+        "config": [
+          "search_path=\"\""
+        ],
+        "result": "TABLE(message_id uuid, sequence bigint, body text, created_at timestamp with time zone, mine boolean, author_id uuid, author_label text)",
+        "volatility": "v",
+        "anon_execute": false,
+        "identity_args": "p_hangout_id uuid, p_request_id uuid, p_body text",
+        "service_execute": false,
+        "security_definer": true,
+        "authenticated_execute": true,
+        "arguments_with_defaults": "p_hangout_id uuid, p_request_id uuid, p_body text"
+      },
+      "allocation": "replace public body only"
+    },
+    {
+      "name": "private.pilot_lock_ordinary_lifecycle",
+      "final_source": "20260927000500_pilot_ordinary_lifecycle.sql",
+      "source_line": 32,
+      "arguments_source": "p_operation text,p_hangout_id uuid,p_request_id uuid default null",
+      "attributes_source": "returns table(actor_id uuid,host_id uuid,campus_id uuid,source_row public.hangouts,prior_hangout_id uuid,prior_payload_fingerprint text,locked_subject_bindings jsonb)\nlanguage plpgsql volatile security definer set search_path=''",
+      "body_sha256": "4eed37a1e1f55127a244e0631f66a65d295889544170bff2e86a293f49ab750e",
+      "calls": [
+        "private.pilot_capability_enabled",
+        "private.pilot_evidence_lock",
+        "private.pilot_require_ordinary_lifecycle",
+        "private.ready_subject_campus",
+        "private.social_hangout_mutation_lock"
+      ],
+      "lock_statements_source": [
+        "perform private.social_hangout_mutation_lock();",
+        "perform private.pilot_evidence_lock();",
+        "perform 1 from private.pilot_availability where singleton for share;",
+        "perform 1 from private.pilot_capabilities where key='hangouts' for share;",
+        "perform pg_catalog.pg_advisory_xact_lock(pg_catalog.hashtextextended(actor_id::text||p_request_id::text,0));",
+        "select h.* into source_row from public.hangouts h where h.id=prior_hangout_id for update;",
+        "select h.* into source_row from public.hangouts h where h.id=p_hangout_id for update;",
+        "perform 1 from private.hangout_feature_gate where singleton for share;",
+        "perform 1 from public.accounts where id=subject for share;",
+        "perform 1 from private.pilot_account_admission where account_id=subject for share;",
+        "perform 1 from auth.users where id=subject for share;",
+        "select m.university_id into campus from public.university_memberships m where m.user_id=subject for share;",
+        "perform 1 from public.universities c where c.id=campus for share;",
+        "select p.primary_photo_path into photo from public.profiles p where p.user_id=subject for share;",
+        "select o.id into object_id from storage.objects o where o.bucket_id='profile-photos' and o.name=photo and o.owner_id=subject::text for share;",
+        "perform 1 from public.hangout_participants p where p.hangout_id=source_row.id and p.account_id=actor_id for update;",
+        "perform 1 from private.hangout_cohosts c where c.hangout_id=source_row.id and c.account_id=actor_id for share;"
+      ],
+      "callers_final25": [
+        "public.cancel_hangout",
+        "public.create_hangout",
+        "public.edit_hangout",
+        "public.join_hangout",
+        "public.leave_hangout",
+        "public.set_hangout_joining"
+      ],
+      "catalog_inherited25": {
+        "acl": [
+          "postgres=X/postgres"
+        ],
+        "name": "private.pilot_lock_ordinary_lifecycle",
+        "config": [
+          "search_path=\"\""
+        ],
+        "result": "TABLE(actor_id uuid, host_id uuid, campus_id uuid, source_row hangouts, prior_hangout_id uuid, prior_payload_fingerprint text, locked_subject_bindings jsonb)",
+        "volatility": "v",
+        "anon_execute": false,
+        "identity_args": "p_operation text, p_hangout_id uuid, p_request_id uuid",
+        "service_execute": false,
+        "security_definer": true,
+        "authenticated_execute": false,
+        "arguments_with_defaults": "p_operation text, p_hangout_id uuid, p_request_id uuid DEFAULT NULL::uuid"
+      },
+      "allocation": "unchanged dependency"
+    },
+    {
+      "name": "private.pilot_require_ordinary_lifecycle",
+      "final_source": "20260927000500_pilot_ordinary_lifecycle.sql",
+      "source_line": 6,
+      "arguments_source": "p_operation text,p_hangout_id uuid",
+      "attributes_source": "returns void\nlanguage plpgsql volatile security definer set search_path=''",
+      "body_sha256": "642799c30e04278571d89a73ac9c96111bfd10a9a23c29f624c4406e44e6ff4a",
+      "calls": [
+        "private.can_read_hangout",
+        "private.effective_hangout_cohost",
+        "private.hangouts_enabled",
+        "private.pilot_capability_enabled",
+        "private.ready_campus",
+        "private.safety_pair_blocked"
+      ],
+      "lock_statements_source": [],
+      "callers_final25": [
+        "private.pilot_lock_ordinary_lifecycle",
+        "public.cancel_hangout",
+        "public.create_hangout",
+        "public.edit_hangout",
+        "public.join_hangout",
+        "public.leave_hangout",
+        "public.set_hangout_joining"
+      ],
+      "catalog_inherited25": {
+        "acl": [
+          "postgres=X/postgres"
+        ],
+        "name": "private.pilot_require_ordinary_lifecycle",
+        "config": [
+          "search_path=\"\""
+        ],
+        "result": "void",
+        "volatility": "v",
+        "anon_execute": false,
+        "identity_args": "p_operation text, p_hangout_id uuid",
+        "service_execute": false,
+        "security_definer": true,
+        "authenticated_execute": false,
+        "arguments_with_defaults": "p_operation text, p_hangout_id uuid"
+      },
+      "allocation": "unchanged dependency"
+    },
+    {
+      "name": "private.lock_hangout",
+      "final_source": "20260924000300_local_hangout_disable.sql",
+      "source_line": 76,
+      "arguments_source": "target uuid",
+      "attributes_source": "returns public.hangouts\nlanguage plpgsql volatile security definer set search_path=''",
+      "body_sha256": "42a6e5cd80c91fd7e69095e3be868465583766ed724cd48c9ecc6418377b20c7",
+      "calls": [
+        "private.ready_campus",
+        "private.safety_lock_hangout_evidence"
+      ],
+      "lock_statements_source": [
+        "select * into h from public.hangouts where id=target for update;",
+        "perform 1 from private.hangout_feature_gate where singleton for share;"
+      ],
+      "callers_final25": [
+        "public.demote_hangout_cohost",
+        "public.promote_hangout_cohost",
+        "public.remove_hangout_participant",
+        "public.send_hangout_message",
+        "public.step_down_hangout_cohost"
+      ],
+      "catalog_inherited25": {
+        "acl": [
+          "postgres=X/postgres"
+        ],
+        "name": "private.lock_hangout",
+        "config": [
+          "search_path=\"\""
+        ],
+        "result": "hangouts",
+        "volatility": "v",
+        "anon_execute": false,
+        "identity_args": "target uuid",
+        "service_execute": false,
+        "security_definer": true,
+        "authenticated_execute": false,
+        "arguments_with_defaults": "target uuid"
+      },
+      "allocation": "unchanged dependency"
+    },
+    {
+      "name": "private.chat_lock_evidence",
+      "final_source": "20260923000200_local_hangout_chat.sql",
+      "source_line": 59,
+      "arguments_source": "p_hangout_id uuid, p_actor uuid, p_campus uuid",
+      "attributes_source": "returns void language plpgsql volatile security definer set search_path = ''",
+      "body_sha256": "c7279dfd1e76b77443fa8a9a07719deec88456174d56d4d057fa8f2411d657f2",
+      "calls": [],
+      "lock_statements_source": [
+        "perform 1 from private.hangout_feature_gate where singleton for share;",
+        "perform 1 from private.hangout_chat_feature_gate where singleton for share;",
+        "perform 1 from public.accounts where id = p_actor for share;",
+        "perform 1 from auth.users where id = p_actor for share;",
+        "perform 1 from public.university_memberships where user_id = p_actor for share;",
+        "perform 1 from public.universities where id = p_campus for share;",
+        "select primary_photo_path into photo_path from public.profiles where user_id = p_actor for share;",
+        "and name = photo_path and owner_id = p_actor::text for share;",
+        "where hangout_id = p_hangout_id and account_id = p_actor for share;"
+      ],
+      "callers_final25": [
+        "public.send_hangout_message"
+      ],
+      "catalog_inherited25": {
+        "acl": [
+          "postgres=X/postgres"
+        ],
+        "name": "private.chat_lock_evidence",
+        "config": [
+          "search_path=\"\""
+        ],
+        "result": "void",
+        "volatility": "v",
+        "anon_execute": false,
+        "identity_args": "p_hangout_id uuid, p_actor uuid, p_campus uuid",
+        "service_execute": false,
+        "security_definer": true,
+        "authenticated_execute": false,
+        "arguments_with_defaults": "p_hangout_id uuid, p_actor uuid, p_campus uuid"
+      },
+      "allocation": "unchanged dependency"
+    },
+    {
+      "name": "private.chat_require",
+      "final_source": "20260923000200_local_hangout_chat.sql",
+      "source_line": 89,
+      "arguments_source": "p_hangout_id uuid",
+      "attributes_source": "returns boolean\nlanguage plpgsql stable security definer set search_path = ''",
+      "body_sha256": "287a2c934ccd82086c43be0e1c58b9a1f79f5681e88c5d049f5619640aaaf754",
+      "calls": [
+        "private.chat_authorized"
+      ],
+      "lock_statements_source": [],
+      "callers_final25": [
+        "public.read_hangout_messages",
+        "public.send_hangout_message"
+      ],
+      "catalog_inherited25": {
+        "acl": [
+          "postgres=X/postgres"
+        ],
+        "name": "private.chat_require",
+        "config": [
+          "search_path=\"\""
+        ],
+        "result": "boolean",
+        "volatility": "s",
+        "anon_execute": false,
+        "identity_args": "p_hangout_id uuid",
+        "service_execute": false,
+        "security_definer": true,
+        "authenticated_execute": false,
+        "arguments_with_defaults": "p_hangout_id uuid"
+      },
+      "allocation": "unchanged dependency"
+    },
+    {
+      "name": "private.chat_authorized",
+      "final_source": "20260927000300_pilot_source_safety.sql",
+      "source_line": 27,
+      "arguments_source": "p_hangout_id uuid",
+      "attributes_source": "returns boolean\nlanguage sql stable security definer set search_path=''",
+      "body_sha256": "45ef6697714477ff4d217ddec539601e876f1265bbd7e94e4ff84e6d0f704719",
+      "calls": [
+        "private.pilot_capability_enabled",
+        "private.ready_campus",
+        "private.ready_subject_campus",
+        "private.safety_pair_blocked"
+      ],
+      "lock_statements_source": [],
+      "callers_final25": [
+        "private.chat_require",
+        "public.list_notifications"
+      ],
+      "catalog_inherited25": {
+        "acl": [
+          "postgres=X/postgres"
+        ],
+        "name": "private.chat_authorized",
+        "config": [
+          "search_path=\"\""
+        ],
+        "result": "boolean",
+        "volatility": "s",
+        "anon_execute": false,
+        "identity_args": "p_hangout_id uuid",
+        "service_execute": false,
+        "security_definer": true,
+        "authenticated_execute": false,
+        "arguments_with_defaults": "p_hangout_id uuid"
+      },
+      "allocation": "unchanged dependency"
+    },
+    {
+      "name": "private.effective_hangout_cohost",
+      "final_source": "20260927000300_pilot_source_safety.sql",
+      "source_line": 46,
+      "arguments_source": "p_hangout_id uuid, p_actor uuid",
+      "attributes_source": "returns boolean language sql stable security definer set search_path = ''",
+      "body_sha256": "b729084775ec76230e23a495c17cbc7ef1b3013932d86a10bf6c9ad92c415fa6",
+      "calls": [
+        "private.hangouts_enabled",
+        "private.pilot_capability_enabled",
+        "private.ready_subject_campus",
+        "private.safety_pair_blocked"
+      ],
+      "lock_statements_source": [],
+      "callers_final25": [
+        "private.pilot_require_ordinary_lifecycle",
+        "public.edit_hangout",
+        "public.list_hangout_roster_roles",
+        "public.remove_hangout_participant",
+        "public.set_hangout_joining",
+        "public.step_down_hangout_cohost"
+      ],
+      "catalog_inherited25": {
+        "acl": [
+          "postgres=X/postgres"
+        ],
+        "name": "private.effective_hangout_cohost",
+        "config": [
+          "search_path=\"\""
+        ],
+        "result": "boolean",
+        "volatility": "s",
+        "anon_execute": false,
+        "identity_args": "p_hangout_id uuid, p_actor uuid",
+        "service_execute": false,
+        "security_definer": true,
+        "authenticated_execute": false,
+        "arguments_with_defaults": "p_hangout_id uuid, p_actor uuid"
+      },
+      "allocation": "unchanged dependency"
+    },
+    {
+      "name": "private.ready_subject_campus",
+      "final_source": "20260927000200_pilot_owner_admission.sql",
+      "source_line": 46,
+      "arguments_source": "subject uuid,campus uuid",
+      "attributes_source": "returns boolean\nlanguage sql stable security definer set search_path=''",
+      "body_sha256": "9c724e1715708b45572a8acb053e6f64f140608ea9e07d01683b31f5b2b47736",
+      "calls": [
+        "private.pilot_is_available"
+      ],
+      "lock_statements_source": [],
+      "callers_final25": [
+        "private.can_read_hangout",
+        "private.can_read_hangout_roster",
+        "private.chat_authorized",
+        "private.effective_hangout_cohost",
+        "private.people_visible",
+        "private.pilot_lock_ordinary_lifecycle",
+        "public.promote_hangout_cohost",
+        "public.read_hangout_messages",
+        "public.remove_hangout_participant"
+      ],
+      "catalog_inherited25": {
+        "acl": [
+          "postgres=X/postgres"
+        ],
+        "name": "private.ready_subject_campus",
+        "config": [
+          "search_path=\"\""
+        ],
+        "result": "boolean",
+        "volatility": "s",
+        "anon_execute": false,
+        "identity_args": "subject uuid, campus uuid",
+        "service_execute": false,
+        "security_definer": true,
+        "authenticated_execute": false,
+        "arguments_with_defaults": "subject uuid, campus uuid"
+      },
+      "allocation": "unchanged dependency"
+    },
+    {
+      "name": "private.safety_lock_hangout_evidence",
+      "final_source": "20260923000600_local_global_blocks.sql",
+      "source_line": 348,
+      "arguments_source": "p_actor uuid,p_campus uuid",
+      "attributes_source": "returns void\nlanguage plpgsql volatile security definer set search_path=''",
+      "body_sha256": "dbf60c8bca3ac8d1b94760e53fcfc971b6bb625b76f51ec1d7e0f043c4454b9b",
+      "calls": [],
+      "lock_statements_source": [
+        "perform 1 from public.accounts where id=p_actor for share;",
+        "perform 1 from auth.users where id=p_actor for share;",
+        "perform 1 from public.university_memberships where user_id=p_actor for share;",
+        "perform 1 from public.universities where id=p_campus for share;",
+        "select primary_photo_path into photo_path from public.profiles where user_id=p_actor for share;",
+        "and name=photo_path and owner_id=p_actor::text for share;"
+      ],
+      "callers_final25": [
+        "private.lock_hangout",
+        "public.list_hangout_cohosts",
+        "public.list_hangout_roster_roles",
+        "public.promote_hangout_cohost",
+        "public.remove_hangout_participant",
+        "public.submit_safety_report"
+      ],
+      "catalog_inherited25": {
+        "acl": [
+          "postgres=X/postgres"
+        ],
+        "name": "private.safety_lock_hangout_evidence",
+        "config": [
+          "search_path=\"\""
+        ],
+        "result": "void",
+        "volatility": "v",
+        "anon_execute": false,
+        "identity_args": "p_actor uuid, p_campus uuid",
+        "service_execute": false,
+        "security_definer": true,
+        "authenticated_execute": false,
+        "arguments_with_defaults": "p_actor uuid, p_campus uuid"
+      },
+      "allocation": "unchanged dependency"
+    },
+    {
+      "name": "private.safety_record_joined_overlap",
+      "final_source": "20260923000600_local_global_blocks.sql",
+      "source_line": 50,
+      "arguments_source": "p_hangout uuid,p_actor uuid",
+      "attributes_source": "returns void\nlanguage plpgsql volatile security definer set search_path=''",
+      "body_sha256": "7433b0a7a85b085535f3480f3724bb35fe258be59a16ade1e438efe318e987c7",
+      "calls": [
+        "private.hangout_peer_provenance"
+      ],
+      "lock_statements_source": [],
+      "callers_final25": [
+        "private.safety_reconcile_existing_blocks",
+        "public.join_hangout",
+        "public.leave_hangout",
+        "public.remove_hangout_participant",
+        "public.set_safety_block"
+      ],
+      "catalog_inherited25": {
+        "acl": [
+          "postgres=X/postgres"
+        ],
+        "name": "private.safety_record_joined_overlap",
+        "config": [
+          "search_path=\"\""
+        ],
+        "result": "void",
+        "volatility": "v",
+        "anon_execute": false,
+        "identity_args": "p_hangout uuid, p_actor uuid",
+        "service_execute": false,
+        "security_definer": true,
+        "authenticated_execute": false,
+        "arguments_with_defaults": "p_hangout uuid, p_actor uuid"
+      },
+      "allocation": "unchanged dependency"
+    },
+    {
+      "name": "private.social_hangout_mutation_lock",
+      "final_source": "20260923000600_local_global_blocks.sql",
+      "source_line": 6,
+      "arguments_source": "",
+      "attributes_source": "returns void\nlanguage plpgsql volatile security definer set search_path=''",
+      "body_sha256": "a06d8c01598dad7f4212fb59c8b8bd535ed63ba7094b99dbf78bb0af0617a80e",
+      "calls": [],
+      "lock_statements_source": [
+        "perform pg_catalog.pg_advisory_xact_lock(16016,1);"
+      ],
+      "callers_final25": [
+        "private.pilot_evidence_write_lock",
+        "private.pilot_lock_ordinary_lifecycle",
+        "private.safety_reconcile_existing_blocks",
+        "public.answer_own_attendance",
+        "public.apply_hangout_moderation_action",
+        "public.create_dm_request",
+        "public.create_friend_request",
+        "public.demote_hangout_cohost",
+        "public.promote_hangout_cohost",
+        "public.remove_hangout_participant",
+        "public.send_dm_message",
+        "public.send_hangout_message",
+        "public.set_safety_block",
+        "public.step_down_hangout_cohost",
+        "public.submit_safety_report",
+        "public.transition_dm",
+        "public.transition_friendship"
+      ],
+      "catalog_inherited25": {
+        "acl": [
+          "postgres=X/postgres"
+        ],
+        "name": "private.social_hangout_mutation_lock",
+        "config": [
+          "search_path=\"\""
+        ],
+        "result": "void",
+        "volatility": "v",
+        "anon_execute": false,
+        "identity_args": "",
+        "service_execute": false,
+        "security_definer": true,
+        "authenticated_execute": false,
+        "arguments_with_defaults": ""
+      },
+      "allocation": "unchanged dependency"
+    },
+    {
+      "name": "private.pilot_evidence_lock",
+      "final_source": "20260927000100_private_pilot_admission_authority.sql",
+      "source_line": 69,
+      "arguments_source": "",
+      "attributes_source": "returns void\nlanguage plpgsql volatile security definer set search_path=''",
+      "body_sha256": "d5b9b5248ed95e5d77efeae5afff45ab692920f2894b5746eba78ba56145241f",
+      "calls": [],
+      "lock_statements_source": [
+        "perform pg_catalog.pg_advisory_xact_lock_shared(16027,1);"
+      ],
+      "callers_final25": [
+        "private.pilot_lock_ordinary_lifecycle",
+        "private.pilot_lock_owner_evidence"
+      ],
+      "catalog_inherited25": {
+        "acl": [
+          "postgres=X/postgres"
+        ],
+        "name": "private.pilot_evidence_lock",
+        "config": [
+          "search_path=\"\""
+        ],
+        "result": "void",
+        "volatility": "v",
+        "anon_execute": false,
+        "identity_args": "",
+        "service_execute": false,
+        "security_definer": true,
+        "authenticated_execute": false,
+        "arguments_with_defaults": ""
+      },
+      "allocation": "unchanged dependency"
+    },
+    {
+      "name": "private.pilot_evidence_write_lock",
+      "final_source": "20260927000100_private_pilot_admission_authority.sql",
+      "source_line": 75,
+      "arguments_source": "",
+      "attributes_source": "returns void\nlanguage plpgsql volatile security definer set search_path=''",
+      "body_sha256": "a4c8c990172194112ce22b867f76b27514a43bd942ff8e02b18d4f31ace1c376",
+      "calls": [
+        "private.social_hangout_mutation_lock"
+      ],
+      "lock_statements_source": [
+        "perform private.social_hangout_mutation_lock();",
+        "perform pg_catalog.pg_advisory_xact_lock(16027,1);"
+      ],
+      "callers_final25": [
+        "private.pilot_lock_management"
+      ],
+      "catalog_inherited25": {
+        "acl": [
+          "postgres=X/postgres"
+        ],
+        "name": "private.pilot_evidence_write_lock",
+        "config": [
+          "search_path=\"\""
+        ],
+        "result": "void",
+        "volatility": "v",
+        "anon_execute": false,
+        "identity_args": "",
+        "service_execute": false,
+        "security_definer": true,
+        "authenticated_execute": false,
+        "arguments_with_defaults": ""
+      },
+      "allocation": "unchanged dependency"
+    },
+    {
+      "name": "private.notification_emit_hangout",
+      "final_source": "20260923000500_local_notifications_hangouts.sql",
+      "source_line": 20,
+      "arguments_source": "p_event uuid,p_hangout uuid,p_actor uuid,p_code text",
+      "attributes_source": "returns void language plpgsql volatile security definer set search_path=''",
+      "body_sha256": "b312885e4b7d3ebbacc8a657a9116cac67ab46cd326fa7d2f1c7976270d9a6fc",
+      "calls": [
+        "private.hangouts_enabled",
+        "private.notification_enabled",
+        "private.notification_items",
+        "private.notification_lock_recipient"
+      ],
+      "lock_statements_source": [
+        "perform 1 from private.hangout_feature_gate where singleton for share;",
+        "perform 1 from private.hangout_chat_feature_gate where singleton for share;",
+        "perform 1 from private.notification_feature_gate where singleton for share;"
+      ],
+      "callers_final25": [
+        "private.notification_chat_source",
+        "public.cancel_hangout",
+        "public.edit_hangout",
+        "public.join_hangout",
+        "public.leave_hangout"
+      ],
+      "catalog_inherited25": {
+        "acl": [
+          "postgres=X/postgres"
+        ],
+        "name": "private.notification_emit_hangout",
+        "config": [
+          "search_path=\"\""
+        ],
+        "result": "void",
+        "volatility": "v",
+        "anon_execute": false,
+        "identity_args": "p_event uuid, p_hangout uuid, p_actor uuid, p_code text",
+        "service_execute": false,
+        "security_definer": true,
+        "authenticated_execute": false,
+        "arguments_with_defaults": "p_event uuid, p_hangout uuid, p_actor uuid, p_code text"
+      },
+      "allocation": "unchanged dependency"
+    },
+    {
+      "name": "private.notification_chat_source",
+      "final_source": "20260923000500_local_notifications_hangouts.sql",
+      "source_line": 122,
+      "arguments_source": "",
+      "attributes_source": "returns trigger language plpgsql security definer set search_path=''",
+      "body_sha256": "0ffd87635d0e1e02d3d78c7e45371b91e962d6db601161b596731ce92fd5c2dc",
+      "calls": [
+        "private.notification_emit_hangout"
+      ],
+      "lock_statements_source": [],
+      "callers_final25": [],
+      "catalog_inherited25": {
+        "acl": [
+          "postgres=X/postgres"
+        ],
+        "name": "private.notification_chat_source",
+        "config": [
+          "search_path=\"\""
+        ],
+        "result": "trigger",
+        "volatility": "v",
+        "anon_execute": false,
+        "identity_args": "",
+        "service_execute": false,
+        "security_definer": true,
+        "authenticated_execute": false,
+        "arguments_with_defaults": ""
+      },
+      "allocation": "unchanged dependency"
+    },
+    {
+      "name": "private.clear_departing_cohost",
+      "final_source": "20260925000200_local_cohost_authority.sql",
+      "source_line": 18,
+      "arguments_source": "",
+      "attributes_source": "returns trigger\nlanguage plpgsql security definer set search_path = ''",
+      "body_sha256": "793cdaba17026cf2745b4b8989d516e50cf9d0d5fefdd3a7b47c42e14a86e2f4",
+      "calls": [],
+      "lock_statements_source": [],
+      "callers_final25": [],
+      "catalog_inherited25": {
+        "acl": [
+          "postgres=X/postgres"
+        ],
+        "name": "private.clear_departing_cohost",
+        "config": [
+          "search_path=\"\""
+        ],
+        "result": "trigger",
+        "volatility": "v",
+        "anon_execute": false,
+        "identity_args": "",
+        "service_execute": false,
+        "security_definer": true,
+        "authenticated_execute": false,
+        "arguments_with_defaults": ""
+      },
+      "allocation": "unchanged dependency"
+    },
+    {
+      "name": "private.enforce_hangout_ownership",
+      "final_source": "20260925000200_local_cohost_authority.sql",
+      "source_line": 34,
+      "arguments_source": "",
+      "attributes_source": "returns trigger\nlanguage plpgsql set search_path = ''",
+      "body_sha256": "176b1b82bfab50589c5849d6c8b5f51d80baac824d5de4796d6808e57852b38f",
+      "calls": [],
+      "lock_statements_source": [],
+      "callers_final25": [],
+      "catalog_inherited25": {
+        "acl": [
+          "postgres=X/postgres"
+        ],
+        "name": "private.enforce_hangout_ownership",
+        "config": [
+          "search_path=\"\""
+        ],
+        "result": "trigger",
+        "volatility": "v",
+        "anon_execute": false,
+        "identity_args": "",
+        "service_execute": false,
+        "security_definer": false,
+        "authenticated_execute": false,
+        "arguments_with_defaults": ""
+      },
+      "allocation": "unchanged dependency"
+    },
+    {
+      "name": "private.check_hangout_revision",
+      "final_source": "20260922000300_hangout_foundation.sql",
+      "source_line": 252,
+      "arguments_source": "h public.hangouts, expected bigint",
+      "attributes_source": "returns void\nlanguage plpgsql set search_path=''",
+      "body_sha256": "cb3070c468471a910dab1ea4721189a71f34efe8645578c83bd6a5ff747929d4",
+      "calls": [],
+      "lock_statements_source": [],
+      "callers_final25": [
+        "public.cancel_hangout",
+        "public.demote_hangout_cohost",
+        "public.edit_hangout",
+        "public.promote_hangout_cohost",
+        "public.remove_hangout_participant",
+        "public.set_hangout_joining",
+        "public.step_down_hangout_cohost"
+      ],
+      "catalog_inherited25": {},
+      "allocation": "unchanged dependency"
+    }
+  ],
+  "triggers": [
+    {
+      "source": "20260922000300_hangout_foundation.sql",
+      "definition": "create trigger hangout_ownership before update on public.hangouts for each row execute function private.enforce_hangout_ownership();"
+    },
+    {
+      "source": "20260922000300_hangout_foundation.sql",
+      "definition": "create constraint trigger hangout_joined_host after insert or update on public.hangouts\n deferrable initially deferred for each row execute function private.enforce_joined_host();"
+    },
+    {
+      "source": "20260922000300_hangout_foundation.sql",
+      "definition": "create constraint trigger participant_joined_host after insert or update or delete on public.hangout_participants\n deferrable initially deferred for each row execute function private.enforce_joined_host();"
+    },
+    {
+      "source": "20260922000300_hangout_foundation.sql",
+      "definition": "create trigger participant_transition before insert or update on public.hangout_participants\n for each row execute function private.enforce_participant_transition();"
+    },
+    {
+      "source": "20260923000200_local_hangout_chat.sql",
+      "definition": "create trigger chat_immutable_message before update or delete on private.hangout_messages\n  for each row execute function private.chat_immutable_message();"
+    },
+    {
+      "source": "20260923000500_local_notifications_hangouts.sql",
+      "definition": "create trigger notification_chat_insert after insert on private.hangout_messages\n for each row execute function private.notification_chat_source();"
+    },
+    {
+      "source": "20260924000300_local_hangout_disable.sql",
+      "definition": "create trigger hangout_disables_immutable before update or delete on private.hangout_disables\n  for each row execute function private.reject_moderation_evidence_change();"
+    },
+    {
+      "source": "20260925000100_local_large_hangout_safeguards.sql",
+      "definition": "create trigger advance_large_hangout_epoch before update on private.large_hangout_feature_gate\n  for each row execute function private.advance_large_hangout_epoch();"
+    },
+    {
+      "source": "20260925000100_local_large_hangout_safeguards.sql",
+      "definition": "create trigger large_hangout_signal_immutable before update or delete\n  on private.large_hangout_signals for each row\n  execute function private.reject_large_hangout_signal_change();"
+    },
+    {
+      "source": "20260925000200_local_cohost_authority.sql",
+      "definition": "create trigger clear_departing_cohost before update of state on public.hangout_participants\n  for each row execute function private.clear_departing_cohost();"
+    }
+  ],
+  "removed_overload": "public.remove_hangout_participant(uuid,uuid) absent; may not restore",
+  "planned_new_private": [
+    "private.pilot_lock_cohost_chat(text,uuid,uuid)",
+    "private.pilot_require_cohost_chat(text,uuid,uuid)"
+  ],
+  "limits": "Function name caller extraction is source-only, not overload-aware. Exact public ABI/ACL inherited from B3a accepted catalog; new live catalog required after implementation. All untouched functions including lifecycle helpers must preserve source body and catalog.",
+  "send_error_precedence": "For S/SR the exact error boundary is operation-specific: missing source/caller, source-campus mismatch, source disable, actor/immutable-host current readiness/admission and Hangouts purpose/gate fail with `42501 / Hangout operation not permitted`; published-status loss, current joined loss, actor-host bilateral block, chat purpose/gate, and inherited visibility/location-precision predicates fail with `42501 / Hangout chat unavailable`. The base send guard must not use broad `can_read_hangout` in a way that masks these extra-chat cases. Social-first stronger isolation remains `42501 / Safety operation unavailable`. Fresh S/SR authority must dominate invalid body or mismatch, with the appropriate exact literal; only otherwise-authorized invalid body gets22023 and mismatched own key gets23505.",
+  "stored_state_invariant": "There is no `h.eligibility` column. Eligibility is create/edit input validation, outside B3b. Stored Hangout CHECK constraints prohibit unsupported visibility/location_precision; audit these as catalog invariants and impossible lawful states, not runtime loss rows. Preserve inherited predicates but do not drop constraints, fabricate unsupported stored rows or race them.",
+  "conditional_identity_partition": "The coordinator accepts a **conditional** common L3 partition: actual identity paths RH.host_actor; RC.actor/host/target; P.target; S.host; SR.actor/host (8\u00d717\u00d72=272). Map D.host_actor and P.host_actor to RH.host_actor; SD.actor/host to RC.actor/host; S.actor to SR.actor through the same send RPC unbranched pre-ledger prefix. All152 L2 cells remain actual, giving424 planned actual cells plus170 explicit common-equivalent conceptual cells,594 unique conceptual cases total. Every cell is unobserved/uncovered, not pass evidence. Promotion/RC targets stay distinct; S/SR hosts stay distinct. Equivalence is gated by independent implementation SOURCE review confirming one identical unbranched identity acquisition and final acquired-tuple checks before any public branch; per-route SQL and real Auth guard-dominance assertions stay actual. Any divergence restores the mapped actual races. This partition reduces only L3 identity executions; all L1/L2/L4/source/role/block/retry/state/crossing/isolation/upgrade/catalog/regression/cleanup requirements remain.",
+  "evidence_limits": "All594 conceptual cases unobserved:424 planned actual+170 proposed-conditional common equivalents. Independent implementation SOURCE review must establish identical unbranched acquisition/tuple checks before public branches; route guards stay actual. Original594 unpartitioned runtime budget is historical planning only."
+}

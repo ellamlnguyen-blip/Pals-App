@@ -1,0 +1,10 @@
+# TASK-021A1b3b contract publication review
+
+Date: 2026-09-27
+Source baseline: independently remote-verified canonical main255cc7c2a15d5063a8706a9c3208dbf277ef9abc; accepted25 migrations, B3a complete.
+
+Fresh Sol-medium independent reviewer review_pilot_cohost_chat_contract cleared corrected six documentation artifacts with no remaining concrete finding. Two P2 findings resolved: exact S/SR base versus extra-chat error precedence, and removal of nonexistent eligibility/stored CHECK-invalid source fixtures. No source permission, trigger, grant, provider or architecture expansion is accepted. Host/cohost target distinctions, cancelled host removal, assignment teardown, original chat fingerprint/return/sequence/hook boundaries reconcile. New two private operation-scoped scalar-result helpers preserve accepted lifecycle/retained/read helpers.
+
+Reviewer and coordinator independently checked594 unique conceptual IDs:424 actual planned (152L2+272L3),170 conditional equivalents mapped to actual representative of identical loss/order, eight exact actual L3 paths, all uncovered/unobserved. Conditional equivalence requires independent implementation SOURCE review of identical unbranched acquired-tuple evidence and per-route SQL/real Auth guard dominance. Divergence restores mapped actual races. All other role/source/retry/state/block/crossing/isolation/upgrade/regression/cleanup obligations remain actual. Coordinator independently recomputed all23 inventory source body hashes; match. Documentation JSON/history/whitespace checks passed. No code/runtime tests claimed.
+
+This review clears bounded contract publication and fresh implementation planning/source work only. Independent source/fixture/ownership reviews and explicit coordinator local runtime release remain gates; no start/reset/install/pull/recovery/hosted operation authorized by this receipt. Sole inherited named composite OUT lint advisory stays exact nonzero exception; any new diagnostic fails. Standard speed app-controlled and not tool-verifiable. B3b/c/A1c/A2/TASK-021 remain incomplete; no product successor.

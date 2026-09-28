@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-09-27 — B3b contract independently reviewed; publication prepared
+
+B3a complete on independently remote-verified accepted main62e47dc/completion255cc7c. Fresh docs-only reconciliation and fresh independent review cleared the exact five cohost/chat operations, new closed scalar helper interface, sorted actor/immutable-host/eligible-target graph, target-authority revision dominance and original chat error/retry behavior. Two P2 documentation findings resolved; no remaining concrete contract finding. Contract/source inventory/graph/matrix/handoff/review are prepared for canonical publication; verify remote main before fresh Sol-medium implementation dispatch.
+
+Evidence plan is424 actual cells plus170 explicitly conditional equivalents,594 conceptual cases all unobserved. Independent implementation source review must establish identical unbranched tuple evidence; all per-route SQL/real Auth controls remain actual, divergence restores race requirements. Source/fixture/ownership review and explicit serial runtime release remain; no runtime/source implementation/hosted operation yet. B3b/c/A1c/A2/TASK-021 incomplete. Coordinator review in TASK-021A1b3b-CONTRACT-REVIEW.md.
+
+
 ## 2026-09-27 — B3a complete after verified canonical integration
 
 Reviewed task `fe4f23c5b43b4b042c3a8e8a99f38da412d4f3fa` and accepted canonical integration `62e47dc8908d6486e544333b169147ee4e735524` are independently remote-verified. B3a is complete only for its six disposable-local Hangout lifecycle mutations and private evidence helpers. Fresh final review has no unresolved finding; 350 new observed waits, bounded SQL/HTTP, inherited regressions, true24 upgrade, catalog and static evidence are accepted with the exact single structural lint advisory recorded as an incompatible-check exception (standard db:lint exit1, not clean/pass). Normal final reset/shutdown and coordinator read-only ownership audit are verified; no runtime remains active.
