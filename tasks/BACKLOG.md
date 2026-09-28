@@ -1,5 +1,13 @@
 # Backlog
 
+## 2026-09-28 — B3b crossing outcome correction source cleared; serial rerun released
+
+Independent bounded correction review clears exact local/unpushed45a075acc14a1a2a49023c8606873c79833d84e5 with no new finding. Exactly crossing module/mapping changed; shared guard/migration/source/other modules frozen. Complete54-table safe census now constructs only exact intended owner and operation changes: P/RC profile primary/revision, parent result/revision/bounded server timestamp, assignment/removal and RC exact departing-target provenance; S one conversation/message/scoped ledger; SR original7field replay and detached-deletion-only census. Unrelated rows/fields/notifications remain equal. Guarded crossing-local one-sided receipt observer verifies named distinct blocking PIDs/ungranted locks, commits/no signals/errors/abort and owned teardown. Syntax/ESLint/whitespace passed only; corrected runtime unrun.
+
+Initial8wait/commit receipt preserved byte-identically at INITIAL-WAIT SHA2566f589f2547be8868815073513bbca1466a39ec47c670cc93c135789756d18ea0. Source clearance does not convert that incomplete outcome evidence to acceptance. Coordinator explicitly releases corrected crossing rerun within the same exclusive bounded serial runtime stage, only after currently running inherited regressions relinquish their serial turn. No parallel runtime, installs/pulls/newnetwork/recovery/hosted/source change. Eight same-ID rerun cases replace acceptance evidence, never inflate unique observations. New complete evidence must receive independent review before final acceptance.
+
+Remaining11 inherited regressions/static/final26zero-off-rev1reset/normalbackupservice-VZstop/independentaudit/finalreview/taskpush/remoteacceptedmainintegration remain. B3b/c/A1c/A2/TASK-021 incomplete; no pilot-ready claim or successor. Coordinator owns publication/shared records; original executor remains sole runtime owner.
+
 ## 2026-09-28 — B3b state/retry evidence reviewed; crossing outcome P2 remains
 
 Independent source-state evidence review found no gap at exacte62:156unique records/142observed waits (120advisory/22transactionid)+14stronger-isolation serial denials,7terminal competing-writer denials/1consumed zero-row SD DELETE excluded from committed-loss credit,8role-only S/SR positives,14participant DELETE/separate fresh INSERT partitions. Exact public writers/revision-after-social ordering/eligibility-only cleanup and internal receipt/census assertions reconcile. Node completion includes guarded reset; raw session error/exit/receipt transcripts not fully persisted, so assertions plus completed pass support outcome credit.
