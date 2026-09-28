@@ -1,5 +1,6 @@
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
+import { createHash } from "node:crypto";
 import {
   localTarget,
   sql,
@@ -1917,6 +1918,47 @@ export const identityPlans = Object.freeze(
   ].map((cell) => Object.freeze(cell)),
 );
 
+export function identitySessionNames(cell) {
+  assert.ok(
+    identityPlans.includes(cell),
+    "exact literal identity cell required",
+  );
+  const digest = createHash("sha256")
+    .update(cell.id)
+    .digest("hex")
+    .slice(0, 24);
+  return Object.freeze(
+    Object.fromEntries(
+      ["holder", "waiter", "positive", "fresh"].map((role) => [
+        role,
+        `b3c_identity_${digest}_${role}`,
+      ]),
+    ),
+  );
+}
+
+export function identitySuiteFailure(
+  outcomes,
+  cause = null,
+  activeCell = null,
+) {
+  const blocked = outcomes.find(
+    (outcome) => outcome.status !== "observed-successful-order",
+  );
+  const id = blocked?.id ?? activeCell ?? "identity-suite";
+  const reason =
+    blocked?.reason ?? cause?.message ?? "all204 actual outcomes required";
+  const error = new Error(
+    `${id}: ${reason}; identity suite incomplete, zero suite success credit`,
+  );
+  error.identityOutcomes = structuredClone(outcomes);
+  error.identityCell = id;
+  error.successful_order_credit = false;
+  error.suite_success_credit = 0;
+  error.cleanupIncomplete = Boolean(cause?.cleanupIncomplete);
+  return error;
+}
+
 export function validateIdentityPlans() {
   const matrix = JSON.parse(
     readFileSync(
@@ -1949,7 +1991,27 @@ export function validateIdentityPlans() {
             ).length,
             1,
           );
-  return { literal_cells: 204, executed_cells: 0 };
+  const names = identityPlans.flatMap((cell) =>
+    Object.values(identitySessionNames(cell)),
+  );
+  for (const name of names) {
+    assert.match(name, /^[a-z0-9_]+$/);
+    assert.ok(
+      name.length <= 63,
+      "ASCII PostgreSQL application_name must fit63 bytes",
+    );
+  }
+  assert.equal(
+    new Set(names).size,
+    816,
+    "all204 cells ×4 roles collision-free before/after PG truncation",
+  );
+  return {
+    literal_cells: 204,
+    executed_cells: 0,
+    unique_session_names: 816,
+    max_session_name_bytes: Math.max(...names.map((name) => name.length)),
+  };
 }
 
 const sorted = (rows) =>
@@ -2197,7 +2259,7 @@ function expectedOperation(before, actual, result, route) {
 }
 async function positiveRollback(route, cell) {
   const before = census(),
-    owned = session(`${cell.id}.positive`);
+    owned = session(identitySessionNames(cell).positive);
   try {
     owned.send(
       `${beginSQL}${rpcSQL(route)}${snapshotSQL}select 'DONE';rollback;`,
@@ -2260,7 +2322,7 @@ async function freshAfterLoss(route, cell, replacement) {
   }
   assertCurrentOnly(route);
   const baseline = census(),
-    owned = session(`${cell.id}.fresh`);
+    owned = session(identitySessionNames(cell).fresh);
   const freshRoute = { ...route, request: caseIds(`${cell.id}.fresh`).request };
   try {
     owned.send(
@@ -2316,8 +2378,8 @@ async function runIdentityCell(cell) {
     owned = [];
   let observed, committed, operationResult, blocker;
   try {
-    const holderName = `${cell.id}.holder`,
-      waiterName = `${cell.id}.waiter`;
+    const { holder: holderName, waiter: waiterName } =
+      identitySessionNames(cell);
     const holder = session(holderName);
     owned.push(holder);
     const waiter = session(waiterName);
@@ -2424,7 +2486,17 @@ async function runIdentityCell(cell) {
     };
     return blocker;
   } finally {
-    await closeAll(owned);
+    try {
+      await closeAll(owned);
+    } catch (error) {
+      if (blocker) {
+        blocker.owned_children_awaited = false;
+        blocker.full54_after_unavailable =
+          "own child exit unproven; target observation/reset forbidden";
+        error.identityOutcome = blocker;
+      }
+      throw error;
+    }
     if (blocker) {
       blocker.full54_after = census();
       // A successful winner may stand while a loser aborts; never erase or falsely call it whole-race rollback.
@@ -2460,13 +2532,17 @@ export async function runIdentityPlans({ exclusiveSerialRelease } = {}) {
   localTarget("current27");
   assertClean();
   const outcomes = [];
-  let ownedChildrenAwaited = true;
+  let ownedChildrenAwaited = true,
+    failure = null,
+    activeCell = null;
   try {
     for (const cell of identityPlans) {
+      activeCell = cell.id;
       resetDisposable("current27");
       const outcome = await runIdentityCell(cell);
       outcomes.push(outcome);
-      if (outcome.status !== "observed-successful-order") break;
+      if (outcome.status !== "observed-successful-order")
+        throw identitySuiteFailure(outcomes);
     }
     assert.equal(
       outcomes.length,
@@ -2477,11 +2553,26 @@ export async function runIdentityPlans({ exclusiveSerialRelease } = {}) {
     return outcomes;
   } catch (error) {
     if (error.cleanupIncomplete) ownedChildrenAwaited = false;
-    throw error;
+    if (
+      error.identityOutcome &&
+      !outcomes.some((outcome) => outcome.id === error.identityOutcome.id)
+    )
+      outcomes.push(error.identityOutcome);
+    failure = error.identityOutcomes
+      ? error
+      : identitySuiteFailure(outcomes, error, activeCell);
+    throw failure;
   } finally {
     if (ownedChildrenAwaited) {
-      resetDisposable("current27");
-      assertClean();
+      try {
+        resetDisposable("current27");
+        assertClean();
+      } catch (cleanupError) {
+        failure ??= identitySuiteFailure(outcomes, cleanupError, activeCell);
+        failure.cleanupIncomplete = true;
+        failure.cleanupReason = String(cleanupError.message);
+        throw failure;
+      }
     }
   }
 }
