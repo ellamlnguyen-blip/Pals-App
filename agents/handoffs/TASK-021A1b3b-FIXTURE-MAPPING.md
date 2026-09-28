@@ -1,0 +1,76 @@
+# TASK-021A1b3b source and fixture authoring checkpoint
+
+Date: 2026-09-28. **Authored/static only; every execution cell remains uncovered. Runtime unreleased. Task incomplete.**
+
+Independent clone `/private/tmp/pals-task021a1b3b-cohost-chat`, canonical GitHub origin, branch `agent/TASK-021A1b3b-cohost-chat`. Reviewed contract baseline1340e27bee4247506547934678b60adf713707c1; immutable source checkpoint aeeb67a76d7a4cc40e72fbe51334e5d934e3a8a3 independently cleared by coordinator review (canonical-main receipt921e8245ed99f05ae2611707e2bafa7f80789a86). Latest coordinator documentation receipt supplied e6038a8864b9459ce1f72f1ac0d0d77ee874e80f. These coordinator receipts were not remotely reverified by this executor. Source migration is unchanged from aeeb; original25 migrations and original fixtures unchanged. GPT-6 Sol medium; Standard is app-controlled and not tool-verifiable. Local authoring checkpoint is separate from task publication or accepted integration.
+
+## Ownership and modules
+
+Executor owns the following new sources; paths relative to `supabase/tests/`. HTTP author owns only its HTTP module and `TASK-021A1b3b-HTTP-FIXTURE.md`. Its finished source and handoff were reviewed for the fixed response ABI, current26 lane and source-derived guard loops before this combined checkpoint. No shared queue/current-state/changelog edits, migration edits, installs, lockfile changes, pushes or runtime operations occurred.
+
+| Source | Exact obligation / output after released successful execution |
+| --- | --- |
+| `helpers/pilot-admission-cohost-chat.mjs` | Exclusive owner/target/full-history guard; current26 API ABI; guarded SQL/sessions/reset/cleanup; actual holder/waiter lock observations and exact expected error/commit; optional complete concurrent receipt equality |
+| `helpers/pilot-cohost-chat-fixtures.mjs` | Synthetic ready actor/host/target and distinct manager; operation-specific roster and retained assignment setup; fresh source per cell; concrete identity writers and census |
+| `helpers/pilot-cohost-chat-matrix.mjs` | Reads normative594-ID MATRIX directly; L2/L3 actual selection and explicit mapping records; eligible same-action rollback control before every race; holder post-loss census |
+| `pilot-admission-cohost-chat-concurrency.integration.mjs` | Every152 actual L2 ID; writes L2-EVIDENCE only after complete run |
+| `pilot-cohost-chat-identity-races.integration.mjs` | Every272 actual L3 ID plus170 explicit common mappings; writes L3-EVIDENCE only after complete run |
+| `pilot-admission-cohost-chat.test.sql` | Rollback pgTAP L1 actual authenticated route/subject identity/policy guard dominance, ACL/default/results/helper ABI, role/target/payload/cancel controls, CHECK catalog invariants |
+| `pilot-admission-cohost-chat-http.integration.mjs` | Real Auth-issued bearer L1 route/subject controls and393 planned serial guard attempts; see disjoint HTTP-FIXTURE handoff; HTTP-EVIDENCE |
+| `pilot-cohost-chat-source-state-races.integration.mjs` | Actual source/role/participant/assignment/block transitions and stronger isolation; SOURCE-STATE-EVIDENCE |
+| `pilot-cohost-chat-absence-retry.integration.mjs` | L4 all13 route/subject absence→actual manager revision0 activation; seven-field immutable retry/own-key mismatch/concurrent duplicate/optional notification races; ABSENCE-RETRY-EVIDENCE |
+| `pilot-cohost-chat-crossings.integration.mjs` | Eight actual both-order owner-primary P/RC target and authenticated detached Storage DELETE S/SR host crossings; scoped inherited safe-abort limits; CROSSING-EVIDENCE |
+| `helpers/verify-pilot-cohost-chat-catalog.mjs` | Accepted B3a scoped ABI/default/results/ACL/definitions, inventory untouched-body hashes, exactly2 owner-only scalar helpers;144 domain functions/52 tables; CATALOG |
+| `helpers/verify-pilot-cohost-chat-lint.mjs` | Exact standard lint arguments, exact stdout/stderr/exit and sole inherited ordinary-lifecycle composite-OUT advisory; no second advisory waiver |
+| `helpers/verify-pilot-cohost-chat-upgrade.mjs` | True full25 reset, retained fixture values and complete catalog/functions, only26 streamed transaction plus atomic history receipt, full26 comparison; UPGRADE-EVIDENCE |
+| `helpers/verify-pilot-cohost-chat-sql.mjs` |13 inherited database suites plus B1/B2/B3a and new SQL through current26 wrapper; completed TAP plan/positive actual count/no SKIP/TODO/not-ok |
+| `pilot-cohost-chat-regressions.integration.mjs` | Disposable guarded adaptations: six embedded A1a/B1/B2 actual modules once via accepted B3a runner, plus B3a HTTP and four race modules;11 actual inherited modules total; REGRESSION-EVIDENCE |
+
+Evidence filenames use `agents/handoffs/TASK-021A1b3b-` and are future outputs, not present execution receipts. Copied regression child receipts use distinct REGRESSION-B3A/REGRESSION-A1 prefixes; original accepted25 receipts are never overwritten. Historical true20/true24 upgrade programs are not run through wildcard history. No fixture imports or program invocations were used for authoring checks.
+
+## Exact matrix and actual controls
+
+Normative `TASK-021A1b3b-MATRIX.json` is unchanged and remains the literal source for594 conceptual IDs:152 actual L2 +272 actual L3 =424 planned actual observations, plus170 source-cleared common L3 mappings. All remain uncovered. Actual L3 paths RH.host_actor; RC.actor/host/target; P.target; S.host; SR.actor/host each execute17 losses×2 orders. D.host_actor/P.host_actor map to RH.host_actor; SD.actor/host map to RC.actor/host; S.actor maps to SR.actor. Source review cleared the identical unbranched identity acquisition/final acquired-tuple prefix, but a mapped cell receives no independent actual-race credit. Runtime mappings require their exact representative ID to have passed. Every action/subject SQL and real Auth serial guard remains actual; any source divergence restores mapped races.
+
+L2 roster revoke uses actual authenticated approved manager RPC. Missing roster maintenance holds social then exclusive pilot prefix and is explicitly privileged maintenance, not manager deletion authority. Policy/gate and L3 direct evidence writes are labeled privileged setup/writers. Each race requires eligible same-action control, holder completion, observed named holder/waiter PIDs with actual ungranted lock/blocking edge, expected commits or exact42501 literal. Deadlock/timeout/serialization/other aborts fail the fixture and never get successful-order credit. Management operation-first can consume role/target/revision; fresh serial denial after that is explicitly not independent identity attribution. Serial fresh eligible identity attribution is provided by the per-route SQL/HTTP loops, and loss-first valid replacement also gets fresh eligible rollback control. No terminal state is reversed to manufacture it.
+
+State IDs are `L3.state.<writer>.<action>.<order>` for disable/cancel, public demote/step_down, required assignment deletion/demotion, target leave/remove/assignment insert, actor leave/remove, both actor-host block directions and P/RC actor-target directions. E/J invoke actual inherited cohost edit/joining. All7 B3b routes also get both stronger isolations, exact social-first literal and unchanged census. Still-joined S/SR role-only losses are positive controls. A competing operation-first writer that now lacks role/target is labeled terminal denial, not committed-loss evidence; SD operation-first consumes its assignment before later privileged DELETE and is labeled zero-row no-op.
+
+Participant IDs `L3.state.participant_delete_replace.<action>.<subject-UUID>.<order>` cover RH.target, RC.actor/target, P.target, SD.actor, S.actor, SR.actor both orders. The actual waiting writer is DELETE-only; loss-first proves immediate required-lookup absence and assignment cascade, then a separate privileged fresh INSERT proves no implicit assignment restoration. Same-transaction DELETE+INSERT would acquire parent FK KEY SHARE before source UPDATE: that would test earlier parent serialization, not rescue of a lower old tuple. This partition is explicit. Post-SD/RC operation-first lower deletion may encounter already-consumed state; no replacement rescue or public participant restoration claim is made.
+
+L4 IDs `L4.<action>.<subject>` prove fresh already-absent denial/no delta, followed by actual manager activation revision0 and later same-action rollback control. Each matching actual DELETE-first waiter exists individually in L2. No absent-row phantom lock or two activation orders are claimed. Retry/duplicate controls compare all7 original fields and census; duplicate sends require one message/ledger/sequence and equal original receipts. Optional notification gate orders distinguish event production for the first message from replay; no delivered-byte recall claim.
+
+## Impossible and scoped cells
+
+These are explicit semantic partitions, not skipped tests or passes:
+
+| Executor ID | Reason / required lawful evidence |
+| --- | --- |
+| IMP.host_only_distinct.RH/P/D | Caller is immutable host; deduplicated host_actor lock path, success and forged-actor HTTP controls |
+| IMP.ready_target.RH/D | Retained host authority intentionally has no target readiness; actual SQL/HTTP inactive-target positives |
+| IMP.host_self_block | Schema/meaning forbids self block; actual distinct bilateral paths |
+| IMP.referenced_primary_delete | FK/reference hook prohibits successful referenced primary deletion; actual detach+delete identity loss and detached crossings |
+| IMP.source_bound_account_auth_campus_delete | Live source FKs prevent deletion; inherited unsourced safe-abort evidence remains scoped |
+| IMP.reverse.cancel/disable | Immutable terminal state never restored; fresh sources and actual cancellation/moderation controls |
+| IMP.absent_roster_phantom | Missing row has no tuple lock; exclusive-prefix DELETE-first + fresh absence/activation |
+| IMP.required_lookup_replacement_rescue | Required old lookup denies immediately; fresh tuple checked separately; no assignment resurrection |
+| IMP.role_only_send_revoke | Joined sender retains S/SR authority; actual positive controls |
+| IMP.retry_new_sequence_notification | Exact retry retains original7fields with census; optional notification duplicate controls |
+| IMP.cross_actor_original_body | Same UUID is actor/source scoped; own separate ledger/message, actual SQL/HTTP controls |
+| IMP.invalid_stored_visibility_precision | CHECK-invalid stored fixtures unsupported; existing CHECK catalog invariants, accepted raw-DML denial |
+| LIMIT.snapshot_bearer_bytes | Already-in-flight read snapshots/preissued bearer/delivered bytes remain outside guarantee |
+| LIMIT.external_writer_deadlock | Trusted external writers not universally deadlock-free; inherited inversion/safe-abort observations remain separately scoped, never successful-order credit |
+
+## Guard, upgrade lane and cleanup
+
+Normal mode is exact full26, ownerTASK-021A1b3b, DO_NOT_TRACK1, socket `unix:///private/tmp/pals-lima/pals-task002/sock/docker.sock`. Target guard asserts API127.0.0.1:54321, DB127.0.0.1:54322/postgres, actual postgres session/database, named running `supabase_db_pals-local`, fixed cached PostgreSQL17.6.1.167 image. Docker calls use `/private/tmp/pals-runtime/docker/docker`. No generic target/owner fallback. Full literal26 version manifest is exported by the helper and compared to the entire sorted history on SQL/session/API entry. HTTP closures bind their captured current26 lane and refuse prior25 HTTP even if another caller later selects upgrade mode.
+
+Only `verify-pilot-cohost-chat-upgrade.mjs` explicitly selects `prior25-upgrade`: exact25 or26 history permitted for its guarded SQL context; resets to version20260927000500, verifies true25, seeds retained values with default-off gates, streams only migration26 and registers its receipt in the same transaction, verifies exact26 and every prior value/catalog/function ABI/body except exactly5 changed public bodies +2 additions. Cleanup selects the explicit upgrade lane to permit safe reset if failure left25; then requires current26. No normal wrapper wildcard/downgrade. Expected history27/partial/random/project mismatch fails closed.
+
+Finally reset requires guards before mutation and verifies default-off exact singleton original gates, availabilityfalse revision1,13 fixed capabilities false revision1, zero Auth/account/profile/membership/roles/Hangout/participant/Storage and non-policy private fixtures. Normal race/HTTP modules retain immutable messages/reports/source rows until full reset. Source/census values and credentials are fixture-local; HTTP tokens stay only in memory. Runtime final owned-service/VM stop remains coordinator-gated and unobserved.
+
+## Static checks and remaining gates
+
+All14 new MJS sources passed `node --check`. Four adapted helper copies plus generated nested regression runner passed syntax-only generation checks without importing or invoking fixtures. ESLint on those14 sources passed exit0 with `--max-warnings=0`; cached React plugin emitted its environment message that React is absent at repository root and it assumes latest, with no lint diagnostic. Formatting applied only executor-owned MJS using cached Prettier; HTTP author's source whitespace/syntax checks retained. Existing dependencies were temporarily linked read-only from accepted B3a clone for static resolution; that untracked node_modules link was removed and excluded from commits. No dependency installation or lockfile edit occurred. Git whitespace and unchanged source/history checks are authoring checks only.
+
+SQL setup legality, Auth/HTTP mapping, held-row waits, concurrency results, catalog/lint runtime, true25 upgrade, actual TAP counts, adapted module execution, cleanup and owned stop have not run. Required next gates: fresh independent fixture/security and ownership/adapter review of this immutable checkpoint; separately explicit coordinator runtime release; serial owned runtime evidence/review; final handoff and publication/remote verification/accepted-main integration. Source checkpoint or fixture authoring is not task completion and dispatches no successor. A source defect requires separately reviewed narrow correction; migration remains frozen.
