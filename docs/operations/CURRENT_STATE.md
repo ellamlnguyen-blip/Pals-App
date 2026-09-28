@@ -1,5 +1,13 @@
 # Current State
 
+## 2026-09-28 — B3b real Auth HTTP reviewed;152 L2 waits observed
+
+Real Auth HTTP module completed1/pass1/fail0/skipped0/cancelled0/todo0 in185.7s including guarded final26 reset/assertClean. Fresh independent bounded review found no gap:1219 recorded entries (567SETUP), exactly393 expected actual guard-attempt IDs,592zero-delta flags (575equal count/hash snapshots across54tables plus17manual Boolean-only census receipts),1171Auth/29transport-ACL/19other entries. Exact7-field retries, target/role/publicstepdown/blockteardown/no-auto-restore/operator/forgery/raw-DML/payload controls reconcile; credentials/raw rows/bodies absent from persisted receipt. Counts are records/attempts, not1219 independent assertions or conceptual race cases. HTTP is serial and provides no concurrency credit. Receipt SHA25650f32b7e78989d5dd5a92e68a4829a2c8f83cbec46d51dc84534af6cbab47b98; reviewer made no runtime access.
+
+L2 module completed1/pass1/fail0/skipped0/cancelled0/todo0 in114.47s including guarded final reset. Root parsed exact152 unique normative actual IDs:76loss-first +76operation-first,116advisory +36transactionid actual ungranted waits, distinct holder/waiter PIDs and76holder post-loss snapshots; no common substitutions. New L2 evidence still awaits bounded independent matrix/evidence review. Sole executor now runs L3 serially (272actual+170explicit common mappings); source/state/absence/retry/crossing/regressions/static/finalcleanup/fullfinalreview/publication incomplete. First-evidence/HTTP sources fixed71; only reviewed unexecuted e62 state setup delta differs, migrationaeeb unchanged.
+
+No taskpush/accepted main code integration/hosted/pilot-ready claim or successor. B3b/c/A1c/A2/TASK-021 remain incomplete; no failed/timeout/abort or inherited race receives new L2 credit. Coordinator runtime remains exclusive/serial.
+
 ## 2026-09-28 — B3b first evidence reviewed; pre-execution state-fixture correction cleared
 
 Fresh bounded first-evidence reviewer found no gap in frozen71 migration/SQL/guard/upgrade/catalog/lint sources and stable completed receipts:1388 actual SQL assertions/18 rollback suites, complete internally compared prior25 history/54 retained tables/catalog and142→144 functions, installed exact ABI/ACL/body closure, standardlint exit1/sole inherited advisory. Original25 migrations/94 inherited fixture files/179 historical handoffs unchanged. Limits: raw TAP and full pre-upgrade retained/history snapshots are not persisted for independent reparse/replay; reviewed fail-closed verifiers compare them internally and durable receipts summarize outcomes. This is scoped review, not full task acceptance.
