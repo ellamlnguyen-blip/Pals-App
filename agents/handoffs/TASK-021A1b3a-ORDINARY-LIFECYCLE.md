@@ -2,7 +2,7 @@
 
 Status: bounded implementation, reviewed fixture execution and disposable cleanup are ready for final independent review. This child is not accepted or complete until final evidence/compatibility review, task-branch publication and remote-verified canonical integration. Task push SHA and accepted main SHA remain pending coordinator action. No B3b/B3c implementation or successor dispatch is included.
 
-Branch: `agent/TASK-021A1b3a-ordinary-lifecycle`, independent no-hardlinks clone `/private/tmp/pals-task021a1b3a-lifecycle`. Canonical contract baseline was `936b784ed2ae6965b4251fe9c6195b8f63671f2e`; coordinator documentation through `1605684bafbb20129af537ec079ef2b8c4abaea6` was reconciled conflict-free. Source was independently cleared at `9dbec14`; complete corrected fixtures at `67fc312`; subsequent narrow corrections were independently reviewed. The final migration initializer-only delta is `40a2143`; reproducible lint verifier source is `ce9b4be` (source review pending at this handoff).
+Branch: `agent/TASK-021A1b3a-ordinary-lifecycle`, independent no-hardlinks clone `/private/tmp/pals-task021a1b3a-lifecycle`. Canonical contract baseline was `936b784ed2ae6965b4251fe9c6195b8f63671f2e`; coordinator documentation through `1605684bafbb20129af537ec079ef2b8c4abaea6` was reconciled conflict-free. Source was independently cleared at `9dbec14`; complete corrected fixtures at `67fc312`; subsequent narrow corrections were independently reviewed. The final migration initializer-only delta is `40a2143`; reproducible lint verifier source was `ce9b4be`, followed by the strict result-shape correction described below.
 
 ## Implementation and preserved boundary
 
@@ -54,6 +54,8 @@ Independent review classified this as the structural advisory for the contract-m
 - Initial standard database lint failed the three jsonb initializer warnings plus the composite structural advisory;40a2143 explicitly types the initializers, leaving the exact reviewed advisory nonzero.
 
 Every failed runtime fixture attempt completed its guarded final reset and is excluded from module passes/counts. Initial unit48/one sandbox skip is superseded only by permitted loopback unit49/no-skip run. Static identifier/missing copied dependency issues were resolved without installs or product changes.
+
+Final independent review of `003e1d4cc7db77b805cfb07c7d6422c198297892` cleared lifecycle source, executed evidence and cleanup, and accepted the bounded nonzero lint compatibility exception. Its only finding was verifier result-shape strictness. The source-only correction now compares the entire results array to the exact single function/issue object, rejecting nonarrays and unexpected result-level fields. Command, threshold, exit1, transport guards and captured evidence remain unchanged. No runtime restart or verifier rerun occurred; exact correction tip awaits final delta clearance.
 
 ## Disposable cleanup and remaining gates
 

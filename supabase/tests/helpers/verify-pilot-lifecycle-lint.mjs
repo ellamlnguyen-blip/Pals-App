@@ -37,13 +37,16 @@ assert.equal(
   1,
   "standard lint remains nonzero; no pass conversion",
 );
-assert.equal(data.results.length, 1);
-assert.equal(data.results[0].function, "private.pilot_lock_ordinary_lifecycle");
-assert.deepEqual(data.results[0].issues, [
+assert.deepEqual(data.results, [
   {
-    level: "warning extra",
-    message: 'composite OUT variable "source_row" is not single argument',
-    sqlState: "00000",
+    function: "private.pilot_lock_ordinary_lifecycle",
+    issues: [
+      {
+        level: "warning extra",
+        message: 'composite OUT variable "source_row" is not single argument',
+        sqlState: "00000",
+      },
+    ],
   },
 ]);
 writeFileSync(
