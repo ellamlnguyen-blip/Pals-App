@@ -1,5 +1,11 @@
 # Backlog
 
+## 2026-09-28 — B3b immutable fixture checkpoint; independent reviews active
+
+Local/unpushed checkpoint `629e3fbed336582b1f3c53333ce0795ca1149054` on `agent/TASK-021A1b3b-cohost-chat` contains17 new fixture/handoff files after independently cleared source `aeeb67a76d7a4cc40e72fbe51334e5d934e3a8a3`. Coordinator confirmed clean executor tree and no migration difference from aeeb; original25 remain untouched. Executor reports syntax/static adapter generation/ESLint/whitespace checks only. No runtime evidence is claimed:424 planned actual matrix observations and170 source-cleared common mappings, all per-route SQL/real Auth controls and remaining source/state/absence/retry/crossing/upgrade/catalog/regressions are still uncovered.
+
+Fresh independent Sol-medium `review_b3b_fixture_semantics` reviews lawful SQL/HTTP/matrix/source-state/census/role/retry semantics; `review_b3b_fixture_ownership` reviews exact target/full-history/captured API lane, guarded sessions/cleanup, true25 upgrade/catalog/strict lint and inherited adapters. Both read-only against exact629; no imports/test/runtime operations authorized. Implementation paused. Coordinator must resolve findings and explicitly release serial disposable local runtime after both clear and fresh ownership preflight. Owned services/VM remain stopped; legacy non-hostagent56460 untouched. No task push/accepted code integration, hosted operations or pilot-ready claim. B3b/c/A1c/A2/TASK-021 incomplete; no product successor from this sub-stage. Standard speed remains app-controlled/unverifiable.
+
 ## 2026-09-28 — B3b source cleared; fixtures authoring, runtime unreleased
 
 Fresh independent source/security review cleared exact local/unpushed aeeb67a76d7a4cc40e72fbe51334e5d934e3a8a3 with no finding. All25 historical bytes/23 inventory body hashes, two private scalar helpers/five public interfaces, sorted required actor/host/eligible-target tuples, exact denial/retry/revision behavior and held authority through later writer/hook waits reconcile. Conditional common-identity source gate is cleared;424 planned actual+170 mapped cells still wholly uncovered, every route SQL/real Auth controls mandatory.
