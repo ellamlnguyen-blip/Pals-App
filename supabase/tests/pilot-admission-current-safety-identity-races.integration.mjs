@@ -1937,6 +1937,18 @@ export function identitySessionNames(cell) {
   );
 }
 
+export function identityObservationFailure(blocker, observationError) {
+  blocker.full54_after_unavailable =
+    "post-closure census failed; no full54 rollback proof";
+  blocker.observation_error = String(observationError.message);
+  blocker.full54_race_rollback = null;
+  const error = new Error(
+    `${blocker.id}: post-closure census failed; original blocked-cell evidence preserved`,
+  );
+  error.identityOutcome = blocker;
+  return error;
+}
+
 export function identitySuiteFailure(
   outcomes,
   cause = null,
@@ -2484,6 +2496,11 @@ async function runIdentityCell(cell) {
       successful_order_credit: false,
       full54_before: before,
     };
+    // Classify already-observed abort diagnostics before any fallible cleanup/observation.
+    blocker.abort_partition = blocker.diagnostics.some(
+      (d) => d && ["40P01", "40001"].includes(d.code),
+    );
+    blocker.abort_credit = false;
     return blocker;
   } finally {
     try {
@@ -2498,7 +2515,12 @@ async function runIdentityCell(cell) {
       throw error;
     }
     if (blocker) {
-      blocker.full54_after = census();
+      blocker.owned_children_awaited = true;
+      try {
+        blocker.full54_after = census();
+      } catch (observationError) {
+        throw identityObservationFailure(blocker, observationError);
+      }
       // A successful winner may stand while a loser aborts; never erase or falsely call it whole-race rollback.
       try {
         equal54(blocker.full54_after, before);
@@ -2507,10 +2529,6 @@ async function runIdentityCell(cell) {
         blocker.full54_race_rollback = false;
         blocker.committed_winner_or_unexplained_delta = true;
       }
-      blocker.abort_partition = blocker.diagnostics.some(
-        (d) => d && ["40P01", "40001"].includes(d.code),
-      );
-      blocker.abort_credit = false;
     }
   }
 }
