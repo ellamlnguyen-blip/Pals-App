@@ -1,6 +1,10 @@
 -- TASK-021A1b3c SOURCE ONLY: authored, unexecuted base SQL controls.
 -- Execution requires later exact source/fixture/owner review and serial release.
 -- This rollback module does not supply an owner/history wrapper or race evidence.
+-- Preserve exact can_read_hangout(false), including its cancelled-host predicate.
+-- A committed actor=host/absent-participant current fixture is impossible: the
+-- deferred enforce_joined_host constraint requires the immutable host joined.
+-- Do not disable constraints or count an uncommitted orphan as lawful evidence.
 begin;
 create extension if not exists pgtap with schema extensions;
 set local search_path=public,extensions;
