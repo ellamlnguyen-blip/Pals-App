@@ -1,6 +1,6 @@
 # Current State
 
-B3b runtime monitoring: all11 regression result pending; exact owned accepted B3a block child/reset progressing, transient status recovered without recovery. Coordinator firm05:55UTC cutoff; no source/timeout edit or partial pass credit. See [monitoring receipt](../../agents/handoffs/TASK-021A1b3b-REGRESSION-MONITOR.md).
+B3b runtime monitoring: all11 regression result pending; exact owned accepted B3a block child/reset progressing, transient status recovered without recovery. Coordinator reviewed per-module bound (block06:01:37UTC; final crossing2min); no source/timeout edit or partial pass credit. See [monitoring receipt](../../agents/handoffs/TASK-021A1b3b-REGRESSION-MONITOR.md).
 
 ## 2026-09-28 — B3b crossing outcome correction source cleared; serial rerun released
 

@@ -1,6 +1,6 @@
 # NOW
 
-B3b all11 regression result pending; exact owned child/reset progressing; firm05:55UTC cutoff, no timeout/source edit or partial pass credit. Monitoring receipt: agents/handoffs/TASK-021A1b3b-REGRESSION-MONITOR.md.
+B3b all11 regression result pending; exact owned child/reset progressing; reviewed per-module bound (block06:01:37UTC; final crossing2min), no timeout/source edit or partial pass credit. Monitoring receipt: agents/handoffs/TASK-021A1b3b-REGRESSION-MONITOR.md.
 
 ## 2026-09-28 — B3b crossing outcome correction source cleared; serial rerun released
 
