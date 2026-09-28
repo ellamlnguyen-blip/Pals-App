@@ -1,6 +1,6 @@
 # B3b exact fixture matrix and evidence limits
 
-Prepared contract/source plan only. No fixture implemented/executed and every cell remains **uncovered** until observed reviewed evidence. IDs below define required loops, not pass counts. L1–L6 inherit B3a's accepted evidence discipline; no B3a identity-path equivalence substitutes for a new B3b action/target or immutable-host chat retry. Use isolated sources and synthetic identifiers per cell.
+Historical pre-execution contract/source plan. At authoring no fixture was implemented/executed and every cell was **uncovered**. Current reviewed coverage is documented in COHOST-CHAT.md, MATRIX-STATE-REVIEW.md and FINAL-REVIEW.md; the JSON remains the normative authored cell inventory, not an execution receipt. IDs below define required loops, not pass counts. L1–L6 inherit B3a's accepted evidence discipline; no B3a identity-path equivalence substitutes for a new B3b action/target or immutable-host chat retry. Use isolated sources and synthetic identifiers per cell.
 
 ## Public action IDs and ready subject sets
 
