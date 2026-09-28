@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-09-27 — B3b reviewed contract remotely published; source stage dispatched
+
+Contract/source inventory/graph/matrix/reconciliation/review and queue records published on independently remote-verified canonical main `1340e27bee4247506547934678b60adf713707c1` before fresh Sol-medium `implement_pilot_cohost_chat` dispatch. Executor uses independent no-hardlinks `/private/tmp/pals-task021a1b3b-cohost-chat`, branch `agent/TASK-021A1b3b-cohost-chat`. No implementation branch push yet. First checkpoint is migration26 plus exact source/ABI/graph/conditional identity-partition handoff, then fresh independent source review; source/fixture/ownership review and explicit coordinator serial runtime release remain before any test-runtime start/mutation/reset. Current services/VM remain stopped.
+
+Five public operations only; scalar private interface, inherited25 untouched; exact S/SR denial partition and target-authority-before-revision correction are contractual.424 actual+170 conditional coverage all unobserved; conditional equivalence requires source proof and per-route actual controls. B3b/c/A1c/A2/TASK-021 incomplete; no hosted/pilot readiness or substage product successor. Standard speed app-controlled and not tool-verifiable.
+
+
 ## 2026-09-27 — B3b contract independently reviewed; publication prepared
 
 B3a complete on independently remote-verified accepted main62e47dc/completion255cc7c. Fresh docs-only reconciliation and fresh independent review cleared the exact five cohost/chat operations, new closed scalar helper interface, sorted actor/immutable-host/eligible-target graph, target-authority revision dominance and original chat error/retry behavior. Two P2 documentation findings resolved; no remaining concrete contract finding. Contract/source inventory/graph/matrix/handoff/review are prepared for canonical publication; verify remote main before fresh Sol-medium implementation dispatch.
