@@ -12,6 +12,7 @@ import {
 } from "./helpers/pilot-admission-current-safety.mjs";
 import {
   census as frozenCensus,
+  censusTables,
   sanitized,
   assertOutcome,
   caseIds,
@@ -163,7 +164,7 @@ const expectedRpcMissing = (name, body) =>
 const digest = (value) =>
   createHash("sha256").update(String(value)).digest("hex");
 const hiddenField =
-  /^(?:title|body|narrative|instructions|real_name|bio|major|email|verification_email|password|encrypted_password|access_token|refresh_token|token|raw_user_meta_data|raw_app_meta_data|data|user|session|authorization|apikey)$/i;
+  /^(?:title|body|narrative|instructions|real_name|bio|major|email|verification_email|password|encrypted_password|access_token|refresh_token|token|raw_user_meta_data|raw_app_meta_data|data|user|session|authorization|apikey|description|note|reason|public_place|primary_photo_path|additional_photo_paths|interests|favorite_foods|favorite_music|down_to_do|weird_fact|instagram|prompts|metadata|path_tokens|name)$/i;
 const safeLiteral = new Set([
   "receipt_id",
   "submitted_at",
@@ -200,30 +201,96 @@ const safeLiteral = new Set([
   "hangout",
   "hangout_host",
 ]);
+// Frozen final27 DDL/census projection and the original public HTTP ABI supply
+// this finite key allowlist. Identifier syntax alone never proves safe content.
+const schemaKeys = new Set([
+  ...censusTables,
+  ...`account_id action active actor_id additional_photo_paths allowed_email_domains answered_at assigned_at attended audit_id author_id bio blocked_id blocker_id body campus_id campus_zone category conversation_id created_at description disposition down_to_do duplicate_report_id effect enabled ends_at event_code executor_backend_pid executor_original_role executor_session_user favorite_foods favorite_music fingerprint generation_id graduation_year hangout_disable_id hangout_id high_id host_id id initiator_id input_fingerprint instagram instructions interests is_complete joined_at joining_state key kind left_at location_precision low_id major message_id name narrative new_account_status new_disabled new_hangout_disabled new_revision new_state new_status new_value next_sequence note observed_at occurred_at operation operator_id opted_in page_count page_report_ids payload_fingerprint policy_key policy_version previous_account_status previous_disabled previous_hangout_disabled previous_revision previous_state previous_status previous_value primary_photo_path prompts provenance_kind provenance_ref_id public_latitude public_longitude public_place ranking_epoch read_at real_name reason recipient_id removed_at report_id reporter_id request_id requester_id result_revision result_state result_value revision role sanction_id sequence singleton slug source_id source_kind starts_at state status subject_campus_id subject_id subject_target_id subject_target_type subject_type submitted_at target_id target_type threshold_value title university_id updated_at user_id verification_email verified_at visibility weird_fact`.split(
+    " ",
+  ),
+  // Native Storage/Auth authorization projections already used by the fixture.
+  ...`bucket_id owner owner_id last_accessed_at metadata path_tokens version level email email_confirmed_at deleted_at raw_user_meta_data raw_app_meta_data`.split(
+    " ",
+  ),
+  // Public response and authored expectation fields; credential keys are named
+  // for shape evidence only, and their values remain private below.
+  ...`receipt_id code sqlstate error_code message msg details hint access_token refresh_token password encrypted_password token data user session authorization apikey accepted_statuses result_keys provenance different_receipt_required`.split(
+    " ",
+  ),
+]);
+const diagnosticNames = new Set([
+  "Error",
+  "AssertionError",
+  "TypeError",
+  "RangeError",
+  "SyntaxError",
+  "AbortError",
+  "TimeoutError",
+  "strictEqual",
+  "deepStrictEqual",
+  "notStrictEqual",
+  "notDeepStrictEqual",
+  "match",
+  "doesNotMatch",
+  "ok",
+  "fail",
+  "rejects",
+]);
 const safeKey = (key) =>
-  key.length <= 64 &&
-  !/eyJ[A-Za-z0-9_-]+\./.test(key) &&
-  /^[A-Za-z_][A-Za-z0-9_.]*$/.test(key)
+  schemaKeys.has(key) || diagnosticNames.has(key)
     ? key
-    : `<key-sha256:${digest(key)}>`;
+    : `<redacted-key:type:string;characters:${Array.from(key).length};sha256:${digest(key)}>`;
+const privateField = (field) =>
+  hiddenField.test(field) || (field !== "" && !schemaKeys.has(field));
+const neutralMessages = new Set([
+  "Safety report unavailable",
+  "Safety operation unavailable",
+]);
+const knownCodes = new Set([
+  "22023",
+  "23503",
+  "23505",
+  "23514",
+  "40001",
+  "40P01",
+  "42501",
+  "22P02",
+  "57014",
+  "P0001",
+  "PGRST301",
+  "PGRST202",
+  "PGRST205",
+]);
+const exactCode = (value) =>
+  typeof value === "string" &&
+  /^(?:[0-9A-Z]{5}|PGRST[0-9]{3})$/.test(value) &&
+  knownCodes.has(value);
+const redactedContent = (value) => ({
+  type: Array.isArray(value) ? "array" : typeof value,
+  ...(typeof value === "string"
+    ? { characters: Array.from(value).length }
+    : Array.isArray(value)
+      ? { length: value.length }
+      : {}),
+  sha256: digest(JSON.stringify(stable(value))),
+  redacted: true,
+});
 export function redactedValue(value, field = "") {
   if (value === undefined) return { type: "undefined" };
-  if (value === null || typeof value === "boolean" || typeof value === "number")
-    return value;
-  if (hiddenField.test(field))
-    return {
-      type: Array.isArray(value) ? "array" : typeof value,
-      sha256: digest(JSON.stringify(stable(value))),
-      redacted: true,
-    };
+  if (value === null) return value;
+  if (privateField(field)) return redactedContent(value);
+  if (field === "message" || field === "msg")
+    return neutralMessages.has(value) ? value : redactedContent(value);
+  if (["code", "sqlstate"].includes(field))
+    return exactCode(value) ? value : redactedContent(value);
+  if (typeof value === "boolean" || typeof value === "number") return value;
   if (typeof value === "string") {
     if (
       safeLiteral.has(value) ||
       uuidPattern.test(value) ||
       /^\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}:\d{2}(?:\.\d+)?(?:Z|[+-]\d{2}(?::?\d{2})?)$/.test(
         value,
-      ) ||
-      /^(?:[A-Z0-9]{5}|PGRST\d{3})$/.test(value)
+      )
     )
       return value;
     return {
@@ -257,7 +324,7 @@ export function redactedDifferences(expected, actual, path = "$", field = "") {
     return [];
   // Keep full precise field/index differences but redact private value content.
   if (
-    !hiddenField.test(field) &&
+    !privateField(field) &&
     expected &&
     actual &&
     typeof expected === "object" &&
@@ -272,8 +339,12 @@ export function redactedDifferences(expected, actual, path = "$", field = "") {
         redactedDifferences(
           expected[key],
           actual[key],
-          `${path}.${safeKey(key)}`,
-          key,
+          Array.isArray(expected) &&
+            /^(?:0|[1-9][0-9]*)$/.test(key) &&
+            Number(key) < Math.max(expected.length, actual.length)
+            ? `${path}[${key}]`
+            : `${path}.${safeKey(key)}`,
+          Array.isArray(expected) ? "" : key,
         ),
       );
   }
@@ -291,11 +362,7 @@ export function redactedHttp(response) {
     body && !Array.isArray(body) ? (body.message ?? body.msg) : undefined;
   return {
     status: typeof response?.status === "number" ? response.status : null,
-    code:
-      typeof body?.code === "string" &&
-      /^(?:[A-Z0-9]{5}|PGRST\d{3})$/.test(body.code)
-        ? body.code
-        : null,
+    code: body?.code === undefined ? null : redactedValue(body.code, "code"),
     auth_error_code:
       typeof body?.error_code === "string" &&
       ["over_email_send_rate_limit", "over_request_rate_limit"].includes(
@@ -307,7 +374,7 @@ export function redactedHttp(response) {
       safeLiteral.has(message) && String(message).startsWith("Safety ")
         ? message
         : null,
-    message: redactedValue(message),
+    message: redactedValue(message, "message"),
     body_shape: {
       type:
         body === null ? "null" : Array.isArray(body) ? "array" : typeof body,
@@ -326,6 +393,84 @@ export function redactedHttp(response) {
     },
   };
 }
+// Pure reusable regression checks: no target, Auth, child, census or entrypoint.
+export function verifyFailureRedactionProjection() {
+  const marker = "TACOS";
+  const response = redactedHttp({
+    status: 403,
+    body: { code: "42501", message: marker, [marker]: marker },
+  });
+  assert.equal(response.code, "42501");
+  assert.equal(response.message.redacted, true);
+  assert.equal(response.message.characters, 5);
+  assert.equal(response.neutral_error, null);
+  assert.ok(!JSON.stringify(response).includes(marker));
+  for (const field of [
+    "",
+    "message",
+    "msg",
+    "narrative",
+    "title",
+    "access_token",
+    marker,
+  ]) {
+    const value = redactedValue(marker, field);
+    assert.equal(value.redacted, true);
+    assert.equal(value.characters, 5);
+    assert.ok(!JSON.stringify(value).includes(marker));
+  }
+  for (const [code, field] of [
+    ["42501", "code"],
+    ["40P01", "sqlstate"],
+    ["PGRST202", "code"],
+  ])
+    assert.equal(redactedValue(code, field), code);
+  assert.equal(redactedValue("42501").redacted, true);
+  assert.equal(redactedValue(marker, "code").redacted, true);
+  assert.equal(redactedValue("PGRST202", "narrative").redacted, true);
+  const differences = redactedDifferences(
+    {
+      status: 200,
+      provenance_kind: "current_people",
+      [marker]: "private-before",
+    },
+    { status: 403, provenance_kind: "retained_host", [marker]: marker },
+  );
+  assert.ok(
+    differences.some(
+      (d) => d.path === "$.status" && d.expected === 200 && d.actual === 403,
+    ),
+  );
+  assert.ok(
+    differences.some(
+      (d) =>
+        d.path === "$.provenance_kind" &&
+        d.expected === "current_people" &&
+        d.actual === "retained_host",
+    ),
+  );
+  assert.ok(
+    differences.some((d) =>
+      d.path.includes("<redacted-key:type:string;characters:5;sha256:"),
+    ),
+  );
+  assert.ok(!JSON.stringify(differences).includes(marker));
+  assert.ok(!JSON.stringify(differences).includes("private-before"));
+  const neutral = redactedHttp({
+    status: 403,
+    body: { code: "42501", message: "Safety report unavailable" },
+  });
+  assert.equal(neutral.neutral_error, "Safety report unavailable");
+  assert.equal(neutral.message, "Safety report unavailable");
+  return {
+    pure_projection: true,
+    unknown_message_value_key_redacted: true,
+    known_code_field_retained: true,
+    expected_field_differences_retained: true,
+    neutral_literal_retained: true,
+  };
+}
+
 const freshFailureContext = () => ({
   caseId: "HTTP.execution-gate",
   fixtureKey: null,
@@ -400,7 +545,7 @@ export function failureRecord(
       operator:
         typeof error?.operator === "string" ? safeKey(error.operator) : null,
       differences: redactedDifferences(error?.expected, error?.actual),
-      message: redactedValue(error?.message),
+      message: redactedValue(error?.message, "message"),
     },
     full54_census_before_cleanup: {
       available_snapshots: snapshots.map(sanitized),
@@ -415,7 +560,7 @@ export function failureRecord(
       census_failure: censusError
         ? {
             name: safeKey(censusError.name ?? "Error"),
-            message: redactedValue(censusError.message),
+            message: redactedValue(censusError.message, "message"),
           }
         : null,
     },
