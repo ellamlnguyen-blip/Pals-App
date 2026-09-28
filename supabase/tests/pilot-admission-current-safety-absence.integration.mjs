@@ -16,7 +16,6 @@ import {
   caseIds,
   auth,
   census,
-  assertOutcome,
   assertCurrentOnly,
 } from "./helpers/pilot-current-safety-fixtures.mjs";
 import {
@@ -30,6 +29,10 @@ import {
   exactSnapshot,
   dynamicTime,
   requireReviewedPolicyTransport,
+  assertCaseSetup,
+  verifiedOutcome,
+  captureFailure,
+  guardedFinalCleanup,
 } from "./pilot-admission-current-safety-concurrency.integration.mjs";
 export const absenceManifest = Object.freeze([
   {
@@ -265,7 +268,7 @@ function activationExpectation(
       },
     ],
   };
-  return assertOutcome({
+  return verifiedOutcome({
     result,
     expectedResult: { state: "active", revision: 1 },
     before,
@@ -287,14 +290,25 @@ export async function runAbsenceFixtures() {
   assert.equal(absenceManifest.length, 24);
   localTarget("current27");
   assertClean();
-  let cleanupSafe = true;
+  let cleanupSafe = true,
+    originalError,
+    context;
   try {
     for (const cell of absenceManifest) {
+      context = { id: cell.id, phase: "independent-case-setup" };
+      const clean = census(),
+        setupStart = sql("select clock_timestamp()::text");
       const route = prepare(
         routes.find((r) => r.id === cell.route),
         { caseKey: cell.id },
       );
+      context.setupQualification = assertCaseSetup(clean, census(), route, {
+        start: setupStart,
+        end: sql("select clock_timestamp()::text"),
+      });
+      context.phase = "eligible-precheck";
       await precheck(route);
+      context.phase = "absence-denial";
       const activation =
         cell.partition === "serial-authorized-manager-activation-after-denial";
       const subjectName = activation
@@ -321,6 +335,7 @@ export async function runAbsenceFixtures() {
         // Revision0 real manager activation admits a NEW call; no phantom wait.
         const subject = route.subjects[cell.subject],
           request = caseIds(cell.id + ".activate").request;
+        context.phase = "manager-activation";
         const start = sql("select clock_timestamp()::text");
         const result = JSON.parse(
           sql(
@@ -347,7 +362,7 @@ export async function runAbsenceFixtures() {
           success.result,
           freshRequest,
         );
-        assertOutcome({
+        verifiedOutcome({
           result: "committed fresh call",
           expectedResult: "committed fresh call",
           before: success.snapshot,
@@ -356,6 +371,7 @@ export async function runAbsenceFixtures() {
         console.log(
           JSON.stringify({
             id: cell.id,
+            setup_qualification: context.setupQualification,
             writer:
               "authenticated set_pilot_account_admission expected revision0",
             result,
@@ -389,7 +405,7 @@ export async function runAbsenceFixtures() {
               e.message ===
               "Disposable SQL error: 42501: Pilot management unavailable",
           );
-          assertOutcome({
+          verifiedOutcome({
             result: "manager cannot recreate mandatory policy",
             expectedResult: "manager cannot recreate mandatory policy",
             before: missing,
@@ -398,6 +414,7 @@ export async function runAbsenceFixtures() {
         }
         // Restoration is privileged synthetic preparation; manager policy APIs
         // cannot recreate a missing singleton/capability. Restore exact old values.
+        context.phase = "privileged-replacement";
         const original = before[loss.table].find((r) =>
           loss.table === "private.pilot_account_admission"
             ? r.account_id === loss.subject
@@ -408,7 +425,7 @@ export async function runAbsenceFixtures() {
         sql(
           `${bounds}begin;select private.pilot_evidence_write_lock();insert into ${loss.table} select * from jsonb_populate_record(null::${loss.table},${quote(JSON.stringify(original))}::jsonb);commit;`,
         );
-        assertOutcome({
+        verifiedOutcome({
           result: "privileged exact fixture replacement",
           expectedResult: "privileged exact fixture replacement",
           before,
@@ -426,7 +443,7 @@ export async function runAbsenceFixtures() {
           fresh.result,
           caseIds(cell.id + ".replacement-fresh").request,
         );
-        assertOutcome({
+        verifiedOutcome({
           result: "replacement precheck rolled back",
           expectedResult: "replacement precheck rolled back",
           before,
@@ -435,6 +452,7 @@ export async function runAbsenceFixtures() {
         console.log(
           JSON.stringify({
             id: cell.id,
+            setup_qualification: context.setupQualification,
             writer: loss.writer,
             result: {
               code: "42501",
@@ -450,16 +468,16 @@ export async function runAbsenceFixtures() {
           }),
         );
       }
+      context.phase = "guarded-case-reset";
       resetDisposable("current27");
     }
   } catch (error) {
+    originalError = error;
     if (error.cleanupIncomplete) cleanupSafe = false;
+    captureFailure(error, context);
     throw error;
   } finally {
-    if (cleanupSafe) {
-      resetDisposable("current27");
-      assertClean();
-    }
+    guardedFinalCleanup(cleanupSafe, originalError);
   }
 }
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1])

@@ -23,7 +23,11 @@ import {
   assertCurrentOnly,
   census,
   censusQuery,
-  assertOutcome,
+  assertOutcome as rawAssertOutcome,
+  censusTables,
+  campus,
+  email,
+  photoPath,
   selectedLaterLane,
   sanitized,
 } from "./helpers/pilot-current-safety-fixtures.mjs";
@@ -630,6 +634,440 @@ export const policyManifest = Object.freeze([
   },
 ]);
 
+// Structured comparisons preserve exact mismatching fields for failed-cell
+// evidence. Credentials are never printed; whole session transcripts are withheld.
+export function credentialFree(value) {
+  if (Array.isArray(value)) return value.map(credentialFree);
+  if (value && typeof value === "object")
+    return Object.fromEntries(
+      Object.entries(value).map(([key, v]) => [
+        key,
+        /password|secret|token|authorization|cookie|credential|api_key|apikey|access_key/i.test(
+          key,
+        )
+          ? "<redacted>"
+          : credentialFree(v),
+      ]),
+    );
+  if (typeof value === "string")
+    return value
+      .replace(
+        /eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+/g,
+        "<redacted-token>",
+      )
+      .replace(/(postgres(?:ql)?:\/\/)[^@\s]+@/gi, "$1<redacted>@");
+  return value;
+}
+export function differences(expected, actual, path = "$") {
+  if (expected === actual) return [];
+  if (
+    expected &&
+    actual &&
+    typeof expected === "object" &&
+    typeof actual === "object"
+  ) {
+    const keys = new Set([...Object.keys(expected), ...Object.keys(actual)]);
+    return [...keys].flatMap((k) =>
+      differences(expected[k], actual[k], `${path}.${k}`),
+    );
+  }
+  const sensitive =
+    /password|secret|token|authorization|cookie|credential|api_key|apikey|access_key/i.test(
+      path,
+    );
+  return [
+    {
+      field: path,
+      expected: sensitive
+        ? "<redacted>"
+        : expected === undefined
+          ? "<absent>"
+          : credentialFree(expected),
+      actual: sensitive
+        ? "<redacted>"
+        : actual === undefined
+          ? "<absent>"
+          : credentialFree(actual),
+    },
+  ];
+}
+export function verifiedOutcome(input) {
+  const delta = differences(input.expectedAfter ?? input.before, input.after);
+  if (delta.length) {
+    const error = new Error("Exact full54 outcome mismatch");
+    error.preciseDifferences = delta;
+    throw error;
+  }
+  return rawAssertOutcome(input);
+}
+export function exactDiagnostic(output) {
+  const rows = [...output.matchAll(/ERROR:\s+([A-Z0-9]{5}):\s*([^\r\n]*)/g)];
+  return rows.map((row) => ({
+    code: row[1],
+    message: credentialFree(row[2].trim()),
+  }));
+}
+export function captureFailure(error, context) {
+  if (error.failureRecorded) return;
+  let snapshot = null,
+    censusDiagnostic = null;
+  try {
+    snapshot = census();
+  } catch (cause) {
+    censusDiagnostic = credentialFree(cause.message);
+  }
+  const parsed = /^Disposable SQL error: ([A-Z0-9]{5}): (.*)$/.exec(
+    error.message,
+  );
+  console.error(
+    JSON.stringify({
+      id: context?.id ?? "<suite>",
+      phase: context?.phase ?? "<unknown>",
+      partition: "failed-no-success-credit",
+      successful_wait_order_credit: false,
+      observed_wait_credit: 0,
+      lock_observation: context?.observation ?? null,
+      available_public_result: context?.publicResult ?? null,
+      available_manager_result: context?.managerResult ?? null,
+      setup_qualification: context?.setupQualification ?? null,
+      diagnostics: [
+        ...(context?.diagnostics ?? []),
+        ...(error.sqlDiagnostics ?? []),
+        ...(parsed
+          ? [{ code: parsed[1], message: credentialFree(parsed[2]) }]
+          : []),
+      ],
+      cleanup_diagnostics: error.cleanupDiagnostics ?? [],
+      error: {
+        name: error.name,
+        message: error.preciseDifferences
+          ? "Exact full54 outcome mismatch"
+          : credentialFree(error.message),
+      },
+      differences: error.preciseDifferences ?? [],
+      committed_census: snapshot ? credentialFree(snapshot) : null,
+      committed_census_summary: snapshot ? sanitized(snapshot) : null,
+      holder_snapshot: context?.holderSnapshot
+        ? credentialFree(context.holderSnapshot)
+        : null,
+      census_failure: censusDiagnostic,
+    }),
+  );
+  error.failureRecorded = true;
+  error.failedCellID = context?.id ?? "<suite>";
+}
+export async function finishOwnedSessions(sessions, originalError = null) {
+  const closed = await Promise.allSettled(
+    sessions.filter(Boolean).map((s) => s.close()),
+  );
+  if (closed.some((r) => r.status === "rejected")) {
+    const error =
+      originalError ??
+      new Error("owned child cleanup incomplete; no reset permission");
+    error.cleanupIncomplete = true;
+    error.cleanupDiagnostics = closed
+      .filter((r) => r.status === "rejected")
+      .map((r) => credentialFree(r.reason.message));
+    console.error(
+      JSON.stringify({
+        id: error.failedCellID ?? "<owned-session>",
+        partition: "owned-exit-unproven",
+        cleanup_diagnostics: error.cleanupDiagnostics,
+        reset_forbidden: true,
+        original_error_preserved: originalError !== null,
+        successful_wait_order_credit: false,
+      }),
+    );
+    throw error;
+  }
+}
+export function guardedFinalCleanup(cleanupSafe, originalError = null) {
+  if (!cleanupSafe) return;
+  try {
+    resetDisposable("current27");
+    assertClean();
+  } catch (cleanup) {
+    if (originalError) {
+      originalError.cleanupDiagnostics = [
+        ...(originalError.cleanupDiagnostics ?? []),
+        credentialFree(cleanup.message),
+      ];
+      console.error(
+        JSON.stringify({
+          id: originalError.failedCellID ?? "<suite>",
+          partition: "cleanup-failed",
+          original_error_preserved: true,
+          diagnostic: credentialFree(cleanup.message),
+          successful_wait_order_credit: false,
+        }),
+      );
+      throw originalError;
+    }
+    throw cleanup;
+  }
+}
+export function assertCaseSetup(
+  clean,
+  after,
+  route,
+  window,
+  actorPreference = "absent",
+) {
+  assert.deepEqual(Object.keys(after).sort(), censusTables.slice().sort());
+  const expected = structuredClone(clean);
+  const all = [route.actor, route.host, route.peer, route.manager],
+    ready = all.slice(0, 3);
+  const select = (table, key, id) => {
+    const rows = after[table].filter((r) => r[key] === id);
+    assert.equal(rows.length, 1, `${table} exact ${key} binding`);
+    return rows[0];
+  };
+  const stamp = (table, key, id, field) =>
+    dynamicTime(select(table, key, id)[field], window);
+  const profile = (id, eligible) => ({
+    user_id: id,
+    real_name: eligible ? "Current safety fixture" : null,
+    graduation_year: eligible ? 2028 : null,
+    major: eligible ? "Math" : null,
+    bio: eligible ? "Local" : null,
+    primary_photo_path: eligible ? photoPath(id) : null,
+    is_complete: eligible,
+    created_at: stamp("public.profiles", "user_id", id, "created_at"),
+    interests: [],
+    down_to_do: [],
+    favorite_music: null,
+    favorite_foods: null,
+    weird_fact: null,
+    prompts: [],
+    instagram: null,
+    additional_photo_paths: [],
+    revision: eligible ? 1 : 0,
+  });
+  expected["public.accounts"] = all.map((id) => ({
+    id,
+    status: "active",
+    created_at: stamp("public.accounts", "id", id, "created_at"),
+  }));
+  expected["public.profiles"] = all.map((id) =>
+    profile(id, id !== route.manager),
+  );
+  expected["auth.users"] = all.map((id) => ({
+    id,
+    email: email(id),
+    email_confirmed_at: stamp("auth.users", "id", id, "email_confirmed_at"),
+    deleted_at: null,
+    raw_user_meta_data: null,
+    raw_app_meta_data: null,
+  }));
+  expected["public.university_memberships"] = all.map((id) => ({
+    user_id: id,
+    university_id: campus,
+    verified_at: select("auth.users", "id", id).email_confirmed_at,
+    verification_email: email(id),
+    created_at: stamp(
+      "public.university_memberships",
+      "user_id",
+      id,
+      "created_at",
+    ),
+  }));
+  expected["private.pilot_account_admission"] = ready.map((id) => ({
+    account_id: id,
+    state: "active",
+    revision: 1,
+    created_at: stamp(
+      "private.pilot_account_admission",
+      "account_id",
+      id,
+      "created_at",
+    ),
+    updated_at: stamp(
+      "private.pilot_account_admission",
+      "account_id",
+      id,
+      "updated_at",
+    ),
+  }));
+  expected["private.pilot_admission_managers"] = [
+    {
+      account_id: route.manager,
+      state: "active",
+      revision: 1,
+      created_at: stamp(
+        "private.pilot_admission_managers",
+        "account_id",
+        route.manager,
+        "created_at",
+      ),
+      updated_at: stamp(
+        "private.pilot_admission_managers",
+        "account_id",
+        route.manager,
+        "updated_at",
+      ),
+    },
+  ];
+  const audits = after["private.pilot_manager_audit"];
+  assert.equal(audits.length, 1);
+  assert.match(audits[0].id, uuid);
+  assert.ok(
+    Number.isSafeInteger(audits[0].executor_backend_pid) &&
+      audits[0].executor_backend_pid > 0,
+  );
+  expected["private.pilot_manager_audit"] = [
+    {
+      id: audits[0].id,
+      account_id: route.manager,
+      executor_session_user: "postgres",
+      executor_original_role: "none",
+      executor_backend_pid: audits[0].executor_backend_pid,
+      previous_state: null,
+      new_state: "active",
+      previous_revision: 0,
+      new_revision: 1,
+      reason: "B3c synthetic manager",
+      request_id: route.managerRequest,
+      occurred_at: dynamicTime(audits[0].occurred_at, window),
+    },
+  ];
+  expected["public.universities"] = [
+    ...clean["public.universities"],
+    {
+      id: route.otherCampus,
+      name: "Other synthetic campus",
+      slug: "b3c-" + route.otherCampus,
+      allowed_email_domains: ["unc.edu"],
+      active: true,
+      created_at: stamp(
+        "public.universities",
+        "id",
+        route.otherCampus,
+        "created_at",
+      ),
+    },
+  ];
+  expected["private.pilot_availability"] = clean[
+    "private.pilot_availability"
+  ].map((row) => ({ ...row, enabled: true }));
+  expected["private.pilot_capabilities"] = clean[
+    "private.pilot_capabilities"
+  ].map((row) => ({
+    ...row,
+    enabled: ["hangouts", "people"].includes(row.key),
+  }));
+  for (const table of [
+    "private.hangout_feature_gate",
+    "private.people_feature_gate",
+    "private.safety_feature_gate",
+  ])
+    expected[table] = [{ singleton: true, enabled: true }];
+  expected["private.people_preferences"] = [
+    { account_id: route.peer, opted_in: true },
+    ...(actorPreference === false
+      ? [{ account_id: route.actor, opted_in: false }]
+      : []),
+  ];
+  // Provider defaults are opaque immutable before-value anchors only. This
+  // assignment changes no Storage value after setup. Identity/owner/bucket/name
+  // and generated UUID/times are independently constrained; no mutated delta
+  // can use an opaque observed value as its expected authorization result.
+  const storage = after["storage.objects"];
+  assert.equal(storage.length, 3);
+  assert.equal(
+    new Set(storage.map((row) => row.id)).size,
+    3,
+    "three distinct generated object bindings",
+  );
+  const providerFields = new Set();
+  expected["storage.objects"] = ready.map((id) => {
+    const object = select("storage.objects", "name", photoPath(id));
+    assert.match(object.id, uuid);
+    assert.equal(object.bucket_id, "profile-photos");
+    assert.equal(object.owner_id, id);
+    const row = {
+      id: object.id,
+      bucket_id: "profile-photos",
+      name: photoPath(id),
+      owner_id: id,
+    };
+    for (const field of ["created_at", "updated_at", "last_accessed_at"])
+      if (Object.hasOwn(object, field) && object[field] !== null) {
+        row[field] = dynamicTime(object[field], window);
+      }
+    for (const field of Object.keys(object))
+      if (!Object.hasOwn(row, field)) {
+        providerFields.add(field);
+        row[field] = structuredClone(object[field]);
+      }
+    return row;
+  });
+  if (route.id === "CH") {
+    expected["public.hangouts"] = [
+      {
+        id: route.source,
+        university_id: campus,
+        host_id: route.host,
+        title: "Undisclosed fixture",
+        description: null,
+        starts_at: dynamicTime(
+          select("public.hangouts", "id", route.source).starts_at,
+          {
+            start: new Date(Date.parse(window.start) + 86400000).toISOString(),
+            end: new Date(Date.parse(window.end) + 86400000).toISOString(),
+          },
+        ),
+        ends_at: null,
+        status: "published",
+        joining_state: "open",
+        visibility: "campus",
+        public_place: "Approximate",
+        public_latitude: 35.91,
+        public_longitude: -79.05,
+        campus_zone: null,
+        location_precision: "approximate_area",
+        revision: 1,
+        created_at: stamp("public.hangouts", "id", route.source, "created_at"),
+        updated_at: stamp("public.hangouts", "id", route.source, "updated_at"),
+      },
+    ];
+    const participant = after["public.hangout_participants"];
+    assert.equal(participant.length, 1);
+    expected["public.hangout_participants"] = [
+      {
+        hangout_id: route.source,
+        account_id: route.host,
+        state: "joined",
+        joined_at: dynamicTime(participant[0].joined_at, window),
+        left_at: null,
+        removed_at: null,
+        updated_at: dynamicTime(participant[0].updated_at, window),
+      },
+    ];
+    const place = after["public.hangout_private_locations"];
+    assert.equal(place.length, 1);
+    expected["public.hangout_private_locations"] = [
+      {
+        hangout_id: route.source,
+        instructions: "Undisclosed synthetic instructions",
+        updated_at: dynamicTime(place[0].updated_at, window),
+      },
+    ];
+  }
+  verifiedOutcome({
+    result: "independent case setup with qualified provider anchors",
+    expectedResult: "independent case setup with qualified provider anchors",
+    before: clean,
+    after,
+    expectedAfter: exactSnapshot(clean, after, expected),
+  });
+  return {
+    source_owned_rowsets_verified: true,
+    provider_identity_and_time_fields_verified: true,
+    provider_opaque_immutable_anchor_fields: [...providerFields].sort(),
+    provider_defaults_source_verified: false,
+    provider_anchor_classification_pending_review: true,
+  };
+}
 export const bounds =
   "set statement_timeout='12s';set lock_timeout='10s';set idle_in_transaction_session_timeout='15s';";
 const reason = "B3c policy fixture";
@@ -654,7 +1092,17 @@ export function exactSnapshot(before, after, replacements) {
   for (const [table, rows] of Object.entries(replacements)) {
     // Ordering alone follows server JSONB sort. Each value comes from the explicit
     // expectation, never an automatically accepted observed row.
-    assert.equal(rows.length, after[table].length);
+    if (rows.length !== after[table].length) {
+      const error = new Error(`Exact row count mismatch in ${table}`);
+      error.preciseDifferences = [
+        {
+          field: `${table}.length`,
+          expected: rows.length,
+          actual: after[table].length,
+        },
+      ];
+      throw error;
+    }
     const used = new Set();
     expected[table] = after[table].map((actual) => {
       const index = rows.findIndex(
@@ -674,7 +1122,16 @@ export function exactSnapshot(before, after, replacements) {
               }
             })
           : index;
-      assert.ok(fallback >= 0, `unexpected exact value in ${table}`);
+      if (fallback < 0) {
+        const error = new Error(`Exact row fields mismatch in ${table}`);
+        const candidate = rows.findIndex((row, i) => !used.has(i));
+        error.preciseDifferences = differences(
+          rows[candidate],
+          actual,
+          `${table}[${candidate}]`,
+        );
+        throw error;
+      }
       used.add(fallback);
       return rows[fallback];
     });
@@ -747,7 +1204,7 @@ export function assertSuccess(
       ],
     };
   }
-  return assertOutcome({
+  return verifiedOutcome({
     result,
     expectedResult:
       route.id === "CB"
@@ -762,7 +1219,7 @@ export async function executeSuccess(
   route,
   { rollback = false, request = route.request } = {},
 ) {
-  let owned;
+  let owned, originalError;
   try {
     owned = session(`b3c_serial_${request.replaceAll("-", "").slice(0, 16)}`);
     owned.send(
@@ -776,18 +1233,12 @@ export async function executeSuccess(
       result: marker(owned.output(), "RESULT:"),
       snapshot: marker(owned.output(), "SNAPSHOT:"),
     };
+  } catch (error) {
+    originalError = error;
+    error.sqlDiagnostics = exactDiagnostic(owned?.output() ?? "");
+    throw error;
   } finally {
-    if (owned) {
-      try {
-        await owned.close();
-      } catch {
-        const error = new Error(
-          "owned child cleanup incomplete; no reset permission",
-        );
-        error.cleanupIncomplete = true;
-        throw error;
-      }
-    }
+    await finishOwnedSessions([owned], originalError);
   }
 }
 export function assertDenied(route, before, request) {
@@ -800,7 +1251,7 @@ export function assertDenied(route, before, request) {
       error.message === `Disposable SQL error: 42501: ${denialFor(route)}`,
   );
   const after = census();
-  return assertOutcome({
+  return verifiedOutcome({
     result: { code: "42501", message: denialFor(route) },
     expectedResult: { code: "42501", message: denialFor(route) },
     before,
@@ -818,7 +1269,7 @@ export async function precheck(route) {
   );
   const observed = await executeSuccess(route, { rollback: true });
   assertSuccess(route, before, observed.snapshot, observed.result);
-  assertOutcome({
+  verifiedOutcome({
     result: "rollback",
     expectedResult: "rollback",
     before,
@@ -974,7 +1425,7 @@ export function assertLoss(before, after, loss, route, window = null) {
     ];
   }
   const expectedAfter = exactSnapshot(before, after, replacements);
-  return assertOutcome({
+  return verifiedOutcome({
     result: "loss committed",
     expectedResult: "loss committed",
     before,
@@ -982,8 +1433,8 @@ export function assertLoss(before, after, loss, route, window = null) {
     expectedAfter,
   });
 }
-async function observeRace(cell, route, loss, before) {
-  let holder, waiter;
+async function observeRace(cell, route, loss, before, context) {
+  let holder, waiter, originalError;
   const start = sql("select clock_timestamp()::text");
   const name =
     "b3c_" + caseIds(cell.id).request.replaceAll("-", "").slice(0, 24);
@@ -992,6 +1443,7 @@ async function observeRace(cell, route, loss, before) {
     waiter = session(name + "_w");
     const operationFirst = cell.order === "operation-first";
     const lossSQL = `${loss.sql}select 'SNAPSHOT:'||(${censusQuery})::text;`;
+    context.phase = "holder-execution";
     holder.send(
       `${bounds}begin;${operationFirst ? successSQL(route) : lossSQL}select 'HELD';`,
     );
@@ -1001,15 +1453,18 @@ async function observeRace(cell, route, loss, before) {
       /ERROR:/,
       "failed holder is not coverage",
     );
+    context.phase = "waiter-execution";
     waiter.send(
       `${bounds}begin;${operationFirst ? lossSQL : successSQL(route)}select 'COMPLETED';commit;`,
     );
     const observationsSQL = `select jsonb_build_object('holder_pid',h.pid,'waiter_pid',w.pid,'blocking_pids',pg_blocking_pids(w.pid),'ungranted_locks',(select jsonb_agg(jsonb_build_object('locktype',l.locktype,'mode',l.mode,'relation',l.relation::regclass::text,'transactionid',l.transactionid,'classid',l.classid,'objid',l.objid,'objsubid',l.objsubid)) from pg_locks l where l.pid=w.pid and not l.granted)) from pg_stat_activity h join pg_stat_activity w on w.application_name=${quote(name + "_w")} where h.application_name=${quote(name + "_h")} and w.wait_event_type='Lock' and h.pid=any(pg_blocking_pids(w.pid)) and exists(select 1 from pg_locks l where l.pid=w.pid and not l.granted)`;
     let observation;
+    context.phase = "observe-required-wait";
     await until(() => {
       const raw = sql(observationsSQL);
       if (!raw) return false;
       observation = JSON.parse(raw);
+      context.observation = observation;
       return true;
     });
     assert.notEqual(observation.holder_pid, observation.waiter_pid);
@@ -1030,13 +1485,19 @@ async function observeRace(cell, route, loss, before) {
         ),
         "actual required tuple contention; advisory-only wait forbidden",
       );
+    context.phase = "release-and-assert-outcome";
     holder.send("commit;");
     holder.child.stdin.end();
     waiter.child.stdin.end();
     const [h, w] = await Promise.all([holder.done, waiter.done]);
+    context.diagnostics = [
+      ...exactDiagnostic(holder.output()),
+      ...exactDiagnostic(waiter.output()),
+    ];
     assert.equal(h[0], 0);
     assert.doesNotMatch(holder.output(), /ERROR:/);
     const held = marker(holder.output(), "SNAPSHOT:");
+    context.holderSnapshot = held;
     const window = { start, end: sql("select clock_timestamp()::text") };
     if (loss.manager) {
       const actual = marker(
@@ -1058,14 +1519,17 @@ async function observeRace(cell, route, loss, before) {
       assertLoss(held, census(), loss, route, window);
     } else {
       assert.notEqual(w[0], 0);
-      assert.match(waiter.output(), /ERROR:\s+42501:/);
-      assert.ok(waiter.output().includes(denialFor(route)));
+      assert.deepEqual(
+        exactDiagnostic(waiter.output()),
+        [{ code: "42501", message: denialFor(route) }],
+        "exact neutral SQL diagnostic only",
+      );
       assert.doesNotMatch(
         waiter.output(),
         /40P01|40001|57014|55P03|COMPLETED|RESULT:|SNAPSHOT:/,
       );
       assertLoss(before, held, loss, route, window);
-      assertOutcome({
+      verifiedOutcome({
         result: { code: "42501", message: denialFor(route) },
         expectedResult: { code: "42501", message: denialFor(route) },
         before: held,
@@ -1077,6 +1541,7 @@ async function observeRace(cell, route, loss, before) {
       : null;
     return {
       id: cell.id,
+      setup_qualification: context.setupQualification,
       ...observation,
       before: sanitized(before),
       after: sanitized(census()),
@@ -1100,17 +1565,63 @@ async function observeRace(cell, route, loss, before) {
         : { code: "42501", message: denialFor(route) },
       full54_values_verified: true,
     };
-  } finally {
-    const closed = await Promise.allSettled(
-      [holder, waiter].filter(Boolean).map((s) => s.close()),
-    );
-    if (closed.some((r) => r.status === "rejected")) {
-      const error = new Error(
-        "owned child cleanup incomplete; no reset permission",
-      );
-      error.cleanupIncomplete = true;
-      throw error;
+  } catch (error) {
+    originalError = error;
+    if (
+      holder
+        ?.output()
+        .split("\n")
+        .some((v) => v.startsWith("SNAPSHOT:"))
+    ) {
+      try {
+        context.holderSnapshot = marker(holder.output(), "SNAPSHOT:");
+      } catch {
+        /* malformed snapshot remains unavailable */
+      }
     }
+    for (const owned of [holder, waiter].filter(Boolean)) {
+      if (
+        owned
+          .output()
+          .split("\n")
+          .some((v) => v.startsWith("RESULT:"))
+      ) {
+        try {
+          const result = marker(owned.output(), "RESULT:");
+          context.publicResult =
+            typeof result === "boolean"
+              ? result
+              : {
+                  fields: Object.keys(result).sort(),
+                  receipt_sha256: createHash("sha256")
+                    .update(JSON.stringify(result))
+                    .digest("hex"),
+                };
+        } catch {
+          /* malformed result remains unavailable */
+        }
+      }
+      if (
+        owned
+          .output()
+          .split("\n")
+          .some((v) => v.startsWith("MANAGER_RESULT:"))
+      ) {
+        try {
+          context.managerResult = marker(owned.output(), "MANAGER_RESULT:");
+        } catch {
+          /* malformed manager result remains unavailable */
+        }
+      }
+    }
+    context.diagnostics = [
+      ...exactDiagnostic(holder?.output() ?? ""),
+      ...exactDiagnostic(waiter?.output() ?? ""),
+    ];
+    captureFailure(error, context);
+    throw error;
+  } finally {
+    await finishOwnedSessions([holder, waiter], originalError);
   }
 }
 export async function removeOwnBlock(route) {
@@ -1130,7 +1641,7 @@ export async function removeOwnBlock(route) {
     rows = before["private.people_blocks"].filter(
       (r) => !(r.blocker_id === route.actor && r.blocked_id === route.peer),
     );
-  assertOutcome({
+  verifiedOutcome({
     result,
     expectedResult: false,
     before,
@@ -1163,9 +1674,17 @@ export async function runPolicyFixtures() {
   assert.equal(policyManifest.length, 72);
   localTarget("current27");
   assertClean();
-  let cleanupSafe = true;
+  let cleanupSafe = true,
+    originalError,
+    context;
   try {
     for (const cell of policyManifest) {
+      context = { id: cell.id, phase: "independent-case-setup" };
+      const clean = census(),
+        setupStart = sql("select clock_timestamp()::text");
+      const actorPreference = cell.id.includes("operation-first")
+        ? false
+        : "absent";
       const route = prepare(
         routes.find((r) => r.id === cell.route),
         {
@@ -1175,10 +1694,20 @@ export async function runPolicyFixtures() {
             : "absent",
         },
       );
+      context.setupQualification = assertCaseSetup(
+        clean,
+        census(),
+        route,
+        { start: setupStart, end: sql("select clock_timestamp()::text") },
+        actorPreference,
+      );
+      context.phase = "eligible-current-precheck";
       await precheck(route);
+      context.phase = "race";
       const before = census(),
         loss = lossDefinition(cell, route);
-      const evidence = await observeRace(cell, route, loss, before);
+      const evidence = await observeRace(cell, route, loss, before, context);
+      context.phase = "post-loss-current-control";
       if (cell.order === "operation-first") {
         if (route.id === "CB") {
           // A missing/off safety gate forbids an authorized unblock. Restore only
@@ -1189,7 +1718,7 @@ export async function runPolicyFixtures() {
               `begin;${loss.missing ? "insert into private.safety_feature_gate(singleton,enabled) values(true,true)" : "update private.safety_feature_gate set enabled=true where singleton"};commit;`,
             );
             const a = census();
-            assertOutcome({
+            verifiedOutcome({
               result: "synthetic safety restore",
               expectedResult: "synthetic safety restore",
               before: b,
@@ -1211,17 +1740,18 @@ export async function runPolicyFixtures() {
         assertCurrentOnly(route);
         assertDenied(route, census(), caseIds(cell.id + ".post-loss").request);
       }
+      context.phase = "success-evidence";
       console.log(JSON.stringify(evidence));
+      context.phase = "guarded-case-reset";
       resetDisposable("current27");
     }
   } catch (error) {
+    originalError = error;
     if (error.cleanupIncomplete) cleanupSafe = false;
+    captureFailure(error, context);
     throw error;
   } finally {
-    if (cleanupSafe) {
-      resetDisposable("current27");
-      assertClean();
-    }
+    guardedFinalCleanup(cleanupSafe, originalError);
   }
 }
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1])
