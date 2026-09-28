@@ -1,5 +1,13 @@
 # Current State
 
+## 2026-09-28 — B3b first evidence reviewed; pre-execution state-fixture correction cleared
+
+Fresh bounded first-evidence reviewer found no gap in frozen71 migration/SQL/guard/upgrade/catalog/lint sources and stable completed receipts:1388 actual SQL assertions/18 rollback suites, complete internally compared prior25 history/54 retained tables/catalog and142→144 functions, installed exact ABI/ACL/body closure, standardlint exit1/sole inherited advisory. Original25 migrations/94 inherited fixture files/179 historical handoffs unchanged. Limits: raw TAP and full pre-upgrade retained/history snapshots are not persisted for independent reparse/replay; reviewed fail-closed verifiers compare them internally and durable receipts summarize outcomes. This is scoped review, not full task acceptance.
+
+Coordinator spotted an unexecuted state-fixture setup gap: RH/D stronger-isolation controls leave synthetic target suspended, so next target-authenticated public unblock would fail before race. Fresh semantic reviewer confirmed P2; executor committed exactly1 restoreTarget-before-clearBlocks statement plus mapping (2files/5lines) at local/unpushed e62a085b93134c9b02d163b6dfdac0fd5095f55a. Fresh exactdelta review clears it with no finding; actual public unblocks preserved and no participation/assignment/source/terminal state restored. Syntax/whitespace passed. Coordinator lifts only that state-module hold within the previously released serial stage. First-evidence/verifiers/HTTP/matrix/sourceaeeb unchanged; HTTP currently runs alone, all race claims remain pending. No failed state execution existed.
+
+Runtime remains sole-owned/serial; remaining HTTP/matrix/state/absence/retry/crossings/11 inherited modules/static/finalresetshutdown/audit/finalreview/taskpush/mainintegration incomplete. No recovery operation occurred: prior network issue resolved through normal backed-up shutdown/corrected startup on existing network. B3b/c/A1c/A2/TASK-021 incomplete, no hosted/pilot-ready claim or successor.
+
 ## 2026-09-28 — B3b upgrade/SQL/catalog and exact lint compatibility observed
 
 Corrected same-existing-network startup passed fresh ownership preflight; all6 cached services attached only pals-local-network with normal defined health checks, no pulls/installs/recovery. Against exact71ae9a9 fixture/sourceaeeb, true25→26 upgrade retry passed exit0 with guarded final26 reset: complete prior25 history names/statements/version records, all retained domain/Auth/Storage values and full catalog preserved;142→144 functions with only2 private additions/5 public-body replacements. Earlier failed attempt excluded.
