@@ -1,7 +1,7 @@
 # TASK-021A1b3c source stage — no runtime
 
 Date: 2026-09-28.
-Status: Ready source-only assignment, published and independently remote-verified canonicalmain7a8000c70b63232d3ad4d70e2b5c25e678618c4d. Start latest main containing the publication receipt. Not a runtime release.
+Status: Active source-only author `implement_current_safety_source`, branch `agent/TASK-021A1b3c-source`, clean fresh baseline06737f6519db4a244e9ee43443aa1b0a2136fca8 independently remote-verified. No source checkpoint pushed yet; local immutable handoff and independent source review pending. Not a runtime release.
 Parent: [current-source safety](TASK-021A1b3c-current-source-safety.md). All parent authority, preservation, graph, fixture, review and publication gates apply. Start from the latest independently remote-verified canonical main containing this assignment and the accepted contract. Accepted backend has 26 migrations; B3b task `dabd1530257a937ad15004e666910c0f08cdbd57` / integration `2c648bc1649ceef0b61b96065e6028837c1d05a9`.
 
 ## Bounded deliverable
