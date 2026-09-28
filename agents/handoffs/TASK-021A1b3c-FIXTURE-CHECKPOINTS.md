@@ -1,0 +1,17 @@
+# B3c static fixture checkpoint receipt
+
+Date:2026-09-28. All source27/fixture code remains task-only and unexecuted; canonical main retains26 migrations. Parent B3c/B3/A1c/A2/TASK-021 remains incomplete. No runtime target/preflight/start/reset/VM/container/provider contact occurred in this resumption.
+
+| Component | Independently reviewed checkpoint | Branch, remote SHA verified |
+| --- | --- | --- |
+| Identity | `4d702510378280f1c4cd74af8515cb51d8eceb0d` | `agent/TASK-021A1b3c-identity-fixture`, exact same SHA |
+| Policy/absence | `cad9a596b76dac2f0dbe2b51908ca2899ba6c915` | `agent/TASK-021A1b3c-policy-fixture`, exact same SHA |
+| Bounded transport | `404edfabae9ede3a80aa4350937302b989339c20` | `agent/TASK-021A1b3c-bounded-transport`, exact same SHA |
+
+Identity independent review closed long/truncated application names and lost blocked-cell/census-failure evidence.204 literal waits remain plans only. Policy independent review closed observed setup adopted as expectation, lost failure evidence and substring SQL denial matching;72 boundary/tuple waits and24 missing-row serial cases remain plans only. Opaque Storage provider fields are qualified unchanged-value anchors, not permission/default proof. Transport independent review closed signaled/null exit denial credit and Node startup injection;18 offline synthetic checks passed with zero target attempts. Actual server/session cleanup and target outcomes remain unproved.
+
+HTTP frozen `b52f1eb053a1264b112a9b2f0106bbe6e0ed2aaf` is unpushed/unaccepted. Independent review found twoP1 issues:904 signup sends versus100/hour local rate and30-minute deadline; discarded failing-case evidence/cleanup replacement. Narrow evidence correction is dispatched under existing two-file scope. `tasks/active/TASK-021A1b3c-http-corrections.md` proposes paced real signup with unchanged configuration and a reviewed24-hour HTTP process ceiling; schedule/runner authoring waits amendment review/publication. Other runner deadlines remain30 minutes. First amendment review found aP1: the mandatory runner would still discard HTTP failure evidence. The amendment now explicitly proposes a dedicated bounded schema-validated failure-only channel; no raw output fallback, success/cleanup credit or runtime release. Exact contract re-review/publication remains required. No application Auth change is granted.
+
+First policy publication attempt was rejected by automatic approval review because canonical GitHub destination was considered unverified. Read-only verification established exact main067d656, reviewed foundation3e9973 and previously published identity4d7025 at canonical origin `https://github.com/ellamlnguyen-blip/Pals-App.git`; AGENTS GitHub Publishing explicitly authorizes routine task publication. The evidence-backed retry was approved; policy and transport branches were then pushed and remote SHAs independently verified. No alternate destination or bypass used.
+
+Remaining: HTTP corrections/review/publication; exact reviewed transport adoption into fixture branches; further state/retained/rate/crossing/operator111/upgrade/catalog/regression fixture contracts and review; combined fixture/ownership review, explicit exclusive serial release/fresh ownership preflight, actual outcomes/full cleanup and final security review, then accepted main-code integration. Historical force approval/stopped state is not inherited. No hosted/pilot readiness or product successor.

@@ -1,5 +1,10 @@
 # Backlog
 
+## 2026-09-28 — B3c static checkpoints reviewed and published
+
+Identity4d702510, policycad9a596 and transport404edfaba independently reviewed and exact remote SHAs verified on assigned task branches. HTTPb52f1eb remains unpushed/unaccepted with twoP1 issues:904 real signups exceed frozen100/hour/30-minute feasibility, and failed-case evidence is discarded before cleanup. Evidence-only correction is dispatched; proposed unchanged-config paced Auth/24-hour HTTP runner amendment requires review/publication before schedule edits. All target code remains unexecuted, main code26 and parent gates incomplete. See `agents/handoffs/TASK-021A1b3c-FIXTURE-CHECKPOINTS.md` and `tasks/active/TASK-021A1b3c-http-corrections.md`. No runtime release.
+
+
 ## 2026-09-28 — B3c fixture resumption and transport dependency
 
 Fresh HTTP/policy/identity authors successfully dispatched from verified main c74beae plus exact reviewed foundation3e9973c. Prior capacity blocker is resolved for these assignments; they are static authoring only. Common synchronous helper calls lack finite transport bounds, so checkpoint execution remains blocked pending reviewed bounded-transport correction. All further fixture/ownership/runtime/cleanup/review/main integration and parent gates remain open. See `agents/handoffs/TASK-021A1b3c-FIXTURE-RESUMPTION.md`.
