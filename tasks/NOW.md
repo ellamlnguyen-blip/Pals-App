@@ -1,5 +1,11 @@
 # NOW
 
+## 2026-09-28 — B3b fixture reviews complete; three narrow corrections required
+
+Fresh independent reviews of local/unpushed629e3fbed336582b1f3c53333ce0795ca1149054 found threeP2 fixture/evidence gaps: revision-sensitive competing public writers evaluate their revision argument before the internal social wait (acquire social in a preceding statement, then read revision); actual S/SR public step-down still-joined positive both-order and real HTTP controls missing (assert membership retained, assignment removed, successful send/exact7-field retry with no duplicate writes); true25 upgrade verifier asserts history preservation without comparing full prior25 names/statements (snapshot and compare complete records). No new implementation/migration defect identified. Matrix594 unique IDs/424actual/170same-loss/order representatives and unchanged migration source independently corroborated.
+
+Bounded original executor resumed only new-fixture corrections and accurate mapping/handoff updates; source/history/original fixtures remain frozen. Corrected immutable checkpoint must receive fresh delta review before explicit coordinator serial runtime release and fresh global ownership preflight. No test/start/reset/API/DB/runtime invocation or task push yet; all execution evidence remains uncovered. B3b/c/A1c/A2/TASK-021 incomplete; no hosted/pilot-ready claim or successor. Full review scope and limits: TASK-021A1b3b-FIXTURE-REVIEW.md.
+
 ## 2026-09-28 — B3b immutable fixture checkpoint; independent reviews active
 
 Local/unpushed checkpoint `629e3fbed336582b1f3c53333ce0795ca1149054` on `agent/TASK-021A1b3b-cohost-chat` contains17 new fixture/handoff files after independently cleared source `aeeb67a76d7a4cc40e72fbe51334e5d934e3a8a3`. Coordinator confirmed clean executor tree and no migration difference from aeeb; original25 remain untouched. Executor reports syntax/static adapter generation/ESLint/whitespace checks only. No runtime evidence is claimed:424 planned actual matrix observations and170 source-cleared common mappings, all per-route SQL/real Auth controls and remaining source/state/absence/retry/crossing/upgrade/catalog/regressions are still uncovered.
