@@ -1,5 +1,10 @@
 # Backlog
 
+## 2026-09-28 — B3c HTTP corrections and required state authoring
+
+Reviewed HTTP correction contract tasked96e624 and documentation mainbe2d4a4 exact remote SHAs verified. Fresh bounded transport author dispatched from mainbe2d4a4 plus reviewedtransport404edfaba for HTTP24h-only deadline and dedicated schema-validated failure-only child evidence channel; all target code unexecuted. HTTP evidence-only checkpoint6ef017db frozen for review; rate/cadence/helper adoption still pending. Proposed two-file24-cell L5 state assignment is under independent contract review; aP2 writer-prerequisite gap is amended with separate exact companion People/target-preference preparation after absent/false current precheck. Source/permission/config unchanged; no runtime or parent completion.
+
+
 ## 2026-09-28 — B3c static checkpoints reviewed and published
 
 Identity4d702510, policycad9a596 and transport404edfaba independently reviewed and exact remote SHAs verified on assigned task branches. HTTPb52f1eb remains unpushed/unaccepted with twoP1 issues:904 real signups exceed frozen100/hour/30-minute feasibility, and failed-case evidence is discarded before cleanup. Evidence-only correction is dispatched; proposed unchanged-config paced Auth/24-hour HTTP runner amendment requires review/publication before schedule edits. All target code remains unexecuted, main code26 and parent gates incomplete. See `agents/handoffs/TASK-021A1b3c-FIXTURE-CHECKPOINTS.md` and `tasks/active/TASK-021A1b3c-http-corrections.md`. No runtime release.
