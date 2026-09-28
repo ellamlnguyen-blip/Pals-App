@@ -1,5 +1,13 @@
 # Current State
 
+## 2026-09-28 — B3b regressions and corrected crossing evidence reviewed
+
+All eleven actual inherited modules individually completed1..1/tests1/pass1/fail0/skipped0/cancelled0/todo0; independent reviewer decoded six nested tails separately. Outer exit0/guarded finally reset completed2362.244seconds; block865.640 and final crossing30.704 within reviewed own limits, no timer/source/recovery change. Consolidated SHA2568780dd79445ec783781145304ea0580e5d042afd77580e9db25f56472ea44961. Fresh inherited B3a350waits remain distinct from new observations; business40001/40P01/impossible partitions and B1 guarded-entry custom-fetch per-request limitation retained. See TASK-021A1b3b-REGRESSION-REVIEW.md.
+
+Corrected45 crossing completed pass1/all-zero failures including guarded reset30.073seconds; independent evidence review closes P2 with no finding. Exact SHA256e9bb491c685f54e726194b2dd9df95b67733d08267cfe24eaa488c25b09a317d contains8unique same-ID full54table outcomes+2scoped notes; source enforces exact P/RC owner-primary/participant/assignment/provenance/parent returns, S one conversation/message/ledger and SR original7field/deletion-only census. Rows/timestamps/receipts asserted internally, not independently replayable from stored hashes. Initial6f589f...18ea0 remains unchanged; rerun replaces acceptance evidence, no duplicate credit. New distinct waits577=424matrix+142state+3absence+8crossing;170common mappings/14serial stronger-isolation denials separate.
+
+Static/final26zero-off-rev1reset/normal backed-up services-VZ shutdown/independent audit/final handoff review/task push/accepted remote main integration remain. Cached pnpm static wrapper attempted auto-install and aborted before dependency change; direct cached checks used instead. General format check flags inherited coordinator CHANGELOG; qualification recorded, no source accommodation/shared edits. Migrationaeeb/helper/fixtures45 remain fixed. B3b/c/A1c/A2/TASK-021 incomplete; no hosted/pilot-ready/successor claim.
+
 B3b runtime monitoring: all11 regression result pending; exact owned accepted B3a block child/reset progressing, transient status recovered without recovery. Coordinator reviewed per-module bound (block06:01:37UTC; final crossing2min); no source/timeout edit or partial pass credit. See [monitoring receipt](../../agents/handoffs/TASK-021A1b3b-REGRESSION-MONITOR.md).
 
 ## 2026-09-28 — B3b crossing outcome correction source cleared; serial rerun released
