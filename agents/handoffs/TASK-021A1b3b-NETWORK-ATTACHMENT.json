@@ -1,0 +1,50 @@
+[
+  {
+    "name": "/supabase_db_pals-local",
+    "image": "public.ecr.aws/supabase/postgres:17.6.1.167",
+    "network": [
+      "pals-local-network"
+    ],
+    "health": "healthy"
+  },
+  {
+    "name": "/supabase_auth_pals-local",
+    "image": "public.ecr.aws/supabase/gotrue:v2.196.0",
+    "network": [
+      "pals-local-network"
+    ],
+    "health": "healthy"
+  },
+  {
+    "name": "/supabase_storage_pals-local",
+    "image": "public.ecr.aws/supabase/storage-api:v1.72.1",
+    "network": [
+      "pals-local-network"
+    ],
+    "health": "healthy"
+  },
+  {
+    "name": "/supabase_rest_pals-local",
+    "image": "public.ecr.aws/supabase/postgrest:v16.2",
+    "network": [
+      "pals-local-network"
+    ],
+    "health": "no-healthcheck"
+  },
+  {
+    "name": "/supabase_inbucket_pals-local",
+    "image": "public.ecr.aws/supabase/mailpit:v1.30.2",
+    "network": [
+      "pals-local-network"
+    ],
+    "health": "healthy"
+  },
+  {
+    "name": "/supabase_kong_pals-local",
+    "image": "public.ecr.aws/supabase/kong:2.8.1",
+    "network": [
+      "pals-local-network"
+    ],
+    "health": "healthy"
+  }
+]

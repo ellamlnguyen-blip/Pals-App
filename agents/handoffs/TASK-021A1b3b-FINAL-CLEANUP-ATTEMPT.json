@@ -1,0 +1,33 @@
+{
+  "owner": "TASK-021A1b3b",
+  "at": "2026-09-28T06:07:32.365455+00:00",
+  "final_guarded_reset": {
+    "exit": 0,
+    "lane": "current26",
+    "exact_manifest": true,
+    "zero_synthetic_rows": true,
+    "original_singleton_gates_off": true,
+    "availability_revision": 1,
+    "fixed13_capability_revision": 1
+  },
+  "service_stop": {
+    "exit": 0,
+    "backup": true,
+    "running_containers_after_stop": 0
+  },
+  "normal_vz_stop": {
+    "exit": 1,
+    "started_utc": "06:03:32",
+    "failed_utc": "06:06:42",
+    "message": "did not receive an event with the exiting status",
+    "known_vm_status": "Running",
+    "host_driver_pid": 4100,
+    "observed_owned_shutdown_descendant_pid": 57103,
+    "transcript": "time=\"2026-09-28T02:03:32-04:00\" level=info msg=\"Sending SIGINT to hostagent process 4100\"\ntime=\"2026-09-28T02:03:32-04:00\" level=info msg=\"Waiting for the host agent and the driver processes to shut down\"\ntime=\"2026-09-28T02:03:32-04:00\" level=info msg=\"[hostagent] Received SIGINT, shutting down the host agent\"\ntime=\"2026-09-28T02:03:32-04:00\" level=info msg=\"[hostagent] Shutting down the host agent\"\ntime=\"2026-09-28T02:03:32-04:00\" level=info msg=\"[hostagent] Stopping forwarding `/run/user/501/docker.sock` (guest) to `/private/tmp/pals-lima/pals-task002/sock/docker.sock` (host)\"\ntime=\"2026-09-28T02:03:42-04:00\" level=info msg=\"[hostagent] Guest agent is running\"\ntime=\"2026-09-28T02:04:20-04:00\" level=info msg=\"[hostagent] Time sync: guest clock adjusted (was 101ms off)\"\ntime=\"2026-09-28T02:05:20-04:00\" level=info msg=\"[hostagent] Time sync: guest clock adjusted (was 101ms off)\"\ntime=\"2026-09-28T02:06:20-04:00\" level=info msg=\"[hostagent] Time sync: guest clock adjusted (was 100ms off)\"\ntime=\"2026-09-28T02:06:42-04:00\" level=fatal msg=\"did not receive an event with the `exiting` status\"\n"
+  },
+  "final_stopped_audit": "not performed: stopped prerequisite false",
+  "ownership_relinquished": false,
+  "force_recovery_restart_attempts": false,
+  "legacy56460": "untouched",
+  "coordinator_notified": true
+}

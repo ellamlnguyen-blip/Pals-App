@@ -1,0 +1,155 @@
+{
+  "at": "2026-09-28T05:41:36.608384+00:00",
+  "owned_node_runners": [
+    {
+      "pid": 30154,
+      "ppid": 98834,
+      "comm": "node",
+      "module": "pilot-cohost-chat-regressions.integration.mjs",
+      "elapsed": "23:33"
+    },
+    {
+      "pid": 30168,
+      "ppid": 30154,
+      "comm": "node",
+      "module": "pilot-cohost-chat-regressions.integration.mjs",
+      "elapsed": "23:33"
+    }
+  ],
+  "complete_result_absent": true,
+  "configured_outer_timeout_ms": 1200000,
+  "spawnSync_child_timeout_absent": true,
+  "owned_descendants": [
+    {
+      "pid": 30154,
+      "ppid": 98834,
+      "comm": "node",
+      "module": "pilot-cohost-chat-regressions.integration.mjs",
+      "cli_stage": null,
+      "elapsed": "24:41"
+    },
+    {
+      "pid": 30168,
+      "ppid": 30154,
+      "comm": "node",
+      "module": "pilot-cohost-chat-regressions.integration.mjs",
+      "cli_stage": null,
+      "elapsed": "24:41"
+    },
+    {
+      "pid": 49728,
+      "ppid": 30168,
+      "comm": "node",
+      "module": "pilot-lifecycle-block-membership-races.integration.mjs",
+      "cli_stage": null,
+      "elapsed": "01:07"
+    },
+    {
+      "pid": 49729,
+      "ppid": 49728,
+      "comm": "node",
+      "module": "pilot-lifecycle-block-membership-races.integration.mjs",
+      "cli_stage": null,
+      "elapsed": "01:07"
+    },
+    {
+      "pid": 50013,
+      "ppid": 49729,
+      "comm": "supabase",
+      "module": null,
+      "cli_stage": "db reset",
+      "elapsed": "00:17"
+    }
+  ],
+  "guarded_db_probe": "localTarget status failed exit1; no SQL query ran",
+  "followup_owned_descendants": [
+    {
+      "at": "2026-09-28T05:46:45.701693+00:00",
+      "rows": [
+        {
+          "pid": 30154,
+          "ppid": 98834,
+          "comm": "node",
+          "module": "pilot-cohost-chat-regressions.integration.mjs",
+          "cli_stage": null,
+          "elapsed": "28:42"
+        },
+        {
+          "pid": 30168,
+          "ppid": 30154,
+          "comm": "node",
+          "module": "pilot-cohost-chat-regressions.integration.mjs",
+          "cli_stage": null,
+          "elapsed": "28:42"
+        },
+        {
+          "pid": 49728,
+          "ppid": 30168,
+          "comm": "node",
+          "module": "pilot-lifecycle-block-membership-races.integration.mjs",
+          "cli_stage": null,
+          "elapsed": "05:08"
+        },
+        {
+          "pid": 49729,
+          "ppid": 49728,
+          "comm": "node",
+          "module": "pilot-lifecycle-block-membership-races.integration.mjs",
+          "cli_stage": null,
+          "elapsed": "05:08"
+        },
+        {
+          "pid": 51257,
+          "ppid": 49729,
+          "comm": "supabase",
+          "module": null,
+          "cli_stage": "db reset",
+          "elapsed": "00:11"
+        }
+      ]
+    },
+    {
+      "at": "2026-09-28T05:53:56+00:00",
+      "rows": [
+        {
+          "pid": 30154,
+          "ppid": 98834,
+          "module": "pilot-cohost-chat-regressions.integration.mjs",
+          "elapsed": "35:53"
+        },
+        {
+          "pid": 30168,
+          "ppid": 30154,
+          "module": "pilot-cohost-chat-regressions.integration.mjs",
+          "elapsed": "35:53"
+        },
+        {
+          "pid": 49728,
+          "ppid": 30168,
+          "module": "pilot-lifecycle-block-membership-races.integration.mjs",
+          "elapsed": "12:19"
+        },
+        {
+          "pid": 49729,
+          "ppid": 49728,
+          "module": "pilot-lifecycle-block-membership-races.integration.mjs",
+          "elapsed": "12:19"
+        },
+        {
+          "pid": 54079,
+          "ppid": 49729,
+          "cli_stage": "db reset",
+          "elapsed": "00:21"
+        }
+      ]
+    }
+  ],
+  "coordinator_module_budget": {
+    "block_start_utc": "05:41:37",
+    "block_hard_cutoff_utc": "06:01:37",
+    "remaining_lifecycle_crossing_ms": 120000,
+    "remaining_normal_reset_allowed": true,
+    "source_timer_changes": false,
+    "reason": "accepted block module34case resets; historical pass823seconds; monitored existing async20minute module budget"
+  }
+}

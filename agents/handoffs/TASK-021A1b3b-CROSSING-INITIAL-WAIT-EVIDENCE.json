@@ -1,0 +1,90 @@
+[
+  {
+    "id": "L5.owner_primary.RC.target.owner-first",
+    "race": "b3b_owner_0",
+    "holder_pid": 594,
+    "waiter_pid": 601,
+    "waiting_lock_types": [
+      "transactionid"
+    ],
+    "writer": "actual authenticated B1 direct owner assignment, approved object locks"
+  },
+  {
+    "id": "L5.owner_primary.RC.target.operation-first",
+    "race": "b3b_owner_1",
+    "holder_pid": 718,
+    "waiter_pid": 725,
+    "waiting_lock_types": [
+      "transactionid"
+    ],
+    "writer": "actual authenticated B1 direct owner assignment, approved object locks"
+  },
+  {
+    "id": "L5.owner_primary.P.target.owner-first",
+    "race": "b3b_owner_2",
+    "holder_pid": 840,
+    "waiter_pid": 848,
+    "waiting_lock_types": [
+      "transactionid"
+    ],
+    "writer": "actual authenticated B1 direct owner assignment, approved object locks"
+  },
+  {
+    "id": "L5.owner_primary.P.target.operation-first",
+    "race": "b3b_owner_3",
+    "holder_pid": 964,
+    "waiter_pid": 971,
+    "waiting_lock_types": [
+      "transactionid"
+    ],
+    "writer": "actual authenticated B1 direct owner assignment, approved object locks"
+  },
+  {
+    "id": "L5.storage_delete.S.host.delete-first",
+    "race": "b3b_storage_4",
+    "holder_pid": 1087,
+    "waiter_pid": 1094,
+    "waiting_lock_types": [
+      "transactionid"
+    ],
+    "writer": "actual authenticated detached-object DELETE, observed immutable-host profile-row wait; B1 real Storage final service-role HTTP is separate regression"
+  },
+  {
+    "id": "L5.storage_delete.S.host.operation-first",
+    "race": "b3b_storage_5",
+    "holder_pid": 1211,
+    "waiter_pid": 1219,
+    "waiting_lock_types": [
+      "transactionid"
+    ],
+    "writer": "actual authenticated detached-object DELETE, observed immutable-host profile-row wait; B1 real Storage final service-role HTTP is separate regression"
+  },
+  {
+    "id": "L5.storage_delete.SR.host.delete-first",
+    "race": "b3b_storage_6",
+    "holder_pid": 1348,
+    "waiter_pid": 1356,
+    "waiting_lock_types": [
+      "transactionid"
+    ],
+    "writer": "actual authenticated detached-object DELETE, observed immutable-host profile-row wait; B1 real Storage final service-role HTTP is separate regression"
+  },
+  {
+    "id": "L5.storage_delete.SR.host.operation-first",
+    "race": "b3b_storage_7",
+    "holder_pid": 1489,
+    "waiter_pid": 1497,
+    "waiting_lock_types": [
+      "transactionid"
+    ],
+    "writer": "actual authenticated detached-object DELETE, observed immutable-host profile-row wait; B1 real Storage final service-role HTTP is separate regression"
+  },
+  {
+    "id": "L5.profile_storage_inversion",
+    "classification": "actual profile/object row inversion remains possible; inherited fresh B1/B3a modules cover safe abort. No abort counted as successful order."
+  },
+  {
+    "id": "L5.source_bound_auth_account_delete",
+    "classification": "live source/participant FK forbids successful source-bound account/Auth deletion; inherited B3a unsourced Auth safe abort stays separately scoped"
+  }
+]

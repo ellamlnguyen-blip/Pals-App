@@ -1,0 +1,9 @@
+{
+  "fixture_checkpoint": "71ae9a9d2a5a5c99a19e4754266b17f199effeee",
+  "completed_suites": 18,
+  "actual_assertions": 1388,
+  "new_cohost_chat_assertions": 402,
+  "suite_output": "identity_rls.test.sql: 53 stage-adapted assertions pass\nonboarding.test.sql: 22 stage-adapted assertions pass\nprofile_enrichment.test.sql: 37 stage-adapted assertions pass\nlocal_account_enforcement.test.sql: 33 stage-adapted assertions pass\nprivate_pilot_admission_authority.test.sql: 74 stage-adapted assertions pass\nhangout_foundation.test.sql: 114 stage-adapted assertions pass\nlocal_global_blocks.test.sql: 62 stage-adapted assertions pass\nlocal_hangout_chat.test.sql: 73 stage-adapted assertions pass\nlocal_safety_reports.test.sql: 43 stage-adapted assertions pass\nlocal_moderation_review.test.sql: 51 stage-adapted assertions pass\nlocal_hangout_disable.test.sql: 75 stage-adapted assertions pass\nlocal_cohost_authority.test.sql: 68 stage-adapted assertions pass\nlocal_large_hangout_safeguards.test.sql: 64 stage-adapted assertions pass\npilot-admission-source-safety.test.sql: 94 assertions pass\nmandatory operator lock results: 13 assertions pass\nB1 owner: 49 assertions pass\nLifecycle: 61 assertions pass\nB3b cohost/chat: 402 actual-role SQL assertions\n",
+  "no_not_ok_skip_todo": true,
+  "all_rollback_suites": true
+}

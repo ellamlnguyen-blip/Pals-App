@@ -1,0 +1,5582 @@
+{
+  "prior_manifest": [
+    "20260921000100",
+    "20260922000100",
+    "20260922000200",
+    "20260922000300",
+    "20260922000400",
+    "20260922000500",
+    "20260922000600",
+    "20260923000100",
+    "20260923000200",
+    "20260923000300",
+    "20260923000400",
+    "20260923000500",
+    "20260923000600",
+    "20260923000700",
+    "20260924000100",
+    "20260924000200",
+    "20260924000300",
+    "20260924000400",
+    "20260925000100",
+    "20260925000200",
+    "20260927000100",
+    "20260927000200",
+    "20260927000300",
+    "20260927000400",
+    "20260927000500"
+  ],
+  "prior_history_row_count": 25,
+  "prior_history_fields": [
+    "name",
+    "statements",
+    "version"
+  ],
+  "prior_history_sha256": "7d8d1cd629178559a7d3861a08275e67d156813aeaaffc97edf895c1286c340f",
+  "prior_history_full_rows_equal": true,
+  "final_manifest": [
+    "20260921000100",
+    "20260922000100",
+    "20260922000200",
+    "20260922000300",
+    "20260922000400",
+    "20260922000500",
+    "20260922000600",
+    "20260923000100",
+    "20260923000200",
+    "20260923000300",
+    "20260923000400",
+    "20260923000500",
+    "20260923000600",
+    "20260923000700",
+    "20260924000100",
+    "20260924000200",
+    "20260924000300",
+    "20260924000400",
+    "20260925000100",
+    "20260925000200",
+    "20260927000100",
+    "20260927000200",
+    "20260927000300",
+    "20260927000400",
+    "20260927000500",
+    "20260927000600"
+  ],
+  "retained_tables": [
+    "auth.users",
+    "private.account_sanctions",
+    "private.attendance_answers",
+    "private.attendance_feature_gate",
+    "private.dm_feature_gate",
+    "private.dm_messages",
+    "private.dm_pairs",
+    "private.dm_retries",
+    "private.dm_suppression",
+    "private.friendship_create_requests",
+    "private.friendship_feature_gate",
+    "private.friendship_suppression",
+    "private.friendships",
+    "private.hangout_chat_feature_gate",
+    "private.hangout_cohosts",
+    "private.hangout_conversations",
+    "private.hangout_create_requests",
+    "private.hangout_disables",
+    "private.hangout_feature_gate",
+    "private.hangout_message_requests",
+    "private.hangout_messages",
+    "private.hangout_peer_provenance",
+    "private.large_hangout_feature_gate",
+    "private.large_hangout_signals",
+    "private.moderation_audit",
+    "private.moderation_cases",
+    "private.moderation_feature_gate",
+    "private.moderation_requests",
+    "private.notification_feature_gate",
+    "private.notification_items",
+    "private.notification_preferences",
+    "private.people_blocks",
+    "private.people_feature_gate",
+    "private.people_preferences",
+    "private.pilot_account_admission",
+    "private.pilot_admission_managers",
+    "private.pilot_availability",
+    "private.pilot_capabilities",
+    "private.pilot_management_audit",
+    "private.pilot_management_requests",
+    "private.pilot_manager_audit",
+    "private.safety_feature_gate",
+    "private.safety_reconciliation_effects",
+    "private.safety_report_requests",
+    "private.safety_reports",
+    "public.accounts",
+    "public.hangout_participants",
+    "public.hangout_private_locations",
+    "public.hangouts",
+    "public.platform_roles",
+    "public.profiles",
+    "public.universities",
+    "public.university_memberships",
+    "storage.objects"
+  ],
+  "prior_function_count": 142,
+  "final_function_count": 144,
+  "catalog": {
+    "tables": [
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres"
+        ],
+        "rls": true,
+        "name": "private.account_sanctions",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "id",
+            "type": "uuid",
+            "default": "gen_random_uuid()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "report_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "subject_type",
+            "type": "text",
+            "default": "'user'::text",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "subject_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "operator_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "request_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "action",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "previous_status",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "new_status",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "subject_campus_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "reason",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "occurred_at",
+            "type": "timestamp with time zone",
+            "default": "clock_timestamp()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres"
+        ],
+        "rls": true,
+        "name": "private.attendance_answers",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "hangout_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "account_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "attended",
+            "type": "boolean",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "revision",
+            "type": "bigint",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "answered_at",
+            "type": "timestamp with time zone",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres"
+        ],
+        "rls": true,
+        "name": "private.attendance_feature_gate",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "singleton",
+            "type": "boolean",
+            "default": "true",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "enabled",
+            "type": "boolean",
+            "default": "false",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres"
+        ],
+        "rls": true,
+        "name": "private.dm_feature_gate",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "singleton",
+            "type": "boolean",
+            "default": "true",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "enabled",
+            "type": "boolean",
+            "default": "false",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres"
+        ],
+        "rls": true,
+        "name": "private.dm_messages",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "id",
+            "type": "uuid",
+            "default": "gen_random_uuid()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "generation_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "sequence",
+            "type": "bigint",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "author_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "body",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "created_at",
+            "type": "timestamp with time zone",
+            "default": "clock_timestamp()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres"
+        ],
+        "rls": true,
+        "name": "private.dm_pairs",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "generation_id",
+            "type": "uuid",
+            "default": "gen_random_uuid()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "low_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "high_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "initiator_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "campus_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "state",
+            "type": "text",
+            "default": "'pending'::text",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "created_at",
+            "type": "timestamp with time zone",
+            "default": "clock_timestamp()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "next_sequence",
+            "type": "bigint",
+            "default": "1",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres"
+        ],
+        "rls": true,
+        "name": "private.dm_retries",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "actor_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "request_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "kind",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "target_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "generation_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "message_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "fingerprint",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres"
+        ],
+        "rls": true,
+        "name": "private.dm_suppression",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "initiator_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "recipient_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres"
+        ],
+        "rls": true,
+        "name": "private.friendship_create_requests",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "actor_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "request_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "target_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "generation_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres"
+        ],
+        "rls": true,
+        "name": "private.friendship_feature_gate",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "singleton",
+            "type": "boolean",
+            "default": "true",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "enabled",
+            "type": "boolean",
+            "default": "false",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres"
+        ],
+        "rls": true,
+        "name": "private.friendship_suppression",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "requester_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "recipient_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres"
+        ],
+        "rls": true,
+        "name": "private.friendships",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "low_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "high_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "requester_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "campus_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "generation_id",
+            "type": "uuid",
+            "default": "gen_random_uuid()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "state",
+            "type": "text",
+            "default": "'pending'::text",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres"
+        ],
+        "rls": true,
+        "name": "private.hangout_chat_feature_gate",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "singleton",
+            "type": "boolean",
+            "default": "true",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "enabled",
+            "type": "boolean",
+            "default": "false",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres"
+        ],
+        "rls": true,
+        "name": "private.hangout_cohosts",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "hangout_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "account_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "assigned_at",
+            "type": "timestamp with time zone",
+            "default": "clock_timestamp()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres"
+        ],
+        "rls": true,
+        "name": "private.hangout_conversations",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "id",
+            "type": "uuid",
+            "default": "gen_random_uuid()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "hangout_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "next_sequence",
+            "type": "bigint",
+            "default": "1",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres"
+        ],
+        "rls": false,
+        "name": "private.hangout_create_requests",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "host_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "request_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "hangout_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "payload_fingerprint",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres"
+        ],
+        "rls": true,
+        "name": "private.hangout_disables",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "id",
+            "type": "uuid",
+            "default": "gen_random_uuid()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "report_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "subject_type",
+            "type": "text",
+            "default": "'hangout'::text",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "hangout_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "operator_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "request_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "previous_disabled",
+            "type": "boolean",
+            "default": "false",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "new_disabled",
+            "type": "boolean",
+            "default": "true",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "subject_campus_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "reason",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "occurred_at",
+            "type": "timestamp with time zone",
+            "default": "clock_timestamp()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres"
+        ],
+        "rls": false,
+        "name": "private.hangout_feature_gate",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "singleton",
+            "type": "boolean",
+            "default": "true",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "enabled",
+            "type": "boolean",
+            "default": "false",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres"
+        ],
+        "rls": true,
+        "name": "private.hangout_message_requests",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "hangout_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "author_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "request_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "message_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "payload_fingerprint",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres"
+        ],
+        "rls": true,
+        "name": "private.hangout_messages",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "id",
+            "type": "uuid",
+            "default": "gen_random_uuid()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "conversation_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "author_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "sequence",
+            "type": "bigint",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "body",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "created_at",
+            "type": "timestamp with time zone",
+            "default": "clock_timestamp()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres"
+        ],
+        "rls": true,
+        "name": "private.hangout_peer_provenance",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "hangout_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "low_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "high_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres"
+        ],
+        "rls": true,
+        "name": "private.large_hangout_feature_gate",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "singleton",
+            "type": "boolean",
+            "default": "true",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "enabled",
+            "type": "boolean",
+            "default": "false",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "ranking_epoch",
+            "type": "uuid",
+            "default": "gen_random_uuid()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres"
+        ],
+        "rls": true,
+        "name": "private.large_hangout_signals",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "hangout_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "policy_version",
+            "type": "integer",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "threshold_value",
+            "type": "integer",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "observed_at",
+            "type": "timestamp with time zone",
+            "default": "clock_timestamp()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres"
+        ],
+        "rls": true,
+        "name": "private.moderation_audit",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "id",
+            "type": "uuid",
+            "default": "gen_random_uuid()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "occurred_at",
+            "type": "timestamp with time zone",
+            "default": "clock_timestamp()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "operator_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "action",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "report_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "subject_target_type",
+            "type": "text",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "subject_target_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "subject_campus_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "request_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "previous_state",
+            "type": "text",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "new_state",
+            "type": "text",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "previous_revision",
+            "type": "bigint",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "new_revision",
+            "type": "bigint",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "reason",
+            "type": "text",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "duplicate_report_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "page_report_ids",
+            "type": "uuid[]",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "page_count",
+            "type": "integer",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "sanction_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "previous_account_status",
+            "type": "text",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "new_account_status",
+            "type": "text",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "hangout_disable_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "previous_hangout_disabled",
+            "type": "boolean",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "new_hangout_disabled",
+            "type": "boolean",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres"
+        ],
+        "rls": true,
+        "name": "private.moderation_cases",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "report_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "state",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "revision",
+            "type": "bigint",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "note",
+            "type": "text",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "disposition",
+            "type": "text",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "duplicate_report_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "sanction_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "hangout_disable_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres"
+        ],
+        "rls": true,
+        "name": "private.moderation_feature_gate",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "singleton",
+            "type": "boolean",
+            "default": "true",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "enabled",
+            "type": "boolean",
+            "default": "false",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres"
+        ],
+        "rls": true,
+        "name": "private.moderation_requests",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "operator_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "request_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "fingerprint",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "report_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "result_state",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "result_revision",
+            "type": "bigint",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres"
+        ],
+        "rls": true,
+        "name": "private.notification_feature_gate",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "singleton",
+            "type": "boolean",
+            "default": "true",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "enabled",
+            "type": "boolean",
+            "default": "false",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres"
+        ],
+        "rls": true,
+        "name": "private.notification_items",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "id",
+            "type": "uuid",
+            "default": "gen_random_uuid()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "recipient_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "source_kind",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "source_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "target_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "event_code",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "actor_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "created_at",
+            "type": "timestamp with time zone",
+            "default": "clock_timestamp()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "read_at",
+            "type": "timestamp with time zone",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres"
+        ],
+        "rls": true,
+        "name": "private.notification_preferences",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "recipient_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "category",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "enabled",
+            "type": "boolean",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres"
+        ],
+        "rls": true,
+        "name": "private.people_blocks",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "blocker_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "blocked_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres"
+        ],
+        "rls": true,
+        "name": "private.people_feature_gate",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "singleton",
+            "type": "boolean",
+            "default": "true",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "enabled",
+            "type": "boolean",
+            "default": "false",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres"
+        ],
+        "rls": true,
+        "name": "private.people_preferences",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "account_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "opted_in",
+            "type": "boolean",
+            "default": "false",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres"
+        ],
+        "rls": true,
+        "name": "private.pilot_account_admission",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "account_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "state",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "revision",
+            "type": "bigint",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "created_at",
+            "type": "timestamp with time zone",
+            "default": "clock_timestamp()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "updated_at",
+            "type": "timestamp with time zone",
+            "default": "clock_timestamp()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres"
+        ],
+        "rls": true,
+        "name": "private.pilot_admission_managers",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "account_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "state",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "revision",
+            "type": "bigint",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "created_at",
+            "type": "timestamp with time zone",
+            "default": "clock_timestamp()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "updated_at",
+            "type": "timestamp with time zone",
+            "default": "clock_timestamp()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres"
+        ],
+        "rls": true,
+        "name": "private.pilot_availability",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "singleton",
+            "type": "boolean",
+            "default": "true",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "enabled",
+            "type": "boolean",
+            "default": "false",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "revision",
+            "type": "bigint",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "created_at",
+            "type": "timestamp with time zone",
+            "default": "clock_timestamp()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "updated_at",
+            "type": "timestamp with time zone",
+            "default": "clock_timestamp()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres"
+        ],
+        "rls": true,
+        "name": "private.pilot_capabilities",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "key",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "enabled",
+            "type": "boolean",
+            "default": "false",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "revision",
+            "type": "bigint",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "created_at",
+            "type": "timestamp with time zone",
+            "default": "clock_timestamp()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "updated_at",
+            "type": "timestamp with time zone",
+            "default": "clock_timestamp()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres"
+        ],
+        "rls": true,
+        "name": "private.pilot_management_audit",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "id",
+            "type": "uuid",
+            "default": "gen_random_uuid()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "actor_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "operation",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "target_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "policy_key",
+            "type": "text",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "previous_value",
+            "type": "jsonb",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "new_value",
+            "type": "jsonb",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "previous_revision",
+            "type": "bigint",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "new_revision",
+            "type": "bigint",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "reason",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "request_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "occurred_at",
+            "type": "timestamp with time zone",
+            "default": "clock_timestamp()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres"
+        ],
+        "rls": true,
+        "name": "private.pilot_management_requests",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "actor_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "request_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "fingerprint",
+            "type": "jsonb",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "result_value",
+            "type": "jsonb",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "result_revision",
+            "type": "bigint",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "audit_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres"
+        ],
+        "rls": true,
+        "name": "private.pilot_manager_audit",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "id",
+            "type": "uuid",
+            "default": "gen_random_uuid()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "account_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "executor_session_user",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "executor_original_role",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "executor_backend_pid",
+            "type": "integer",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "previous_state",
+            "type": "text",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "new_state",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "previous_revision",
+            "type": "bigint",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "new_revision",
+            "type": "bigint",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "reason",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "request_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "occurred_at",
+            "type": "timestamp with time zone",
+            "default": "clock_timestamp()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres"
+        ],
+        "rls": true,
+        "name": "private.safety_feature_gate",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "singleton",
+            "type": "boolean",
+            "default": "true",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "enabled",
+            "type": "boolean",
+            "default": "false",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres"
+        ],
+        "rls": true,
+        "name": "private.safety_reconciliation_effects",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "hangout_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "account_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "effect",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres"
+        ],
+        "rls": true,
+        "name": "private.safety_report_requests",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "reporter_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "request_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "input_fingerprint",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "report_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres"
+        ],
+        "rls": true,
+        "name": "private.safety_reports",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "id",
+            "type": "uuid",
+            "default": "gen_random_uuid()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "submitted_at",
+            "type": "timestamp with time zone",
+            "default": "clock_timestamp()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "reporter_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "target_type",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "target_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "category",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "narrative",
+            "type": "text",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "provenance_kind",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "provenance_ref_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres",
+          "service_role=Dxtm/postgres",
+          "authenticated=r/postgres"
+        ],
+        "rls": true,
+        "name": "public.accounts",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "status",
+            "type": "text",
+            "default": "'active'::text",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "created_at",
+            "type": "timestamp with time zone",
+            "default": "now()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres",
+          "service_role=Dxtm/postgres"
+        ],
+        "rls": true,
+        "name": "public.hangout_participants",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": [
+              "authenticated=r/postgres"
+            ],
+            "name": "hangout_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": [
+              "authenticated=r/postgres"
+            ],
+            "name": "account_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "state",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "joined_at",
+            "type": "timestamp with time zone",
+            "default": "clock_timestamp()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "left_at",
+            "type": "timestamp with time zone",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "removed_at",
+            "type": "timestamp with time zone",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "updated_at",
+            "type": "timestamp with time zone",
+            "default": "clock_timestamp()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres",
+          "service_role=Dxtm/postgres",
+          "authenticated=r/postgres"
+        ],
+        "rls": true,
+        "name": "public.hangout_private_locations",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "hangout_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "instructions",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "updated_at",
+            "type": "timestamp with time zone",
+            "default": "clock_timestamp()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres",
+          "service_role=Dxtm/postgres",
+          "authenticated=r/postgres"
+        ],
+        "rls": true,
+        "name": "public.hangouts",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "id",
+            "type": "uuid",
+            "default": "gen_random_uuid()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "university_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "host_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "title",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "description",
+            "type": "text",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "starts_at",
+            "type": "timestamp with time zone",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "ends_at",
+            "type": "timestamp with time zone",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "status",
+            "type": "text",
+            "default": "'published'::text",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "joining_state",
+            "type": "text",
+            "default": "'open'::text",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "visibility",
+            "type": "text",
+            "default": "'campus'::text",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "public_place",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "public_latitude",
+            "type": "double precision",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "public_longitude",
+            "type": "double precision",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "campus_zone",
+            "type": "text",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "location_precision",
+            "type": "text",
+            "default": "'approximate_area'::text",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "revision",
+            "type": "bigint",
+            "default": "1",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "created_at",
+            "type": "timestamp with time zone",
+            "default": "clock_timestamp()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "updated_at",
+            "type": "timestamp with time zone",
+            "default": "clock_timestamp()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres",
+          "service_role=Dxtm/postgres",
+          "authenticated=r/postgres"
+        ],
+        "rls": true,
+        "name": "public.platform_roles",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "user_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "role",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "created_at",
+            "type": "timestamp with time zone",
+            "default": "now()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres",
+          "service_role=Dxtm/postgres",
+          "authenticated=r/postgres"
+        ],
+        "rls": true,
+        "name": "public.profiles",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "user_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": [
+              "authenticated=w/postgres"
+            ],
+            "name": "real_name",
+            "type": "text",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": [
+              "authenticated=w/postgres"
+            ],
+            "name": "graduation_year",
+            "type": "integer",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": [
+              "authenticated=w/postgres"
+            ],
+            "name": "major",
+            "type": "text",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": [
+              "authenticated=w/postgres"
+            ],
+            "name": "bio",
+            "type": "text",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": [
+              "authenticated=w/postgres"
+            ],
+            "name": "primary_photo_path",
+            "type": "text",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "is_complete",
+            "type": "boolean",
+            "default": "((real_name IS NOT NULL) AND (graduation_year IS NOT NULL) AND (major IS NOT NULL) AND (bio IS NOT NULL) AND (primary_photo_path IS NOT NULL))",
+            "notnull": false,
+            "identity": "",
+            "generated": "s"
+          },
+          {
+            "acl": null,
+            "name": "created_at",
+            "type": "timestamp with time zone",
+            "default": "now()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": [
+              "authenticated=w/postgres"
+            ],
+            "name": "interests",
+            "type": "text[]",
+            "default": "'{}'::text[]",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": [
+              "authenticated=w/postgres"
+            ],
+            "name": "down_to_do",
+            "type": "text[]",
+            "default": "'{}'::text[]",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": [
+              "authenticated=w/postgres"
+            ],
+            "name": "favorite_music",
+            "type": "text",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": [
+              "authenticated=w/postgres"
+            ],
+            "name": "favorite_foods",
+            "type": "text",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": [
+              "authenticated=w/postgres"
+            ],
+            "name": "weird_fact",
+            "type": "text",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": [
+              "authenticated=w/postgres"
+            ],
+            "name": "prompts",
+            "type": "jsonb",
+            "default": "'[]'::jsonb",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": [
+              "authenticated=w/postgres"
+            ],
+            "name": "instagram",
+            "type": "text",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": [
+              "authenticated=w/postgres"
+            ],
+            "name": "additional_photo_paths",
+            "type": "text[]",
+            "default": "'{}'::text[]",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "revision",
+            "type": "bigint",
+            "default": "0",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres",
+          "service_role=Dxtm/postgres",
+          "authenticated=r/postgres"
+        ],
+        "rls": true,
+        "name": "public.universities",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "id",
+            "type": "uuid",
+            "default": "gen_random_uuid()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "slug",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "name",
+            "type": "text",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "active",
+            "type": "boolean",
+            "default": "false",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "allowed_email_domains",
+            "type": "text[]",
+            "default": "'{}'::text[]",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "created_at",
+            "type": "timestamp with time zone",
+            "default": "now()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "postgres=arwdDxtm/postgres",
+          "service_role=Dxtm/postgres",
+          "authenticated=r/postgres"
+        ],
+        "rls": true,
+        "name": "public.university_memberships",
+        "owner": "postgres",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "user_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "university_id",
+            "type": "uuid",
+            "default": null,
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "verified_at",
+            "type": "timestamp with time zone",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "verification_email",
+            "type": "text",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "created_at",
+            "type": "timestamp with time zone",
+            "default": "now()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      },
+      {
+        "acl": [
+          "supabase_storage_admin=arwdDxtm/supabase_storage_admin",
+          "postgres=a*r*w*d*D*x*t*m*/supabase_storage_admin",
+          "service_role=arwdDxtm/supabase_storage_admin",
+          "authenticated=arwdDxtm/supabase_storage_admin",
+          "anon=arwdDxtm/supabase_storage_admin"
+        ],
+        "rls": true,
+        "name": "storage.objects",
+        "owner": "supabase_storage_admin",
+        "forced": false,
+        "columns": [
+          {
+            "acl": null,
+            "name": "id",
+            "type": "uuid",
+            "default": "gen_random_uuid()",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "bucket_id",
+            "type": "text",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "name",
+            "type": "text",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "owner",
+            "type": "uuid",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "created_at",
+            "type": "timestamp with time zone",
+            "default": "now()",
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "updated_at",
+            "type": "timestamp with time zone",
+            "default": "now()",
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "last_accessed_at",
+            "type": "timestamp with time zone",
+            "default": "now()",
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "metadata",
+            "type": "jsonb",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "path_tokens",
+            "type": "text[]",
+            "default": "string_to_array(name, '/'::text)",
+            "notnull": false,
+            "identity": "",
+            "generated": "s"
+          },
+          {
+            "acl": null,
+            "name": "version",
+            "type": "text",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "owner_id",
+            "type": "text",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "user_metadata",
+            "type": "jsonb",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "archived_at",
+            "type": "timestamp with time zone",
+            "default": null,
+            "notnull": false,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "is_delete_marker",
+            "type": "boolean",
+            "default": "false",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          },
+          {
+            "acl": null,
+            "name": "is_versioned",
+            "type": "boolean",
+            "default": "false",
+            "notnull": true,
+            "identity": "",
+            "generated": ""
+          }
+        ]
+      }
+    ],
+    "policies": [
+      {
+        "cmd": "SELECT",
+        "qual": "((id = ( SELECT auth.uid() AS uid)) AND ( SELECT private.pilot_onboarding_eligible() AS pilot_onboarding_eligible))",
+        "roles": [
+          "authenticated"
+        ],
+        "tablename": "accounts",
+        "permissive": "PERMISSIVE",
+        "policyname": "accounts_owner_read",
+        "schemaname": "public",
+        "with_check": null
+      },
+      {
+        "cmd": "SELECT",
+        "qual": "private.can_read_hangout_roster(hangout_id, account_id)",
+        "roles": [
+          "authenticated"
+        ],
+        "tablename": "hangout_participants",
+        "permissive": "PERMISSIVE",
+        "policyname": "hangout_roster_read",
+        "schemaname": "public",
+        "with_check": null
+      },
+      {
+        "cmd": "SELECT",
+        "qual": "private.can_read_hangout(hangout_id, true)",
+        "roles": [
+          "authenticated"
+        ],
+        "tablename": "hangout_private_locations",
+        "permissive": "PERMISSIVE",
+        "policyname": "hangout_private_read",
+        "schemaname": "public",
+        "with_check": null
+      },
+      {
+        "cmd": "SELECT",
+        "qual": "private.can_read_hangout(id)",
+        "roles": [
+          "authenticated"
+        ],
+        "tablename": "hangouts",
+        "permissive": "PERMISSIVE",
+        "policyname": "hangouts_read",
+        "schemaname": "public",
+        "with_check": null
+      },
+      {
+        "cmd": "SELECT",
+        "qual": "((user_id = ( SELECT auth.uid() AS uid)) AND ( SELECT private.pilot_onboarding_eligible() AS pilot_onboarding_eligible))",
+        "roles": [
+          "authenticated"
+        ],
+        "tablename": "platform_roles",
+        "permissive": "PERMISSIVE",
+        "policyname": "roles_owner_read",
+        "schemaname": "public",
+        "with_check": null
+      },
+      {
+        "cmd": "SELECT",
+        "qual": "((user_id = ( SELECT auth.uid() AS uid)) AND ( SELECT private.pilot_onboarding_eligible() AS pilot_onboarding_eligible))",
+        "roles": [
+          "authenticated"
+        ],
+        "tablename": "profiles",
+        "permissive": "PERMISSIVE",
+        "policyname": "profiles_owner_read",
+        "schemaname": "public",
+        "with_check": null
+      },
+      {
+        "cmd": "UPDATE",
+        "qual": "((user_id = ( SELECT auth.uid() AS uid)) AND ( SELECT private.pilot_onboarding_eligible() AS pilot_onboarding_eligible))",
+        "roles": [
+          "authenticated"
+        ],
+        "tablename": "profiles",
+        "permissive": "PERMISSIVE",
+        "policyname": "profiles_owner_update",
+        "schemaname": "public",
+        "with_check": "((user_id = ( SELECT auth.uid() AS uid)) AND ( SELECT private.pilot_onboarding_eligible() AS pilot_onboarding_eligible))"
+      },
+      {
+        "cmd": "SELECT",
+        "qual": "(active AND ( SELECT private.pilot_onboarding_eligible() AS pilot_onboarding_eligible) AND (id = ( SELECT university_memberships.university_id\n   FROM university_memberships\n  WHERE (university_memberships.user_id = ( SELECT auth.uid() AS uid)))))",
+        "roles": [
+          "authenticated"
+        ],
+        "tablename": "universities",
+        "permissive": "PERMISSIVE",
+        "policyname": "universities_active_read",
+        "schemaname": "public",
+        "with_check": null
+      },
+      {
+        "cmd": "SELECT",
+        "qual": "((user_id = ( SELECT auth.uid() AS uid)) AND ( SELECT private.pilot_onboarding_eligible() AS pilot_onboarding_eligible))",
+        "roles": [
+          "authenticated"
+        ],
+        "tablename": "university_memberships",
+        "permissive": "PERMISSIVE",
+        "policyname": "memberships_owner_read",
+        "schemaname": "public",
+        "with_check": null
+      },
+      {
+        "cmd": "DELETE",
+        "qual": "((bucket_id = 'profile-photos'::text) AND (owner_id = (( SELECT auth.uid() AS uid))::text) AND ( SELECT private.pilot_onboarding_eligible() AS pilot_onboarding_eligible) AND (NOT (EXISTS ( SELECT 1\n   FROM profiles p\n  WHERE ((p.user_id = ( SELECT auth.uid() AS uid)) AND ((p.primary_photo_path = objects.name) OR (objects.name = ANY (p.additional_photo_paths))))))))",
+        "roles": [
+          "authenticated"
+        ],
+        "tablename": "objects",
+        "permissive": "PERMISSIVE",
+        "policyname": "profile_photos_owner_delete",
+        "schemaname": "storage",
+        "with_check": null
+      },
+      {
+        "cmd": "INSERT",
+        "qual": null,
+        "roles": [
+          "authenticated"
+        ],
+        "tablename": "objects",
+        "permissive": "PERMISSIVE",
+        "policyname": "profile_photos_owner_insert",
+        "schemaname": "storage",
+        "with_check": "((bucket_id = 'profile-photos'::text) AND (owner_id = (( SELECT auth.uid() AS uid))::text) AND (name ~ (('^'::text || (( SELECT auth.uid() AS uid))::text) || '/[a-f0-9-]+\\.(jpg|png|webp)$'::text)) AND ( SELECT private.pilot_onboarding_eligible() AS pilot_onboarding_eligible))"
+      },
+      {
+        "cmd": "SELECT",
+        "qual": "((bucket_id = 'profile-photos'::text) AND (owner_id = (( SELECT auth.uid() AS uid))::text) AND ( SELECT private.pilot_onboarding_eligible() AS pilot_onboarding_eligible))",
+        "roles": [
+          "authenticated"
+        ],
+        "tablename": "objects",
+        "permissive": "PERMISSIVE",
+        "policyname": "profile_photos_owner_read",
+        "schemaname": "storage",
+        "with_check": null
+      }
+    ],
+    "triggers": [
+      {
+        "name": "enforce_bucket_name_length_trigger",
+        "table": "storage.buckets",
+        "function": "storage.enforce_bucket_name_length()",
+        "definition": "CREATE TRIGGER enforce_bucket_name_length_trigger BEFORE INSERT OR UPDATE OF name ON storage.buckets FOR EACH ROW EXECUTE FUNCTION storage.enforce_bucket_name_length()"
+      },
+      {
+        "name": "protect_buckets_delete",
+        "table": "storage.buckets",
+        "function": "storage.protect_delete()",
+        "definition": "CREATE TRIGGER protect_buckets_delete BEFORE DELETE ON storage.buckets FOR EACH STATEMENT EXECUTE FUNCTION storage.protect_delete()"
+      },
+      {
+        "name": "pals_protect_profile_photo_delete",
+        "table": "storage.objects",
+        "function": "private.protect_profile_photo_delete()",
+        "definition": "CREATE TRIGGER pals_protect_profile_photo_delete BEFORE DELETE ON storage.objects FOR EACH ROW EXECUTE FUNCTION private.protect_profile_photo_delete()"
+      },
+      {
+        "name": "pals_reject_client_profile_photo_update",
+        "table": "storage.objects",
+        "function": "private.reject_client_profile_photo_update()",
+        "definition": "CREATE TRIGGER pals_reject_client_profile_photo_update BEFORE UPDATE ON storage.objects FOR EACH ROW EXECUTE FUNCTION private.reject_client_profile_photo_update()"
+      },
+      {
+        "name": "pals_require_active_photo_delete",
+        "table": "storage.objects",
+        "function": "private.require_active_photo_write()",
+        "definition": "CREATE TRIGGER pals_require_active_photo_delete BEFORE DELETE ON storage.objects FOR EACH ROW EXECUTE FUNCTION private.require_active_photo_write()"
+      },
+      {
+        "name": "pals_require_active_photo_insert",
+        "table": "storage.objects",
+        "function": "private.require_active_photo_write()",
+        "definition": "CREATE TRIGGER pals_require_active_photo_insert BEFORE INSERT ON storage.objects FOR EACH ROW EXECUTE FUNCTION private.require_active_photo_write()"
+      },
+      {
+        "name": "protect_objects_delete",
+        "table": "storage.objects",
+        "function": "storage.protect_delete()",
+        "definition": "CREATE TRIGGER protect_objects_delete BEFORE DELETE ON storage.objects FOR EACH STATEMENT EXECUTE FUNCTION storage.protect_delete()"
+      },
+      {
+        "name": "update_objects_updated_at",
+        "table": "storage.objects",
+        "function": "storage.update_updated_at_column()",
+        "definition": "CREATE TRIGGER update_objects_updated_at BEFORE UPDATE ON storage.objects FOR EACH ROW EXECUTE FUNCTION storage.update_updated_at_column()"
+      },
+      {
+        "name": "bump_profile_revision",
+        "table": "profiles",
+        "function": "private.bump_profile_revision()",
+        "definition": "CREATE TRIGGER bump_profile_revision BEFORE UPDATE ON public.profiles FOR EACH ROW EXECUTE FUNCTION private.bump_profile_revision()"
+      },
+      {
+        "name": "pals_require_active_profile_write",
+        "table": "profiles",
+        "function": "private.require_active_profile_write()",
+        "definition": "CREATE TRIGGER pals_require_active_profile_write BEFORE UPDATE ON public.profiles FOR EACH ROW EXECUTE FUNCTION private.require_active_profile_write()"
+      },
+      {
+        "name": "validate_profile_photos",
+        "table": "profiles",
+        "function": "private.validate_profile_photos()",
+        "definition": "CREATE TRIGGER validate_profile_photos BEFORE INSERT OR UPDATE OF primary_photo_path, additional_photo_paths ON public.profiles FOR EACH ROW EXECUTE FUNCTION private.validate_profile_photos()"
+      },
+      {
+        "name": "hangout_joined_host",
+        "table": "hangouts",
+        "function": "private.enforce_joined_host()",
+        "definition": "CREATE CONSTRAINT TRIGGER hangout_joined_host AFTER INSERT OR UPDATE ON public.hangouts DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION private.enforce_joined_host()"
+      },
+      {
+        "name": "hangout_ownership",
+        "table": "hangouts",
+        "function": "private.enforce_hangout_ownership()",
+        "definition": "CREATE TRIGGER hangout_ownership BEFORE UPDATE ON public.hangouts FOR EACH ROW EXECUTE FUNCTION private.enforce_hangout_ownership()"
+      },
+      {
+        "name": "clear_departing_cohost",
+        "table": "hangout_participants",
+        "function": "private.clear_departing_cohost()",
+        "definition": "CREATE TRIGGER clear_departing_cohost BEFORE UPDATE OF state ON public.hangout_participants FOR EACH ROW EXECUTE FUNCTION private.clear_departing_cohost()"
+      },
+      {
+        "name": "participant_joined_host",
+        "table": "hangout_participants",
+        "function": "private.enforce_joined_host()",
+        "definition": "CREATE CONSTRAINT TRIGGER participant_joined_host AFTER INSERT OR DELETE OR UPDATE ON public.hangout_participants DEFERRABLE INITIALLY DEFERRED FOR EACH ROW EXECUTE FUNCTION private.enforce_joined_host()"
+      },
+      {
+        "name": "participant_transition",
+        "table": "hangout_participants",
+        "function": "private.enforce_participant_transition()",
+        "definition": "CREATE TRIGGER participant_transition BEFORE INSERT OR UPDATE ON public.hangout_participants FOR EACH ROW EXECUTE FUNCTION private.enforce_participant_transition()"
+      },
+      {
+        "name": "notification_friend_accept",
+        "table": "private.friendships",
+        "function": "private.notification_friend_source()",
+        "definition": "CREATE TRIGGER notification_friend_accept AFTER UPDATE OF state ON private.friendships FOR EACH ROW EXECUTE FUNCTION private.notification_friend_source()"
+      },
+      {
+        "name": "notification_friend_insert",
+        "table": "private.friendships",
+        "function": "private.notification_friend_source()",
+        "definition": "CREATE TRIGGER notification_friend_insert AFTER INSERT ON private.friendships FOR EACH ROW EXECUTE FUNCTION private.notification_friend_source()"
+      },
+      {
+        "name": "pals_active_friendship_write",
+        "table": "private.friendships",
+        "function": "private.require_active_student_source_write()",
+        "definition": "CREATE TRIGGER pals_active_friendship_write BEFORE DELETE OR UPDATE ON private.friendships FOR EACH ROW EXECUTE FUNCTION private.require_active_student_source_write()"
+      },
+      {
+        "name": "chat_immutable_message",
+        "table": "private.hangout_messages",
+        "function": "private.chat_immutable_message()",
+        "definition": "CREATE TRIGGER chat_immutable_message BEFORE DELETE OR UPDATE ON private.hangout_messages FOR EACH ROW EXECUTE FUNCTION private.chat_immutable_message()"
+      },
+      {
+        "name": "notification_chat_insert",
+        "table": "private.hangout_messages",
+        "function": "private.notification_chat_source()",
+        "definition": "CREATE TRIGGER notification_chat_insert AFTER INSERT ON private.hangout_messages FOR EACH ROW EXECUTE FUNCTION private.notification_chat_source()"
+      },
+      {
+        "name": "notification_dm_pair_accept",
+        "table": "private.dm_pairs",
+        "function": "private.notification_dm_pair_source()",
+        "definition": "CREATE TRIGGER notification_dm_pair_accept AFTER UPDATE OF state ON private.dm_pairs FOR EACH ROW EXECUTE FUNCTION private.notification_dm_pair_source()"
+      },
+      {
+        "name": "notification_dm_pair_insert",
+        "table": "private.dm_pairs",
+        "function": "private.notification_dm_pair_source()",
+        "definition": "CREATE TRIGGER notification_dm_pair_insert AFTER INSERT ON private.dm_pairs FOR EACH ROW EXECUTE FUNCTION private.notification_dm_pair_source()"
+      },
+      {
+        "name": "pals_active_dm_pair_write",
+        "table": "private.dm_pairs",
+        "function": "private.require_active_student_source_write()",
+        "definition": "CREATE TRIGGER pals_active_dm_pair_write BEFORE DELETE OR UPDATE ON private.dm_pairs FOR EACH ROW EXECUTE FUNCTION private.require_active_student_source_write()"
+      },
+      {
+        "name": "dm_immutable_message",
+        "table": "private.dm_messages",
+        "function": "private.dm_immutable()",
+        "definition": "CREATE TRIGGER dm_immutable_message BEFORE DELETE OR UPDATE ON private.dm_messages FOR EACH ROW EXECUTE FUNCTION private.dm_immutable()"
+      },
+      {
+        "name": "notification_dm_message_insert",
+        "table": "private.dm_messages",
+        "function": "private.notification_dm_message_source()",
+        "definition": "CREATE TRIGGER notification_dm_message_insert AFTER INSERT ON private.dm_messages FOR EACH ROW EXECUTE FUNCTION private.notification_dm_message_source()"
+      },
+      {
+        "name": "dm_immutable_retry",
+        "table": "private.dm_retries",
+        "function": "private.dm_immutable()",
+        "definition": "CREATE TRIGGER dm_immutable_retry BEFORE DELETE OR UPDATE ON private.dm_retries FOR EACH ROW EXECUTE FUNCTION private.dm_immutable()"
+      },
+      {
+        "name": "pals_active_notification_preference_write",
+        "table": "private.notification_preferences",
+        "function": "private.require_active_student_source_write()",
+        "definition": "CREATE TRIGGER pals_active_notification_preference_write BEFORE INSERT OR UPDATE ON private.notification_preferences FOR EACH ROW EXECUTE FUNCTION private.require_active_student_source_write()"
+      },
+      {
+        "name": "pals_active_notification_read_write",
+        "table": "private.notification_items",
+        "function": "private.require_active_student_source_write()",
+        "definition": "CREATE TRIGGER pals_active_notification_read_write BEFORE UPDATE OF read_at ON private.notification_items FOR EACH ROW EXECUTE FUNCTION private.require_active_student_source_write()"
+      },
+      {
+        "name": "moderation_case_reopen_sanction",
+        "table": "private.moderation_cases",
+        "function": "private.clear_reopened_case_sanction()",
+        "definition": "CREATE TRIGGER moderation_case_reopen_sanction BEFORE UPDATE OF disposition ON private.moderation_cases FOR EACH ROW EXECUTE FUNCTION private.clear_reopened_case_sanction()"
+      },
+      {
+        "name": "moderation_audit_immutable",
+        "table": "private.moderation_audit",
+        "function": "private.reject_moderation_evidence_change()",
+        "definition": "CREATE TRIGGER moderation_audit_immutable BEFORE DELETE OR UPDATE ON private.moderation_audit FOR EACH ROW EXECUTE FUNCTION private.reject_moderation_evidence_change()"
+      },
+      {
+        "name": "account_sanctions_immutable",
+        "table": "private.account_sanctions",
+        "function": "private.reject_moderation_evidence_change()",
+        "definition": "CREATE TRIGGER account_sanctions_immutable BEFORE DELETE OR UPDATE ON private.account_sanctions FOR EACH ROW EXECUTE FUNCTION private.reject_moderation_evidence_change()"
+      },
+      {
+        "name": "hangout_disables_immutable",
+        "table": "private.hangout_disables",
+        "function": "private.reject_moderation_evidence_change()",
+        "definition": "CREATE TRIGGER hangout_disables_immutable BEFORE DELETE OR UPDATE ON private.hangout_disables FOR EACH ROW EXECUTE FUNCTION private.reject_moderation_evidence_change()"
+      },
+      {
+        "name": "advance_large_hangout_epoch",
+        "table": "private.large_hangout_feature_gate",
+        "function": "private.advance_large_hangout_epoch()",
+        "definition": "CREATE TRIGGER advance_large_hangout_epoch BEFORE UPDATE ON private.large_hangout_feature_gate FOR EACH ROW EXECUTE FUNCTION private.advance_large_hangout_epoch()"
+      },
+      {
+        "name": "large_hangout_signal_immutable",
+        "table": "private.large_hangout_signals",
+        "function": "private.reject_large_hangout_signal_change()",
+        "definition": "CREATE TRIGGER large_hangout_signal_immutable BEFORE DELETE OR UPDATE ON private.large_hangout_signals FOR EACH ROW EXECUTE FUNCTION private.reject_large_hangout_signal_change()"
+      },
+      {
+        "name": "pilot_management_audit_immutable",
+        "table": "private.pilot_management_audit",
+        "function": "private.reject_pilot_evidence_change()",
+        "definition": "CREATE TRIGGER pilot_management_audit_immutable BEFORE DELETE OR UPDATE ON private.pilot_management_audit FOR EACH ROW EXECUTE FUNCTION private.reject_pilot_evidence_change()"
+      },
+      {
+        "name": "pilot_management_requests_immutable",
+        "table": "private.pilot_management_requests",
+        "function": "private.reject_pilot_evidence_change()",
+        "definition": "CREATE TRIGGER pilot_management_requests_immutable BEFORE DELETE OR UPDATE ON private.pilot_management_requests FOR EACH ROW EXECUTE FUNCTION private.reject_pilot_evidence_change()"
+      },
+      {
+        "name": "pilot_manager_audit_immutable",
+        "table": "private.pilot_manager_audit",
+        "function": "private.reject_pilot_evidence_change()",
+        "definition": "CREATE TRIGGER pilot_manager_audit_immutable BEFORE DELETE OR UPDATE ON private.pilot_manager_audit FOR EACH ROW EXECUTE FUNCTION private.reject_pilot_evidence_change()"
+      }
+    ],
+    "constraints": [
+      {
+        "name": "migrations_name_key",
+        "table": "storage.migrations",
+        "definition": "UNIQUE (name)"
+      },
+      {
+        "name": "migrations_pkey",
+        "table": "storage.migrations",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "buckets_pkey",
+        "table": "storage.buckets",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "buckets_versioning_dark_check",
+        "table": "storage.buckets",
+        "definition": "CHECK ((versioning_status = 'DISABLED'::text))"
+      },
+      {
+        "name": "buckets_versioning_standard_only_check",
+        "table": "storage.buckets",
+        "definition": "CHECK (((type = 'STANDARD'::storage.buckettype) OR (versioning_status = 'DISABLED'::text)))"
+      },
+      {
+        "name": "buckets_versioning_status_check",
+        "table": "storage.buckets",
+        "definition": "CHECK ((versioning_status = ANY (ARRAY['DISABLED'::text, 'ENABLED'::text, 'SUSPENDED'::text])))"
+      },
+      {
+        "name": "objects_bucketId_fkey",
+        "table": "storage.objects",
+        "definition": "FOREIGN KEY (bucket_id) REFERENCES storage.buckets(id)"
+      },
+      {
+        "name": "objects_pkey",
+        "table": "storage.objects",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "s3_multipart_uploads_bucket_id_fkey",
+        "table": "storage.s3_multipart_uploads",
+        "definition": "FOREIGN KEY (bucket_id) REFERENCES storage.buckets(id)"
+      },
+      {
+        "name": "s3_multipart_uploads_pkey",
+        "table": "storage.s3_multipart_uploads",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "s3_multipart_uploads_parts_bucket_id_fkey",
+        "table": "storage.s3_multipart_uploads_parts",
+        "definition": "FOREIGN KEY (bucket_id) REFERENCES storage.buckets(id)"
+      },
+      {
+        "name": "s3_multipart_uploads_parts_pkey",
+        "table": "storage.s3_multipart_uploads_parts",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "s3_multipart_uploads_parts_upload_id_fkey",
+        "table": "storage.s3_multipart_uploads_parts",
+        "definition": "FOREIGN KEY (upload_id) REFERENCES storage.s3_multipart_uploads(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "buckets_analytics_pkey",
+        "table": "storage.buckets_analytics",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "iceberg_namespaces_catalog_id_fkey",
+        "table": "storage.iceberg_namespaces",
+        "definition": "FOREIGN KEY (catalog_id) REFERENCES storage.buckets_analytics(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "iceberg_namespaces_pkey",
+        "table": "storage.iceberg_namespaces",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "iceberg_tables_catalog_id_fkey",
+        "table": "storage.iceberg_tables",
+        "definition": "FOREIGN KEY (catalog_id) REFERENCES storage.buckets_analytics(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "iceberg_tables_namespace_id_fkey",
+        "table": "storage.iceberg_tables",
+        "definition": "FOREIGN KEY (namespace_id) REFERENCES storage.iceberg_namespaces(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "iceberg_tables_pkey",
+        "table": "storage.iceberg_tables",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "buckets_vectors_pkey",
+        "table": "storage.buckets_vectors",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "vector_indexes_bucket_id_fkey",
+        "table": "storage.vector_indexes",
+        "definition": "FOREIGN KEY (bucket_id) REFERENCES storage.buckets_vectors(id)"
+      },
+      {
+        "name": "vector_indexes_pkey",
+        "table": "storage.vector_indexes",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "universities_name_check",
+        "table": "universities",
+        "definition": "CHECK ((length(btrim(name)) > 0))"
+      },
+      {
+        "name": "universities_pkey",
+        "table": "universities",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "universities_slug_check",
+        "table": "universities",
+        "definition": "CHECK ((slug ~ '^[a-z0-9]+(-[a-z0-9]+)*$'::text))"
+      },
+      {
+        "name": "universities_slug_key",
+        "table": "universities",
+        "definition": "UNIQUE (slug)"
+      },
+      {
+        "name": "accounts_id_fkey",
+        "table": "accounts",
+        "definition": "FOREIGN KEY (id) REFERENCES auth.users(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "accounts_pkey",
+        "table": "accounts",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "accounts_status_check",
+        "table": "accounts",
+        "definition": "CHECK ((status = ANY (ARRAY['active'::text, 'suspended'::text, 'banned'::text])))"
+      },
+      {
+        "name": "university_memberships_check",
+        "table": "university_memberships",
+        "definition": "CHECK ((((verified_at IS NULL) AND (verification_email IS NULL)) OR ((verified_at IS NOT NULL) AND (verification_email IS NOT NULL) AND (length(btrim(verification_email)) > 0))))"
+      },
+      {
+        "name": "university_memberships_pkey",
+        "table": "university_memberships",
+        "definition": "PRIMARY KEY (user_id)"
+      },
+      {
+        "name": "university_memberships_university_id_fkey",
+        "table": "university_memberships",
+        "definition": "FOREIGN KEY (university_id) REFERENCES universities(id)"
+      },
+      {
+        "name": "university_memberships_user_id_fkey",
+        "table": "university_memberships",
+        "definition": "FOREIGN KEY (user_id) REFERENCES accounts(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "distinct_primary_extra",
+        "table": "profiles",
+        "definition": "CHECK (((primary_photo_path IS NULL) OR (NOT (primary_photo_path = ANY (additional_photo_paths)))))"
+      },
+      {
+        "name": "profiles_additional_photo_paths_check",
+        "table": "profiles",
+        "definition": "CHECK (private.valid_profile_list(additional_photo_paths, 4, 1024))"
+      },
+      {
+        "name": "profiles_bio_check",
+        "table": "profiles",
+        "definition": "CHECK (((bio IS NULL) OR ((length(btrim(bio)) >= 1) AND (length(btrim(bio)) <= 2000))))"
+      },
+      {
+        "name": "profiles_down_to_do_check",
+        "table": "profiles",
+        "definition": "CHECK (private.valid_profile_list(down_to_do, 10, 80))"
+      },
+      {
+        "name": "profiles_favorite_foods_check",
+        "table": "profiles",
+        "definition": "CHECK (((favorite_foods IS NULL) OR ((favorite_foods = private.profile_trim(favorite_foods)) AND ((length(favorite_foods) >= 1) AND (length(favorite_foods) <= 500)))))"
+      },
+      {
+        "name": "profiles_favorite_music_check",
+        "table": "profiles",
+        "definition": "CHECK (((favorite_music IS NULL) OR ((favorite_music = private.profile_trim(favorite_music)) AND ((length(favorite_music) >= 1) AND (length(favorite_music) <= 500)))))"
+      },
+      {
+        "name": "profiles_graduation_year_check",
+        "table": "profiles",
+        "definition": "CHECK (((graduation_year >= 1900) AND (graduation_year <= 2200)))"
+      },
+      {
+        "name": "profiles_instagram_check",
+        "table": "profiles",
+        "definition": "CHECK (((instagram IS NULL) OR (instagram ~ '^[A-Za-z0-9_.]{1,30}$'::text)))"
+      },
+      {
+        "name": "profiles_interests_check",
+        "table": "profiles",
+        "definition": "CHECK (private.valid_profile_list(interests, 10, 80))"
+      },
+      {
+        "name": "profiles_major_check",
+        "table": "profiles",
+        "definition": "CHECK (((major IS NULL) OR ((length(btrim(major)) >= 1) AND (length(btrim(major)) <= 200))))"
+      },
+      {
+        "name": "profiles_pkey",
+        "table": "profiles",
+        "definition": "PRIMARY KEY (user_id)"
+      },
+      {
+        "name": "profiles_primary_photo_path_check",
+        "table": "profiles",
+        "definition": "CHECK (((primary_photo_path IS NULL) OR ((length(btrim(primary_photo_path)) >= 1) AND (length(btrim(primary_photo_path)) <= 1024))))"
+      },
+      {
+        "name": "profiles_prompts_check",
+        "table": "profiles",
+        "definition": "CHECK (private.valid_profile_prompts(prompts))"
+      },
+      {
+        "name": "profiles_real_name_check",
+        "table": "profiles",
+        "definition": "CHECK (((real_name IS NULL) OR ((length(btrim(real_name)) >= 1) AND (length(btrim(real_name)) <= 100))))"
+      },
+      {
+        "name": "profiles_user_id_fkey",
+        "table": "profiles",
+        "definition": "FOREIGN KEY (user_id) REFERENCES accounts(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "profiles_weird_fact_check",
+        "table": "profiles",
+        "definition": "CHECK (((weird_fact IS NULL) OR ((weird_fact = private.profile_trim(weird_fact)) AND ((length(weird_fact) >= 1) AND (length(weird_fact) <= 500)))))"
+      },
+      {
+        "name": "platform_roles_pkey",
+        "table": "platform_roles",
+        "definition": "PRIMARY KEY (user_id)"
+      },
+      {
+        "name": "platform_roles_role_check",
+        "table": "platform_roles",
+        "definition": "CHECK ((role = ANY (ARRAY['moderator'::text, 'admin'::text])))"
+      },
+      {
+        "name": "platform_roles_user_id_fkey",
+        "table": "platform_roles",
+        "definition": "FOREIGN KEY (user_id) REFERENCES accounts(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "hangout_joined_host",
+        "table": "hangouts",
+        "definition": "TRIGGER DEFERRABLE INITIALLY DEFERRED"
+      },
+      {
+        "name": "hangouts_campus_zone_check",
+        "table": "hangouts",
+        "definition": "CHECK (((campus_zone IS NULL) OR ((campus_zone = private.profile_trim(campus_zone)) AND ((length(campus_zone) >= 1) AND (length(campus_zone) <= 80)))))"
+      },
+      {
+        "name": "hangouts_check",
+        "table": "hangouts",
+        "definition": "CHECK ((isfinite(ends_at) AND (ends_at > starts_at) AND (ends_at <= (starts_at + '7 days'::interval))))"
+      },
+      {
+        "name": "hangouts_check1",
+        "table": "hangouts",
+        "definition": "CHECK (((status <> 'cancelled'::text) OR (joining_state = 'closed'::text)))"
+      },
+      {
+        "name": "hangouts_description_check",
+        "table": "hangouts",
+        "definition": "CHECK (((description IS NULL) OR ((description = private.profile_trim(description)) AND ((length(description) >= 1) AND (length(description) <= 2000)))))"
+      },
+      {
+        "name": "hangouts_host_id_fkey",
+        "table": "hangouts",
+        "definition": "FOREIGN KEY (host_id) REFERENCES accounts(id)"
+      },
+      {
+        "name": "hangouts_joining_state_check",
+        "table": "hangouts",
+        "definition": "CHECK ((joining_state = ANY (ARRAY['open'::text, 'closed'::text])))"
+      },
+      {
+        "name": "hangouts_location_precision_check",
+        "table": "hangouts",
+        "definition": "CHECK ((location_precision = 'approximate_area'::text))"
+      },
+      {
+        "name": "hangouts_pkey",
+        "table": "hangouts",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "hangouts_public_latitude_check",
+        "table": "hangouts",
+        "definition": "CHECK (((public_latitude >= ('-90'::integer)::double precision) AND (public_latitude <= (90)::double precision)))"
+      },
+      {
+        "name": "hangouts_public_longitude_check",
+        "table": "hangouts",
+        "definition": "CHECK (((public_longitude >= ('-180'::integer)::double precision) AND (public_longitude <= (180)::double precision)))"
+      },
+      {
+        "name": "hangouts_public_place_check",
+        "table": "hangouts",
+        "definition": "CHECK (((public_place = private.profile_trim(public_place)) AND ((length(public_place) >= 1) AND (length(public_place) <= 120))))"
+      },
+      {
+        "name": "hangouts_revision_check",
+        "table": "hangouts",
+        "definition": "CHECK ((revision > 0))"
+      },
+      {
+        "name": "hangouts_starts_at_check",
+        "table": "hangouts",
+        "definition": "CHECK (isfinite(starts_at))"
+      },
+      {
+        "name": "hangouts_status_check",
+        "table": "hangouts",
+        "definition": "CHECK ((status = ANY (ARRAY['published'::text, 'cancelled'::text])))"
+      },
+      {
+        "name": "hangouts_title_check",
+        "table": "hangouts",
+        "definition": "CHECK (((title = private.profile_trim(title)) AND ((length(title) >= 1) AND (length(title) <= 120))))"
+      },
+      {
+        "name": "hangouts_university_id_fkey",
+        "table": "hangouts",
+        "definition": "FOREIGN KEY (university_id) REFERENCES universities(id)"
+      },
+      {
+        "name": "hangouts_visibility_check",
+        "table": "hangouts",
+        "definition": "CHECK ((visibility = 'campus'::text))"
+      },
+      {
+        "name": "hangout_feature_gate_pkey",
+        "table": "private.hangout_feature_gate",
+        "definition": "PRIMARY KEY (singleton)"
+      },
+      {
+        "name": "hangout_feature_gate_singleton_check",
+        "table": "private.hangout_feature_gate",
+        "definition": "CHECK (singleton)"
+      },
+      {
+        "name": "hangout_create_requests_hangout_id_fkey",
+        "table": "private.hangout_create_requests",
+        "definition": "FOREIGN KEY (hangout_id) REFERENCES hangouts(id)"
+      },
+      {
+        "name": "hangout_create_requests_hangout_id_key",
+        "table": "private.hangout_create_requests",
+        "definition": "UNIQUE (hangout_id)"
+      },
+      {
+        "name": "hangout_create_requests_host_id_fkey",
+        "table": "private.hangout_create_requests",
+        "definition": "FOREIGN KEY (host_id) REFERENCES accounts(id)"
+      },
+      {
+        "name": "hangout_create_requests_pkey",
+        "table": "private.hangout_create_requests",
+        "definition": "PRIMARY KEY (host_id, request_id)"
+      },
+      {
+        "name": "hangout_participants_account_id_fkey",
+        "table": "hangout_participants",
+        "definition": "FOREIGN KEY (account_id) REFERENCES accounts(id)"
+      },
+      {
+        "name": "hangout_participants_check",
+        "table": "hangout_participants",
+        "definition": "CHECK ((((state = 'joined'::text) AND (left_at IS NULL) AND (removed_at IS NULL)) OR ((state = 'left'::text) AND (left_at IS NOT NULL) AND (removed_at IS NULL)) OR ((state = 'removed'::text) AND (removed_at IS NOT NULL))))"
+      },
+      {
+        "name": "hangout_participants_hangout_id_fkey",
+        "table": "hangout_participants",
+        "definition": "FOREIGN KEY (hangout_id) REFERENCES hangouts(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "hangout_participants_pkey",
+        "table": "hangout_participants",
+        "definition": "PRIMARY KEY (hangout_id, account_id)"
+      },
+      {
+        "name": "hangout_participants_state_check",
+        "table": "hangout_participants",
+        "definition": "CHECK ((state = ANY (ARRAY['joined'::text, 'left'::text, 'removed'::text])))"
+      },
+      {
+        "name": "participant_joined_host",
+        "table": "hangout_participants",
+        "definition": "TRIGGER DEFERRABLE INITIALLY DEFERRED"
+      },
+      {
+        "name": "hangout_private_locations_hangout_id_fkey",
+        "table": "hangout_private_locations",
+        "definition": "FOREIGN KEY (hangout_id) REFERENCES hangouts(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "hangout_private_locations_instructions_check",
+        "table": "hangout_private_locations",
+        "definition": "CHECK (((instructions = private.profile_trim(instructions)) AND ((length(instructions) >= 1) AND (length(instructions) <= 2000))))"
+      },
+      {
+        "name": "hangout_private_locations_pkey",
+        "table": "hangout_private_locations",
+        "definition": "PRIMARY KEY (hangout_id)"
+      },
+      {
+        "name": "people_feature_gate_pkey",
+        "table": "private.people_feature_gate",
+        "definition": "PRIMARY KEY (singleton)"
+      },
+      {
+        "name": "people_feature_gate_singleton_check",
+        "table": "private.people_feature_gate",
+        "definition": "CHECK (singleton)"
+      },
+      {
+        "name": "people_preferences_account_id_fkey",
+        "table": "private.people_preferences",
+        "definition": "FOREIGN KEY (account_id) REFERENCES accounts(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "people_preferences_pkey",
+        "table": "private.people_preferences",
+        "definition": "PRIMARY KEY (account_id)"
+      },
+      {
+        "name": "people_blocks_blocked_id_fkey",
+        "table": "private.people_blocks",
+        "definition": "FOREIGN KEY (blocked_id) REFERENCES accounts(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "people_blocks_blocker_id_fkey",
+        "table": "private.people_blocks",
+        "definition": "FOREIGN KEY (blocker_id) REFERENCES accounts(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "people_blocks_check",
+        "table": "private.people_blocks",
+        "definition": "CHECK ((blocker_id <> blocked_id))"
+      },
+      {
+        "name": "people_blocks_pkey",
+        "table": "private.people_blocks",
+        "definition": "PRIMARY KEY (blocker_id, blocked_id)"
+      },
+      {
+        "name": "friendship_feature_gate_pkey",
+        "table": "private.friendship_feature_gate",
+        "definition": "PRIMARY KEY (singleton)"
+      },
+      {
+        "name": "friendship_feature_gate_singleton_check",
+        "table": "private.friendship_feature_gate",
+        "definition": "CHECK (singleton)"
+      },
+      {
+        "name": "friendships_campus_id_fkey",
+        "table": "private.friendships",
+        "definition": "FOREIGN KEY (campus_id) REFERENCES universities(id)"
+      },
+      {
+        "name": "friendships_check",
+        "table": "private.friendships",
+        "definition": "CHECK ((low_id < high_id))"
+      },
+      {
+        "name": "friendships_check1",
+        "table": "private.friendships",
+        "definition": "CHECK (((requester_id = low_id) OR (requester_id = high_id)))"
+      },
+      {
+        "name": "friendships_generation_id_key",
+        "table": "private.friendships",
+        "definition": "UNIQUE (generation_id)"
+      },
+      {
+        "name": "friendships_high_id_fkey",
+        "table": "private.friendships",
+        "definition": "FOREIGN KEY (high_id) REFERENCES accounts(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "friendships_low_id_fkey",
+        "table": "private.friendships",
+        "definition": "FOREIGN KEY (low_id) REFERENCES accounts(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "friendships_pkey",
+        "table": "private.friendships",
+        "definition": "PRIMARY KEY (low_id, high_id)"
+      },
+      {
+        "name": "friendships_requester_id_fkey",
+        "table": "private.friendships",
+        "definition": "FOREIGN KEY (requester_id) REFERENCES accounts(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "friendships_state_check",
+        "table": "private.friendships",
+        "definition": "CHECK ((state = ANY (ARRAY['pending'::text, 'accepted'::text])))"
+      },
+      {
+        "name": "friendship_create_requests_actor_id_fkey",
+        "table": "private.friendship_create_requests",
+        "definition": "FOREIGN KEY (actor_id) REFERENCES accounts(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "friendship_create_requests_check",
+        "table": "private.friendship_create_requests",
+        "definition": "CHECK ((actor_id <> target_id))"
+      },
+      {
+        "name": "friendship_create_requests_generation_id_key",
+        "table": "private.friendship_create_requests",
+        "definition": "UNIQUE (generation_id)"
+      },
+      {
+        "name": "friendship_create_requests_pkey",
+        "table": "private.friendship_create_requests",
+        "definition": "PRIMARY KEY (actor_id, request_id)"
+      },
+      {
+        "name": "friendship_create_requests_target_id_fkey",
+        "table": "private.friendship_create_requests",
+        "definition": "FOREIGN KEY (target_id) REFERENCES accounts(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "friendship_suppression_check",
+        "table": "private.friendship_suppression",
+        "definition": "CHECK ((requester_id <> recipient_id))"
+      },
+      {
+        "name": "friendship_suppression_pkey",
+        "table": "private.friendship_suppression",
+        "definition": "PRIMARY KEY (requester_id, recipient_id)"
+      },
+      {
+        "name": "friendship_suppression_recipient_id_fkey",
+        "table": "private.friendship_suppression",
+        "definition": "FOREIGN KEY (recipient_id) REFERENCES accounts(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "friendship_suppression_requester_id_fkey",
+        "table": "private.friendship_suppression",
+        "definition": "FOREIGN KEY (requester_id) REFERENCES accounts(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "hangout_chat_feature_gate_pkey",
+        "table": "private.hangout_chat_feature_gate",
+        "definition": "PRIMARY KEY (singleton)"
+      },
+      {
+        "name": "hangout_chat_feature_gate_singleton_check",
+        "table": "private.hangout_chat_feature_gate",
+        "definition": "CHECK (singleton)"
+      },
+      {
+        "name": "hangout_conversations_hangout_id_fkey",
+        "table": "private.hangout_conversations",
+        "definition": "FOREIGN KEY (hangout_id) REFERENCES hangouts(id)"
+      },
+      {
+        "name": "hangout_conversations_hangout_id_key",
+        "table": "private.hangout_conversations",
+        "definition": "UNIQUE (hangout_id)"
+      },
+      {
+        "name": "hangout_conversations_next_sequence_check",
+        "table": "private.hangout_conversations",
+        "definition": "CHECK ((next_sequence > 0))"
+      },
+      {
+        "name": "hangout_conversations_pkey",
+        "table": "private.hangout_conversations",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "hangout_messages_author_id_fkey",
+        "table": "private.hangout_messages",
+        "definition": "FOREIGN KEY (author_id) REFERENCES accounts(id)"
+      },
+      {
+        "name": "hangout_messages_body_check",
+        "table": "private.hangout_messages",
+        "definition": "CHECK (((body = private.profile_trim(body)) AND ((length(body) >= 1) AND (length(body) <= 2000))))"
+      },
+      {
+        "name": "hangout_messages_conversation_id_fkey",
+        "table": "private.hangout_messages",
+        "definition": "FOREIGN KEY (conversation_id) REFERENCES private.hangout_conversations(id)"
+      },
+      {
+        "name": "hangout_messages_conversation_id_sequence_key",
+        "table": "private.hangout_messages",
+        "definition": "UNIQUE (conversation_id, sequence)"
+      },
+      {
+        "name": "hangout_messages_pkey",
+        "table": "private.hangout_messages",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "hangout_messages_sequence_check",
+        "table": "private.hangout_messages",
+        "definition": "CHECK ((sequence > 0))"
+      },
+      {
+        "name": "hangout_message_requests_author_id_fkey",
+        "table": "private.hangout_message_requests",
+        "definition": "FOREIGN KEY (author_id) REFERENCES accounts(id)"
+      },
+      {
+        "name": "hangout_message_requests_hangout_id_fkey",
+        "table": "private.hangout_message_requests",
+        "definition": "FOREIGN KEY (hangout_id) REFERENCES hangouts(id)"
+      },
+      {
+        "name": "hangout_message_requests_message_id_fkey",
+        "table": "private.hangout_message_requests",
+        "definition": "FOREIGN KEY (message_id) REFERENCES private.hangout_messages(id)"
+      },
+      {
+        "name": "hangout_message_requests_message_id_key",
+        "table": "private.hangout_message_requests",
+        "definition": "UNIQUE (message_id)"
+      },
+      {
+        "name": "hangout_message_requests_pkey",
+        "table": "private.hangout_message_requests",
+        "definition": "PRIMARY KEY (hangout_id, author_id, request_id)"
+      },
+      {
+        "name": "dm_feature_gate_pkey",
+        "table": "private.dm_feature_gate",
+        "definition": "PRIMARY KEY (singleton)"
+      },
+      {
+        "name": "dm_feature_gate_singleton_check",
+        "table": "private.dm_feature_gate",
+        "definition": "CHECK (singleton)"
+      },
+      {
+        "name": "dm_pairs_campus_id_fkey",
+        "table": "private.dm_pairs",
+        "definition": "FOREIGN KEY (campus_id) REFERENCES universities(id)"
+      },
+      {
+        "name": "dm_pairs_check",
+        "table": "private.dm_pairs",
+        "definition": "CHECK ((low_id < high_id))"
+      },
+      {
+        "name": "dm_pairs_check1",
+        "table": "private.dm_pairs",
+        "definition": "CHECK (((initiator_id = low_id) OR (initiator_id = high_id)))"
+      },
+      {
+        "name": "dm_pairs_high_id_fkey",
+        "table": "private.dm_pairs",
+        "definition": "FOREIGN KEY (high_id) REFERENCES accounts(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "dm_pairs_initiator_id_fkey",
+        "table": "private.dm_pairs",
+        "definition": "FOREIGN KEY (initiator_id) REFERENCES accounts(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "dm_pairs_low_id_fkey",
+        "table": "private.dm_pairs",
+        "definition": "FOREIGN KEY (low_id) REFERENCES accounts(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "dm_pairs_next_sequence_check",
+        "table": "private.dm_pairs",
+        "definition": "CHECK ((next_sequence > 0))"
+      },
+      {
+        "name": "dm_pairs_pkey",
+        "table": "private.dm_pairs",
+        "definition": "PRIMARY KEY (generation_id)"
+      },
+      {
+        "name": "dm_pairs_state_check",
+        "table": "private.dm_pairs",
+        "definition": "CHECK ((state = ANY (ARRAY['pending'::text, 'accepted'::text, 'ignored'::text, 'withdrawn'::text, 'closed'::text, 'blocked'::text])))"
+      },
+      {
+        "name": "dm_messages_author_id_fkey",
+        "table": "private.dm_messages",
+        "definition": "FOREIGN KEY (author_id) REFERENCES accounts(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "dm_messages_body_check",
+        "table": "private.dm_messages",
+        "definition": "CHECK (((body = private.profile_trim(body)) AND ((length(body) >= 1) AND (length(body) <= 2000))))"
+      },
+      {
+        "name": "dm_messages_generation_id_fkey",
+        "table": "private.dm_messages",
+        "definition": "FOREIGN KEY (generation_id) REFERENCES private.dm_pairs(generation_id) ON DELETE CASCADE"
+      },
+      {
+        "name": "dm_messages_generation_id_sequence_key",
+        "table": "private.dm_messages",
+        "definition": "UNIQUE (generation_id, sequence)"
+      },
+      {
+        "name": "dm_messages_pkey",
+        "table": "private.dm_messages",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "dm_messages_sequence_check",
+        "table": "private.dm_messages",
+        "definition": "CHECK ((sequence > 0))"
+      },
+      {
+        "name": "dm_retries_actor_id_fkey",
+        "table": "private.dm_retries",
+        "definition": "FOREIGN KEY (actor_id) REFERENCES accounts(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "dm_retries_generation_id_fkey",
+        "table": "private.dm_retries",
+        "definition": "FOREIGN KEY (generation_id) REFERENCES private.dm_pairs(generation_id) ON DELETE CASCADE"
+      },
+      {
+        "name": "dm_retries_kind_check",
+        "table": "private.dm_retries",
+        "definition": "CHECK ((kind = ANY (ARRAY['create'::text, 'reply'::text, 'send'::text])))"
+      },
+      {
+        "name": "dm_retries_message_id_fkey",
+        "table": "private.dm_retries",
+        "definition": "FOREIGN KEY (message_id) REFERENCES private.dm_messages(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "dm_retries_message_id_key",
+        "table": "private.dm_retries",
+        "definition": "UNIQUE (message_id)"
+      },
+      {
+        "name": "dm_retries_pkey",
+        "table": "private.dm_retries",
+        "definition": "PRIMARY KEY (actor_id, request_id)"
+      },
+      {
+        "name": "dm_retries_target_id_fkey",
+        "table": "private.dm_retries",
+        "definition": "FOREIGN KEY (target_id) REFERENCES accounts(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "dm_suppression_check",
+        "table": "private.dm_suppression",
+        "definition": "CHECK ((initiator_id <> recipient_id))"
+      },
+      {
+        "name": "dm_suppression_initiator_id_fkey",
+        "table": "private.dm_suppression",
+        "definition": "FOREIGN KEY (initiator_id) REFERENCES accounts(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "dm_suppression_pkey",
+        "table": "private.dm_suppression",
+        "definition": "PRIMARY KEY (initiator_id, recipient_id)"
+      },
+      {
+        "name": "dm_suppression_recipient_id_fkey",
+        "table": "private.dm_suppression",
+        "definition": "FOREIGN KEY (recipient_id) REFERENCES accounts(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "notification_feature_gate_pkey",
+        "table": "private.notification_feature_gate",
+        "definition": "PRIMARY KEY (singleton)"
+      },
+      {
+        "name": "notification_feature_gate_singleton_check",
+        "table": "private.notification_feature_gate",
+        "definition": "CHECK (singleton)"
+      },
+      {
+        "name": "notification_preferences_category_check",
+        "table": "private.notification_preferences",
+        "definition": "CHECK ((category = ANY (ARRAY['social_requests'::text, 'messages'::text, 'hangout_updates'::text, 'host_activity'::text])))"
+      },
+      {
+        "name": "notification_preferences_pkey",
+        "table": "private.notification_preferences",
+        "definition": "PRIMARY KEY (recipient_id, category)"
+      },
+      {
+        "name": "notification_preferences_recipient_id_fkey",
+        "table": "private.notification_preferences",
+        "definition": "FOREIGN KEY (recipient_id) REFERENCES accounts(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "notification_items_actor_id_fkey",
+        "table": "private.notification_items",
+        "definition": "FOREIGN KEY (actor_id) REFERENCES accounts(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "notification_items_check",
+        "table": "private.notification_items",
+        "definition": "CHECK ((((source_kind = 'friendship'::text) AND (event_code = ANY (ARRAY['friend_request'::text, 'friend_accepted'::text])) AND (source_id = target_id)) OR ((source_kind = 'dm'::text) AND (event_code = ANY (ARRAY['dm_request'::text, 'dm_accepted'::text])) AND (source_id = target_id)) OR ((source_kind = 'dm'::text) AND (event_code = 'dm_message'::text)) OR ((source_kind = 'hangout'::text) AND (event_code = ANY (ARRAY['hangout_edited'::text, 'hangout_cancelled'::text, 'hangout_joined'::text, 'hangout_left'::text]))) OR ((source_kind = 'hangout_chat'::text) AND (event_code = 'hangout_chat_message'::text))))"
+      },
+      {
+        "name": "notification_items_event_code_check",
+        "table": "private.notification_items",
+        "definition": "CHECK ((event_code = ANY (ARRAY['friend_request'::text, 'friend_accepted'::text, 'dm_request'::text, 'dm_accepted'::text, 'dm_message'::text, 'hangout_edited'::text, 'hangout_cancelled'::text, 'hangout_joined'::text, 'hangout_left'::text, 'hangout_chat_message'::text])))"
+      },
+      {
+        "name": "notification_items_pkey",
+        "table": "private.notification_items",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "notification_items_recipient_id_fkey",
+        "table": "private.notification_items",
+        "definition": "FOREIGN KEY (recipient_id) REFERENCES accounts(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "notification_items_recipient_id_source_kind_source_id_event_key",
+        "table": "private.notification_items",
+        "definition": "UNIQUE (recipient_id, source_kind, source_id, event_code)"
+      },
+      {
+        "name": "notification_items_source_kind_check",
+        "table": "private.notification_items",
+        "definition": "CHECK ((source_kind = ANY (ARRAY['friendship'::text, 'dm'::text, 'hangout'::text, 'hangout_chat'::text])))"
+      },
+      {
+        "name": "safety_feature_gate_pkey",
+        "table": "private.safety_feature_gate",
+        "definition": "PRIMARY KEY (singleton)"
+      },
+      {
+        "name": "safety_feature_gate_singleton_check",
+        "table": "private.safety_feature_gate",
+        "definition": "CHECK (singleton)"
+      },
+      {
+        "name": "hangout_peer_provenance_check",
+        "table": "private.hangout_peer_provenance",
+        "definition": "CHECK ((low_id < high_id))"
+      },
+      {
+        "name": "hangout_peer_provenance_hangout_id_fkey",
+        "table": "private.hangout_peer_provenance",
+        "definition": "FOREIGN KEY (hangout_id) REFERENCES hangouts(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "hangout_peer_provenance_high_id_fkey",
+        "table": "private.hangout_peer_provenance",
+        "definition": "FOREIGN KEY (high_id) REFERENCES accounts(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "hangout_peer_provenance_low_id_fkey",
+        "table": "private.hangout_peer_provenance",
+        "definition": "FOREIGN KEY (low_id) REFERENCES accounts(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "hangout_peer_provenance_pkey",
+        "table": "private.hangout_peer_provenance",
+        "definition": "PRIMARY KEY (hangout_id, low_id, high_id)"
+      },
+      {
+        "name": "safety_reconciliation_effects_effect_check",
+        "table": "private.safety_reconciliation_effects",
+        "definition": "CHECK ((effect = ANY (ARRAY['left'::text, 'removed'::text])))"
+      },
+      {
+        "name": "safety_reconciliation_effects_pkey",
+        "table": "private.safety_reconciliation_effects",
+        "definition": "PRIMARY KEY (hangout_id, account_id)"
+      },
+      {
+        "name": "safety_report_exact_target",
+        "table": "private.safety_reports",
+        "definition": "UNIQUE (id, target_type, target_id)"
+      },
+      {
+        "name": "safety_reports_category_check",
+        "table": "private.safety_reports",
+        "definition": "CHECK ((category = ANY (ARRAY['harassment'::text, 'safety concern'::text, 'impersonation'::text, 'spam/commercial promotion'::text, 'other'::text])))"
+      },
+      {
+        "name": "safety_reports_check",
+        "table": "private.safety_reports",
+        "definition": "CHECK ((((category = 'other'::text) AND (narrative IS NOT NULL)) OR (category <> 'other'::text)))"
+      },
+      {
+        "name": "safety_reports_narrative_check",
+        "table": "private.safety_reports",
+        "definition": "CHECK (((narrative IS NULL) OR ((narrative = private.profile_trim(narrative)) AND ((length(narrative) >= 1) AND (length(narrative) <= 2000)))))"
+      },
+      {
+        "name": "safety_reports_pkey",
+        "table": "private.safety_reports",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "safety_reports_provenance_kind_check",
+        "table": "private.safety_reports",
+        "definition": "CHECK ((provenance_kind = ANY (ARRAY['current_people'::text, 'owned_block'::text, 'friendship'::text, 'friend_request'::text, 'dm_generation'::text, 'hangout_host'::text, 'hangout_overlap'::text, 'current_hangout'::text, 'retained_hangout'::text, 'retained_host'::text])))"
+      },
+      {
+        "name": "safety_reports_reporter_id_fkey",
+        "table": "private.safety_reports",
+        "definition": "FOREIGN KEY (reporter_id) REFERENCES accounts(id) ON DELETE RESTRICT"
+      },
+      {
+        "name": "safety_reports_target_type_check",
+        "table": "private.safety_reports",
+        "definition": "CHECK ((target_type = ANY (ARRAY['user'::text, 'hangout'::text])))"
+      },
+      {
+        "name": "safety_report_requests_pkey",
+        "table": "private.safety_report_requests",
+        "definition": "PRIMARY KEY (reporter_id, request_id)"
+      },
+      {
+        "name": "safety_report_requests_report_id_fkey",
+        "table": "private.safety_report_requests",
+        "definition": "FOREIGN KEY (report_id) REFERENCES private.safety_reports(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "safety_report_requests_report_id_key",
+        "table": "private.safety_report_requests",
+        "definition": "UNIQUE (report_id)"
+      },
+      {
+        "name": "safety_report_requests_reporter_id_fkey",
+        "table": "private.safety_report_requests",
+        "definition": "FOREIGN KEY (reporter_id) REFERENCES accounts(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "moderation_feature_gate_pkey",
+        "table": "private.moderation_feature_gate",
+        "definition": "PRIMARY KEY (singleton)"
+      },
+      {
+        "name": "moderation_feature_gate_singleton_check",
+        "table": "private.moderation_feature_gate",
+        "definition": "CHECK (singleton)"
+      },
+      {
+        "name": "moderation_case_action_link",
+        "table": "private.moderation_cases",
+        "definition": "CHECK (((((disposition = 'action_taken'::text) IS TRUE) = (num_nonnulls(sanction_id, hangout_disable_id) = 1)) AND (num_nonnulls(sanction_id, hangout_disable_id) <= 1)))"
+      },
+      {
+        "name": "moderation_case_disable_binding",
+        "table": "private.moderation_cases",
+        "definition": "FOREIGN KEY (hangout_disable_id, report_id) REFERENCES private.hangout_disables(id, report_id) ON DELETE RESTRICT"
+      },
+      {
+        "name": "moderation_case_sanction_binding",
+        "table": "private.moderation_cases",
+        "definition": "FOREIGN KEY (sanction_id, report_id) REFERENCES private.account_sanctions(id, report_id) ON DELETE RESTRICT"
+      },
+      {
+        "name": "moderation_cases_check",
+        "table": "private.moderation_cases",
+        "definition": "CHECK (((state = 'closed'::text) = (disposition IS NOT NULL)))"
+      },
+      {
+        "name": "moderation_cases_check1",
+        "table": "private.moderation_cases",
+        "definition": "CHECK ((COALESCE((disposition = 'duplicate'::text), false) = (duplicate_report_id IS NOT NULL)))"
+      },
+      {
+        "name": "moderation_cases_disposition_check",
+        "table": "private.moderation_cases",
+        "definition": "CHECK ((disposition = ANY (ARRAY['no_action'::text, 'duplicate'::text, 'action_taken'::text])))"
+      },
+      {
+        "name": "moderation_cases_duplicate_report_id_fkey",
+        "table": "private.moderation_cases",
+        "definition": "FOREIGN KEY (duplicate_report_id) REFERENCES private.safety_reports(id) ON DELETE RESTRICT"
+      },
+      {
+        "name": "moderation_cases_pkey",
+        "table": "private.moderation_cases",
+        "definition": "PRIMARY KEY (report_id)"
+      },
+      {
+        "name": "moderation_cases_report_id_fkey",
+        "table": "private.moderation_cases",
+        "definition": "FOREIGN KEY (report_id) REFERENCES private.safety_reports(id) ON DELETE RESTRICT"
+      },
+      {
+        "name": "moderation_cases_revision_check",
+        "table": "private.moderation_cases",
+        "definition": "CHECK ((revision > 0))"
+      },
+      {
+        "name": "moderation_cases_state_check",
+        "table": "private.moderation_cases",
+        "definition": "CHECK ((state = ANY (ARRAY['in_review'::text, 'closed'::text])))"
+      },
+      {
+        "name": "moderation_requests_pkey",
+        "table": "private.moderation_requests",
+        "definition": "PRIMARY KEY (operator_id, request_id)"
+      },
+      {
+        "name": "moderation_requests_report_id_fkey",
+        "table": "private.moderation_requests",
+        "definition": "FOREIGN KEY (report_id) REFERENCES private.safety_reports(id) ON DELETE RESTRICT"
+      },
+      {
+        "name": "moderation_audit_check",
+        "table": "private.moderation_audit",
+        "definition": "CHECK (((subject_target_type IS NULL) = (subject_target_id IS NULL)))"
+      },
+      {
+        "name": "moderation_audit_hangout_disable_id_fkey",
+        "table": "private.moderation_audit",
+        "definition": "FOREIGN KEY (hangout_disable_id) REFERENCES private.hangout_disables(id) ON DELETE RESTRICT"
+      },
+      {
+        "name": "moderation_audit_new_account_status_check",
+        "table": "private.moderation_audit",
+        "definition": "CHECK ((new_account_status = ANY (ARRAY['active'::text, 'suspended'::text, 'banned'::text])))"
+      },
+      {
+        "name": "moderation_audit_pkey",
+        "table": "private.moderation_audit",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "moderation_audit_previous_account_status_check",
+        "table": "private.moderation_audit",
+        "definition": "CHECK ((previous_account_status = ANY (ARRAY['active'::text, 'suspended'::text, 'banned'::text])))"
+      },
+      {
+        "name": "moderation_audit_sanction_id_fkey",
+        "table": "private.moderation_audit",
+        "definition": "FOREIGN KEY (sanction_id) REFERENCES private.account_sanctions(id) ON DELETE RESTRICT"
+      },
+      {
+        "name": "moderation_audit_subject_target_type_check",
+        "table": "private.moderation_audit",
+        "definition": "CHECK ((subject_target_type = ANY (ARRAY['user'::text, 'hangout'::text])))"
+      },
+      {
+        "name": "account_sanctions_action_check",
+        "table": "private.account_sanctions",
+        "definition": "CHECK ((action = ANY (ARRAY['suspend'::text, 'ban'::text, 'reinstate'::text])))"
+      },
+      {
+        "name": "account_sanctions_id_report_id_key",
+        "table": "private.account_sanctions",
+        "definition": "UNIQUE (id, report_id)"
+      },
+      {
+        "name": "account_sanctions_new_status_check",
+        "table": "private.account_sanctions",
+        "definition": "CHECK ((new_status = ANY (ARRAY['active'::text, 'suspended'::text, 'banned'::text])))"
+      },
+      {
+        "name": "account_sanctions_operator_id_fkey",
+        "table": "private.account_sanctions",
+        "definition": "FOREIGN KEY (operator_id) REFERENCES accounts(id) ON DELETE RESTRICT"
+      },
+      {
+        "name": "account_sanctions_operator_id_request_id_key",
+        "table": "private.account_sanctions",
+        "definition": "UNIQUE (operator_id, request_id)"
+      },
+      {
+        "name": "account_sanctions_pkey",
+        "table": "private.account_sanctions",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "account_sanctions_previous_status_check",
+        "table": "private.account_sanctions",
+        "definition": "CHECK ((previous_status = ANY (ARRAY['active'::text, 'suspended'::text, 'banned'::text])))"
+      },
+      {
+        "name": "account_sanctions_reason_check",
+        "table": "private.account_sanctions",
+        "definition": "CHECK (((reason = private.profile_trim(reason)) AND ((char_length(reason) >= 1) AND (char_length(reason) <= 2000))))"
+      },
+      {
+        "name": "account_sanctions_report_id_subject_type_subject_id_fkey",
+        "table": "private.account_sanctions",
+        "definition": "FOREIGN KEY (report_id, subject_type, subject_id) REFERENCES private.safety_reports(id, target_type, target_id) ON DELETE RESTRICT"
+      },
+      {
+        "name": "account_sanctions_subject_id_fkey",
+        "table": "private.account_sanctions",
+        "definition": "FOREIGN KEY (subject_id) REFERENCES accounts(id) ON DELETE RESTRICT"
+      },
+      {
+        "name": "account_sanctions_subject_type_check",
+        "table": "private.account_sanctions",
+        "definition": "CHECK ((subject_type = 'user'::text))"
+      },
+      {
+        "name": "hangout_disables_hangout_id_fkey",
+        "table": "private.hangout_disables",
+        "definition": "FOREIGN KEY (hangout_id) REFERENCES hangouts(id) ON DELETE RESTRICT"
+      },
+      {
+        "name": "hangout_disables_hangout_id_key",
+        "table": "private.hangout_disables",
+        "definition": "UNIQUE (hangout_id)"
+      },
+      {
+        "name": "hangout_disables_id_report_id_key",
+        "table": "private.hangout_disables",
+        "definition": "UNIQUE (id, report_id)"
+      },
+      {
+        "name": "hangout_disables_new_disabled_check",
+        "table": "private.hangout_disables",
+        "definition": "CHECK ((new_disabled = true))"
+      },
+      {
+        "name": "hangout_disables_operator_id_fkey",
+        "table": "private.hangout_disables",
+        "definition": "FOREIGN KEY (operator_id) REFERENCES accounts(id) ON DELETE RESTRICT"
+      },
+      {
+        "name": "hangout_disables_operator_id_request_id_key",
+        "table": "private.hangout_disables",
+        "definition": "UNIQUE (operator_id, request_id)"
+      },
+      {
+        "name": "hangout_disables_pkey",
+        "table": "private.hangout_disables",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "hangout_disables_previous_disabled_check",
+        "table": "private.hangout_disables",
+        "definition": "CHECK ((previous_disabled = false))"
+      },
+      {
+        "name": "hangout_disables_reason_check",
+        "table": "private.hangout_disables",
+        "definition": "CHECK (((reason = private.profile_trim(reason)) AND ((char_length(reason) >= 1) AND (char_length(reason) <= 2000))))"
+      },
+      {
+        "name": "hangout_disables_report_id_subject_type_hangout_id_fkey",
+        "table": "private.hangout_disables",
+        "definition": "FOREIGN KEY (report_id, subject_type, hangout_id) REFERENCES private.safety_reports(id, target_type, target_id) ON DELETE RESTRICT"
+      },
+      {
+        "name": "hangout_disables_subject_campus_id_fkey",
+        "table": "private.hangout_disables",
+        "definition": "FOREIGN KEY (subject_campus_id) REFERENCES universities(id) ON DELETE RESTRICT"
+      },
+      {
+        "name": "hangout_disables_subject_type_check",
+        "table": "private.hangout_disables",
+        "definition": "CHECK ((subject_type = 'hangout'::text))"
+      },
+      {
+        "name": "attendance_feature_gate_pkey",
+        "table": "private.attendance_feature_gate",
+        "definition": "PRIMARY KEY (singleton)"
+      },
+      {
+        "name": "attendance_feature_gate_singleton_check",
+        "table": "private.attendance_feature_gate",
+        "definition": "CHECK (singleton)"
+      },
+      {
+        "name": "attendance_answers_hangout_id_account_id_fkey",
+        "table": "private.attendance_answers",
+        "definition": "FOREIGN KEY (hangout_id, account_id) REFERENCES hangout_participants(hangout_id, account_id) ON DELETE RESTRICT"
+      },
+      {
+        "name": "attendance_answers_pkey",
+        "table": "private.attendance_answers",
+        "definition": "PRIMARY KEY (hangout_id, account_id)"
+      },
+      {
+        "name": "attendance_answers_revision_check",
+        "table": "private.attendance_answers",
+        "definition": "CHECK ((revision > 0))"
+      },
+      {
+        "name": "large_hangout_feature_gate_pkey",
+        "table": "private.large_hangout_feature_gate",
+        "definition": "PRIMARY KEY (singleton)"
+      },
+      {
+        "name": "large_hangout_feature_gate_singleton_check",
+        "table": "private.large_hangout_feature_gate",
+        "definition": "CHECK (singleton)"
+      },
+      {
+        "name": "large_hangout_signals_hangout_id_fkey",
+        "table": "private.large_hangout_signals",
+        "definition": "FOREIGN KEY (hangout_id) REFERENCES hangouts(id) ON DELETE RESTRICT"
+      },
+      {
+        "name": "large_hangout_signals_pkey",
+        "table": "private.large_hangout_signals",
+        "definition": "PRIMARY KEY (hangout_id, policy_version)"
+      },
+      {
+        "name": "large_hangout_signals_policy_version_check",
+        "table": "private.large_hangout_signals",
+        "definition": "CHECK ((policy_version = 1))"
+      },
+      {
+        "name": "large_hangout_signals_threshold_value_check",
+        "table": "private.large_hangout_signals",
+        "definition": "CHECK ((threshold_value = 25))"
+      },
+      {
+        "name": "hangout_cohosts_hangout_id_account_id_fkey",
+        "table": "private.hangout_cohosts",
+        "definition": "FOREIGN KEY (hangout_id, account_id) REFERENCES hangout_participants(hangout_id, account_id) ON DELETE CASCADE"
+      },
+      {
+        "name": "hangout_cohosts_pkey",
+        "table": "private.hangout_cohosts",
+        "definition": "PRIMARY KEY (hangout_id, account_id)"
+      },
+      {
+        "name": "pilot_account_admission_account_id_fkey",
+        "table": "private.pilot_account_admission",
+        "definition": "FOREIGN KEY (account_id) REFERENCES accounts(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "pilot_account_admission_pkey",
+        "table": "private.pilot_account_admission",
+        "definition": "PRIMARY KEY (account_id)"
+      },
+      {
+        "name": "pilot_account_admission_revision_check",
+        "table": "private.pilot_account_admission",
+        "definition": "CHECK ((revision > 0))"
+      },
+      {
+        "name": "pilot_account_admission_state_check",
+        "table": "private.pilot_account_admission",
+        "definition": "CHECK ((state = ANY (ARRAY['active'::text, 'revoked'::text])))"
+      },
+      {
+        "name": "pilot_account_admission_revision_check",
+        "table": "private.pilot_admission_managers",
+        "definition": "CHECK ((revision > 0))"
+      },
+      {
+        "name": "pilot_account_admission_state_check",
+        "table": "private.pilot_admission_managers",
+        "definition": "CHECK ((state = ANY (ARRAY['active'::text, 'revoked'::text])))"
+      },
+      {
+        "name": "pilot_admission_managers_account_id_fkey",
+        "table": "private.pilot_admission_managers",
+        "definition": "FOREIGN KEY (account_id) REFERENCES accounts(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "pilot_admission_managers_pkey",
+        "table": "private.pilot_admission_managers",
+        "definition": "PRIMARY KEY (account_id)"
+      },
+      {
+        "name": "pilot_availability_pkey",
+        "table": "private.pilot_availability",
+        "definition": "PRIMARY KEY (singleton)"
+      },
+      {
+        "name": "pilot_availability_revision_check",
+        "table": "private.pilot_availability",
+        "definition": "CHECK ((revision > 0))"
+      },
+      {
+        "name": "pilot_availability_singleton_check",
+        "table": "private.pilot_availability",
+        "definition": "CHECK (singleton)"
+      },
+      {
+        "name": "pilot_capabilities_key_check",
+        "table": "private.pilot_capabilities",
+        "definition": "CHECK ((key = ANY (ARRAY['onboarding'::text, 'hangouts'::text, 'hangout_chat'::text, 'calendar'::text, 'people'::text, 'friendship'::text, 'dm'::text, 'notifications'::text, 'attendance'::text, 'optional_profile'::text, 'extra_photos'::text, 'analytics'::text, 'large_hangout_safeguards'::text])))"
+      },
+      {
+        "name": "pilot_capabilities_pkey",
+        "table": "private.pilot_capabilities",
+        "definition": "PRIMARY KEY (key)"
+      },
+      {
+        "name": "pilot_capabilities_revision_check",
+        "table": "private.pilot_capabilities",
+        "definition": "CHECK ((revision > 0))"
+      },
+      {
+        "name": "pilot_management_audit_actor_id_request_id_key",
+        "table": "private.pilot_management_audit",
+        "definition": "UNIQUE (actor_id, request_id)"
+      },
+      {
+        "name": "pilot_management_audit_check",
+        "table": "private.pilot_management_audit",
+        "definition": "CHECK (((operation = 'admission'::text) = (target_id IS NOT NULL)))"
+      },
+      {
+        "name": "pilot_management_audit_check1",
+        "table": "private.pilot_management_audit",
+        "definition": "CHECK (((operation = 'policy'::text) = (policy_key IS NOT NULL)))"
+      },
+      {
+        "name": "pilot_management_audit_operation_check",
+        "table": "private.pilot_management_audit",
+        "definition": "CHECK ((operation = ANY (ARRAY['admission'::text, 'policy'::text])))"
+      },
+      {
+        "name": "pilot_management_audit_pkey",
+        "table": "private.pilot_management_audit",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "pilot_management_audit_reason_check",
+        "table": "private.pilot_management_audit",
+        "definition": "CHECK (((reason = private.profile_trim(reason)) AND ((char_length(reason) >= 1) AND (char_length(reason) <= 2000))))"
+      },
+      {
+        "name": "pilot_management_requests_audit_id_fkey",
+        "table": "private.pilot_management_requests",
+        "definition": "FOREIGN KEY (audit_id) REFERENCES private.pilot_management_audit(id)"
+      },
+      {
+        "name": "pilot_management_requests_pkey",
+        "table": "private.pilot_management_requests",
+        "definition": "PRIMARY KEY (actor_id, request_id)"
+      },
+      {
+        "name": "pilot_manager_audit_new_state_check",
+        "table": "private.pilot_manager_audit",
+        "definition": "CHECK ((new_state = ANY (ARRAY['active'::text, 'revoked'::text])))"
+      },
+      {
+        "name": "pilot_manager_audit_pkey",
+        "table": "private.pilot_manager_audit",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "pilot_manager_audit_reason_check",
+        "table": "private.pilot_manager_audit",
+        "definition": "CHECK (((reason = private.profile_trim(reason)) AND ((char_length(reason) >= 1) AND (char_length(reason) <= 2000))))"
+      }
+    ],
+    "default_acl": [
+      {
+        "oid": "16451",
+        "defaclacl": [
+          "postgres=arwdDxtm/postgres",
+          "anon=Dxtm/postgres",
+          "authenticated=Dxtm/postgres",
+          "service_role=Dxtm/postgres"
+        ],
+        "defaclrole": "16384",
+        "defaclobjtype": "r",
+        "defaclnamespace": "2200"
+      },
+      {
+        "oid": "16452",
+        "defaclacl": [
+          "postgres=X/postgres"
+        ],
+        "defaclrole": "16384",
+        "defaclobjtype": "f",
+        "defaclnamespace": "2200"
+      },
+      {
+        "oid": "16453",
+        "defaclacl": [
+          "postgres=rwU/postgres",
+          "anon=w/postgres",
+          "authenticated=w/postgres",
+          "service_role=w/postgres"
+        ],
+        "defaclrole": "16384",
+        "defaclobjtype": "S",
+        "defaclnamespace": "2200"
+      },
+      {
+        "oid": "16454",
+        "defaclacl": [
+          "postgres=rwU/supabase_admin",
+          "anon=rwU/supabase_admin",
+          "authenticated=rwU/supabase_admin",
+          "service_role=rwU/supabase_admin"
+        ],
+        "defaclrole": "10",
+        "defaclobjtype": "S",
+        "defaclnamespace": "2200"
+      },
+      {
+        "oid": "16455",
+        "defaclacl": [
+          "postgres=arwdDxtm/supabase_admin",
+          "anon=arwdDxtm/supabase_admin",
+          "authenticated=arwdDxtm/supabase_admin",
+          "service_role=arwdDxtm/supabase_admin"
+        ],
+        "defaclrole": "10",
+        "defaclobjtype": "r",
+        "defaclnamespace": "2200"
+      },
+      {
+        "oid": "16456",
+        "defaclacl": [
+          "postgres=X/supabase_admin",
+          "anon=X/supabase_admin",
+          "authenticated=X/supabase_admin",
+          "service_role=X/supabase_admin"
+        ],
+        "defaclrole": "10",
+        "defaclobjtype": "f",
+        "defaclnamespace": "2200"
+      },
+      {
+        "oid": "16507",
+        "defaclacl": [
+          "postgres=arwdDxtm/postgres",
+          "anon=arwdDxtm/postgres",
+          "authenticated=arwdDxtm/postgres",
+          "service_role=arwdDxtm/postgres"
+        ],
+        "defaclrole": "16384",
+        "defaclobjtype": "r",
+        "defaclnamespace": "16505"
+      },
+      {
+        "oid": "16508",
+        "defaclacl": [
+          "postgres=X/postgres",
+          "anon=X/postgres",
+          "authenticated=X/postgres",
+          "service_role=X/postgres"
+        ],
+        "defaclrole": "16384",
+        "defaclobjtype": "f",
+        "defaclnamespace": "16505"
+      },
+      {
+        "oid": "16509",
+        "defaclacl": [
+          "postgres=rwU/postgres",
+          "anon=rwU/postgres",
+          "authenticated=rwU/postgres",
+          "service_role=rwU/postgres"
+        ],
+        "defaclrole": "16384",
+        "defaclobjtype": "S",
+        "defaclnamespace": "16505"
+      },
+      {
+        "oid": "16552",
+        "defaclacl": [
+          "postgres=arwdDxtm/supabase_auth_admin",
+          "dashboard_user=arwdDxtm/supabase_auth_admin"
+        ],
+        "defaclrole": "16504",
+        "defaclobjtype": "r",
+        "defaclnamespace": "16457"
+      },
+      {
+        "oid": "16553",
+        "defaclacl": [
+          "postgres=rwU/supabase_auth_admin",
+          "dashboard_user=rwU/supabase_auth_admin"
+        ],
+        "defaclrole": "16504",
+        "defaclobjtype": "S",
+        "defaclnamespace": "16457"
+      },
+      {
+        "oid": "16554",
+        "defaclacl": [
+          "postgres=X/supabase_auth_admin",
+          "dashboard_user=X/supabase_auth_admin"
+        ],
+        "defaclrole": "16504",
+        "defaclobjtype": "f",
+        "defaclnamespace": "16457"
+      },
+      {
+        "oid": "16556",
+        "defaclacl": [
+          "postgres=arwdDxtm/supabase_admin",
+          "dashboard_user=arwdDxtm/supabase_admin"
+        ],
+        "defaclrole": "10",
+        "defaclobjtype": "r",
+        "defaclnamespace": "16555"
+      },
+      {
+        "oid": "16557",
+        "defaclacl": [
+          "postgres=rwU/supabase_admin",
+          "dashboard_user=rwU/supabase_admin"
+        ],
+        "defaclrole": "10",
+        "defaclobjtype": "S",
+        "defaclnamespace": "16555"
+      },
+      {
+        "oid": "16558",
+        "defaclacl": [
+          "postgres=X/supabase_admin",
+          "dashboard_user=X/supabase_admin"
+        ],
+        "defaclrole": "10",
+        "defaclobjtype": "f",
+        "defaclnamespace": "16555"
+      },
+      {
+        "oid": "16565",
+        "defaclacl": [
+          "postgres=arwdDxtm/supabase_admin",
+          "anon=arwdDxtm/supabase_admin",
+          "authenticated=arwdDxtm/supabase_admin",
+          "service_role=arwdDxtm/supabase_admin"
+        ],
+        "defaclrole": "10",
+        "defaclobjtype": "r",
+        "defaclnamespace": "16563"
+      },
+      {
+        "oid": "16566",
+        "defaclacl": [
+          "postgres=X/supabase_admin",
+          "anon=X/supabase_admin",
+          "authenticated=X/supabase_admin",
+          "service_role=X/supabase_admin"
+        ],
+        "defaclrole": "10",
+        "defaclobjtype": "f",
+        "defaclnamespace": "16563"
+      },
+      {
+        "oid": "16567",
+        "defaclacl": [
+          "postgres=rwU/supabase_admin",
+          "anon=rwU/supabase_admin",
+          "authenticated=rwU/supabase_admin",
+          "service_role=rwU/supabase_admin"
+        ],
+        "defaclrole": "10",
+        "defaclobjtype": "S",
+        "defaclnamespace": "16563"
+      },
+      {
+        "oid": "16585",
+        "defaclacl": [
+          "postgres=arwdDxtm/supabase_admin",
+          "anon=arwdDxtm/supabase_admin",
+          "authenticated=arwdDxtm/supabase_admin",
+          "service_role=arwdDxtm/supabase_admin"
+        ],
+        "defaclrole": "10",
+        "defaclobjtype": "r",
+        "defaclnamespace": "16574"
+      },
+      {
+        "oid": "16586",
+        "defaclacl": [
+          "postgres=X/supabase_admin",
+          "anon=X/supabase_admin",
+          "authenticated=X/supabase_admin",
+          "service_role=X/supabase_admin"
+        ],
+        "defaclrole": "10",
+        "defaclobjtype": "f",
+        "defaclnamespace": "16574"
+      },
+      {
+        "oid": "16587",
+        "defaclacl": [
+          "postgres=rwU/supabase_admin",
+          "anon=rwU/supabase_admin",
+          "authenticated=rwU/supabase_admin",
+          "service_role=rwU/supabase_admin"
+        ],
+        "defaclrole": "10",
+        "defaclobjtype": "S",
+        "defaclnamespace": "16574"
+      },
+      {
+        "oid": "16630",
+        "defaclacl": [
+          "postgres=a*r*w*d*D*x*t*m*/supabase_admin"
+        ],
+        "defaclrole": "10",
+        "defaclobjtype": "r",
+        "defaclnamespace": "16394"
+      },
+      {
+        "oid": "16631",
+        "defaclacl": [
+          "postgres=X*/supabase_admin"
+        ],
+        "defaclrole": "10",
+        "defaclobjtype": "f",
+        "defaclnamespace": "16394"
+      },
+      {
+        "oid": "16632",
+        "defaclacl": [
+          "postgres=r*w*U*/supabase_admin"
+        ],
+        "defaclrole": "10",
+        "defaclobjtype": "S",
+        "defaclnamespace": "16394"
+      },
+      {
+        "oid": "16665",
+        "defaclacl": [
+          "postgres=arwdDxtm/supabase_admin",
+          "anon=arwdDxtm/supabase_admin",
+          "authenticated=arwdDxtm/supabase_admin",
+          "service_role=arwdDxtm/supabase_admin"
+        ],
+        "defaclrole": "10",
+        "defaclobjtype": "r",
+        "defaclnamespace": "16664"
+      },
+      {
+        "oid": "16666",
+        "defaclacl": [
+          "postgres=X/supabase_admin",
+          "anon=X/supabase_admin",
+          "authenticated=X/supabase_admin",
+          "service_role=X/supabase_admin"
+        ],
+        "defaclrole": "10",
+        "defaclobjtype": "f",
+        "defaclnamespace": "16664"
+      },
+      {
+        "oid": "16667",
+        "defaclacl": [
+          "postgres=rwU/supabase_admin",
+          "anon=rwU/supabase_admin",
+          "authenticated=rwU/supabase_admin",
+          "service_role=rwU/supabase_admin"
+        ],
+        "defaclrole": "10",
+        "defaclobjtype": "S",
+        "defaclnamespace": "16664"
+      }
+    ]
+  },
+  "classification": "true25→only26 streamed migration with atomic new history receipt; every prior value and unchanged ABI/catalog/body preserved"
+}

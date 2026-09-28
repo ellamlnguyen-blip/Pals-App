@@ -1,0 +1,111 @@
+[
+  {
+    "id": "L4.RH.host_actor",
+    "classification": "fresh absence denies with no delta; actual manager revision0 activation permits later same action. Two activation wait orders are not claimed; roster-delete waiter is individually in L2."
+  },
+  {
+    "id": "L4.RC.actor",
+    "classification": "fresh absence denies with no delta; actual manager revision0 activation permits later same action. Two activation wait orders are not claimed; roster-delete waiter is individually in L2."
+  },
+  {
+    "id": "L4.RC.host",
+    "classification": "fresh absence denies with no delta; actual manager revision0 activation permits later same action. Two activation wait orders are not claimed; roster-delete waiter is individually in L2."
+  },
+  {
+    "id": "L4.RC.target",
+    "classification": "fresh absence denies with no delta; actual manager revision0 activation permits later same action. Two activation wait orders are not claimed; roster-delete waiter is individually in L2."
+  },
+  {
+    "id": "L4.P.host_actor",
+    "classification": "fresh absence denies with no delta; actual manager revision0 activation permits later same action. Two activation wait orders are not claimed; roster-delete waiter is individually in L2."
+  },
+  {
+    "id": "L4.P.target",
+    "classification": "fresh absence denies with no delta; actual manager revision0 activation permits later same action. Two activation wait orders are not claimed; roster-delete waiter is individually in L2."
+  },
+  {
+    "id": "L4.D.host_actor",
+    "classification": "fresh absence denies with no delta; actual manager revision0 activation permits later same action. Two activation wait orders are not claimed; roster-delete waiter is individually in L2."
+  },
+  {
+    "id": "L4.SD.actor",
+    "classification": "fresh absence denies with no delta; actual manager revision0 activation permits later same action. Two activation wait orders are not claimed; roster-delete waiter is individually in L2."
+  },
+  {
+    "id": "L4.SD.host",
+    "classification": "fresh absence denies with no delta; actual manager revision0 activation permits later same action. Two activation wait orders are not claimed; roster-delete waiter is individually in L2."
+  },
+  {
+    "id": "L4.S.actor",
+    "classification": "fresh absence denies with no delta; actual manager revision0 activation permits later same action. Two activation wait orders are not claimed; roster-delete waiter is individually in L2."
+  },
+  {
+    "id": "L4.S.host",
+    "classification": "fresh absence denies with no delta; actual manager revision0 activation permits later same action. Two activation wait orders are not claimed; roster-delete waiter is individually in L2."
+  },
+  {
+    "id": "L4.SR.actor",
+    "classification": "fresh absence denies with no delta; actual manager revision0 activation permits later same action. Two activation wait orders are not claimed; roster-delete waiter is individually in L2."
+  },
+  {
+    "id": "L4.SR.host",
+    "classification": "fresh absence denies with no delta; actual manager revision0 activation permits later same action. Two activation wait orders are not claimed; roster-delete waiter is individually in L2."
+  },
+  {
+    "id": "L1.retry.S.b3b00000-0000-4000-8000-000000000002",
+    "classification": "exact normalized seven-field replay unchanged census; mismatched own key conflict; other actor same key creates own immutable message, never original sender replay"
+  },
+  {
+    "id": "L1.retry.S.b3b00000-0000-4000-8000-000000000001",
+    "classification": "exact normalized seven-field replay unchanged census; mismatched own key conflict; other actor same key creates own immutable message, never original sender replay"
+  },
+  {
+    "id": "L1.retry.SR.b3b00000-0000-4000-8000-000000000002",
+    "classification": "exact normalized seven-field replay unchanged census; mismatched own key conflict; other actor same key creates own immutable message, never original sender replay"
+  },
+  {
+    "id": "L1.retry.SR.b3b00000-0000-4000-8000-000000000001",
+    "classification": "exact normalized seven-field replay unchanged census; mismatched own key conflict; other actor same key creates own immutable message, never original sender replay"
+  },
+  {
+    "id": "L5.concurrent_same_key",
+    "race": "b3b_duplicate_send",
+    "holder_pid": 2993,
+    "waiter_pid": 3000,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "receipts_equal": true,
+    "receipt_sha256": "a2008cbeec944d6fd887d52653037b21707349f772cc6902473e16341a4c4fd0",
+    "receipt_fields": [
+      "author_id",
+      "author_label",
+      "body",
+      "created_at",
+      "message_id",
+      "mine",
+      "sequence"
+    ],
+    "classification": "one immutable message/request/sequence; both authorized calls return same original key result (complete concurrent receipt equality asserted in held SQL sessions; HTTP permission separately actual)"
+  },
+  {
+    "id": "L5.optional_notification.gate-first",
+    "race": "b3b_notification_gate-first",
+    "holder_pid": 3141,
+    "waiter_pid": 3150,
+    "waiting_lock_types": [
+      "transactionid"
+    ],
+    "classification": "real late notification-gate wait; authorized message stands, delivery suppressed or original2 recipients; exact retry no delta"
+  },
+  {
+    "id": "L5.optional_notification.message-first",
+    "race": "b3b_notification_message-first",
+    "holder_pid": 3313,
+    "waiter_pid": 3322,
+    "waiting_lock_types": [
+      "transactionid"
+    ],
+    "classification": "real late notification-gate wait; authorized message stands, delivery suppressed or original2 recipients; exact retry no delta"
+  }
+]

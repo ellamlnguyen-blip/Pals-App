@@ -1,0 +1,76 @@
+[
+  {
+    "race": "b3a_owner_assignment_first",
+    "holder_pid": 489,
+    "waiter_pid": 510,
+    "waiting_lock_types": [
+      "transactionid"
+    ]
+  },
+  {
+    "race": "b3a_ordinary_before_owner_assignment",
+    "holder_pid": 587,
+    "waiter_pid": 610,
+    "waiting_lock_types": [
+      "transactionid"
+    ]
+  },
+  {
+    "race": "b3a_authenticated_storage_delete_first",
+    "holder_pid": 684,
+    "waiter_pid": 705,
+    "waiting_lock_types": [
+      "transactionid"
+    ]
+  },
+  {
+    "race": "b3a_ordinary_before_authenticated_storage_delete",
+    "holder_pid": 799,
+    "waiter_pid": 819,
+    "waiting_lock_types": [
+      "transactionid"
+    ]
+  },
+  {
+    "cell": "ordinary edit↔Storage DELETE",
+    "classification": "actual authenticated direct object DELETE with lawful detached object; both profile-row waits; primary remains owned/ready. Real Storage API final service INSERT/authenticated DELETE context separately fresh B1 regression, not mislabeled this direct SQL crossing."
+  },
+  {
+    "race": "b3a_new_create_auth_delete_first",
+    "holder_pid": 911,
+    "waiter_pid": 931,
+    "waiting_lock_types": [
+      "transactionid"
+    ]
+  },
+  {
+    "cell": "new-create Auth/account deletion",
+    "classification": "delete-first observed; mutation-first creates retained FK and makes Auth/account deletion unlawful, so no fabricated successful delete order; different UUID/same email inherits no admission"
+  },
+  {
+    "classification": "40P01 safe abort, not successful commit order",
+    "observed": [
+      {
+        "pid": 1048,
+        "name": "b3a_cycle_auth",
+        "ungranted": [
+          "transactionid"
+        ],
+        "blocked_by": [
+          1070
+        ]
+      },
+      {
+        "pid": 1070,
+        "name": "b3a_cycle_ordinary",
+        "ungranted": [
+          "transactionid"
+        ],
+        "blocked_by": [
+          1048
+        ]
+      }
+    ],
+    "ordinary_committed": false
+  }
+]

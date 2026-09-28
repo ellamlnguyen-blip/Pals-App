@@ -1,0 +1,259 @@
+{
+  "actual_modules": [
+    {
+      "module": "pilot-admission-authority-concurrency.integration.mjs",
+      "tests": 1,
+      "suites": 0,
+      "pass": 1,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "duration_ms": 21909.790416,
+      "top_level_tail": [
+        "1..1",
+        "# tests 1",
+        "# suites 0",
+        "# pass 1",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 0",
+        "# todo 0",
+        "# duration_ms 21909.790416"
+      ]
+    },
+    {
+      "module": "pilot-admission-authority-http.integration.mjs",
+      "tests": 1,
+      "suites": 0,
+      "pass": 1,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "duration_ms": 1896.011208,
+      "top_level_tail": [
+        "1..1",
+        "# tests 1",
+        "# suites 0",
+        "# pass 1",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 0",
+        "# todo 0",
+        "# duration_ms 1896.011208"
+      ]
+    },
+    {
+      "module": "pilot-admission-owner-concurrency.integration.mjs",
+      "tests": 1,
+      "suites": 0,
+      "pass": 1,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "duration_ms": 49006.077,
+      "top_level_tail": [
+        "1..1",
+        "# tests 1",
+        "# suites 0",
+        "# pass 1",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 0",
+        "# todo 0",
+        "# duration_ms 49006.077"
+      ]
+    },
+    {
+      "module": "pilot-admission-owner-http.integration.mjs",
+      "tests": 1,
+      "suites": 0,
+      "pass": 1,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "duration_ms": 11806.5225,
+      "top_level_tail": [
+        "1..1",
+        "# tests 1",
+        "# suites 0",
+        "# pass 1",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 0",
+        "# todo 0",
+        "# duration_ms 11806.5225"
+      ]
+    },
+    {
+      "module": "pilot-admission-source-safety-concurrency.integration.mjs",
+      "tests": 1,
+      "suites": 0,
+      "pass": 1,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "duration_ms": 34349.15,
+      "top_level_tail": [
+        "1..1",
+        "# tests 1",
+        "# suites 0",
+        "# pass 1",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 0",
+        "# todo 0",
+        "# duration_ms 34349.15"
+      ]
+    },
+    {
+      "module": "pilot-admission-source-safety-http.integration.mjs",
+      "tests": 1,
+      "suites": 0,
+      "pass": 1,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "duration_ms": 32222.953834,
+      "top_level_tail": [
+        "1..1",
+        "# tests 1",
+        "# suites 0",
+        "# pass 1",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 0",
+        "# todo 0",
+        "# duration_ms 32222.953834"
+      ]
+    },
+    {
+      "module": "pilot-admission-lifecycle-http.integration.mjs",
+      "tests": 1,
+      "suites": 0,
+      "pass": 1,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "duration_ms": 118242.425125,
+      "top_level_tail": [
+        "1..1",
+        "# tests 1",
+        "# suites 0",
+        "# pass 1",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 0",
+        "# todo 0",
+        "# duration_ms 118242.425125"
+      ]
+    },
+    {
+      "module": "pilot-admission-lifecycle-concurrency.integration.mjs",
+      "tests": 1,
+      "suites": 0,
+      "pass": 1,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "duration_ms": 265172.141458,
+      "top_level_tail": [
+        "1..1",
+        "# tests 1",
+        "# suites 0",
+        "# pass 1",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 0",
+        "# todo 0",
+        "# duration_ms 265172.141458"
+      ]
+    },
+    {
+      "module": "pilot-lifecycle-source-races.integration.mjs",
+      "tests": 1,
+      "suites": 0,
+      "pass": 1,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "duration_ms": 592275.491791,
+      "top_level_tail": [
+        "1..1",
+        "# tests 1",
+        "# suites 0",
+        "# pass 1",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 0",
+        "# todo 0",
+        "# duration_ms 592275.491791"
+      ]
+    },
+    {
+      "module": "pilot-lifecycle-block-membership-races.integration.mjs",
+      "tests": 1,
+      "suites": 0,
+      "pass": 1,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "duration_ms": 865639.88075,
+      "top_level_tail": [
+        "1..1",
+        "# tests 1",
+        "# suites 0",
+        "# pass 1",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 0",
+        "# todo 0",
+        "# duration_ms 865639.88075"
+      ]
+    },
+    {
+      "module": "pilot-lifecycle-crossings.integration.mjs",
+      "tests": 1,
+      "suites": 0,
+      "pass": 1,
+      "fail": 0,
+      "cancelled": 0,
+      "skipped": 0,
+      "todo": 0,
+      "duration_ms": 30704.349417,
+      "top_level_tail": [
+        "1..1",
+        "# tests 1",
+        "# suites 0",
+        "# pass 1",
+        "# fail 0",
+        "# cancelled 0",
+        "# skipped 0",
+        "# todo 0",
+        "# duration_ms 30704.349417"
+      ]
+    }
+  ],
+  "outer_exit": 0,
+  "outer_finally_guarded_reset_completed": true,
+  "outer_tap": {
+    "tests": 1,
+    "pass": 1,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "duration_ms": 2362243.754333
+  },
+  "consolidated_transcript": "TASK-021A1b3b-REGRESSION-EVIDENCE.json",
+  "qualification": "Historical B1 direct Storage/PATCH fetch uses guarded entry URL/key but does not recheck the manifest before every request; no universal per-request manifest coverage claim. Outer synchronous spawnSync does not enforce its event-loop timer; coordinator monitored actual accepted module budgets without timer/source changes."
+}

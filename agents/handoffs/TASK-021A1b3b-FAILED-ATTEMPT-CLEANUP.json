@@ -1,0 +1,30 @@
+{
+  "owner": "TASK-021A1b3b",
+  "uid": 501,
+  "vm": "pals-task002",
+  "state": "Stopped",
+  "mountless": true,
+  "vm_type": "vz",
+  "pals_agents": [],
+  "registrations": [],
+  "sockets": [],
+  "holders": {
+    "/private/tmp/pals-lima/pals-task002/disk": [],
+    "/private/tmp/pals-lima/pals-task002/vz-efi": []
+  },
+  "listeners": {
+    "54320": [],
+    "54321": [],
+    "54322": [],
+    "54323": [],
+    "54324": []
+  },
+  "historical": [
+    {
+      "pid": 56460,
+      "comm": "(limactl)",
+      "untouched": true
+    }
+  ],
+  "at": "2026-09-28T04:53:57.972294+00:00"
+}

@@ -1,0 +1,168 @@
+{
+  "checkpoint": "71ae9a9d2a5a5c99a19e4754266b17f199effeee",
+  "source_checkpoint": "aeeb67a76d7a4cc40e72fbe51334e5d934e3a8a3",
+  "release_main": "0a2fefe6111b3389981eebcf96b610b0651fdd00",
+  "initial_history_lane": "prior25-upgrade",
+  "initial_full25_verified": true,
+  "service_versions": {
+    "postgres": "17.6.1.167",
+    "storage": "1.72.1",
+    "postgrest": "16.2",
+    "mailpit": "1.30.2",
+    "auth": "2.196.0",
+    "kong": "2.8.1"
+  },
+  "attempts": [
+    {
+      "stage": "startup",
+      "outcome": "excluded tool-environment failure before service lifecycle",
+      "reason": "existing reviewed Docker executable directory absent from PATH",
+      "correction": "existing approved directory added to task command environment only; no file/install/config change"
+    },
+    {
+      "stage": "startup",
+      "outcome": "normal healthy six cached services started",
+      "pull_install_recovery": false
+    },
+    {
+      "stage": "true25-upgrade",
+      "outcome": "failed/excluded; no preservation receipt",
+      "finally_reset": "command failed normal service-health check; original failure masked by finally error",
+      "observed_history_after_finally": "exact full26",
+      "observed_read_only_final_census": "zero synthetic rows; all original gates exact singleton off; availability false/revision1;13 fixed capabilities false/revision1",
+      "auth_failure": "Docker DNS hostname resolution failed for supabase_db_pals-local",
+      "network_attachment_proof": {
+        "db": [
+          "pals-local-network"
+        ],
+        "auth_storage_rest_mail_kong": [
+          "supabase_network_pals-local"
+        ]
+      },
+      "executor_invocation_defect": "startup omitted exact reviewed --network-id pals-local-network; reset uses explicit existing network",
+      "normal_stop": "owned pals-local stop with backups enabled exit0; zero running containers; VZ normal stop",
+      "source_fixture_edits": false,
+      "pass_count": 0,
+      "proposed_correction": "existing reviewed start command gains --network-id pals-local-network, normal health checks; fresh preflight and renewed coordinator release before rerun"
+    },
+    {
+      "stage": "startup-retry-preflight",
+      "fresh_preflight_at": "2026-09-28T04:56:18.883390+00:00",
+      "owner_clear": true,
+      "existing_network_readonly": "pals-local-network bridge local zero endpoints",
+      "startup_command_correction": "--network-id pals-local-network; reviewed existing PATH; normal health checks",
+      "new_network_recovery": false
+    },
+    {
+      "stage": "true25-upgrade-retry",
+      "outcome": "passed exit0 including finally guarded reset",
+      "prior_history_full_rows_equal": true,
+      "prior_function_count": 142,
+      "final_function_count": 144
+    },
+    {
+      "stage": "SQL",
+      "outcome": "18 completed rollback suites;1388 actual assertions; zero skips/TODO/not-ok",
+      "new_cohost_chat": 402
+    },
+    {
+      "stage": "installed catalog",
+      "outcome": "passed exact ABI/ACL/unchanged definitions and inventory/two owner-only helpers/144 functions52tables"
+    },
+    {
+      "stage": "standard lint compatibility check",
+      "outcome": "exact sole inherited ordinary-lifecycle advisory verified; no other diagnostics",
+      "standard_lint_exit": 1,
+      "verifier_exit": 0,
+      "not_standard_lint_clean": true
+    },
+    {
+      "stage": "real Auth HTTP",
+      "outcome": "actual module pass1/fail0/skipped0/cancelled0/todo0 including finally reset/clean",
+      "recorded_case_count": 1219,
+      "count_limits": "includes setup and distinct controls; not assertion total or594 race conceptual count",
+      "guard_loop_planned_attempts": 393,
+      "concurrency_claimed": false
+    },
+    {
+      "stage": "L2",
+      "outcome": "actual module1/pass1/fail0/skipped0/cancelled0/todo0 including finally guarded reset",
+      "unique_actual_wait_cells": 152,
+      "common_cells": 0,
+      "holder_waiter_ungranted_lock_receipts": 152
+    },
+    {
+      "stage": "L3",
+      "outcome": "module1/pass1/fail0/skipped0/cancelled0/todo0 including finally guarded reset",
+      "unique_actual_wait_cells": 272,
+      "source_cleared_common_mappings": 170,
+      "all_exact_representatives_observed": true,
+      "mapped_cells_not_independent_actual": true
+    },
+    {
+      "stage": "e62 source-state",
+      "outcome": "module1/pass1/fail0/skipped0/cancelled0/todo0 including finally guarded reset",
+      "records": 156,
+      "observed_waits": 142,
+      "serial_stronger_isolation_denials": 14,
+      "classification_counts": {
+        "actual observed wait and expected commit/denial": 105,
+        "first operation committed; terminal competing writer lawfully denied/rolled back, not successful committed-loss credit": 6,
+        "effective role revocation enforced": 7,
+        "step-down committed; demotion terminal denial, no committed-loss credit": 1,
+        "step-down already consumed assignment; later privileged DELETE affects zero rows, not fresh committed-loss credit": 1,
+        "joined send/retry remains authorized after designation loss": 4,
+        "role-only loss preserves still-joined send authority": 4,
+        "required old lookup absent; FK assignment cascade; immediate denial before separate fresh replacement": 7,
+        "operation commits before trusted row deletion; no client role/participation restoration claim": 7
+      },
+      "terminal_denials_and_consumed_noops_not_committed_loss_credit": true
+    },
+    {
+      "stage": "absence/retry",
+      "outcome": "module1/pass1/fail0/skipped0/cancelled0/todo0 including finally guarded reset",
+      "records": 20,
+      "observed_waits": 3,
+      "absence_activation_serial_not_race_credit": 13
+    },
+    {
+      "stage": "crossings",
+      "outcome": "module1/pass1/fail0/skipped0/cancelled0/todo0 including finally guarded reset",
+      "actual_observed_waits": 8,
+      "scoped_limits_not_wait_or_abort_credit": 2,
+      "qualification": "Initial8 wait/commit observations only; complete outcome acceptance missing, excluded until reviewed45 same-ID rerun. Preserved byte-identical INITIAL-WAIT receipt; not16unique crossings."
+    },
+    {
+      "stage": "11 inherited regressions",
+      "outcome": "outer exit0/pass1/fail0/skipped0/cancelled0/todo0 including finally guarded reset; each11 actual module top-level TAP pass1/fail0/cancelled0/skipped0/todo0",
+      "outer_duration_ms": 2362243.754333,
+      "module_timeout_qualification": "Outer spawnSync blocks event-loop timer; coordinator monitored actual existing module budgets; no timeout/source edits; block865639.88075ms and final crossing30704.349417ms completed within monitored bounds",
+      "summary": "TASK-021A1b3b-REGRESSION-SUMMARY.json"
+    },
+    {
+      "stage": "reviewed45 complete crossing rerun",
+      "outcome": "exit0/pass1/fail0/skipped0/cancelled0/todo0 including finally guarded reset",
+      "duration_ms": 30072.701333,
+      "same_unique_ids": 8,
+      "additional_unique_credit": 0,
+      "complete_expected_census_and_actual_rpc": true,
+      "receipt_sha256": "e9bb491c685f54e726194b2dd9df95b67733d08267cfe24eaa488c25b09a317d"
+    },
+    {
+      "stage": "static",
+      "outcome": "repository ESLint, six packages plus web/admin typechecks, unit49 and copied-cache standard web/admin builds exit0;14MJS syntax pass",
+      "qualification": "whole-repository format exit1 unchanged coordinator CHANGELOG; normal-policy applicable scope excludes that shared file and passes. Optional explicit ignored-scope HTTP formatting remains diagnostic. Wrapper auto-install attempt aborted before removal/install; external-symlink build failed before compilation; both excluded. No install/source/config/lockfile changes."
+    },
+    {
+      "stage": "final guarded reset",
+      "outcome": "current26 exact manifest;zero synthetic rows;original exact singleton gates off;availability false/rev1;13fixedcapabilities false/rev1;exit0"
+    },
+    {
+      "stage": "final normal service stop",
+      "outcome": "normal service stop exit0 backups=true;zero containers. Normal VZ stop exit1 expected exiting event absent;known VM Running. No force/recovery;final stopped audit incomplete;ownership held"
+    }
+  ],
+  "at": "2026-09-28T04:50:48.021121+00:00",
+  "renewed_release_main": "a505541aa29c146d472e30751b6b5590537cdd37",
+  "last_updated_at": "2026-09-28T06:07:32.367443+00:00"
+}

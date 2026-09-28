@@ -1,0 +1,3682 @@
+[
+  {
+    "id": "L5.owner_primary.RC.target.owner-first",
+    "race": "b3b_owner_0",
+    "holder_pid": 626,
+    "waiter_pid": 632,
+    "waiting_lock_types": [
+      "transactionid"
+    ],
+    "writer": "actual authenticated B1 direct owner assignment, approved object locks",
+    "actual_revision": 2,
+    "complete_expected_census_equal": true,
+    "before": {
+      "auth.users": {
+        "rows": 4,
+        "sha256": "dd45292280e292d6f656ae734020be212771bc0c211278b5443dd3ac1032b573"
+      },
+      "public.accounts": {
+        "rows": 4,
+        "sha256": "6f65653f81e9229473c90fc3f5b80fc0e75b36b241ec2a55b5a0109cbac5ddb4"
+      },
+      "public.hangouts": {
+        "rows": 1,
+        "sha256": "19be1125c9bbdfe45958e67100f618b94329718a3e53dfa6395e7750efba987b"
+      },
+      "public.profiles": {
+        "rows": 4,
+        "sha256": "7e55bd3a077e22946325dac9cd8c87d58886d89c7bfda58b0922e2317edc24bc"
+      },
+      "storage.objects": {
+        "rows": 5,
+        "sha256": "24dd504bede662b564dcf408e6ec1b3ef08f6230efc433cac7417b0eb58ec257"
+      },
+      "private.dm_pairs": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_retries": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_messages": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.friendships": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.universities": {
+        "rows": 2,
+        "sha256": "c44b0eff4d207865f95622f00a30377b73079b7bf8a2cda4492e09c3c907ba20"
+      },
+      "private.people_blocks": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.platform_roles": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_suppression": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.safety_reports": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.hangout_cohosts": {
+        "rows": 1,
+        "sha256": "eb9ccc2b9a7775d8084e82666cb365e6005aceb87327f58522b873cefaa2e629"
+      },
+      "private.hangout_disables": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.hangout_messages": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.moderation_audit": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.moderation_cases": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.account_sanctions": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.attendance_answers": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.notification_items": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.people_preferences": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_availability": {
+        "rows": 1,
+        "sha256": "9cc3dc1c4be40070ea128edbfe98d5dbaa8742358b35121635eb431ecb417a12"
+      },
+      "private.pilot_capabilities": {
+        "rows": 13,
+        "sha256": "19d18ac0a354263e0919a5bfb9d5d81a331ba90abaa9b34b9e8ce6de61e84b64"
+      },
+      "private.moderation_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.people_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_manager_audit": {
+        "rows": 1,
+        "sha256": "a811d9df1a3355c134c6adb162b53d1e183d10f92b9c0503f84131f8ebe13486"
+      },
+      "private.safety_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "public.hangout_participants": {
+        "rows": 3,
+        "sha256": "ccc13f5fdb2835e2acdb2af747e9361ad99b5e24ad62f4eadee6325949679823"
+      },
+      "private.hangout_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "private.hangout_conversations": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.large_hangout_signals": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.university_memberships": {
+        "rows": 4,
+        "sha256": "c08adb99db843ed2e933286d4fdd6b6180ff0feae883a646e11807eb5941a9f3"
+      },
+      "private.friendship_suppression": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_management_audit": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.safety_report_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.attendance_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.friendship_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.hangout_create_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.hangout_peer_provenance": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.moderation_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_account_admission": {
+        "rows": 3,
+        "sha256": "4d2fed98f37490d5af33ae9c30959f58b9d9ffc86abe6b828b4daf804e9ceecd"
+      },
+      "private.hangout_message_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.notification_preferences": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_admission_managers": {
+        "rows": 1,
+        "sha256": "a4dbceda6f77f2586bdb9b3cf43d162be51ec36c1b247d66d53d263668df143e"
+      },
+      "public.hangout_private_locations": {
+        "rows": 1,
+        "sha256": "986b68d5690297c1630efdb1fe6f6ea578cb69896521c5e58286770832acf2da"
+      },
+      "private.hangout_chat_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "private.notification_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_management_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.friendship_create_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.large_hangout_feature_gate": {
+        "rows": 1,
+        "sha256": "095a93cb58d2fdfb21bc08ea3b7d27b6a5566f0d357b54c6087b739e2687d026"
+      },
+      "private.safety_reconciliation_effects": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    },
+    "after": {
+      "auth.users": {
+        "rows": 4,
+        "sha256": "dd45292280e292d6f656ae734020be212771bc0c211278b5443dd3ac1032b573"
+      },
+      "public.accounts": {
+        "rows": 4,
+        "sha256": "6f65653f81e9229473c90fc3f5b80fc0e75b36b241ec2a55b5a0109cbac5ddb4"
+      },
+      "public.hangouts": {
+        "rows": 1,
+        "sha256": "51c845e08c1c209655dd71a2ef5e70ba51e5aa7efcc77ca0a526d51f86782776"
+      },
+      "public.profiles": {
+        "rows": 4,
+        "sha256": "3d1d82c22d9a9b822fc27a27edafc362fb3c167e2371988566143b710bc9badb"
+      },
+      "storage.objects": {
+        "rows": 5,
+        "sha256": "24dd504bede662b564dcf408e6ec1b3ef08f6230efc433cac7417b0eb58ec257"
+      },
+      "private.dm_pairs": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_retries": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_messages": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.friendships": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.universities": {
+        "rows": 2,
+        "sha256": "c44b0eff4d207865f95622f00a30377b73079b7bf8a2cda4492e09c3c907ba20"
+      },
+      "private.people_blocks": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.platform_roles": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_suppression": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.safety_reports": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.hangout_cohosts": {
+        "rows": 1,
+        "sha256": "eb9ccc2b9a7775d8084e82666cb365e6005aceb87327f58522b873cefaa2e629"
+      },
+      "private.hangout_disables": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.hangout_messages": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.moderation_audit": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.moderation_cases": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.account_sanctions": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.attendance_answers": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.notification_items": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.people_preferences": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_availability": {
+        "rows": 1,
+        "sha256": "9cc3dc1c4be40070ea128edbfe98d5dbaa8742358b35121635eb431ecb417a12"
+      },
+      "private.pilot_capabilities": {
+        "rows": 13,
+        "sha256": "19d18ac0a354263e0919a5bfb9d5d81a331ba90abaa9b34b9e8ce6de61e84b64"
+      },
+      "private.moderation_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.people_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_manager_audit": {
+        "rows": 1,
+        "sha256": "a811d9df1a3355c134c6adb162b53d1e183d10f92b9c0503f84131f8ebe13486"
+      },
+      "private.safety_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "public.hangout_participants": {
+        "rows": 3,
+        "sha256": "c504a7e70e094440cb35b32999d47ee482b66e09bc3ee310be4835f9fc2ecbad"
+      },
+      "private.hangout_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "private.hangout_conversations": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.large_hangout_signals": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.university_memberships": {
+        "rows": 4,
+        "sha256": "c08adb99db843ed2e933286d4fdd6b6180ff0feae883a646e11807eb5941a9f3"
+      },
+      "private.friendship_suppression": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_management_audit": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.safety_report_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.attendance_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.friendship_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.hangout_create_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.hangout_peer_provenance": {
+        "rows": 2,
+        "sha256": "642b0bda4cf41d675af91b778cc8a4b3aa06cc477ec8d224bded5ebaa96ed8d2"
+      },
+      "private.moderation_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_account_admission": {
+        "rows": 3,
+        "sha256": "4d2fed98f37490d5af33ae9c30959f58b9d9ffc86abe6b828b4daf804e9ceecd"
+      },
+      "private.hangout_message_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.notification_preferences": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_admission_managers": {
+        "rows": 1,
+        "sha256": "a4dbceda6f77f2586bdb9b3cf43d162be51ec36c1b247d66d53d263668df143e"
+      },
+      "public.hangout_private_locations": {
+        "rows": 1,
+        "sha256": "986b68d5690297c1630efdb1fe6f6ea578cb69896521c5e58286770832acf2da"
+      },
+      "private.hangout_chat_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "private.notification_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_management_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.friendship_create_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.large_hangout_feature_gate": {
+        "rows": 1,
+        "sha256": "095a93cb58d2fdfb21bc08ea3b7d27b6a5566f0d357b54c6087b739e2687d026"
+      },
+      "private.safety_reconciliation_effects": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    },
+    "expected_changes": [
+      "profile primary path/revision",
+      "parent revision/server timestamp",
+      "target removed state/server timestamps",
+      "exact two departing-target peer provenance pairs"
+    ],
+    "unrelated_rows_fields_unchanged": true
+  },
+  {
+    "id": "L5.owner_primary.RC.target.operation-first",
+    "race": "b3b_owner_1",
+    "holder_pid": 807,
+    "waiter_pid": 814,
+    "waiting_lock_types": [
+      "transactionid"
+    ],
+    "writer": "actual authenticated B1 direct owner assignment, approved object locks",
+    "actual_revision": 2,
+    "complete_expected_census_equal": true,
+    "before": {
+      "auth.users": {
+        "rows": 4,
+        "sha256": "dd45292280e292d6f656ae734020be212771bc0c211278b5443dd3ac1032b573"
+      },
+      "public.accounts": {
+        "rows": 4,
+        "sha256": "6f65653f81e9229473c90fc3f5b80fc0e75b36b241ec2a55b5a0109cbac5ddb4"
+      },
+      "public.hangouts": {
+        "rows": 2,
+        "sha256": "e9de3bbd67c3dbe388bb9864cf26e258c135f41b31fb04444bbb680e4069ecba"
+      },
+      "public.profiles": {
+        "rows": 4,
+        "sha256": "66045282899eeb025b8359fb5eab3582d0aa69fbba6c5363ff40be4dbb8a8a99"
+      },
+      "storage.objects": {
+        "rows": 5,
+        "sha256": "24dd504bede662b564dcf408e6ec1b3ef08f6230efc433cac7417b0eb58ec257"
+      },
+      "private.dm_pairs": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_retries": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_messages": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.friendships": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.universities": {
+        "rows": 2,
+        "sha256": "c44b0eff4d207865f95622f00a30377b73079b7bf8a2cda4492e09c3c907ba20"
+      },
+      "private.people_blocks": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.platform_roles": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_suppression": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.safety_reports": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.hangout_cohosts": {
+        "rows": 2,
+        "sha256": "87ab4ddd00cae3cb0eadc4481ff9ae0c7b24c6692097114088997a6903fb0b5e"
+      },
+      "private.hangout_disables": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.hangout_messages": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.moderation_audit": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.moderation_cases": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.account_sanctions": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.attendance_answers": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.notification_items": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.people_preferences": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_availability": {
+        "rows": 1,
+        "sha256": "9cc3dc1c4be40070ea128edbfe98d5dbaa8742358b35121635eb431ecb417a12"
+      },
+      "private.pilot_capabilities": {
+        "rows": 13,
+        "sha256": "19d18ac0a354263e0919a5bfb9d5d81a331ba90abaa9b34b9e8ce6de61e84b64"
+      },
+      "private.moderation_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.people_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_manager_audit": {
+        "rows": 1,
+        "sha256": "a811d9df1a3355c134c6adb162b53d1e183d10f92b9c0503f84131f8ebe13486"
+      },
+      "private.safety_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "public.hangout_participants": {
+        "rows": 6,
+        "sha256": "ad48910ae2fb2dbf4377fe086c5b785a44776042c21417216abe176e3b947f63"
+      },
+      "private.hangout_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "private.hangout_conversations": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.large_hangout_signals": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.university_memberships": {
+        "rows": 4,
+        "sha256": "c08adb99db843ed2e933286d4fdd6b6180ff0feae883a646e11807eb5941a9f3"
+      },
+      "private.friendship_suppression": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_management_audit": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.safety_report_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.attendance_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.friendship_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.hangout_create_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.hangout_peer_provenance": {
+        "rows": 2,
+        "sha256": "642b0bda4cf41d675af91b778cc8a4b3aa06cc477ec8d224bded5ebaa96ed8d2"
+      },
+      "private.moderation_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_account_admission": {
+        "rows": 3,
+        "sha256": "4d2fed98f37490d5af33ae9c30959f58b9d9ffc86abe6b828b4daf804e9ceecd"
+      },
+      "private.hangout_message_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.notification_preferences": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_admission_managers": {
+        "rows": 1,
+        "sha256": "a4dbceda6f77f2586bdb9b3cf43d162be51ec36c1b247d66d53d263668df143e"
+      },
+      "public.hangout_private_locations": {
+        "rows": 2,
+        "sha256": "7c8ecb1e018e03fdc60910d888e73cb46f93832ce34e80ce58b4ba338b8545b4"
+      },
+      "private.hangout_chat_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "private.notification_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_management_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.friendship_create_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.large_hangout_feature_gate": {
+        "rows": 1,
+        "sha256": "095a93cb58d2fdfb21bc08ea3b7d27b6a5566f0d357b54c6087b739e2687d026"
+      },
+      "private.safety_reconciliation_effects": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    },
+    "after": {
+      "auth.users": {
+        "rows": 4,
+        "sha256": "dd45292280e292d6f656ae734020be212771bc0c211278b5443dd3ac1032b573"
+      },
+      "public.accounts": {
+        "rows": 4,
+        "sha256": "6f65653f81e9229473c90fc3f5b80fc0e75b36b241ec2a55b5a0109cbac5ddb4"
+      },
+      "public.hangouts": {
+        "rows": 2,
+        "sha256": "16a04d039ce17c7098324d3b01355d5adb921005459fae38433065e2aa9b7a8e"
+      },
+      "public.profiles": {
+        "rows": 4,
+        "sha256": "27af2f34d357ddc14bec1fad9a10fdd8261b5ceae779816944bd10fd53e0979a"
+      },
+      "storage.objects": {
+        "rows": 5,
+        "sha256": "24dd504bede662b564dcf408e6ec1b3ef08f6230efc433cac7417b0eb58ec257"
+      },
+      "private.dm_pairs": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_retries": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_messages": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.friendships": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.universities": {
+        "rows": 2,
+        "sha256": "c44b0eff4d207865f95622f00a30377b73079b7bf8a2cda4492e09c3c907ba20"
+      },
+      "private.people_blocks": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.platform_roles": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_suppression": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.safety_reports": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.hangout_cohosts": {
+        "rows": 2,
+        "sha256": "87ab4ddd00cae3cb0eadc4481ff9ae0c7b24c6692097114088997a6903fb0b5e"
+      },
+      "private.hangout_disables": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.hangout_messages": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.moderation_audit": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.moderation_cases": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.account_sanctions": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.attendance_answers": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.notification_items": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.people_preferences": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_availability": {
+        "rows": 1,
+        "sha256": "9cc3dc1c4be40070ea128edbfe98d5dbaa8742358b35121635eb431ecb417a12"
+      },
+      "private.pilot_capabilities": {
+        "rows": 13,
+        "sha256": "19d18ac0a354263e0919a5bfb9d5d81a331ba90abaa9b34b9e8ce6de61e84b64"
+      },
+      "private.moderation_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.people_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_manager_audit": {
+        "rows": 1,
+        "sha256": "a811d9df1a3355c134c6adb162b53d1e183d10f92b9c0503f84131f8ebe13486"
+      },
+      "private.safety_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "public.hangout_participants": {
+        "rows": 6,
+        "sha256": "f7f49cbeb3702238ba2137b67cbaf2c42fcf0f4c874cb677118245d221e008dd"
+      },
+      "private.hangout_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "private.hangout_conversations": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.large_hangout_signals": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.university_memberships": {
+        "rows": 4,
+        "sha256": "c08adb99db843ed2e933286d4fdd6b6180ff0feae883a646e11807eb5941a9f3"
+      },
+      "private.friendship_suppression": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_management_audit": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.safety_report_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.attendance_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.friendship_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.hangout_create_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.hangout_peer_provenance": {
+        "rows": 4,
+        "sha256": "aeb7d5a73507f5c340bdc893eec04aa596156af92acbdc8035b426505d8bb20c"
+      },
+      "private.moderation_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_account_admission": {
+        "rows": 3,
+        "sha256": "4d2fed98f37490d5af33ae9c30959f58b9d9ffc86abe6b828b4daf804e9ceecd"
+      },
+      "private.hangout_message_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.notification_preferences": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_admission_managers": {
+        "rows": 1,
+        "sha256": "a4dbceda6f77f2586bdb9b3cf43d162be51ec36c1b247d66d53d263668df143e"
+      },
+      "public.hangout_private_locations": {
+        "rows": 2,
+        "sha256": "7c8ecb1e018e03fdc60910d888e73cb46f93832ce34e80ce58b4ba338b8545b4"
+      },
+      "private.hangout_chat_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "private.notification_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_management_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.friendship_create_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.large_hangout_feature_gate": {
+        "rows": 1,
+        "sha256": "095a93cb58d2fdfb21bc08ea3b7d27b6a5566f0d357b54c6087b739e2687d026"
+      },
+      "private.safety_reconciliation_effects": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    },
+    "expected_changes": [
+      "profile primary path/revision",
+      "parent revision/server timestamp",
+      "target removed state/server timestamps",
+      "exact two departing-target peer provenance pairs"
+    ],
+    "unrelated_rows_fields_unchanged": true
+  },
+  {
+    "id": "L5.owner_primary.P.target.owner-first",
+    "race": "b3b_owner_2",
+    "holder_pid": 989,
+    "waiter_pid": 998,
+    "waiting_lock_types": [
+      "transactionid"
+    ],
+    "writer": "actual authenticated B1 direct owner assignment, approved object locks",
+    "actual_revision": 2,
+    "complete_expected_census_equal": true,
+    "before": {
+      "auth.users": {
+        "rows": 4,
+        "sha256": "dd45292280e292d6f656ae734020be212771bc0c211278b5443dd3ac1032b573"
+      },
+      "public.accounts": {
+        "rows": 4,
+        "sha256": "6f65653f81e9229473c90fc3f5b80fc0e75b36b241ec2a55b5a0109cbac5ddb4"
+      },
+      "public.hangouts": {
+        "rows": 3,
+        "sha256": "d3a547a2b720a87e574a0578403c13ae7ef276f895bd9f6666c0bf52cef1eaa6"
+      },
+      "public.profiles": {
+        "rows": 4,
+        "sha256": "fd5397a581058bd836fb83c13743f4499fae899edde1d151841ba1e250a8ed4e"
+      },
+      "storage.objects": {
+        "rows": 5,
+        "sha256": "24dd504bede662b564dcf408e6ec1b3ef08f6230efc433cac7417b0eb58ec257"
+      },
+      "private.dm_pairs": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_retries": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_messages": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.friendships": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.universities": {
+        "rows": 2,
+        "sha256": "c44b0eff4d207865f95622f00a30377b73079b7bf8a2cda4492e09c3c907ba20"
+      },
+      "private.people_blocks": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.platform_roles": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_suppression": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.safety_reports": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.hangout_cohosts": {
+        "rows": 2,
+        "sha256": "87ab4ddd00cae3cb0eadc4481ff9ae0c7b24c6692097114088997a6903fb0b5e"
+      },
+      "private.hangout_disables": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.hangout_messages": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.moderation_audit": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.moderation_cases": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.account_sanctions": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.attendance_answers": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.notification_items": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.people_preferences": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_availability": {
+        "rows": 1,
+        "sha256": "9cc3dc1c4be40070ea128edbfe98d5dbaa8742358b35121635eb431ecb417a12"
+      },
+      "private.pilot_capabilities": {
+        "rows": 13,
+        "sha256": "19d18ac0a354263e0919a5bfb9d5d81a331ba90abaa9b34b9e8ce6de61e84b64"
+      },
+      "private.moderation_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.people_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_manager_audit": {
+        "rows": 1,
+        "sha256": "a811d9df1a3355c134c6adb162b53d1e183d10f92b9c0503f84131f8ebe13486"
+      },
+      "private.safety_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "public.hangout_participants": {
+        "rows": 9,
+        "sha256": "96b4e50da65b37884869ea95503173aded63ee1eef2edebfc8ef460affa82863"
+      },
+      "private.hangout_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "private.hangout_conversations": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.large_hangout_signals": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.university_memberships": {
+        "rows": 4,
+        "sha256": "c08adb99db843ed2e933286d4fdd6b6180ff0feae883a646e11807eb5941a9f3"
+      },
+      "private.friendship_suppression": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_management_audit": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.safety_report_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.attendance_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.friendship_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.hangout_create_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.hangout_peer_provenance": {
+        "rows": 4,
+        "sha256": "aeb7d5a73507f5c340bdc893eec04aa596156af92acbdc8035b426505d8bb20c"
+      },
+      "private.moderation_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_account_admission": {
+        "rows": 3,
+        "sha256": "4d2fed98f37490d5af33ae9c30959f58b9d9ffc86abe6b828b4daf804e9ceecd"
+      },
+      "private.hangout_message_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.notification_preferences": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_admission_managers": {
+        "rows": 1,
+        "sha256": "a4dbceda6f77f2586bdb9b3cf43d162be51ec36c1b247d66d53d263668df143e"
+      },
+      "public.hangout_private_locations": {
+        "rows": 3,
+        "sha256": "0b36f2ee0a6ce910e99c620a9ece1ca6beea33873ebc8489d81fdc1a85dfe6b5"
+      },
+      "private.hangout_chat_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "private.notification_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_management_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.friendship_create_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.large_hangout_feature_gate": {
+        "rows": 1,
+        "sha256": "095a93cb58d2fdfb21bc08ea3b7d27b6a5566f0d357b54c6087b739e2687d026"
+      },
+      "private.safety_reconciliation_effects": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    },
+    "after": {
+      "auth.users": {
+        "rows": 4,
+        "sha256": "dd45292280e292d6f656ae734020be212771bc0c211278b5443dd3ac1032b573"
+      },
+      "public.accounts": {
+        "rows": 4,
+        "sha256": "6f65653f81e9229473c90fc3f5b80fc0e75b36b241ec2a55b5a0109cbac5ddb4"
+      },
+      "public.hangouts": {
+        "rows": 3,
+        "sha256": "9ca094dbd91b6ffc03239ca8bfd3d4ffd128e01eb8d574fd8e205646943a5c12"
+      },
+      "public.profiles": {
+        "rows": 4,
+        "sha256": "bdd9279628df828be265e348796f64cf075f58a4f84b03684632167c35174f6f"
+      },
+      "storage.objects": {
+        "rows": 5,
+        "sha256": "24dd504bede662b564dcf408e6ec1b3ef08f6230efc433cac7417b0eb58ec257"
+      },
+      "private.dm_pairs": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_retries": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_messages": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.friendships": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.universities": {
+        "rows": 2,
+        "sha256": "c44b0eff4d207865f95622f00a30377b73079b7bf8a2cda4492e09c3c907ba20"
+      },
+      "private.people_blocks": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.platform_roles": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_suppression": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.safety_reports": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.hangout_cohosts": {
+        "rows": 3,
+        "sha256": "e0547e429763387c0e4119e82e0f686c77a29e848fad290bb9563c77e2a178fc"
+      },
+      "private.hangout_disables": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.hangout_messages": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.moderation_audit": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.moderation_cases": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.account_sanctions": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.attendance_answers": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.notification_items": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.people_preferences": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_availability": {
+        "rows": 1,
+        "sha256": "9cc3dc1c4be40070ea128edbfe98d5dbaa8742358b35121635eb431ecb417a12"
+      },
+      "private.pilot_capabilities": {
+        "rows": 13,
+        "sha256": "19d18ac0a354263e0919a5bfb9d5d81a331ba90abaa9b34b9e8ce6de61e84b64"
+      },
+      "private.moderation_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.people_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_manager_audit": {
+        "rows": 1,
+        "sha256": "a811d9df1a3355c134c6adb162b53d1e183d10f92b9c0503f84131f8ebe13486"
+      },
+      "private.safety_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "public.hangout_participants": {
+        "rows": 9,
+        "sha256": "96b4e50da65b37884869ea95503173aded63ee1eef2edebfc8ef460affa82863"
+      },
+      "private.hangout_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "private.hangout_conversations": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.large_hangout_signals": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.university_memberships": {
+        "rows": 4,
+        "sha256": "c08adb99db843ed2e933286d4fdd6b6180ff0feae883a646e11807eb5941a9f3"
+      },
+      "private.friendship_suppression": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_management_audit": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.safety_report_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.attendance_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.friendship_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.hangout_create_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.hangout_peer_provenance": {
+        "rows": 4,
+        "sha256": "aeb7d5a73507f5c340bdc893eec04aa596156af92acbdc8035b426505d8bb20c"
+      },
+      "private.moderation_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_account_admission": {
+        "rows": 3,
+        "sha256": "4d2fed98f37490d5af33ae9c30959f58b9d9ffc86abe6b828b4daf804e9ceecd"
+      },
+      "private.hangout_message_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.notification_preferences": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_admission_managers": {
+        "rows": 1,
+        "sha256": "a4dbceda6f77f2586bdb9b3cf43d162be51ec36c1b247d66d53d263668df143e"
+      },
+      "public.hangout_private_locations": {
+        "rows": 3,
+        "sha256": "0b36f2ee0a6ce910e99c620a9ece1ca6beea33873ebc8489d81fdc1a85dfe6b5"
+      },
+      "private.hangout_chat_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "private.notification_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_management_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.friendship_create_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.large_hangout_feature_gate": {
+        "rows": 1,
+        "sha256": "095a93cb58d2fdfb21bc08ea3b7d27b6a5566f0d357b54c6087b739e2687d026"
+      },
+      "private.safety_reconciliation_effects": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    },
+    "expected_changes": [
+      "profile primary path/revision",
+      "parent revision/server timestamp",
+      "exact target assignment"
+    ],
+    "unrelated_rows_fields_unchanged": true
+  },
+  {
+    "id": "L5.owner_primary.P.target.operation-first",
+    "race": "b3b_owner_3",
+    "holder_pid": 1169,
+    "waiter_pid": 1176,
+    "waiting_lock_types": [
+      "transactionid"
+    ],
+    "writer": "actual authenticated B1 direct owner assignment, approved object locks",
+    "actual_revision": 2,
+    "complete_expected_census_equal": true,
+    "before": {
+      "auth.users": {
+        "rows": 4,
+        "sha256": "dd45292280e292d6f656ae734020be212771bc0c211278b5443dd3ac1032b573"
+      },
+      "public.accounts": {
+        "rows": 4,
+        "sha256": "6f65653f81e9229473c90fc3f5b80fc0e75b36b241ec2a55b5a0109cbac5ddb4"
+      },
+      "public.hangouts": {
+        "rows": 4,
+        "sha256": "ea205e39e6c7abb294825524328a31e0e70ceab4d7139c7ce282ca8401fc20d8"
+      },
+      "public.profiles": {
+        "rows": 4,
+        "sha256": "71f295c8aeb94b7dafe1cfd96a35782759a243cc4bd91075947567a6d9f10301"
+      },
+      "storage.objects": {
+        "rows": 5,
+        "sha256": "24dd504bede662b564dcf408e6ec1b3ef08f6230efc433cac7417b0eb58ec257"
+      },
+      "private.dm_pairs": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_retries": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_messages": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.friendships": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.universities": {
+        "rows": 2,
+        "sha256": "c44b0eff4d207865f95622f00a30377b73079b7bf8a2cda4492e09c3c907ba20"
+      },
+      "private.people_blocks": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.platform_roles": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_suppression": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.safety_reports": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.hangout_cohosts": {
+        "rows": 3,
+        "sha256": "e0547e429763387c0e4119e82e0f686c77a29e848fad290bb9563c77e2a178fc"
+      },
+      "private.hangout_disables": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.hangout_messages": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.moderation_audit": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.moderation_cases": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.account_sanctions": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.attendance_answers": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.notification_items": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.people_preferences": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_availability": {
+        "rows": 1,
+        "sha256": "9cc3dc1c4be40070ea128edbfe98d5dbaa8742358b35121635eb431ecb417a12"
+      },
+      "private.pilot_capabilities": {
+        "rows": 13,
+        "sha256": "19d18ac0a354263e0919a5bfb9d5d81a331ba90abaa9b34b9e8ce6de61e84b64"
+      },
+      "private.moderation_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.people_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_manager_audit": {
+        "rows": 1,
+        "sha256": "a811d9df1a3355c134c6adb162b53d1e183d10f92b9c0503f84131f8ebe13486"
+      },
+      "private.safety_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "public.hangout_participants": {
+        "rows": 12,
+        "sha256": "696e637e6fcae90a441a0db2c64f33a5239f8094f3139ef01d2af63823ca0b02"
+      },
+      "private.hangout_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "private.hangout_conversations": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.large_hangout_signals": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.university_memberships": {
+        "rows": 4,
+        "sha256": "c08adb99db843ed2e933286d4fdd6b6180ff0feae883a646e11807eb5941a9f3"
+      },
+      "private.friendship_suppression": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_management_audit": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.safety_report_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.attendance_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.friendship_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.hangout_create_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.hangout_peer_provenance": {
+        "rows": 4,
+        "sha256": "aeb7d5a73507f5c340bdc893eec04aa596156af92acbdc8035b426505d8bb20c"
+      },
+      "private.moderation_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_account_admission": {
+        "rows": 3,
+        "sha256": "4d2fed98f37490d5af33ae9c30959f58b9d9ffc86abe6b828b4daf804e9ceecd"
+      },
+      "private.hangout_message_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.notification_preferences": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_admission_managers": {
+        "rows": 1,
+        "sha256": "a4dbceda6f77f2586bdb9b3cf43d162be51ec36c1b247d66d53d263668df143e"
+      },
+      "public.hangout_private_locations": {
+        "rows": 4,
+        "sha256": "b25cbf0699ae6de162391c61d267686d8269cd4264f202532591fe87f6b7ff86"
+      },
+      "private.hangout_chat_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "private.notification_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_management_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.friendship_create_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.large_hangout_feature_gate": {
+        "rows": 1,
+        "sha256": "095a93cb58d2fdfb21bc08ea3b7d27b6a5566f0d357b54c6087b739e2687d026"
+      },
+      "private.safety_reconciliation_effects": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    },
+    "after": {
+      "auth.users": {
+        "rows": 4,
+        "sha256": "dd45292280e292d6f656ae734020be212771bc0c211278b5443dd3ac1032b573"
+      },
+      "public.accounts": {
+        "rows": 4,
+        "sha256": "6f65653f81e9229473c90fc3f5b80fc0e75b36b241ec2a55b5a0109cbac5ddb4"
+      },
+      "public.hangouts": {
+        "rows": 4,
+        "sha256": "83eab87709b64f10dcc9ca8148e0cdd8de00ef48280e1576cf0596048acdc58a"
+      },
+      "public.profiles": {
+        "rows": 4,
+        "sha256": "e7408d0d06669caccdd3fd38bd3e6f36ecd24552275db422e9b857efcb26160e"
+      },
+      "storage.objects": {
+        "rows": 5,
+        "sha256": "24dd504bede662b564dcf408e6ec1b3ef08f6230efc433cac7417b0eb58ec257"
+      },
+      "private.dm_pairs": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_retries": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_messages": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.friendships": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.universities": {
+        "rows": 2,
+        "sha256": "c44b0eff4d207865f95622f00a30377b73079b7bf8a2cda4492e09c3c907ba20"
+      },
+      "private.people_blocks": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.platform_roles": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_suppression": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.safety_reports": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.hangout_cohosts": {
+        "rows": 4,
+        "sha256": "2211230ad68f1a3039e641eee36d70ba592fe18da6f52a4368ef1f2223b315f2"
+      },
+      "private.hangout_disables": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.hangout_messages": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.moderation_audit": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.moderation_cases": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.account_sanctions": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.attendance_answers": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.notification_items": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.people_preferences": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_availability": {
+        "rows": 1,
+        "sha256": "9cc3dc1c4be40070ea128edbfe98d5dbaa8742358b35121635eb431ecb417a12"
+      },
+      "private.pilot_capabilities": {
+        "rows": 13,
+        "sha256": "19d18ac0a354263e0919a5bfb9d5d81a331ba90abaa9b34b9e8ce6de61e84b64"
+      },
+      "private.moderation_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.people_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_manager_audit": {
+        "rows": 1,
+        "sha256": "a811d9df1a3355c134c6adb162b53d1e183d10f92b9c0503f84131f8ebe13486"
+      },
+      "private.safety_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "public.hangout_participants": {
+        "rows": 12,
+        "sha256": "696e637e6fcae90a441a0db2c64f33a5239f8094f3139ef01d2af63823ca0b02"
+      },
+      "private.hangout_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "private.hangout_conversations": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.large_hangout_signals": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.university_memberships": {
+        "rows": 4,
+        "sha256": "c08adb99db843ed2e933286d4fdd6b6180ff0feae883a646e11807eb5941a9f3"
+      },
+      "private.friendship_suppression": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_management_audit": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.safety_report_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.attendance_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.friendship_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.hangout_create_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.hangout_peer_provenance": {
+        "rows": 4,
+        "sha256": "aeb7d5a73507f5c340bdc893eec04aa596156af92acbdc8035b426505d8bb20c"
+      },
+      "private.moderation_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_account_admission": {
+        "rows": 3,
+        "sha256": "4d2fed98f37490d5af33ae9c30959f58b9d9ffc86abe6b828b4daf804e9ceecd"
+      },
+      "private.hangout_message_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.notification_preferences": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_admission_managers": {
+        "rows": 1,
+        "sha256": "a4dbceda6f77f2586bdb9b3cf43d162be51ec36c1b247d66d53d263668df143e"
+      },
+      "public.hangout_private_locations": {
+        "rows": 4,
+        "sha256": "b25cbf0699ae6de162391c61d267686d8269cd4264f202532591fe87f6b7ff86"
+      },
+      "private.hangout_chat_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "private.notification_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_management_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.friendship_create_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.large_hangout_feature_gate": {
+        "rows": 1,
+        "sha256": "095a93cb58d2fdfb21bc08ea3b7d27b6a5566f0d357b54c6087b739e2687d026"
+      },
+      "private.safety_reconciliation_effects": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    },
+    "expected_changes": [
+      "profile primary path/revision",
+      "parent revision/server timestamp",
+      "exact target assignment"
+    ],
+    "unrelated_rows_fields_unchanged": true
+  },
+  {
+    "id": "L5.storage_delete.S.host.delete-first",
+    "race": "b3b_storage_4",
+    "holder_pid": 1350,
+    "waiter_pid": 1357,
+    "waiting_lock_types": [
+      "transactionid"
+    ],
+    "writer": "actual authenticated detached-object DELETE; actual operation-side receipt captured; B1 real Storage final service-role HTTP remains separate regression",
+    "complete_expected_census_equal": true,
+    "before": {
+      "auth.users": {
+        "rows": 4,
+        "sha256": "dd45292280e292d6f656ae734020be212771bc0c211278b5443dd3ac1032b573"
+      },
+      "public.accounts": {
+        "rows": 4,
+        "sha256": "6f65653f81e9229473c90fc3f5b80fc0e75b36b241ec2a55b5a0109cbac5ddb4"
+      },
+      "public.hangouts": {
+        "rows": 5,
+        "sha256": "5cc63b2cfaf3d52297c6b4e681da82577b4db33b56993a8b4671bffcfd00f27e"
+      },
+      "public.profiles": {
+        "rows": 4,
+        "sha256": "6306860c9436b8e8564c8d5563c483149d1937cee0c1a56c81819e3d0cbb2a1e"
+      },
+      "storage.objects": {
+        "rows": 6,
+        "sha256": "cb78bf0efca841460d4a6f2e2d3c065af05db502b5c8b9435e57e27d51ab0303"
+      },
+      "private.dm_pairs": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_retries": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_messages": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.friendships": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.universities": {
+        "rows": 2,
+        "sha256": "c44b0eff4d207865f95622f00a30377b73079b7bf8a2cda4492e09c3c907ba20"
+      },
+      "private.people_blocks": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.platform_roles": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_suppression": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.safety_reports": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.hangout_cohosts": {
+        "rows": 4,
+        "sha256": "2211230ad68f1a3039e641eee36d70ba592fe18da6f52a4368ef1f2223b315f2"
+      },
+      "private.hangout_disables": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.hangout_messages": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.moderation_audit": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.moderation_cases": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.account_sanctions": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.attendance_answers": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.notification_items": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.people_preferences": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_availability": {
+        "rows": 1,
+        "sha256": "9cc3dc1c4be40070ea128edbfe98d5dbaa8742358b35121635eb431ecb417a12"
+      },
+      "private.pilot_capabilities": {
+        "rows": 13,
+        "sha256": "19d18ac0a354263e0919a5bfb9d5d81a331ba90abaa9b34b9e8ce6de61e84b64"
+      },
+      "private.moderation_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.people_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_manager_audit": {
+        "rows": 1,
+        "sha256": "a811d9df1a3355c134c6adb162b53d1e183d10f92b9c0503f84131f8ebe13486"
+      },
+      "private.safety_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "public.hangout_participants": {
+        "rows": 15,
+        "sha256": "6d50f45fd2007ea82b5df5b546740e71e04f9e66c70572bec948d694e4708250"
+      },
+      "private.hangout_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "private.hangout_conversations": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.large_hangout_signals": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.university_memberships": {
+        "rows": 4,
+        "sha256": "c08adb99db843ed2e933286d4fdd6b6180ff0feae883a646e11807eb5941a9f3"
+      },
+      "private.friendship_suppression": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_management_audit": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.safety_report_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.attendance_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.friendship_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.hangout_create_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.hangout_peer_provenance": {
+        "rows": 4,
+        "sha256": "aeb7d5a73507f5c340bdc893eec04aa596156af92acbdc8035b426505d8bb20c"
+      },
+      "private.moderation_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_account_admission": {
+        "rows": 3,
+        "sha256": "4d2fed98f37490d5af33ae9c30959f58b9d9ffc86abe6b828b4daf804e9ceecd"
+      },
+      "private.hangout_message_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.notification_preferences": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_admission_managers": {
+        "rows": 1,
+        "sha256": "a4dbceda6f77f2586bdb9b3cf43d162be51ec36c1b247d66d53d263668df143e"
+      },
+      "public.hangout_private_locations": {
+        "rows": 5,
+        "sha256": "7ebdbd14ec6f40377784cdc90f108010bce47d568822203819e35ab33848faa0"
+      },
+      "private.hangout_chat_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "private.notification_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_management_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.friendship_create_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.large_hangout_feature_gate": {
+        "rows": 1,
+        "sha256": "095a93cb58d2fdfb21bc08ea3b7d27b6a5566f0d357b54c6087b739e2687d026"
+      },
+      "private.safety_reconciliation_effects": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    },
+    "after": {
+      "auth.users": {
+        "rows": 4,
+        "sha256": "dd45292280e292d6f656ae734020be212771bc0c211278b5443dd3ac1032b573"
+      },
+      "public.accounts": {
+        "rows": 4,
+        "sha256": "6f65653f81e9229473c90fc3f5b80fc0e75b36b241ec2a55b5a0109cbac5ddb4"
+      },
+      "public.hangouts": {
+        "rows": 5,
+        "sha256": "5cc63b2cfaf3d52297c6b4e681da82577b4db33b56993a8b4671bffcfd00f27e"
+      },
+      "public.profiles": {
+        "rows": 4,
+        "sha256": "6306860c9436b8e8564c8d5563c483149d1937cee0c1a56c81819e3d0cbb2a1e"
+      },
+      "storage.objects": {
+        "rows": 5,
+        "sha256": "24dd504bede662b564dcf408e6ec1b3ef08f6230efc433cac7417b0eb58ec257"
+      },
+      "private.dm_pairs": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_retries": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_messages": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.friendships": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.universities": {
+        "rows": 2,
+        "sha256": "c44b0eff4d207865f95622f00a30377b73079b7bf8a2cda4492e09c3c907ba20"
+      },
+      "private.people_blocks": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.platform_roles": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_suppression": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.safety_reports": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.hangout_cohosts": {
+        "rows": 4,
+        "sha256": "2211230ad68f1a3039e641eee36d70ba592fe18da6f52a4368ef1f2223b315f2"
+      },
+      "private.hangout_disables": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.hangout_messages": {
+        "rows": 1,
+        "sha256": "9f971a4f78288c2f3d0cca6d0650719d8828429baedfd0b45a5280e9584cd609"
+      },
+      "private.moderation_audit": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.moderation_cases": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.account_sanctions": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.attendance_answers": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.notification_items": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.people_preferences": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_availability": {
+        "rows": 1,
+        "sha256": "9cc3dc1c4be40070ea128edbfe98d5dbaa8742358b35121635eb431ecb417a12"
+      },
+      "private.pilot_capabilities": {
+        "rows": 13,
+        "sha256": "19d18ac0a354263e0919a5bfb9d5d81a331ba90abaa9b34b9e8ce6de61e84b64"
+      },
+      "private.moderation_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.people_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_manager_audit": {
+        "rows": 1,
+        "sha256": "a811d9df1a3355c134c6adb162b53d1e183d10f92b9c0503f84131f8ebe13486"
+      },
+      "private.safety_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "public.hangout_participants": {
+        "rows": 15,
+        "sha256": "6d50f45fd2007ea82b5df5b546740e71e04f9e66c70572bec948d694e4708250"
+      },
+      "private.hangout_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "private.hangout_conversations": {
+        "rows": 1,
+        "sha256": "fec04ee66ecb9408568d7a8e7594a699930ac5d2282a2bf958b234fd176af7b4"
+      },
+      "private.large_hangout_signals": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.university_memberships": {
+        "rows": 4,
+        "sha256": "c08adb99db843ed2e933286d4fdd6b6180ff0feae883a646e11807eb5941a9f3"
+      },
+      "private.friendship_suppression": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_management_audit": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.safety_report_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.attendance_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.friendship_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.hangout_create_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.hangout_peer_provenance": {
+        "rows": 4,
+        "sha256": "aeb7d5a73507f5c340bdc893eec04aa596156af92acbdc8035b426505d8bb20c"
+      },
+      "private.moderation_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_account_admission": {
+        "rows": 3,
+        "sha256": "4d2fed98f37490d5af33ae9c30959f58b9d9ffc86abe6b828b4daf804e9ceecd"
+      },
+      "private.hangout_message_requests": {
+        "rows": 1,
+        "sha256": "f507494b10c429322264a3d516c98781274dd9a10927c14c5078f97f9ce3f14e"
+      },
+      "private.notification_preferences": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_admission_managers": {
+        "rows": 1,
+        "sha256": "a4dbceda6f77f2586bdb9b3cf43d162be51ec36c1b247d66d53d263668df143e"
+      },
+      "public.hangout_private_locations": {
+        "rows": 5,
+        "sha256": "7ebdbd14ec6f40377784cdc90f108010bce47d568822203819e35ab33848faa0"
+      },
+      "private.hangout_chat_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "private.notification_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_management_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.friendship_create_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.large_hangout_feature_gate": {
+        "rows": 1,
+        "sha256": "095a93cb58d2fdfb21bc08ea3b7d27b6a5566f0d357b54c6087b739e2687d026"
+      },
+      "private.safety_reconciliation_effects": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    },
+    "receipt_fields": [
+      "author_id",
+      "author_label",
+      "body",
+      "created_at",
+      "message_id",
+      "mine",
+      "sequence"
+    ],
+    "receipt_sha256": "da0a3acac704a1e7f5ccb39e85518e4a61252a600d66172a40a87f183d7900c9",
+    "original_retry_equal": null,
+    "expected_changes": [
+      "one exact detached Storage row removed",
+      "one exact conversation next_sequence2",
+      "one exact sequence1 message",
+      "one exact scoped request/fingerprint; gate-off inbox unchanged"
+    ],
+    "unrelated_rows_fields_unchanged": true
+  },
+  {
+    "id": "L5.storage_delete.S.host.operation-first",
+    "race": "b3b_storage_5",
+    "holder_pid": 1527,
+    "waiter_pid": 1534,
+    "waiting_lock_types": [
+      "transactionid"
+    ],
+    "writer": "actual authenticated detached-object DELETE; actual operation-side receipt captured; B1 real Storage final service-role HTTP remains separate regression",
+    "complete_expected_census_equal": true,
+    "before": {
+      "auth.users": {
+        "rows": 4,
+        "sha256": "dd45292280e292d6f656ae734020be212771bc0c211278b5443dd3ac1032b573"
+      },
+      "public.accounts": {
+        "rows": 4,
+        "sha256": "6f65653f81e9229473c90fc3f5b80fc0e75b36b241ec2a55b5a0109cbac5ddb4"
+      },
+      "public.hangouts": {
+        "rows": 6,
+        "sha256": "d14a2d7a30d7dc8922c7e754f55774f058d92a701e48961d015053468d9a76eb"
+      },
+      "public.profiles": {
+        "rows": 4,
+        "sha256": "6306860c9436b8e8564c8d5563c483149d1937cee0c1a56c81819e3d0cbb2a1e"
+      },
+      "storage.objects": {
+        "rows": 6,
+        "sha256": "c33524f924780b44fd4160da1c11dfcc75f1710b601f62ad90ba5c1ea7c1f922"
+      },
+      "private.dm_pairs": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_retries": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_messages": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.friendships": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.universities": {
+        "rows": 2,
+        "sha256": "c44b0eff4d207865f95622f00a30377b73079b7bf8a2cda4492e09c3c907ba20"
+      },
+      "private.people_blocks": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.platform_roles": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_suppression": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.safety_reports": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.hangout_cohosts": {
+        "rows": 4,
+        "sha256": "2211230ad68f1a3039e641eee36d70ba592fe18da6f52a4368ef1f2223b315f2"
+      },
+      "private.hangout_disables": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.hangout_messages": {
+        "rows": 1,
+        "sha256": "9f971a4f78288c2f3d0cca6d0650719d8828429baedfd0b45a5280e9584cd609"
+      },
+      "private.moderation_audit": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.moderation_cases": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.account_sanctions": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.attendance_answers": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.notification_items": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.people_preferences": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_availability": {
+        "rows": 1,
+        "sha256": "9cc3dc1c4be40070ea128edbfe98d5dbaa8742358b35121635eb431ecb417a12"
+      },
+      "private.pilot_capabilities": {
+        "rows": 13,
+        "sha256": "19d18ac0a354263e0919a5bfb9d5d81a331ba90abaa9b34b9e8ce6de61e84b64"
+      },
+      "private.moderation_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.people_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_manager_audit": {
+        "rows": 1,
+        "sha256": "a811d9df1a3355c134c6adb162b53d1e183d10f92b9c0503f84131f8ebe13486"
+      },
+      "private.safety_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "public.hangout_participants": {
+        "rows": 18,
+        "sha256": "1e87a37e696b606aed6f1237868ae748bdd6450d9fc86a57a5949a9189d3546c"
+      },
+      "private.hangout_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "private.hangout_conversations": {
+        "rows": 1,
+        "sha256": "fec04ee66ecb9408568d7a8e7594a699930ac5d2282a2bf958b234fd176af7b4"
+      },
+      "private.large_hangout_signals": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.university_memberships": {
+        "rows": 4,
+        "sha256": "c08adb99db843ed2e933286d4fdd6b6180ff0feae883a646e11807eb5941a9f3"
+      },
+      "private.friendship_suppression": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_management_audit": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.safety_report_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.attendance_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.friendship_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.hangout_create_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.hangout_peer_provenance": {
+        "rows": 4,
+        "sha256": "aeb7d5a73507f5c340bdc893eec04aa596156af92acbdc8035b426505d8bb20c"
+      },
+      "private.moderation_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_account_admission": {
+        "rows": 3,
+        "sha256": "4d2fed98f37490d5af33ae9c30959f58b9d9ffc86abe6b828b4daf804e9ceecd"
+      },
+      "private.hangout_message_requests": {
+        "rows": 1,
+        "sha256": "f507494b10c429322264a3d516c98781274dd9a10927c14c5078f97f9ce3f14e"
+      },
+      "private.notification_preferences": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_admission_managers": {
+        "rows": 1,
+        "sha256": "a4dbceda6f77f2586bdb9b3cf43d162be51ec36c1b247d66d53d263668df143e"
+      },
+      "public.hangout_private_locations": {
+        "rows": 6,
+        "sha256": "9d1f519634fd91fe2c923fc2f5242d79272c8c95085b461ac796bcd2c7513e42"
+      },
+      "private.hangout_chat_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "private.notification_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_management_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.friendship_create_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.large_hangout_feature_gate": {
+        "rows": 1,
+        "sha256": "095a93cb58d2fdfb21bc08ea3b7d27b6a5566f0d357b54c6087b739e2687d026"
+      },
+      "private.safety_reconciliation_effects": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    },
+    "after": {
+      "auth.users": {
+        "rows": 4,
+        "sha256": "dd45292280e292d6f656ae734020be212771bc0c211278b5443dd3ac1032b573"
+      },
+      "public.accounts": {
+        "rows": 4,
+        "sha256": "6f65653f81e9229473c90fc3f5b80fc0e75b36b241ec2a55b5a0109cbac5ddb4"
+      },
+      "public.hangouts": {
+        "rows": 6,
+        "sha256": "d14a2d7a30d7dc8922c7e754f55774f058d92a701e48961d015053468d9a76eb"
+      },
+      "public.profiles": {
+        "rows": 4,
+        "sha256": "6306860c9436b8e8564c8d5563c483149d1937cee0c1a56c81819e3d0cbb2a1e"
+      },
+      "storage.objects": {
+        "rows": 5,
+        "sha256": "24dd504bede662b564dcf408e6ec1b3ef08f6230efc433cac7417b0eb58ec257"
+      },
+      "private.dm_pairs": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_retries": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_messages": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.friendships": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.universities": {
+        "rows": 2,
+        "sha256": "c44b0eff4d207865f95622f00a30377b73079b7bf8a2cda4492e09c3c907ba20"
+      },
+      "private.people_blocks": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.platform_roles": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_suppression": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.safety_reports": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.hangout_cohosts": {
+        "rows": 4,
+        "sha256": "2211230ad68f1a3039e641eee36d70ba592fe18da6f52a4368ef1f2223b315f2"
+      },
+      "private.hangout_disables": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.hangout_messages": {
+        "rows": 2,
+        "sha256": "960934851d21e112e103487c9de43a09bc696ea1b6a6c77f422e2d059b377058"
+      },
+      "private.moderation_audit": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.moderation_cases": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.account_sanctions": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.attendance_answers": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.notification_items": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.people_preferences": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_availability": {
+        "rows": 1,
+        "sha256": "9cc3dc1c4be40070ea128edbfe98d5dbaa8742358b35121635eb431ecb417a12"
+      },
+      "private.pilot_capabilities": {
+        "rows": 13,
+        "sha256": "19d18ac0a354263e0919a5bfb9d5d81a331ba90abaa9b34b9e8ce6de61e84b64"
+      },
+      "private.moderation_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.people_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_manager_audit": {
+        "rows": 1,
+        "sha256": "a811d9df1a3355c134c6adb162b53d1e183d10f92b9c0503f84131f8ebe13486"
+      },
+      "private.safety_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "public.hangout_participants": {
+        "rows": 18,
+        "sha256": "1e87a37e696b606aed6f1237868ae748bdd6450d9fc86a57a5949a9189d3546c"
+      },
+      "private.hangout_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "private.hangout_conversations": {
+        "rows": 2,
+        "sha256": "bfeacb77f754bc46d37d44f42651aaeae8a29405edc6e5c676c9a1aa5e27bc97"
+      },
+      "private.large_hangout_signals": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.university_memberships": {
+        "rows": 4,
+        "sha256": "c08adb99db843ed2e933286d4fdd6b6180ff0feae883a646e11807eb5941a9f3"
+      },
+      "private.friendship_suppression": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_management_audit": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.safety_report_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.attendance_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.friendship_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.hangout_create_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.hangout_peer_provenance": {
+        "rows": 4,
+        "sha256": "aeb7d5a73507f5c340bdc893eec04aa596156af92acbdc8035b426505d8bb20c"
+      },
+      "private.moderation_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_account_admission": {
+        "rows": 3,
+        "sha256": "4d2fed98f37490d5af33ae9c30959f58b9d9ffc86abe6b828b4daf804e9ceecd"
+      },
+      "private.hangout_message_requests": {
+        "rows": 2,
+        "sha256": "af2ef9cc8e85331b1c28f2d2aa47cdcb4b15a47295f48c2e1058d9339450233a"
+      },
+      "private.notification_preferences": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_admission_managers": {
+        "rows": 1,
+        "sha256": "a4dbceda6f77f2586bdb9b3cf43d162be51ec36c1b247d66d53d263668df143e"
+      },
+      "public.hangout_private_locations": {
+        "rows": 6,
+        "sha256": "9d1f519634fd91fe2c923fc2f5242d79272c8c95085b461ac796bcd2c7513e42"
+      },
+      "private.hangout_chat_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "private.notification_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_management_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.friendship_create_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.large_hangout_feature_gate": {
+        "rows": 1,
+        "sha256": "095a93cb58d2fdfb21bc08ea3b7d27b6a5566f0d357b54c6087b739e2687d026"
+      },
+      "private.safety_reconciliation_effects": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    },
+    "receipt_fields": [
+      "author_id",
+      "author_label",
+      "body",
+      "created_at",
+      "message_id",
+      "mine",
+      "sequence"
+    ],
+    "receipt_sha256": "974c23e30db03afbbf8f2eb205cbb9f7d6a34971ad806fca0c89d3a0760081d0",
+    "original_retry_equal": null,
+    "expected_changes": [
+      "one exact detached Storage row removed",
+      "one exact conversation next_sequence2",
+      "one exact sequence1 message",
+      "one exact scoped request/fingerprint; gate-off inbox unchanged"
+    ],
+    "unrelated_rows_fields_unchanged": true
+  },
+  {
+    "id": "L5.storage_delete.SR.host.delete-first",
+    "race": "b3b_storage_6",
+    "holder_pid": 1720,
+    "waiter_pid": 1728,
+    "waiting_lock_types": [
+      "transactionid"
+    ],
+    "writer": "actual authenticated detached-object DELETE; actual operation-side receipt captured; B1 real Storage final service-role HTTP remains separate regression",
+    "complete_expected_census_equal": true,
+    "before": {
+      "auth.users": {
+        "rows": 4,
+        "sha256": "dd45292280e292d6f656ae734020be212771bc0c211278b5443dd3ac1032b573"
+      },
+      "public.accounts": {
+        "rows": 4,
+        "sha256": "6f65653f81e9229473c90fc3f5b80fc0e75b36b241ec2a55b5a0109cbac5ddb4"
+      },
+      "public.hangouts": {
+        "rows": 7,
+        "sha256": "6e37624d9f6408a3535086741b226178962a6fae40c030451dad1d51c5960678"
+      },
+      "public.profiles": {
+        "rows": 4,
+        "sha256": "6306860c9436b8e8564c8d5563c483149d1937cee0c1a56c81819e3d0cbb2a1e"
+      },
+      "storage.objects": {
+        "rows": 6,
+        "sha256": "ee27889c2620bafe8a93c38d407adbda9c8a6342307c706966be64aa68b5cb2b"
+      },
+      "private.dm_pairs": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_retries": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_messages": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.friendships": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.universities": {
+        "rows": 2,
+        "sha256": "c44b0eff4d207865f95622f00a30377b73079b7bf8a2cda4492e09c3c907ba20"
+      },
+      "private.people_blocks": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.platform_roles": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_suppression": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.safety_reports": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.hangout_cohosts": {
+        "rows": 4,
+        "sha256": "2211230ad68f1a3039e641eee36d70ba592fe18da6f52a4368ef1f2223b315f2"
+      },
+      "private.hangout_disables": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.hangout_messages": {
+        "rows": 3,
+        "sha256": "cbac0f9b026b4bfee3df7a60ee7fe771a9b4a1a180e1bbb754a698926bc0a0a7"
+      },
+      "private.moderation_audit": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.moderation_cases": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.account_sanctions": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.attendance_answers": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.notification_items": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.people_preferences": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_availability": {
+        "rows": 1,
+        "sha256": "9cc3dc1c4be40070ea128edbfe98d5dbaa8742358b35121635eb431ecb417a12"
+      },
+      "private.pilot_capabilities": {
+        "rows": 13,
+        "sha256": "19d18ac0a354263e0919a5bfb9d5d81a331ba90abaa9b34b9e8ce6de61e84b64"
+      },
+      "private.moderation_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.people_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_manager_audit": {
+        "rows": 1,
+        "sha256": "a811d9df1a3355c134c6adb162b53d1e183d10f92b9c0503f84131f8ebe13486"
+      },
+      "private.safety_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "public.hangout_participants": {
+        "rows": 21,
+        "sha256": "a19b5d17f0c79c7334b090b646f2003b990a2fd8f59babd0a213c4252e3c6eb6"
+      },
+      "private.hangout_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "private.hangout_conversations": {
+        "rows": 3,
+        "sha256": "abc4b58f3a7846cc535b6f536a97db04b8eb785e741d6fac78603b726cb0c577"
+      },
+      "private.large_hangout_signals": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.university_memberships": {
+        "rows": 4,
+        "sha256": "c08adb99db843ed2e933286d4fdd6b6180ff0feae883a646e11807eb5941a9f3"
+      },
+      "private.friendship_suppression": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_management_audit": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.safety_report_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.attendance_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.friendship_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.hangout_create_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.hangout_peer_provenance": {
+        "rows": 4,
+        "sha256": "aeb7d5a73507f5c340bdc893eec04aa596156af92acbdc8035b426505d8bb20c"
+      },
+      "private.moderation_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_account_admission": {
+        "rows": 3,
+        "sha256": "4d2fed98f37490d5af33ae9c30959f58b9d9ffc86abe6b828b4daf804e9ceecd"
+      },
+      "private.hangout_message_requests": {
+        "rows": 3,
+        "sha256": "2c198126f3aaf4b6e68c6b5eacf51d0d887b87319da5753a909bc101510067b8"
+      },
+      "private.notification_preferences": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_admission_managers": {
+        "rows": 1,
+        "sha256": "a4dbceda6f77f2586bdb9b3cf43d162be51ec36c1b247d66d53d263668df143e"
+      },
+      "public.hangout_private_locations": {
+        "rows": 7,
+        "sha256": "4be4fa1c7b61654cbb223c9635c9e0f21d2b4066e6de99997719db604c485ee1"
+      },
+      "private.hangout_chat_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "private.notification_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_management_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.friendship_create_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.large_hangout_feature_gate": {
+        "rows": 1,
+        "sha256": "095a93cb58d2fdfb21bc08ea3b7d27b6a5566f0d357b54c6087b739e2687d026"
+      },
+      "private.safety_reconciliation_effects": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    },
+    "after": {
+      "auth.users": {
+        "rows": 4,
+        "sha256": "dd45292280e292d6f656ae734020be212771bc0c211278b5443dd3ac1032b573"
+      },
+      "public.accounts": {
+        "rows": 4,
+        "sha256": "6f65653f81e9229473c90fc3f5b80fc0e75b36b241ec2a55b5a0109cbac5ddb4"
+      },
+      "public.hangouts": {
+        "rows": 7,
+        "sha256": "6e37624d9f6408a3535086741b226178962a6fae40c030451dad1d51c5960678"
+      },
+      "public.profiles": {
+        "rows": 4,
+        "sha256": "6306860c9436b8e8564c8d5563c483149d1937cee0c1a56c81819e3d0cbb2a1e"
+      },
+      "storage.objects": {
+        "rows": 5,
+        "sha256": "24dd504bede662b564dcf408e6ec1b3ef08f6230efc433cac7417b0eb58ec257"
+      },
+      "private.dm_pairs": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_retries": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_messages": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.friendships": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.universities": {
+        "rows": 2,
+        "sha256": "c44b0eff4d207865f95622f00a30377b73079b7bf8a2cda4492e09c3c907ba20"
+      },
+      "private.people_blocks": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.platform_roles": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_suppression": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.safety_reports": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.hangout_cohosts": {
+        "rows": 4,
+        "sha256": "2211230ad68f1a3039e641eee36d70ba592fe18da6f52a4368ef1f2223b315f2"
+      },
+      "private.hangout_disables": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.hangout_messages": {
+        "rows": 3,
+        "sha256": "cbac0f9b026b4bfee3df7a60ee7fe771a9b4a1a180e1bbb754a698926bc0a0a7"
+      },
+      "private.moderation_audit": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.moderation_cases": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.account_sanctions": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.attendance_answers": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.notification_items": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.people_preferences": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_availability": {
+        "rows": 1,
+        "sha256": "9cc3dc1c4be40070ea128edbfe98d5dbaa8742358b35121635eb431ecb417a12"
+      },
+      "private.pilot_capabilities": {
+        "rows": 13,
+        "sha256": "19d18ac0a354263e0919a5bfb9d5d81a331ba90abaa9b34b9e8ce6de61e84b64"
+      },
+      "private.moderation_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.people_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_manager_audit": {
+        "rows": 1,
+        "sha256": "a811d9df1a3355c134c6adb162b53d1e183d10f92b9c0503f84131f8ebe13486"
+      },
+      "private.safety_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "public.hangout_participants": {
+        "rows": 21,
+        "sha256": "a19b5d17f0c79c7334b090b646f2003b990a2fd8f59babd0a213c4252e3c6eb6"
+      },
+      "private.hangout_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "private.hangout_conversations": {
+        "rows": 3,
+        "sha256": "abc4b58f3a7846cc535b6f536a97db04b8eb785e741d6fac78603b726cb0c577"
+      },
+      "private.large_hangout_signals": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.university_memberships": {
+        "rows": 4,
+        "sha256": "c08adb99db843ed2e933286d4fdd6b6180ff0feae883a646e11807eb5941a9f3"
+      },
+      "private.friendship_suppression": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_management_audit": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.safety_report_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.attendance_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.friendship_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.hangout_create_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.hangout_peer_provenance": {
+        "rows": 4,
+        "sha256": "aeb7d5a73507f5c340bdc893eec04aa596156af92acbdc8035b426505d8bb20c"
+      },
+      "private.moderation_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_account_admission": {
+        "rows": 3,
+        "sha256": "4d2fed98f37490d5af33ae9c30959f58b9d9ffc86abe6b828b4daf804e9ceecd"
+      },
+      "private.hangout_message_requests": {
+        "rows": 3,
+        "sha256": "2c198126f3aaf4b6e68c6b5eacf51d0d887b87319da5753a909bc101510067b8"
+      },
+      "private.notification_preferences": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_admission_managers": {
+        "rows": 1,
+        "sha256": "a4dbceda6f77f2586bdb9b3cf43d162be51ec36c1b247d66d53d263668df143e"
+      },
+      "public.hangout_private_locations": {
+        "rows": 7,
+        "sha256": "4be4fa1c7b61654cbb223c9635c9e0f21d2b4066e6de99997719db604c485ee1"
+      },
+      "private.hangout_chat_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "private.notification_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_management_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.friendship_create_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.large_hangout_feature_gate": {
+        "rows": 1,
+        "sha256": "095a93cb58d2fdfb21bc08ea3b7d27b6a5566f0d357b54c6087b739e2687d026"
+      },
+      "private.safety_reconciliation_effects": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    },
+    "receipt_fields": [
+      "author_id",
+      "author_label",
+      "body",
+      "created_at",
+      "message_id",
+      "mine",
+      "sequence"
+    ],
+    "receipt_sha256": "1c580eb30bd7b1cffa5f4d21948c83357a7b9e1294b04f4d317035bc39f12a51",
+    "original_retry_equal": true,
+    "expected_changes": [
+      "one exact detached Storage row removed; every other row/field unchanged"
+    ],
+    "unrelated_rows_fields_unchanged": true
+  },
+  {
+    "id": "L5.storage_delete.SR.host.operation-first",
+    "race": "b3b_storage_7",
+    "holder_pid": 1919,
+    "waiter_pid": 1926,
+    "waiting_lock_types": [
+      "transactionid"
+    ],
+    "writer": "actual authenticated detached-object DELETE; actual operation-side receipt captured; B1 real Storage final service-role HTTP remains separate regression",
+    "complete_expected_census_equal": true,
+    "before": {
+      "auth.users": {
+        "rows": 4,
+        "sha256": "dd45292280e292d6f656ae734020be212771bc0c211278b5443dd3ac1032b573"
+      },
+      "public.accounts": {
+        "rows": 4,
+        "sha256": "6f65653f81e9229473c90fc3f5b80fc0e75b36b241ec2a55b5a0109cbac5ddb4"
+      },
+      "public.hangouts": {
+        "rows": 8,
+        "sha256": "a1ed95ba34aaa2aaacbd46df9df6024ab7b148aa73e65055c06fbf69d33b6d02"
+      },
+      "public.profiles": {
+        "rows": 4,
+        "sha256": "6306860c9436b8e8564c8d5563c483149d1937cee0c1a56c81819e3d0cbb2a1e"
+      },
+      "storage.objects": {
+        "rows": 6,
+        "sha256": "295a17d19e472cd93df8f76e51aaca69b981ef29db84e6f35b32a9260dc4d0c7"
+      },
+      "private.dm_pairs": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_retries": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_messages": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.friendships": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.universities": {
+        "rows": 2,
+        "sha256": "c44b0eff4d207865f95622f00a30377b73079b7bf8a2cda4492e09c3c907ba20"
+      },
+      "private.people_blocks": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.platform_roles": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_suppression": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.safety_reports": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.hangout_cohosts": {
+        "rows": 4,
+        "sha256": "2211230ad68f1a3039e641eee36d70ba592fe18da6f52a4368ef1f2223b315f2"
+      },
+      "private.hangout_disables": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.hangout_messages": {
+        "rows": 4,
+        "sha256": "27fd73d29b902b2a5499ae431baeb3ee608c3afc7ac137d989cfb305dc954b59"
+      },
+      "private.moderation_audit": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.moderation_cases": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.account_sanctions": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.attendance_answers": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.notification_items": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.people_preferences": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_availability": {
+        "rows": 1,
+        "sha256": "9cc3dc1c4be40070ea128edbfe98d5dbaa8742358b35121635eb431ecb417a12"
+      },
+      "private.pilot_capabilities": {
+        "rows": 13,
+        "sha256": "19d18ac0a354263e0919a5bfb9d5d81a331ba90abaa9b34b9e8ce6de61e84b64"
+      },
+      "private.moderation_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.people_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_manager_audit": {
+        "rows": 1,
+        "sha256": "a811d9df1a3355c134c6adb162b53d1e183d10f92b9c0503f84131f8ebe13486"
+      },
+      "private.safety_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "public.hangout_participants": {
+        "rows": 24,
+        "sha256": "907480e60ae3f93abe0845d07231885478d3064b697ee93716dfa52f6c7419d9"
+      },
+      "private.hangout_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "private.hangout_conversations": {
+        "rows": 4,
+        "sha256": "9cc8a1f6414c98dca5776a2213bdd183dede0331efb563fde2ca61ba9d9994de"
+      },
+      "private.large_hangout_signals": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.university_memberships": {
+        "rows": 4,
+        "sha256": "c08adb99db843ed2e933286d4fdd6b6180ff0feae883a646e11807eb5941a9f3"
+      },
+      "private.friendship_suppression": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_management_audit": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.safety_report_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.attendance_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.friendship_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.hangout_create_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.hangout_peer_provenance": {
+        "rows": 4,
+        "sha256": "aeb7d5a73507f5c340bdc893eec04aa596156af92acbdc8035b426505d8bb20c"
+      },
+      "private.moderation_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_account_admission": {
+        "rows": 3,
+        "sha256": "4d2fed98f37490d5af33ae9c30959f58b9d9ffc86abe6b828b4daf804e9ceecd"
+      },
+      "private.hangout_message_requests": {
+        "rows": 4,
+        "sha256": "f070c49865f45f66b9b650709b358595ae2db427c1318dabba874035f489bcfe"
+      },
+      "private.notification_preferences": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_admission_managers": {
+        "rows": 1,
+        "sha256": "a4dbceda6f77f2586bdb9b3cf43d162be51ec36c1b247d66d53d263668df143e"
+      },
+      "public.hangout_private_locations": {
+        "rows": 8,
+        "sha256": "f5118cb1e4e2b7efbb6e26134a46f8b6abdc6ada2ae0fdba74287cd74face3fb"
+      },
+      "private.hangout_chat_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "private.notification_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_management_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.friendship_create_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.large_hangout_feature_gate": {
+        "rows": 1,
+        "sha256": "095a93cb58d2fdfb21bc08ea3b7d27b6a5566f0d357b54c6087b739e2687d026"
+      },
+      "private.safety_reconciliation_effects": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    },
+    "after": {
+      "auth.users": {
+        "rows": 4,
+        "sha256": "dd45292280e292d6f656ae734020be212771bc0c211278b5443dd3ac1032b573"
+      },
+      "public.accounts": {
+        "rows": 4,
+        "sha256": "6f65653f81e9229473c90fc3f5b80fc0e75b36b241ec2a55b5a0109cbac5ddb4"
+      },
+      "public.hangouts": {
+        "rows": 8,
+        "sha256": "a1ed95ba34aaa2aaacbd46df9df6024ab7b148aa73e65055c06fbf69d33b6d02"
+      },
+      "public.profiles": {
+        "rows": 4,
+        "sha256": "6306860c9436b8e8564c8d5563c483149d1937cee0c1a56c81819e3d0cbb2a1e"
+      },
+      "storage.objects": {
+        "rows": 5,
+        "sha256": "24dd504bede662b564dcf408e6ec1b3ef08f6230efc433cac7417b0eb58ec257"
+      },
+      "private.dm_pairs": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_retries": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_messages": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.friendships": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.universities": {
+        "rows": 2,
+        "sha256": "c44b0eff4d207865f95622f00a30377b73079b7bf8a2cda4492e09c3c907ba20"
+      },
+      "private.people_blocks": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.platform_roles": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_suppression": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.safety_reports": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.dm_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.hangout_cohosts": {
+        "rows": 4,
+        "sha256": "2211230ad68f1a3039e641eee36d70ba592fe18da6f52a4368ef1f2223b315f2"
+      },
+      "private.hangout_disables": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.hangout_messages": {
+        "rows": 4,
+        "sha256": "27fd73d29b902b2a5499ae431baeb3ee608c3afc7ac137d989cfb305dc954b59"
+      },
+      "private.moderation_audit": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.moderation_cases": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.account_sanctions": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.attendance_answers": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.notification_items": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.people_preferences": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_availability": {
+        "rows": 1,
+        "sha256": "9cc3dc1c4be40070ea128edbfe98d5dbaa8742358b35121635eb431ecb417a12"
+      },
+      "private.pilot_capabilities": {
+        "rows": 13,
+        "sha256": "19d18ac0a354263e0919a5bfb9d5d81a331ba90abaa9b34b9e8ce6de61e84b64"
+      },
+      "private.moderation_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.people_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_manager_audit": {
+        "rows": 1,
+        "sha256": "a811d9df1a3355c134c6adb162b53d1e183d10f92b9c0503f84131f8ebe13486"
+      },
+      "private.safety_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "public.hangout_participants": {
+        "rows": 24,
+        "sha256": "907480e60ae3f93abe0845d07231885478d3064b697ee93716dfa52f6c7419d9"
+      },
+      "private.hangout_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "private.hangout_conversations": {
+        "rows": 4,
+        "sha256": "9cc8a1f6414c98dca5776a2213bdd183dede0331efb563fde2ca61ba9d9994de"
+      },
+      "private.large_hangout_signals": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "public.university_memberships": {
+        "rows": 4,
+        "sha256": "c08adb99db843ed2e933286d4fdd6b6180ff0feae883a646e11807eb5941a9f3"
+      },
+      "private.friendship_suppression": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_management_audit": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.safety_report_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.attendance_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.friendship_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.hangout_create_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.hangout_peer_provenance": {
+        "rows": 4,
+        "sha256": "aeb7d5a73507f5c340bdc893eec04aa596156af92acbdc8035b426505d8bb20c"
+      },
+      "private.moderation_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_account_admission": {
+        "rows": 3,
+        "sha256": "4d2fed98f37490d5af33ae9c30959f58b9d9ffc86abe6b828b4daf804e9ceecd"
+      },
+      "private.hangout_message_requests": {
+        "rows": 4,
+        "sha256": "f070c49865f45f66b9b650709b358595ae2db427c1318dabba874035f489bcfe"
+      },
+      "private.notification_preferences": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.pilot_admission_managers": {
+        "rows": 1,
+        "sha256": "a4dbceda6f77f2586bdb9b3cf43d162be51ec36c1b247d66d53d263668df143e"
+      },
+      "public.hangout_private_locations": {
+        "rows": 8,
+        "sha256": "f5118cb1e4e2b7efbb6e26134a46f8b6abdc6ada2ae0fdba74287cd74face3fb"
+      },
+      "private.hangout_chat_feature_gate": {
+        "rows": 1,
+        "sha256": "9dea8bdce2ad6e80fffe1cd9a9aee928a1f3085156d368bbc4d4e4682e7e6028"
+      },
+      "private.notification_feature_gate": {
+        "rows": 1,
+        "sha256": "f8b0b493d6b1595f01e5721692639b55fab9b5e28b026d16d6da4bd741e444e7"
+      },
+      "private.pilot_management_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.friendship_create_requests": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      },
+      "private.large_hangout_feature_gate": {
+        "rows": 1,
+        "sha256": "095a93cb58d2fdfb21bc08ea3b7d27b6a5566f0d357b54c6087b739e2687d026"
+      },
+      "private.safety_reconciliation_effects": {
+        "rows": 0,
+        "sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+      }
+    },
+    "receipt_fields": [
+      "author_id",
+      "author_label",
+      "body",
+      "created_at",
+      "message_id",
+      "mine",
+      "sequence"
+    ],
+    "receipt_sha256": "cdcbf0ea8f755b32f6eb29f6b79025048f2030090cf0eda08923acc7c45943ec",
+    "original_retry_equal": true,
+    "expected_changes": [
+      "one exact detached Storage row removed; every other row/field unchanged"
+    ],
+    "unrelated_rows_fields_unchanged": true
+  },
+  {
+    "id": "L5.profile_storage_inversion",
+    "classification": "actual profile/object row inversion remains possible; inherited fresh B1/B3a modules cover safe abort. No abort counted as successful order."
+  },
+  {
+    "id": "L5.source_bound_auth_account_delete",
+    "classification": "live source/participant FK forbids successful source-bound account/Auth deletion; inherited B3a unsourced Auth safe abort stays separately scoped"
+  }
+]

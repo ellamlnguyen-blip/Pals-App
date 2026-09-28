@@ -1,0 +1,138 @@
+{
+  "source_checkpoint": "aeeb67a76d7a4cc40e72fbe51334e5d934e3a8a3",
+  "fixture_checkpoint": "45a075acc14a1a2a49023c8606873c79833d84e5",
+  "task_publication": "not pushed",
+  "cleanup_status": "incomplete normal VZ stop failed;ownership held;no forced/recovery action",
+  "files": [
+    {
+      "path": "agents/handoffs/TASK-021A1b3b-ABSENCE-RETRY-EVIDENCE.json",
+      "sha256": "86c2ea35ec28011d35cf2b9897885e2d106f297dcf4eb286959e1ed58ee082c6",
+      "bytes": 5626
+    },
+    {
+      "path": "agents/handoffs/TASK-021A1b3b-CATALOG.json",
+      "sha256": "8e1404a086c9046501d9cd2ee379e8cce7396b6292770a70af03790b340f2efa",
+      "bytes": 441800
+    },
+    {
+      "path": "agents/handoffs/TASK-021A1b3b-COHOST-CHAT.md",
+      "sha256": "88954546a1de85cd7a7e62d59cd2897a15948fccae220c454d075c9e7ddec8fd",
+      "bytes": 8645
+    },
+    {
+      "path": "agents/handoffs/TASK-021A1b3b-CROSSING-EVIDENCE.json",
+      "sha256": "e9bb491c685f54e726194b2dd9df95b67733d08267cfe24eaa488c25b09a317d",
+      "bytes": 137197
+    },
+    {
+      "path": "agents/handoffs/TASK-021A1b3b-CROSSING-INITIAL-WAIT-EVIDENCE.json",
+      "sha256": "6f589f2547be8868815073513bbca1466a39ec47c670cc93c135789756d18ea0",
+      "bytes": 3013
+    },
+    {
+      "path": "agents/handoffs/TASK-021A1b3b-FAILED-ATTEMPT-CLEANUP.json",
+      "sha256": "c373c11a9892e758744de4c7342dc8384b8074e262d9dd85837ffac25f1057eb",
+      "bytes": 573
+    },
+    {
+      "path": "agents/handoffs/TASK-021A1b3b-FINAL-CLEANUP-ATTEMPT.json",
+      "sha256": "861ea0bbbc882c5a791c14af86f99c8849dfd733f3afba619267f36fc73eb769",
+      "bytes": 2091
+    },
+    {
+      "path": "agents/handoffs/TASK-021A1b3b-HTTP-EVIDENCE.json",
+      "sha256": "50f32b7e78989d5dd5a92e68a4829a2c8f83cbec46d51dc84534af6cbab47b98",
+      "bytes": 10171444
+    },
+    {
+      "path": "agents/handoffs/TASK-021A1b3b-L2-EVIDENCE.json",
+      "sha256": "f0cfdfceadc01820a259999597582915e6535f259612209b63b2de425de7710b",
+      "bytes": 14278899
+    },
+    {
+      "path": "agents/handoffs/TASK-021A1b3b-L3-EVIDENCE.json",
+      "sha256": "308f85825e49e9f5c5a7896fa11e43dc80d9793be0c92d589ce7dd57f18c0526",
+      "bytes": 47608518
+    },
+    {
+      "path": "agents/handoffs/TASK-021A1b3b-LINT-EVIDENCE.json",
+      "sha256": "d8313ce6926831d8e71ee0ce00b3b40af27f613c2b32b6e03c9fbc6a9af15fd5",
+      "bytes": 973
+    },
+    {
+      "path": "agents/handoffs/TASK-021A1b3b-NETWORK-ATTACHMENT.json",
+      "sha256": "c5a91ca9bace3e8b91d922bcc7697e3ee59c4a8d779c0823081016a4330861c2",
+      "bytes": 1104
+    },
+    {
+      "path": "agents/handoffs/TASK-021A1b3b-PREFLIGHT.json",
+      "sha256": "7fb59ca25130c7d3bad99a3387167d0d323c5700c2cfade7912ff5f9d34473c2",
+      "bytes": 573
+    },
+    {
+      "path": "agents/handoffs/TASK-021A1b3b-REGRESSION-B3A-BLOCK-MEMBERSHIP-EVIDENCE.json",
+      "sha256": "5a81855f49398ab429738561cbfe113290e503625e0bc4d1d7cc7f3b7ab4ced3",
+      "bytes": 43676
+    },
+    {
+      "path": "agents/handoffs/TASK-021A1b3b-REGRESSION-B3A-CONCURRENCY-EVIDENCE.json",
+      "sha256": "1e32268435b68892e4ffaa44a5c3f5fc963d5799faa88ce94caf63be4438c5fe",
+      "bytes": 2594187
+    },
+    {
+      "path": "agents/handoffs/TASK-021A1b3b-REGRESSION-B3A-CROSSING-EVIDENCE.json",
+      "sha256": "e281085f4e4488f3c80d2b38002cb2508fe51ecc2f795b71410f94eeca262cbe",
+      "bytes": 1934
+    },
+    {
+      "path": "agents/handoffs/TASK-021A1b3b-REGRESSION-B3A-HTTP-EVIDENCE.json",
+      "sha256": "af67673620a25ec1140a67b0fbd4d6124b84868c4d7d7a2d9c40e0d314ec65cd",
+      "bytes": 156363
+    },
+    {
+      "path": "agents/handoffs/TASK-021A1b3b-REGRESSION-B3A-SOURCE-RACE-EVIDENCE.json",
+      "sha256": "ce4e3920cf2d5fd96814f177e7eadb5b22197aaa69e9117a4b7c65f4d5d1e2be",
+      "bytes": 6686
+    },
+    {
+      "path": "agents/handoffs/TASK-021A1b3b-REGRESSION-DIAGNOSIS.json",
+      "sha256": "905638ca4b6f33a03123afbd92d38ebc2d0a43ccb554a77d23d229167e6d5047",
+      "bytes": 4060
+    },
+    {
+      "path": "agents/handoffs/TASK-021A1b3b-REGRESSION-EVIDENCE.json",
+      "sha256": "8780dd79445ec783781145304ea0580e5d042afd77580e9db25f56472ea44961",
+      "bytes": 26226
+    },
+    {
+      "path": "agents/handoffs/TASK-021A1b3b-REGRESSION-SUMMARY.json",
+      "sha256": "464ab0035359d488f86dcfaecfe09d2d0300d947e7c712f22608c08086bcc63a",
+      "bytes": 5986
+    },
+    {
+      "path": "agents/handoffs/TASK-021A1b3b-RUNTIME-ATTEMPTS.json",
+      "sha256": "d32bd68e2b77bcd1998c8e4eab1ffa74a23b58bc66f1d42cc49ed4884be31648",
+      "bytes": 8391
+    },
+    {
+      "path": "agents/handoffs/TASK-021A1b3b-SOURCE-STATE-EVIDENCE.json",
+      "sha256": "487d6526b1616c90970fed2de09f3ab7647a6630627d56b62cff603d9f3941e2",
+      "bytes": 14614002
+    },
+    {
+      "path": "agents/handoffs/TASK-021A1b3b-SQL-EVIDENCE.json",
+      "sha256": "874f1d1db078129beef03e097f6e7fb944f5b9dca12fb636c7ed6ad92824fd46",
+      "bytes": 1325
+    },
+    {
+      "path": "agents/handoffs/TASK-021A1b3b-STATIC-EVIDENCE.json",
+      "sha256": "cd89a943fed702f2f99c6bb5a313bc2aec81a3819965692f3c9852344c50ceca",
+      "bytes": 16800
+    },
+    {
+      "path": "agents/handoffs/TASK-021A1b3b-UPGRADE-EVIDENCE.json",
+      "sha256": "269f4782cde381aae32180ad5981d15f0a26bab33c582807c8895631e31c35ad",
+      "bytes": 170068
+    }
+  ]
+}
