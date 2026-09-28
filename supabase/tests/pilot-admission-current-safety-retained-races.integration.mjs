@@ -887,13 +887,127 @@ function redactedValue(value) {
   if (value === undefined) return "<absent>";
   if (value === null || typeof value === "boolean" || typeof value === "number")
     return value;
-  if (
-    typeof value === "string" &&
-    (uuid.test(value) || neutralMessages.has(value) || safeSQLStates.has(value))
-  )
-    return value;
   return {
     sha256: createHash("sha256").update(JSON.stringify(value)).digest("hex"),
+  };
+}
+function projectRetainedDifferences(delta) {
+  return delta.map((d) => ({
+    field: safeFieldPath(d.field),
+    expected: redactedValue(d.expected),
+    actual: redactedValue(d.actual),
+  }));
+}
+function projectRetainedDiagnostics(error, context) {
+  // Synchronous guarded SQL has no session transcript. Accept only its exact
+  // wrapper, never a substring or a raw arbitrary Error/AssertionError payload.
+  const wrapped =
+    typeof error.message === "string"
+      ? /^Disposable SQL error: ([A-Z0-9]{5}): ([^\r\n]*)$/.exec(error.message)
+      : null;
+  const strictWrapper = wrapped && wrapped[0] === error.message;
+  return [
+    ...(context?.diagnostics ?? []),
+    ...(error.sqlDiagnostics ?? []),
+    ...(strictWrapper ? [{ code: wrapped[1], message: wrapped[2] }] : []),
+  ].map((r) => ({
+    code: safeSQLStates.has(r.code) ? r.code : "<withheld unexpected code>",
+    message:
+      safeSQLStates.has(r.code) && neutralMessages.has(r.message)
+        ? r.message
+        : "<withheld nonneutral diagnostic>",
+  }));
+}
+// Committed pure examples: dormant on import/direct entry; no target function,
+// suite, process, filesystem, census or cleanup dependency is invoked here.
+export function verifyRetainedProjectionExamples() {
+  const privateUUID = "deadcafe-1234-4567-89ab-0123456789ab";
+  const privateKey = "provider-private-key";
+  const differences = [
+    {
+      field: "$.private.safety_reports.0.narrative",
+      expected: privateUUID,
+      actual: privateUUID,
+    },
+    {
+      field: "$.auth.users.0.raw_user_meta_data",
+      expected: { identity: privateUUID },
+      actual: privateUUID,
+    },
+    {
+      field: "$.storage.objects.0.metadata." + privateKey,
+      expected: privateUUID,
+      actual: { [privateKey]: privateUUID },
+    },
+  ];
+  const projection = JSON.stringify(projectRetainedDifferences(differences));
+  assert.ok(!projection.includes(privateUUID));
+  assert.ok(!projection.includes(privateKey));
+  for (const row of projectRetainedDifferences(differences)) {
+    assert.match(row.expected.sha256, /^[0-9a-f]{64}$/);
+    assert.match(row.actual.sha256, /^[0-9a-f]{64}$/);
+  }
+  assert.deepEqual(
+    projectRetainedDiagnostics({
+      message: "Disposable SQL error: 42501: Safety report unavailable",
+    }),
+    [{ code: "42501", message: "Safety report unavailable" }],
+  );
+  assert.deepEqual(
+    projectRetainedDiagnostics({
+      message: "Disposable SQL error: 42501: Safety operation unavailable",
+    }),
+    [{ code: "42501", message: "Safety operation unavailable" }],
+  );
+  assert.deepEqual(
+    projectRetainedDiagnostics({
+      message: "Disposable SQL error: 40P01: operation failed",
+    }),
+    [{ code: "40P01", message: "<withheld nonneutral diagnostic>" }],
+  );
+  assert.deepEqual(
+    projectRetainedDiagnostics({
+      message: "Disposable SQL error: 42501: " + privateUUID,
+    }),
+    [{ code: "42501", message: "<withheld nonneutral diagnostic>" }],
+  );
+  const unexpected = projectRetainedDiagnostics({
+    message: "Disposable SQL error: ABCDE: " + privateUUID,
+    actual: [{ message: privateUUID }],
+    expected: [{ [privateKey]: privateUUID }],
+  });
+  assert.deepEqual(unexpected, [
+    {
+      code: "<withheld unexpected code>",
+      message: "<withheld nonneutral diagnostic>",
+    },
+  ]);
+  const arbitrary = projectRetainedDiagnostics(
+    {
+      message: privateUUID,
+      actual: [{ message: privateUUID }],
+      expected: [{ [privateKey]: privateUUID }],
+    },
+    { diagnostics: [{ code: "ABCDE", message: privateUUID }] },
+  );
+  assert.ok(!JSON.stringify(arbitrary).includes(privateUUID));
+  assert.ok(!JSON.stringify(arbitrary).includes(privateKey));
+  const malformed = [
+    "prefix Disposable SQL error: 42501: Safety report unavailable",
+    "Disposable SQL error: 42501: Safety report unavailable\n",
+    "Disposable SQL error: 42501: Safety report unavailable\nprivate payload",
+    "Disposable SQL error: 42501:Safety report unavailable",
+    "Disposable SQL error: abcde: Safety report unavailable",
+    "Disposable SQL error: 4250: Safety report unavailable",
+    "ERROR: 42501: Safety report unavailable",
+  ];
+  for (const message of malformed)
+    assert.deepEqual(projectRetainedDiagnostics({ message }), []);
+  return {
+    uuid_private_projection_examples: 3,
+    diagnostic_projection_examples: 6,
+    malformed_wrappers_rejected: 7,
+    target_attempts: 0,
   };
 }
 export function captureRetainedFailure(error, context) {
@@ -910,15 +1024,7 @@ export function captureRetainedFailure(error, context) {
   const delta =
     error.preciseDifferences ??
     (expected && snapshot ? differences(expected, snapshot) : []);
-  const diagnostics = [
-    ...(context?.diagnostics ?? []),
-    ...(error.sqlDiagnostics ?? []),
-  ].map((r) => ({
-    code: safeSQLStates.has(r.code) ? r.code : "<withheld unexpected code>",
-    message: neutralMessages.has(r.message)
-      ? r.message
-      : "<withheld nonneutral diagnostic>",
-  }));
+  const diagnostics = projectRetainedDiagnostics(error, context);
   console.error(
     JSON.stringify({
       id: context?.id ?? "<suite>",
@@ -935,11 +1041,7 @@ export function captureRetainedFailure(error, context) {
           : context?.publicResult
             ? redactedValue(context.publicResult)
             : null,
-      differences: delta.map((d) => ({
-        field: safeFieldPath(d.field),
-        expected: redactedValue(d.expected),
-        actual: redactedValue(d.actual),
-      })),
+      differences: projectRetainedDifferences(delta),
       full54_census_summary: snapshot ? sanitized(snapshot) : null,
       holder_summary: context?.holderSnapshot
         ? sanitized(context.holderSnapshot)
