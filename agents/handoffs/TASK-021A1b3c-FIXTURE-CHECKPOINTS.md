@@ -6,6 +6,8 @@ Date:2026-09-28. All source27/fixture code remains task-only and unexecuted; can
 | --- | --- | --- |
 | Identity | `4d702510378280f1c4cd74af8515cb51d8eceb0d` | `agent/TASK-021A1b3c-identity-fixture`, exact same SHA |
 | Policy/absence | `cad9a596b76dac2f0dbe2b51908ca2899ba6c915` | `agent/TASK-021A1b3c-policy-fixture`, exact same SHA |
+| HTTP evidence/redaction | `5f428bc7f0d2ea75cef069526029cd745357ccea` | `agent/TASK-021A1b3c-http-fixture`, exact same SHA |
+| HTTP failure transport | `c7fb19092224d816025ed41712164e5da6486bcf` | `agent/TASK-021A1b3c-http-transport`, exact same SHA |
 | Bounded transport | `404edfabae9ede3a80aa4350937302b989339c20` | `agent/TASK-021A1b3c-bounded-transport`, exact same SHA |
 
 Identity independent review closed long/truncated application names and lost blocked-cell/census-failure evidence.204 literal waits remain plans only. Policy independent review closed observed setup adopted as expectation, lost failure evidence and substring SQL denial matching;72 boundary/tuple waits and24 missing-row serial cases remain plans only. Opaque Storage provider fields are qualified unchanged-value anchors, not permission/default proof. Transport independent review closed signaled/null exit denial credit and Node startup injection;18 offline synthetic checks passed with zero target attempts. Actual server/session cleanup and target outcomes remain unproved.
@@ -15,3 +17,7 @@ HTTP frozen `b52f1eb053a1264b112a9b2f0106bbe6e0ed2aaf` is unpushed/unaccepted. I
 First policy publication attempt was rejected by automatic approval review because canonical GitHub destination was considered unverified. Read-only verification established exact main067d656, reviewed foundation3e9973 and previously published identity4d7025 at canonical origin `https://github.com/ellamlnguyen-blip/Pals-App.git`; AGENTS GitHub Publishing explicitly authorizes routine task publication. The evidence-backed retry was approved; policy and transport branches were then pushed and remote SHAs independently verified. No alternate destination or bypass used.
 
 Remaining: HTTP corrections/review/publication; exact reviewed transport adoption into fixture branches; further state/retained/rate/crossing/operator111/upgrade/catalog/regression fixture contracts and review; combined fixture/ownership review, explicit exclusive serial release/fresh ownership preflight, actual outcomes/full cleanup and final security review, then accepted main-code integration. Historical force approval/stopped state is not inherited. No hosted/pilot readiness or product successor.
+
+## Later reviewed checkpoints
+
+HTTP evidence/redaction5f428bc7 independently clears original failurecaptureP1 plus newP2 unknown-key/five-character private-value projection. Exact remote SHA verified, static-only;904 signup/cadence/helperdelivery gates remain until adoption. HTTP transportc7fb190 independently reviewed/remote-verified: fixedfd3 strict framing/schema, unavailable on corruption/overflow/truncation, child-reported failed/uncredited records survive rejected child exit and never establish cleanup;27 offline synthetic groups/zero target attempts. Fresh bounded HTTP adoption author active from main7b8078d plus these exact reviewed dependencies at preparedc6dd76a. No runtime release.
