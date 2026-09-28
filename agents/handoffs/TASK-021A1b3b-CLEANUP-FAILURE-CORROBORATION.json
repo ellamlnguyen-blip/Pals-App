@@ -1,0 +1,91 @@
+{
+  "at": "2026-09-28T06:09:47.004465+00:00",
+  "observer": "independent coordinator, read-only cleanup failure diagnosis; no takeover or mutation",
+  "uid": 501,
+  "list_exit": 0,
+  "named_vms": [
+    {
+      "name": "pals-task002",
+      "status": "Running",
+      "vmType": "vz",
+      "arch": "aarch64",
+      "hostAgentPID": 4100,
+      "driverPID": 4100,
+      "dir": "/private/tmp/pals-lima/pals-task002"
+    }
+  ],
+  "mountless_config": true,
+  "named_agents": [
+    {
+      "pid": 4100,
+      "ppid": 1,
+      "comm": "/private/tmp/pal"
+    },
+    {
+      "pid": 4115,
+      "ppid": 1,
+      "comm": "ssh:"
+    },
+    {
+      "pid": 57103,
+      "ppid": 4100,
+      "comm": "/private/tmp/pal"
+    }
+  ],
+  "registrations": [],
+  "sockets": [
+    "/private/tmp/pals-lima/pals-task002/ssh.sock",
+    "/private/tmp/pals-lima/pals-task002/ha.sock",
+    "/private/tmp/pals-lima/pals-task002/default_ep.sock",
+    "/private/tmp/pals-lima/pals-task002/default_fd.sock",
+    "/private/tmp/pals-lima/pals-task002/sock/docker.sock"
+  ],
+  "holders": {
+    "/private/tmp/pals-lima/pals-task002/disk": {
+      "exit": 0,
+      "metadata": [
+        "p4106",
+        "ccom.apple.Virtualization.Virtua",
+        "f4"
+      ]
+    },
+    "/private/tmp/pals-lima/pals-task002/vz-efi": {
+      "exit": 0,
+      "metadata": [
+        "p4106",
+        "ccom.apple.Virtualization.Virtua",
+        "ftxt"
+      ]
+    }
+  },
+  "listeners": {
+    "54320": {
+      "exit": 1,
+      "metadata": []
+    },
+    "54321": {
+      "exit": 1,
+      "metadata": []
+    },
+    "54322": {
+      "exit": 1,
+      "metadata": []
+    },
+    "54323": {
+      "exit": 1,
+      "metadata": []
+    },
+    "54324": {
+      "exit": 1,
+      "metadata": []
+    }
+  },
+  "historical": [
+    {
+      "pid": 56460,
+      "comm": "(limactl)",
+      "untouched": true
+    }
+  ],
+  "live_database_census": "executor guarded reset evidence; coordinator does not restart/requery stopped DB"
+}

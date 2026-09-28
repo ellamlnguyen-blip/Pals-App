@@ -1,0 +1,11 @@
+# TASK-021A1b3b corrected crossing serial rerun release
+
+## 2026-09-28 — B3b crossing outcome correction source cleared; serial rerun released
+
+Independent bounded correction review clears exact local/unpushed45a075acc14a1a2a49023c8606873c79833d84e5 with no new finding. Exactly crossing module/mapping changed; shared guard/migration/source/other modules frozen. Complete54-table safe census now constructs only exact intended owner and operation changes: P/RC profile primary/revision, parent result/revision/bounded server timestamp, assignment/removal and RC exact departing-target provenance; S one conversation/message/scoped ledger; SR original7field replay and detached-deletion-only census. Unrelated rows/fields/notifications remain equal. Guarded crossing-local one-sided receipt observer verifies named distinct blocking PIDs/ungranted locks, commits/no signals/errors/abort and owned teardown. Syntax/ESLint/whitespace passed only; corrected runtime unrun.
+
+Initial8wait/commit receipt preserved byte-identically at INITIAL-WAIT SHA2566f589f2547be8868815073513bbca1466a39ec47c670cc93c135789756d18ea0. Source clearance does not convert that incomplete outcome evidence to acceptance. Coordinator explicitly releases corrected crossing rerun within the same exclusive bounded serial runtime stage, only after currently running inherited regressions relinquish their serial turn. No parallel runtime, installs/pulls/newnetwork/recovery/hosted/source change. Eight same-ID rerun cases replace acceptance evidence, never inflate unique observations. New complete evidence must receive independent review before final acceptance.
+
+Remaining11 inherited regressions/static/final26zero-off-rev1reset/normalbackupservice-VZstop/independentaudit/finalreview/taskpush/remoteacceptedmainintegration remain. B3b/c/A1c/A2/TASK-021 incomplete; no pilot-ready claim or successor. Coordinator owns publication/shared records; original executor remains sole runtime owner.
+
+Canonical pre-release baseline9e1530b2823253829c204867281891d6e0b375db independently remote-verified. Root inspected exact395-line crossing delta and actual table/function definitions; no shared guard or migration difference. Review closes source gap only; completed module pass and reviewed new full-census evidence still required.

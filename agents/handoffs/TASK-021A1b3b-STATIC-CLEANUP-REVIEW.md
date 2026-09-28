@@ -1,0 +1,10 @@
+# TASK-021A1b3b static review and cleanup failure
+
+## 2026-09-28 — B3b execution reviewed; normal VM shutdown failed
+
+Source/fixtures and all bounded execution evidence reviewed:1388 SQL assertions,144-function catalog/true25 preservation, realAuthHTTP,577new wait observations/170mapped conceptual cases,11 fresh inherited modules, static lint/typecheck49units/web-admin builds. Static receipt line-ending integrity finding closed: raw CR preserved, all hashes match, exact SHA256cd89a943fed702f2f99c6bb5a313bc2aec81a3819965692f3c9852344c50ceca. Wholeformat unchangedCHANGELOG and optional ignoredHTTP fixture diagnostics remain explicitly qualified; standarddb lint still exit1 sole inherited structural warning, no clean-pass claim.
+
+Finalcurrent26 guarded zero/off/rev1 reset and normal servicesstop with backups/zero runningcontainers passed. Normal VZstop failedexit1 at06:06:42UTC, no exiting event. Independent read-only06:09:47 corroboration: only named mountlessUID501 pals-task002 Running, host/driver4100, exact disk/EFI holderApple4106, ownedSSH4115/stopchild57103,5instance sockets; alltestportsclosed/no launchregistration. Legacy56460 untouched. Runtime ownership remains held, no stopped-audit/taskcompletion credit. Executor evidence/draft freeze e6cd17045dadd7e5cb7057cb9dfaa8cb3c6345fc is local/unpushed27files only, sourceaeeb/fixture45 unchanged.
+
+Concrete targeted forced-stop exception is Proposed only in TASK-021A1b3b-CLEANUP-PROPOSAL.md, subject to independent review and additional userauthorization because accepted contract/runtime release explicitly excludes force/recovery. Fresh identity/ownership guard, exact oneVM installedCLI2.2.0force stop and mandatory independent stopped/unheld endpoint audit; no generic kill/legacy process action/disk or backup deletion/restart/provider/hosted operation. Residual owners or failed postconditions remain incomplete, no improvised recovery. B3b cleanup/finalhandoff/taskpublication/acceptedmainintegration and B3c/A1c/A2/TASK-021 incomplete; no successor/pilot-ready claim.
+
