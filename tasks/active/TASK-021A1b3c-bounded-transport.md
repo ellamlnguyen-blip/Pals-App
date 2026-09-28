@@ -1,6 +1,6 @@
 # B3c bounded fixture transport — authoring only
 
-Status: proposed bounded correction contract; independent review/publication required before implementation dispatch.
+Status: independently reviewed bounded correction contract; canonical publication required before implementation dispatch.
 Date: 2026-09-28. Parent B3c remains incomplete. User requested continuation of pending fixture authoring. Source27 is unchanged and unexecuted; main retains26. Exact reviewed foundation `3e9973ce573a48c9879286624b92fb2d72ca7769` contains source `17b72001c3c76d2002b320d92df32703141bb88e`.
 
 ## Concrete gap
