@@ -1,5 +1,12 @@
 # NOW
 
+## 2026-09-28 — B3b local source checkpoint; independent review in progress
+
+Executor checkpoint `aeeb67a76d7a4cc40e72fbe51334e5d934e3a8a3` on `agent/TASK-021A1b3b-cohost-chat` in independent `/private/tmp/pals-task021a1b3b-cohost-chat` contains only proposed migration26 and SOURCE-STAGE handoff. This is local/unpushed, not accepted code or remote-verified task work. All25 migration files are byte-identical; static extraction records two closed scalar helpers/five preserved public interfaces, with no table/trigger/RLS/public-grant/app changes. Coordinator inspected source/handoff; fresh independent Sol-medium source/security reviewer is active, including conditional identity-partition proof. No review completion yet.
+
+Fixtures, PostgreSQL compilation/live catalog/permissions/observed races/lint/upgrade/regressions and runtime remain unrun/unreleased. Current owned services/VM remain stopped. B3b/c/A1c/A2/TASK-021 incomplete; no hosted/pilot-ready claim. Reviewed contract publication1340e27 and dispatch receipt6c4d05 remain canonical prerequisites. Source/fixture/ownership reviews and explicit serial release gate any runtime use.
+
+
 ## 2026-09-27 — B3b reviewed contract remotely published; source stage dispatched
 
 Contract/source inventory/graph/matrix/reconciliation/review and queue records published on independently remote-verified canonical main `1340e27bee4247506547934678b60adf713707c1` before fresh Sol-medium `implement_pilot_cohost_chat` dispatch. Executor uses independent no-hardlinks `/private/tmp/pals-task021a1b3b-cohost-chat`, branch `agent/TASK-021A1b3b-cohost-chat`. No implementation branch push yet. First checkpoint is migration26 plus exact source/ABI/graph/conditional identity-partition handoff, then fresh independent source review; source/fixture/ownership review and explicit coordinator serial runtime release remain before any test-runtime start/mutation/reset. Current services/VM remain stopped.
