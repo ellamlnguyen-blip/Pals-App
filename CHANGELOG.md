@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-28 — B3c state feasibility correction
+
+Independent source review reopened state contractP1: CB inbound operation-first must reject peer writer after actor current block, even with companion opt-in; outbound operation-first is retained idempotent repair/no new loss. Proposed matrix/contract correction preserves24 literal IDs as22 planned new-loss orders+one repair+one expected writer rejection, both specialized orders zero committed-loss credit. State author confirms original assumption would fail and freezes qualified static checkpoint with contract gap; exact reconciliation review/publication/adoption remain required. No fabricated retained proof/intervening unblock/source or permission change. All300 planned observations unexecuted; main code26 and parent/runtime gates incomplete.
+
+
 ## 2026-09-28 — B3c reviewed HTTP diagnostics and remaining fixtures
 
 HTTP5f428bc7 and HTTPtransportc7fb190 independently reviewed/pushed/exact remote SHAs verified; original failurecapture and arbitrary-key/private-string projection corrections cleared. Dedicated validated failure channel/HTTP24h runner remains unexecuted; fresh two-file HTTP cadence/channel adoption author active from main7b8078d plus exact dependencies at c6dd76a. Fresh two-file24L5 state author active from published main7b8078d contract plus policycad9/transport404 at79fd728; state checkpoint/review pending. Proposed operator contract111 IDs partitions35serial SQL+76Node waits; independent review foundP1 unsupported nonoperator role values, amended to lawful permanent assignment removal with honest shared-absence-predicate classification, no schema/permission change. Review/publication required before operator author. Main code26, all target outcomes/cleanup/exclusive release/parent gates remain incomplete.

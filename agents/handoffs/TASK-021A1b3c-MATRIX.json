@@ -2707,9 +2707,9 @@
       "route": "CB",
       "loss": "actor_peer_block_outbound",
       "order": "operation-first",
-      "partition": "actual-state-wait-required",
+      "partition": "actual-state-boundary-retained-idempotent-repair",
       "status": "unexecuted",
-      "outcome_classification": "CH cancel/disable terminal; CP/CB block loss-first can select retained if own outbound evidence now exists: enforce frozen-lane and separate retained controls, never label lawful retained success current denial"
+      "outcome_classification": "Original actual current actor-to-peer block commits. Same actor-to-peer writer waits at social boundary then selects owned retained block and returns true as idempotent repair. Current-only fixture has no shared relationship/parent teardown: exact full54 zero writer delta, no additional block/new loss, zero committed-loss order credit."
     },
     {
       "id": "L5.CB.actor_peer_block_inbound.loss-first",
@@ -2725,9 +2725,9 @@
       "route": "CB",
       "loss": "actor_peer_block_inbound",
       "order": "operation-first",
-      "partition": "actual-state-wait-required",
+      "partition": "actual-state-boundary-expected-writer-denial",
       "status": "unexecuted",
-      "outcome_classification": "CH cancel/disable terminal; CP/CB block loss-first can select retained if own outbound evidence now exists: enforce frozen-lane and separate retained controls, never label lawful retained success current denial"
+      "outcome_classification": "Original actual current actor-to-peer block commits. Peer-to-actor writer waits at social boundary, then has no peer-owned retained proof and fails exact 42501 Safety operation unavailable because bilateral People visibility is blocked. Full54 zero writer delta/rollback; zero committed-loss order credit. No manufactured retained proof or intervening unblock."
     }
   ],
   "serial_cells": [
@@ -3130,9 +3130,12 @@
     "conditional_mapped": 0,
     "operator_allocations": 111,
     "operator_serial": 35,
-    "operator_wait": 76
+    "operator_wait": 76,
+    "L5_planned_new_loss_orders": 22,
+    "L5_planned_retained_repair_orders": 1,
+    "L5_planned_expected_denied_writer_orders": 1
   },
-  "coverage_rule": "Each observed cell requires eligible actual RPC control, holder/waiter PID + pg_blocking_pids + ungranted pg_locks, successful outcome and full census; timeout/40P01/40001 do not credit either commit order. State block lane switches are classified separately, not force-fit to current denial. All counts are planning allocations; final source/fixture review freezes exact assertion totals. object_detach_delete cells retain both orders but identify profile UPDATE contention; no successful referenced-primary DELETE wait allocation.",
+  "coverage_rule": "Each observed cell requires eligible actual RPC control, holder/waiter PID + pg_blocking_pids + ungranted pg_locks, successful outcome and full census; timeout/40P01/40001 do not credit either commit order. State block lane switches are classified separately, not force-fit to current denial. All counts are planning allocations; final source/fixture review freezes exact assertion totals. object_detach_delete cells retain both orders but identify profile UPDATE contention; no successful referenced-primary DELETE wait allocation. The24 L5 IDs allocate22 planned new-loss orders, one CB outbound operation-first retained idempotent repair and one CB inbound operation-first exact denied competing writer. Both specialized cases require actual social-boundary observation/full54 expected outcome and zero committed-loss credit; expected42501 writer denial is a successfully verified business rejection, not a failed fixture/abort.300 is planned observed ID count, not300 successful loss commits.",
   "operator_cells": [
     {
       "id": "M.list_moderation_reports.gate_missing.serial",
