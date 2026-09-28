@@ -1,5 +1,10 @@
 # NOW
 
+## 2026-09-28 — B3c fixture authoring resumed
+
+The user requested continuation after the published capacity blocker. Fresh bounded GPT-6 Sol medium HTTP, policy and identity authors successfully dispatched from verified canonical main `c74beae0f50b42e048dd643b137f55ab84d32e96`, each in a separate isolated branch plus exact reviewed foundation `3e9973ce573a48c9879286624b92fb2d72ca7769` (source `17b72001c3c76d2002b320d92df32703141bb88e`). Disjoint published two/three/two-file contracts remain authoritative. Static authoring only; no runtime or target access is released. All plans remain unexecuted. Source27/foundation/fixture code stays task-only; main code remains26. Standard speed is app-controlled and not verifiable through dispatch tools. The original TASK-021 coordinator was notified to avoid duplicate author or runtime dispatch. See `agents/handoffs/TASK-021A1b3c-FIXTURE-RESUMPTION.md`. Parent B3c/B3/A1c/A2/TASK-021 remains incomplete.
+
+
 ## 2026-09-28 — B3c foundation publication verified
 
 Reviewed foundationtask3e9973ce573a48c9879286624b92fb2d72ca7769 and canonicaldocumentationmain9a0b3942fc1fb85b9abef313d00e6a9b35f36850 independently remote-verified. No source/fixturecode onmain yet (26migrations). Three nextbounded contracts published/reviewed but undispatched because agenttools returnedthreadlimit; freshauthorcapacity is dispatchdependency, not userpermission or runtimeauthority. All actualexecution/security/cleanup/acceptedmainintegration and parentgates remain incomplete. Receipt: TASK-021A1b3c-FIXTURE-FOUNDATION-PUBLICATION.md. Existingcoordinator gets receipt-only; no duplicateproducttask/newchat.
