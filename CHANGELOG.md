@@ -1,5 +1,13 @@
 # Changelog
 
+## 2026-09-27 — B3a reviewed task published; canonical integration prepared
+
+Fresh final independent security/source/evidence review cleared exactfe4f23c5b43b4b042c3a8e8a99f38da412d4f3fa, including the source-only strict lint-verifier correction, with no unresolved findings. Task branch agent/TASK-021A1b3a-ordinary-lifecycle is independently remote-verified at that SHA by executor and coordinator. Accepted code/handoff/evidence/shared records are being integrated on a bounded coordinator branch; canonical push/remote verification and completion receipt remain pending. No task-branch-only completion claim.
+
+Migration25 preserves six lifecycle interfaces and adds two closed private helpers;350 new observed waits,986 bounded SQL assertions plus post-cast61, real Auth HTTP1087 setup/control/case entries, six fresh A1a/B1/B2 regression modules, true24 upgrade/catalog142functions52tables and static49unit/no-skip outcomes passed within recorded limits. Standard db:lint remains exit1 with EXACTONE independently accepted structural composite-OUT advisory; no threshold/suppression change, no zero-warning claim. Strict verifier source is reviewed but not executed after cleanup. Final25zero/off/rev1 reset, normal backed-up service/VZ shutdown and global named-Pals ownership/disk/EFI/socket/port cleanup are independently corroborated; legacy non-hostagent56460 is untouched.
+
+After verified canonical integration/completion, next is fresh bounded B3b contract reconciliation to actual25 helper/source/graph, then independent review/publication before implementation. B3b/c/A1c/A2 and TASK-021 remain incomplete; no hosted/app/pilot readiness or product successor. See ORDINARY-LIFECYCLE handoff and coordinator REVIEW receipt.
+
 ## 2026-09-27 — B3a corrected block module passed and reviewed
 
 Corrected block/current-membership module completed34 observed waits plus1 host-self/impossibility classification in823 seconds, no fail/timeout/cancel/skip, guarded25 reset clean. Fresh bounded evidence review found no gap:20 public host block cells,6 privileged parent-bound joined participant deletions,8 actual public peer block/reconciliation cells;16 loss-first denial holder snapshots match no-added-mutation census. Actor-left genuine join loss-first denies while paired peer departure permits applicable later joins/no-ops. Bothorders/PIDs/ungranted advisory locks and role/writer labels consistent. Failed705-second attempt remains excluded. New Hangout modules now total350 successful observed waits (288main+23source+34block+5crossing), with separate40P01 rollback and explicit classifications; inherited regressions not included in350.

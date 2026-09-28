@@ -1,5 +1,9 @@
 # Backlog
 
+## Current next dependency — accepted B3a integration then B3b contract
+
+B3a final task fe4f23c is reviewed and remotely verified; canonical integration/completion remains pending. Next ready work only after that receipt: fresh B3b planning reconciliation to actual migration25, five final management/chat RPCs and sorted eligible-target/actor/immutable-host graph; independent contract review and canonical publication precede implementation. B3c follows accepted B3b, then A1c/A2. Earlier B3a contract/source/runtime planning rows below are historical milestones.
+
 ## Current B3 sequential dependency
 
 Reviewed contract68f639e allocates B3a six lifecycle RPCs first; canonical publication precedes fresh bounded implementation. B3b five co-host/chat RPCs and B3c two current-source safety branches remain dependent planning; each requires actual accepted predecessor reconciliation/review/publication. B3 is not complete or executable as one implementation. A1c/A2/TASK-021 incomplete.

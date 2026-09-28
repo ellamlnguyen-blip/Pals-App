@@ -1,0 +1,22 @@
+{
+  "command": "supabase db lint --local --schema public,private --level warning --fail-on warning",
+  "standard_exit_status": 1,
+  "stdout": "{\"results\":[{\"function\":\"private.pilot_lock_ordinary_lifecycle\",\"issues\":[{\"level\":\"warning extra\",\"message\":\"composite OUT variable \\\"source_row\\\" is not single argument\",\"sqlState\":\"00000\"}]}],\"message\":\"db lint\"}\n",
+  "stderr": "Connecting to local database...\nLinting schema: public\nLinting schema: private\n",
+  "exact_compatibility_verification": "only prescribed helper structural composite OUT advisory; no other warning/error",
+  "diagnostics": {
+    "results": [
+      {
+        "function": "private.pilot_lock_ordinary_lifecycle",
+        "issues": [
+          {
+            "level": "warning extra",
+            "message": "composite OUT variable \"source_row\" is not single argument",
+            "sqlState": "00000"
+          }
+        ]
+      }
+    ],
+    "message": "db lint"
+  }
+}

@@ -1,0 +1,1288 @@
+[
+  {
+    "race": "b3a_edit_actor-to-host_loss-first",
+    "holder_pid": 368,
+    "waiter_pid": 369,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "holder_snapshot": {
+      "ledger": null,
+      "cohosts": null,
+      "private": null,
+      "sources": [
+        {
+          "id": "b3a00000-0000-4000-8001-000000000001",
+          "title": "Lifecycle source",
+          "status": "published",
+          "ends_at": null,
+          "host_id": "b3a00000-0000-4000-8000-000000000001",
+          "revision": 1,
+          "starts_at": "2026-09-28T20:12:51.327549+00:00",
+          "created_at": "2026-09-27T20:12:51.328952+00:00",
+          "updated_at": "2026-09-27T20:12:51.328952+00:00",
+          "visibility": "campus",
+          "campus_zone": null,
+          "description": null,
+          "public_place": "Approximate",
+          "joining_state": "open",
+          "university_id": "00000000-0000-4000-8000-000000000001",
+          "public_latitude": 35.91,
+          "public_longitude": -79.05,
+          "location_precision": "approximate_area"
+        }
+      ],
+      "provenance": [
+        {
+          "low_id": "b3a00000-0000-4000-8000-000000000001",
+          "high_id": "b3a00000-0000-4000-8000-000000000002",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001"
+        }
+      ],
+      "participants": [
+        {
+          "state": "joined",
+          "left_at": null,
+          "joined_at": "2026-09-27T20:12:51.329287+00:00",
+          "account_id": "b3a00000-0000-4000-8000-000000000001",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001",
+          "removed_at": null,
+          "updated_at": "2026-09-27T20:12:51.329287+00:00"
+        },
+        {
+          "state": "left",
+          "left_at": "2026-09-27T20:12:51.437844+00:00",
+          "joined_at": "2026-09-27T20:12:51.329548+00:00",
+          "account_id": "b3a00000-0000-4000-8000-000000000002",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001",
+          "removed_at": null,
+          "updated_at": "2026-09-27T20:12:51.437844+00:00"
+        }
+      ],
+      "notifications": null
+    },
+    "route": "edit",
+    "direction": "actor-to-host",
+    "order": "loss-first",
+    "writer": "actual authenticated set_safety_block, retained evidence, existing reconciliation"
+  },
+  {
+    "race": "b3a_edit_actor-to-host_mutation-first",
+    "holder_pid": 363,
+    "waiter_pid": 364,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "route": "edit",
+    "direction": "actor-to-host",
+    "order": "mutation-first",
+    "writer": "actual authenticated set_safety_block, retained evidence, existing reconciliation"
+  },
+  {
+    "race": "b3a_edit_host-to-actor_loss-first",
+    "holder_pid": 370,
+    "waiter_pid": 369,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "holder_snapshot": {
+      "ledger": null,
+      "cohosts": null,
+      "private": null,
+      "sources": [
+        {
+          "id": "b3a00000-0000-4000-8001-000000000001",
+          "title": "Lifecycle source",
+          "status": "published",
+          "ends_at": null,
+          "host_id": "b3a00000-0000-4000-8000-000000000001",
+          "revision": 1,
+          "starts_at": "2026-09-28T20:13:38.134589+00:00",
+          "created_at": "2026-09-27T20:13:38.135964+00:00",
+          "updated_at": "2026-09-27T20:13:38.135964+00:00",
+          "visibility": "campus",
+          "campus_zone": null,
+          "description": null,
+          "public_place": "Approximate",
+          "joining_state": "open",
+          "university_id": "00000000-0000-4000-8000-000000000001",
+          "public_latitude": 35.91,
+          "public_longitude": -79.05,
+          "location_precision": "approximate_area"
+        }
+      ],
+      "provenance": [
+        {
+          "low_id": "b3a00000-0000-4000-8000-000000000001",
+          "high_id": "b3a00000-0000-4000-8000-000000000002",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001"
+        }
+      ],
+      "participants": [
+        {
+          "state": "joined",
+          "left_at": null,
+          "joined_at": "2026-09-27T20:13:38.136306+00:00",
+          "account_id": "b3a00000-0000-4000-8000-000000000001",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001",
+          "removed_at": null,
+          "updated_at": "2026-09-27T20:13:38.136306+00:00"
+        },
+        {
+          "state": "removed",
+          "left_at": null,
+          "joined_at": "2026-09-27T20:13:38.136578+00:00",
+          "account_id": "b3a00000-0000-4000-8000-000000000002",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001",
+          "removed_at": "2026-09-27T20:13:38.234663+00:00",
+          "updated_at": "2026-09-27T20:13:38.234663+00:00"
+        }
+      ],
+      "notifications": null
+    },
+    "route": "edit",
+    "direction": "host-to-actor",
+    "order": "loss-first",
+    "writer": "actual authenticated set_safety_block, retained evidence, existing reconciliation"
+  },
+  {
+    "race": "b3a_edit_host-to-actor_mutation-first",
+    "holder_pid": 370,
+    "waiter_pid": 369,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "route": "edit",
+    "direction": "host-to-actor",
+    "order": "mutation-first",
+    "writer": "actual authenticated set_safety_block, retained evidence, existing reconciliation"
+  },
+  {
+    "race": "b3a_join_actor-to-host_loss-first",
+    "holder_pid": 369,
+    "waiter_pid": 368,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "holder_snapshot": {
+      "ledger": null,
+      "cohosts": null,
+      "private": null,
+      "sources": [
+        {
+          "id": "b3a00000-0000-4000-8001-000000000001",
+          "title": "Lifecycle source",
+          "status": "published",
+          "ends_at": null,
+          "host_id": "b3a00000-0000-4000-8000-000000000001",
+          "revision": 1,
+          "starts_at": "2026-09-28T20:14:24.58311+00:00",
+          "created_at": "2026-09-27T20:14:24.584348+00:00",
+          "updated_at": "2026-09-27T20:14:24.584348+00:00",
+          "visibility": "campus",
+          "campus_zone": null,
+          "description": null,
+          "public_place": "Approximate",
+          "joining_state": "open",
+          "university_id": "00000000-0000-4000-8000-000000000001",
+          "public_latitude": 35.91,
+          "public_longitude": -79.05,
+          "location_precision": "approximate_area"
+        }
+      ],
+      "provenance": null,
+      "participants": [
+        {
+          "state": "joined",
+          "left_at": null,
+          "joined_at": "2026-09-27T20:14:24.58468+00:00",
+          "account_id": "b3a00000-0000-4000-8000-000000000001",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001",
+          "removed_at": null,
+          "updated_at": "2026-09-27T20:14:24.58468+00:00"
+        },
+        {
+          "state": "left",
+          "left_at": "2026-09-27T20:14:24.610104+00:00",
+          "joined_at": "2026-09-27T20:14:24.58494+00:00",
+          "account_id": "b3a00000-0000-4000-8000-000000000002",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001",
+          "removed_at": null,
+          "updated_at": "2026-09-27T20:14:24.58494+00:00"
+        }
+      ],
+      "notifications": null
+    },
+    "route": "join",
+    "direction": "actor-to-host",
+    "order": "loss-first",
+    "writer": "actual authenticated set_safety_block, retained evidence, existing reconciliation"
+  },
+  {
+    "race": "b3a_join_actor-to-host_mutation-first",
+    "holder_pid": 371,
+    "waiter_pid": 372,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "route": "join",
+    "direction": "actor-to-host",
+    "order": "mutation-first",
+    "writer": "actual authenticated set_safety_block, retained evidence, existing reconciliation"
+  },
+  {
+    "race": "b3a_join_host-to-actor_loss-first",
+    "holder_pid": 374,
+    "waiter_pid": 375,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "holder_snapshot": {
+      "ledger": null,
+      "cohosts": null,
+      "private": null,
+      "sources": [
+        {
+          "id": "b3a00000-0000-4000-8001-000000000001",
+          "title": "Lifecycle source",
+          "status": "published",
+          "ends_at": null,
+          "host_id": "b3a00000-0000-4000-8000-000000000001",
+          "revision": 1,
+          "starts_at": "2026-09-28T20:15:11.359332+00:00",
+          "created_at": "2026-09-27T20:15:11.360701+00:00",
+          "updated_at": "2026-09-27T20:15:11.360701+00:00",
+          "visibility": "campus",
+          "campus_zone": null,
+          "description": null,
+          "public_place": "Approximate",
+          "joining_state": "open",
+          "university_id": "00000000-0000-4000-8000-000000000001",
+          "public_latitude": 35.91,
+          "public_longitude": -79.05,
+          "location_precision": "approximate_area"
+        }
+      ],
+      "provenance": null,
+      "participants": [
+        {
+          "state": "joined",
+          "left_at": null,
+          "joined_at": "2026-09-27T20:15:11.361059+00:00",
+          "account_id": "b3a00000-0000-4000-8000-000000000001",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001",
+          "removed_at": null,
+          "updated_at": "2026-09-27T20:15:11.361059+00:00"
+        },
+        {
+          "state": "left",
+          "left_at": "2026-09-27T20:15:11.384703+00:00",
+          "joined_at": "2026-09-27T20:15:11.361333+00:00",
+          "account_id": "b3a00000-0000-4000-8000-000000000002",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001",
+          "removed_at": null,
+          "updated_at": "2026-09-27T20:15:11.361333+00:00"
+        }
+      ],
+      "notifications": null
+    },
+    "route": "join",
+    "direction": "host-to-actor",
+    "order": "loss-first",
+    "writer": "actual authenticated set_safety_block, retained evidence, existing reconciliation"
+  },
+  {
+    "race": "b3a_join_host-to-actor_mutation-first",
+    "holder_pid": 376,
+    "waiter_pid": 375,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "route": "join",
+    "direction": "host-to-actor",
+    "order": "mutation-first",
+    "writer": "actual authenticated set_safety_block, retained evidence, existing reconciliation"
+  },
+  {
+    "race": "b3a_noop_actor-to-host_loss-first",
+    "holder_pid": 366,
+    "waiter_pid": 367,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "holder_snapshot": {
+      "ledger": null,
+      "cohosts": null,
+      "private": null,
+      "sources": [
+        {
+          "id": "b3a00000-0000-4000-8001-000000000001",
+          "title": "Lifecycle source",
+          "status": "published",
+          "ends_at": null,
+          "host_id": "b3a00000-0000-4000-8000-000000000001",
+          "revision": 1,
+          "starts_at": "2026-09-28T20:15:58.306985+00:00",
+          "created_at": "2026-09-27T20:15:58.308784+00:00",
+          "updated_at": "2026-09-27T20:15:58.308784+00:00",
+          "visibility": "campus",
+          "campus_zone": null,
+          "description": null,
+          "public_place": "Approximate",
+          "joining_state": "open",
+          "university_id": "00000000-0000-4000-8000-000000000001",
+          "public_latitude": 35.91,
+          "public_longitude": -79.05,
+          "location_precision": "approximate_area"
+        }
+      ],
+      "provenance": [
+        {
+          "low_id": "b3a00000-0000-4000-8000-000000000001",
+          "high_id": "b3a00000-0000-4000-8000-000000000002",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001"
+        }
+      ],
+      "participants": [
+        {
+          "state": "joined",
+          "left_at": null,
+          "joined_at": "2026-09-27T20:15:58.309144+00:00",
+          "account_id": "b3a00000-0000-4000-8000-000000000001",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001",
+          "removed_at": null,
+          "updated_at": "2026-09-27T20:15:58.309144+00:00"
+        },
+        {
+          "state": "left",
+          "left_at": "2026-09-27T20:15:58.414037+00:00",
+          "joined_at": "2026-09-27T20:15:58.309435+00:00",
+          "account_id": "b3a00000-0000-4000-8000-000000000002",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001",
+          "removed_at": null,
+          "updated_at": "2026-09-27T20:15:58.414037+00:00"
+        }
+      ],
+      "notifications": null
+    },
+    "route": "noop",
+    "direction": "actor-to-host",
+    "order": "loss-first",
+    "writer": "actual authenticated set_safety_block, retained evidence, existing reconciliation"
+  },
+  {
+    "race": "b3a_noop_actor-to-host_mutation-first",
+    "holder_pid": 366,
+    "waiter_pid": 367,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "route": "noop",
+    "direction": "actor-to-host",
+    "order": "mutation-first",
+    "writer": "actual authenticated set_safety_block, retained evidence, existing reconciliation"
+  },
+  {
+    "race": "b3a_noop_host-to-actor_loss-first",
+    "holder_pid": 367,
+    "waiter_pid": 368,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "holder_snapshot": {
+      "ledger": null,
+      "cohosts": null,
+      "private": null,
+      "sources": [
+        {
+          "id": "b3a00000-0000-4000-8001-000000000001",
+          "title": "Lifecycle source",
+          "status": "published",
+          "ends_at": null,
+          "host_id": "b3a00000-0000-4000-8000-000000000001",
+          "revision": 1,
+          "starts_at": "2026-09-28T20:16:45.488786+00:00",
+          "created_at": "2026-09-27T20:16:45.49013+00:00",
+          "updated_at": "2026-09-27T20:16:45.49013+00:00",
+          "visibility": "campus",
+          "campus_zone": null,
+          "description": null,
+          "public_place": "Approximate",
+          "joining_state": "open",
+          "university_id": "00000000-0000-4000-8000-000000000001",
+          "public_latitude": 35.91,
+          "public_longitude": -79.05,
+          "location_precision": "approximate_area"
+        }
+      ],
+      "provenance": [
+        {
+          "low_id": "b3a00000-0000-4000-8000-000000000001",
+          "high_id": "b3a00000-0000-4000-8000-000000000002",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001"
+        }
+      ],
+      "participants": [
+        {
+          "state": "joined",
+          "left_at": null,
+          "joined_at": "2026-09-27T20:16:45.49047+00:00",
+          "account_id": "b3a00000-0000-4000-8000-000000000001",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001",
+          "removed_at": null,
+          "updated_at": "2026-09-27T20:16:45.49047+00:00"
+        },
+        {
+          "state": "removed",
+          "left_at": null,
+          "joined_at": "2026-09-27T20:16:45.49077+00:00",
+          "account_id": "b3a00000-0000-4000-8000-000000000002",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001",
+          "removed_at": "2026-09-27T20:16:45.581869+00:00",
+          "updated_at": "2026-09-27T20:16:45.581869+00:00"
+        }
+      ],
+      "notifications": null
+    },
+    "route": "noop",
+    "direction": "host-to-actor",
+    "order": "loss-first",
+    "writer": "actual authenticated set_safety_block, retained evidence, existing reconciliation"
+  },
+  {
+    "race": "b3a_noop_host-to-actor_mutation-first",
+    "holder_pid": 363,
+    "waiter_pid": 364,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "route": "noop",
+    "direction": "host-to-actor",
+    "order": "mutation-first",
+    "writer": "actual authenticated set_safety_block, retained evidence, existing reconciliation"
+  },
+  {
+    "race": "b3a_leave_actor-to-host_loss-first",
+    "holder_pid": 362,
+    "waiter_pid": 361,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "holder_snapshot": {
+      "ledger": null,
+      "cohosts": null,
+      "private": null,
+      "sources": [
+        {
+          "id": "b3a00000-0000-4000-8001-000000000001",
+          "title": "Lifecycle source",
+          "status": "published",
+          "ends_at": null,
+          "host_id": "b3a00000-0000-4000-8000-000000000001",
+          "revision": 1,
+          "starts_at": "2026-09-28T20:17:32.507021+00:00",
+          "created_at": "2026-09-27T20:17:32.508422+00:00",
+          "updated_at": "2026-09-27T20:17:32.508422+00:00",
+          "visibility": "campus",
+          "campus_zone": null,
+          "description": null,
+          "public_place": "Approximate",
+          "joining_state": "open",
+          "university_id": "00000000-0000-4000-8000-000000000001",
+          "public_latitude": 35.91,
+          "public_longitude": -79.05,
+          "location_precision": "approximate_area"
+        }
+      ],
+      "provenance": [
+        {
+          "low_id": "b3a00000-0000-4000-8000-000000000001",
+          "high_id": "b3a00000-0000-4000-8000-000000000002",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001"
+        }
+      ],
+      "participants": [
+        {
+          "state": "joined",
+          "left_at": null,
+          "joined_at": "2026-09-27T20:17:32.508769+00:00",
+          "account_id": "b3a00000-0000-4000-8000-000000000001",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001",
+          "removed_at": null,
+          "updated_at": "2026-09-27T20:17:32.508769+00:00"
+        },
+        {
+          "state": "left",
+          "left_at": "2026-09-27T20:17:32.603725+00:00",
+          "joined_at": "2026-09-27T20:17:32.50904+00:00",
+          "account_id": "b3a00000-0000-4000-8000-000000000002",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001",
+          "removed_at": null,
+          "updated_at": "2026-09-27T20:17:32.603725+00:00"
+        }
+      ],
+      "notifications": null
+    },
+    "route": "leave",
+    "direction": "actor-to-host",
+    "order": "loss-first",
+    "writer": "actual authenticated set_safety_block, retained evidence, existing reconciliation"
+  },
+  {
+    "race": "b3a_leave_actor-to-host_mutation-first",
+    "holder_pid": 365,
+    "waiter_pid": 366,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "route": "leave",
+    "direction": "actor-to-host",
+    "order": "mutation-first",
+    "writer": "actual authenticated set_safety_block, retained evidence, existing reconciliation"
+  },
+  {
+    "race": "b3a_leave_host-to-actor_loss-first",
+    "holder_pid": 368,
+    "waiter_pid": 367,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "holder_snapshot": {
+      "ledger": null,
+      "cohosts": null,
+      "private": null,
+      "sources": [
+        {
+          "id": "b3a00000-0000-4000-8001-000000000001",
+          "title": "Lifecycle source",
+          "status": "published",
+          "ends_at": null,
+          "host_id": "b3a00000-0000-4000-8000-000000000001",
+          "revision": 1,
+          "starts_at": "2026-09-28T20:18:19.73383+00:00",
+          "created_at": "2026-09-27T20:18:19.735372+00:00",
+          "updated_at": "2026-09-27T20:18:19.735372+00:00",
+          "visibility": "campus",
+          "campus_zone": null,
+          "description": null,
+          "public_place": "Approximate",
+          "joining_state": "open",
+          "university_id": "00000000-0000-4000-8000-000000000001",
+          "public_latitude": 35.91,
+          "public_longitude": -79.05,
+          "location_precision": "approximate_area"
+        }
+      ],
+      "provenance": [
+        {
+          "low_id": "b3a00000-0000-4000-8000-000000000001",
+          "high_id": "b3a00000-0000-4000-8000-000000000002",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001"
+        }
+      ],
+      "participants": [
+        {
+          "state": "joined",
+          "left_at": null,
+          "joined_at": "2026-09-27T20:18:19.735721+00:00",
+          "account_id": "b3a00000-0000-4000-8000-000000000001",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001",
+          "removed_at": null,
+          "updated_at": "2026-09-27T20:18:19.735721+00:00"
+        },
+        {
+          "state": "removed",
+          "left_at": null,
+          "joined_at": "2026-09-27T20:18:19.736004+00:00",
+          "account_id": "b3a00000-0000-4000-8000-000000000002",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001",
+          "removed_at": "2026-09-27T20:18:19.832826+00:00",
+          "updated_at": "2026-09-27T20:18:19.832826+00:00"
+        }
+      ],
+      "notifications": null
+    },
+    "route": "leave",
+    "direction": "host-to-actor",
+    "order": "loss-first",
+    "writer": "actual authenticated set_safety_block, retained evidence, existing reconciliation"
+  },
+  {
+    "race": "b3a_leave_host-to-actor_mutation-first",
+    "holder_pid": 367,
+    "waiter_pid": 366,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "route": "leave",
+    "direction": "host-to-actor",
+    "order": "mutation-first",
+    "writer": "actual authenticated set_safety_block, retained evidence, existing reconciliation"
+  },
+  {
+    "race": "b3a_joining_actor-to-host_loss-first",
+    "holder_pid": 369,
+    "waiter_pid": 368,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "holder_snapshot": {
+      "ledger": null,
+      "cohosts": null,
+      "private": null,
+      "sources": [
+        {
+          "id": "b3a00000-0000-4000-8001-000000000001",
+          "title": "Lifecycle source",
+          "status": "published",
+          "ends_at": null,
+          "host_id": "b3a00000-0000-4000-8000-000000000001",
+          "revision": 1,
+          "starts_at": "2026-09-28T20:19:06.993372+00:00",
+          "created_at": "2026-09-27T20:19:06.994969+00:00",
+          "updated_at": "2026-09-27T20:19:06.994969+00:00",
+          "visibility": "campus",
+          "campus_zone": null,
+          "description": null,
+          "public_place": "Approximate",
+          "joining_state": "open",
+          "university_id": "00000000-0000-4000-8000-000000000001",
+          "public_latitude": 35.91,
+          "public_longitude": -79.05,
+          "location_precision": "approximate_area"
+        }
+      ],
+      "provenance": [
+        {
+          "low_id": "b3a00000-0000-4000-8000-000000000001",
+          "high_id": "b3a00000-0000-4000-8000-000000000002",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001"
+        }
+      ],
+      "participants": [
+        {
+          "state": "joined",
+          "left_at": null,
+          "joined_at": "2026-09-27T20:19:06.995382+00:00",
+          "account_id": "b3a00000-0000-4000-8000-000000000001",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001",
+          "removed_at": null,
+          "updated_at": "2026-09-27T20:19:06.995382+00:00"
+        },
+        {
+          "state": "left",
+          "left_at": "2026-09-27T20:19:07.095536+00:00",
+          "joined_at": "2026-09-27T20:19:06.995675+00:00",
+          "account_id": "b3a00000-0000-4000-8000-000000000002",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001",
+          "removed_at": null,
+          "updated_at": "2026-09-27T20:19:07.095536+00:00"
+        }
+      ],
+      "notifications": null
+    },
+    "route": "joining",
+    "direction": "actor-to-host",
+    "order": "loss-first",
+    "writer": "actual authenticated set_safety_block, retained evidence, existing reconciliation"
+  },
+  {
+    "race": "b3a_joining_actor-to-host_mutation-first",
+    "holder_pid": 368,
+    "waiter_pid": 369,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "route": "joining",
+    "direction": "actor-to-host",
+    "order": "mutation-first",
+    "writer": "actual authenticated set_safety_block, retained evidence, existing reconciliation"
+  },
+  {
+    "race": "b3a_joining_host-to-actor_loss-first",
+    "holder_pid": 363,
+    "waiter_pid": 364,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "holder_snapshot": {
+      "ledger": null,
+      "cohosts": null,
+      "private": null,
+      "sources": [
+        {
+          "id": "b3a00000-0000-4000-8001-000000000001",
+          "title": "Lifecycle source",
+          "status": "published",
+          "ends_at": null,
+          "host_id": "b3a00000-0000-4000-8000-000000000001",
+          "revision": 1,
+          "starts_at": "2026-09-28T20:19:53.84029+00:00",
+          "created_at": "2026-09-27T20:19:53.841586+00:00",
+          "updated_at": "2026-09-27T20:19:53.841586+00:00",
+          "visibility": "campus",
+          "campus_zone": null,
+          "description": null,
+          "public_place": "Approximate",
+          "joining_state": "open",
+          "university_id": "00000000-0000-4000-8000-000000000001",
+          "public_latitude": 35.91,
+          "public_longitude": -79.05,
+          "location_precision": "approximate_area"
+        }
+      ],
+      "provenance": [
+        {
+          "low_id": "b3a00000-0000-4000-8000-000000000001",
+          "high_id": "b3a00000-0000-4000-8000-000000000002",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001"
+        }
+      ],
+      "participants": [
+        {
+          "state": "joined",
+          "left_at": null,
+          "joined_at": "2026-09-27T20:19:53.84195+00:00",
+          "account_id": "b3a00000-0000-4000-8000-000000000001",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001",
+          "removed_at": null,
+          "updated_at": "2026-09-27T20:19:53.84195+00:00"
+        },
+        {
+          "state": "removed",
+          "left_at": null,
+          "joined_at": "2026-09-27T20:19:53.84226+00:00",
+          "account_id": "b3a00000-0000-4000-8000-000000000002",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001",
+          "removed_at": "2026-09-27T20:19:53.936772+00:00",
+          "updated_at": "2026-09-27T20:19:53.936772+00:00"
+        }
+      ],
+      "notifications": null
+    },
+    "route": "joining",
+    "direction": "host-to-actor",
+    "order": "loss-first",
+    "writer": "actual authenticated set_safety_block, retained evidence, existing reconciliation"
+  },
+  {
+    "race": "b3a_joining_host-to-actor_mutation-first",
+    "holder_pid": 368,
+    "waiter_pid": 369,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "route": "joining",
+    "direction": "host-to-actor",
+    "order": "mutation-first",
+    "writer": "actual authenticated set_safety_block, retained evidence, existing reconciliation"
+  },
+  {
+    "race": "b3a_edit_joined_member_delete_loss-first",
+    "holder_pid": 357,
+    "waiter_pid": 358,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "holder_snapshot": {
+      "ledger": null,
+      "cohosts": null,
+      "private": null,
+      "sources": [
+        {
+          "id": "b3a00000-0000-4000-8001-000000000001",
+          "title": "Lifecycle source",
+          "status": "published",
+          "ends_at": null,
+          "host_id": "b3a00000-0000-4000-8000-000000000001",
+          "revision": 1,
+          "starts_at": "2026-09-28T20:20:40.539109+00:00",
+          "created_at": "2026-09-27T20:20:40.540338+00:00",
+          "updated_at": "2026-09-27T20:20:40.540338+00:00",
+          "visibility": "campus",
+          "campus_zone": null,
+          "description": null,
+          "public_place": "Approximate",
+          "joining_state": "open",
+          "university_id": "00000000-0000-4000-8000-000000000001",
+          "public_latitude": 35.91,
+          "public_longitude": -79.05,
+          "location_precision": "approximate_area"
+        }
+      ],
+      "provenance": null,
+      "participants": [
+        {
+          "state": "joined",
+          "left_at": null,
+          "joined_at": "2026-09-27T20:20:40.540685+00:00",
+          "account_id": "b3a00000-0000-4000-8000-000000000001",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001",
+          "removed_at": null,
+          "updated_at": "2026-09-27T20:20:40.540685+00:00"
+        }
+      ],
+      "notifications": null
+    },
+    "route": "edit",
+    "order": "loss-first",
+    "writer": "lawful privileged parent-bound participant deletion; FK cohost cascade; no retained attendance fixture"
+  },
+  {
+    "race": "b3a_edit_joined_member_delete_mutation-first",
+    "holder_pid": 359,
+    "waiter_pid": 358,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "route": "edit",
+    "order": "mutation-first",
+    "writer": "lawful privileged parent-bound participant deletion; FK cohost cascade; no retained attendance fixture"
+  },
+  {
+    "race": "b3a_leave_joined_member_delete_loss-first",
+    "holder_pid": 360,
+    "waiter_pid": 361,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "holder_snapshot": {
+      "ledger": null,
+      "cohosts": null,
+      "private": null,
+      "sources": [
+        {
+          "id": "b3a00000-0000-4000-8001-000000000001",
+          "title": "Lifecycle source",
+          "status": "published",
+          "ends_at": null,
+          "host_id": "b3a00000-0000-4000-8000-000000000001",
+          "revision": 1,
+          "starts_at": "2026-09-28T20:21:27.479674+00:00",
+          "created_at": "2026-09-27T20:21:27.480987+00:00",
+          "updated_at": "2026-09-27T20:21:27.480987+00:00",
+          "visibility": "campus",
+          "campus_zone": null,
+          "description": null,
+          "public_place": "Approximate",
+          "joining_state": "open",
+          "university_id": "00000000-0000-4000-8000-000000000001",
+          "public_latitude": 35.91,
+          "public_longitude": -79.05,
+          "location_precision": "approximate_area"
+        }
+      ],
+      "provenance": null,
+      "participants": [
+        {
+          "state": "joined",
+          "left_at": null,
+          "joined_at": "2026-09-27T20:21:27.481316+00:00",
+          "account_id": "b3a00000-0000-4000-8000-000000000001",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001",
+          "removed_at": null,
+          "updated_at": "2026-09-27T20:21:27.481316+00:00"
+        }
+      ],
+      "notifications": null
+    },
+    "route": "leave",
+    "order": "loss-first",
+    "writer": "lawful privileged parent-bound participant deletion; FK cohost cascade; no retained attendance fixture"
+  },
+  {
+    "race": "b3a_leave_joined_member_delete_mutation-first",
+    "holder_pid": 354,
+    "waiter_pid": 353,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "route": "leave",
+    "order": "mutation-first",
+    "writer": "lawful privileged parent-bound participant deletion; FK cohost cascade; no retained attendance fixture"
+  },
+  {
+    "race": "b3a_joining_joined_member_delete_loss-first",
+    "holder_pid": 359,
+    "waiter_pid": 360,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "holder_snapshot": {
+      "ledger": null,
+      "cohosts": null,
+      "private": null,
+      "sources": [
+        {
+          "id": "b3a00000-0000-4000-8001-000000000001",
+          "title": "Lifecycle source",
+          "status": "published",
+          "ends_at": null,
+          "host_id": "b3a00000-0000-4000-8000-000000000001",
+          "revision": 1,
+          "starts_at": "2026-09-28T20:22:14.352866+00:00",
+          "created_at": "2026-09-27T20:22:14.354183+00:00",
+          "updated_at": "2026-09-27T20:22:14.354183+00:00",
+          "visibility": "campus",
+          "campus_zone": null,
+          "description": null,
+          "public_place": "Approximate",
+          "joining_state": "open",
+          "university_id": "00000000-0000-4000-8000-000000000001",
+          "public_latitude": 35.91,
+          "public_longitude": -79.05,
+          "location_precision": "approximate_area"
+        }
+      ],
+      "provenance": null,
+      "participants": [
+        {
+          "state": "joined",
+          "left_at": null,
+          "joined_at": "2026-09-27T20:22:14.354541+00:00",
+          "account_id": "b3a00000-0000-4000-8000-000000000001",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001",
+          "removed_at": null,
+          "updated_at": "2026-09-27T20:22:14.354541+00:00"
+        }
+      ],
+      "notifications": null
+    },
+    "route": "joining",
+    "order": "loss-first",
+    "writer": "lawful privileged parent-bound participant deletion; FK cohost cascade; no retained attendance fixture"
+  },
+  {
+    "race": "b3a_joining_joined_member_delete_mutation-first",
+    "holder_pid": 364,
+    "waiter_pid": 363,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "route": "joining",
+    "order": "mutation-first",
+    "writer": "lawful privileged parent-bound participant deletion; FK cohost cascade; no retained attendance fixture"
+  },
+  {
+    "race": "b3a_join_actor-to-peer_loss-first",
+    "holder_pid": 396,
+    "waiter_pid": 397,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "holder_snapshot": {
+      "ledger": null,
+      "cohosts": null,
+      "private": null,
+      "sources": [
+        {
+          "id": "b3a00000-0000-4000-8001-000000000001",
+          "title": "Lifecycle source",
+          "status": "published",
+          "ends_at": null,
+          "host_id": "b3a00000-0000-4000-8000-000000000001",
+          "revision": 1,
+          "starts_at": "2026-09-28T20:23:01.943171+00:00",
+          "created_at": "2026-09-27T20:23:01.944876+00:00",
+          "updated_at": "2026-09-27T20:23:01.944876+00:00",
+          "visibility": "campus",
+          "campus_zone": null,
+          "description": null,
+          "public_place": "Approximate",
+          "joining_state": "open",
+          "university_id": "00000000-0000-4000-8000-000000000001",
+          "public_latitude": 35.91,
+          "public_longitude": -79.05,
+          "location_precision": "approximate_area"
+        }
+      ],
+      "provenance": [
+        {
+          "low_id": "b3a00000-0000-4000-8000-000000000001",
+          "high_id": "b3a00000-0000-4000-8000-000000000002",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001"
+        },
+        {
+          "low_id": "b3a00000-0000-4000-8000-000000000001",
+          "high_id": "b3a00000-0000-4000-8000-000000000004",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001"
+        },
+        {
+          "low_id": "b3a00000-0000-4000-8000-000000000002",
+          "high_id": "b3a00000-0000-4000-8000-000000000004",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001"
+        }
+      ],
+      "participants": [
+        {
+          "state": "joined",
+          "left_at": null,
+          "joined_at": "2026-09-27T20:23:01.945378+00:00",
+          "account_id": "b3a00000-0000-4000-8000-000000000001",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001",
+          "removed_at": null,
+          "updated_at": "2026-09-27T20:23:01.945378+00:00"
+        },
+        {
+          "state": "left",
+          "left_at": "2026-09-27T20:23:02.121367+00:00",
+          "joined_at": "2026-09-27T20:23:02.106494+00:00",
+          "account_id": "b3a00000-0000-4000-8000-000000000002",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001",
+          "removed_at": null,
+          "updated_at": "2026-09-27T20:23:02.121367+00:00"
+        },
+        {
+          "state": "joined",
+          "left_at": null,
+          "joined_at": "2026-09-27T20:23:02.017282+00:00",
+          "account_id": "b3a00000-0000-4000-8000-000000000004",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001",
+          "removed_at": null,
+          "updated_at": "2026-09-27T20:23:02.017282+00:00"
+        }
+      ],
+      "notifications": null
+    },
+    "route": "join",
+    "direction": "actor-to-peer",
+    "order": "loss-first",
+    "classification": "joined blocked peer remains; actor join/noop denies (genuine join loss-first has no shared-current pair to reconcile)"
+  },
+  {
+    "race": "b3a_join_actor-to-peer_mutation-first",
+    "holder_pid": 385,
+    "waiter_pid": 386,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "route": "join",
+    "direction": "actor-to-peer",
+    "order": "mutation-first",
+    "classification": "joined blocked peer remains; actor join/noop denies (genuine join loss-first has no shared-current pair to reconcile)"
+  },
+  {
+    "race": "b3a_join_peer-to-actor_loss-first",
+    "holder_pid": 389,
+    "waiter_pid": 388,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "holder_snapshot": {
+      "ledger": null,
+      "cohosts": null,
+      "private": null,
+      "sources": [
+        {
+          "id": "b3a00000-0000-4000-8001-000000000001",
+          "title": "Lifecycle source",
+          "status": "published",
+          "ends_at": null,
+          "host_id": "b3a00000-0000-4000-8000-000000000001",
+          "revision": 1,
+          "starts_at": "2026-09-28T20:23:49.295992+00:00",
+          "created_at": "2026-09-27T20:23:49.297372+00:00",
+          "updated_at": "2026-09-27T20:23:49.297372+00:00",
+          "visibility": "campus",
+          "campus_zone": null,
+          "description": null,
+          "public_place": "Approximate",
+          "joining_state": "open",
+          "university_id": "00000000-0000-4000-8000-000000000001",
+          "public_latitude": 35.91,
+          "public_longitude": -79.05,
+          "location_precision": "approximate_area"
+        }
+      ],
+      "provenance": [
+        {
+          "low_id": "b3a00000-0000-4000-8000-000000000001",
+          "high_id": "b3a00000-0000-4000-8000-000000000002",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001"
+        },
+        {
+          "low_id": "b3a00000-0000-4000-8000-000000000001",
+          "high_id": "b3a00000-0000-4000-8000-000000000004",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001"
+        },
+        {
+          "low_id": "b3a00000-0000-4000-8000-000000000002",
+          "high_id": "b3a00000-0000-4000-8000-000000000004",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001"
+        }
+      ],
+      "participants": [
+        {
+          "state": "joined",
+          "left_at": null,
+          "joined_at": "2026-09-27T20:23:49.297716+00:00",
+          "account_id": "b3a00000-0000-4000-8000-000000000001",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001",
+          "removed_at": null,
+          "updated_at": "2026-09-27T20:23:49.297716+00:00"
+        },
+        {
+          "state": "left",
+          "left_at": "2026-09-27T20:23:49.406428+00:00",
+          "joined_at": "2026-09-27T20:23:49.398476+00:00",
+          "account_id": "b3a00000-0000-4000-8000-000000000002",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001",
+          "removed_at": null,
+          "updated_at": "2026-09-27T20:23:49.406428+00:00"
+        },
+        {
+          "state": "joined",
+          "left_at": null,
+          "joined_at": "2026-09-27T20:23:49.36106+00:00",
+          "account_id": "b3a00000-0000-4000-8000-000000000004",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001",
+          "removed_at": null,
+          "updated_at": "2026-09-27T20:23:49.36106+00:00"
+        }
+      ],
+      "notifications": null
+    },
+    "route": "join",
+    "direction": "peer-to-actor",
+    "order": "loss-first",
+    "classification": "joined blocked peer remains; actor join/noop denies (genuine join loss-first has no shared-current pair to reconcile)"
+  },
+  {
+    "race": "b3a_join_peer-to-actor_mutation-first",
+    "holder_pid": 387,
+    "waiter_pid": 386,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "route": "join",
+    "direction": "peer-to-actor",
+    "order": "mutation-first",
+    "classification": "shared-current pair exists; peer blocker leaves itself, no joined blocked peer remains and actor join/noop is permitted"
+  },
+  {
+    "race": "b3a_noop_actor-to-peer_loss-first",
+    "holder_pid": 372,
+    "waiter_pid": 373,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "holder_snapshot": {
+      "ledger": null,
+      "cohosts": null,
+      "private": null,
+      "sources": [
+        {
+          "id": "b3a00000-0000-4000-8001-000000000001",
+          "title": "Lifecycle source",
+          "status": "published",
+          "ends_at": null,
+          "host_id": "b3a00000-0000-4000-8000-000000000001",
+          "revision": 1,
+          "starts_at": "2026-09-28T20:24:36.453952+00:00",
+          "created_at": "2026-09-27T20:24:36.455286+00:00",
+          "updated_at": "2026-09-27T20:24:36.455286+00:00",
+          "visibility": "campus",
+          "campus_zone": null,
+          "description": null,
+          "public_place": "Approximate",
+          "joining_state": "open",
+          "university_id": "00000000-0000-4000-8000-000000000001",
+          "public_latitude": 35.91,
+          "public_longitude": -79.05,
+          "location_precision": "approximate_area"
+        }
+      ],
+      "provenance": [
+        {
+          "low_id": "b3a00000-0000-4000-8000-000000000001",
+          "high_id": "b3a00000-0000-4000-8000-000000000002",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001"
+        },
+        {
+          "low_id": "b3a00000-0000-4000-8000-000000000001",
+          "high_id": "b3a00000-0000-4000-8000-000000000004",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001"
+        },
+        {
+          "low_id": "b3a00000-0000-4000-8000-000000000002",
+          "high_id": "b3a00000-0000-4000-8000-000000000004",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001"
+        }
+      ],
+      "participants": [
+        {
+          "state": "joined",
+          "left_at": null,
+          "joined_at": "2026-09-27T20:24:36.455628+00:00",
+          "account_id": "b3a00000-0000-4000-8000-000000000001",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001",
+          "removed_at": null,
+          "updated_at": "2026-09-27T20:24:36.455628+00:00"
+        },
+        {
+          "state": "left",
+          "left_at": "2026-09-27T20:24:36.559493+00:00",
+          "joined_at": "2026-09-27T20:24:36.45593+00:00",
+          "account_id": "b3a00000-0000-4000-8000-000000000002",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001",
+          "removed_at": null,
+          "updated_at": "2026-09-27T20:24:36.559493+00:00"
+        },
+        {
+          "state": "joined",
+          "left_at": null,
+          "joined_at": "2026-09-27T20:24:36.490744+00:00",
+          "account_id": "b3a00000-0000-4000-8000-000000000004",
+          "hangout_id": "b3a00000-0000-4000-8001-000000000001",
+          "removed_at": null,
+          "updated_at": "2026-09-27T20:24:36.490744+00:00"
+        }
+      ],
+      "notifications": null
+    },
+    "route": "noop",
+    "direction": "actor-to-peer",
+    "order": "loss-first",
+    "classification": "joined blocked peer remains; actor join/noop denies (genuine join loss-first has no shared-current pair to reconcile)"
+  },
+  {
+    "race": "b3a_noop_actor-to-peer_mutation-first",
+    "holder_pid": 375,
+    "waiter_pid": 374,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "route": "noop",
+    "direction": "actor-to-peer",
+    "order": "mutation-first",
+    "classification": "joined blocked peer remains; actor join/noop denies (genuine join loss-first has no shared-current pair to reconcile)"
+  },
+  {
+    "race": "b3a_noop_peer-to-actor_loss-first",
+    "holder_pid": 373,
+    "waiter_pid": 374,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "route": "noop",
+    "direction": "peer-to-actor",
+    "order": "loss-first",
+    "classification": "shared-current pair exists; peer blocker leaves itself, no joined blocked peer remains and actor join/noop is permitted"
+  },
+  {
+    "race": "b3a_noop_peer-to-actor_mutation-first",
+    "holder_pid": 375,
+    "waiter_pid": 374,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "route": "noop",
+    "direction": "peer-to-actor",
+    "order": "mutation-first",
+    "classification": "shared-current pair exists; peer blocker leaves itself, no joined blocked peer remains and actor join/noop is permitted"
+  },
+  {
+    "route": "create/retry/cancel",
+    "classification": "actor=immutable host; bilateral host-self block forbidden. Peer block may remove peer and does not prohibit ready host creation/exact retry/cancellation. No invented distinct host authority cell."
+  }
+]

@@ -1,0 +1,16 @@
+# TASK-021A1b3a coordinator acceptance review
+
+Date: 2026-09-27
+Reviewed task/source: `fe4f23c5b43b4b042c3a8e8a99f38da412d4f3fa`; remote task branch independently verified. Canonical integration SHA remains pending publication.
+
+Fresh final reviewer review_pilot_lifecycle_final_acceptance independently cleared003e1d4 source/evidence except a P2 strict lint-result shape gap; fe4f23c closes it by matching the complete single results array. Final exact-tip review has no unresolved finding. Coordinator read handoff/diff and independently confirmed migration9db→final differs only three explicit JSONB initializer casts. No merge conflict or code change is introduced by coordinator integration.
+
+Acceptance is bounded to six ordinary lifecycle mutations, their own retry/no-op/source authority and two revoked internal helpers. Verified inherited54 ABI/default/result/grant fields,48 untouched bodies and exact7-field internal result; sorted mandatory actor/immutable-host evidence and fresh source/role/tuple guards. Common identity evidence is an independently accepted partition through actual new create, distinct cohost edit and exact retry, not every route identity race. Writer privilege and lawful impossibilities remain labeled.
+
+Evidence:350 successful new waits160direct+128common+23source+34block+5crossings, separate40P01 rollback;986 bounded SQL before initializer cast, postcast61 and catalog checks;HTTP1087 includes636setup178controls273other; six fresh regression modules25/59/14SQL waits and real Storage HTTP final-role waits separate; true24-only migration upgrade preserves values/catalog/defaults. Static49unit/no skips and builds do not establish A2. Failed fixture/runner attempts are excluded; no timeout/skip/abort counted successful.
+
+The exact standard lint command remains `supabase db lint --local --schema public,private --level warning --fail-on warning`, exit1. Its only remaining diagnostic is private.pilot_lock_ordinary_lifecycle / warning extra / SQLSTATE00000 / composite OUT variable source_row is not single argument. Primary checker author reproduces this structural advisory: https://okbob.blogspot.com/2017/05/new-version-of-plpgsqlcheck.html . Preserving contract-mandated interface with actual return/caller exercise supports the narrow incompatible-check ledger; no standard lint clean/pass or global warning waiver. Actual exact-one assertion executed; reproducible strict verifier source reviewed, not rerun after shutdown. This explicit exception follows independent classification/acceptance.
+
+Coordinator independent read-only cleanup corroborates knownVM Stopped, absent ha.pid/ha.sock/Docker socket, empty exact disk/vz-efi holder scans, empty listeners54321/54322/54324 and global namedPals hostagents absent. Only parenthesized historicalPID56460 non-hostagent remains untouched. Executor final25zero/off/rev1 census and normal backed-up services/VZstop16:39:18EDT are in CLEANUP-EVIDENCE. No runtime rerun by either reviewer/coordinator.
+
+Publication/main verification and completion receipt still gate completion. B3b/c/A1c/A2/TASK-021 and hosted/pilot readiness remain incomplete. Standard speed is app-controlled and not tool-verifiable.

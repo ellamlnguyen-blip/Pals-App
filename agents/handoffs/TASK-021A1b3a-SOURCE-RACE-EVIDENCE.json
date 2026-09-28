@@ -1,0 +1,263 @@
+[
+  {
+    "race": "b3a_retry_disable_loss-first",
+    "holder_pid": 385,
+    "waiter_pid": 384,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "route": "retry",
+    "order": "loss-first",
+    "writer": "privileged synthetic immutable evidence; operator authority separately covered"
+  },
+  {
+    "race": "b3a_retry_disable_mutation-first",
+    "holder_pid": 383,
+    "waiter_pid": 382,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "route": "retry",
+    "order": "mutation-first",
+    "writer": "privileged synthetic immutable evidence; operator authority separately covered"
+  },
+  {
+    "race": "b3a_edit_disable_loss-first",
+    "holder_pid": 368,
+    "waiter_pid": 369,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "route": "edit",
+    "order": "loss-first",
+    "writer": "privileged synthetic immutable evidence; operator authority separately covered"
+  },
+  {
+    "race": "b3a_edit_disable_mutation-first",
+    "holder_pid": 369,
+    "waiter_pid": 368,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "route": "edit",
+    "order": "mutation-first",
+    "writer": "privileged synthetic immutable evidence; operator authority separately covered"
+  },
+  {
+    "race": "b3a_cancel_disable_loss-first",
+    "holder_pid": 370,
+    "waiter_pid": 369,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "route": "cancel",
+    "order": "loss-first",
+    "writer": "privileged synthetic immutable evidence; operator authority separately covered"
+  },
+  {
+    "race": "b3a_cancel_disable_mutation-first",
+    "holder_pid": 367,
+    "waiter_pid": 368,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "route": "cancel",
+    "order": "mutation-first",
+    "writer": "privileged synthetic immutable evidence; operator authority separately covered"
+  },
+  {
+    "race": "b3a_join_disable_loss-first",
+    "holder_pid": 374,
+    "waiter_pid": 375,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "route": "join",
+    "order": "loss-first",
+    "writer": "privileged synthetic immutable evidence; operator authority separately covered"
+  },
+  {
+    "race": "b3a_join_disable_mutation-first",
+    "holder_pid": 374,
+    "waiter_pid": 373,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "route": "join",
+    "order": "mutation-first",
+    "writer": "privileged synthetic immutable evidence; operator authority separately covered"
+  },
+  {
+    "race": "b3a_noop_disable_loss-first",
+    "holder_pid": 369,
+    "waiter_pid": 370,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "route": "noop",
+    "order": "loss-first",
+    "writer": "privileged synthetic immutable evidence; operator authority separately covered"
+  },
+  {
+    "race": "b3a_noop_disable_mutation-first",
+    "holder_pid": 371,
+    "waiter_pid": 372,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "route": "noop",
+    "order": "mutation-first",
+    "writer": "privileged synthetic immutable evidence; operator authority separately covered"
+  },
+  {
+    "race": "b3a_leave_disable_loss-first",
+    "holder_pid": 366,
+    "waiter_pid": 367,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "route": "leave",
+    "order": "loss-first",
+    "writer": "privileged synthetic immutable evidence; operator authority separately covered"
+  },
+  {
+    "race": "b3a_leave_disable_mutation-first",
+    "holder_pid": 366,
+    "waiter_pid": 367,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "route": "leave",
+    "order": "mutation-first",
+    "writer": "privileged synthetic immutable evidence; operator authority separately covered"
+  },
+  {
+    "race": "b3a_joining_disable_loss-first",
+    "holder_pid": 371,
+    "waiter_pid": 372,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "route": "joining",
+    "order": "loss-first",
+    "writer": "privileged synthetic immutable evidence; operator authority separately covered"
+  },
+  {
+    "race": "b3a_joining_disable_mutation-first",
+    "holder_pid": 370,
+    "waiter_pid": 369,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "route": "joining",
+    "order": "mutation-first",
+    "writer": "privileged synthetic immutable evidence; operator authority separately covered"
+  },
+  {
+    "race": "b3a_edit_cancelled_loss-first",
+    "holder_pid": 363,
+    "waiter_pid": 364,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "route": "edit",
+    "order": "loss-first"
+  },
+  {
+    "race": "b3a_edit_cancelled_mutation-first",
+    "holder_pid": 363,
+    "waiter_pid": 364,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "route": "edit",
+    "order": "mutation-first"
+  },
+  {
+    "race": "b3a_cancel_cancelled_loss-first",
+    "holder_pid": 357,
+    "waiter_pid": 358,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "route": "cancel",
+    "order": "loss-first"
+  },
+  {
+    "route": "cancel",
+    "order": "mutation-first",
+    "classification": "terminal cancel cannot be cancelled a second time; applicable disable writer both orders observed separately"
+  },
+  {
+    "race": "b3a_join_cancelled_loss-first",
+    "holder_pid": 367,
+    "waiter_pid": 368,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "route": "join",
+    "order": "loss-first"
+  },
+  {
+    "race": "b3a_join_cancelled_mutation-first",
+    "holder_pid": 367,
+    "waiter_pid": 368,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "route": "join",
+    "order": "mutation-first"
+  },
+  {
+    "race": "b3a_noop_cancelled_loss-first",
+    "holder_pid": 360,
+    "waiter_pid": 359,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "route": "noop",
+    "order": "loss-first"
+  },
+  {
+    "race": "b3a_noop_cancelled_mutation-first",
+    "holder_pid": 357,
+    "waiter_pid": 358,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "route": "noop",
+    "order": "mutation-first"
+  },
+  {
+    "race": "b3a_joining_cancelled_loss-first",
+    "holder_pid": 364,
+    "waiter_pid": 363,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "route": "joining",
+    "order": "loss-first"
+  },
+  {
+    "race": "b3a_joining_cancelled_mutation-first",
+    "holder_pid": 363,
+    "waiter_pid": 364,
+    "waiting_lock_types": [
+      "advisory"
+    ],
+    "route": "joining",
+    "order": "mutation-first"
+  },
+  {
+    "route": "create",
+    "classification": "new source has no existing parent/immutable second host; no fabricated source-state or disable race"
+  },
+  {
+    "route": "retry",
+    "classification": "cancelled source remains readable to its host; exact retry is allowed by inherited source rules; disable still denies"
+  },
+  {
+    "route": "leave",
+    "classification": "cancelled source still permits currently joined nonhost leave; disable denies"
+  }
+]

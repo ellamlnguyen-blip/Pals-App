@@ -1,0 +1,22 @@
+# TASK-021A1b3a source-stage review request
+
+Historical source-stage review record. Completed execution outcomes and remaining final review/publication gates are in [the ordinary lifecycle handoff](TASK-021A1b3a-ORDINARY-LIFECYCLE.md).
+
+Status: implementation source/fixture stage, no runtime started, no completion claim.
+Baseline: independently reviewed canonical936b784ed2ae6965b4251fe9c6195b8f63671f2e; later coordinator documentation receipts72865ee/9b459a8 are documentation-only and remain to reconcile before publication.
+
+Migration25 replaces only final six public lifecycle bodies. Exact inherited public signatures/defaults/result, effective ACLs, body normalization/fingerprint, revision/private instructions/terminal state/optional notifications/large safeguards are retained. Shared lock_hangout, safety/chat helpers, B3b/B3c, reads/retained/operator callers are untouched.
+
+New private helpers:
+- pilot_lock_ordinary_lifecycle(text,uuid,uuid default null): prescribed internal table result; derives auth.uid; operation allowlist six; create request hash and own ledger/saved parent; otherwise required parent UPDATE; graph phases social exclusive→pilot shared→availability/Hangouts policy→request (create only)→parent→gate→all sorted accounts→rosters→Auth→memberships→campuses→profiles→actual primary objects→actor participant/current effective cohost state→final tuple-bound readiness and fresh source/operation check.
+- pilot_require_ordinary_lifecycle(text,uuid): separate VOLATILE fresh statement guard; caller/source only, no caller-supplied subject/campus/readiness. Called by the locker after all waits and by public routes before original validation/revision and write/no-op/saved-ID branches. This checker acquires no rows or advisory locks and exposes no return data.
+
+Both SECURITY DEFINER, VOLATILE, empty paths, fully qualified relation references; PUBLIC/anon/authenticated/service_role EXECUTE revoked. Public replacements retain prior ACLs through CREATE OR REPLACE. Required tuple absence immediately denies42501 before later lookup; final current membership/profile/object predicates bind exact returned campus/path/object UUID. No onboarding capability requirement. Existing social prefix preserves42501 Safety operation unavailable for stronger isolation; neutral ordinary authority denial precedes22023/23505/authorized Stale Hangout revision40001. No caught/converted PostgreSQL aborts.
+
+Identity equivalence: one helper across six routes; actual public new create, distinct cohost edit (actor and immutable host individually) and exact create retry share every phased identity lookup/check. This mapping is proposed to the independent reviewer, not counted evidence yet. All-route roster/shutdown/purpose/gate fixtures remain individual.
+
+Tests authored so far: actual-role SQL ABI/helper ACL, authorized cohost lifecycle, no-op/closed/role/stale/payload dominance, raw source/ledger denial and per-route actor/host identity/admission guard dominance; real Auth HTTP fixture is independently authored; concurrency exact PID/blocking/ungranted-lock utility and all-route roster/off/purpose/gate/missing controls plus approved identity partition, both orders. Fixture source recreates isolated shared source rather than reversing terminal cancellation. Disposable helper has exact TASK-021A1b3a owner and25 history guard; source regression runner keeps exact guard and adapts inherited B1/B2 suite only in memory. True24→new-only upgrade runner checks retained profile/object and off/rev1 defaults.
+
+Initial checkpoint remaining source coverage before follow-up fixture authoring: source disable/state/cohost authority races with immutable isolated source fixtures; required missing/replacement binding probes; explicit actual manager activation absence partition; owner/Storage and external Auth/account crossings with safe abort rollback evidence; exact catalog snapshot comparison; broader retained safety preservation during true24 upgrade. Existing B1/B2 evidence is inherited and does not substitute for fresh B3a cells. No full historical A1c/app/pilot readiness claimed. This child remains incomplete until exact full source review, released runtime, evidence review/cleanup and coordinator publication/integration.
+
+Follow-up fixtures now author these previously listed cells; see TASK-021A1b3a-FIXTURE-MAPPING.md for actual/common/impossible mapping and remaining review/runtime gates. No runtime claim is added.

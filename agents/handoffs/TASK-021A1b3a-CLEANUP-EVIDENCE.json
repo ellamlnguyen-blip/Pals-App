@@ -1,0 +1,34 @@
+{
+  "pals_agents": [],
+  "registrations": [],
+  "sockets": [],
+  "disk_efi_paths_checked": [
+    "/private/tmp/pals-lima/pals-task002/disk",
+    "/private/tmp/pals-lima/pals-task002/vz-efi"
+  ],
+  "disk_efi_held": [],
+  "listeners": {
+    "54321": [],
+    "54322": [],
+    "54324": []
+  },
+  "historical_process": {
+    "pid": 56460,
+    "process": "(limactl)",
+    "untouched": true
+  },
+  "audited_at_utc": "2026-09-27T20:41:07.082920+00:00",
+  "owner": "TASK-021A1b3a",
+  "history_before_stop": "25:20260927000500",
+  "final_census": "zero synthetic rows; all original/pilot gates off; availability and 13 capability revisions1",
+  "supabase_stop": {
+    "normal": true,
+    "backup": true
+  },
+  "running_containers_after_service_stop": 0,
+  "vm": {
+    "name": "pals-task002",
+    "status": "Stopped",
+    "normal_vz_stop_at": "2026-09-27T16:39:18-04:00"
+  }
+}
