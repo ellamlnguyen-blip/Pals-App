@@ -4,7 +4,13 @@ import {
   capabilityKeys,
 } from "./pilot-current-safety-fixtures.mjs";
 import { createHash } from "node:crypto";
-import { readFileSync, readdirSync, lstatSync, realpathSync } from "node:fs";
+import {
+  readFileSync,
+  readdirSync,
+  lstatSync,
+  realpathSync,
+  createWriteStream,
+} from "node:fs";
 import { fileURLToPath } from "node:url";
 import { resolve } from "node:path";
 import { performance } from "node:perf_hooks";
@@ -27,7 +33,11 @@ const transportBudgets = Object.freeze({
   close: 10_000,
   exit: 5_000,
   module: 30 * 60_000,
+  httpModule: 24 * 60 * 60_000,
 });
+const httpModule = "pilot-admission-current-safety-http.integration.mjs";
+const moduleBudget = (name) =>
+  name === httpModule ? transportBudgets.httpModule : transportBudgets.module;
 const transportLimit = 20 * 1024 * 1024;
 function nodeStartupGuard(environment) {
   for (const key of ["NODE_OPTIONS", "NODE_PATH"])
@@ -188,24 +198,730 @@ function ownedSession(binary, argv, initialInput) {
     },
   };
 }
-async function runOwnedProcess(binary, argv, options, budget) {
+// Fixed wire allocation mirrors the reviewed HTTP fixture's literal case allocation.
+// No source evaluation, module import, caller-selected ID or path is accepted.
+const httpFixtureKeys = new Set();
+const httpOutcomeIds = new Set();
+const httpRoutes = ["CH", "CP", "CB"];
+const identityLosses = [
+  "suspended",
+  "banned",
+  "email_confirmation",
+  "email_domain",
+  "email_equality",
+  "membership_verification",
+  "membership_delete",
+  "membership_campus",
+  "campus_active",
+  "campus_unc",
+  "campus_allowlist",
+  "profile_missing",
+  "profile_required",
+  "profile_primary",
+  "object_detach_delete",
+  "membership_delete_replace",
+  "profile_delete_replace",
+  "roster_revoked",
+  "roster_missing",
+];
+const fixtureId = (id) => httpFixtureKeys.add(id);
+const outcomeId = (id) => httpOutcomeIds.add(id);
+const positiveIds = (id, route) => {
+  outcomeId(`${id}.positive`);
+  if (route === "CB") outcomeId(`${id}.positive-unblock`);
+};
+for (const route of httpRoutes) {
+  fixtureId(`ABI.${route}`);
+  positiveIds(`ABI.${route}`, route);
+  for (const suffix of [
+    "anon",
+    "service",
+    "invalid-signature",
+    "forged-actor",
+    "unknown-overload",
+    "typed-uuid",
+    "metadata-platform-no-admission",
+    "table.safety_reports",
+    "table.safety_report_requests",
+    "table.people_blocks",
+    "table.pilot_account_admission",
+    "helper.pilot_lock_current_safety",
+    "helper.pilot_require_current_safety",
+  ])
+    outcomeId(`ABI.${route}.${suffix}`);
+  fixtureId(`ABI.${route}.metadata-no-admission`);
+  fixtureId(`L1.actual-purpose.${route}`);
+  if (route !== "CH") {
+    positiveIds(`L1.people_onboarding_hangouts_off_allowed.${route}`, route);
+    for (const pref of ["absent", "false"]) {
+      const id = `L1.actor-preference.${route}.${pref}`;
+      fixtureId(id);
+      positiveIds(id, route);
+    }
+  }
+  for (const kind of ["availability", "purpose", "source_gate", "safety_gate"])
+    for (const loss of ["off", "missing"]) {
+      const id = `HTTP.serial.${route}.${kind}.${loss}`;
+      fixtureId(id);
+      outcomeId(id);
+      positiveIds(id, route);
+    }
+  for (const subject of route === "CH"
+    ? ["actor", "immutable_host"]
+    : ["actor", "peer"])
+    for (const loss of identityLosses) {
+      const id = `HTTP.serial.${route}.${subject}.${loss}`;
+      fixtureId(id);
+      outcomeId(id);
+      positiveIds(id, route);
+    }
+  if (route !== "CH")
+    for (const loss of ["false", "missing"]) {
+      const id = `HTTP.serial.${route}.peer-preference.${loss}`;
+      fixtureId(id);
+      outcomeId(id);
+      positiveIds(id, route);
+    }
+  for (const variant of ["nonexistent", "self", "crosscampus"]) {
+    const id = `L1.neutral.${route}.${variant}`;
+    fixtureId(id);
+    outcomeId(id);
+    positiveIds(id, route);
+  }
+  fixtureId(`HTTP.fresh-account-missing.${route}`);
+  outcomeId(`HTTP.fresh-account-missing.${route}`);
+  for (const direction of ["outbound", "inbound"]) {
+    const id = `HTTP.state.${route}.${direction}`;
+    fixtureId(id);
+    positiveIds(id, route);
+    if (route === "CH" || direction === "inbound") outcomeId(id);
+  }
+}
+fixtureId("ABI.set_people_block");
+for (const id of [
+  "ABI.set_people_block.true",
+  "ABI.set_people_block.false",
+  "ABI.set_people_block.anon",
+  "ABI.set_people_block.service",
+  "ABI.set_people_block.no-bypass",
+  "ABI.set_safety_block.null-boolean",
+  "L1.hangout_onboarding_people_chat_off_allowed",
+  "HTTP.state.CP.outbound.retained",
+  "HTTP.state.CB.outbound.retained-repair",
+  "L1.global_teardown.serial-full-values",
+  "L1.global_teardown.unblock-restores-nothing",
+  "L1.teardown.disable-report",
+])
+  outcomeId(id);
+for (const label of [
+  "unicode-trim",
+  "null",
+  "empty",
+  "default",
+  "2000",
+  "2001",
+  "other-empty",
+  "other-null",
+  "category-unknown",
+  "category-null",
+  "mode-unknown",
+  "request-null",
+  "target-null",
+  "mode-null",
+  "nonretained-host",
+]) {
+  const id = `L1.shape.${label}`;
+  fixtureId(id);
+  outcomeId(id);
+  if (!["unicode-trim", "null", "empty", "default", "2000"].includes(label))
+    positiveIds(id, "CH");
+}
+for (const label of ["null", "empty", "default"])
+  outcomeId(`L1.shape.${label}.normalized-equivalent`);
+outcomeId("L1.shape.unicode-trim.equivalent");
+for (const category of [
+  "safety concern",
+  "impersonation",
+  "spam/commercial promotion",
+  "other",
+]) {
+  fixtureId(`L1.category.${category}`);
+  outcomeId(`L1.category.${category}`);
+}
+for (const loss of [
+  "shutdown",
+  "absent-roster",
+  "target-deleted",
+  "fingerprint-mismatch",
+  "safety-off",
+  "safety-missing",
+  "actor-suspended",
+  "actor-banned",
+]) {
+  fixtureId(`L1.retry.${loss}`);
+  outcomeId(`L1.retry.${loss}`);
+  outcomeId(`L1.retry.${loss}.saved`);
+}
+fixtureId("L1.retry.caller-isolation");
+outcomeId("L1.retry.caller-isolation");
+outcomeId("L1.retry.caller-isolation.saved");
+fixtureId("HTTP.capacity-five-not-hour-edge");
+for (const n of [1, 2, 3, 4, 5]) outcomeId(`HTTP.capacity.${n}`);
+outcomeId("HTTP.capacity.sixth-denied");
+for (const kind of [
+  "owned_block",
+  "friendship",
+  "friend_request",
+  "dm_generation",
+  "hangout_host",
+  "immutable_overlap",
+  "positive_interval",
+])
+  for (const group of ["proof", "priority"]) {
+    const id = `L1.retained.${group}.${kind}`;
+    fixtureId(id);
+    outcomeId(id);
+  }
+for (const mode of ["hangout", "hangout_host"]) {
+  const id = `L1.retained.${mode}`;
+  fixtureId(id);
+  outcomeId(id);
+  outcomeId(`${id}.exact-original-input`);
+  outcomeId(`${id}.missing-safety`);
+}
+outcomeId("L1.retained.host.resolved-input-mismatch");
+for (const gap of ["touching", "nonoverlapping"]) {
+  fixtureId(`L1.retained.interval.${gap}`);
+  outcomeId(`L1.retained.interval.${gap}`);
+}
+for (const loss of ["shutdown", "absent-roster"]) {
+  const id = `L1.retained.block.${loss}`;
+  fixtureId(id);
+  outcomeId(id);
+  outcomeId(`${id}.repair`);
+  outcomeId(`${id}.unblock-restores-nothing`);
+}
+for (const state of ["cancelled", "disabled"]) {
+  const id = `HTTP.state.CH.${state}`;
+  fixtureId(id);
+  outcomeId(id);
+  outcomeId(`${id}.positive`);
+}
+fixtureId("L1.global-teardown");
+const httpFailureIds = new Set([
+  ...httpFixtureKeys,
+  ...httpOutcomeIds,
+  "HTTP.execution-gate",
+  "HTTP.cleanup",
+  "HTTP.planned-completion-totals",
+]);
+for (const key of httpFixtureKeys)
+  for (const slot of ["actor", "host", "peer", "manager"])
+    httpFailureIds.add(`${key}.Auth.${slot}`);
+const httpFailurePhases = [
+  "execution-blocked-before-target",
+  "target-current27-guard",
+  "real-Auth-signup",
+  "real-Auth-password-login",
+  "signup-quiet-period",
+  "signup-cadence",
+  "privileged-fixture-preparation",
+  "privileged-existing-Auth-fixture-preparation",
+  "privileged-fixture-mutation-or-restoration",
+  "denial-outcome",
+  "report-result-provenance-full54",
+  "block-result-teardown-full54",
+  "current-only-positive-guard",
+  "report-exact-replay-full54",
+  "separate-caller-receipt-provenance-full54",
+  "exact-total-assertions",
+  "guarded-full27-reset-and-zero54",
+];
+const httpFailureOperations = [
+  "none",
+  "privileged-sql",
+  "full54-census",
+  "HTTP-result-assertion",
+  "signup",
+  "password-login",
+  "submit_safety_report",
+  "set_safety_block",
+  "set_people_block",
+  "safety_reports",
+  "safety_report_requests",
+  "people_blocks",
+  "pilot_account_admission",
+  "pilot_lock_current_safety",
+  "pilot_require_current_safety",
+];
+const httpFailureCodes = [
+  null,
+  "42501",
+  "PGRST301",
+  "PGRST202",
+  "PGRST205",
+  "22P02",
+  "40P01",
+  "40001",
+  "over_email_send_rate_limit",
+  "over_request_rate_limit",
+  "invalid_credentials",
+  "email_not_confirmed",
+  "unknown-code",
+  "unavailable",
+];
+const httpFailureMessages = [
+  null,
+  "Safety report unavailable",
+  "Safety operation unavailable",
+  "permission-denied",
+  "invalid-signature",
+  "rpc-missing",
+  "table-missing",
+  "invalid-uuid",
+  "unknown-shape",
+  "unavailable",
+];
+const httpFailureValues = [
+  "missing",
+  "null",
+  "true",
+  "false",
+  "redacted-string",
+  "redacted-number",
+  "array",
+  "object",
+  "unknown",
+  "current_hangout",
+  "current_people",
+  "current_visible_new_block",
+  "retained_hangout",
+  "retained_host",
+  "owned_block",
+  "friendship",
+  "friend_request",
+  "dm_generation",
+  "hangout_host",
+  "hangout_overlap",
+  "published",
+  "cancelled",
+  "joined",
+  "left",
+  "removed",
+  "active",
+  "revoked",
+  "suspended",
+  "banned",
+  "pending",
+  "accepted",
+  "blocked",
+  "user",
+  "hangout",
+];
+// Paths identify known fields only; values never contain identity or user content.
+const httpFailureFields = [
+  "$",
+  "count",
+  "status",
+  "code",
+  "message",
+  "shape",
+  "receipt_id",
+  "submitted_at",
+  "id",
+  "reporter_id",
+  "target_type",
+  "target_id",
+  "category",
+  "narrative",
+  "provenance_kind",
+  "provenance_ref_id",
+  "request_id",
+  "report_id",
+  "blocker_id",
+  "blocked_id",
+  "hangout_id",
+  "account_id",
+  "host_id",
+  "user_id",
+  "university_id",
+  "state",
+  "status",
+  "enabled",
+  "singleton",
+  "revision",
+  "key",
+  "opted_in",
+  "joined_at",
+  "left_at",
+  "removed_at",
+  "low_id",
+  "high_id",
+  "generation_id",
+  "initiator_id",
+  "campus_id",
+  "primary_photo_path",
+  "email",
+  "email_confirmed_at",
+  "deleted_at",
+  "raw_user_meta_data",
+  "raw_app_meta_data",
+  "verified_at",
+  "verification_email",
+  "active",
+  "slug",
+  "allowed_email_domains",
+  "real_name",
+  "major",
+  "bio",
+  "graduation_year",
+  "bucket_id",
+  "name",
+  "owner_id",
+  "title",
+  "body",
+  "instructions",
+  "joining_state",
+  "starts_at",
+  "public_place",
+  "public_latitude",
+  "public_longitude",
+  "created_at",
+  "updated_at",
+  "role",
+  "reason",
+  "operator_id",
+  "subject_campus_id",
+  "other-field",
+];
+const failureWireLimits = Object.freeze({
+  frame: 64 * 1024,
+  records: 4,
+  total: 256 * 1024,
+  differences: 128,
+  count: 1_000_000,
+});
+function exactFields(value, keys) {
+  if (
+    !value ||
+    typeof value !== "object" ||
+    Array.isArray(value) ||
+    Object.keys(value).sort().join("|") !== keys.slice().sort().join("|")
+  )
+    throw new Error("Failure evidence schema invalid");
+}
+function denseArray(value) {
+  return (
+    Array.isArray(value) &&
+    Object.keys(value).length === value.length &&
+    Object.keys(value).every((key, index) => key === String(index))
+  );
+}
+function member(value, allowed) {
+  if (!allowed.includes(value))
+    throw new Error("Failure evidence value invalid");
+}
+function validateHttpFailureRecord(record) {
+  exactFields(record, [
+    "version",
+    "case_id",
+    "phase",
+    "operation",
+    "observed",
+    "expected",
+    "census",
+    "availability",
+    "differences",
+    "cleanup_errors",
+  ]);
+  if (record.version !== 1 || !httpFailureIds.has(record.case_id))
+    throw new Error("Failure evidence allocation invalid");
+  member(record.phase, httpFailurePhases);
+  member(record.operation, httpFailureOperations);
+  for (const http of [record.observed, record.expected]) {
+    exactFields(http, ["status", "code", "message", "shape"]);
+    if (
+      http.status !== null &&
+      (!Number.isInteger(http.status) || http.status < 100 || http.status > 599)
+    )
+      throw new Error("Failure evidence status invalid");
+    member(http.code, httpFailureCodes);
+    member(http.message, httpFailureMessages);
+    member(http.shape, [
+      "unavailable",
+      "null",
+      "boolean",
+      "number",
+      "string",
+      "array",
+      "object",
+      "unknown-shape",
+    ]);
+  }
+  exactFields(record.census, ["before", "after", "expected"]);
+  exactFields(record.availability, ["before", "after", "expected"]);
+  for (const key of ["before", "after", "expected"]) {
+    member(record.availability[key], ["available", "unavailable"]);
+    const counts = record.census[key];
+    if (
+      !denseArray(counts) ||
+      counts.length !== censusTables.length ||
+      !counts.every((value) =>
+        record.availability[key] === "unavailable"
+          ? value === null
+          : Number.isInteger(value) &&
+            value >= 0 &&
+            value <= failureWireLimits.count,
+      )
+    )
+      throw new Error("Failure evidence census invalid");
+  }
+  if (
+    !denseArray(record.differences) ||
+    record.differences.length > failureWireLimits.differences
+  )
+    throw new Error("Failure evidence differences invalid");
+  for (const difference of record.differences) {
+    exactFields(difference, [
+      "scope",
+      "table",
+      "field",
+      "row",
+      "kind",
+      "expected",
+      "observed",
+    ]);
+    member(difference.scope, ["http", "result", "census"]);
+    if (
+      difference.scope === "census"
+        ? !censusTables.includes(difference.table)
+        : difference.table !== null
+    )
+      throw new Error("Failure evidence table invalid");
+    member(difference.field, httpFailureFields);
+    if (
+      difference.row !== null &&
+      (!Number.isInteger(difference.row) ||
+        difference.row < 0 ||
+        difference.row > failureWireLimits.count)
+    )
+      throw new Error("Failure evidence row invalid");
+    member(difference.kind, [
+      "missing",
+      "unexpected",
+      "type",
+      "value",
+      "count",
+      "unknown-code",
+      "unknown-shape",
+      "unavailable",
+    ]);
+    member(difference.expected, httpFailureValues);
+    member(difference.observed, httpFailureValues);
+  }
+  if (!denseArray(record.cleanup_errors) || record.cleanup_errors.length > 4)
+    throw new Error("Failure evidence cleanup invalid");
+  for (const error of record.cleanup_errors)
+    member(error, [
+      "not-attempted-target-unestablished",
+      "not-attempted-settlement-unproven",
+      "guard-failed",
+      "reset-failed",
+      "census-failed",
+      "owned-exit-unobserved",
+      "transport-interrupted",
+      "deadline",
+    ]);
+  return record;
+}
+function failureReceiver() {
+  let pending = Buffer.alloc(0),
+    total = 0,
+    ended = false,
+    reason = null;
+  const records = [];
+  const invalidate = (value) => {
+    reason ??= value;
+    pending = Buffer.alloc(0);
+    records.length = 0;
+  };
+  return {
+    receive(value) {
+      if (reason) return;
+      total += value.length;
+      if (total > failureWireLimits.total) {
+        invalidate("overflow");
+        return;
+      }
+      pending = Buffer.concat([pending, value]);
+      while (pending.length >= 4) {
+        const size = pending.readUInt32BE(0);
+        if (size === 0) {
+          invalidate("writer-unavailable");
+          return;
+        }
+        if (
+          size > failureWireLimits.frame ||
+          records.length >= failureWireLimits.records
+        ) {
+          invalidate("overflow");
+          return;
+        }
+        if (pending.length < size + 4) return;
+        const payload = pending.subarray(4, size + 4);
+        pending = pending.subarray(size + 4);
+        try {
+          const encoded = payload.toString("utf8"),
+            record = JSON.parse(encoded);
+          if (
+            !Buffer.from(encoded).equals(payload) ||
+            JSON.stringify(record) !== encoded
+          )
+            throw new Error("Noncanonical frame");
+          records.push(validateHttpFailureRecord(record));
+        } catch {
+          invalidate("invalid-record");
+          return;
+        }
+      }
+    },
+    end() {
+      ended = true;
+      if (pending.length) invalidate("truncated");
+    },
+    error() {
+      invalidate("transport-error");
+    },
+    invalid() {
+      return reason !== null;
+    },
+    hasRecords() {
+      return records.length > 0;
+    },
+    evidence() {
+      return reason || !ended || !records.length
+        ? {
+            availability: "unavailable",
+            reason: reason ?? (!ended ? "eof-unobserved" : "absent"),
+            records: [],
+          }
+        : { availability: "available", reason: null, records: records.slice() };
+    },
+  };
+}
+let failureWriter = null,
+  failureWrites = 0,
+  failureBytes = 0,
+  failureWriterInvalid = false,
+  failureWritePending = false;
+async function sendFailureFrame(frame) {
+  await new Promise((resolve, reject) => {
+    let timer,
+      settled = false;
+    const finish = (error) => {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      if (error) {
+        failureWriterInvalid = true;
+        failureWriter?.destroy();
+        reject(new Error("HTTP failure evidence unavailable"));
+      } else resolve();
+    };
+    try {
+      if (!failureWriter) {
+        failureWriter = createWriteStream(null, { fd: 3, autoClose: false });
+        failureWriter.on("error", () => {
+          failureWriterInvalid = true;
+        });
+      }
+      failureWriter.once("error", finish);
+      timer = setTimeout(
+        () => finish(new Error("Failure evidence write deadline")),
+        transportBudgets.write,
+      );
+      failureWriter.write(frame, (error) => {
+        failureWriter.removeListener("error", finish);
+        finish(error);
+      });
+    } catch {
+      finish(new Error("Failure evidence write failed"));
+    }
+  });
+}
+async function unavailableFailureWriter() {
+  failureWriterInvalid = true;
+  // Fixed zero-length sentinel invalidates earlier records without sending the
+  // rejected payload. If the pipe itself fails, the receiver reports no EOF.
+  try {
+    await sendFailureFrame(Buffer.alloc(4));
+  } catch {
+    /* unavailable */
+  }
+  throw new Error("HTTP failure evidence unavailable");
+}
+async function writeFailureRecord(record) {
+  if (failureWriterInvalid || failureWritePending)
+    return unavailableFailureWriter();
+  // Canonical serialization is validated again so getters/custom serialization
+  // cannot inject a field or payload after the first validation.
+  let payload;
+  try {
+    validateHttpFailureRecord(record);
+    payload = Buffer.from(JSON.stringify(record));
+    validateHttpFailureRecord(JSON.parse(payload.toString("utf8")));
+    if (
+      payload.length > failureWireLimits.frame ||
+      failureWrites >= failureWireLimits.records ||
+      failureBytes + payload.length + 4 > failureWireLimits.total
+    )
+      throw new Error("Failure evidence overflow");
+  } catch {
+    return unavailableFailureWriter();
+  }
+  const frame = Buffer.alloc(payload.length + 4);
+  frame.writeUInt32BE(payload.length);
+  payload.copy(frame, 4);
+  failureWrites++;
+  failureBytes += frame.length;
+  failureWritePending = true;
+  try {
+    await sendFailureFrame(frame);
+  } finally {
+    failureWritePending = false;
+  }
+}
+async function runOwnedProcess(
+  binary,
+  argv,
+  options,
+  budget,
+  httpEvidence = false,
+) {
   nodeStartupGuard(options.env ?? process.env);
   const child = spawn(binary, argv, {
     ...options,
-    stdio: ["ignore", "pipe", "pipe"],
+    stdio: httpEvidence
+      ? ["ignore", "pipe", "pipe", "pipe"]
+      : ["ignore", "pipe", "pipe"],
   });
   let output = "",
     failure = null,
     exited = false,
     timer,
     exitTimer;
+  const receiver = httpEvidence ? failureReceiver() : null;
   return new Promise((resolve, reject) => {
+    const fail = (error) => {
+      if (receiver) error.httpFailureEvidence = receiver.evidence();
+      reject(error);
+    };
     const stop = (reason) => {
       failure ??= new Error(reason);
       if (exited) return;
       if (child.pid !== undefined) child.kill("SIGKILL");
       exitTimer ??= setTimeout(() => {
-        reject(new Error("Owned module exit unobserved; cleanup incomplete"));
+        fail(new Error("Owned module exit unobserved; cleanup incomplete"));
       }, transportBudgets.exit);
     };
     child.once("error", () =>
@@ -215,9 +931,14 @@ async function runOwnedProcess(binary, argv, options, budget) {
       exited = true;
       clearTimeout(timer);
       clearTimeout(exitTimer);
-      if (failure) reject(failure);
-      else if (code !== 0 || signal !== null)
-        reject(
+      if (failure) fail(failure);
+      else if (
+        code !== 0 ||
+        signal !== null ||
+        receiver?.hasRecords() ||
+        receiver?.invalid()
+      )
+        fail(
           new Error("Owned module failed; output withheld; cleanup unverified"),
         );
       else resolve(redact(output));
@@ -232,6 +953,21 @@ async function runOwnedProcess(binary, argv, options, budget) {
         stop("Owned module output failed; cleanup incomplete"),
       );
     }
+    if (receiver) {
+      const channel = child.stdio[3];
+      channel.on("data", (value) => {
+        receiver.receive(value);
+        if (receiver.invalid())
+          stop("Owned module failure evidence invalid; cleanup incomplete");
+      });
+      channel.once("end", () => receiver.end());
+      channel.once("error", () => {
+        receiver.error();
+        stop(
+          "Owned module failure evidence transport failed; cleanup incomplete",
+        );
+      });
+    }
     timer = setTimeout(
       () =>
         stop("Owned module deadline interrupted execution; cleanup incomplete"),
@@ -240,6 +976,17 @@ async function runOwnedProcess(binary, argv, options, budget) {
   });
 }
 // PRIVATE TRANSPORT END
+// HTTP-only dedicated fd3 writer; this export makes no operation until called.
+// Await each record before cleanup. It never grants pass or cleanup credit.
+export async function writeHttpFailureEvidence(record) {
+  nodeStartupGuard(process.env);
+  if (
+    !process.argv[1] ||
+    resolve(process.argv[1]) !== resolve(root, "supabase/tests", httpModule)
+  )
+    throw new Error("HTTP failure evidence unavailable");
+  await writeFailureRecord(record);
+}
 const args = [
   "--host",
   socket,
@@ -866,10 +1613,25 @@ if (
         cwd: root,
         env: cliEnvironment(),
       },
-      transportBudgets.module,
+      moduleBudget(process.argv[3]),
+      process.argv[3] === httpModule,
     );
     process.stdout.write(result);
-  } catch {
+  } catch (error) {
+    if (process.argv[3] === httpModule) {
+      const evidence = error.httpFailureEvidence ?? {
+        availability: "unavailable",
+        reason: "not-started",
+        records: [],
+      };
+      process.stderr.write(
+        JSON.stringify({
+          classification: "child-reported-failed-uncredited",
+          cleanup: "unverified",
+          evidence,
+        }) + "\n",
+      );
+    }
     process.stderr.write(
       "Bounded current27 module failed/uncredited; cleanup unverified; fresh guarded owner/census review required; no reset/retry authorized.\n",
     );
