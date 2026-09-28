@@ -1,7 +1,7 @@
 # TASK-021A1b3 — Core mutation serialization allocation
 
 Date: 2026-09-27
-Status: **Nonexecutable allocation parent; B3a complete on remote-verified main 62e47dc; B3b contract reconciliation next, B3b/c incomplete.**
+Status: **Nonexecutable allocation parent incomplete; B3a/B3b complete on remote-verified main,26 migrations. B3c current-source safety contract reconciliation next; combined closure pending.**
 Parent: [TASK-021A1b](TASK-021A1b-live-admission-enforcement.md).
 Source baseline: completed B2 canonical `bb2b97e70c6641c44b9f5fa7343baa301c7ada8d`, all24 migrations. B2 reviewed task `a451242a2de454a41571ede7db72ed10faf79819`, accepted code/shared main `172308d17cfdb4677a417d7b681f5c07372afa67`. Planning receipt `18da6e38a99e3119b045a0e9f02737816ac95423` changes shared records only and is reconciled here.
 
@@ -10,7 +10,7 @@ Source baseline: completed B2 canonical `bb2b97e70c6641c44b9f5fa7343baa301c7ada8
 Thirteen public RPCs, exact retries, two purpose families, direct owner crossings and independent retained/operator branches are too large for one implementation/review. Keep B3 as combined acceptance parent; dispatch only one reviewed published child at a time:
 
 1. [B3a — ordinary lifecycle boundary](TASK-021A1b3a-ordinary-lifecycle.md): six lifecycle RPCs and private ordinary evidence boundary. First candidate for independent contract/graph review, then coordinator publication before fresh implementation.
-2. [B3b — co-host management and chat](TASK-021A1b3b-cohost-chat.md): five RPCs, dependent planning only; reconcile exact accepted B3a helpers/graph and inventory, independently review/publish before dispatch.
+2. [B3b — co-host management and chat](TASK-021A1b3b-cohost-chat.md): five RPCs, complete boundedlocal scope; reviewedtaskdabd1530257a937ad15004e666910c0f08cdbd57/acceptedmain2c648bc1649ceef0b61b96065e6028837c1d05a9,26 migrations and qualified execution/cleanup evidence. See final handoff/completion receipt.
 3. [B3c — current-source safety acquisition](TASK-021A1b3c-current-source-safety.md): nonretained branches of two safety RPCs and combined B3 closure; dependent planning only. Reconcile accepted B3a/B3b first, independently review/publish before dispatch.
 
 Shared contract: [source and graph reconciliation](../../agents/handoffs/TASK-021A1b3-LOCK-GRAPH.md); exact baseline signatures/defaults/results/ACLs/private callers/locks/trigger definitions: [inventory](../../agents/handoffs/TASK-021A1b3-SOURCE-INVENTORY.json). B2 catalogs contain full inherited bodies/policies/table ACLs; inventory is an extraction, not new runtime evidence. Child completion never triggers a product successor. Coordinator owns shared records, acceptance/integration and remote SHA receipts. B3/A1c/A2/TASK-021 remain incomplete.

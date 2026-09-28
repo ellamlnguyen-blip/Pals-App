@@ -1,7 +1,7 @@
 # TASK-021A1b — Live admission, core and retained safety enforcement
 
 Date: 2026-09-27
-Status: **Nonexecutable allocation parent; B1/B2/B3a complete on remote-verified main; B3b/c incomplete.**
+Status: **Nonexecutable allocation parent incomplete; B1/B2/B3a/B3b complete on remote-verified main; B3c/combinedB3 closure pending.**
 Parent: [TASK-021A1](TASK-021A1-pilot-backend-authorization.md), under TASK-021A / incomplete TASK-021.
 Current reconciliation input: canonical main `172308d17cfdb4677a417d7b681f5c07372afa67`, including completed reviewed B1/B2 and all24 migrations. Historical parent allocation baseline was `776db8c648f339c8650f7e725108d2853a0859ba`. Executor starts from latest independently verified `origin/main` containing its reviewed contract; this SHA is the contract source baseline, not permission to use a stale checkout.
 

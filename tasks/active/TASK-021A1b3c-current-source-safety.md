@@ -3,7 +3,7 @@
 Date: 2026-09-27
 Status: **Dependent planning only; reconcile after accepted B3a/B3b, independently review/publish before dispatch.**
 Parent: [B3 combined acceptance](TASK-021A1b3-core-mutation-serialization.md); all shared gates apply.
-Dependency: remote-verified accepted B3a/B3b code/handoffs/current graph. Do not dispatch this planning seed.
+Dependency: accepted B3a and completed B3b taskdabd1530257a937ad15004e666910c0f08cdbd57/canonicalmain2c648bc1649ceef0b61b96065e6028837c1d05a9, all26 migrations. Fresh bounded contract/source/graph reconciliation is ready; this seed itself is not dispatchable.
 
 Scope: final `submit_safety_report(uuid,text,uuid,text,text default null)` receipt_id/submitted_at, only nonretained `current_hangout` and `current_people` acquisition; final `set_safety_block(uuid,boolean)` boolean, only current-visible new block acquisition when no retained peer evidence exists. Exact ABI/authenticated-only EXECUTE preserved. Retained exact report replay, peer/Hangout/host provenance, outbound unblock, global reconciliation and independent operator authority remain unchanged and have no pilot/onboarding policy/lock requirement. Existing retained new blocks still teardown all shared joined parents and clear departing co-hosts. No A1c People RPC/preference/friendship/DM wrapper closure moved here; ordinary People source acquisition explicitly retains People capability + gate + opted-in visibility + same-campus/bilateral blocks, while Hangout uses Hangouts purpose/source/current immutable host.
 
