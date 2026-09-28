@@ -1,5 +1,9 @@
 # Current State
 
+## 2026-09-28 — B3c common-output privacy gate reopened
+
+Fresh read-only assessment confirmsP1 commonpolicy/absence/state failure/cleanup/rollback paths expose rawprivatefull54values/arbitrarydiagnostictext;P2 successsetup emitsunknownprovideranchor keys. No actualleak/execution claimed. Proposed boundedpolicy/absence pure outgoingprojector+neutral suiteerror correction requiresindependentreview/publication beforeauthor, then separatestateadopter. Priorcad9/state89 functionalstaticclear isnotoutputprivacy/runtimeacceptance; allrefusalsremain. Retained44ebc58aeb73c21a5c9ecae85c4c19677105ab5a twoP2corrections rereviewclear/pushed/exactremoteSHAverifiedagainstmain4d0bb937f3a013eb1ddf240d27e4c4067ce5108d. Retry18 initial2a636FULLreviewfound3P2 unknownfieldpath/placeholderhash, unexpectedexit-reset andomittedwrapperSQLdiag; boundedcorrectionactive. Cross60authoractivepreparedf74111. Main26/allsource27fixturecodeunexecuted; exactedge/upgrade/catalog/regression/runner/ownership/runtime/security/cleanup/acceptedparentintegrationremaining. Seecommon-failure-projectioncontract andCOMMON-OUTPUT-PRIVACY-REVIEW.
+
 ## 2026-09-28 — B3c corrected operator fixture published
 
 Supersedes preceding operator active/correction-pending status. Fresh FULL review ofdbdf764 found oneP2: arbitrarySQLdiagnostic messages leaked through AssertionError.actual fallback. Narrow correction780952dc68e9c8586c1cb1ea8fa6bd8978f2b164 clears independent re-review; assignedoperator branch pushed/exactremoteSHA verified against canonicalmainb01c813c189684135684d037fede3fe5da856bfe. OnlyNode+handoff correction, SQLbyteidentical.111literalallocations35SQL/76Node withplanned344TAP and80actualracevariants (fourreinstate supplements zeroextraallocationcredit); alltargetcodeunexecuted. Diagnostic/assertion projection finitecodes/types/digests, arbitrarystrings/keys/messageswithheld; authorofflineexamples not independently rerun.
