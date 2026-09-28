@@ -1,0 +1,57 @@
+# B3c crossings fixture — static author handoff
+
+Status: **Authored, unexecuted, awaiting fresh independent FULL review.** This is a bounded fixture substage, not B3c completion or runtime release.
+
+Branch: `agent/TASK-021A1b3c-crossings-fixture`.
+Worktree: `/private/tmp/pals-task021-crossings`.
+Prepared baseline: `f74111d96f7fd2f80f601105e941206f0cfc6fa7` (coordinator supplied canonical main `4d0bb937f3a013eb1ddf240d27e4c4067ce5108d` plus reviewed policy `cad9a596b76dac2f0dbe2b51908ca2899ba6c915`, transport `404edfabae9ede3a80aa4350937302b989339c20`, source17b and foundation `3e9973`). Crossing contract publication/verification and prerequisite review were supplied by coordinator; this author performed no network publication or verification.
+
+Author: fresh GPT-6 Sol, medium reasoning as dispatched. Standard speed is app controlled and unverified. Exactly two owned files: this handoff and `supabase/tests/pilot-admission-current-safety-crossings.integration.mjs`. Final immutable combined commit SHA is delivered to the coordinator in the author receipt; no self-referential commit hash is embedded here.
+
+## Allocation and implemented expectations
+
+The module contains **60 explicitly written frozen literal allocations**: CH actor/immutable host; CP and CB actor/peer. Each subject/route has assignment, detach→former-object-delete, confirmation-null and invalid-domain writers in both orders (48 planned actual orders), plus referenced-primary protection and onboarding-off serial controls (12). Literal rows are not a generated coverage mapping. Every row remains `unexecuted`; the 12 serial fixtures are independently allocated repeats of two final RLS predicates, not 12 new permissions. Extra postchecks carry no extra allocation credit.
+
+Actual subject-derived authenticated owner claims execute profile UPDATE and Storage DELETE through existing grants/RLS/triggers. Writers return exact affected rows and bound profile path/revision/completeness or deleted object identity/owner. Assignment must affect one profile, increment revision once, retain completeness and preserve both objects. Detach must affect one profile, increment once, clear completeness and delete exactly the former primary. A privileged fixture update is never described as owner permission. Direct trusted Auth UPDATE uses the original confirmation/email sync trigger, returns the exact altered Auth tuple and removes only the bound membership; it is not an Auth API permission test.
+
+Setup reuses only inert reviewed policy exports, never invokes that suite. It independently verifies source-owned full54 setup against clean state with bounded generated UUID/time bindings; provider-only opaque fields remain qualified immutable anchors. Three ready identities, active admitted campus membership, the CH published source with joined immutable host, private place and all absence/unchanged expectations remain exact. Actor People preference alternates absent/false and is not an eligibility requirement. Each fixture proves actual current rollback success while onboarding is off before companion setup. A second private lawful object has explicit independent ID/name/path/owner; its insertion and the later onboarding enable each have separate exact full54 expected deltas. No extra-photo reference or immutable-object overwrite occurs. Auth cases leave onboarding off.
+
+The two serial classes use actual authenticated statements: onboarding-off assignment returns zero updated rows; still-referenced-primary DELETE returns zero deleted rows. Both assert zero full54 delta, then an actual current rollback positive with exact result/provenance. No trigger42501 or object wait is fabricated when RLS excludes the row.
+
+## Source feasibility and exact contention
+
+Read AGENTS, crossing and parent contracts, ADR-0026/0027, DATA_MODEL/AUTHORIZATION/SECURITY_AND_SAFETY, B1 handoff/source/helpers, source inventory/lock graph/matrix and inherited lifecycle/cohost crossing sources.
+
+- Migration22 `pilot_owner_admission` owner profile policy requires onboarding capability. The real profile row is locked before existing alphabetical profile triggers: revision, B1 owner evidence, owned photo validation. Its evidence guards take shared pilot/policy/account/roster/Auth/membership/campus, with no social lock after the row.
+- Migration27 current safety phases all sorted Auth subjects before memberships, then profiles and objects. B1 also takes Auth before membership. Direct Auth confirmation/domain loss therefore really waits on Auth, and its real sync removes membership after that wait. No membership-before-Auth inversion is invented.
+- Profile assignment competes at the actual subject profile UPDATE/SHARE boundary. Operation-first holds current authority through public commit, then owner assignment succeeds. Writer-first holds the actual changed profile; public acquisition waits and then succeeds using the newly assigned owned object.
+- Detach/delete contention is the **profile UPDATE**. DELETE follows actual detachment and targets the formerly referenced object. Writer-first public call waits at profile and then neutrally denies; operation-first current call commits before the later readiness loss. This is not a successful DELETE wait against a still-referenced held current primary.
+- Final Storage DELETE RLS excludes committed references. Inherited `protect_profile_photo_delete` still locks profile UPDATE and may reject23514 in a stale-snapshot crossing; profile→object versus object→profile may still abort40P01 in the separate B1 regression. Original ordering and protection are unchanged.
+- CH source host/account and retained report FKs remain intact. This module uses lawful field changes, not account/profile deletion or constraint removal to manufacture orders.
+
+Before releasing a held transaction, each planned order requires distinct actual holder/waiter PIDs, matching `pg_blocking_pids`, an ungranted transaction-ID lock against the holder's actual transaction and the waiter's heavyweight tuple lock on the exact relation and independently captured subject ctid. Application names are deterministic and below PostgreSQL's63-byte limit. A missing tuple observation, unexpected writer result, timeout, abort or failed statement gets no order credit. This stricter subject/tuple observation remains a planned runtime assertion, not an observed result.
+
+## Outcomes, fresh current controls and privacy
+
+Every phase compares all54 complete table rowsets after canonical ordering; no ignored tables/fields, hash-only permission comparison or observed-rowset adoption is used. Expected owner/Auth effects are pure transformations of verified before state. Public report/block expectations are independently constructed from that state and bounded generated receipt/time bindings, preserving original input fingerprint, normalized harassment/null payload, target, provenance/ref, report/request counts and exact own block. Reviewed policy public assertions are additionally reused. All unrelated source, admission, metadata, identity, participant/cohost, rate records, relationships, DM/chat/private evidence, moderation and notification rows remain exact.
+
+Every claimed fresh CB current call first performs actual authorized public outbound unblock, checks its exact full54 removal/no-op delta and proves all seven retained proofs absent with no shared joined parent. That includes assignment positive/new-object postchecks and each current rollback precheck. A later own-block repair is separately executed/classified as lawful retained recovery with zero full54 delta; it supplies no fresh-current loss credit. CH/CP fresh post-loss calls use distinct request IDs and exact neutral42501/zero-delta assertions. Assignment postchecks independently verify bound new object ID/name/owner/profile path and another actual rollback current positive.
+
+Failure records literal case/known phase, available actual locks and finite strictly parsed diagnostics before closing owned sessions. Complete guarded wrapper shape is required; only known SQLSTATE codes and the two neutral public messages are disclosed. Unexpected diagnostics/messages are withheld. Every difference string and field path is hashed, including UUID-looking narrative text, metadata keys and arbitrary AssertionError actual/expected values; raw snapshots/transcripts/credentials remain in memory. Committed full54 failure evidence uses only known table names, counts and hashes. Precise differences preserve hashes plus safe typed leaves. Cleanup diagnostics are separate and the original error survives cleanup failure.
+
+Owned close/exit is finite through the inherited reviewed transport. Unknown settlement/exit means rollback evidence unavailable. Failure accounting requires exact backend names absent after close and independently compares known committed writer/public survivors; before==after is allowed only when both known transactions rolled back. An abort is always uncredited. **Any module failure forbids automatic reset**, even with client exit, because client termination alone does not prove server/descendant cleanup. No unknown process/service kill or recovery authority is added.
+
+## Static evidence and frozen limits
+
+Only cached inert checks ran, with `/usr/local/bin/node` and existing `/private/tmp/pals-task024/node_modules` packages:
+
+- Node syntax check: exit0.
+- Prettier API formatting, followed by format verification: pass.
+- Narrow ESLint API parse/no-unused-vars/no-undef: zero errors, zero warnings.
+- Inert import plus pure expected-delta examples: pass; literal60/48 orders/12 serial counts, assignment/detachment/Auth/zero-delta expectations and guarded diagnostic/private UUID-text projection examples. No actual module entrypoint or fixture was run.
+
+No target API/DB/CLI/binary/socket/preflight/start/reset/services/VM/container/provider/hosted action, installation, force, network push, shared-record edit or dependent dispatch occurred. All48 waits,12 serial controls, public RPCs, row values/permissions, aborts, runtime diagnostics/cleanup and server settlement remain **unexecuted**. The local clean immutable commit is only an author freeze for review.
+
+`requireReviewedCrossingRelease()` unconditionally throws before `localTarget` or any target contact. This module is absent from the reviewed runner allowlist. Runner adoption, failed-child diagnostic delivery, whole-module bounds, combined ownership review and explicit exclusive serial release remain future gates. Nothing here clears those gates or grants execution by environment flag.
+
+Separate mandatory combined coverage remains incomplete: actual B1 assignment/delete inversion and stale-snapshot reference protection, real Storage HTTP final INSERT/authenticated DELETE/raw-insert-winner UPSERT rejection, inherited A1a/B1/B2/B3a/B3b regressions, identity/state/retained/retry/operator fixtures, true26→only27 catalog/upgrade/lint preservation, cleanup/security review, publication and remote-verified accepted integration. Main code26/task source27 remain unexecuted in this stage. Parent B3c/A1c/A2/TASK-021 and hosted/pilot release remain incomplete. Stop for fresh independent FULL review; coordinator owns publication/shared records and any next assignment.
