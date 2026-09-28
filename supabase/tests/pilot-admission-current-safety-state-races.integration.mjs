@@ -872,6 +872,13 @@ export async function postLoss(cell, route, writer, context) {
   };
 }
 
+export function stateEffectClassification(cell) {
+  if (cell.id === "L5.CB.actor_peer_block_inbound.operation-first")
+    return "public-writer-denial-no-committed-loss-order";
+  if (cell.id === "L5.CB.actor_peer_block_outbound.operation-first")
+    return "retained-repair-no-new-loss";
+  return "planned-committed-state-loss";
+}
 export async function observeStateRace(cell, route, writer, before, context) {
   let holder, waiter, originalError;
   const operationFirst = cell.order === "operation-first",
@@ -955,6 +962,93 @@ export async function observeStateRace(cell, route, writer, before, context) {
     assert.deepEqual(exactDiagnostic(holder.output()), []);
     const held = context.holderSnapshot,
       window = endWindow(start);
+    if (
+      stateEffectClassification(cell) ===
+      "public-writer-denial-no-committed-loss-order"
+    ) {
+      // The current CB inserts actor→peer. For peer→actor that is only inbound
+      // evidence, never peer-owned retained authority. Bilateral block masks
+      // current People even though actor companion opt-in is true. Real public
+      // writer denial is lawful and cannot count as a committed state loss.
+      assert.deepEqual(w, [3, null]);
+      assert.deepEqual(exactDiagnostic(waiter.output()), [
+        { code: "42501", message: "Safety operation unavailable" },
+      ]);
+      assert.doesNotMatch(
+        waiter.output(),
+        /40P01|40001|57014|55P03|COMPLETED|WRITER_RESULT:|SNAPSHOT:|WAITER_COMMITTED/,
+      );
+      const initialResult = marker(holder.output(), "RESULT:");
+      assertOperation(
+        route,
+        before,
+        held,
+        initialResult,
+        route.request,
+        window,
+        "current",
+      );
+      exactDelta(
+        held,
+        census(),
+        {},
+        "lawful denied inbound writer exact rollback; no committed loss",
+      );
+      context.managerResult = {
+        code: "42501",
+        message: "Safety operation unavailable",
+      };
+      context.publicResult = initialResult;
+      verifyLaterLane(route, "retained");
+      const recoveryBefore = census(),
+        recoveryStart = windowStart(),
+        recoveryRequest = caseIds(
+          cell.id + ".feasibility-retained-recovery",
+        ).request;
+      const recovered = await executeSuccess(route, {
+        request: recoveryRequest,
+      });
+      assertOperation(
+        route,
+        recoveryBefore,
+        recovered.snapshot,
+        recovered.result,
+        recoveryRequest,
+        endWindow(recoveryStart),
+        "retained",
+      );
+      exactDelta(
+        recovered.snapshot,
+        census(),
+        {},
+        "retained recovery after lawful failed inbound writer",
+      );
+      const recovery = {
+        selected_lane: "retained",
+        provenance: "owned outbound block repair",
+        outcome: true,
+        full54_verified: true,
+        separate_current_denial: null,
+        no_inbound_loss_committed: true,
+      };
+      console.error(
+        JSON.stringify({
+          id: cell.id,
+          partition: "source-feasibility-contract-gap",
+          classification: stateEffectClassification(cell),
+          observed_boundary: context.observation,
+          original_current_success: true,
+          actual_writer_result: context.managerResult,
+          writer_full54_rollback_verified: true,
+          post_loss: recovery,
+          successful_wait_order_credit: false,
+          committed_loss_order_credit: 0,
+        }),
+      );
+      throw new Error(
+        "Uncredited L5.CB.actor_peer_block_inbound.operation-first: peer public block lawfully denies bilateral visibility after current actor block; no peer-owned retained proof, so committed-loss contract requires reconciliation",
+      );
+    }
     const result = marker(
       (operationFirst ? waiter : holder).output(),
       "WRITER_RESULT:",
@@ -1055,6 +1149,11 @@ export async function observeStateRace(cell, route, writer, before, context) {
       lower_current_tuple_wait_credit: writer.relation !== null,
       frozen_lane_upgrade_or_fallback_credit: 0,
       full54_values_verified: true,
+      writer_effect_classification: stateEffectClassification(cell),
+      committed_loss_order_credit:
+        stateEffectClassification(cell) === "retained-repair-no-new-loss"
+          ? 0
+          : 1,
     };
   } catch (error) {
     originalError = error;
