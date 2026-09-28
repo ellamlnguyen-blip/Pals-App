@@ -2,6 +2,9 @@ import assert from "node:assert/strict";
 import { createHash, randomUUID } from "node:crypto";
 import { fileURLToPath } from "node:url";
 import { resolve } from "node:path";
+import { performance } from "node:perf_hooks";
+import { isDeepStrictEqual } from "node:util";
+import { setTimeout as delay } from "node:timers/promises";
 import {
   localTarget,
   sql as frozenSql,
@@ -9,6 +12,7 @@ import {
   ok,
   resetDisposable,
   assertClean,
+  writeHttpFailureEvidence,
 } from "./helpers/pilot-admission-current-safety.mjs";
 import {
   census as frozenCensus,
@@ -33,8 +37,10 @@ import {
 // All SQL preparation/observation is privileged synthetic setup, not RLS proof.
 export const budgets = Object.freeze({
   requestMs: 30_000,
-  moduleMs: 1_800_000,
-  childExitMs: 10_000,
+  moduleMs: 86_400_000,
+  childExitMs: 5_000,
+  signupQuietMs: 3_900_000,
+  signupGapMs: 65_000,
 });
 export const plannedTotals = Object.freeze({
   verifiedHttpOutcomes: 522,
@@ -44,7 +50,46 @@ export const plannedTotals = Object.freeze({
   concurrencyCredit: 0,
 });
 export const executionBlocker =
-  "Frozen guard rawSql/status/reset synchronous child calls are unbounded; reviewed shared transport amendment required before runtime.";
+  "Combined HTTP fixture/transport adoption review, fresh exclusive ownership review and explicit serial runtime release remain required; execution refused before target contact.";
+// Starts only after later proven exclusive ownership. The settlement anchor is
+// deliberately conservative: target.request has variable synchronous guards
+// before fetch, so a timestamp before those guards cannot prove start spacing.
+export function createSignupSchedule({ now, wait, signal, ownedAt }) {
+  if (!Number.isFinite(ownedAt))
+    throw new Error("HTTP ownership clock unavailable");
+  const deadline = ownedAt + budgets.moduleMs;
+  let next = ownedAt + budgets.signupQuietMs;
+  let settled = 0;
+  const check = () => {
+    if (signal?.aborted) throw new Error("HTTP schedule cancelled");
+    const elapsed = now();
+    if (!Number.isFinite(elapsed) || elapsed < ownedAt || elapsed >= deadline)
+      throw new Error("HTTP module deadline");
+    return elapsed;
+  };
+  return {
+    check,
+    async beforeSignup() {
+      for (;;) {
+        const current = check();
+        if (current >= next) return;
+        await wait(Math.min(next - current, deadline - current), signal);
+        // Early wakeups, delayed clocks and cancellation are rechecked; no burst.
+      }
+    },
+    signupSettled() {
+      const current = check();
+      settled++;
+      if (settled > plannedTotals.realAuthSignups)
+        throw new Error("HTTP signup allocation exceeded");
+      next = current + budgets.signupGapMs;
+    },
+    get settled() {
+      return settled;
+    },
+  };
+}
+
 export const identityDimensions = Object.freeze([
   "suspended",
   "banned",
@@ -477,6 +522,8 @@ const freshFailureContext = () => ({
   phase: "execution-blocked-before-target",
   expectedHttp: null,
   actualHttp: null,
+  actualWire: null,
+  operation: "none",
   snapshots: [],
   targetEstablished: false,
   transportUnproven: false,
@@ -490,6 +537,8 @@ function beginCase(id, phase, expectedHttp = null) {
   failureContext.phase = phase;
   failureContext.expectedHttp = expectedHttp;
   failureContext.actualHttp = null;
+  failureContext.actualWire = null;
+  failureContext.operation = "none";
   failureContext.snapshots = [];
 }
 function sql(input, options) {
@@ -504,6 +553,7 @@ function sql(input, options) {
   }
   const priorPhase = failureContext.phase;
   failureContext.phase = `${priorPhase}:privileged-sql`;
+  failureContext.operation = "privileged-sql";
   try {
     const result = frozenSql(input, options);
     failureContext.phase = priorPhase;
@@ -516,6 +566,7 @@ function sql(input, options) {
 function census() {
   const priorPhase = failureContext.phase;
   failureContext.phase = `${priorPhase}:full54-census`;
+  failureContext.operation = "full54-census";
   try {
     const snapshot = frozenCensus();
     failureContext.snapshots.push(snapshot);
@@ -575,10 +626,515 @@ export function failureRecord(
     task_incomplete: true,
   };
 }
+// Fixed reviewed wire enums. This projection never forwards internal hashes,
+// unknown keys, raw provider strings, row identities or private content.
+const httpFailurePhases = [
+  "execution-blocked-before-target",
+  "target-current27-guard",
+  "real-Auth-signup",
+  "real-Auth-password-login",
+  "signup-quiet-period",
+  "signup-cadence",
+  "privileged-fixture-preparation",
+  "privileged-existing-Auth-fixture-preparation",
+  "privileged-fixture-mutation-or-restoration",
+  "denial-outcome",
+  "report-result-provenance-full54",
+  "block-result-teardown-full54",
+  "current-only-positive-guard",
+  "report-exact-replay-full54",
+  "separate-caller-receipt-provenance-full54",
+  "exact-total-assertions",
+  "guarded-full27-reset-and-zero54",
+];
+const httpFailureOperations = [
+  "none",
+  "privileged-sql",
+  "full54-census",
+  "HTTP-result-assertion",
+  "signup",
+  "password-login",
+  "submit_safety_report",
+  "set_safety_block",
+  "set_people_block",
+  "safety_reports",
+  "safety_report_requests",
+  "people_blocks",
+  "pilot_account_admission",
+  "pilot_lock_current_safety",
+  "pilot_require_current_safety",
+];
+const httpFailureCodes = [
+  null,
+  "42501",
+  "PGRST301",
+  "PGRST202",
+  "PGRST205",
+  "22P02",
+  "40P01",
+  "40001",
+  "over_email_send_rate_limit",
+  "over_request_rate_limit",
+  "invalid_credentials",
+  "email_not_confirmed",
+  "unknown-code",
+  "unavailable",
+];
+const httpFailureMessages = [
+  null,
+  "Safety report unavailable",
+  "Safety operation unavailable",
+  "permission-denied",
+  "invalid-signature",
+  "rpc-missing",
+  "table-missing",
+  "invalid-uuid",
+  "unknown-shape",
+  "unavailable",
+];
+const httpFailureValues = [
+  "missing",
+  "null",
+  "true",
+  "false",
+  "redacted-string",
+  "redacted-number",
+  "array",
+  "object",
+  "unknown",
+  "current_hangout",
+  "current_people",
+  "current_visible_new_block",
+  "retained_hangout",
+  "retained_host",
+  "owned_block",
+  "friendship",
+  "friend_request",
+  "dm_generation",
+  "hangout_host",
+  "hangout_overlap",
+  "published",
+  "cancelled",
+  "joined",
+  "left",
+  "removed",
+  "active",
+  "revoked",
+  "suspended",
+  "banned",
+  "pending",
+  "accepted",
+  "blocked",
+  "user",
+  "hangout",
+];
+const httpFailureFields = [
+  "$",
+  "count",
+  "status",
+  "code",
+  "message",
+  "shape",
+  "receipt_id",
+  "submitted_at",
+  "id",
+  "reporter_id",
+  "target_type",
+  "target_id",
+  "category",
+  "narrative",
+  "provenance_kind",
+  "provenance_ref_id",
+  "request_id",
+  "report_id",
+  "blocker_id",
+  "blocked_id",
+  "hangout_id",
+  "account_id",
+  "host_id",
+  "user_id",
+  "university_id",
+  "state",
+  "status",
+  "enabled",
+  "singleton",
+  "revision",
+  "key",
+  "opted_in",
+  "joined_at",
+  "left_at",
+  "removed_at",
+  "low_id",
+  "high_id",
+  "generation_id",
+  "initiator_id",
+  "campus_id",
+  "primary_photo_path",
+  "email",
+  "email_confirmed_at",
+  "deleted_at",
+  "raw_user_meta_data",
+  "raw_app_meta_data",
+  "verified_at",
+  "verification_email",
+  "active",
+  "slug",
+  "allowed_email_domains",
+  "real_name",
+  "major",
+  "bio",
+  "graduation_year",
+  "bucket_id",
+  "name",
+  "owner_id",
+  "title",
+  "body",
+  "instructions",
+  "joining_state",
+  "starts_at",
+  "public_place",
+  "public_latitude",
+  "public_longitude",
+  "created_at",
+  "updated_at",
+  "role",
+  "reason",
+  "operator_id",
+  "subject_campus_id",
+  "other-field",
+];
+
+function httpOperation(path) {
+  const fixed = {
+    "/auth/v1/signup": "signup",
+    "/auth/v1/token?grant_type=password": "password-login",
+  };
+  if (fixed[path]) return fixed[path];
+  const route = path.split("?")[0].replace(/^\/rest\/v1\/(?:rpc\/)?/, "");
+  if (!httpFailureOperations.includes(route))
+    throw new Error("HTTP failure operation unrepresentable");
+  return route;
+}
+const wireShape = (value) =>
+  value === undefined
+    ? "unavailable"
+    : value === null
+      ? "null"
+      : Array.isArray(value)
+        ? "array"
+        : ["boolean", "number", "string", "object"].includes(typeof value)
+          ? typeof value
+          : "unknown-shape";
+function wireMessage(message) {
+  if (message == null) return null;
+  if (
+    ["Safety report unavailable", "Safety operation unavailable"].includes(
+      message,
+    )
+  )
+    return message;
+  if (typeof message !== "string") return "unknown-shape";
+  if (
+    /^permission denied for function (?:submit_safety_report|set_safety_block|set_people_block)$/.test(
+      message,
+    )
+  )
+    return "permission-denied";
+  if (message === "JWSError JWSInvalidSignature") return "invalid-signature";
+  if (message === 'invalid input syntax for type uuid: "not-a-uuid"')
+    return "invalid-uuid";
+  // Classify dynamic cache diagnostics without copying their signatures/keys.
+  if (message.startsWith("Could not find the function public."))
+    return "rpc-missing";
+  if (message.startsWith("Could not find the table 'public."))
+    return "table-missing";
+  return "unknown-shape";
+}
+function wireHttp(response) {
+  if (!response)
+    return {
+      status: null,
+      code: "unavailable",
+      message: "unavailable",
+      shape: "unavailable",
+    };
+  const code = response.body?.code ?? response.body?.error_code;
+  return {
+    status:
+      Number.isInteger(response.status) &&
+      response.status >= 100 &&
+      response.status <= 599
+        ? response.status
+        : null,
+    code:
+      code == null
+        ? null
+        : httpFailureCodes.includes(code)
+          ? code
+          : "unknown-code",
+    message: wireMessage(response.body?.message ?? response.body?.msg),
+    shape: wireShape(response.body),
+  };
+}
+function expectedWireHttp(expected) {
+  if (!expected) return wireHttp(null);
+  return wireHttp({
+    status: expected.status ?? null,
+    body: Object.hasOwn(expected, "body")
+      ? expected.body
+      : expected.result_keys
+        ? []
+        : expected.code !== undefined || expected.message !== undefined
+          ? { code: expected.code, message: expected.message }
+          : undefined,
+  });
+}
+const completeSnapshot = (value) =>
+  value &&
+  typeof value === "object" &&
+  !Array.isArray(value) &&
+  Object.keys(value).sort().join("|") ===
+    censusTables.slice().sort().join("|") &&
+  censusTables.every(
+    (table) =>
+      Array.isArray(value[table]) &&
+      value[table].length <= 1_000_000 &&
+      Object.keys(value[table]).length === value[table].length,
+  );
+function wireValue(value, field) {
+  if (value === undefined) return "missing";
+  if (value === null) return "null";
+  if (typeof value === "boolean") return String(value);
+  if (typeof value === "number") return "redacted-number";
+  if (typeof value === "string") {
+    // Only source-backed provenance/state/type fields can retain finite enums.
+    if (
+      ["provenance_kind", "state", "status", "target_type"].includes(field) &&
+      httpFailureValues.includes(value)
+    )
+      return value;
+    return "redacted-string";
+  }
+  if (Array.isArray(value)) return "array";
+  return typeof value === "object" ? "object" : "unknown";
+}
+export function normalizeHttpFailure(
+  error,
+  context,
+  failureCensus = null,
+  cleanupErrors = [],
+) {
+  if (
+    !Array.isArray(cleanupErrors) ||
+    cleanupErrors.length > 4 ||
+    !cleanupErrors.every((value) =>
+      [
+        "not-attempted-target-unestablished",
+        "not-attempted-settlement-unproven",
+        "guard-failed",
+        "reset-failed",
+        "census-failed",
+        "owned-exit-unobserved",
+        "transport-interrupted",
+        "deadline",
+      ].includes(value),
+    )
+  )
+    throw new Error("HTTP cleanup failure unrepresentable");
+  const [phase, ...suffixes] = context.phase.split(":");
+  for (let index = 0; index < suffixes.length; index++) {
+    if (
+      ["privileged-sql", "full54-census", "HTTP-result-assertion"].includes(
+        suffixes[index],
+      )
+    )
+      continue;
+    if (suffixes[index] === "HTTP") {
+      const path = suffixes[++index];
+      if (["/auth/v1/signup", "/auth/v1/token"].includes(path)) continue;
+      if (typeof path === "string" && path.startsWith("/rest/v1/")) {
+        httpOperation(path);
+        continue;
+      }
+    }
+    throw new Error("HTTP failure phase suffix unrepresentable");
+  }
+  if (
+    !httpFailurePhases.includes(phase) ||
+    !httpFailureOperations.includes(context.operation ?? "none")
+  )
+    throw new Error("HTTP failure context unrepresentable");
+  const expectedSnapshot = completeSnapshot(error?.expected)
+    ? error.expected
+    : null;
+  const before = completeSnapshot(context.snapshots?.[0])
+    ? context.snapshots[0]
+    : null;
+  const after = completeSnapshot(failureCensus)
+    ? failureCensus
+    : completeSnapshot(context.snapshots?.at(-1))
+      ? context.snapshots.at(-1)
+      : null;
+  const counts = (snapshot) =>
+    snapshot
+      ? censusTables.map((table) => snapshot[table].length)
+      : censusTables.map(() => null);
+  const differences = [];
+  const add = (scope, table, field, row, a, b, kind = null) => {
+    differences.push({
+      scope,
+      table,
+      field,
+      row,
+      kind:
+        kind ??
+        (a === undefined
+          ? "unexpected"
+          : b === undefined
+            ? "missing"
+            : wireShape(a) !== wireShape(b)
+              ? "type"
+              : "value"),
+      expected: wireValue(a, field),
+      observed: wireValue(b, field),
+    });
+    if (differences.length > 128)
+      throw new Error("HTTP failure differences overflow");
+  };
+  const walk = (a, b, scope, table = null, field = "$", row = null) => {
+    if (isDeepStrictEqual(a, b)) return;
+    if (Array.isArray(a) && Array.isArray(b)) {
+      if (a.length !== b.length)
+        add(scope, table, "count", row, a.length, b.length, "count");
+      for (let index = 0; index < Math.max(a.length, b.length); index++)
+        walk(a[index], b[index], scope, table, field, row ?? index);
+    } else if (
+      a &&
+      b &&
+      typeof a === "object" &&
+      typeof b === "object" &&
+      !Array.isArray(a) &&
+      !Array.isArray(b) &&
+      Object.getPrototypeOf(a) === Object.prototype &&
+      Object.getPrototypeOf(b) === Object.prototype &&
+      (field === "$" || !privateField(field))
+    ) {
+      for (const key of new Set([...Object.keys(a), ...Object.keys(b)])) {
+        if (httpFailureFields.includes(key))
+          walk(a[key], b[key], scope, table, key, row);
+        else add(scope, table, "other-field", row, a[key], b[key]);
+      }
+    } else
+      add(
+        scope,
+        table,
+        httpFailureFields.includes(field) ? field : "other-field",
+        row,
+        a,
+        b,
+      );
+  };
+  if (expectedSnapshot) {
+    if (after)
+      for (const table of censusTables)
+        walk(expectedSnapshot[table], after[table], "census", table);
+    else
+      add(
+        "census",
+        censusTables[0],
+        "$",
+        null,
+        expectedSnapshot,
+        undefined,
+        "unavailable",
+      );
+  } else {
+    walk(error?.expected, error?.actual, "result");
+    if (before && after)
+      for (const table of censusTables)
+        walk(before[table], after[table], "census", table);
+  }
+  const observed = context.actualWire ?? wireHttp(null);
+  const expected = expectedWireHttp(context.expectedHttp);
+  if (
+    ![observed, expected].every((http) =>
+      httpFailureMessages.includes(http.message),
+    )
+  )
+    throw new Error("HTTP failure message unrepresentable");
+  for (const key of ["status", "code", "message", "shape"])
+    if (observed[key] !== expected[key])
+      add(
+        "http",
+        null,
+        key,
+        null,
+        expected[key],
+        observed[key],
+        observed[key] === "unknown-code"
+          ? "unknown-code"
+          : observed[key] === "unknown-shape"
+            ? "unknown-shape"
+            : "value",
+      );
+  const record = {
+    version: 1,
+    case_id: context.caseId,
+    phase,
+    operation: context.operation ?? "none",
+    observed,
+    expected,
+    census: {
+      before: counts(before),
+      after: counts(after),
+      expected: counts(expectedSnapshot),
+    },
+    availability: {
+      before: before ? "available" : "unavailable",
+      after: after ? "available" : "unavailable",
+      expected: expectedSnapshot ? "available" : "unavailable",
+    },
+    differences,
+    cleanup_errors: cleanupErrors,
+  };
+  if (Buffer.byteLength(JSON.stringify(record)) > 64 * 1024)
+    throw new Error("HTTP failure payload overflow");
+  return record;
+}
+async function publishFailure(
+  error,
+  context,
+  failureCensus,
+  cleanupErrors = [],
+) {
+  let record;
+  try {
+    record = normalizeHttpFailure(error, context, failureCensus, cleanupErrors);
+  } catch {
+    // The reviewed writer's invalid-record sentinel invalidates earlier evidence;
+    // never silently trim an oversized/unrepresentable failure into pass credit.
+    try {
+      await writeHttpFailureEvidence(null);
+    } catch {
+      /* unavailable */
+    }
+    failureContext.failureChannelUnavailable = true;
+    return;
+  }
+  try {
+    await writeHttpFailureEvidence(record);
+  } catch {
+    failureContext.failureChannelUnavailable = true;
+  }
+}
+
 function evidenceError(record, cleanup) {
   const error = new Error("Redacted fixture failure evidence retained");
   error.safeEvidence = {
     original_failure: record,
+    failure_channel: failureContext.failureChannelUnavailable
+      ? "unavailable"
+      : "child-reported-failed-uncredited",
     cleanup,
     credited_outcomes: 0,
     concurrency_credit: 0,
@@ -589,11 +1145,18 @@ function evidenceError(record, cleanup) {
 
 export async function runSerialHttp() {
   failureContext = freshFailureContext();
-  // Fail BEFORE any contact; authoring cannot waive the shared transport blocker.
+  // Fail BEFORE any contact; authoring cannot waive review/ownership/release.
   assert.equal(executionBlocker, null, executionBlocker);
   failureContext.phase = "target-current27-guard";
   const target = localTarget("current27");
   failureContext.targetEstablished = true;
+  const moduleSignal = AbortSignal.timeout(budgets.moduleMs);
+  const schedule = createSignupSchedule({
+    now: () => performance.now(),
+    wait: (ms, signal) => delay(ms, undefined, { signal }),
+    signal: moduleSignal,
+    ownedAt: performance.now(),
+  });
   const evidence = [];
   const emittedIds = new Set();
   const fixtureIds = new Set();
@@ -613,17 +1176,25 @@ export async function runSerialHttp() {
   };
   // Frozen request rechecks fixed origin/owner/full27 before EACH Auth/REST call.
   const request = async (path, token, body, options = {}) => {
+    schedule.check();
+    failureContext.operation = httpOperation(path);
     failureContext.httpInFlight = true;
     failureContext.actualHttp = null;
+    failureContext.actualWire = null;
     const priorPhase = failureContext.phase;
     failureContext.phase = `${priorPhase}:HTTP:${path.split("?")[0]}`;
     try {
       const response = await target.request(path, token, body, {
         ...options,
-        signal: AbortSignal.timeout(budgets.requestMs),
+        signal: AbortSignal.any([
+          moduleSignal,
+          AbortSignal.timeout(budgets.requestMs),
+        ]),
       });
       failureContext.httpInFlight = false;
       failureContext.actualHttp = redactedHttp(response);
+      failureContext.actualWire = wireHttp(response);
+      schedule.check();
       failureContext.phase = `${priorPhase}:HTTP-result-assertion`;
       return response;
     } catch (error) {
@@ -641,13 +1212,17 @@ export async function runSerialHttp() {
     });
     const address = email(caseIds(`${key}.${slot}`).actor);
     const password = `Local-only-${randomUUID()}`;
-    const created = ok(
-      await request("/auth/v1/signup", null, {
-        email: address,
-        password,
-        data: metadata,
-      }),
-    );
+    failureContext.phase =
+      schedule.settled === 0 ? "signup-quiet-period" : "signup-cadence";
+    await schedule.beforeSignup();
+    failureContext.phase = "real-Auth-signup";
+    const signupResponse = await request("/auth/v1/signup", null, {
+      email: address,
+      password,
+      data: metadata,
+    });
+    schedule.signupSettled();
+    const created = ok(signupResponse);
     const id = created.user?.id ?? created.id;
     assert.match(id, uuidPattern);
     // Confirmation is local fixture preparation. It grants no client permission.
@@ -1788,6 +2363,12 @@ export async function runSerialHttp() {
       plannedTotals.uniqueFixtureKeys,
       "exact fresh fixture total",
     );
+    assert.equal(
+      schedule.settled,
+      plannedTotals.realAuthSignups,
+      "exact genuine signup total",
+    );
+    schedule.check();
     completed = true;
   } catch (error) {
     // Capture the original case and available full54 evidence BEFORE any reset.
@@ -1820,6 +2401,9 @@ export async function runSerialHttp() {
       censusError,
     );
     console.error(JSON.stringify(originalFailure));
+    // Await original diagnostics before finally can reset. Channel failure stays
+    // separate and cannot replace the original error or prove target settlement.
+    await publishFailure(error, originalContext, failureCensus);
   } finally {
     if (
       !failureContext.targetEstablished ||
@@ -1837,6 +2421,11 @@ export async function runSerialHttp() {
         concurrency_credit: 0,
       };
       console.error(JSON.stringify(cleanup));
+      await publishFailure(null, failureContext, null, [
+        !failureContext.targetEstablished
+          ? "not-attempted-target-unestablished"
+          : "not-attempted-settlement-unproven",
+      ]);
     } else {
       // Never delete/retime immutable evidence. Cleanup errors are a separate
       // record, never a replacement for the original failing case/census.
@@ -1866,6 +2455,11 @@ export async function runSerialHttp() {
           task_incomplete: true,
         };
         console.error(JSON.stringify(cleanup));
+        await publishFailure(cleanupError, failureContext, null, [
+          failureContext.phase.endsWith(":full54-census")
+            ? "census-failed"
+            : "reset-failed",
+        ]);
       }
     }
   }
@@ -1893,10 +2487,9 @@ export async function runSerialHttp() {
   return { completed_outcomes: evidence.length, concurrency_credit: 0 };
 }
 
-// Whole-module bounds cannot safely be supplied by an event-loop timer around
-// frozen synchronous child calls, nor by killing a worker that could orphan its
-// Docker/SQL descendants. No child/service kill or cleanup proof is fabricated.
-// A reviewed shared transport amendment must precede any executable launcher.
+// The reviewed independent helper runner supplies the fixed outer 24h deadline.
+// HTTP adoption/combined review and exclusive ownership/release are still absent.
+// This local entrypoint never spawns a child or supplies cleanup proof.
 export async function runBoundedChild() {
   throw new Error(executionBlocker);
 }
