@@ -6529,7 +6529,7 @@
         "storage.objects"
       ],
       "boundary": "row-first alphabetical BEFORE triggers; shared pilot; never social after direct row",
-      "evidence": "B1 real owner/Storage regression; B3c explicit two-order direct crossings/safe-abort census"
+      "evidence": "B1 real owner/Storage regression; B3c primary detach/profile UPDATE two-order waits, separate referenced-primary DELETE rejection or observed40P01 full-rollback crossing; no successful DELETE of held referenced primary claimed"
     },
     {
       "writer": "trusted account/Auth/membership/campus/role/gate/preference maintenance",

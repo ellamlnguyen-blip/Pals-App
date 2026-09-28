@@ -476,7 +476,9 @@
       "loss": "object_detach_delete",
       "order": "loss-first",
       "partition": "actual-observed-wait-required",
-      "status": "unexecuted"
+      "status": "unexecuted",
+      "observed_wait_resource": "public.profiles row: primary detach UPDATE vs held current profile SHARE",
+      "object_delete_classification": "separate lawful sub-action after primary detach; formerly referenced object is no longer current held primary; no successful same-object DELETE/held-primary wait credit"
     },
     {
       "id": "L3.CH.actor.object_detach_delete.operation-first",
@@ -485,7 +487,9 @@
       "loss": "object_detach_delete",
       "order": "operation-first",
       "partition": "actual-observed-wait-required",
-      "status": "unexecuted"
+      "status": "unexecuted",
+      "observed_wait_resource": "public.profiles row: primary detach UPDATE vs held current profile SHARE",
+      "object_delete_classification": "separate lawful sub-action after primary detach; formerly referenced object is no longer current held primary; no successful same-object DELETE/held-primary wait credit"
     },
     {
       "id": "L3.CH.actor.membership_delete_replace.loss-first",
@@ -818,7 +822,9 @@
       "loss": "object_detach_delete",
       "order": "loss-first",
       "partition": "actual-observed-wait-required",
-      "status": "unexecuted"
+      "status": "unexecuted",
+      "observed_wait_resource": "public.profiles row: primary detach UPDATE vs held current profile SHARE",
+      "object_delete_classification": "separate lawful sub-action after primary detach; formerly referenced object is no longer current held primary; no successful same-object DELETE/held-primary wait credit"
     },
     {
       "id": "L3.CH.immutable_host.object_detach_delete.operation-first",
@@ -827,7 +833,9 @@
       "loss": "object_detach_delete",
       "order": "operation-first",
       "partition": "actual-observed-wait-required",
-      "status": "unexecuted"
+      "status": "unexecuted",
+      "observed_wait_resource": "public.profiles row: primary detach UPDATE vs held current profile SHARE",
+      "object_delete_classification": "separate lawful sub-action after primary detach; formerly referenced object is no longer current held primary; no successful same-object DELETE/held-primary wait credit"
     },
     {
       "id": "L3.CH.immutable_host.membership_delete_replace.loss-first",
@@ -1288,7 +1296,9 @@
       "loss": "object_detach_delete",
       "order": "loss-first",
       "partition": "actual-observed-wait-required",
-      "status": "unexecuted"
+      "status": "unexecuted",
+      "observed_wait_resource": "public.profiles row: primary detach UPDATE vs held current profile SHARE",
+      "object_delete_classification": "separate lawful sub-action after primary detach; formerly referenced object is no longer current held primary; no successful same-object DELETE/held-primary wait credit"
     },
     {
       "id": "L3.CP.actor.object_detach_delete.operation-first",
@@ -1297,7 +1307,9 @@
       "loss": "object_detach_delete",
       "order": "operation-first",
       "partition": "actual-observed-wait-required",
-      "status": "unexecuted"
+      "status": "unexecuted",
+      "observed_wait_resource": "public.profiles row: primary detach UPDATE vs held current profile SHARE",
+      "object_delete_classification": "separate lawful sub-action after primary detach; formerly referenced object is no longer current held primary; no successful same-object DELETE/held-primary wait credit"
     },
     {
       "id": "L3.CP.actor.membership_delete_replace.loss-first",
@@ -1630,7 +1642,9 @@
       "loss": "object_detach_delete",
       "order": "loss-first",
       "partition": "actual-observed-wait-required",
-      "status": "unexecuted"
+      "status": "unexecuted",
+      "observed_wait_resource": "public.profiles row: primary detach UPDATE vs held current profile SHARE",
+      "object_delete_classification": "separate lawful sub-action after primary detach; formerly referenced object is no longer current held primary; no successful same-object DELETE/held-primary wait credit"
     },
     {
       "id": "L3.CP.peer.object_detach_delete.operation-first",
@@ -1639,7 +1653,9 @@
       "loss": "object_detach_delete",
       "order": "operation-first",
       "partition": "actual-observed-wait-required",
-      "status": "unexecuted"
+      "status": "unexecuted",
+      "observed_wait_resource": "public.profiles row: primary detach UPDATE vs held current profile SHARE",
+      "object_delete_classification": "separate lawful sub-action after primary detach; formerly referenced object is no longer current held primary; no successful same-object DELETE/held-primary wait credit"
     },
     {
       "id": "L3.CP.peer.membership_delete_replace.loss-first",
@@ -2100,7 +2116,9 @@
       "loss": "object_detach_delete",
       "order": "loss-first",
       "partition": "actual-observed-wait-required",
-      "status": "unexecuted"
+      "status": "unexecuted",
+      "observed_wait_resource": "public.profiles row: primary detach UPDATE vs held current profile SHARE",
+      "object_delete_classification": "separate lawful sub-action after primary detach; formerly referenced object is no longer current held primary; no successful same-object DELETE/held-primary wait credit"
     },
     {
       "id": "L3.CB.actor.object_detach_delete.operation-first",
@@ -2109,7 +2127,9 @@
       "loss": "object_detach_delete",
       "order": "operation-first",
       "partition": "actual-observed-wait-required",
-      "status": "unexecuted"
+      "status": "unexecuted",
+      "observed_wait_resource": "public.profiles row: primary detach UPDATE vs held current profile SHARE",
+      "object_delete_classification": "separate lawful sub-action after primary detach; formerly referenced object is no longer current held primary; no successful same-object DELETE/held-primary wait credit"
     },
     {
       "id": "L3.CB.actor.membership_delete_replace.loss-first",
@@ -2442,7 +2462,9 @@
       "loss": "object_detach_delete",
       "order": "loss-first",
       "partition": "actual-observed-wait-required",
-      "status": "unexecuted"
+      "status": "unexecuted",
+      "observed_wait_resource": "public.profiles row: primary detach UPDATE vs held current profile SHARE",
+      "object_delete_classification": "separate lawful sub-action after primary detach; formerly referenced object is no longer current held primary; no successful same-object DELETE/held-primary wait credit"
     },
     {
       "id": "L3.CB.peer.object_detach_delete.operation-first",
@@ -2451,7 +2473,9 @@
       "loss": "object_detach_delete",
       "order": "operation-first",
       "partition": "actual-observed-wait-required",
-      "status": "unexecuted"
+      "status": "unexecuted",
+      "observed_wait_resource": "public.profiles row: primary detach UPDATE vs held current profile SHARE",
+      "object_delete_classification": "separate lawful sub-action after primary detach; formerly referenced object is no longer current held primary; no successful same-object DELETE/held-primary wait credit"
     },
     {
       "id": "L3.CB.peer.membership_delete_replace.loss-first",
@@ -3051,7 +3075,7 @@
     },
     {
       "id": "I.primary_referenced_delete",
-      "reason": "Referenced primary object deletion denied by protection; lawful detach\u2192delete allocation instead",
+      "reason": "Successful DELETE of a still-referenced held primary is impossible under protection. Lawful detach\u2192delete is a profile UPDATE wait; actual referenced-primary DELETE rejection and observed40P01 rollback crossing are separate controls, never successful deletion credit.",
       "status": "classification-only"
     },
     {
@@ -3091,7 +3115,7 @@
     },
     {
       "id": "I.role_account_replacement",
-      "reason": "Role FK prevents role insertion with absent account; use repaired mandatory serial denial and lawful downgrade actual races",
+      "reason": "Role FK prevents role insertion with absent account; use repaired mandatory serial denial and lawful downgrade actual races Saved account-sanction/Hangout-disable retry operator deletion is separately FK RESTRICT impossible; isolated transition retry requires fresh per-route dependency inspection.",
       "status": "classification-only"
     }
   ],
@@ -3108,7 +3132,7 @@
     "operator_serial": 35,
     "operator_wait": 76
   },
-  "coverage_rule": "Each observed cell requires eligible actual RPC control, holder/waiter PID + pg_blocking_pids + ungranted pg_locks, successful outcome and full census; timeout/40P01/40001 do not credit either commit order. State block lane switches are classified separately, not force-fit to current denial. All counts are planning allocations; final source/fixture review freezes exact assertion totals.",
+  "coverage_rule": "Each observed cell requires eligible actual RPC control, holder/waiter PID + pg_blocking_pids + ungranted pg_locks, successful outcome and full census; timeout/40P01/40001 do not credit either commit order. State block lane switches are classified separately, not force-fit to current denial. All counts are planning allocations; final source/fixture review freezes exact assertion totals. object_detach_delete cells retain both orders but identify profile UPDATE contention; no successful referenced-primary DELETE wait allocation.",
   "operator_cells": [
     {
       "id": "M.list_moderation_reports.gate_missing.serial",
@@ -3971,5 +3995,11 @@
       "partition": "actual-authority-specific-wait",
       "status": "unexecuted"
     }
-  ]
+  ],
+  "retry_account_deletion_classification": {
+    "apply_account_moderation_action": "impossible after saved sanction: account_sanctions.operator_id account FK ON DELETE RESTRICT; use planned account status retry waits and fresh-call missing-account serial denial",
+    "apply_hangout_moderation_action": "impossible after saved disable: hangout_disables.operator_id account FK ON DELETE RESTRICT; use planned account status retry waits and fresh-call missing-account serial denial",
+    "transition_moderation_case": "conditionally lawful isolated serial missing-account retry only after exact dependency inspection; moderation audit/request operator UUIDs have no account FK, other restrictive dependencies may still forbid deletion",
+    "rule": "no immutable evidence/constraint deletion; no account-deletion retry wait implied by planned111 cells"
+  }
 }
