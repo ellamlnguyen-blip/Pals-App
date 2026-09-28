@@ -1,0 +1,1136 @@
+[
+  {
+    "acl": [
+      "postgres=X/postgres",
+      "authenticated=X/postgres"
+    ],
+    "name": "private.ready_campus",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "uuid",
+    "definition": "CREATE OR REPLACE FUNCTION private.ready_campus()\n RETURNS uuid\n LANGUAGE sql\n STABLE SECURITY DEFINER\n SET search_path TO ''\nAS $function$\n select university_id from public.university_memberships\n where user_id=(select auth.uid()) and private.pilot_capability_enabled('hangouts') and private.hangouts_enabled() and public.get_access_state()='ready';\n$function$\n",
+    "volatility": "s",
+    "anon_execute": false,
+    "identity_args": "",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true,
+    "arguments_with_defaults": ""
+  },
+  {
+    "acl": [
+      "postgres=X/postgres"
+    ],
+    "name": "private.ready_subject_campus",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "boolean",
+    "definition": "CREATE OR REPLACE FUNCTION private.ready_subject_campus(subject uuid, campus uuid)\n RETURNS boolean\n LANGUAGE sql\n STABLE SECURITY DEFINER\n SET search_path TO ''\nAS $function$\n select private.pilot_is_available() and exists(select 1 from public.accounts a\n join private.pilot_account_admission r on r.account_id=a.id and r.state='active'\n join auth.users u on u.id=a.id\n join public.university_memberships m on m.user_id=a.id\n join public.universities c on c.id=m.university_id\n join public.profiles p on p.user_id=a.id\n join storage.objects o on o.bucket_id='profile-photos' and o.name=p.primary_photo_path\n  and o.owner_id=a.id::text and split_part(o.name,'/',1)=a.id::text\n where a.id=subject and a.status='active' and c.id=campus and c.active and c.slug='unc-chapel-hill'\n and u.email_confirmed_at is not null and m.verified_at is not null\n and lower(u.email)=lower(m.verification_email)\n and u.email ~ '^[^@[:space:]]+@[^@[:space:]]+$'\n and lower(split_part(u.email,'@',2))=any(c.allowed_email_domains) and p.is_complete);\n$function$\n",
+    "volatility": "s",
+    "anon_execute": false,
+    "identity_args": "subject uuid, campus uuid",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": false,
+    "arguments_with_defaults": "subject uuid, campus uuid"
+  },
+  {
+    "acl": [
+      "postgres=X/postgres"
+    ],
+    "name": "private.lock_hangout",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "hangouts",
+    "definition": "CREATE OR REPLACE FUNCTION private.lock_hangout(target uuid)\n RETURNS hangouts\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare h public.hangouts;\nbegin\n  select * into h from public.hangouts where id=target for update;\n  if not found then raise exception 'Hangout operation not permitted' using errcode='42501'; end if;\n  perform 1 from private.hangout_feature_gate where singleton for share;\n  perform private.safety_lock_hangout_evidence(auth.uid(),h.university_id);\n  if h.university_id is distinct from private.ready_campus()\n    or exists(select 1 from private.hangout_disables where hangout_id=target) then\n    raise exception 'Hangout operation not permitted' using errcode='42501'; end if;\n  update public.hangouts set updated_at=updated_at where id=target;\n  return h;\nend; $function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "target uuid",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": false,
+    "arguments_with_defaults": "target uuid"
+  },
+  {
+    "acl": [
+      "postgres=X/postgres"
+    ],
+    "name": "private.sync_confirmed_membership",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "trigger",
+    "definition": "CREATE OR REPLACE FUNCTION private.sync_confirmed_membership()\n RETURNS trigger\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare campus uuid;\nbegin\n  if new.email_confirmed_at is not null and new.email ~ '^[^@[:space:]]+@[^@[:space:]]+$' then\n    select id into campus from public.universities\n    where slug = 'unc-chapel-hill' and active\n      and lower(split_part(new.email, '@', 2)) = any(allowed_email_domains);\n  end if;\n  if campus is null then\n    delete from public.university_memberships where user_id = new.id;\n  else\n    insert into public.university_memberships(user_id, university_id, verified_at, verification_email)\n    values (new.id, campus, new.email_confirmed_at, lower(new.email))\n    on conflict (user_id) do update set university_id = excluded.university_id,\n      verified_at = excluded.verified_at, verification_email = excluded.verification_email;\n  end if;\n  return new;\nend;\n$function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": false,
+    "arguments_with_defaults": ""
+  },
+  {
+    "acl": [
+      "postgres=X/postgres"
+    ],
+    "name": "private.provision_account",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "trigger",
+    "definition": "CREATE OR REPLACE FUNCTION private.provision_account()\n RETURNS trigger\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\nbegin\n  insert into public.accounts(id) values (new.id);\n  insert into public.profiles(user_id) values (new.id);\n  return new;\nend;\n$function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": false,
+    "arguments_with_defaults": ""
+  },
+  {
+    "acl": [
+      "postgres=X/postgres"
+    ],
+    "name": "private.bump_profile_revision",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "trigger",
+    "definition": "CREATE OR REPLACE FUNCTION private.bump_profile_revision()\n RETURNS trigger\n LANGUAGE plpgsql\n SET search_path TO ''\nAS $function$\nbegin new.revision=old.revision+1; return new; end;\n$function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "",
+    "service_execute": false,
+    "security_definer": false,
+    "authenticated_execute": false,
+    "arguments_with_defaults": ""
+  },
+  {
+    "acl": [
+      "postgres=X/postgres"
+    ],
+    "name": "private.validate_profile_photos",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "trigger",
+    "definition": "CREATE OR REPLACE FUNCTION private.validate_profile_photos()\n RETURNS trigger\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare path text;\nbegin\n -- A KEY SHARE lock lasts through commit. A concurrent delete either waits,\n -- fails serialization at stronger isolation, or deadlocks and aborts safely.\n for path in select unnest(array_remove(array_prepend(new.primary_photo_path,new.additional_photo_paths),null)) order by 1 loop\n   perform 1 from storage.objects o where o.bucket_id='profile-photos' and o.name=path\n     and o.owner_id=new.user_id::text and split_part(o.name,'/',1)=new.user_id::text for key share;\n   if not found then raise exception 'Photos must be existing owned private objects' using errcode='23514'; end if;\n end loop;\n return new;\nend;\n$function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": false,
+    "arguments_with_defaults": ""
+  },
+  {
+    "acl": [
+      "postgres=X/postgres"
+    ],
+    "name": "private.protect_profile_photo_delete",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "trigger",
+    "definition": "CREATE OR REPLACE FUNCTION private.protect_profile_photo_delete()\n RETURNS trigger\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare profile public.profiles;\nbegin\n if old.bucket_id='profile-photos' then\n   -- RLS NOT EXISTS alone has a stale statement snapshot race. Lock the profile\n   -- and examine the returned current tuple, not a pre-lock snapshot. A newer\n   -- tuple at REPEATABLE READ aborts. Lock inversion may abort, never orphan.\n   select * into profile from public.profiles where user_id::text=old.owner_id for update;\n   if found and (profile.primary_photo_path=old.name or old.name=any(profile.additional_photo_paths)) then\n     raise exception 'Detach a profile photo before deleting it' using errcode='23514';\n   end if;\n end if;\n return old;\nend;\n$function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": false,
+    "arguments_with_defaults": ""
+  },
+  {
+    "acl": [
+      "postgres=X/postgres"
+    ],
+    "name": "private.enforce_hangout_ownership",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "trigger",
+    "definition": "CREATE OR REPLACE FUNCTION private.enforce_hangout_ownership()\n RETURNS trigger\n LANGUAGE plpgsql\n SET search_path TO ''\nAS $function$\nbegin\n  if new.host_id is distinct from old.host_id or new.university_id is distinct from old.university_id\n    or (old.status = 'cancelled' and new is distinct from old\n      and (new.revision <> old.revision + 1\n        or (to_jsonb(new) - 'revision') is distinct from (to_jsonb(old) - 'revision')))\n    or (new.revision <> old.revision + 1 and new is distinct from old) then\n    raise exception 'Immutable Hangout ownership or lifecycle' using errcode = '23514';\n  end if;\n  if (new.starts_at is distinct from old.starts_at or new.ends_at is distinct from old.ends_at)\n    and clock_timestamp() >= coalesce(old.ends_at, old.starts_at + interval '2 hours') then\n    raise exception 'Hangout schedule is closed' using errcode = '23514';\n  end if;\n  return new;\nend;\n$function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "",
+    "service_execute": false,
+    "security_definer": false,
+    "authenticated_execute": false,
+    "arguments_with_defaults": ""
+  },
+  {
+    "acl": [
+      "postgres=X/postgres",
+      "authenticated=X/postgres"
+    ],
+    "name": "public.create_hangout",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "uuid",
+    "definition": "CREATE OR REPLACE FUNCTION public.create_hangout(p_request_id uuid, p_title text, p_starts_at timestamp with time zone, p_public_place text, p_public_latitude double precision, p_public_longitude double precision, p_description text DEFAULT NULL::text, p_ends_at timestamp with time zone DEFAULT NULL::timestamp with time zone, p_campus_zone text DEFAULT NULL::text, p_private_instructions text DEFAULT NULL::text, p_visibility text DEFAULT 'campus'::text, p_location_precision text DEFAULT 'approximate_area'::text, p_eligibility jsonb DEFAULT NULL::jsonb)\n RETURNS uuid\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare evidence record; campus uuid; result uuid; existing_id uuid; existing_fingerprint text; fingerprint text; normalized_private text;\nbegin\n select * into evidence from private.pilot_lock_ordinary_lifecycle('create_hangout',null,p_request_id);\n campus:=evidence.campus_id;\n existing_id:=evidence.prior_hangout_id; existing_fingerprint:=evidence.prior_payload_fingerprint;\n perform private.pilot_require_ordinary_lifecycle('create_hangout',existing_id);\n perform private.validate_hangout_input(p_title,p_starts_at,p_public_place,p_public_latitude,p_public_longitude,p_description,p_ends_at,p_campus_zone,p_visibility,p_location_precision,p_eligibility);\n perform private.validate_hangout_instructions(p_private_instructions);\n if p_request_id is null then raise exception 'Invalid Hangout input' using errcode='22023'; end if;\n normalized_private=nullif(private.profile_trim(p_private_instructions),'');\n fingerprint=pg_catalog.encode(pg_catalog.sha256(pg_catalog.convert_to(jsonb_build_array(private.profile_trim(p_title),extract(epoch from p_starts_at),\n   private.profile_trim(p_public_place),p_public_latitude,p_public_longitude,\n   nullif(private.profile_trim(p_description),''),extract(epoch from p_ends_at),\n   nullif(private.profile_trim(p_campus_zone),''),normalized_private,\n   p_visibility,p_location_precision,p_eligibility)::text,'UTF8')),'hex');\n if existing_id is not null then\n   -- The current gate/readiness/campus and row access must still hold. Never\n   -- replay private content, even when the original write had it.\n   if not private.can_read_hangout(existing_id) then raise exception 'Hangout operation not permitted' using errcode='42501'; end if;\n   if existing_fingerprint<>fingerprint then raise exception 'Creation request conflict' using errcode='23505'; end if;\n   perform private.pilot_require_ordinary_lifecycle('create_hangout',existing_id);\n   return existing_id;\n end if;\n if p_starts_at<clock_timestamp() or p_starts_at>clock_timestamp()+interval '366 days' then\n   raise exception 'Invalid Hangout input' using errcode='22023';\n end if;\n perform private.pilot_require_ordinary_lifecycle('create_hangout',null);\n insert into public.hangouts(university_id,host_id,title,starts_at,public_place,public_latitude,public_longitude,description,ends_at,campus_zone)\n values(campus,auth.uid(),private.profile_trim(p_title),p_starts_at,private.profile_trim(p_public_place),p_public_latitude,p_public_longitude,nullif(private.profile_trim(p_description),''),p_ends_at,nullif(private.profile_trim(p_campus_zone),'')) returning id into result;\n insert into public.hangout_participants(hangout_id,account_id,state) values(result,auth.uid(),'joined');\n if normalized_private is not null then\n   insert into public.hangout_private_locations(hangout_id,instructions) values(result,normalized_private);\n end if;\n insert into private.hangout_create_requests(host_id,request_id,hangout_id,payload_fingerprint) values(auth.uid(),p_request_id,result,fingerprint);\n return result;\nend;\n$function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "p_request_id uuid, p_title text, p_starts_at timestamp with time zone, p_public_place text, p_public_latitude double precision, p_public_longitude double precision, p_description text, p_ends_at timestamp with time zone, p_campus_zone text, p_private_instructions text, p_visibility text, p_location_precision text, p_eligibility jsonb",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true,
+    "arguments_with_defaults": "p_request_id uuid, p_title text, p_starts_at timestamp with time zone, p_public_place text, p_public_latitude double precision, p_public_longitude double precision, p_description text DEFAULT NULL::text, p_ends_at timestamp with time zone DEFAULT NULL::timestamp with time zone, p_campus_zone text DEFAULT NULL::text, p_private_instructions text DEFAULT NULL::text, p_visibility text DEFAULT 'campus'::text, p_location_precision text DEFAULT 'approximate_area'::text, p_eligibility jsonb DEFAULT NULL::jsonb"
+  },
+  {
+    "acl": [
+      "postgres=X/postgres",
+      "authenticated=X/postgres"
+    ],
+    "name": "public.cancel_hangout",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "bigint",
+    "definition": "CREATE OR REPLACE FUNCTION public.cancel_hangout(p_hangout_id uuid, p_expected_revision bigint)\n RETURNS bigint\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare evidence record; h public.hangouts; next_revision bigint;\nbegin\n select * into evidence from private.pilot_lock_ordinary_lifecycle('cancel_hangout',p_hangout_id);\n h:=evidence.source_row;\n perform private.pilot_require_ordinary_lifecycle('cancel_hangout',p_hangout_id);\n if h.host_id<>auth.uid() or h.status<>'published' then raise exception 'Hangout operation not permitted' using errcode='42501'; end if;\n perform private.check_hangout_revision(h,p_expected_revision);\n perform private.pilot_require_ordinary_lifecycle('cancel_hangout',p_hangout_id);\n update public.hangouts set status='cancelled',joining_state='closed',revision=revision+1,updated_at=clock_timestamp() where id=h.id returning revision into next_revision;\n perform private.notification_emit_hangout(gen_random_uuid(),h.id,auth.uid(),'hangout_cancelled');\n return next_revision;\nend; $function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "p_hangout_id uuid, p_expected_revision bigint",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true,
+    "arguments_with_defaults": "p_hangout_id uuid, p_expected_revision bigint"
+  },
+  {
+    "acl": [
+      "postgres=X/postgres"
+    ],
+    "name": "private.people_ready_campus",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "uuid",
+    "definition": "CREATE OR REPLACE FUNCTION private.people_ready_campus()\n RETURNS uuid\n LANGUAGE sql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\n  select m.university_id from public.university_memberships m\n  where m.user_id = (select auth.uid())\n    and public.get_access_state() = 'ready';\n$function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": false,
+    "arguments_with_defaults": ""
+  },
+  {
+    "acl": [
+      "postgres=X/postgres"
+    ],
+    "name": "private.people_visible",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "boolean",
+    "definition": "CREATE OR REPLACE FUNCTION private.people_visible(subject uuid, campus uuid)\n RETURNS boolean\n LANGUAGE sql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\n  select subject <> (select auth.uid())\n    and private.ready_subject_campus(subject, campus)\n    and exists(select 1 from private.people_preferences v\n      where v.account_id = subject and v.opted_in)\n    and not exists(select 1 from private.people_blocks b\n      where (b.blocker_id = (select auth.uid()) and b.blocked_id = subject)\n         or (b.blocker_id = subject and b.blocked_id = (select auth.uid())));\n$function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "subject uuid, campus uuid",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": false,
+    "arguments_with_defaults": "subject uuid, campus uuid"
+  },
+  {
+    "acl": [
+      "postgres=X/postgres",
+      "authenticated=X/postgres"
+    ],
+    "name": "public.leave_hangout",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "void",
+    "definition": "CREATE OR REPLACE FUNCTION public.leave_hangout(p_hangout_id uuid)\n RETURNS void\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare evidence record; h public.hangouts; was_cohost boolean;\nbegin\n select * into evidence from private.pilot_lock_ordinary_lifecycle('leave_hangout',p_hangout_id);\n h:=evidence.source_row;\n perform private.pilot_require_ordinary_lifecycle('leave_hangout',p_hangout_id);\n if h.host_id=auth.uid() then raise exception 'Hangout operation not permitted' using errcode='42501'; end if;\n was_cohost:=exists(select 1 from private.hangout_cohosts c where c.hangout_id=h.id and c.account_id=auth.uid());\n perform private.pilot_require_ordinary_lifecycle('leave_hangout',p_hangout_id);\n perform private.safety_record_joined_overlap(h.id,auth.uid());\n update public.hangout_participants set state='left',left_at=clock_timestamp(),updated_at=clock_timestamp()\n where hangout_id=h.id and account_id=auth.uid() and state='joined';\n if not found then raise exception 'Hangout operation not permitted' using errcode='42501'; end if;\n if was_cohost then\n   update public.hangouts set revision=revision+1,\n     updated_at=case when status='cancelled' then updated_at else clock_timestamp() end\n     where id=h.id;\n end if;\n perform private.notification_emit_hangout(gen_random_uuid(),h.id,auth.uid(),'hangout_left');\nend; $function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "p_hangout_id uuid",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true,
+    "arguments_with_defaults": "p_hangout_id uuid"
+  },
+  {
+    "acl": [
+      "postgres=X/postgres"
+    ],
+    "name": "private.friendship_lock_pair",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "void",
+    "definition": "CREATE OR REPLACE FUNCTION private.friendship_lock_pair(a uuid, b uuid)\n RETURNS void\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\nbegin\n  perform pg_catalog.pg_advisory_xact_lock(pg_catalog.hashtextextended(\n    least(a::text,b::text) || ':' || greatest(a::text,b::text), 0));\nend;\n$function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "a uuid, b uuid",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": false,
+    "arguments_with_defaults": "a uuid, b uuid"
+  },
+  {
+    "acl": [
+      "postgres=X/postgres"
+    ],
+    "name": "private.chat_lock_evidence",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "void",
+    "definition": "CREATE OR REPLACE FUNCTION private.chat_lock_evidence(p_hangout_id uuid, p_actor uuid, p_campus uuid)\n RETURNS void\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare photo_path text;\nbegin\n  perform 1 from private.hangout_feature_gate where singleton for share;\n  perform 1 from private.hangout_chat_feature_gate where singleton for share;\n  perform 1 from public.accounts where id = p_actor for share;\n  perform 1 from auth.users where id = p_actor for share;\n  perform 1 from public.university_memberships where user_id = p_actor for share;\n  perform 1 from public.universities where id = p_campus for share;\n  select primary_photo_path into photo_path from public.profiles where user_id = p_actor for share;\n  perform 1 from storage.objects where bucket_id = 'profile-photos'\n    and name = photo_path and owner_id = p_actor::text for share;\n  perform 1 from public.hangout_participants\n    where hangout_id = p_hangout_id and account_id = p_actor for share;\nend;\n$function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "p_hangout_id uuid, p_actor uuid, p_campus uuid",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": false,
+    "arguments_with_defaults": "p_hangout_id uuid, p_actor uuid, p_campus uuid"
+  },
+  {
+    "acl": [
+      "postgres=X/postgres"
+    ],
+    "name": "private.chat_require",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "boolean",
+    "definition": "CREATE OR REPLACE FUNCTION private.chat_require(p_hangout_id uuid)\n RETURNS boolean\n LANGUAGE plpgsql\n STABLE SECURITY DEFINER\n SET search_path TO ''\nAS $function$\nbegin\n  if p_hangout_id is null or not coalesce(private.chat_authorized(p_hangout_id), false) then\n    raise exception 'Hangout chat unavailable' using errcode = '42501';\n  end if;\n  return true;\nend;\n$function$\n",
+    "volatility": "s",
+    "anon_execute": false,
+    "identity_args": "p_hangout_id uuid",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": false,
+    "arguments_with_defaults": "p_hangout_id uuid"
+  },
+  {
+    "acl": [
+      "postgres=X/postgres",
+      "authenticated=X/postgres"
+    ],
+    "name": "public.send_hangout_message",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "TABLE(message_id uuid, sequence bigint, body text, created_at timestamp with time zone, mine boolean, author_id uuid, author_label text)",
+    "definition": "CREATE OR REPLACE FUNCTION public.send_hangout_message(p_hangout_id uuid, p_request_id uuid, p_body text)\n RETURNS TABLE(message_id uuid, sequence bigint, body text, created_at timestamp with time zone, mine boolean, author_id uuid, author_label text)\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare actor uuid := auth.uid(); h public.hangouts; normalized text;\n  fingerprint text; old_message uuid; old_fingerprint text; conversation uuid;\n  new_sequence bigint; new_message uuid;\nbegin\n  perform private.social_hangout_mutation_lock();\n  if current_setting('transaction_isolation') <> 'read committed' then\n    raise exception 'Hangout chat unavailable' using errcode = '42501';\n  end if;\n  -- Serialize with join, leave, remove and cancel using their existing parent\n  -- lock. This also makes two sends of the same key strictly ordered.\n  h := private.lock_hangout(p_hangout_id);\n  perform private.chat_lock_evidence(h.id, actor, h.university_id);\n  -- A fresh READ COMMITTED statement after lock waits sees committed revocation.\n  perform private.chat_require(h.id);\n  if p_request_id is null or p_body is null then\n    raise exception 'Invalid Hangout message' using errcode = '22023';\n  end if;\n  normalized := private.profile_trim(p_body);\n  if length(normalized) not between 1 and 2000 then\n    raise exception 'Invalid Hangout message' using errcode = '22023';\n  end if;\n  fingerprint := pg_catalog.encode(pg_catalog.sha256(pg_catalog.convert_to(normalized, 'UTF8')), 'hex');\n  select r.message_id, r.payload_fingerprint into old_message, old_fingerprint\n    from private.hangout_message_requests r\n    where r.hangout_id = h.id and r.author_id = actor and r.request_id = p_request_id;\n  if found then\n    if old_fingerprint <> fingerprint then\n      raise exception 'Message request conflict' using errcode = '23505';\n    end if;\n    return query select m.id, m.sequence, m.body, m.created_at, true, actor, null::text\n      from private.hangout_messages m where m.id = old_message;\n    return;\n  end if;\n  insert into private.hangout_conversations(hangout_id) values (h.id)\n    on conflict(hangout_id) do nothing;\n  update private.hangout_conversations c set next_sequence = c.next_sequence + 1\n    where c.hangout_id = h.id returning c.id, c.next_sequence - 1 into conversation, new_sequence;\n  insert into private.hangout_messages(conversation_id, author_id, sequence, body)\n    values (conversation, actor, new_sequence, normalized) returning id into new_message;\n  insert into private.hangout_message_requests(hangout_id, author_id, request_id, message_id, payload_fingerprint)\n    values (h.id, actor, p_request_id, new_message, fingerprint);\n  return query select m.id, m.sequence, m.body, m.created_at, true, actor, null::text\n    from private.hangout_messages m where m.id = new_message;\nend;\n$function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "p_hangout_id uuid, p_request_id uuid, p_body text",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true,
+    "arguments_with_defaults": "p_hangout_id uuid, p_request_id uuid, p_body text"
+  },
+  {
+    "acl": [
+      "postgres=X/postgres"
+    ],
+    "name": "private.notification_lock_recipient",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "void",
+    "definition": "CREATE OR REPLACE FUNCTION private.notification_lock_recipient(p_recipient uuid)\n RETURNS void\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\nbegin\n perform pg_catalog.pg_advisory_xact_lock(pg_catalog.hashtextextended('notification-recipient:'||p_recipient::text,0));\nend; $function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "p_recipient uuid",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": false,
+    "arguments_with_defaults": "p_recipient uuid"
+  },
+  {
+    "acl": [
+      "postgres=X/postgres"
+    ],
+    "name": "private.notification_emit_hangout",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "void",
+    "definition": "CREATE OR REPLACE FUNCTION private.notification_emit_hangout(p_event uuid, p_hangout uuid, p_actor uuid, p_code text)\n RETURNS void\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare recipient uuid; event_category text; essential boolean; kind text;\nbegin\n if p_code not in('hangout_edited','hangout_cancelled','hangout_joined','hangout_left','hangout_chat_message') then\n  raise exception 'Invalid notification event' using errcode='22023'; end if;\n perform 1 from private.hangout_feature_gate where singleton for share;\n -- A fresh READ COMMITTED check after any source-gate lock wait.\n if not private.hangouts_enabled() then return; end if;\n if p_code='hangout_chat_message' then\n  perform 1 from private.hangout_chat_feature_gate where singleton for share;\n  if not exists(select 1 from private.hangout_chat_feature_gate where singleton and enabled) then return; end if;\n end if;\n perform 1 from private.notification_feature_gate where singleton for share;\n if not private.notification_enabled() then return; end if;\n essential:=p_code='hangout_cancelled';\n event_category:=case when p_code='hangout_chat_message' then 'messages'\n  when p_code in('hangout_joined','hangout_left') then 'host_activity' else 'hangout_updates' end;\n kind:=case when p_code='hangout_chat_message' then 'hangout_chat' else 'hangout' end;\n for recipient in\n  select p.account_id from public.hangout_participants p join public.hangouts h on h.id=p.hangout_id\n  where p.hangout_id=p_hangout and p.state='joined' and p.account_id<>p_actor\n   and (p_code not in('hangout_joined','hangout_left') or p.account_id=h.host_id)\n  order by p.account_id\n loop\n  perform private.notification_lock_recipient(recipient);\n  -- Fresh statement after waiting for a preference write.\n  if private.notification_enabled() and (essential or not exists(\n    select 1 from private.notification_preferences pref where pref.recipient_id=recipient\n      and pref.category=event_category and not pref.enabled)) then\n   insert into private.notification_items(recipient_id,source_kind,source_id,target_id,event_code,actor_id)\n    values(recipient,kind,p_event,p_hangout,p_code,p_actor)\n    on conflict(recipient_id,source_kind,source_id,event_code) do nothing;\n  end if;\n end loop;\nend; $function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "p_event uuid, p_hangout uuid, p_actor uuid, p_code text",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": false,
+    "arguments_with_defaults": "p_event uuid, p_hangout uuid, p_actor uuid, p_code text"
+  },
+  {
+    "acl": [
+      "postgres=X/postgres"
+    ],
+    "name": "private.notification_chat_source",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "trigger",
+    "definition": "CREATE OR REPLACE FUNCTION private.notification_chat_source()\n RETURNS trigger\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare target uuid;\nbegin\n select c.hangout_id into target from private.hangout_conversations c where c.id=new.conversation_id;\n perform private.notification_emit_hangout(new.id,target,new.author_id,'hangout_chat_message');\n return new;\nend; $function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": false,
+    "arguments_with_defaults": ""
+  },
+  {
+    "acl": [
+      "postgres=X/postgres"
+    ],
+    "name": "private.social_hangout_mutation_lock",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "void",
+    "definition": "CREATE OR REPLACE FUNCTION private.social_hangout_mutation_lock()\n RETURNS void\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\nbegin\n  if current_setting('transaction_isolation') <> 'read committed' then\n    raise exception 'Safety operation unavailable' using errcode='42501';\n  end if;\n  perform pg_catalog.pg_advisory_xact_lock(16016,1);\nend; $function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": false,
+    "arguments_with_defaults": ""
+  },
+  {
+    "acl": [
+      "postgres=X/postgres"
+    ],
+    "name": "private.safety_record_joined_overlap",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "void",
+    "definition": "CREATE OR REPLACE FUNCTION private.safety_record_joined_overlap(p_hangout uuid, p_actor uuid)\n RETURNS void\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\nbegin\n  if not exists(select 1 from public.hangout_participants own\n    where own.hangout_id=p_hangout and own.account_id=p_actor and own.state='joined') then\n    return;\n  end if;\n  insert into private.hangout_peer_provenance(hangout_id,low_id,high_id)\n  select p_hangout,least(p_actor,p.account_id),greatest(p_actor,p.account_id)\n  from public.hangout_participants p\n  where p.hangout_id=p_hangout and p.state='joined' and p.account_id<>p_actor\n  on conflict do nothing;\nend; $function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "p_hangout uuid, p_actor uuid",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": false,
+    "arguments_with_defaults": "p_hangout uuid, p_actor uuid"
+  },
+  {
+    "acl": [
+      "postgres=X/postgres"
+    ],
+    "name": "private.safety_peer_evidence",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "boolean",
+    "definition": "CREATE OR REPLACE FUNCTION private.safety_peer_evidence(p_actor uuid, p_peer uuid)\n RETURNS boolean\n LANGUAGE sql\n STABLE SECURITY DEFINER\n SET search_path TO ''\nAS $function$\n select exists(select 1 from private.people_blocks b where b.blocker_id=p_actor and b.blocked_id=p_peer)\n or exists(select 1 from private.friendships f where f.low_id=least(p_actor,p_peer) and f.high_id=greatest(p_actor,p_peer))\n or exists(select 1 from private.friendship_create_requests r\n     where (r.actor_id=p_actor and r.target_id=p_peer)\n        or (r.actor_id=p_peer and r.target_id=p_actor))\n or exists(select 1 from private.dm_pairs d where d.low_id=least(p_actor,p_peer) and d.high_id=greatest(p_actor,p_peer))\n or exists(select 1 from private.hangout_peer_provenance v where v.low_id=least(p_actor,p_peer) and v.high_id=greatest(p_actor,p_peer))\n or exists(select 1 from public.hangouts h join public.hangout_participants mine\n     on mine.hangout_id=h.id and mine.account_id=p_actor\n     where h.host_id=p_peer)\n or exists(select 1 from public.hangout_participants mine\n     join public.hangout_participants peer on peer.hangout_id=mine.hangout_id\n     where mine.account_id=p_actor and peer.account_id=p_peer\n       and mine.joined_at < coalesce(peer.left_at,peer.removed_at,'infinity'::timestamptz)\n       and peer.joined_at < coalesce(mine.left_at,mine.removed_at,'infinity'::timestamptz));\n$function$\n",
+    "volatility": "s",
+    "anon_execute": false,
+    "identity_args": "p_actor uuid, p_peer uuid",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": false,
+    "arguments_with_defaults": "p_actor uuid, p_peer uuid"
+  },
+  {
+    "acl": [
+      "postgres=X/postgres"
+    ],
+    "name": "private.safety_lock_visible_evidence",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "void",
+    "definition": "CREATE OR REPLACE FUNCTION private.safety_lock_visible_evidence(p_actor uuid, p_peer uuid)\n RETURNS void\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare subject uuid; campus uuid; photo_path text;\nbegin\n  perform 1 from private.people_feature_gate where singleton for share;\n  for subject in select id from (values(p_actor),(p_peer)) v(id) order by id loop\n    perform 1 from public.accounts where id=subject for share;\n    perform 1 from auth.users where id=subject for share;\n    select university_id into campus from public.university_memberships\n      where user_id=subject for share;\n    perform 1 from public.universities where id=campus for share;\n    select primary_photo_path into photo_path from public.profiles\n      where user_id=subject for share;\n    perform 1 from storage.objects where bucket_id='profile-photos'\n      and name=photo_path and owner_id=subject::text for share;\n    perform 1 from private.people_preferences where account_id=subject for share;\n  end loop;\nend; $function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "p_actor uuid, p_peer uuid",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": false,
+    "arguments_with_defaults": "p_actor uuid, p_peer uuid"
+  },
+  {
+    "acl": [
+      "postgres=X/postgres"
+    ],
+    "name": "private.safety_lock_hangout_evidence",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "void",
+    "definition": "CREATE OR REPLACE FUNCTION private.safety_lock_hangout_evidence(p_actor uuid, p_campus uuid)\n RETURNS void\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare photo_path text;\nbegin\n  perform 1 from public.accounts where id=p_actor for share;\n  perform 1 from auth.users where id=p_actor for share;\n  perform 1 from public.university_memberships where user_id=p_actor for share;\n  perform 1 from public.universities where id=p_campus for share;\n  select primary_photo_path into photo_path from public.profiles where user_id=p_actor for share;\n  perform 1 from storage.objects where bucket_id='profile-photos'\n    and name=photo_path and owner_id=p_actor::text for share;\nend; $function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "p_actor uuid, p_campus uuid",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": false,
+    "arguments_with_defaults": "p_actor uuid, p_campus uuid"
+  },
+  {
+    "acl": [
+      "postgres=X/postgres"
+    ],
+    "name": "private.safety_report_peer_source",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "TABLE(kind text, ref_id uuid)",
+    "definition": "CREATE OR REPLACE FUNCTION private.safety_report_peer_source(p_actor uuid, p_peer uuid)\n RETURNS TABLE(kind text, ref_id uuid)\n LANGUAGE sql\n STABLE SECURITY DEFINER\n SET search_path TO ''\nAS $function$\n  select v.kind,v.ref_id from (\n    select 1 priority,'owned_block'::text kind,b.blocked_id ref_id\n      from private.people_blocks b where b.blocker_id=p_actor and b.blocked_id=p_peer\n    union all\n    select 2,'friendship',f.generation_id from private.friendships f\n      where f.low_id=least(p_actor,p_peer) and f.high_id=greatest(p_actor,p_peer)\n    union all\n    select 3,'friend_request',r.generation_id from private.friendship_create_requests r\n      where (r.actor_id=p_actor and r.target_id=p_peer)\n        or (r.actor_id=p_peer and r.target_id=p_actor)\n    union all\n    select 4,'dm_generation',d.generation_id from private.dm_pairs d\n      where d.low_id=least(p_actor,p_peer) and d.high_id=greatest(p_actor,p_peer)\n    union all\n    select 5,'hangout_host',h.id from public.hangouts h\n      join public.hangout_participants mine on mine.hangout_id=h.id\n        and mine.account_id=p_actor where h.host_id=p_peer\n    union all\n    select 6,'hangout_overlap',v.hangout_id from private.hangout_peer_provenance v\n      where v.low_id=least(p_actor,p_peer) and v.high_id=greatest(p_actor,p_peer)\n    union all\n    select 7,'hangout_overlap',mine.hangout_id\n      from public.hangout_participants mine\n      join public.hangout_participants peer on peer.hangout_id=mine.hangout_id\n      where mine.account_id=p_actor and peer.account_id=p_peer\n        and mine.joined_at < coalesce(peer.left_at,peer.removed_at,'infinity'::timestamptz)\n        and peer.joined_at < coalesce(mine.left_at,mine.removed_at,'infinity'::timestamptz)\n  ) v order by v.priority,v.ref_id limit 1;\n$function$\n",
+    "volatility": "s",
+    "anon_execute": false,
+    "identity_args": "p_actor uuid, p_peer uuid",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": false,
+    "arguments_with_defaults": "p_actor uuid, p_peer uuid"
+  },
+  {
+    "acl": [
+      "postgres=X/postgres",
+      "authenticated=X/postgres"
+    ],
+    "name": "public.apply_account_moderation_action",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "TABLE(case_state text, revision bigint, account_status text)",
+    "definition": "CREATE OR REPLACE FUNCTION public.apply_account_moderation_action(p_report_id uuid, p_request_id uuid, p_expected_case_revision bigint, p_action text, p_reason text)\n RETURNS TABLE(case_state text, revision bigint, account_status text)\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare\n  actor uuid; r private.safety_reports%rowtype;\n  c private.moderation_cases%rowtype; prior private.moderation_requests%rowtype;\n  target public.accounts%rowtype; normalized_reason text; fingerprint text;\n  required_role text; next_status text; campus uuid; saved_sanction uuid;\nbegin\n  -- Stage A order: moderation advisory lock, gate, actor account and role,\n  -- stored report, target account, request UUID, case, membership, writes.\n  -- The target account UPDATE lock also excludes concurrent FK key-share\n  -- platform-role insertion. It conflicts with student evidence SHARE locks.\n  actor:=private.moderation_actor();\n  normalized_reason:=private.profile_trim(p_reason);\n  if p_report_id is null or p_request_id is null\n    or p_expected_case_revision is null or p_expected_case_revision<0\n    or p_action is null or p_action not in ('suspend','ban','reinstate')\n    or normalized_reason is null or char_length(normalized_reason) not between 1 and 2000\n    or not private.moderation_report_allowed(actor,p_report_id,true) then\n    raise exception 'Moderation unavailable' using errcode='42501'; end if;\n  select * into r from private.safety_reports where id=p_report_id;\n  if r.target_type<>'user' then\n    raise exception 'Moderation unavailable' using errcode='42501'; end if;\n  select * into target from public.accounts where id=r.target_id;\n  if not found or exists(select 1 from public.platform_roles where user_id=r.target_id) then\n    raise exception 'Moderation unavailable' using errcode='42501'; end if;\n  required_role:=case when p_action='suspend' then 'moderator' else 'admin' end;\n  if not exists(select 1 from public.platform_roles where user_id=actor and\n    (role='admin' or (required_role='moderator' and role='moderator'))) then\n    raise exception 'Moderation unavailable' using errcode='42501'; end if;\n  fingerprint:='account:'||md5(jsonb_build_array(p_report_id,\n    p_expected_case_revision,p_action,normalized_reason)::text);\n  perform pg_advisory_xact_lock(hashtextextended(actor::text||p_request_id::text,17017));\n  select * into prior from private.moderation_requests\n    where operator_id=actor and request_id=p_request_id;\n  if found then\n    if prior.fingerprint<>fingerprint then\n      raise exception 'Moderation unavailable' using errcode='42501'; end if;\n    -- Current operator/gate/conflict/target-role checks occurred above. The\n    -- replay reveals only the original minimal result, not current status.\n    select s.new_status into account_status from private.account_sanctions s\n      where s.operator_id=actor and s.request_id=p_request_id\n        and s.report_id=p_report_id;\n    if account_status is null then\n      raise exception 'Moderation unavailable' using errcode='42501'; end if;\n    case_state:=prior.result_state; revision:=prior.result_revision;\n    return next; return;\n  end if;\n  select * into c from private.moderation_cases\n    where report_id=p_report_id for update;\n  if not found or c.state<>'in_review'\n    or c.revision<>p_expected_case_revision then\n    raise exception 'Moderation unavailable' using errcode='42501'; end if;\n  next_status:=case p_action when 'suspend' then 'suspended'\n    when 'ban' then 'banned' else 'active' end;\n  if (p_action='suspend' and target.status<>'active')\n    or (p_action='ban' and target.status not in ('active','suspended'))\n    or (p_action='reinstate' and target.status not in ('suspended','banned')) then\n    raise exception 'Moderation unavailable' using errcode='42501'; end if;\n  select university_id into campus from public.university_memberships\n    where user_id=r.target_id for share;\n  -- The account, role, case, gate, report and current membership are held\n  -- through commit. Recheck after every possible lock wait.\n  if not exists(select 1 from private.moderation_feature_gate where singleton and enabled)\n    or not exists(select 1 from public.accounts where id=actor and status='active')\n    or not exists(select 1 from public.platform_roles where user_id=actor and\n      (role='admin' or (required_role='moderator' and role='moderator')))\n    or exists(select 1 from public.platform_roles where user_id=r.target_id)\n    or not exists(select 1 from public.accounts where id=r.target_id\n      and status=target.status) then\n    raise exception 'Moderation unavailable' using errcode='42501'; end if;\n  insert into private.account_sanctions(report_id,subject_id,operator_id,request_id,\n    action,previous_status,new_status,subject_campus_id,reason)\n    values(r.id,r.target_id,actor,p_request_id,p_action,target.status,\n      next_status,campus,normalized_reason) returning id into saved_sanction;\n  update public.accounts set status=next_status where id=r.target_id;\n  update private.moderation_cases set state='closed',revision=c.revision+1,\n    note=normalized_reason,disposition='action_taken',duplicate_report_id=null,\n    sanction_id=saved_sanction where report_id=r.id;\n  insert into private.moderation_requests(operator_id,request_id,fingerprint,\n    report_id,result_state,result_revision)\n    values(actor,p_request_id,fingerprint,r.id,'closed',c.revision+1);\n  insert into private.moderation_audit(operator_id,action,report_id,\n    subject_target_type,subject_target_id,subject_campus_id,request_id,\n    previous_state,new_state,previous_revision,new_revision,reason,sanction_id,\n    previous_account_status,new_account_status)\n    values(actor,p_action,r.id,'user',r.target_id,campus,p_request_id,\n      c.state,'closed',c.revision,c.revision+1,normalized_reason,saved_sanction,\n      target.status,next_status);\n  case_state:='closed'; revision:=c.revision+1; account_status:=next_status;\n  return next;\nend; $function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "p_report_id uuid, p_request_id uuid, p_expected_case_revision bigint, p_action text, p_reason text",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true,
+    "arguments_with_defaults": "p_report_id uuid, p_request_id uuid, p_expected_case_revision bigint, p_action text, p_reason text"
+  },
+  {
+    "acl": [
+      "postgres=X/postgres"
+    ],
+    "name": "private.moderation_report_allowed",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "boolean",
+    "definition": "CREATE OR REPLACE FUNCTION private.moderation_report_allowed(p_actor uuid, p_report uuid, p_for_action boolean DEFAULT false)\n RETURNS boolean\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare r private.safety_reports%rowtype; host uuid;\nbegin\n  select * into r from private.safety_reports where id=p_report for share;\n  if not found or r.reporter_id=p_actor or r.target_id=p_actor then return false; end if;\n  if r.target_type='user' then\n    if p_for_action then\n      -- A case writer must conflict with the account FK key-share acquired\n      -- by a concurrent platform-role insertion.\n      perform 1 from public.accounts where id=r.target_id for update;\n    else\n      -- Queue/detail need stable context, but SHARE avoids a cycle with\n      -- safety block writers that lock Hangout parents before peer accounts.\n      perform 1 from public.accounts where id=r.target_id for share;\n    end if;\n  else\n    select h.host_id into host from public.hangouts h where h.id=r.target_id for share;\n    if host=p_actor then return false; end if;\n  end if;\n  -- A fresh statement after any wait is required. A missing target is still\n  -- reviewable, but a currently privileged user target is not actionable.\n  if r.target_type='hangout' and exists(select 1 from public.hangouts\n      where id=r.target_id and host_id=p_actor) then return false; end if;\n  return true;\nend; $function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "p_actor uuid, p_report uuid, p_for_action boolean",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": false,
+    "arguments_with_defaults": "p_actor uuid, p_report uuid, p_for_action boolean DEFAULT false"
+  },
+  {
+    "acl": [
+      "postgres=X/postgres"
+    ],
+    "name": "private.record_large_hangout_join",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "void",
+    "definition": "CREATE OR REPLACE FUNCTION private.record_large_hangout_join(p_hangout_id uuid)\n RETURNS void\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare gate_enabled boolean;\nbegin\n  select enabled into gate_enabled from private.large_hangout_feature_gate\n    where singleton for share;\n  if gate_enabled and (select count(*) from public.hangout_participants\n      where hangout_id = p_hangout_id and state = 'joined') >= 25 then\n    insert into private.large_hangout_signals(hangout_id, policy_version, threshold_value)\n      values (p_hangout_id, 1, 25) on conflict (hangout_id, policy_version) do nothing;\n  end if;\nend;\n$function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "p_hangout_id uuid",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": false,
+    "arguments_with_defaults": "p_hangout_id uuid"
+  },
+  {
+    "acl": [
+      "postgres=X/postgres"
+    ],
+    "name": "private.pilot_is_available",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "boolean",
+    "definition": "CREATE OR REPLACE FUNCTION private.pilot_is_available()\n RETURNS boolean\n LANGUAGE sql\n STABLE SECURITY DEFINER\n SET search_path TO ''\nAS $function$\n select exists(select 1 from private.pilot_availability where singleton and enabled);\n$function$\n",
+    "volatility": "s",
+    "anon_execute": false,
+    "identity_args": "",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": false,
+    "arguments_with_defaults": ""
+  },
+  {
+    "acl": [
+      "postgres=X/postgres"
+    ],
+    "name": "private.pilot_capability_enabled",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "boolean",
+    "definition": "CREATE OR REPLACE FUNCTION private.pilot_capability_enabled(p_key text)\n RETURNS boolean\n LANGUAGE sql\n STABLE SECURITY DEFINER\n SET search_path TO ''\nAS $function$\n select private.pilot_is_available() and exists(select 1 from private.pilot_capabilities where key=p_key and enabled);\n$function$\n",
+    "volatility": "s",
+    "anon_execute": false,
+    "identity_args": "p_key text",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": false,
+    "arguments_with_defaults": "p_key text"
+  },
+  {
+    "acl": [
+      "postgres=X/postgres"
+    ],
+    "name": "private.pilot_caller_is_admitted",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "boolean",
+    "definition": "CREATE OR REPLACE FUNCTION private.pilot_caller_is_admitted()\n RETURNS boolean\n LANGUAGE sql\n STABLE SECURITY DEFINER\n SET search_path TO ''\nAS $function$\n select private.pilot_is_available() and exists(select 1 from private.pilot_account_admission a join public.accounts c on c.id=a.account_id where a.account_id=auth.uid() and a.state='active' and c.status='active');\n$function$\n",
+    "volatility": "s",
+    "anon_execute": false,
+    "identity_args": "",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": false,
+    "arguments_with_defaults": ""
+  },
+  {
+    "acl": [
+      "postgres=X/postgres",
+      "authenticated=X/postgres"
+    ],
+    "name": "public.join_hangout",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "void",
+    "definition": "CREATE OR REPLACE FUNCTION public.join_hangout(p_hangout_id uuid)\n RETURNS void\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare evidence record; h public.hangouts; participant_state text; did_join boolean;\nbegin\n select * into evidence from private.pilot_lock_ordinary_lifecycle('join_hangout',p_hangout_id);\n h:=evidence.source_row;\n perform private.pilot_require_ordinary_lifecycle('join_hangout',p_hangout_id);\n  if h.status <> 'published' or h.joining_state <> 'open' then\n    raise exception 'Hangout operation not permitted' using errcode = '42501';\n  end if;\n  if exists(select 1 from public.hangout_participants p where p.hangout_id = h.id\n    and p.state = 'joined' and p.account_id <> auth.uid()\n    and private.safety_pair_blocked(auth.uid(), p.account_id)) then\n    raise exception 'Hangout operation not permitted' using errcode = '42501';\n  end if;\n  select state into participant_state from public.hangout_participants\n    where hangout_id = h.id and account_id = auth.uid();\n  if participant_state = 'removed' then\n    raise exception 'Hangout operation not permitted' using errcode = '42501';\n  end if;\n perform private.pilot_require_ordinary_lifecycle('join_hangout',p_hangout_id);\n  if participant_state = 'joined' then return; end if;\n  insert into public.hangout_participants(hangout_id, account_id, state)\n    values (h.id, auth.uid(), 'joined')\n    on conflict(hangout_id, account_id) do update\n      set state = 'joined', joined_at = clock_timestamp(), left_at = null,\n          updated_at = clock_timestamp()\n      where hangout_participants.state = 'left';\n  did_join := found;\n  if did_join then\n    perform private.safety_record_joined_overlap(h.id, auth.uid());\n    perform private.record_large_hangout_join(h.id);\n    perform private.notification_emit_hangout(gen_random_uuid(), h.id, auth.uid(), 'hangout_joined');\n  end if;\nend;\n$function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "p_hangout_id uuid",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true,
+    "arguments_with_defaults": "p_hangout_id uuid"
+  },
+  {
+    "acl": [
+      "postgres=X/postgres"
+    ],
+    "name": "private.require_active_profile_write",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "trigger",
+    "definition": "CREATE OR REPLACE FUNCTION private.require_active_profile_write()\n RETURNS trigger\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\nbegin\n if current_setting('role',true)='authenticated' then\n  perform private.pilot_lock_owner_evidence(auth.uid());\n  if auth.uid() is distinct from new.user_id then\n   raise exception 'Owner operation unavailable' using errcode='42501'; end if;\n end if;\n return new;\nend; $function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": false,
+    "arguments_with_defaults": ""
+  },
+  {
+    "acl": [
+      "postgres=X/postgres",
+      "authenticated=X/postgres"
+    ],
+    "name": "public.apply_hangout_moderation_action",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "TABLE(case_state text, revision bigint, target_disabled boolean)",
+    "definition": "CREATE OR REPLACE FUNCTION public.apply_hangout_moderation_action(p_report_id uuid, p_request_id uuid, p_expected_case_revision bigint, p_reason text)\n RETURNS TABLE(case_state text, revision bigint, target_disabled boolean)\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare actor uuid; r private.safety_reports%rowtype; h public.hangouts%rowtype;\n  c private.moderation_cases%rowtype; prior private.moderation_requests%rowtype;\n  normalized_reason text; fingerprint text; saved_disable uuid;\nbegin\n  -- Shared social lock precedes the parent. Stage A actor lock/gate/role\n  -- precede the report. Take the Hangout parent UPDATE lock exactly once,\n  -- then retry identity, case, and writes. No FOR SHARE upgrade.\n  perform private.social_hangout_mutation_lock();\n  actor:=private.moderation_actor();\n  normalized_reason:=private.profile_trim(p_reason);\n  if p_report_id is null or p_request_id is null or p_expected_case_revision is null\n    or p_expected_case_revision<0 or normalized_reason is null\n    or char_length(normalized_reason) not between 1 and 2000 then\n    raise exception 'Moderation unavailable' using errcode='42501'; end if;\n  select * into r from private.safety_reports where id=p_report_id for share;\n  if not found or r.target_type<>'hangout' or r.reporter_id=actor then\n    raise exception 'Moderation unavailable' using errcode='42501'; end if;\n  select * into h from public.hangouts where id=r.target_id for update;\n  if not found or h.host_id=actor then\n    raise exception 'Moderation unavailable' using errcode='42501'; end if;\n  -- Recheck every authority source after the parent wait. The live target\n  -- stays locked through commit, so host and campus cannot change beneath us.\n  if not exists(select 1 from private.moderation_feature_gate where singleton and enabled)\n    or not exists(select 1 from public.accounts where id=actor and status='active')\n    or not exists(select 1 from public.platform_roles where user_id=actor\n      and role in ('moderator','admin'))\n    or r.reporter_id=actor or h.host_id=actor then\n    raise exception 'Moderation unavailable' using errcode='42501'; end if;\n  fingerprint:='hangout:'||md5(jsonb_build_array(p_report_id,\n    p_expected_case_revision,normalized_reason)::text);\n  perform pg_advisory_xact_lock(hashtextextended(actor::text||p_request_id::text,17017));\n  select * into prior from private.moderation_requests\n    where operator_id=actor and request_id=p_request_id;\n  if found then\n    if prior.fingerprint<>fingerprint or prior.report_id<>p_report_id\n      or not exists(select 1 from private.hangout_disables d\n        where d.operator_id=actor and d.request_id=p_request_id\n          and d.report_id=p_report_id and d.hangout_id=h.id) then\n      raise exception 'Moderation unavailable' using errcode='42501'; end if;\n    case_state:=prior.result_state; revision:=prior.result_revision;\n    target_disabled:=true; return next; return;\n  end if;\n  select * into c from private.moderation_cases\n    where report_id=p_report_id for update;\n  if not found or c.state<>'in_review' or c.revision<>p_expected_case_revision\n    or exists(select 1 from private.hangout_disables where hangout_id=h.id) then\n    raise exception 'Moderation unavailable' using errcode='42501'; end if;\n  insert into private.hangout_disables(report_id,hangout_id,operator_id,request_id,\n    subject_campus_id,reason)\n    values(r.id,h.id,actor,p_request_id,h.university_id,normalized_reason)\n    returning id into saved_disable;\n  update private.moderation_cases set state='closed',revision=c.revision+1,\n    note=normalized_reason,disposition='action_taken',duplicate_report_id=null,\n    sanction_id=null,hangout_disable_id=saved_disable where report_id=r.id;\n  insert into private.moderation_requests(operator_id,request_id,fingerprint,\n    report_id,result_state,result_revision)\n    values(actor,p_request_id,fingerprint,r.id,'closed',c.revision+1);\n  insert into private.moderation_audit(operator_id,action,report_id,\n    subject_target_type,subject_target_id,subject_campus_id,request_id,\n    previous_state,new_state,previous_revision,new_revision,reason,hangout_disable_id,\n    previous_hangout_disabled,new_hangout_disabled)\n    values(actor,'disable_hangout',r.id,'hangout',h.id,h.university_id,p_request_id,\n      c.state,'closed',c.revision,c.revision+1,normalized_reason,saved_disable,false,true);\n  case_state:='closed'; revision:=c.revision+1; target_disabled:=true;\n  return next;\nend; $function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "p_report_id uuid, p_request_id uuid, p_expected_case_revision bigint, p_reason text",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true,
+    "arguments_with_defaults": "p_report_id uuid, p_request_id uuid, p_expected_case_revision bigint, p_reason text"
+  },
+  {
+    "acl": [
+      "postgres=X/postgres"
+    ],
+    "name": "private.pilot_evidence_lock",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "void",
+    "definition": "CREATE OR REPLACE FUNCTION private.pilot_evidence_lock()\n RETURNS void\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\nbegin\n if current_setting('transaction_isolation')<>'read committed' then raise exception 'Pilot management unavailable' using errcode='42501'; end if;\n perform pg_catalog.pg_advisory_xact_lock_shared(16027,1);\nend; $function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": false,
+    "arguments_with_defaults": ""
+  },
+  {
+    "acl": [
+      "postgres=X/postgres"
+    ],
+    "name": "private.pilot_evidence_write_lock",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "void",
+    "definition": "CREATE OR REPLACE FUNCTION private.pilot_evidence_write_lock()\n RETURNS void\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\nbegin\n perform private.social_hangout_mutation_lock();\n perform pg_catalog.pg_advisory_xact_lock(16027,1);\nend; $function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": false,
+    "arguments_with_defaults": ""
+  },
+  {
+    "acl": [
+      "postgres=X/postgres"
+    ],
+    "name": "private.clear_departing_cohost",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "trigger",
+    "definition": "CREATE OR REPLACE FUNCTION private.clear_departing_cohost()\n RETURNS trigger\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\nbegin\n  if old.state = 'joined' and new.state <> 'joined' then\n    delete from private.hangout_cohosts c\n      where c.hangout_id = old.hangout_id and c.account_id = old.account_id;\n  end if;\n  return new;\nend;\n$function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": false,
+    "arguments_with_defaults": ""
+  },
+  {
+    "acl": [
+      "postgres=X/postgres"
+    ],
+    "name": "private.effective_hangout_cohost",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "boolean",
+    "definition": "CREATE OR REPLACE FUNCTION private.effective_hangout_cohost(p_hangout_id uuid, p_actor uuid)\n RETURNS boolean\n LANGUAGE sql\n STABLE SECURITY DEFINER\n SET search_path TO ''\nAS $function$\n  select exists(select 1 from public.hangouts h\n    join private.hangout_cohosts c on c.hangout_id = h.id and c.account_id = p_actor\n    join public.hangout_participants p on p.hangout_id = c.hangout_id\n      and p.account_id = c.account_id and p.state = 'joined'\n    where h.id = p_hangout_id and h.status = 'published'\n      and h.host_id <> p_actor and h.visibility = 'campus'\n      and not exists(select 1 from private.hangout_disables d where d.hangout_id = h.id)\n      and private.hangouts_enabled()\n      and private.pilot_capability_enabled('hangouts')\n      and h.location_precision='approximate_area'\n      and private.ready_subject_campus(h.host_id,h.university_id)\n      and private.ready_subject_campus(p_actor, h.university_id)\n      and not private.safety_pair_blocked(p_actor, h.host_id));\n$function$\n",
+    "volatility": "s",
+    "anon_execute": false,
+    "identity_args": "p_hangout_id uuid, p_actor uuid",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": false,
+    "arguments_with_defaults": "p_hangout_id uuid, p_actor uuid"
+  },
+  {
+    "acl": [
+      "postgres=X/postgres"
+    ],
+    "name": "private.pilot_lock_ordinary_lifecycle",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "TABLE(actor_id uuid, host_id uuid, campus_id uuid, source_row hangouts, prior_hangout_id uuid, prior_payload_fingerprint text, locked_subject_bindings jsonb)",
+    "definition": "CREATE OR REPLACE FUNCTION private.pilot_lock_ordinary_lifecycle(p_operation text, p_hangout_id uuid, p_request_id uuid DEFAULT NULL::uuid)\n RETURNS TABLE(actor_id uuid, host_id uuid, campus_id uuid, source_row hangouts, prior_hangout_id uuid, prior_payload_fingerprint text, locked_subject_bindings jsonb)\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare subjects uuid[]; subject uuid; campus uuid; photo text; object_id uuid; binding jsonb;\n memberships jsonb:='{}'::jsonb; photos jsonb:='{}'::jsonb; objects jsonb:='{}'::jsonb;\nbegin\n -- Social is first, including its established stronger-isolation error.\n perform private.social_hangout_mutation_lock();\n actor_id:=auth.uid();\n if actor_id is null or p_operation is null or p_operation not in ('create_hangout','edit_hangout','cancel_hangout','join_hangout','leave_hangout','set_hangout_joining')\n  or (p_operation='create_hangout' and p_hangout_id is not null)\n  or (p_operation<>'create_hangout' and (p_hangout_id is null or p_request_id is not null)) then\n  raise exception 'Hangout operation not permitted' using errcode='42501'; end if;\n perform private.pilot_evidence_lock();\n perform 1 from private.pilot_availability where singleton for share;\n if not found then raise exception 'Hangout operation not permitted' using errcode='42501'; end if;\n perform 1 from private.pilot_capabilities where key='hangouts' for share;\n if not found then raise exception 'Hangout operation not permitted' using errcode='42501'; end if;\n if not private.pilot_capability_enabled('hangouts') then raise exception 'Hangout operation not permitted' using errcode='42501'; end if;\n if p_operation='create_hangout' then\n  if p_request_id is not null then\n   perform pg_catalog.pg_advisory_xact_lock(pg_catalog.hashtextextended(actor_id::text||p_request_id::text,0));\n   select r.hangout_id,r.payload_fingerprint into prior_hangout_id,prior_payload_fingerprint\n    from private.hangout_create_requests r where r.host_id=actor_id and r.request_id=p_request_id;\n  end if;\n  if prior_hangout_id is not null then\n   select h.* into source_row from public.hangouts h where h.id=prior_hangout_id for update;\n   if not found then raise exception 'Hangout operation not permitted' using errcode='42501'; end if;\n  end if;\n else\n  select h.* into source_row from public.hangouts h where h.id=p_hangout_id for update;\n  if not found then raise exception 'Hangout operation not permitted' using errcode='42501'; end if;\n end if;\n host_id:=coalesce(source_row.host_id,actor_id);\n campus_id:=source_row.university_id;\n perform 1 from private.hangout_feature_gate where singleton for share;\n if not found then raise exception 'Hangout operation not permitted' using errcode='42501'; end if;\n select array_agg(s order by s) into subjects from (select distinct unnest(array[actor_id,host_id]) s) ids;\n foreach subject in array subjects loop\n  perform 1 from public.accounts where id=subject for share;\n  if not found then raise exception 'Hangout operation not permitted' using errcode='42501'; end if;\n end loop;\n foreach subject in array subjects loop\n  perform 1 from private.pilot_account_admission where account_id=subject for share;\n  if not found then raise exception 'Hangout operation not permitted' using errcode='42501'; end if;\n end loop;\n foreach subject in array subjects loop\n  perform 1 from auth.users where id=subject for share;\n  if not found then raise exception 'Hangout operation not permitted' using errcode='42501'; end if;\n end loop;\n foreach subject in array subjects loop\n  select m.university_id into campus from public.university_memberships m where m.user_id=subject for share;\n  if not found then raise exception 'Hangout operation not permitted' using errcode='42501'; end if;\n  memberships:=memberships||jsonb_build_object(subject::text,campus);\n end loop;\n if campus_id is null then campus_id:=(memberships->>actor_id::text)::uuid; end if;\n for campus in select distinct value::uuid from jsonb_each_text(memberships) order by value::uuid loop\n  perform 1 from public.universities c where c.id=campus for share;\n  if not found then raise exception 'Hangout operation not permitted' using errcode='42501'; end if;\n end loop;\n foreach subject in array subjects loop\n  select p.primary_photo_path into photo from public.profiles p where p.user_id=subject for share;\n  if not found then raise exception 'Hangout operation not permitted' using errcode='42501'; end if;\n  if photo is null then raise exception 'Hangout operation not permitted' using errcode='42501'; end if;\n  photos:=photos||jsonb_build_object(subject::text,photo);\n end loop;\n for subject,photo in select key::uuid,value from jsonb_each_text(photos) order by value,key::uuid loop\n  select o.id into object_id from storage.objects o where o.bucket_id='profile-photos' and o.name=photo and o.owner_id=subject::text for share;\n  if not found then raise exception 'Hangout operation not permitted' using errcode='42501'; end if;\n  objects:=objects||jsonb_build_object(subject::text,object_id);\n end loop;\n locked_subject_bindings:='[]';\n foreach subject in array subjects loop\n  binding:=jsonb_build_object('subject_id',subject,'membership_campus_id',memberships->>subject::text,\n   'primary_photo_path',photos->>subject::text,'storage_object_id',objects->>subject::text);\n  locked_subject_bindings:=locked_subject_bindings||jsonb_build_array(binding);\n end loop;\n -- All waits finished. Bind every current predicate to the actual locked tuple,\n -- never a fresh EXISTS that could accept an unlocked replacement row.\n foreach subject in array subjects loop\n  if not private.ready_subject_campus(subject,campus_id)\n   or (memberships->>subject::text)::uuid is distinct from campus_id\n   or not exists(select 1 from public.university_memberships m where m.user_id=subject and m.university_id=(memberships->>subject::text)::uuid)\n   or not exists(select 1 from public.profiles p where p.user_id=subject and p.primary_photo_path=photos->>subject::text)\n   or not exists(select 1 from storage.objects o where o.id=(objects->>subject::text)::uuid and o.bucket_id='profile-photos' and o.name=photos->>subject::text and o.owner_id=subject::text) then\n   raise exception 'Hangout operation not permitted' using errcode='42501'; end if;\n end loop;\n -- Original lower state boundary follows the complete identity phases. Source\n -- parent UPDATE prevents new FK-bound state rows from appearing behind us.\n if source_row.id is not null then\n  perform 1 from public.hangout_participants p where p.hangout_id=source_row.id and p.account_id=actor_id for update;\n  if not found and p_operation='leave_hangout' then\n   raise exception 'Hangout operation not permitted' using errcode='42501'; end if;\n  if p_operation in ('edit_hangout','set_hangout_joining') and actor_id<>host_id then\n   perform 1 from private.hangout_cohosts c where c.hangout_id=source_row.id and c.account_id=actor_id for share;\n   if not found then raise exception 'Hangout operation not permitted' using errcode='42501'; end if;\n  end if;\n end if;\n perform private.pilot_require_ordinary_lifecycle(p_operation,coalesce(p_hangout_id,prior_hangout_id));\n return next;\nend; $function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "p_operation text, p_hangout_id uuid, p_request_id uuid",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": false,
+    "arguments_with_defaults": "p_operation text, p_hangout_id uuid, p_request_id uuid DEFAULT NULL::uuid"
+  },
+  {
+    "acl": [
+      "postgres=X/postgres",
+      "authenticated=X/postgres"
+    ],
+    "name": "public.edit_hangout",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "bigint",
+    "definition": "CREATE OR REPLACE FUNCTION public.edit_hangout(p_hangout_id uuid, p_expected_revision bigint, p_title text, p_starts_at timestamp with time zone, p_public_place text, p_public_latitude double precision, p_public_longitude double precision, p_description text DEFAULT NULL::text, p_ends_at timestamp with time zone DEFAULT NULL::timestamp with time zone, p_campus_zone text DEFAULT NULL::text, p_private_instructions text DEFAULT NULL::text, p_visibility text DEFAULT 'campus'::text, p_location_precision text DEFAULT 'approximate_area'::text, p_eligibility jsonb DEFAULT NULL::jsonb)\n RETURNS bigint\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare evidence record; h public.hangouts; next_revision bigint; normalized_private text; old_private text; material boolean;\nbegin\n select * into evidence from private.pilot_lock_ordinary_lifecycle('edit_hangout',p_hangout_id);\n h:=evidence.source_row;\n perform private.pilot_require_ordinary_lifecycle('edit_hangout',p_hangout_id);\n if (h.host_id<>auth.uid() and not private.effective_hangout_cohost(h.id,auth.uid())) or h.status<>'published' then raise exception 'Hangout operation not permitted' using errcode='42501'; end if;\n perform private.check_hangout_revision(h,p_expected_revision);\n perform private.validate_hangout_input(p_title,p_starts_at,p_public_place,p_public_latitude,p_public_longitude,p_description,p_ends_at,p_campus_zone,p_visibility,p_location_precision,p_eligibility);\n perform private.validate_hangout_instructions(p_private_instructions);\n if p_starts_at is distinct from h.starts_at and (p_starts_at<clock_timestamp() or p_starts_at>clock_timestamp()+interval '366 days') then\n   raise exception 'Invalid Hangout input' using errcode='22023'; end if;\n normalized_private=nullif(private.profile_trim(p_private_instructions),'');\n select instructions into old_private from public.hangout_private_locations where hangout_id=h.id;\n perform private.pilot_require_ordinary_lifecycle('edit_hangout',p_hangout_id);\n update public.hangouts set title=private.profile_trim(p_title),starts_at=p_starts_at,public_place=private.profile_trim(p_public_place),public_latitude=p_public_latitude,public_longitude=p_public_longitude,description=nullif(private.profile_trim(p_description),''),ends_at=p_ends_at,campus_zone=nullif(private.profile_trim(p_campus_zone),''),revision=revision+1,updated_at=clock_timestamp() where id=h.id returning revision into next_revision;\n if normalized_private is null then delete from public.hangout_private_locations where hangout_id=h.id;\n else insert into public.hangout_private_locations(hangout_id,instructions) values(h.id,normalized_private)\n  on conflict(hangout_id) do update set instructions=excluded.instructions,updated_at=clock_timestamp(); end if;\n material:=row(h.title,h.starts_at,h.public_place,h.public_latitude,h.public_longitude,h.description,h.ends_at,h.campus_zone,old_private)\n  is distinct from row(private.profile_trim(p_title),p_starts_at,private.profile_trim(p_public_place),p_public_latitude,p_public_longitude,\n   nullif(private.profile_trim(p_description),''),p_ends_at,nullif(private.profile_trim(p_campus_zone),''),normalized_private);\n if material then perform private.notification_emit_hangout(gen_random_uuid(),h.id,auth.uid(),'hangout_edited'); end if;\n return next_revision;\nend; $function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "p_hangout_id uuid, p_expected_revision bigint, p_title text, p_starts_at timestamp with time zone, p_public_place text, p_public_latitude double precision, p_public_longitude double precision, p_description text, p_ends_at timestamp with time zone, p_campus_zone text, p_private_instructions text, p_visibility text, p_location_precision text, p_eligibility jsonb",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true,
+    "arguments_with_defaults": "p_hangout_id uuid, p_expected_revision bigint, p_title text, p_starts_at timestamp with time zone, p_public_place text, p_public_latitude double precision, p_public_longitude double precision, p_description text DEFAULT NULL::text, p_ends_at timestamp with time zone DEFAULT NULL::timestamp with time zone, p_campus_zone text DEFAULT NULL::text, p_private_instructions text DEFAULT NULL::text, p_visibility text DEFAULT 'campus'::text, p_location_precision text DEFAULT 'approximate_area'::text, p_eligibility jsonb DEFAULT NULL::jsonb"
+  },
+  {
+    "acl": [
+      "postgres=X/postgres",
+      "authenticated=X/postgres"
+    ],
+    "name": "public.promote_hangout_cohost",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "bigint",
+    "definition": "CREATE OR REPLACE FUNCTION public.promote_hangout_cohost(p_hangout_id uuid, p_account_id uuid, p_expected_revision bigint)\n RETURNS bigint\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare h public.hangouts; next_revision bigint;\nbegin\n  perform private.social_hangout_mutation_lock();\n  h := private.lock_hangout(p_hangout_id);\n  if p_account_id is not null and p_account_id <> h.host_id then\n    perform private.safety_lock_hangout_evidence(p_account_id, h.university_id);\n  end if;\n  if h.host_id <> auth.uid() or h.status <> 'published' or p_account_id is null\n    or p_account_id = h.host_id or not exists(\n      select 1 from public.hangout_participants p where p.hangout_id = h.id\n        and p.account_id = p_account_id and p.state = 'joined')\n    or not private.ready_subject_campus(p_account_id, h.university_id)\n    or private.safety_pair_blocked(h.host_id, p_account_id)\n    or exists(select 1 from private.hangout_cohosts c where c.hangout_id = h.id\n      and c.account_id = p_account_id) then\n    raise exception 'Hangout operation not permitted' using errcode = '42501';\n  end if;\n  perform private.check_hangout_revision(h, p_expected_revision);\n  insert into private.hangout_cohosts(hangout_id, account_id) values(h.id, p_account_id);\n  update public.hangouts set revision = revision + 1, updated_at = clock_timestamp()\n    where id = h.id returning revision into next_revision;\n  return next_revision;\nend;\n$function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "p_hangout_id uuid, p_account_id uuid, p_expected_revision bigint",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true,
+    "arguments_with_defaults": "p_hangout_id uuid, p_account_id uuid, p_expected_revision bigint"
+  },
+  {
+    "acl": [
+      "postgres=X/postgres",
+      "authenticated=X/postgres"
+    ],
+    "name": "public.demote_hangout_cohost",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "bigint",
+    "definition": "CREATE OR REPLACE FUNCTION public.demote_hangout_cohost(p_hangout_id uuid, p_account_id uuid, p_expected_revision bigint)\n RETURNS bigint\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare h public.hangouts; next_revision bigint;\nbegin\n  perform private.social_hangout_mutation_lock();\n  h := private.lock_hangout(p_hangout_id);\n  if h.host_id <> auth.uid() or h.status <> 'published' or p_account_id is null\n    or p_account_id = h.host_id or not exists(\n      select 1 from private.hangout_cohosts c where c.hangout_id = h.id\n        and c.account_id = p_account_id) then\n    raise exception 'Hangout operation not permitted' using errcode = '42501';\n  end if;\n  perform private.check_hangout_revision(h, p_expected_revision);\n  delete from private.hangout_cohosts where hangout_id = h.id and account_id = p_account_id;\n  update public.hangouts set revision = revision + 1, updated_at = clock_timestamp()\n    where id = h.id returning revision into next_revision;\n  return next_revision;\nend;\n$function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "p_hangout_id uuid, p_account_id uuid, p_expected_revision bigint",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true,
+    "arguments_with_defaults": "p_hangout_id uuid, p_account_id uuid, p_expected_revision bigint"
+  },
+  {
+    "acl": [
+      "postgres=X/postgres",
+      "authenticated=X/postgres"
+    ],
+    "name": "public.step_down_hangout_cohost",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "bigint",
+    "definition": "CREATE OR REPLACE FUNCTION public.step_down_hangout_cohost(p_hangout_id uuid, p_expected_revision bigint)\n RETURNS bigint\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare h public.hangouts; next_revision bigint;\nbegin\n  perform private.social_hangout_mutation_lock();\n  h := private.lock_hangout(p_hangout_id);\n  if h.status <> 'published' or not private.effective_hangout_cohost(h.id, auth.uid()) then\n    raise exception 'Hangout operation not permitted' using errcode = '42501';\n  end if;\n  perform private.check_hangout_revision(h, p_expected_revision);\n  delete from private.hangout_cohosts where hangout_id = h.id and account_id = auth.uid();\n  update public.hangouts set revision = revision + 1, updated_at = clock_timestamp()\n    where id = h.id returning revision into next_revision;\n  return next_revision;\nend;\n$function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "p_hangout_id uuid, p_expected_revision bigint",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true,
+    "arguments_with_defaults": "p_hangout_id uuid, p_expected_revision bigint"
+  },
+  {
+    "acl": [
+      "postgres=X/postgres",
+      "authenticated=X/postgres"
+    ],
+    "name": "public.remove_hangout_participant",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "bigint",
+    "definition": "CREATE OR REPLACE FUNCTION public.remove_hangout_participant(p_hangout_id uuid, p_account_id uuid, p_expected_revision bigint)\n RETURNS bigint\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare h public.hangouts; next_revision bigint; target_state text;\nbegin\n  perform private.social_hangout_mutation_lock();\n  h := private.lock_hangout(p_hangout_id);\n  if p_account_id is null or p_account_id = h.host_id\n    or (h.host_id <> auth.uid() and not private.effective_hangout_cohost(h.id, auth.uid()))\n    or (h.host_id <> auth.uid() and h.status <> 'published') then\n    raise exception 'Hangout operation not permitted' using errcode = '42501';\n  end if;\n  perform private.check_hangout_revision(h, p_expected_revision);\n  select state into target_state from public.hangout_participants p\n    where p.hangout_id = h.id and p.account_id = p_account_id;\n  if target_state not in ('joined','left') or target_state is null then\n    raise exception 'Hangout operation not permitted' using errcode = '42501';\n  end if;\n  if h.host_id <> auth.uid() then\n    perform private.safety_lock_hangout_evidence(p_account_id, h.university_id);\n    if target_state <> 'joined'\n      or not private.ready_subject_campus(p_account_id, h.university_id)\n      or exists(select 1 from private.hangout_cohosts c\n        where c.hangout_id = h.id and c.account_id = p_account_id)\n      or private.safety_pair_blocked(auth.uid(), p_account_id)\n      or not private.effective_hangout_cohost(h.id, auth.uid()) then\n      raise exception 'Hangout operation not permitted' using errcode = '42501';\n    end if;\n  end if;\n  perform private.safety_record_joined_overlap(h.id, p_account_id);\n  update public.hangout_participants set state = 'removed',\n    removed_at = clock_timestamp(), updated_at = clock_timestamp()\n    where hangout_id = h.id and account_id = p_account_id and state in ('joined','left');\n  if not found then raise exception 'Hangout operation not permitted' using errcode = '42501'; end if;\n  update public.hangouts set revision = revision + 1,\n    updated_at = case when status = 'cancelled' then updated_at else clock_timestamp() end\n    where id = h.id returning revision into next_revision;\n  return next_revision;\nend;\n$function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "p_hangout_id uuid, p_account_id uuid, p_expected_revision bigint",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true,
+    "arguments_with_defaults": "p_hangout_id uuid, p_account_id uuid, p_expected_revision bigint"
+  },
+  {
+    "acl": [
+      "postgres=X/postgres"
+    ],
+    "name": "private.pilot_lock_management",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "void",
+    "definition": "CREATE OR REPLACE FUNCTION private.pilot_lock_management(p_actor uuid, p_target uuid, p_policy_key text, p_manager_write boolean DEFAULT false)\n RETURNS void\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare subject uuid;\nbegin\n perform private.pilot_evidence_write_lock();\n if p_policy_key='availability' then perform 1 from private.pilot_availability where singleton for update;\n else perform 1 from private.pilot_availability where singleton for share; end if;\n perform 1 from private.pilot_capabilities where key<>coalesce(p_policy_key,'') order by key for share;\n if p_policy_key is not null and p_policy_key<>'availability' then perform 1 from private.pilot_capabilities where key=p_policy_key for update; end if;\n for subject in select distinct v from unnest(array[p_actor,p_target]) v where v is not null order by v loop\n  perform 1 from public.accounts where id=subject for share;\n end loop;\n for subject in select distinct v from unnest(array[p_actor,p_target]) v where v is not null order by v loop\n  if p_manager_write and subject=p_target then perform 1 from private.pilot_admission_managers where account_id=subject for update;\n  else perform 1 from private.pilot_admission_managers where account_id=subject for share; end if;\n end loop;\n for subject in select distinct v from unnest(array[p_actor,p_target]) v where v is not null order by v loop\n  if not p_manager_write and subject=p_target and p_policy_key is null then perform 1 from private.pilot_account_admission where account_id=subject for update;\n  else perform 1 from private.pilot_account_admission where account_id=subject for share; end if;\n end loop;\nend; $function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "p_actor uuid, p_target uuid, p_policy_key text, p_manager_write boolean",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": false,
+    "arguments_with_defaults": "p_actor uuid, p_target uuid, p_policy_key text, p_manager_write boolean DEFAULT false"
+  },
+  {
+    "acl": [
+      "postgres=X/postgres"
+    ],
+    "name": "private.pilot_require_manager",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "uuid",
+    "definition": "CREATE OR REPLACE FUNCTION private.pilot_require_manager()\n RETURNS uuid\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare actor uuid:=auth.uid();\nbegin\n if actor is null or not exists(select 1 from public.accounts where id=actor and status='active')\n  or not exists(select 1 from private.pilot_admission_managers where account_id=actor and state='active') then\n  raise exception 'Pilot management unavailable' using errcode='42501'; end if;\n return actor;\nend; $function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": false,
+    "arguments_with_defaults": ""
+  },
+  {
+    "acl": [
+      "postgres=X/postgres"
+    ],
+    "name": "private.pilot_require_activation",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "void",
+    "definition": "CREATE OR REPLACE FUNCTION private.pilot_require_activation(p_target uuid)\n RETURNS void\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare campus uuid;\nbegin\n perform 1 from auth.users where id=p_target for share;\n select university_id into campus from public.university_memberships where user_id=p_target for share;\n perform 1 from public.universities where id=campus for share;\n -- Separate statement after locks/waits: campus came from locked current tuple.\n if not exists(select 1 from public.accounts a join auth.users u on u.id=a.id\n  join public.university_memberships m on m.user_id=a.id join public.universities c on c.id=m.university_id\n  where a.id=p_target and a.status='active' and c.id=campus and c.slug='unc-chapel-hill' and c.active\n   and u.email_confirmed_at is not null and m.verified_at is not null\n   and lower(u.email)=lower(m.verification_email) and u.email ~ '^[^@[:space:]]+@[^@[:space:]]+$'\n   and lower(split_part(u.email,'@',2))=any(c.allowed_email_domains)) then\n  raise exception 'Pilot management unavailable' using errcode='42501'; end if;\nend; $function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "p_target uuid",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": false,
+    "arguments_with_defaults": "p_target uuid"
+  },
+  {
+    "acl": [
+      "postgres=X/postgres"
+    ],
+    "name": "private.set_pilot_manager_fixture",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "bigint",
+    "definition": "CREATE OR REPLACE FUNCTION private.set_pilot_manager_fixture(p_account_id uuid, p_state text, p_expected_revision bigint, p_reason text, p_request_id uuid)\n RETURNS bigint\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare original_role text:=current_setting('role',true); reason text:=private.profile_trim(p_reason); old private.pilot_admission_managers%rowtype; next_revision bigint;\nbegin\n if session_user<>'postgres' or original_role not in ('none','postgres') then raise exception 'Pilot management unavailable' using errcode='42501'; end if;\n perform private.pilot_lock_management(null,p_account_id,null,true);\n if p_account_id is null or p_state is null or p_state not in ('active','revoked') or p_expected_revision is null or p_expected_revision<0\n  or reason is null or char_length(reason) not between 1 and 2000 or p_request_id is null\n  or not exists(select 1 from public.accounts where id=p_account_id) then raise exception 'Pilot management unavailable' using errcode='42501'; end if;\n select * into old from private.pilot_admission_managers where account_id=p_account_id;\n if coalesce(old.revision,0)<>p_expected_revision then raise exception 'Pilot management unavailable' using errcode='42501'; end if;\n next_revision:=case when old.state=p_state then old.revision else coalesce(old.revision,0)+1 end;\n if old.account_id is null then insert into private.pilot_admission_managers(account_id,state,revision) values(p_account_id,p_state,next_revision);\n elsif old.state<>p_state then update private.pilot_admission_managers set state=p_state,revision=next_revision,updated_at=clock_timestamp() where account_id=p_account_id; end if;\n insert into private.pilot_manager_audit(account_id,executor_session_user,executor_original_role,executor_backend_pid,previous_state,new_state,previous_revision,new_revision,reason,request_id)\n values(p_account_id,session_user,original_role,pg_backend_pid(),old.state,p_state,coalesce(old.revision,0),next_revision,reason,p_request_id);\n return next_revision;\nend; $function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "p_account_id uuid, p_state text, p_expected_revision bigint, p_reason text, p_request_id uuid",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": false,
+    "arguments_with_defaults": "p_account_id uuid, p_state text, p_expected_revision bigint, p_reason text, p_request_id uuid"
+  },
+  {
+    "acl": [
+      "postgres=X/postgres"
+    ],
+    "name": "private.pilot_owner_subject_eligible",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "boolean",
+    "definition": "CREATE OR REPLACE FUNCTION private.pilot_owner_subject_eligible(subject uuid)\n RETURNS boolean\n LANGUAGE sql\n STABLE SECURITY DEFINER\n SET search_path TO ''\nAS $function$\n select private.pilot_is_available() and private.pilot_capability_enabled('onboarding')\n and exists(select 1 from public.accounts a\n join private.pilot_account_admission r on r.account_id=a.id and r.state='active'\n join auth.users u on u.id=a.id\n join public.university_memberships m on m.user_id=a.id\n join public.universities c on c.id=m.university_id\n where a.id=subject and a.status='active' and c.slug='unc-chapel-hill' and c.active\n and u.email_confirmed_at is not null and m.verified_at is not null\n and lower(u.email)=lower(m.verification_email)\n and u.email ~ '^[^@[:space:]]+@[^@[:space:]]+$'\n and lower(split_part(u.email,'@',2))=any(c.allowed_email_domains));\n$function$\n",
+    "volatility": "s",
+    "anon_execute": false,
+    "identity_args": "subject uuid",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": false,
+    "arguments_with_defaults": "subject uuid"
+  },
+  {
+    "acl": [
+      "postgres=X/postgres",
+      "authenticated=X/postgres"
+    ],
+    "name": "private.pilot_onboarding_eligible",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "boolean",
+    "definition": "CREATE OR REPLACE FUNCTION private.pilot_onboarding_eligible()\n RETURNS boolean\n LANGUAGE sql\n STABLE SECURITY DEFINER\n SET search_path TO ''\nAS $function$\n select private.pilot_owner_subject_eligible((select auth.uid()));\n$function$\n",
+    "volatility": "s",
+    "anon_execute": false,
+    "identity_args": "",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true,
+    "arguments_with_defaults": ""
+  },
+  {
+    "acl": [
+      "postgres=X/postgres"
+    ],
+    "name": "private.pilot_lock_owner_evidence",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "void",
+    "definition": "CREATE OR REPLACE FUNCTION private.pilot_lock_owner_evidence(subject uuid)\n RETURNS void\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare campus uuid;\nbegin\n perform private.pilot_evidence_lock();\n perform 1 from private.pilot_availability where singleton for share;\n if not found then raise exception 'Owner operation unavailable' using errcode='42501'; end if;\n perform 1 from private.pilot_capabilities where key='onboarding' for share;\n if not found then raise exception 'Owner operation unavailable' using errcode='42501'; end if;\n -- One involved account, hence trivially sorted UUID order.\n perform 1 from public.accounts where id=subject for share;\n if not found then raise exception 'Owner operation unavailable' using errcode='42501'; end if;\n perform 1 from private.pilot_account_admission where account_id=subject for share;\n if not found then raise exception 'Owner operation unavailable' using errcode='42501'; end if;\n perform 1 from auth.users where id=subject for share;\n if not found then raise exception 'Owner operation unavailable' using errcode='42501'; end if;\n select university_id into campus from public.university_memberships where user_id=subject for share;\n if not found then raise exception 'Owner operation unavailable' using errcode='42501'; end if;\n perform 1 from public.universities where id=campus for share;\n if not found then raise exception 'Owner operation unavailable' using errcode='42501'; end if;\n -- This separate volatile statement receives a fresh READ COMMITTED snapshot.\n if subject is null or not private.pilot_owner_subject_eligible(subject)\n  or not exists(select 1 from public.university_memberships where user_id=subject and university_id=campus) then\n  raise exception 'Owner operation unavailable' using errcode='42501'; end if;\nend; $function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "subject uuid",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": false,
+    "arguments_with_defaults": "subject uuid"
+  },
+  {
+    "acl": [
+      "postgres=X/postgres",
+      "authenticated=X/postgres"
+    ],
+    "name": "public.set_hangout_joining",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "bigint",
+    "definition": "CREATE OR REPLACE FUNCTION public.set_hangout_joining(p_hangout_id uuid, p_expected_revision bigint, p_joining_state text)\n RETURNS bigint\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare evidence record; h public.hangouts; next_revision bigint;\nbegin\n select * into evidence from private.pilot_lock_ordinary_lifecycle('set_hangout_joining',p_hangout_id);\n h:=evidence.source_row;\n perform private.pilot_require_ordinary_lifecycle('set_hangout_joining',p_hangout_id);\n if (h.host_id<>auth.uid() and not private.effective_hangout_cohost(h.id,auth.uid())) or h.status<>'published' then raise exception 'Hangout operation not permitted' using errcode='42501'; end if;\n perform private.check_hangout_revision(h,p_expected_revision);\n if p_joining_state is null or p_joining_state not in ('open','closed') then raise exception 'Invalid joining state' using errcode='22023'; end if;\n perform private.pilot_require_ordinary_lifecycle('set_hangout_joining',p_hangout_id);\n update public.hangouts set joining_state=p_joining_state,revision=revision+1,updated_at=clock_timestamp() where id=h.id returning revision into next_revision;\n return next_revision;\nend;\n$function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "p_hangout_id uuid, p_expected_revision bigint, p_joining_state text",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true,
+    "arguments_with_defaults": "p_hangout_id uuid, p_expected_revision bigint, p_joining_state text"
+  },
+  {
+    "acl": [
+      "postgres=X/postgres"
+    ],
+    "name": "private.require_active_photo_write",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "trigger",
+    "definition": "CREATE OR REPLACE FUNCTION private.require_active_photo_write()\n RETURNS trigger\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare target storage.objects%rowtype; subject uuid; original_role text:=current_setting('role',true);\nbegin\n target:=case when tg_op='DELETE' then old else new end;\n if target.bucket_id='profile-photos' then\n  if original_role='authenticated' then\n   subject:=auth.uid();\n   if subject is null or target.owner_id is distinct from subject::text then\n    raise exception 'Owner operation unavailable' using errcode='42501'; end if;\n  elsif original_role='service_role' then\n   -- Real Storage first checks client permission separately, then persists as\n   -- supabase_storage_admin/service_role with auth.uid null. Guard that final\n   -- row through commit using its server-assigned owner; no service RPC grant.\n   if tg_op<>'INSERT' or session_user<>'supabase_storage_admin' or target.owner_id is null\n    or target.owner_id !~ '^[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}$' then\n    raise exception 'Owner operation unavailable' using errcode='42501'; end if;\n   subject:=target.owner_id::uuid;\n   -- Storage finalizes via UPSERT even for a create request. Never let its\n   -- privileged final insert overwrite an already committed immutable name.\n   if exists(select 1 from storage.objects o where o.bucket_id=target.bucket_id and o.name=target.name) then\n    raise exception 'Owner operation unavailable' using errcode='42501'; end if;\n  end if;\n  if original_role in ('authenticated','service_role') then\n   if target.name !~ ('^'||subject::text||'/[a-f0-9-]+\\.(jpg|png|webp)$') then\n    raise exception 'Owner operation unavailable' using errcode='42501'; end if;\n   perform private.pilot_lock_owner_evidence(subject);\n  end if;\n end if;\n if tg_op='DELETE' then return old; end if;\n return new;\nend; $function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": false,
+    "arguments_with_defaults": ""
+  },
+  {
+    "acl": [
+      "postgres=X/postgres"
+    ],
+    "name": "private.reject_client_profile_photo_update",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "trigger",
+    "definition": "CREATE OR REPLACE FUNCTION private.reject_client_profile_photo_update()\n RETURNS trigger\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\nbegin\n if (old.bucket_id='profile-photos' or new.bucket_id='profile-photos')\n  and current_setting('role',true) in ('authenticated','service_role') then\n  raise exception 'Profile photos are immutable' using errcode='42501'; end if;\n return new;\nend; $function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": false,
+    "arguments_with_defaults": ""
+  },
+  {
+    "acl": [
+      "postgres=X/postgres",
+      "authenticated=X/postgres"
+    ],
+    "name": "private.can_read_hangout",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "boolean",
+    "definition": "CREATE OR REPLACE FUNCTION private.can_read_hangout(target uuid, private_details boolean DEFAULT false)\n RETURNS boolean\n LANGUAGE sql\n STABLE SECURITY DEFINER\n SET search_path TO ''\nAS $function$\n select exists(select 1 from public.hangouts h\n where h.id=target and h.university_id=private.ready_campus() and h.visibility='campus'\n and h.location_precision='approximate_area'\n and private.ready_subject_campus(h.host_id,h.university_id)\n and not exists(select 1 from private.hangout_disables d where d.hangout_id=h.id)\n and not private.safety_pair_blocked(auth.uid(),h.host_id)\n and (case when private_details then h.status='published' and\n       (h.host_id=auth.uid() or exists(select 1 from public.hangout_participants p\n         where p.hangout_id=h.id and p.account_id=auth.uid() and p.state='joined'))\n   else h.status='published' or (h.status='cancelled' and\n       (h.host_id=auth.uid() or exists(select 1 from public.hangout_participants p\n         where p.hangout_id=h.id and p.account_id=auth.uid() and p.state='joined'))) end));\n$function$\n",
+    "volatility": "s",
+    "anon_execute": false,
+    "identity_args": "target uuid, private_details boolean",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true,
+    "arguments_with_defaults": "target uuid, private_details boolean DEFAULT false"
+  },
+  {
+    "acl": [
+      "postgres=X/postgres"
+    ],
+    "name": "private.chat_authorized",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "boolean",
+    "definition": "CREATE OR REPLACE FUNCTION private.chat_authorized(p_hangout_id uuid)\n RETURNS boolean\n LANGUAGE sql\n STABLE SECURITY DEFINER\n SET search_path TO ''\nAS $function$\n  select current_setting('transaction_isolation')='read committed'\n    and private.pilot_capability_enabled('hangout_chat')\n    and private.ready_campus() is not null\n    and exists(select 1 from private.hangout_feature_gate where singleton and enabled)\n    and exists(select 1 from private.hangout_chat_feature_gate where singleton and enabled)\n    and exists(select 1 from public.hangouts h\n      join public.hangout_participants p on p.hangout_id=h.id\n      where h.id=p_hangout_id and h.status='published' and h.visibility='campus'\n        and h.location_precision='approximate_area'\n        and h.university_id=private.ready_campus()\n        and private.ready_subject_campus(h.host_id,h.university_id)\n        and not exists(select 1 from private.hangout_disables d where d.hangout_id=h.id)\n        and p.account_id=auth.uid() and p.state='joined'\n        and not private.safety_pair_blocked(auth.uid(),h.host_id)\n        and private.ready_subject_campus(auth.uid(),h.university_id));\n$function$\n",
+    "volatility": "s",
+    "anon_execute": false,
+    "identity_args": "p_hangout_id uuid",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": false,
+    "arguments_with_defaults": "p_hangout_id uuid"
+  },
+  {
+    "acl": [
+      "postgres=X/postgres",
+      "authenticated=X/postgres"
+    ],
+    "name": "public.set_safety_block",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "boolean",
+    "definition": "CREATE OR REPLACE FUNCTION public.set_safety_block(p_account_id uuid, p_blocked boolean)\n RETURNS boolean\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare actor uuid:=auth.uid(); target uuid; hangout_row public.hangouts%rowtype; effect text;\nbegin\n  perform private.social_hangout_mutation_lock();\n  if actor is null or p_account_id is null or p_account_id=actor or p_blocked is null\n      or not private.people_active_owner() then\n    raise exception 'Safety operation unavailable' using errcode='42501';\n  end if;\n  perform private.friendship_lock_pair(actor,p_account_id);\n  -- A fresh READ COMMITTED statement discovers the full currently shared set\n  -- after every preceding mutation. Sorted parents precede gate/evidence rows.\n  for target in\n    select x.hangout_id from public.hangout_participants x\n    join public.hangout_participants y on y.hangout_id=x.hangout_id\n    where x.account_id=actor and y.account_id=p_account_id\n      and x.state='joined' and y.state='joined' order by x.hangout_id\n  loop\n    perform 1 from public.hangouts where id=target for update;\n  end loop;\n  perform 1 from private.safety_feature_gate where singleton for share;\n  if not private.safety_enabled() or not private.people_active_owner() then\n    raise exception 'Safety operation unavailable' using errcode='42501';\n  end if;\n  perform 1 from public.accounts where id=actor for share;\n  if not private.people_active_owner() then\n    raise exception 'Safety operation unavailable' using errcode='42501'; end if;\n  if p_blocked then\n    if not private.safety_peer_evidence(actor,p_account_id) then\n      perform private.safety_lock_visible_evidence(actor,p_account_id);\n    end if;\n    if not (private.safety_peer_evidence(actor,p_account_id)\n      or (private.pilot_capability_enabled('people') and private.people_enabled() and private.people_ready_campus() is not null\n         and private.people_visible(p_account_id,private.people_ready_campus()))) then\n      raise exception 'Safety operation unavailable' using errcode='42501';\n    end if;\n    insert into private.people_blocks(blocker_id,blocked_id)\n      values(actor,p_account_id) on conflict do nothing;\n    -- Recheck the entire affected set after lock waits. The shared lock keeps\n    -- membership stable through commit; this also repairs old-block retries.\n    for hangout_row in select hh.* from public.hangouts hh\n      join public.hangout_participants x on x.hangout_id=hh.id\n        and x.account_id=actor and x.state='joined'\n      join public.hangout_participants y on y.hangout_id=hh.id\n        and y.account_id=p_account_id and y.state='joined'\n      order by hh.id\n    loop\n      perform private.safety_record_joined_overlap(hangout_row.id,actor);\n      perform private.safety_record_joined_overlap(hangout_row.id,p_account_id);\n      effect:=case when hangout_row.host_id=actor then 'removed' else 'left' end;\n      update public.hangout_participants set state=effect,\n        left_at=case when effect='left' then clock_timestamp() else left_at end,\n        removed_at=case when effect='removed' then clock_timestamp() else removed_at end,\n        updated_at=clock_timestamp()\n      where hangout_id=hangout_row.id and account_id=case when effect='removed' then p_account_id else actor end\n        and state='joined';\n    end loop;\n    delete from private.friendships f where f.low_id=least(actor,p_account_id)\n      and f.high_id=greatest(actor,p_account_id);\n    update private.dm_pairs d set state='blocked' where d.low_id=least(actor,p_account_id)\n      and d.high_id=greatest(actor,p_account_id) and d.state in('pending','accepted');\n  else\n    delete from private.people_blocks b where b.blocker_id=actor and b.blocked_id=p_account_id;\n  end if;\n  return p_blocked;\nend; $function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "p_account_id uuid, p_blocked boolean",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true,
+    "arguments_with_defaults": "p_account_id uuid, p_blocked boolean"
+  },
+  {
+    "acl": [
+      "postgres=X/postgres",
+      "authenticated=X/postgres"
+    ],
+    "name": "public.submit_safety_report",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "TABLE(receipt_id uuid, submitted_at timestamp with time zone)",
+    "definition": "CREATE OR REPLACE FUNCTION public.submit_safety_report(p_request_id uuid, p_target_mode text, p_target_id uuid, p_category text, p_narrative text DEFAULT NULL::text)\n RETURNS TABLE(receipt_id uuid, submitted_at timestamp with time zone)\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare\n  actor uuid:=auth.uid(); normalized_category text; normalized_narrative text;\n  input_fingerprint text; prior private.safety_report_requests%rowtype;\n  retained boolean; target_type text; resolved_target uuid;\n  provenance text; provenance_ref uuid; campus uuid;\n  parent public.hangouts%rowtype; saved_id uuid; saved_at timestamptz;\nbegin\n  perform private.social_hangout_mutation_lock();\n  -- Shape validation never probes the target. Invalid UUID text is rejected by\n  -- PostgREST before this function with its ordinary parameter error.\n  normalized_category:=pg_catalog.lower(private.profile_trim(p_category));\n  normalized_narrative:=nullif(private.profile_trim(p_narrative),'');\n  if actor is null or p_request_id is null or p_target_id is null\n    or p_target_mode is null or p_target_mode not in ('user','hangout','hangout_host')\n    or normalized_category is null or normalized_category not in\n      ('harassment','safety concern','impersonation','spam/commercial promotion','other')\n    or (normalized_narrative is not null and pg_catalog.length(normalized_narrative)>2000)\n    or (normalized_category='other' and normalized_narrative is null) then\n    raise exception 'Safety report unavailable' using errcode='42501';\n  end if;\n  input_fingerprint:=pg_catalog.md5(pg_catalog.jsonb_build_array(\n    p_target_mode,p_target_id,normalized_category,normalized_narrative)::text);\n\n  -- The shared transaction lock serializes every caller, including retries.\n  -- A replay only reads its own ledger and never resolves its target again.\n  select * into prior from private.safety_report_requests r\n    where r.reporter_id=actor and r.request_id=p_request_id;\n  if found then\n    perform 1 from private.safety_feature_gate where singleton for share;\n    perform 1 from public.accounts where id=actor for share;\n    if not private.safety_enabled() or not private.people_active_owner() then\n      raise exception 'Safety report unavailable' using errcode='42501'; end if;\n    if prior.input_fingerprint<>input_fingerprint then\n      raise exception 'Safety report unavailable' using errcode='42501'; end if;\n    return query select r.id,r.submitted_at from private.safety_reports r\n      where r.id=prior.report_id and r.reporter_id=actor;\n    return;\n  end if;\n\n  -- A nonlocking hint chooses the path before any lower gate/account lock.\n  -- Its authority is checked again after those locks are held.\n  if p_target_mode='user' then\n    retained:=private.safety_peer_evidence(actor,p_target_id);\n  else\n    retained:=exists(select 1 from public.hangout_participants p\n      where p.hangout_id=p_target_id and p.account_id=actor);\n  end if;\n  if not retained then\n    if p_target_mode='hangout_host' then\n      raise exception 'Safety report unavailable' using errcode='42501';\n    elsif p_target_mode='user' then\n      perform private.friendship_lock_pair(actor,p_target_id);\n    else\n      select * into parent from public.hangouts h where h.id=p_target_id for update;\n      if not found then raise exception 'Safety report unavailable' using errcode='42501'; end if;\n    end if;\n  end if;\n\n  perform 1 from private.safety_feature_gate where singleton for share;\n  if not retained then\n    if p_target_mode='user' then\n      perform private.safety_lock_visible_evidence(actor,p_target_id);\n    else\n      perform 1 from private.hangout_feature_gate where singleton for share;\n      perform private.safety_lock_hangout_evidence(actor,parent.university_id);\n    end if;\n  else\n    perform 1 from public.accounts where id=actor for share;\n  end if;\n\n  -- Each of these checks is a fresh READ COMMITTED statement after all waits.\n  if not private.safety_enabled() or not private.people_active_owner() then\n    raise exception 'Safety report unavailable' using errcode='42501'; end if;\n  if retained then\n    if p_target_mode='user' then\n      select kind,ref_id into provenance,provenance_ref\n        from private.safety_report_peer_source(actor,p_target_id);\n      if not found or not private.safety_peer_evidence(actor,p_target_id) then\n        raise exception 'Safety report unavailable' using errcode='42501'; end if;\n      target_type:='user'; resolved_target:=p_target_id;\n    else\n      select h.host_id into resolved_target from public.hangout_participants p\n        join public.hangouts h on h.id=p.hangout_id\n        where p.hangout_id=p_target_id and p.account_id=actor;\n      if not found then raise exception 'Safety report unavailable' using errcode='42501'; end if;\n      if p_target_mode='hangout_host' then\n        target_type:='user'; provenance:='retained_host';\n        provenance_ref:=p_target_id;\n      else\n        target_type:='hangout'; resolved_target:=p_target_id;\n        provenance:='retained_hangout'; provenance_ref:=p_target_id;\n      end if;\n    end if;\n  elsif p_target_mode='user' then\n    campus:=private.people_ready_campus();\n    if not private.pilot_capability_enabled('people') or not private.people_enabled() or campus is null\n      or not private.people_visible(p_target_id,campus) then\n      raise exception 'Safety report unavailable' using errcode='42501'; end if;\n    target_type:='user'; resolved_target:=p_target_id;\n    provenance:='current_people'; provenance_ref:=p_target_id;\n  else\n    if not private.hangouts_enabled() or not private.can_read_hangout(p_target_id,false) then\n      raise exception 'Safety report unavailable' using errcode='42501'; end if;\n    target_type:='hangout'; resolved_target:=p_target_id;\n    provenance:='current_hangout'; provenance_ref:=p_target_id;\n  end if;\n  if target_type='user' and resolved_target=actor then\n    raise exception 'Safety report unavailable' using errcode='42501'; end if;\n\n  -- Inclusive lower edge: a row at exactly now-1 hour still consumes a slot.\n  -- The clock is sampled after contention and after final authorization.\n  saved_at:=clock_timestamp();\n  if (select count(*) from private.safety_reports r where r.reporter_id=actor\n      and r.submitted_at between saved_at-interval '1 hour' and saved_at)>=5 then\n    raise exception 'Safety report unavailable' using errcode='42501'; end if;\n  insert into private.safety_reports(reporter_id,target_type,target_id,category,narrative,\n    provenance_kind,provenance_ref_id,submitted_at)\n    values(actor,target_type,resolved_target,normalized_category,normalized_narrative,\n      provenance,provenance_ref,saved_at) returning id into saved_id;\n  insert into private.safety_report_requests(reporter_id,request_id,input_fingerprint,report_id)\n    values(actor,p_request_id,input_fingerprint,saved_id);\n  return query select saved_id,saved_at;\nend; $function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "p_request_id uuid, p_target_mode text, p_target_id uuid, p_category text, p_narrative text",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": true,
+    "arguments_with_defaults": "p_request_id uuid, p_target_mode text, p_target_id uuid, p_category text, p_narrative text DEFAULT NULL::text"
+  },
+  {
+    "acl": [
+      "postgres=X/postgres"
+    ],
+    "name": "private.moderation_actor",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "uuid",
+    "definition": "CREATE OR REPLACE FUNCTION private.moderation_actor()\n RETURNS uuid\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare actor uuid:=auth.uid();\nbegin\n  perform pg_advisory_xact_lock(17017,1);\n  if current_setting('transaction_isolation')<>'read committed' or actor is null then\n    raise exception 'Moderation unavailable' using errcode='42501'; end if;\n  perform 1 from private.moderation_feature_gate where singleton for share;\n  if not found then\n    raise exception 'Moderation unavailable' using errcode='42501'; end if;\n  -- SHARE blocks status/deletion changes but is compatible with the existing\n  -- report intake actor SHARE after its Hangout parent lock.\n  perform 1 from public.accounts where id=actor for share;\n  if not found then\n    raise exception 'Moderation unavailable' using errcode='42501'; end if;\n  perform 1 from public.platform_roles where user_id=actor for share;\n  if not found then\n    raise exception 'Moderation unavailable' using errcode='42501'; end if;\n  if not exists(select 1 from private.moderation_feature_gate where singleton and enabled)\n    or not exists(select 1 from public.accounts where id=actor and status='active')\n    or not exists(select 1 from public.platform_roles where user_id=actor and role in ('moderator','admin')) then\n    raise exception 'Moderation unavailable' using errcode='42501'; end if;\n  return actor;\nend; $function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": false,
+    "arguments_with_defaults": ""
+  },
+  {
+    "acl": [
+      "postgres=X/postgres"
+    ],
+    "name": "private.pilot_require_ordinary_lifecycle",
+    "config": [
+      "search_path=\"\""
+    ],
+    "result": "void",
+    "definition": "CREATE OR REPLACE FUNCTION private.pilot_require_ordinary_lifecycle(p_operation text, p_hangout_id uuid)\n RETURNS void\n LANGUAGE plpgsql\n SECURITY DEFINER\n SET search_path TO ''\nAS $function$\ndeclare actor uuid:=auth.uid(); h public.hangouts;\nbegin\n if p_operation is null or p_operation not in ('create_hangout','edit_hangout','cancel_hangout','join_hangout','leave_hangout','set_hangout_joining')\n  or actor is null or not private.pilot_capability_enabled('hangouts') or not private.hangouts_enabled()\n  or private.ready_campus() is null then\n  raise exception 'Hangout operation not permitted' using errcode='42501'; end if;\n if p_hangout_id is null then\n  if p_operation<>'create_hangout' then raise exception 'Hangout operation not permitted' using errcode='42501'; end if;\n  return;\n end if;\n select * into h from public.hangouts where id=p_hangout_id;\n if not found then raise exception 'Hangout operation not permitted' using errcode='42501'; end if;\n if not private.can_read_hangout(h.id) then raise exception 'Hangout operation not permitted' using errcode='42501'; end if;\n if p_operation='create_hangout' and h.host_id<>actor\n  or p_operation='cancel_hangout' and (h.status<>'published' or h.host_id<>actor)\n  or p_operation in ('edit_hangout','set_hangout_joining') and (h.status<>'published' or (h.host_id<>actor and not private.effective_hangout_cohost(h.id,actor)))\n  or p_operation='join_hangout' and (h.status<>'published' or h.joining_state<>'open'\n    or exists(select 1 from public.hangout_participants p where p.hangout_id=h.id and p.state='joined' and p.account_id<>actor and private.safety_pair_blocked(actor,p.account_id))\n    or exists(select 1 from public.hangout_participants p where p.hangout_id=h.id and p.account_id=actor and p.state='removed'))\n  or p_operation='leave_hangout' and (h.host_id=actor or not exists(select 1 from public.hangout_participants p where p.hangout_id=h.id and p.account_id=actor and p.state='joined')) then\n  raise exception 'Hangout operation not permitted' using errcode='42501'; end if;\nend; $function$\n",
+    "volatility": "v",
+    "anon_execute": false,
+    "identity_args": "p_operation text, p_hangout_id uuid",
+    "service_execute": false,
+    "security_definer": true,
+    "authenticated_execute": false,
+    "arguments_with_defaults": "p_operation text, p_hangout_id uuid"
+  }
+]

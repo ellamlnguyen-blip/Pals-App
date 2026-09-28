@@ -1,0 +1,6195 @@
+{
+  "fixture": "B3a HTTP",
+  "cases": [
+    {
+      "id": "L1-create_hangout-onboarding-off",
+      "rpc": "create_hangout",
+      "result": "8fb3869c-43d0-4294-8ed4-75e857b57f8e"
+    },
+    {
+      "id": "L1-create_hangout-anon",
+      "rpc": "create_hangout",
+      "status": 401,
+      "code": "42501",
+      "message": "permission denied for function create_hangout",
+      "zero_delta": true
+    },
+    {
+      "id": "L1-create_hangout-service",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "permission denied for function create_hangout",
+      "zero_delta": true
+    },
+    {
+      "id": "L1-create_hangout-forged-extra-argument",
+      "status": 404,
+      "code": "PGRST202"
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "e839d422-3750-48e9-ae57-488927b62001"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L1-edit_hangout-onboarding-off",
+      "rpc": "edit_hangout",
+      "result": 2
+    },
+    {
+      "id": "L1-edit_hangout-anon",
+      "rpc": "edit_hangout",
+      "status": 401,
+      "code": "42501",
+      "message": "permission denied for function edit_hangout",
+      "zero_delta": true
+    },
+    {
+      "id": "L1-edit_hangout-service",
+      "rpc": "edit_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "permission denied for function edit_hangout",
+      "zero_delta": true
+    },
+    {
+      "id": "L1-edit_hangout-forged-extra-argument",
+      "status": 404,
+      "code": "PGRST202"
+    },
+    {
+      "id": "setup-cancel_hangout",
+      "rpc": "create_hangout",
+      "result": "ab352eb1-83ea-45f8-90c5-a9c0618bbcec"
+    },
+    {
+      "id": "setup-join-cancel_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L1-cancel_hangout-onboarding-off",
+      "rpc": "cancel_hangout",
+      "result": 2
+    },
+    {
+      "id": "L1-cancel_hangout-anon",
+      "rpc": "cancel_hangout",
+      "status": 401,
+      "code": "42501",
+      "message": "permission denied for function cancel_hangout",
+      "zero_delta": true
+    },
+    {
+      "id": "L1-cancel_hangout-service",
+      "rpc": "cancel_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "permission denied for function cancel_hangout",
+      "zero_delta": true
+    },
+    {
+      "id": "L1-cancel_hangout-forged-extra-argument",
+      "status": 404,
+      "code": "PGRST202"
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "f4377686-6109-43a2-8166-4ff669d88f20"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L1-join-transition-precondition",
+      "rpc": "leave_hangout",
+      "result": null
+    },
+    {
+      "id": "L1-join_hangout-onboarding-off",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L1-join_hangout-anon",
+      "rpc": "join_hangout",
+      "status": 401,
+      "code": "42501",
+      "message": "permission denied for function join_hangout",
+      "zero_delta": true
+    },
+    {
+      "id": "L1-join_hangout-service",
+      "rpc": "join_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "permission denied for function join_hangout",
+      "zero_delta": true
+    },
+    {
+      "id": "L1-join_hangout-forged-extra-argument",
+      "status": 404,
+      "code": "PGRST202"
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "353ceaa2-6299-447e-a528-1cbb03db8b1d"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L1-leave_hangout-onboarding-off",
+      "rpc": "leave_hangout",
+      "result": null
+    },
+    {
+      "id": "L1-leave_hangout-anon",
+      "rpc": "leave_hangout",
+      "status": 401,
+      "code": "42501",
+      "message": "permission denied for function leave_hangout",
+      "zero_delta": true
+    },
+    {
+      "id": "L1-leave_hangout-service",
+      "rpc": "leave_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "permission denied for function leave_hangout",
+      "zero_delta": true
+    },
+    {
+      "id": "L1-leave_hangout-forged-extra-argument",
+      "status": 404,
+      "code": "PGRST202"
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "8360b936-129f-4c25-998d-e6998401d978"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L1-set_hangout_joining-onboarding-off",
+      "rpc": "set_hangout_joining",
+      "result": 2
+    },
+    {
+      "id": "L1-set_hangout_joining-anon",
+      "rpc": "set_hangout_joining",
+      "status": 401,
+      "code": "42501",
+      "message": "permission denied for function set_hangout_joining",
+      "zero_delta": true
+    },
+    {
+      "id": "L1-set_hangout_joining-service",
+      "rpc": "set_hangout_joining",
+      "status": 403,
+      "code": "42501",
+      "message": "permission denied for function set_hangout_joining",
+      "zero_delta": true
+    },
+    {
+      "id": "L1-set_hangout_joining-forged-extra-argument",
+      "status": 404,
+      "code": "PGRST202"
+    },
+    {
+      "id": "L1-create-first",
+      "rpc": "create_hangout",
+      "result": "e5446b71-2af1-4499-9bb8-c8173580ed3f"
+    },
+    {
+      "id": "L1-create-exact",
+      "rpc": "create_hangout",
+      "result": "e5446b71-2af1-4499-9bb8-c8173580ed3f"
+    },
+    {
+      "id": "L1-create-mismatch",
+      "rpc": "create_hangout",
+      "status": 409,
+      "code": "23505",
+      "message": "Creation request conflict",
+      "zero_delta": true
+    },
+    {
+      "id": "L1-create-cross-actor",
+      "rpc": "create_hangout",
+      "result": "c4ecb1e6-4bac-4e7d-9d60-31194380385d"
+    },
+    {
+      "id": "L1-authorized-edit-input",
+      "rpc": "edit_hangout",
+      "status": 400,
+      "code": "22023",
+      "message": "Invalid Hangout input",
+      "zero_delta": true
+    },
+    {
+      "id": "L1-authorized-private-input",
+      "rpc": "edit_hangout",
+      "status": 400,
+      "code": "22023",
+      "message": "Invalid private meeting instructions",
+      "zero_delta": true
+    },
+    {
+      "id": "L1-authorized-stale",
+      "rpc": "edit_hangout",
+      "status": 500,
+      "code": "40001",
+      "message": "Stale Hangout revision",
+      "zero_delta": true
+    },
+    {
+      "id": "L1-authorized-joining-input",
+      "rpc": "set_hangout_joining",
+      "status": 400,
+      "code": "22023",
+      "message": "Invalid joining state",
+      "zero_delta": true
+    },
+    {
+      "id": "L1-authorized-create-input",
+      "rpc": "create_hangout",
+      "status": 400,
+      "code": "22023",
+      "message": "Invalid Hangout input",
+      "zero_delta": true
+    },
+    {
+      "id": "L1-raw-DML-hangouts",
+      "status": 403,
+      "code": "42501",
+      "zero_delta": true
+    },
+    {
+      "id": "L1-raw-DML-hangout_participants",
+      "status": 403,
+      "code": "42501",
+      "zero_delta": true
+    },
+    {
+      "id": "L1-raw-DML-hangout_private_locations",
+      "status": 403,
+      "code": "42501",
+      "zero_delta": true
+    },
+    {
+      "id": "L1-private-ledger-helper-unexposed",
+      "ledger_code": "PGRST205",
+      "helper_code": "PGRST202"
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "01eda813-fed9-4061-bddb-fda0cb09e0ab"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L1-joined-noop",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L1-host-leave",
+      "rpc": "leave_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L1-nonmember-leave",
+      "rpc": "leave_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L1-close-control",
+      "rpc": "set_hangout_joining",
+      "result": 2
+    },
+    {
+      "id": "L1-closed-before-noop",
+      "rpc": "join_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "a81a3437-deb0-49d5-8aae-34890c39eb69"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L1-terminal-removed",
+      "rpc": "join_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "aa2b9e4f-aff7-4f9b-8599-0b572ce67d6d"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L1-blocked-before-noop",
+      "rpc": "join_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "0ad8aa8f-b857-4020-868c-9649c7deb741"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L1-cancel-control",
+      "rpc": "cancel_hangout",
+      "result": 2
+    },
+    {
+      "id": "L1-cancelled-join",
+      "rpc": "join_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L1-cancelled-edit",
+      "rpc": "edit_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L1-cancelled-cancel",
+      "rpc": "cancel_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L1-cancelled-joining",
+      "rpc": "set_hangout_joining",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L1-cancelled-leave-preserved",
+      "rpc": "leave_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "8ce562c1-d1e1-4fc3-97c9-629533899d11"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L1-disabled-edit_hangout",
+      "rpc": "edit_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L1-disabled-cancel_hangout",
+      "rpc": "cancel_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L1-disabled-join_hangout",
+      "rpc": "join_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L1-disabled-leave_hangout",
+      "rpc": "leave_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L1-disabled-set_hangout_joining",
+      "rpc": "set_hangout_joining",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create_hangout-actor-roster-revoked-control",
+      "rpc": "create_hangout",
+      "result": "2cdff80c-e243-4ecc-b97a-f372aa2f5a63"
+    },
+    {
+      "id": "L2L3-create_hangout-actor-roster-revoked",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create-saved-roster-revoked",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create-conflict-roster-revoked",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create_hangout-actor-roster-missing-control",
+      "rpc": "create_hangout",
+      "result": "47df2e82-4797-42c1-9bda-e0497a574eb5"
+    },
+    {
+      "id": "L2L3-create_hangout-actor-roster-missing",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create-saved-roster-missing",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create-conflict-roster-missing",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create_hangout-actor-suspended-control",
+      "rpc": "create_hangout",
+      "result": "d50e8086-c346-47bf-82b9-3402c1ae1825"
+    },
+    {
+      "id": "L2L3-create_hangout-actor-suspended",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create-saved-suspended",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create-conflict-suspended",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create_hangout-actor-banned-control",
+      "rpc": "create_hangout",
+      "result": "d08b547d-b2e4-427b-9246-9633af576209"
+    },
+    {
+      "id": "L2L3-create_hangout-actor-banned",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create-saved-banned",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create-conflict-banned",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create_hangout-actor-email-unconfirmed-control",
+      "rpc": "create_hangout",
+      "result": "fd93197e-1b79-4005-9548-1037f4e77e80"
+    },
+    {
+      "id": "L2L3-create_hangout-actor-email-unconfirmed",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create-saved-email-unconfirmed",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create-conflict-email-unconfirmed",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create_hangout-actor-email-equality-control",
+      "rpc": "create_hangout",
+      "result": "237d44c0-40c6-4c92-bfd9-22199a35cc8d"
+    },
+    {
+      "id": "L2L3-create_hangout-actor-email-equality",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create-saved-email-equality",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create-conflict-email-equality",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create_hangout-actor-email-domain-control",
+      "rpc": "create_hangout",
+      "result": "032c31a6-4aef-4fcb-80eb-ee931c84b856"
+    },
+    {
+      "id": "L2L3-create_hangout-actor-email-domain",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create-saved-email-domain",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create-conflict-email-domain",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create_hangout-actor-membership-unverified-control",
+      "rpc": "create_hangout",
+      "result": "d9594ed4-defc-4924-b84d-bd6523460bb9"
+    },
+    {
+      "id": "L2L3-create_hangout-actor-membership-unverified",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create-saved-membership-unverified",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create-conflict-membership-unverified",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create_hangout-actor-membership-missing-control",
+      "rpc": "create_hangout",
+      "result": "e7a2407d-9de1-4932-ab54-1729e7387ab3"
+    },
+    {
+      "id": "L2L3-create_hangout-actor-membership-missing",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create-saved-membership-missing",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create-conflict-membership-missing",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create_hangout-actor-profile-incomplete-control",
+      "rpc": "create_hangout",
+      "result": "4309417a-ae33-495c-9943-b607e2c3b2e8"
+    },
+    {
+      "id": "L2L3-create_hangout-actor-profile-incomplete",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create-saved-profile-incomplete",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create-conflict-profile-incomplete",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create_hangout-actor-owned-object-lawful-detach-delete-control",
+      "rpc": "create_hangout",
+      "result": "24fca78d-d4a0-410f-83a4-3396db130dea"
+    },
+    {
+      "id": "L2L3-create_hangout-actor-owned-object-lawful-detach-delete",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create-saved-owned-object-lawful-detach-delete",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create-conflict-owned-object-lawful-detach-delete",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create_hangout-actor-primary-reference-control",
+      "rpc": "create_hangout",
+      "result": "9d97be93-9f93-4b52-9215-ae5b9798a84a"
+    },
+    {
+      "id": "L2L3-create_hangout-actor-primary-reference",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create-saved-primary-reference",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create-conflict-primary-reference",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create_hangout-shutdown-control",
+      "rpc": "create_hangout",
+      "result": "0ce3e3d7-6aba-4ae3-a2f3-f26d2b7cdd21"
+    },
+    {
+      "id": "L2L3-create_hangout-shutdown",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-saved-shutdown",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-conflict-shutdown",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create_hangout-hangouts-capability-control",
+      "rpc": "create_hangout",
+      "result": "205656df-6d3c-439a-9de6-cb01c10a6469"
+    },
+    {
+      "id": "L2L3-create_hangout-hangouts-capability",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-saved-hangouts-capability",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-conflict-hangouts-capability",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create_hangout-availability-missing-control",
+      "rpc": "create_hangout",
+      "result": "1772ae77-e82f-4e41-9ea6-431a094c51e0"
+    },
+    {
+      "id": "L2L3-create_hangout-availability-missing",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-saved-availability-missing",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-conflict-availability-missing",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create_hangout-capability-missing-control",
+      "rpc": "create_hangout",
+      "result": "6a4eceee-3b4e-4e19-8fa4-7190c234418a"
+    },
+    {
+      "id": "L2L3-create_hangout-capability-missing",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-saved-capability-missing",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-conflict-capability-missing",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create_hangout-gate-missing-control",
+      "rpc": "create_hangout",
+      "result": "26292834-7bab-47fc-acf4-827ab248022d"
+    },
+    {
+      "id": "L2L3-create_hangout-gate-missing",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-saved-gate-missing",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-conflict-gate-missing",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create_hangout-hangout-gate-control",
+      "rpc": "create_hangout",
+      "result": "14360324-3023-4c7a-9837-6c62381efcaa"
+    },
+    {
+      "id": "L2L3-create_hangout-hangout-gate",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-saved-hangout-gate",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-conflict-hangout-gate",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create_hangout-campus-inactive-control",
+      "rpc": "create_hangout",
+      "result": "b833b028-00dc-4514-b8cc-dc4f5e76acff"
+    },
+    {
+      "id": "L2L3-create_hangout-campus-inactive",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-saved-campus-inactive",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-conflict-campus-inactive",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create_hangout-campus-slug-control",
+      "rpc": "create_hangout",
+      "result": "aa498a6b-98da-43fe-9fe4-3b197bba90db"
+    },
+    {
+      "id": "L2L3-create_hangout-campus-slug",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-saved-campus-slug",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-conflict-campus-slug",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-create_hangout-campus-allowlist-control",
+      "rpc": "create_hangout",
+      "result": "6a759304-3db8-482a-8d8b-ff40f2dd44dd"
+    },
+    {
+      "id": "L2L3-create_hangout-campus-allowlist",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-saved-campus-allowlist",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L2L3-conflict-campus-allowlist",
+      "rpc": "create_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "736311dd-ae1f-421e-a067-31726b9415cc"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-actor-roster-revoked-control",
+      "rpc": "edit_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "8b2955fc-3ad9-4ab3-b2f3-3c7e397c8ef4"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-actor-roster-revoked",
+      "rpc": "edit_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "d54d0f7b-764d-47b2-8d38-c8456b6cba2a"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-actor-roster-missing-control",
+      "rpc": "edit_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "aa569981-70bc-4884-b61e-27f48691de08"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-actor-roster-missing",
+      "rpc": "edit_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "44a07329-2fe3-40c8-91f9-de3f6bf6ef15"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-actor-suspended-control",
+      "rpc": "edit_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "6ef8629a-d685-49b7-b4f3-f63137ed500b"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-actor-suspended",
+      "rpc": "edit_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "eaf48ffd-e349-4f0d-98ff-365ffa3fd663"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-actor-banned-control",
+      "rpc": "edit_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "17eff0fa-4aba-4a72-bf81-e1663576bc98"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-actor-banned",
+      "rpc": "edit_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "9a92cb37-5ab5-4cfe-88b8-d653b0a8ed01"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-actor-email-unconfirmed-control",
+      "rpc": "edit_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "8aa90271-e49b-4298-b94d-f79070bf08cc"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-actor-email-unconfirmed",
+      "rpc": "edit_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "2f607d1b-92cc-4664-951e-a9649d5b0368"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-actor-email-equality-control",
+      "rpc": "edit_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "04de3dd3-cb65-4f5b-ac08-16a1c2d2ee62"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-actor-email-equality",
+      "rpc": "edit_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "ac3aace2-6451-4c28-aac3-50747fa79f9d"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-actor-email-domain-control",
+      "rpc": "edit_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "722b6d48-d1cf-456b-a45c-22529766fa3f"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-actor-email-domain",
+      "rpc": "edit_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "359f0980-1468-4467-b6f2-d08fc9411e51"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-actor-membership-unverified-control",
+      "rpc": "edit_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "54c8e5da-9ca0-4d03-b73c-2b8a2e21a87c"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-actor-membership-unverified",
+      "rpc": "edit_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "4ed7ddd9-eddc-447b-89dd-7b6882b7885b"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-actor-membership-missing-control",
+      "rpc": "edit_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "2abe24a4-ad45-4b1b-a0f1-56e14fdc1bdc"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-actor-membership-missing",
+      "rpc": "edit_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "f2565ca9-b641-43e3-a206-0c8c6a15ec29"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-actor-profile-incomplete-control",
+      "rpc": "edit_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "460ac266-d14d-4f90-a604-97395bb7bfdb"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-actor-profile-incomplete",
+      "rpc": "edit_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "4336fb58-effa-4d08-b73e-6192cfdfdee7"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-actor-owned-object-lawful-detach-delete-control",
+      "rpc": "edit_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "4bca2a20-1988-478a-806d-2c66edd0dc11"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-actor-owned-object-lawful-detach-delete",
+      "rpc": "edit_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "b4e26ade-42bb-4ef9-9479-7cf178d6f206"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-actor-primary-reference-control",
+      "rpc": "edit_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "675db1a2-9437-40bd-b7c1-0d54e7f43f4f"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-actor-primary-reference",
+      "rpc": "edit_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "3c101d85-4572-4b60-b176-1dbf68dce921"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-host-roster-revoked-control",
+      "rpc": "edit_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "27f7d2ed-79fe-4e4e-aa90-3cec95c13d71"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-host-roster-revoked",
+      "rpc": "edit_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "4b233b8d-ae79-41f8-b81d-2c56ab0d5715"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-host-roster-missing-control",
+      "rpc": "edit_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "3947abd5-beb0-4078-8ac8-f7ec8aec6da2"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-host-roster-missing",
+      "rpc": "edit_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "632ca950-5a72-48d5-b5f4-13eaaec508f2"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-host-suspended-control",
+      "rpc": "edit_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "d5c1ee94-2550-4654-9418-a241a634ddbd"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-host-suspended",
+      "rpc": "edit_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "37ea8a3a-f7b6-4f78-8aac-e528f0819bb1"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-host-banned-control",
+      "rpc": "edit_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "f1e36386-df46-4fee-8dec-94a04183db48"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-host-banned",
+      "rpc": "edit_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "46d1c114-bc25-4e2b-b0f0-e16bd9ec3b69"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-host-email-unconfirmed-control",
+      "rpc": "edit_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "16c4f5f5-4c9f-4e26-9221-a320a9ceddbc"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-host-email-unconfirmed",
+      "rpc": "edit_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "19cba481-785c-4613-b8c9-bb393eaed11b"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-host-email-equality-control",
+      "rpc": "edit_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "b70f2e6a-c997-4f0b-8fcf-22e47b1dd031"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-host-email-equality",
+      "rpc": "edit_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "417aba99-c4f3-4fa1-b4d9-269524d39902"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-host-email-domain-control",
+      "rpc": "edit_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "8916c620-9a66-4195-837e-f113ccd5fe4e"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-host-email-domain",
+      "rpc": "edit_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "22f79e39-6ee1-4b4f-9558-02f9a2456d8d"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-host-membership-unverified-control",
+      "rpc": "edit_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "becb57d0-232a-471a-893f-e710886ba8c5"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-host-membership-unverified",
+      "rpc": "edit_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "4f031bb3-52e3-4293-bf11-05a82d4b2740"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-host-membership-missing-control",
+      "rpc": "edit_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "7e333811-3d9f-47e5-84d4-b10b8ba8f504"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-host-membership-missing",
+      "rpc": "edit_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "ff3b242d-b9b0-4918-8a82-1ef4cc159f04"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-host-profile-incomplete-control",
+      "rpc": "edit_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "f6b9bbf9-f7f7-447b-98f2-39f65f20c17c"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-host-profile-incomplete",
+      "rpc": "edit_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "eb296781-47a9-4c85-9d04-030492db33e2"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-host-owned-object-lawful-detach-delete-control",
+      "rpc": "edit_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "ee9b58e0-d3fc-4610-aa9a-2baea8d8b23a"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-host-owned-object-lawful-detach-delete",
+      "rpc": "edit_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "f064b65c-9753-406f-8ebe-f6432d032967"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-host-primary-reference-control",
+      "rpc": "edit_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "62f1b1ac-b3ca-4474-a34c-3d03631182e9"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-host-primary-reference",
+      "rpc": "edit_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "53e49f5a-2c4c-4922-a6ee-8df755cb9f5e"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-shutdown-control",
+      "rpc": "edit_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "f2d1817b-97f9-43fb-b862-a0cce6a6d3d6"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-shutdown",
+      "rpc": "edit_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "610605f7-678d-4106-8e7b-1656c01c500a"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-hangouts-capability-control",
+      "rpc": "edit_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "584aacd2-41ac-4d6c-9e26-20b52f11545c"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-hangouts-capability",
+      "rpc": "edit_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "8c833f95-2565-4749-94a2-d8b25d120f29"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-availability-missing-control",
+      "rpc": "edit_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "927c768e-bd77-4fd2-822c-3ce596c32a4b"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-availability-missing",
+      "rpc": "edit_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "8da448d6-7ee2-4d07-97f3-5fc3a85e3f12"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-capability-missing-control",
+      "rpc": "edit_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "07aed561-9bd9-4f71-9641-fecd823eae79"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-capability-missing",
+      "rpc": "edit_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "80d6475d-b638-4ce3-9d95-925ff85b306d"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-gate-missing-control",
+      "rpc": "edit_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "3ca97f45-bd8a-458a-b16f-f4ddbeb24e8b"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-gate-missing",
+      "rpc": "edit_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "0b2355db-e4a9-4309-ba30-9022ff743247"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-hangout-gate-control",
+      "rpc": "edit_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "3f77d009-bfb8-4357-8627-8cd736c6c711"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-hangout-gate",
+      "rpc": "edit_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "2da6c50d-2c6f-4a16-91d4-2c3648a4d603"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-campus-inactive-control",
+      "rpc": "edit_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "be3a36fe-94fa-4f07-96e3-d06d32fd1ad3"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-campus-inactive",
+      "rpc": "edit_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "8c487406-f276-40bf-b5f8-c6c4dc6b8246"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-campus-slug-control",
+      "rpc": "edit_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "f0d301b6-88e0-4ae8-8d3d-b7c043994499"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-campus-slug",
+      "rpc": "edit_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "054bf8ea-19b4-4773-a55d-8694506cafb1"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-campus-allowlist-control",
+      "rpc": "edit_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "6853297b-03e6-4e2f-a146-c721cc8d5d1c"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-edit_hangout-campus-allowlist",
+      "rpc": "edit_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-cancel_hangout",
+      "rpc": "create_hangout",
+      "result": "83fdfa16-7bf6-48ad-8328-85fccfb6bda2"
+    },
+    {
+      "id": "setup-join-cancel_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-cancel_hangout-host-roster-revoked-control",
+      "rpc": "cancel_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-cancel_hangout",
+      "rpc": "create_hangout",
+      "result": "c50bd10d-9052-4950-b349-1971d5fe2321"
+    },
+    {
+      "id": "setup-join-cancel_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-cancel_hangout-host-roster-revoked",
+      "rpc": "cancel_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-cancel_hangout",
+      "rpc": "create_hangout",
+      "result": "bc124c57-79f9-4c83-8114-651821e07940"
+    },
+    {
+      "id": "setup-join-cancel_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-cancel_hangout-host-roster-missing-control",
+      "rpc": "cancel_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-cancel_hangout",
+      "rpc": "create_hangout",
+      "result": "514afbf4-47bd-425b-b54c-af3c122280c4"
+    },
+    {
+      "id": "setup-join-cancel_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-cancel_hangout-host-roster-missing",
+      "rpc": "cancel_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-cancel_hangout",
+      "rpc": "create_hangout",
+      "result": "a1ed5a77-a5d3-4568-8c3e-e84e10684e65"
+    },
+    {
+      "id": "setup-join-cancel_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-cancel_hangout-host-suspended-control",
+      "rpc": "cancel_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-cancel_hangout",
+      "rpc": "create_hangout",
+      "result": "49973fb8-3dfe-4be1-9408-cb4f1fc17bf8"
+    },
+    {
+      "id": "setup-join-cancel_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-cancel_hangout-host-suspended",
+      "rpc": "cancel_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-cancel_hangout",
+      "rpc": "create_hangout",
+      "result": "aac382d6-4ed5-4b31-afb2-3d2333372643"
+    },
+    {
+      "id": "setup-join-cancel_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-cancel_hangout-host-banned-control",
+      "rpc": "cancel_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-cancel_hangout",
+      "rpc": "create_hangout",
+      "result": "a25824af-4a11-4496-86f3-684c7e578b7c"
+    },
+    {
+      "id": "setup-join-cancel_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-cancel_hangout-host-banned",
+      "rpc": "cancel_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-cancel_hangout",
+      "rpc": "create_hangout",
+      "result": "36669723-4c43-4946-9afc-a6b7d10bef26"
+    },
+    {
+      "id": "setup-join-cancel_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-cancel_hangout-host-email-unconfirmed-control",
+      "rpc": "cancel_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-cancel_hangout",
+      "rpc": "create_hangout",
+      "result": "6a028bfc-0895-485b-a975-158b80b9c4ea"
+    },
+    {
+      "id": "setup-join-cancel_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-cancel_hangout-host-email-unconfirmed",
+      "rpc": "cancel_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-cancel_hangout",
+      "rpc": "create_hangout",
+      "result": "d160df55-f07d-442d-9c7e-97550dd4f089"
+    },
+    {
+      "id": "setup-join-cancel_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-cancel_hangout-host-email-equality-control",
+      "rpc": "cancel_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-cancel_hangout",
+      "rpc": "create_hangout",
+      "result": "19953dba-9b0f-4860-8e23-f25e2e27f52c"
+    },
+    {
+      "id": "setup-join-cancel_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-cancel_hangout-host-email-equality",
+      "rpc": "cancel_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-cancel_hangout",
+      "rpc": "create_hangout",
+      "result": "66955e9f-e971-490c-a8d2-bd590860a320"
+    },
+    {
+      "id": "setup-join-cancel_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-cancel_hangout-host-email-domain-control",
+      "rpc": "cancel_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-cancel_hangout",
+      "rpc": "create_hangout",
+      "result": "59c1813d-1468-4032-8cd3-a82200ed7de1"
+    },
+    {
+      "id": "setup-join-cancel_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-cancel_hangout-host-email-domain",
+      "rpc": "cancel_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-cancel_hangout",
+      "rpc": "create_hangout",
+      "result": "97bb2d17-bdaf-44a5-8213-4602e1842ffd"
+    },
+    {
+      "id": "setup-join-cancel_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-cancel_hangout-host-membership-unverified-control",
+      "rpc": "cancel_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-cancel_hangout",
+      "rpc": "create_hangout",
+      "result": "1c5d72b2-5a9a-4214-87f2-91fd62dd2640"
+    },
+    {
+      "id": "setup-join-cancel_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-cancel_hangout-host-membership-unverified",
+      "rpc": "cancel_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-cancel_hangout",
+      "rpc": "create_hangout",
+      "result": "0d48395b-8c2e-483f-a1cf-8205b9cfa8dc"
+    },
+    {
+      "id": "setup-join-cancel_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-cancel_hangout-host-membership-missing-control",
+      "rpc": "cancel_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-cancel_hangout",
+      "rpc": "create_hangout",
+      "result": "6acd0cd1-859e-4322-9e1c-bd37a8952e67"
+    },
+    {
+      "id": "setup-join-cancel_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-cancel_hangout-host-membership-missing",
+      "rpc": "cancel_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-cancel_hangout",
+      "rpc": "create_hangout",
+      "result": "5b23ab1f-8c9d-4563-8173-ba01bf76af18"
+    },
+    {
+      "id": "setup-join-cancel_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-cancel_hangout-host-profile-incomplete-control",
+      "rpc": "cancel_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-cancel_hangout",
+      "rpc": "create_hangout",
+      "result": "1ac05e15-a620-40c4-8edc-c50ab9edd732"
+    },
+    {
+      "id": "setup-join-cancel_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-cancel_hangout-host-profile-incomplete",
+      "rpc": "cancel_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-cancel_hangout",
+      "rpc": "create_hangout",
+      "result": "3babea97-da75-4244-9b62-8c099c0b3560"
+    },
+    {
+      "id": "setup-join-cancel_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-cancel_hangout-host-owned-object-lawful-detach-delete-control",
+      "rpc": "cancel_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-cancel_hangout",
+      "rpc": "create_hangout",
+      "result": "d8193495-642c-42b2-8afd-c31a1ab2c3d1"
+    },
+    {
+      "id": "setup-join-cancel_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-cancel_hangout-host-owned-object-lawful-detach-delete",
+      "rpc": "cancel_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-cancel_hangout",
+      "rpc": "create_hangout",
+      "result": "e2a74baf-e64d-4447-80f0-089bb2a951af"
+    },
+    {
+      "id": "setup-join-cancel_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-cancel_hangout-host-primary-reference-control",
+      "rpc": "cancel_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-cancel_hangout",
+      "rpc": "create_hangout",
+      "result": "3b8a4d07-ef66-4426-a601-a07d8b5cbb66"
+    },
+    {
+      "id": "setup-join-cancel_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-cancel_hangout-host-primary-reference",
+      "rpc": "cancel_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-cancel_hangout",
+      "rpc": "create_hangout",
+      "result": "08ed8e03-3313-45d6-9004-1c70ef35915c"
+    },
+    {
+      "id": "setup-join-cancel_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-cancel_hangout-shutdown-control",
+      "rpc": "cancel_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-cancel_hangout",
+      "rpc": "create_hangout",
+      "result": "9e5c9d41-08ec-48ea-8303-8bd27f2dd201"
+    },
+    {
+      "id": "setup-join-cancel_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-cancel_hangout-shutdown",
+      "rpc": "cancel_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-cancel_hangout",
+      "rpc": "create_hangout",
+      "result": "673cc159-3580-4fb5-a5a1-8967fd3a1930"
+    },
+    {
+      "id": "setup-join-cancel_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-cancel_hangout-hangouts-capability-control",
+      "rpc": "cancel_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-cancel_hangout",
+      "rpc": "create_hangout",
+      "result": "90b6c084-533a-42fa-a8ad-013ec258bfd3"
+    },
+    {
+      "id": "setup-join-cancel_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-cancel_hangout-hangouts-capability",
+      "rpc": "cancel_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-cancel_hangout",
+      "rpc": "create_hangout",
+      "result": "a6645ab7-d620-4916-bb7a-c75a84115687"
+    },
+    {
+      "id": "setup-join-cancel_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-cancel_hangout-availability-missing-control",
+      "rpc": "cancel_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-cancel_hangout",
+      "rpc": "create_hangout",
+      "result": "a968c0e9-2475-4f63-aba5-521737002726"
+    },
+    {
+      "id": "setup-join-cancel_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-cancel_hangout-availability-missing",
+      "rpc": "cancel_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-cancel_hangout",
+      "rpc": "create_hangout",
+      "result": "ee4a756b-1177-41cc-9506-a336e5aecdaa"
+    },
+    {
+      "id": "setup-join-cancel_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-cancel_hangout-capability-missing-control",
+      "rpc": "cancel_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-cancel_hangout",
+      "rpc": "create_hangout",
+      "result": "9dcf1b8c-d394-4669-aead-3beca8b21c5c"
+    },
+    {
+      "id": "setup-join-cancel_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-cancel_hangout-capability-missing",
+      "rpc": "cancel_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-cancel_hangout",
+      "rpc": "create_hangout",
+      "result": "2cd9dc81-b77d-4f7d-b156-de361cf9932a"
+    },
+    {
+      "id": "setup-join-cancel_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-cancel_hangout-gate-missing-control",
+      "rpc": "cancel_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-cancel_hangout",
+      "rpc": "create_hangout",
+      "result": "08b59ac1-4c54-4803-af08-5553e8d5d9cf"
+    },
+    {
+      "id": "setup-join-cancel_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-cancel_hangout-gate-missing",
+      "rpc": "cancel_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-cancel_hangout",
+      "rpc": "create_hangout",
+      "result": "68366fd7-1a40-4c77-886a-85c7bca9b681"
+    },
+    {
+      "id": "setup-join-cancel_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-cancel_hangout-hangout-gate-control",
+      "rpc": "cancel_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-cancel_hangout",
+      "rpc": "create_hangout",
+      "result": "d1bda055-d1f4-4513-b399-38c886d4649f"
+    },
+    {
+      "id": "setup-join-cancel_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-cancel_hangout-hangout-gate",
+      "rpc": "cancel_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-cancel_hangout",
+      "rpc": "create_hangout",
+      "result": "43d5fcfa-e800-429f-9a4d-d6299278789a"
+    },
+    {
+      "id": "setup-join-cancel_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-cancel_hangout-campus-inactive-control",
+      "rpc": "cancel_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-cancel_hangout",
+      "rpc": "create_hangout",
+      "result": "87c40435-7f10-41d8-add4-780e5e0f265d"
+    },
+    {
+      "id": "setup-join-cancel_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-cancel_hangout-campus-inactive",
+      "rpc": "cancel_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-cancel_hangout",
+      "rpc": "create_hangout",
+      "result": "06d09e98-a828-4612-b973-79a4ab66d560"
+    },
+    {
+      "id": "setup-join-cancel_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-cancel_hangout-campus-slug-control",
+      "rpc": "cancel_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-cancel_hangout",
+      "rpc": "create_hangout",
+      "result": "1c606b02-e049-42f9-82f2-e664e29db531"
+    },
+    {
+      "id": "setup-join-cancel_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-cancel_hangout-campus-slug",
+      "rpc": "cancel_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-cancel_hangout",
+      "rpc": "create_hangout",
+      "result": "a09ba22d-0bb8-4f4e-85c7-a53387970784"
+    },
+    {
+      "id": "setup-join-cancel_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-cancel_hangout-campus-allowlist-control",
+      "rpc": "cancel_hangout",
+      "result": 2
+    },
+    {
+      "id": "setup-cancel_hangout",
+      "rpc": "create_hangout",
+      "result": "4529a811-2afd-4b3b-9649-03ac3c8b125f"
+    },
+    {
+      "id": "setup-join-cancel_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-cancel_hangout-campus-allowlist",
+      "rpc": "cancel_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "f6b040e3-7118-49a1-ad57-7c0518ee64f0"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-actor-roster-revoked-control",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "5abc90b9-ab49-414e-b4ed-b19dc56298d5"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-actor-roster-revoked",
+      "rpc": "join_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "34ade732-d98f-4e23-ba2d-ee2edb6399ed"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-actor-roster-missing-control",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "c72ac36c-b896-45a7-b20e-f85cbdee8126"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-actor-roster-missing",
+      "rpc": "join_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "81896193-b9d1-4de1-9275-8eb03ec18e3c"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-actor-suspended-control",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "00802a90-e2ea-463e-a4e4-3c13a7c6e382"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-actor-suspended",
+      "rpc": "join_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "47cacacc-0758-47c8-9f94-903f0b5a1399"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-actor-banned-control",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "e3b5f8bc-3580-4a13-bb2f-cac877c448d2"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-actor-banned",
+      "rpc": "join_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "5f6d225c-0eb9-414f-ace8-82f7a0433bff"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-actor-email-unconfirmed-control",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "aab9e3ac-5c49-4b2d-a228-bc039d9bfc11"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-actor-email-unconfirmed",
+      "rpc": "join_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "843455b8-6512-4bf1-8b3e-1aa198cfd60f"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-actor-email-equality-control",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "8582e6f6-d008-4d6a-96b8-2f87033bcadd"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-actor-email-equality",
+      "rpc": "join_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "0b7907f3-7d2a-4c47-a115-8c5c505d8e9a"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-actor-email-domain-control",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "ec09ceec-3236-4b39-809f-f19284f5fb1c"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-actor-email-domain",
+      "rpc": "join_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "a9dc3e29-3034-40e0-9431-0e9686defed7"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-actor-membership-unverified-control",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "9def28b5-db80-49f3-a969-d091d6d9935c"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-actor-membership-unverified",
+      "rpc": "join_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "ad63c25e-4030-4ed2-a6af-5365030d4b7f"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-actor-membership-missing-control",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "c12212d0-bb06-4eea-ad82-64df8964a5c3"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-actor-membership-missing",
+      "rpc": "join_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "b8a10c2e-59e2-4782-8188-3d73228714b9"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-actor-profile-incomplete-control",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "401b3ecc-147b-4a8b-a206-bd1daee8e199"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-actor-profile-incomplete",
+      "rpc": "join_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "2fd7518b-1cf0-4885-8473-2e10a64ff5bc"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-actor-owned-object-lawful-detach-delete-control",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "f745629f-00db-46ec-b33d-0c2526376f22"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-actor-owned-object-lawful-detach-delete",
+      "rpc": "join_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "f7c8782a-9bc5-4fa5-9f8c-dab47e9519f3"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-actor-primary-reference-control",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "53011572-56fa-4b3d-9c01-629898bf0bc9"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-actor-primary-reference",
+      "rpc": "join_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "e743daed-56d8-4665-9de2-f4ddfc2c386c"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-host-roster-revoked-control",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "11c01ae6-734b-43e1-bbd5-4691d7f907fe"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-host-roster-revoked",
+      "rpc": "join_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "40a5e60d-96a2-41a7-be03-504a40d0dfdc"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-host-roster-missing-control",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "1928d3c0-d8d7-47b4-9b6a-4d13e4c2c10f"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-host-roster-missing",
+      "rpc": "join_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "095450b5-4e82-48ec-aee0-85aa86c0589d"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-host-suspended-control",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "8c091401-fb50-4139-a25c-1e28eaec9984"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-host-suspended",
+      "rpc": "join_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "397c4d6a-b0da-4990-83ba-6a0d71b1b9c1"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-host-banned-control",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "ee7e5324-3516-4b3b-97f1-b5aa6e335878"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-host-banned",
+      "rpc": "join_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "ec641831-e1f9-41c0-95a8-082401e6f477"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-host-email-unconfirmed-control",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "bb8a8768-59ad-4bf2-a293-1c2b7d6a10b9"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-host-email-unconfirmed",
+      "rpc": "join_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "81e73a33-5116-47f2-8897-7035f7e66bdc"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-host-email-equality-control",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "d0cab493-e736-41f0-b8b2-30d093596809"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-host-email-equality",
+      "rpc": "join_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "d50e63fa-072f-43ff-9765-ef480af079f9"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-host-email-domain-control",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "2a9b707c-01ce-4dfa-8d51-4e8222ce9346"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-host-email-domain",
+      "rpc": "join_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "d63fbf44-5420-4e94-82c4-8875ef3680da"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-host-membership-unverified-control",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "8e929ec8-b579-4b4e-b881-2eadc1011fb6"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-host-membership-unverified",
+      "rpc": "join_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "a76c22f6-b95f-48a6-85a8-572935db6b1f"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-host-membership-missing-control",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "2d22c47a-6020-4356-8f32-cd20bc0486af"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-host-membership-missing",
+      "rpc": "join_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "afff50db-364a-4d78-96a4-fae7c84717de"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-host-profile-incomplete-control",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "ca1b2436-5e0a-4e15-985b-53fce00d6a0a"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-host-profile-incomplete",
+      "rpc": "join_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "99da8dfd-f511-46b3-87c1-bbd4d69ff2c2"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-host-owned-object-lawful-detach-delete-control",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "b45c3c7a-6430-4216-8dfd-dc4ac9fd176b"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-host-owned-object-lawful-detach-delete",
+      "rpc": "join_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "825d889c-5d9c-42bb-8fda-2bb066ed4286"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-host-primary-reference-control",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "d960cd8c-2821-4e41-84e9-6930e3f461f8"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-host-primary-reference",
+      "rpc": "join_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "eb52ef8c-fc1c-41c4-b12c-6a08fd502268"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-shutdown-control",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "8acc5d55-97f5-410f-8873-3c7ad4248e93"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-shutdown",
+      "rpc": "join_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "c56df7d1-e032-464a-b1b3-cec829fc04db"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-hangouts-capability-control",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "0f8ceb8e-fee7-4342-a2d3-72299c462526"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-hangouts-capability",
+      "rpc": "join_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "58190f14-9bf1-4e1b-8de8-7f188569a1c6"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-availability-missing-control",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "2b2b0dcd-0585-4e0f-81da-c511e88e8ded"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-availability-missing",
+      "rpc": "join_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "f73675da-5d90-4ee4-9b0a-79139223b593"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-capability-missing-control",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "fe5c3d1f-587a-4b34-ad5d-bf340141ee2d"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-capability-missing",
+      "rpc": "join_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "e532bec2-d5d9-4894-9654-96bfb0338e53"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-gate-missing-control",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "bbd39f45-ba32-4c29-be0a-5001b0bccbf3"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-gate-missing",
+      "rpc": "join_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "0753bc2c-f64e-4e83-a8ae-632c4c51026b"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-hangout-gate-control",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "f9bc8a8e-537c-447c-878e-22128c7be025"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-hangout-gate",
+      "rpc": "join_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "4f4d5c6b-488c-4a8c-97e7-2bd73a4f878a"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-campus-inactive-control",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "2efe57e3-2bf4-4645-8b40-452e13a6fcdc"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-campus-inactive",
+      "rpc": "join_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "c17d9226-2694-4eaf-8bc0-2687773c110f"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-campus-slug-control",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "657fb95c-a660-4767-aa62-d388e208b5dd"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-campus-slug",
+      "rpc": "join_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "a2b200cb-f118-4992-aacf-ded6e374e4d5"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-campus-allowlist-control",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "19158c00-37a6-471f-b307-0f8c4cc4a1fd"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-join_hangout-campus-allowlist",
+      "rpc": "join_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "50409482-9dff-4ff3-a34a-34dfd1b7bb22"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-actor-roster-revoked-control",
+      "rpc": "leave_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "19e6ea68-e02a-41d1-9592-b7ffa0996e6e"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-actor-roster-revoked",
+      "rpc": "leave_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "ba4e8bfc-3edd-45d3-a30a-842fe863869e"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-actor-roster-missing-control",
+      "rpc": "leave_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "8083a516-e907-4f83-ae7e-14f4885444c4"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-actor-roster-missing",
+      "rpc": "leave_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "ba6d00b1-ca37-4b05-8977-58dfbf930956"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-actor-suspended-control",
+      "rpc": "leave_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "5ef0a252-7a8d-4296-aea6-82a8633a4faa"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-actor-suspended",
+      "rpc": "leave_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "fb187826-a26d-4573-913f-980d0f14aa33"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-actor-banned-control",
+      "rpc": "leave_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "381d42ab-6430-4da6-b63f-504d9047c29f"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-actor-banned",
+      "rpc": "leave_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "db53b009-4b7d-45d9-b1a7-f0ce596804de"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-actor-email-unconfirmed-control",
+      "rpc": "leave_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "160bd62c-afe1-46eb-9113-b2bb4215872a"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-actor-email-unconfirmed",
+      "rpc": "leave_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "9593e0ed-367f-41c0-aca4-61847c8386ac"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-actor-email-equality-control",
+      "rpc": "leave_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "f7aa0207-7589-4818-b431-ca212e80aeda"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-actor-email-equality",
+      "rpc": "leave_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "ad636a1d-8514-488d-88ec-756e53e013e6"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-actor-email-domain-control",
+      "rpc": "leave_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "d4540692-0920-4ee5-b2cc-6d7846e5069d"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-actor-email-domain",
+      "rpc": "leave_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "4c0ac8b7-4e54-4349-a03a-8629ea41d464"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-actor-membership-unverified-control",
+      "rpc": "leave_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "ab92a8cd-b613-4fa3-ac1e-1e0f650a464f"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-actor-membership-unverified",
+      "rpc": "leave_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "a7e6566a-6539-438d-b210-10d0a7ac61dc"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-actor-membership-missing-control",
+      "rpc": "leave_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "5a252054-63e7-47cc-b549-96d077266e90"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-actor-membership-missing",
+      "rpc": "leave_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "8b211a5f-530d-4656-824f-036cec532a6f"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-actor-profile-incomplete-control",
+      "rpc": "leave_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "86ac6a3d-1ec9-43ad-9b7d-a9ab43e79bd3"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-actor-profile-incomplete",
+      "rpc": "leave_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "3d991152-c2b3-460a-9173-a46cf7d3514e"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-actor-owned-object-lawful-detach-delete-control",
+      "rpc": "leave_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "dc3e07fe-652e-4b37-b1c2-4611c7af3455"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-actor-owned-object-lawful-detach-delete",
+      "rpc": "leave_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "7e62149f-d91d-4fa4-9214-d993cc3c8d13"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-actor-primary-reference-control",
+      "rpc": "leave_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "4c920a2c-2591-4970-8237-9b8f4db7d07e"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-actor-primary-reference",
+      "rpc": "leave_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "291096c2-5b8d-43de-babe-fefe51b72ff4"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-host-roster-revoked-control",
+      "rpc": "leave_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "123c63e1-aa0b-4d46-9fdf-1030012f2964"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-host-roster-revoked",
+      "rpc": "leave_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "65a7ca1b-7076-45c2-b58e-c97253ed6941"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-host-roster-missing-control",
+      "rpc": "leave_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "c8ea6157-7a77-4ac7-8f4c-d2ef915711e8"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-host-roster-missing",
+      "rpc": "leave_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "94870971-be8b-47a1-b5dd-3b9cc49cd66a"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-host-suspended-control",
+      "rpc": "leave_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "654ea4cf-8d22-41cd-9c60-b84b41809f52"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-host-suspended",
+      "rpc": "leave_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "e4c68baf-cd48-474e-be69-baef4d2833bc"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-host-banned-control",
+      "rpc": "leave_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "1f883ffc-5bb9-4c87-b4b2-88e132fa4fd6"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-host-banned",
+      "rpc": "leave_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "f2f936b6-6199-445c-ab8c-1daf98d45f01"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-host-email-unconfirmed-control",
+      "rpc": "leave_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "5da9e442-ce48-4807-a34e-fabb51d1ab97"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-host-email-unconfirmed",
+      "rpc": "leave_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "90c8dd2a-e2b2-4997-8dc4-573c30c2440f"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-host-email-equality-control",
+      "rpc": "leave_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "a3a99560-08e5-4ccd-b855-4e5c2ddda01b"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-host-email-equality",
+      "rpc": "leave_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "afd450e7-ca0d-4c1f-b2d7-1de40ab4e9f8"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-host-email-domain-control",
+      "rpc": "leave_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "2505f9a7-8fd0-4aec-ab4a-670adf2bc55a"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-host-email-domain",
+      "rpc": "leave_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "3847e4af-b5d0-44cc-b7f2-6b16c390fb84"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-host-membership-unverified-control",
+      "rpc": "leave_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "64ef4dc9-0f38-48b2-bb62-94a749de9b82"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-host-membership-unverified",
+      "rpc": "leave_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "a0d65fa1-4c35-406f-9732-326c2ce564a3"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-host-membership-missing-control",
+      "rpc": "leave_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "0c2824d9-03f5-4e9c-a568-5fb2fc9ff76f"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-host-membership-missing",
+      "rpc": "leave_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "ed6f0e9c-561d-4251-a2cc-27b8239f6cad"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-host-profile-incomplete-control",
+      "rpc": "leave_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "2f9211aa-69a2-405c-a0d3-270b512c3f96"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-host-profile-incomplete",
+      "rpc": "leave_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "37c543ed-7140-41e0-a7a4-be6f715d70e3"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-host-owned-object-lawful-detach-delete-control",
+      "rpc": "leave_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "cd692d2a-b370-4ade-80a5-8a065cd9d84b"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-host-owned-object-lawful-detach-delete",
+      "rpc": "leave_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "5423d314-2be4-46bc-936d-91829e2be408"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-host-primary-reference-control",
+      "rpc": "leave_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "a03e4b32-f050-4c6f-a84a-eb65b7b691d0"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-host-primary-reference",
+      "rpc": "leave_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "c9abc361-ba5b-4610-b41b-34c0b6b75563"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-shutdown-control",
+      "rpc": "leave_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "dd91ebe9-a80f-4e00-8dc3-cf3ab085a158"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-shutdown",
+      "rpc": "leave_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "4991151a-17e8-476f-a42a-6259da511d1a"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-hangouts-capability-control",
+      "rpc": "leave_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "79295469-e838-4c19-a516-52573a6c256d"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-hangouts-capability",
+      "rpc": "leave_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "f19f9da0-8345-42fc-b53e-c963ad5b2991"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-availability-missing-control",
+      "rpc": "leave_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "cf9e3b97-6268-48af-aa60-328cbc03cad7"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-availability-missing",
+      "rpc": "leave_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "e1a18255-42d4-4136-b726-c692dbf220f9"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-capability-missing-control",
+      "rpc": "leave_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "af11188e-43ca-4190-ac6d-18c34b9a260e"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-capability-missing",
+      "rpc": "leave_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "f9791da4-aa7f-4f90-9a4f-44a0576310bd"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-gate-missing-control",
+      "rpc": "leave_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "2dba1a18-b348-4584-b832-c548979a83ab"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-gate-missing",
+      "rpc": "leave_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "54efeaf2-f7e7-4e5b-9fae-342e9c4d1cf2"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-hangout-gate-control",
+      "rpc": "leave_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "7174bac9-20ba-461d-8b74-7ee5e949fdce"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-hangout-gate",
+      "rpc": "leave_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "6ab403a2-2d96-49ef-8aef-15914f8e78d3"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-campus-inactive-control",
+      "rpc": "leave_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "116fb1ff-0971-4834-8826-3c16702f6765"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-campus-inactive",
+      "rpc": "leave_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "94773dbc-3e1a-4794-aef2-f662af0613e1"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-campus-slug-control",
+      "rpc": "leave_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "e555d863-ffbc-4984-b360-b349156fe520"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-campus-slug",
+      "rpc": "leave_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "dffdd224-58fb-445f-b101-f1a59bbaebb5"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-campus-allowlist-control",
+      "rpc": "leave_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-leave_hangout",
+      "rpc": "create_hangout",
+      "result": "851dcd27-6528-4e93-9af1-9d83350271f7"
+    },
+    {
+      "id": "setup-join-leave_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-leave_hangout-campus-allowlist",
+      "rpc": "leave_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "674a0566-d61a-41bd-acc5-4f1d207710d4"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-actor-roster-revoked-control",
+      "rpc": "set_hangout_joining",
+      "result": 2
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "ea16c54d-e4f8-478e-8b5f-0b7300c75dab"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-actor-roster-revoked",
+      "rpc": "set_hangout_joining",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "29d57fdf-c499-4a3d-a644-18d1eb9f77ef"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-actor-roster-missing-control",
+      "rpc": "set_hangout_joining",
+      "result": 2
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "be8cdafe-a5f9-4f42-a9c2-22f41fbd434d"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-actor-roster-missing",
+      "rpc": "set_hangout_joining",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "c880036e-0951-416d-a03d-59c12df4ef0b"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-actor-suspended-control",
+      "rpc": "set_hangout_joining",
+      "result": 2
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "d38f15dd-17d6-47f7-80d2-71ce756617ad"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-actor-suspended",
+      "rpc": "set_hangout_joining",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "8e6cfce1-2d35-415f-937d-fcab38bf45f6"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-actor-banned-control",
+      "rpc": "set_hangout_joining",
+      "result": 2
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "75f74b26-4333-4c20-91c7-e6606da95753"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-actor-banned",
+      "rpc": "set_hangout_joining",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "8f7d2256-7571-417a-b873-1d782cba7b74"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-actor-email-unconfirmed-control",
+      "rpc": "set_hangout_joining",
+      "result": 2
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "720efc13-687c-4c58-9a15-a7e2be180316"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-actor-email-unconfirmed",
+      "rpc": "set_hangout_joining",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "2fd760fe-14d2-4bf6-b0a4-eefde4666608"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-actor-email-equality-control",
+      "rpc": "set_hangout_joining",
+      "result": 2
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "8afbc2a9-5fc1-49c7-aa30-59da09003184"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-actor-email-equality",
+      "rpc": "set_hangout_joining",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "7fd368c4-c258-45e0-8af1-c605a27d6d15"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-actor-email-domain-control",
+      "rpc": "set_hangout_joining",
+      "result": 2
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "286e5d20-f747-4ebc-a029-6005007ad6e1"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-actor-email-domain",
+      "rpc": "set_hangout_joining",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "c852545c-315b-41dd-9594-c040c15f174b"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-actor-membership-unverified-control",
+      "rpc": "set_hangout_joining",
+      "result": 2
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "97ad71f6-7e63-470d-9c93-61e4e5caeb7d"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-actor-membership-unverified",
+      "rpc": "set_hangout_joining",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "445ae77c-e05f-45ab-b381-ab852f276032"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-actor-membership-missing-control",
+      "rpc": "set_hangout_joining",
+      "result": 2
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "1e9444b4-e83f-489f-9c92-f8edb5ef7b7c"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-actor-membership-missing",
+      "rpc": "set_hangout_joining",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "2f12d299-23ba-44b2-97d1-6f0e4f52b3eb"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-actor-profile-incomplete-control",
+      "rpc": "set_hangout_joining",
+      "result": 2
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "84eddbac-b12a-44c4-ba76-75a8c077ec94"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-actor-profile-incomplete",
+      "rpc": "set_hangout_joining",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "cea70972-c2f0-4447-8979-b6c6e8f0f16b"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-actor-owned-object-lawful-detach-delete-control",
+      "rpc": "set_hangout_joining",
+      "result": 2
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "03b7e582-6efb-4589-8910-f4719eaa42b2"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-actor-owned-object-lawful-detach-delete",
+      "rpc": "set_hangout_joining",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "b177d9a5-8163-4fd5-bd78-8bf3d878d7ca"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-actor-primary-reference-control",
+      "rpc": "set_hangout_joining",
+      "result": 2
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "7fdde3c9-f463-4b2a-898b-e419f16374bf"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-actor-primary-reference",
+      "rpc": "set_hangout_joining",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "e5a406ab-6de5-41e6-9d65-fc654a79f800"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-host-roster-revoked-control",
+      "rpc": "set_hangout_joining",
+      "result": 2
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "70eabc9d-0aa1-4c6f-81a1-d28045320bdb"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-host-roster-revoked",
+      "rpc": "set_hangout_joining",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "144a7504-e59a-4aed-a4d0-1f47f447795b"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-host-roster-missing-control",
+      "rpc": "set_hangout_joining",
+      "result": 2
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "19c835bd-c9dc-4601-ba52-73813f382379"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-host-roster-missing",
+      "rpc": "set_hangout_joining",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "bd1908c0-560a-4a43-86a8-48a17727c3eb"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-host-suspended-control",
+      "rpc": "set_hangout_joining",
+      "result": 2
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "dec387fd-a77a-4744-a12c-c691213a6dc4"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-host-suspended",
+      "rpc": "set_hangout_joining",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "c9411612-bf6d-466c-95dc-bd6868013854"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-host-banned-control",
+      "rpc": "set_hangout_joining",
+      "result": 2
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "bed763ce-9bc4-44c8-9251-c1f07be17834"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-host-banned",
+      "rpc": "set_hangout_joining",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "15803706-3496-4409-b997-61f8bb937d05"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-host-email-unconfirmed-control",
+      "rpc": "set_hangout_joining",
+      "result": 2
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "270e6435-ec7b-416d-a28e-45cfd1cc0732"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-host-email-unconfirmed",
+      "rpc": "set_hangout_joining",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "c32d071d-5298-4171-8bea-f069a7403244"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-host-email-equality-control",
+      "rpc": "set_hangout_joining",
+      "result": 2
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "dc85a1ae-357b-4614-b7b0-674b4a0b2a09"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-host-email-equality",
+      "rpc": "set_hangout_joining",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "c3175c1d-8454-4e9c-8755-703134c67905"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-host-email-domain-control",
+      "rpc": "set_hangout_joining",
+      "result": 2
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "f90ad481-73ac-4d54-b0f7-173d32a2b98b"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-host-email-domain",
+      "rpc": "set_hangout_joining",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "f27f03b9-cb5d-42b9-9f44-377a2df56d93"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-host-membership-unverified-control",
+      "rpc": "set_hangout_joining",
+      "result": 2
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "9f6a1ff9-33ba-472b-8467-36f46d9f468c"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-host-membership-unverified",
+      "rpc": "set_hangout_joining",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "03f854d0-8dce-4b92-a654-97041112ede9"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-host-membership-missing-control",
+      "rpc": "set_hangout_joining",
+      "result": 2
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "de22eba5-b1eb-412e-a048-c49f9bfad8b1"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-host-membership-missing",
+      "rpc": "set_hangout_joining",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "1c50320b-845c-4bf3-bc49-24afa21b91df"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-host-profile-incomplete-control",
+      "rpc": "set_hangout_joining",
+      "result": 2
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "6ff65971-0771-4b8a-9e78-1c92c317cd62"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-host-profile-incomplete",
+      "rpc": "set_hangout_joining",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "a282422a-9f77-426a-83d3-5bd32dd91577"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-host-owned-object-lawful-detach-delete-control",
+      "rpc": "set_hangout_joining",
+      "result": 2
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "58869e90-f08e-4b87-965e-0f5bbb391300"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-host-owned-object-lawful-detach-delete",
+      "rpc": "set_hangout_joining",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "12cc311c-7156-4f83-bf17-961e223b4f18"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-host-primary-reference-control",
+      "rpc": "set_hangout_joining",
+      "result": 2
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "da31367d-5756-45ca-abc6-d71ad8859e8f"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-host-primary-reference",
+      "rpc": "set_hangout_joining",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "1a265035-519c-4eae-83b6-f81e7d7304d0"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-shutdown-control",
+      "rpc": "set_hangout_joining",
+      "result": 2
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "06e31bd5-fcb4-4356-86eb-10a592fd0398"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-shutdown",
+      "rpc": "set_hangout_joining",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "15e8230c-849f-4211-9489-ed9a3656c602"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-hangouts-capability-control",
+      "rpc": "set_hangout_joining",
+      "result": 2
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "ac920253-caf7-4f55-8cc6-063b3053743b"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-hangouts-capability",
+      "rpc": "set_hangout_joining",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "feac9ade-317e-40f3-98e2-c787e914afd4"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-availability-missing-control",
+      "rpc": "set_hangout_joining",
+      "result": 2
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "b3086c68-cd8d-4a0d-8f90-21333f3674de"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-availability-missing",
+      "rpc": "set_hangout_joining",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "b2bdd685-da83-4450-aee9-76d8108e33a6"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-capability-missing-control",
+      "rpc": "set_hangout_joining",
+      "result": 2
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "5e24aef9-3124-42f8-b380-3401228e310f"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-capability-missing",
+      "rpc": "set_hangout_joining",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "0713471d-e97b-4655-9f7f-ae11ee95910b"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-gate-missing-control",
+      "rpc": "set_hangout_joining",
+      "result": 2
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "31b8e0a6-d13c-435e-80cd-0a239401c3bf"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-gate-missing",
+      "rpc": "set_hangout_joining",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "f8b5fdad-11c8-4e1e-a9ba-d2df9e863d89"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-hangout-gate-control",
+      "rpc": "set_hangout_joining",
+      "result": 2
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "abff8e8d-745a-412e-ae80-467abce25fb6"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-hangout-gate",
+      "rpc": "set_hangout_joining",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "393ce978-2014-4936-a13d-e666d7b919e2"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-campus-inactive-control",
+      "rpc": "set_hangout_joining",
+      "result": 2
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "1f7f414a-5afb-4de3-a1bf-35ce96a1dc1a"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-campus-inactive",
+      "rpc": "set_hangout_joining",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "cbedf968-5931-4576-9e33-7aa0cea0bb59"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-campus-slug-control",
+      "rpc": "set_hangout_joining",
+      "result": 2
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "5bdddc2c-76ca-48dd-93d0-3c49b91d886b"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-campus-slug",
+      "rpc": "set_hangout_joining",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "a6e4d70d-22da-48d1-b75b-d7dbe72126b0"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-campus-allowlist-control",
+      "rpc": "set_hangout_joining",
+      "result": 2
+    },
+    {
+      "id": "setup-set_hangout_joining",
+      "rpc": "create_hangout",
+      "result": "b7755828-43e9-42d0-bad2-b971520d0d6d"
+    },
+    {
+      "id": "setup-join-set_hangout_joining",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L2L3-set_hangout_joining-campus-allowlist",
+      "rpc": "set_hangout_joining",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "setup-edit_hangout",
+      "rpc": "create_hangout",
+      "result": "d7026ea9-6320-4192-96aa-e094021d4b95"
+    },
+    {
+      "id": "setup-join-edit_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L3-readmission-depart-control",
+      "rpc": "leave_hangout",
+      "result": null
+    },
+    {
+      "id": "L3-readmission-no-role-restoration",
+      "rpc": "edit_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    },
+    {
+      "id": "L3-readmission-explicit-rejoin",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "setup-join_hangout",
+      "rpc": "create_hangout",
+      "result": "c778667a-4293-46cc-90a6-2a36b3195a6a"
+    },
+    {
+      "id": "setup-join-join_hangout",
+      "rpc": "join_hangout",
+      "result": null
+    },
+    {
+      "id": "L3-readmission-removal-control",
+      "rpc": "remove_hangout_participant",
+      "result": 2
+    },
+    {
+      "id": "L3-readmission-no-removed-restoration",
+      "rpc": "join_hangout",
+      "status": 403,
+      "code": "42501",
+      "message": "Hangout operation not permitted",
+      "zero_delta": true
+    }
+  ],
+  "concurrency_claimed": false,
+  "old_auth_tokens": true
+}

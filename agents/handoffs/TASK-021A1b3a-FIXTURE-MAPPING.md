@@ -1,5 +1,7 @@
 # TASK-021A1b3a stable fixture-source mapping
 
+Historical source-stage review record. Completed execution outcomes and remaining final review/publication gates are in [the ordinary lifecycle handoff](TASK-021A1b3a-ORDINARY-LIFECYCLE.md).
+
 Prepared source only. No database/VM/API runtime, push, integration or completion yet. Migration source checkpoint9dbec14 independently cleared; follow-up fixture checkpoint below leaves migration unchanged.
 
 | Acceptance | Actual public fixture paths prepared | Equivalent/inherited cells | Impossible/partitioned cells |

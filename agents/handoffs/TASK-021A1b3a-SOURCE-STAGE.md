@@ -1,5 +1,7 @@
 # TASK-021A1b3a source-stage review request
 
+Historical source-stage review record. Completed execution outcomes and remaining final review/publication gates are in [the ordinary lifecycle handoff](TASK-021A1b3a-ORDINARY-LIFECYCLE.md).
+
 Status: implementation source/fixture stage, no runtime started, no completion claim.
 Baseline: independently reviewed canonical936b784ed2ae6965b4251fe9c6195b8f63671f2e; later coordinator documentation receipts72865ee/9b459a8 are documentation-only and remain to reconcile before publication.
 

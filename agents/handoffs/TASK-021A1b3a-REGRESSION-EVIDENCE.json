@@ -1,0 +1,1291 @@
+{
+  "scope": "fresh bounded A1a/B1/B2 adapters; not full historical A1c or app acceptance",
+  "owner": "TASK-021A1b3a",
+  "history": "25:20260927000500",
+  "modules": [
+    {
+      "module": "authority-concurrency",
+      "pass": 1,
+      "fail": 0,
+      "skipped": 0,
+      "observed_waits": 25
+    },
+    {
+      "module": "authority-http",
+      "pass": 1,
+      "fail": 0,
+      "skipped": 0
+    },
+    {
+      "module": "owner-concurrency",
+      "pass": 1,
+      "fail": 0,
+      "skipped": 0,
+      "observed_waits": 59,
+      "separate_abort": "40P01"
+    },
+    {
+      "module": "owner-http",
+      "pass": 1,
+      "fail": 0,
+      "skipped": 0,
+      "actual_storage_final_loss_waits": 6
+    },
+    {
+      "module": "source-safety-concurrency",
+      "pass": 1,
+      "fail": 0,
+      "skipped": 0,
+      "observed_waits": 14
+    },
+    {
+      "module": "source-safety-http",
+      "pass": 1,
+      "fail": 0,
+      "skipped": 0
+    }
+  ],
+  "wrapper": {
+    "pass": 1,
+    "fail": 0,
+    "cancelled": 0,
+    "skipped": 0,
+    "todo": 0,
+    "final_guarded_reset": "passed"
+  },
+  "diagnostics": [
+    {
+      "module": "authority-concurrency",
+      "observed_lock_cases": [
+        {
+          "race": "pilot_1",
+          "holder_pid": 371,
+          "waiter_pid": 370,
+          "waiting_lock_types": [
+            "advisory"
+          ]
+        },
+        {
+          "race": "pilot_2",
+          "holder_pid": 432,
+          "waiter_pid": 431,
+          "waiting_lock_types": [
+            "advisory"
+          ]
+        },
+        {
+          "race": "pilot_3",
+          "holder_pid": 499,
+          "waiter_pid": 498,
+          "waiting_lock_types": [
+            "advisory"
+          ]
+        },
+        {
+          "race": "pilot_4",
+          "holder_pid": 567,
+          "waiter_pid": 568,
+          "waiting_lock_types": [
+            "advisory"
+          ]
+        },
+        {
+          "race": "pilot_5",
+          "holder_pid": 629,
+          "waiter_pid": 630,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "pilot_6",
+          "holder_pid": 685,
+          "waiter_pid": 686,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "pilot_7",
+          "holder_pid": 750,
+          "waiter_pid": 751,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "pilot_8",
+          "holder_pid": 817,
+          "waiter_pid": 816,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "pilot_9",
+          "holder_pid": 872,
+          "waiter_pid": 871,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "pilot_10",
+          "holder_pid": 944,
+          "waiter_pid": 943,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "pilot_11",
+          "holder_pid": 1019,
+          "waiter_pid": 1020,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "pilot_12",
+          "holder_pid": 1098,
+          "waiter_pid": 1097,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "pilot_13",
+          "holder_pid": 1160,
+          "waiter_pid": 1161,
+          "waiting_lock_types": [
+            "advisory"
+          ]
+        },
+        {
+          "race": "pilot_14",
+          "holder_pid": 1211,
+          "waiter_pid": 1210,
+          "waiting_lock_types": [
+            "advisory"
+          ]
+        },
+        {
+          "race": "pilot_15",
+          "holder_pid": 1267,
+          "waiter_pid": 1268,
+          "waiting_lock_types": [
+            "advisory"
+          ]
+        },
+        {
+          "race": "pilot_16",
+          "holder_pid": 1327,
+          "waiter_pid": 1326,
+          "waiting_lock_types": [
+            "advisory"
+          ]
+        },
+        {
+          "race": "pilot_17",
+          "holder_pid": 1384,
+          "waiter_pid": 1383,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "pilot_18",
+          "holder_pid": 1442,
+          "waiter_pid": 1441,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "pilot_19",
+          "holder_pid": 1496,
+          "waiter_pid": 1497,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "pilot_20",
+          "holder_pid": 1560,
+          "waiter_pid": 1559,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "pilot_21",
+          "holder_pid": 1622,
+          "waiter_pid": 1623,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "pilot_22",
+          "holder_pid": 1680,
+          "waiter_pid": 1679,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "pilot_23",
+          "holder_pid": 1760,
+          "waiter_pid": 1759,
+          "waiting_lock_types": [
+            "advisory"
+          ]
+        },
+        {
+          "race": "pilot_24",
+          "holder_pid": 1839,
+          "waiter_pid": 1838,
+          "waiting_lock_types": [
+            "advisory"
+          ]
+        },
+        {
+          "race": "pilot_25",
+          "holder_pid": 1901,
+          "waiter_pid": 1900,
+          "waiting_lock_types": [
+            "advisory"
+          ]
+        }
+      ],
+      "recovery": "actual successful A1a stdout diagnostics from retained tool output; no rerun"
+    },
+    {
+      "safe_abort": "40P01",
+      "cycle": [
+        {
+          "pid": 3533,
+          "locks": [
+            "transactionid"
+          ],
+          "blocked_by": [
+            3532
+          ]
+        },
+        {
+          "pid": 3532,
+          "locks": [
+            "transactionid"
+          ],
+          "blocked_by": [
+            3533
+          ]
+        }
+      ]
+    },
+    {
+      "observed_waits": 59,
+      "evidence": [
+        {
+          "race": "owner_required_revoke_first",
+          "holder_pid": 380,
+          "waiter_pid": 381,
+          "waiting_lock_types": [
+            "advisory"
+          ]
+        },
+        {
+          "race": "owner_required_first_revoke",
+          "holder_pid": 443,
+          "waiter_pid": 444,
+          "waiting_lock_types": [
+            "advisory"
+          ]
+        },
+        {
+          "race": "owner_required_shutdown_first",
+          "holder_pid": 507,
+          "waiter_pid": 506,
+          "waiting_lock_types": [
+            "advisory"
+          ]
+        },
+        {
+          "race": "owner_required_first_shutdown",
+          "holder_pid": 571,
+          "waiter_pid": 572,
+          "waiting_lock_types": [
+            "advisory"
+          ]
+        },
+        {
+          "race": "owner_assignment_revoke_first",
+          "holder_pid": 634,
+          "waiter_pid": 633,
+          "waiting_lock_types": [
+            "advisory"
+          ]
+        },
+        {
+          "race": "owner_assignment_first_revoke",
+          "holder_pid": 696,
+          "waiter_pid": 695,
+          "waiting_lock_types": [
+            "advisory"
+          ]
+        },
+        {
+          "race": "owner_assignment_shutdown_first",
+          "holder_pid": 759,
+          "waiter_pid": 760,
+          "waiting_lock_types": [
+            "advisory"
+          ]
+        },
+        {
+          "race": "owner_assignment_first_shutdown",
+          "holder_pid": 822,
+          "waiter_pid": 821,
+          "waiting_lock_types": [
+            "advisory"
+          ]
+        },
+        {
+          "race": "owner_insert_revoke_first",
+          "holder_pid": 886,
+          "waiter_pid": 885,
+          "waiting_lock_types": [
+            "advisory"
+          ]
+        },
+        {
+          "race": "owner_insert_first_revoke",
+          "holder_pid": 947,
+          "waiter_pid": 948,
+          "waiting_lock_types": [
+            "advisory"
+          ]
+        },
+        {
+          "race": "owner_insert_shutdown_first",
+          "holder_pid": 1009,
+          "waiter_pid": 1008,
+          "waiting_lock_types": [
+            "advisory"
+          ]
+        },
+        {
+          "race": "owner_insert_first_shutdown",
+          "holder_pid": 1071,
+          "waiter_pid": 1070,
+          "waiting_lock_types": [
+            "advisory"
+          ]
+        },
+        {
+          "race": "owner_delete_revoke_first",
+          "holder_pid": 1136,
+          "waiter_pid": 1135,
+          "waiting_lock_types": [
+            "advisory"
+          ]
+        },
+        {
+          "race": "owner_delete_first_revoke",
+          "holder_pid": 1199,
+          "waiter_pid": 1198,
+          "waiting_lock_types": [
+            "advisory"
+          ]
+        },
+        {
+          "race": "owner_delete_shutdown_first",
+          "holder_pid": 1260,
+          "waiter_pid": 1259,
+          "waiting_lock_types": [
+            "advisory"
+          ]
+        },
+        {
+          "race": "owner_delete_first_shutdown",
+          "holder_pid": 1323,
+          "waiter_pid": 1322,
+          "waiting_lock_types": [
+            "advisory"
+          ]
+        },
+        {
+          "race": "owner_required_account_first",
+          "holder_pid": 1379,
+          "waiter_pid": 1380,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "owner_required_first_account",
+          "holder_pid": 1426,
+          "waiter_pid": 1427,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "owner_assignment_account_first",
+          "holder_pid": 1477,
+          "waiter_pid": 1476,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "owner_assignment_first_account",
+          "holder_pid": 1527,
+          "waiter_pid": 1526,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "owner_insert_account_first",
+          "holder_pid": 1575,
+          "waiter_pid": 1576,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "owner_insert_first_account",
+          "holder_pid": 1623,
+          "waiter_pid": 1624,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "owner_delete_account_first",
+          "holder_pid": 1672,
+          "waiter_pid": 1671,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "owner_delete_first_account",
+          "holder_pid": 1720,
+          "waiter_pid": 1719,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "owner_required_auth_first",
+          "holder_pid": 1767,
+          "waiter_pid": 1768,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "owner_required_first_auth",
+          "holder_pid": 1815,
+          "waiter_pid": 1814,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "owner_assignment_auth_first",
+          "holder_pid": 1863,
+          "waiter_pid": 1864,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "owner_assignment_first_auth",
+          "holder_pid": 1911,
+          "waiter_pid": 1910,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "owner_insert_auth_first",
+          "holder_pid": 1959,
+          "waiter_pid": 1958,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "owner_insert_first_auth",
+          "holder_pid": 2006,
+          "waiter_pid": 2007,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "owner_delete_auth_first",
+          "holder_pid": 2056,
+          "waiter_pid": 2055,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "owner_delete_first_auth",
+          "holder_pid": 2105,
+          "waiter_pid": 2104,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "owner_required_membership_recreate_first",
+          "holder_pid": 2155,
+          "waiter_pid": 2154,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "owner_required_first_membership_recreate",
+          "holder_pid": 2202,
+          "waiter_pid": 2203,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "owner_assignment_membership_recreate_first",
+          "holder_pid": 2250,
+          "waiter_pid": 2251,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "owner_assignment_first_membership_recreate",
+          "holder_pid": 2298,
+          "waiter_pid": 2299,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "owner_insert_membership_recreate_first",
+          "holder_pid": 2348,
+          "waiter_pid": 2349,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "owner_insert_first_membership_recreate",
+          "holder_pid": 2404,
+          "waiter_pid": 2403,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "owner_delete_membership_recreate_first",
+          "holder_pid": 2455,
+          "waiter_pid": 2456,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "owner_delete_first_membership_recreate",
+          "holder_pid": 2501,
+          "waiter_pid": 2502,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "owner_required_membership_first",
+          "holder_pid": 2553,
+          "waiter_pid": 2554,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "owner_required_first_membership",
+          "holder_pid": 2603,
+          "waiter_pid": 2602,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "owner_assignment_membership_first",
+          "holder_pid": 2652,
+          "waiter_pid": 2651,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "owner_assignment_first_membership",
+          "holder_pid": 2701,
+          "waiter_pid": 2700,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "owner_insert_membership_first",
+          "holder_pid": 2746,
+          "waiter_pid": 2745,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "owner_insert_first_membership",
+          "holder_pid": 2795,
+          "waiter_pid": 2794,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "owner_delete_membership_first",
+          "holder_pid": 2843,
+          "waiter_pid": 2842,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "owner_delete_first_membership",
+          "holder_pid": 2892,
+          "waiter_pid": 2893,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "owner_required_campus_first",
+          "holder_pid": 2939,
+          "waiter_pid": 2938,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "owner_required_first_campus",
+          "holder_pid": 2985,
+          "waiter_pid": 2984,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "owner_assignment_campus_first",
+          "holder_pid": 3033,
+          "waiter_pid": 3032,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "owner_assignment_first_campus",
+          "holder_pid": 3083,
+          "waiter_pid": 3084,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "owner_insert_campus_first",
+          "holder_pid": 3134,
+          "waiter_pid": 3135,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "owner_insert_first_campus",
+          "holder_pid": 3182,
+          "waiter_pid": 3181,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "owner_delete_campus_first",
+          "holder_pid": 3229,
+          "waiter_pid": 3230,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "owner_delete_first_campus",
+          "holder_pid": 3280,
+          "waiter_pid": 3281,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "owner_absent_roster_after_prior_snapshot",
+          "holder_pid": 3349,
+          "waiter_pid": 3350,
+          "waiting_lock_types": [
+            "advisory"
+          ]
+        },
+        {
+          "race": "owner_assignment_first_reference_delete",
+          "holder_pid": 3455,
+          "waiter_pid": 3454,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "owner_delete_first_assignment",
+          "holder_pid": 3490,
+          "waiter_pid": 3489,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        }
+      ]
+    },
+    {
+      "real_duplicate_final_wait": {
+        "lock": [
+          "advisory"
+        ],
+        "holder_pid": 419,
+        "waiter_pid": 766
+      }
+    },
+    {
+      "real_storage_final_waits": [
+        {
+          "lock": "advisory",
+          "loss": "revoke",
+          "operation": "INSERT",
+          "holder_pid": 489,
+          "waiter_pid": 419,
+          "response_status": 400,
+          "response_message": "Owner operation unavailable"
+        },
+        {
+          "lock": "advisory",
+          "loss": "shutdown",
+          "operation": "INSERT",
+          "holder_pid": 533,
+          "waiter_pid": 419,
+          "response_status": 400,
+          "response_message": "Owner operation unavailable"
+        },
+        {
+          "lock": "advisory",
+          "loss": "email",
+          "operation": "INSERT",
+          "holder_pid": 575,
+          "waiter_pid": 419,
+          "response_status": 400,
+          "response_message": "Owner operation unavailable"
+        },
+        {
+          "lock": "advisory",
+          "loss": "revoke",
+          "operation": "DELETE",
+          "holder_pid": 615,
+          "waiter_pid": 419,
+          "response_status": 400,
+          "response_message": "Owner operation unavailable"
+        },
+        {
+          "lock": "advisory",
+          "loss": "shutdown",
+          "operation": "DELETE",
+          "holder_pid": 656,
+          "waiter_pid": 419,
+          "response_status": 400,
+          "response_message": "Owner operation unavailable"
+        },
+        {
+          "lock": "advisory",
+          "loss": "email",
+          "operation": "DELETE",
+          "holder_pid": 700,
+          "waiter_pid": 419,
+          "response_status": 400,
+          "response_message": "Owner operation unavailable"
+        }
+      ]
+    },
+    {
+      "raw_insert_final_upsert_wait": {
+        "lock": "advisory",
+        "holder_pid": 810,
+        "waiter_pid": 766
+      }
+    },
+    {
+      "observed_lock_cases": [
+        {
+          "race": "b2_reader_account_loss_first",
+          "holder_pid": 354,
+          "waiter_pid": 353,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "b2_reader_first",
+          "holder_pid": 395,
+          "waiter_pid": 394,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "b2_retained_retry_gate_loss_first",
+          "holder_pid": 441,
+          "waiter_pid": 442,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "b2_retained_retry_first",
+          "holder_pid": 476,
+          "waiter_pid": 477,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "b2_operator_role_loss_first",
+          "holder_pid": 519,
+          "waiter_pid": 520,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "b2_operator_queue_first",
+          "holder_pid": 562,
+          "waiter_pid": 561,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "b2_operator_gate_delete_loss_first",
+          "holder_pid": 605,
+          "waiter_pid": 604,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "b2_operator_gate_delete_operation_first",
+          "holder_pid": 648,
+          "waiter_pid": 647,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "b2_operator_gate_disable_loss_first",
+          "holder_pid": 689,
+          "waiter_pid": 688,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "b2_operator_gate_disable_operation_first",
+          "holder_pid": 728,
+          "waiter_pid": 729,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "b2_operator_account_suspend_loss_first",
+          "holder_pid": 768,
+          "waiter_pid": 769,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "b2_operator_account_suspend_operation_first",
+          "holder_pid": 812,
+          "waiter_pid": 813,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "b2_operator_account_delete_loss_first",
+          "holder_pid": 853,
+          "waiter_pid": 852,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        },
+        {
+          "race": "b2_operator_account_delete_operation_first",
+          "holder_pid": 907,
+          "waiter_pid": 906,
+          "waiting_lock_types": [
+            "transactionid"
+          ]
+        }
+      ],
+      "new_pilot_locks": false,
+      "scope": "existing source actor, retained exact retry safety gate, unadmitted operator role; no B3 admission/write claim"
+    },
+    {
+      "cases": [
+        {
+          "isolation": "repeatable read",
+          "message": "Hangout chat unavailable",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "isolation": "repeatable read",
+          "message": "Hangout operation not permitted",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "isolation": "repeatable read",
+          "message": "People operation unavailable",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "isolation": "repeatable read",
+          "message": "People operation unavailable",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "isolation": "repeatable read",
+          "message": "Hangout operation not permitted",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "isolation": "serializable",
+          "message": "Hangout chat unavailable",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "isolation": "serializable",
+          "message": "Hangout operation not permitted",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "isolation": "serializable",
+          "message": "People operation unavailable",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "isolation": "serializable",
+          "message": "People operation unavailable",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "isolation": "serializable",
+          "message": "Hangout operation not permitted",
+          "kind": "actual authenticated SQL"
+        },
+        {
+          "rpc": "submit_safety_report",
+          "status": 403,
+          "code": "42501",
+          "message": "Safety report unavailable"
+        },
+        {
+          "rpc": "submit_safety_report",
+          "status": 403,
+          "code": "42501",
+          "message": "Safety report unavailable"
+        },
+        {
+          "rpc": "read_hangout_messages",
+          "status": 403,
+          "code": "42501",
+          "message": "Hangout chat unavailable"
+        },
+        {
+          "rpc": "submit_safety_report",
+          "status": 403,
+          "code": "42501",
+          "message": "Safety report unavailable"
+        },
+        {
+          "case": "ordinary-current-hangout-report",
+          "never_participated": true,
+          "provenance": "current_hangout",
+          "receipt_keys": [
+            "receipt_id",
+            "submitted_at"
+          ],
+          "host_revoke_absence_and_hangouts_off_new_acquisition_denied": true,
+          "new_denial_report_ledger_growth": 0,
+          "exact_receipt_independent": true
+        },
+        {
+          "rpc": "read_hangout_messages",
+          "status": 403,
+          "code": "42501",
+          "message": "Hangout chat unavailable"
+        },
+        {
+          "rpc": "read_hangout_messages",
+          "status": 403,
+          "code": "42501",
+          "message": "Hangout chat unavailable"
+        },
+        {
+          "rpc": "list_hangout_cohosts",
+          "status": 403,
+          "code": "42501",
+          "message": "Hangout operation not permitted"
+        },
+        {
+          "rpc": "submit_safety_report",
+          "status": 403,
+          "code": "42501",
+          "message": "Safety report unavailable"
+        },
+        {
+          "rpc": "submit_safety_report",
+          "status": 403,
+          "code": "42501",
+          "message": "Safety report unavailable"
+        },
+        {
+          "rpc": "submit_safety_report",
+          "status": 403,
+          "code": "42501",
+          "message": "Safety report unavailable"
+        },
+        {
+          "rpc": "list_moderation_reports",
+          "status": 403,
+          "code": "42501",
+          "message": "Moderation unavailable"
+        },
+        {
+          "rpc": "get_moderation_report",
+          "status": 403,
+          "code": "42501",
+          "message": "Moderation unavailable"
+        },
+        {
+          "rpc": "list_moderation_reports",
+          "status": 403,
+          "code": "42501",
+          "message": "Moderation unavailable"
+        },
+        {
+          "rpc": "get_moderation_report",
+          "status": 403,
+          "code": "42501",
+          "message": "Moderation unavailable"
+        },
+        {
+          "rpc": "transition_moderation_case",
+          "status": 403,
+          "code": "42501",
+          "message": "Moderation unavailable"
+        },
+        {
+          "rpc": "apply_account_moderation_action",
+          "status": 403,
+          "code": "42501",
+          "message": "Moderation unavailable"
+        },
+        {
+          "rpc": "apply_hangout_moderation_action",
+          "status": 403,
+          "code": "42501",
+          "message": "Moderation unavailable"
+        },
+        {
+          "rpc": "list_moderation_reports",
+          "status": 403,
+          "code": "42501",
+          "message": "Moderation unavailable"
+        },
+        {
+          "rpc": "get_moderation_report",
+          "status": 403,
+          "code": "42501",
+          "message": "Moderation unavailable"
+        },
+        {
+          "rpc": "transition_moderation_case",
+          "status": 403,
+          "code": "42501",
+          "message": "Moderation unavailable"
+        },
+        {
+          "rpc": "apply_account_moderation_action",
+          "status": 403,
+          "code": "42501",
+          "message": "Moderation unavailable"
+        },
+        {
+          "rpc": "apply_hangout_moderation_action",
+          "status": 403,
+          "code": "42501",
+          "message": "Moderation unavailable"
+        },
+        {
+          "rpc": "list_moderation_reports",
+          "status": 403,
+          "code": "42501",
+          "message": "Moderation unavailable"
+        },
+        {
+          "rpc": "get_moderation_report",
+          "status": 403,
+          "code": "42501",
+          "message": "Moderation unavailable"
+        },
+        {
+          "rpc": "transition_moderation_case",
+          "status": 403,
+          "code": "42501",
+          "message": "Moderation unavailable"
+        },
+        {
+          "rpc": "apply_account_moderation_action",
+          "status": 403,
+          "code": "42501",
+          "message": "Moderation unavailable"
+        },
+        {
+          "rpc": "apply_hangout_moderation_action",
+          "status": 403,
+          "code": "42501",
+          "message": "Moderation unavailable"
+        },
+        {
+          "rpc": "list_moderation_reports",
+          "status": 403,
+          "code": "42501",
+          "message": "Moderation unavailable"
+        },
+        {
+          "rpc": "get_moderation_report",
+          "status": 403,
+          "code": "42501",
+          "message": "Moderation unavailable"
+        },
+        {
+          "rpc": "transition_moderation_case",
+          "status": 403,
+          "code": "42501",
+          "message": "Moderation unavailable"
+        },
+        {
+          "rpc": "apply_account_moderation_action",
+          "status": 403,
+          "code": "42501",
+          "message": "Moderation unavailable"
+        },
+        {
+          "rpc": "apply_hangout_moderation_action",
+          "status": 403,
+          "code": "42501",
+          "message": "Moderation unavailable"
+        },
+        {
+          "isolation": "repeatable read",
+          "kind": "eligible actual authenticated operator SQL",
+          "read_committed_control": "success",
+          "code": "42501",
+          "message": "Moderation unavailable"
+        },
+        {
+          "isolation": "serializable",
+          "kind": "eligible actual authenticated operator SQL",
+          "read_committed_control": "success",
+          "code": "42501",
+          "message": "Moderation unavailable"
+        },
+        {
+          "rpc": "apply_account_moderation_action",
+          "status": 403,
+          "code": "42501",
+          "message": "Moderation unavailable"
+        },
+        {
+          "rpc": "apply_account_moderation_action",
+          "status": 403,
+          "code": "42501",
+          "message": "Moderation unavailable"
+        },
+        {
+          "rpc": "submit_safety_report",
+          "status": 403,
+          "code": "42501",
+          "message": "Safety report unavailable"
+        },
+        {
+          "rpc": "list_my_retained_hangout_ids",
+          "status": 403,
+          "code": "42501",
+          "message": "Safety operation unavailable"
+        },
+        {
+          "rpc": "submit_safety_report",
+          "status": 403,
+          "code": "42501",
+          "message": "Safety report unavailable"
+        },
+        {
+          "case": "source-and-retained-output",
+          "roster_keys": [
+            "account_id",
+            "role_label"
+          ],
+          "receipt_keys": [
+            "receipt_id",
+            "submitted_at"
+          ],
+          "former_body_retained": true,
+          "former_author_id": null,
+          "blocked_body_omitted_before_limit": true,
+          "operator_detail_keys": [
+            "case_note",
+            "case_revision",
+            "case_state",
+            "category",
+            "disposition",
+            "narrative",
+            "provenance_kind",
+            "provenance_ref_id",
+            "report_id",
+            "reporter_id",
+            "submitted_at",
+            "target_campus_id",
+            "target_disabled",
+            "target_id",
+            "target_status",
+            "target_type"
+          ],
+          "old_tokens_used": true
+        }
+      ]
+    }
+  ]
+}
