@@ -1,5 +1,10 @@
 # Backlog
 
+## 2026-09-28 — B3c fixture resumption and transport dependency
+
+Fresh HTTP/policy/identity authors successfully dispatched from verified main c74beae plus exact reviewed foundation3e9973c. Prior capacity blocker is resolved for these assignments; they are static authoring only. Common synchronous helper calls lack finite transport bounds, so checkpoint execution remains blocked pending reviewed bounded-transport correction. All further fixture/ownership/runtime/cleanup/review/main integration and parent gates remain open. See `agents/handoffs/TASK-021A1b3c-FIXTURE-RESUMPTION.md`.
+
+
 ## 2026-09-28 — B3c foundation reviewed; next authoring dispatch held
 
 Independently cleared and remote-verified foundation3e9973ce573a48c9879286624b92fb2d72ca7769, exact six assigned helper/verifier/handoff files; source17b remains unchanged/unexecuted. Two fixture P2 corrections separately rereviewed: partial session construction gets awaited own-child cleanup with finite failure/no force; API tests honor cancellation+finite transport. Static/inert checks pass with zero target attempts, no runtime evidence. Canonicalmain code26, unfinished27/source+foundation task-only. See TASK-021A1b3c-FIXTURE-FOUNDATION-REVIEW.md.

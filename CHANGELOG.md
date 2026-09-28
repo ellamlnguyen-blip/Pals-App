@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-09-28 — B3c fixture authoring resumed
+
+The user requested continuation after the published capacity blocker. Fresh bounded GPT-6 Sol medium HTTP, policy and identity authors successfully dispatched from verified canonical main `c74beae0f50b42e048dd643b137f55ab84d32e96`, each in a separate isolated branch plus exact reviewed foundation `3e9973ce573a48c9879286624b92fb2d72ca7769` (source `17b72001c3c76d2002b320d92df32703141bb88e`). Disjoint published two/three/two-file contracts remain authoritative. Static authoring only; no runtime or target access is released. All plans remain unexecuted. Source27/foundation/fixture code stays task-only; main code remains26. Standard speed is app-controlled and not verifiable through dispatch tools. The original TASK-021 coordinator was notified to avoid duplicate author or runtime dispatch. See `agents/handoffs/TASK-021A1b3c-FIXTURE-RESUMPTION.md`. Parent B3c/B3/A1c/A2/TASK-021 remains incomplete.
+
+
 ## 2026-09-28 — B3c foundation reviewed; next authoring dispatch held
 
 Independently cleared and remote-verified foundation3e9973ce573a48c9879286624b92fb2d72ca7769, exact six assigned helper/verifier/handoff files; source17b remains unchanged/unexecuted. Two fixture P2 corrections separately rereviewed: partial session construction gets awaited own-child cleanup with finite failure/no force; API tests honor cancellation+finite transport. Static/inert checks pass with zero target attempts, no runtime evidence. Canonicalmain code26, unfinished27/source+foundation task-only. See TASK-021A1b3c-FIXTURE-FOUNDATION-REVIEW.md.
