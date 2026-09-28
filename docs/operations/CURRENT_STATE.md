@@ -1,5 +1,13 @@
 # Current State
 
+## 2026-09-28 — B3b upgrade/SQL/catalog and exact lint compatibility observed
+
+Corrected same-existing-network startup passed fresh ownership preflight; all6 cached services attached only pals-local-network with normal defined health checks, no pulls/installs/recovery. Against exact71ae9a9 fixture/sourceaeeb, true25→26 upgrade retry passed exit0 with guarded final26 reset: complete prior25 history names/statements/version records, all retained domain/Auth/Storage values and full catalog preserved;142→144 functions with only2 private additions/5 public-body replacements. Earlier failed attempt excluded.
+
+Guarded18 rollback SQL suites completed1388 actual assertions (986 inherited/stage-adapted +402 new cohost/chat), exact TAP/no not-ok/SKIP/TODO. Installed catalog checks passed scoped ABI/defaults/results/ACL/untouched definitions/inventory hashes,2 scalar owner-only helpers/144 functions/52 tables/removed overload absent. Strict compatibility verifier passed while actual STANDARD db:lint remained exit1 with EXACTLY the sole independently accepted inherited ordinary-lifecycle composite OUT structural advisory; no clean/zero-warning lint claim or threshold change. Root read durable SQL/upgrade/lint summaries; fresh final evidence review remains.
+
+Sole executor continues previously reviewed serial real Auth HTTP,424 planned matrix observations+170common mappings, source/state/absence/retry/crossing and11 inherited regression modules, then static checks/final26zero/off/rev1 reset/normalbackupshutdown/independentaudit. No HTTP/race/regression pass yet; runtime active under exclusive B3b owner. No source/fixture edit/taskpush/acceptedmaincodeintegration/completion; B3b/c/A1c/A2/TASK-021 incomplete and no hosted/pilot-ready claim or successor.
+
 ## 2026-09-28 — B3b first local attempt excluded; normal cleanup and narrow startup correction
 
 Fresh preflight passed and six exact cached services started with normal checks; initial installed full25 manifest verified. First true25 upgrade attempt failed, and its finally reset failed service health, masking the original error. No upgrade/SQL/catalog/lint/HTTP/race pass is claimed. Read-only attachments show database on existing pals-local-network while Auth/Storage/REST/Mailpit/Kong were on supabase_network_pals-local; Auth reports database-hostname DNS failure. Executor startup omitted the reviewed network flag. Initial PATH failure occurred before lifecycle; both failures excluded. No source/fixture edits, pulls/installs/recovery/reconnect/new-network action occurred.
