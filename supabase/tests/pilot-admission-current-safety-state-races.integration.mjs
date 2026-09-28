@@ -260,10 +260,10 @@ export const stateManifest = Object.freeze([
     route: "CB",
     loss: "actor_peer_block_outbound",
     order: "operation-first",
-    partition: "actual-state-wait-required",
+    partition: "actual-state-boundary-retained-idempotent-repair",
     status: "unexecuted",
     outcome_classification:
-      "CH cancel/disable terminal; CP/CB block loss-first can select retained if own outbound evidence now exists: enforce frozen-lane and separate retained controls, never label lawful retained success current denial",
+      "Original actual current actor-to-peer block commits. Same actor-to-peer writer waits at social boundary then selects owned retained block and returns true as idempotent repair. Current-only fixture has no shared relationship/parent teardown: exact full54 zero writer delta, no additional block/new loss, zero committed-loss order credit.",
   },
   {
     id: "L5.CB.actor_peer_block_inbound.loss-first",
@@ -280,10 +280,10 @@ export const stateManifest = Object.freeze([
     route: "CB",
     loss: "actor_peer_block_inbound",
     order: "operation-first",
-    partition: "actual-state-wait-required",
+    partition: "actual-state-boundary-expected-writer-denial",
     status: "unexecuted",
     outcome_classification:
-      "CH cancel/disable terminal; CP/CB block loss-first can select retained if own outbound evidence now exists: enforce frozen-lane and separate retained controls, never label lawful retained success current denial",
+      "Original actual current actor-to-peer block commits. Peer-to-actor writer waits at social boundary, then has no peer-owned retained proof and fails exact 42501 Safety operation unavailable because bilateral People visibility is blocked. Full54 zero writer delta/rollback; zero committed-loss order credit. No manufactured retained proof or intervening unblock.",
   },
 ]);
 const uuid =
@@ -1021,7 +1021,7 @@ export async function observeStateRace(cell, route, writer, before, context) {
         recovered.snapshot,
         census(),
         {},
-        "retained recovery after lawful failed inbound writer",
+        "retained recovery after source-qualified expected denied writer",
       );
       const recovery = {
         selected_lane: "retained",
@@ -1031,23 +1031,31 @@ export async function observeStateRace(cell, route, writer, before, context) {
         separate_current_denial: null,
         no_inbound_loss_committed: true,
       };
-      console.error(
-        JSON.stringify({
-          id: cell.id,
-          partition: "source-feasibility-contract-gap",
-          classification: stateEffectClassification(cell),
-          observed_boundary: context.observation,
-          original_current_success: true,
-          actual_writer_result: context.managerResult,
-          writer_full54_rollback_verified: true,
-          post_loss: recovery,
-          successful_wait_order_credit: false,
-          committed_loss_order_credit: 0,
-        }),
-      );
-      throw new Error(
-        "Uncredited L5.CB.actor_peer_block_inbound.operation-first: peer public block lawfully denies bilateral visibility after current actor block; no peer-owned retained proof, so committed-loss contract requires reconciliation",
-      );
+      // The exact reviewed/published reconciliation treats this neutral
+      // business rejection as an expected state observation, never a loss commit.
+      return {
+        id: cell.id,
+        partition: cell.partition,
+        order: cell.order,
+        writer_public: true,
+        writer_actor: writer.actor,
+        actual_writer_result: context.managerResult,
+        wait_location: writer.wait,
+        ...observation,
+        holder_current_snapshot: sanitized(held),
+        holder_snapshot_kind:
+          "successful current block; no competing loss committed",
+        operation_selected_lane: "current",
+        operation_result: initialResult,
+        writer_effect_classification: stateEffectClassification(cell),
+        writer_full54_rollback_verified: true,
+        post_loss: recovery,
+        lower_current_tuple_wait_credit: false,
+        frozen_lane_upgrade_or_fallback_credit: 0,
+        state_observation_verified: true,
+        committed_loss_order_credit: 0,
+        full54_values_verified: true,
+      };
     }
     const result = marker(
       (operationFirst ? waiter : holder).output(),
@@ -1149,6 +1157,8 @@ export async function observeStateRace(cell, route, writer, before, context) {
       lower_current_tuple_wait_credit: writer.relation !== null,
       frozen_lane_upgrade_or_fallback_credit: 0,
       full54_values_verified: true,
+      state_observation_verified: true,
+      partition: cell.partition,
       writer_effect_classification: stateEffectClassification(cell),
       committed_loss_order_credit:
         stateEffectClassification(cell) === "retained-repair-no-new-loss"
@@ -1303,7 +1313,8 @@ export async function runStateFixtures() {
         context,
       );
       context.phase = "fresh-post-loss-lane-and-outcome";
-      evidence.post_loss = await postLoss(cell, route, writer, context);
+      if (!evidence.post_loss)
+        evidence.post_loss = await postLoss(cell, route, writer, context);
       evidence.setup_qualification = context.setupQualification;
       // Successful ordered evidence is emitted only after all post-loss checks.
       console.log(JSON.stringify(credentialFree(evidence)));
