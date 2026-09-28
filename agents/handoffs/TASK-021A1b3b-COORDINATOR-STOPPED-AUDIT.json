@@ -1,0 +1,61 @@
+{
+  "at": "2026-09-28T12:14:33.879887+00:00",
+  "observer": "Coordinator post-operation read-only audit; same cleanup operator, independent executor corroboration pending",
+  "uid": 501,
+  "list_exit": 0,
+  "named_vms": [
+    {
+      "name": "pals-task002",
+      "status": "Stopped",
+      "vmType": "vz",
+      "arch": "aarch64",
+      "hostAgentPID": null,
+      "driverPID": null,
+      "dir": "/private/tmp/pals-lima/pals-task002"
+    }
+  ],
+  "mountless_config": true,
+  "named_agents": [],
+  "registrations": [],
+  "sockets": [],
+  "holders": {
+    "/private/tmp/pals-lima/pals-task002/disk": {
+      "exit": 1,
+      "metadata": []
+    },
+    "/private/tmp/pals-lima/pals-task002/vz-efi": {
+      "exit": 1,
+      "metadata": []
+    }
+  },
+  "listeners": {
+    "54320": {
+      "exit": 1,
+      "metadata": []
+    },
+    "54321": {
+      "exit": 1,
+      "metadata": []
+    },
+    "54322": {
+      "exit": 1,
+      "metadata": []
+    },
+    "54323": {
+      "exit": 1,
+      "metadata": []
+    },
+    "54324": {
+      "exit": 1,
+      "metadata": []
+    }
+  },
+  "historical": [
+    {
+      "pid": 56460,
+      "comm": "(limactl)",
+      "untouched": true
+    }
+  ],
+  "live_database_census": "executor guarded reset evidence; coordinator does not restart/requery stopped DB"
+}

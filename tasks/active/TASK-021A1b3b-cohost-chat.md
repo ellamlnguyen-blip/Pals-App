@@ -3,7 +3,7 @@
 Disjoint fixture assignment: main executor owns helpers/SQL/concurrency/catalog/upgrade/regressions; fresh HTTP author owns only `pilot-admission-cohost-chat-http.integration.mjs` and `TASK-021A1b3b-HTTP-FIXTURE.md`. No HTTP-author Git/runtime/shared-queue/source/helper edits. Executor reviews handoff before combined local fixture checkpoint; acceptance unchanged.
 
 Date: 2026-09-27
-Status: **Bounded source/execution/static evidence reviewed; normal VZ shutdown failed, runtime ownership held. Targeted cleanup exception Proposed pending review/user authorization; final cleanup/handoff/publication/accepted main integration incomplete.**
+Status: **Source/execution/static evidence reviewed; user-approved targeted shutdown and separately reviewed residual cleanup independently corroborated, ownership relinquished. Final handoff review/task publication/accepted main integration pending.**
 Parent: [B3](TASK-021A1b3-core-mutation-serialization.md), [A1b](TASK-021A1b-live-admission-enforcement.md), [A1](TASK-021A1-pilot-backend-authorization.md); their scope, authorization and completion gates apply.
 Baseline: independent no-hardlinks clone of clean canonical main `255cc7c2a15d5063a8706a9c3208dbf277ef9abc`, verified locally against coordinator's independent remote receipt. Accepted B3a task `fe4f23c5b43b4b042c3a8e8a99f38da412d4f3fa`, integration `62e47dc8908d6486e544333b169147ee4e735524`, completion `255cc7c`; all25 migrations. No network verification is claimed by this documentation agent.
 

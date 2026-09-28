@@ -1,0 +1,8 @@
+{
+  "user_authorization": "Explicit force-quit approval in root context; separately reviewed residual proposal",
+  "chunk_id": "97dd3a",
+  "wall_time_seconds": 6.673782667,
+  "exit_code": 0,
+  "original_token_count": 273,
+  "output": "{\"pid\": 4115, \"ppid\": 1, \"uid\": 501, \"role\": \"ssh mux\", \"signal\": \"SIGTERM\"}\n{\"pid\": 57103, \"ppid\": 1, \"uid\": 501, \"role\": \"owned orphan hostagent\", \"signal\": \"SIGTERM\"}\n{\"pid\": 57103, \"ppid\": 1, \"uid\": 501, \"role\": \"owned orphan hostagent\", \"signal\": \"SIGKILL after exact survivor recheck\"}\n{\n  \"at\": \"2026-09-28T12:13:58.238703+00:00\",\n  \"scope\": \"user-approved force quit of exact disposable Pals environment; independently reviewed residual plan\",\n  \"events\": [\n    {\n      \"pid\": 4115,\n      \"ppid\": 1,\n      \"uid\": 501,\n      \"role\": \"ssh mux\",\n      \"signal\": \"SIGTERM\"\n    },\n    {\n      \"pid\": 57103,\n      \"ppid\": 1,\n      \"uid\": 501,\n      \"role\": \"owned orphan hostagent\",\n      \"signal\": \"SIGTERM\"\n    },\n    {\n      \"pid\": 57103,\n      \"ppid\": 1,\n      \"uid\": 501,\n      \"role\": \"owned orphan hostagent\",\n      \"signal\": \"SIGKILL after exact survivor recheck\"\n    },\n    {\n      \"unlinked\": \"/private/tmp/pals-lima/pals-task002/sock/docker.sock\",\n      \"inode\": 12421673,\n      \"unheld\": true\n    }\n  ],\n  \"legacy56460\": \"untouched\",\n  \"restart_or_disk_backup_delete\": false\n}\n"
+}
