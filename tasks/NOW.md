@@ -1,5 +1,9 @@
 # NOW
 
+## HTTP composition split contract review receipt — 2026-09-29
+
+Fresh independent FULL eight-document sequencing review CLEAR/no findings at `b416e905f05a735be3f31120baab79fad998b8e3` against verifiedmain253045c2f1dc3ab68fe6362a440dd3a9991eda0e. Reviewer inspected frozen source/private interfaces, exact f85 hashes and clean stopped da7 checkout;24prefix/15suffix/membership-once/terminal gate/state/dependency/privacy/assertion qualifications consistent. Read-only inspection, no execution/contact. Reviewed amendment accepted for coordinator task publication/doc-only canonical integration, pending exact remote verification at this receipt. Fresh latest-main/exactf85 reconciliation then NEW c2a author; exact reviewed/pushed c2a amendment/publication/reconciliation before NEW c2b author. Both required; no new code or parent completion. Main26/source27/fixturesunexecuted; all parent/current-safety/transport/provider/consumer/runtime/security/cleanup/integration gates remain incomplete.
+
 ## B3c whole HTTP composition author clean stop and sequencing split — 2026-09-29
 
 Fresh c2 author stopped clean before edits/commit/execution/contact at exact prepared `da7ac105d25975ee714d0d85ac257f81ef73a5b0`, branch `agent/TASK-021A1b3c-moderation-http-model-composition`, latest main253045c2f1dc3ab68fe6362a440dd3a9991eda0e plus reviewed/task-publishedf85b925. Source/private interfaces available and no prior semantic conflict; entire pre-sanction source-order/restoration plus final sanctioned join is oversized. Helper/MODELS remain exactf85, no new accepted code/evidence. Root independently verified clean diff/HEAD and39 manifest split24prefix+15suffix.
