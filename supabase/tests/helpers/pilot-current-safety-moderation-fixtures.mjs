@@ -1221,8 +1221,95 @@ const FINAL_HTTP_MAPPING = freeze(
     modelAvailable: index !== 0,
   })),
 );
+// These are literal source sites, not executed races. The first twelve retain
+// their existing private models; the final three retain their separate models.
+const FINAL_RACE_MAPPING = freeze(
+  [
+    [110, [110, 111], "moderation gate commits before detail; waiter denied"],
+    [113, [115, 116], "detail commits before gate disable; audit count text 1"],
+    [118, [118, 119], "role deletion commits before detail; waiter denied"],
+    [
+      123,
+      [125, 127, 128, 129],
+      "detail commits before role deletion; audit +1 then denial",
+    ],
+    [
+      131,
+      [131, 132],
+      "account suspension commits before detail; waiter denied",
+    ],
+    [136, [138, 142], "detail commits before suspension; audit +1 then denial"],
+    [144, [144, 147], "target role commits before transition; waiter denied"],
+    [
+      149,
+      [153, 155],
+      "transition commits before target role; saved replay denied",
+    ],
+    [
+      157,
+      [161, 162],
+      "one operator transition commits; waiter denied; revision text 1",
+    ],
+    [165, [166, 169], "same key replays; revision and audit count text 1"],
+    [170, [175, 177], "membership deletion first; audit campus null text t"],
+    [182, [187, 189], "action first; audit campus nonnull text t"],
+    [199, [199], "current Hangout report commits before historical detail"],
+    [200, [200], "historical detail commits before second current report"],
+    [206, [206, 207], "directional block commits before queue read"],
+  ].map(([sourceLine, assertionLines, resultAssertion], index) => ({
+    id: RACES[index],
+    sourceLine,
+    components:
+      index < 12
+        ? RACE_STEPS[RACES[index]]
+        : index === 12
+          ? ["current-report-0005", "historical-detail-1"]
+          : index === 13
+            ? ["historical-detail-2", "current-report-0006"]
+            : [
+                "joined-retained-block",
+                "post-block-queue",
+                "evidence-teardown",
+              ],
+    assertionLines,
+    resultAssertion,
+    qualification:
+      index < 12
+        ? "first-twelve-source-model;actual-lock-order-unobserved"
+        : index < 14
+          ? "current-report-source-model;actual-lock-order-unobserved"
+          : "retained-block-source-model;actual-lock-order-unobserved",
+    sourceOnly: true,
+    runtimeCredit: 0,
+    actualRaceCredit: 0,
+    permissionCredit: 0,
+  })),
+);
+const FINAL_DESCRIPTOR_ID = "finite-final-source-descriptors";
+function exactSourceDescriptorOrder(ids, mapping, expected) {
+  check(
+    Array.isArray(ids) &&
+      ids.length === expected.length &&
+      mapping.length === expected.length &&
+      ids.every(
+        (id, index) => id === expected[index] && mapping[index]?.id === id,
+      ) &&
+      new Set(ids).size === expected.length,
+  );
+  return mapping;
+}
+exactSourceDescriptorOrder(HTTP_IDS, FINAL_HTTP_MAPPING, HTTP_IDS);
+exactSourceDescriptorOrder(RACES, FINAL_RACE_MAPPING, RACES);
 const finalHttpTerminals = new WeakMap();
 export const httpTransitionPlans = freeze({
+  [FINAL_DESCRIPTOR_ID]: opaque(
+    plans,
+    freeze({
+      id: FINAL_DESCRIPTOR_ID,
+      family: "finite-final-source-descriptors",
+      sourceOnly: true,
+    }),
+  ),
   [FINAL_HTTP_ID]: opaque(
     plans,
     freeze({
@@ -1362,6 +1449,31 @@ export function describeModelPlan(handle) {
     id: p.id,
     sourceOnly: true,
     runtimeCredit: 0,
+    ...(p.family === "finite-final-source-descriptors"
+      ? {
+          modelAvailable: true,
+          http: exactSourceDescriptorOrder(
+            HTTP_IDS,
+            FINAL_HTTP_MAPPING,
+            HTTP_IDS,
+          ),
+          races: exactSourceDescriptorOrder(RACES, FINAL_RACE_MAPPING, RACES),
+          expectedStaticCounts: {
+            httpLabels: 39,
+            raceIds: 15,
+            originalHttpLexicalSites: 41,
+            retainedHttpLexicalSites: 40,
+            historical219Retained: 0,
+            currentOwnStatusSupplementals: 1,
+          },
+          racesAvailable: false,
+          actualRaceCredit: 0,
+          permissionCredit: 0,
+          transportAvailable: false,
+          providerCredit: 0,
+          originalCasePassCredit: 0,
+        }
+      : {}),
     ...(["retained-http-source", "post-prefix-sanctions"].includes(p.family)
       ? {
           modelAvailable: true,
@@ -6367,6 +6479,7 @@ function memoryExamples(bytes) {
   groups += sanctionMemoryExamples(source, bounds, time, later, reports);
   groups += preSanctionMemoryExamples(source, bounds, time, later, baseline);
   groups += currentReadinessMemoryExamples(source, bounds, time, later);
+  groups += finalDescriptorMemoryExamples();
   return freeze({
     available: true,
     classification: "memory-only",
@@ -6378,6 +6491,98 @@ function memoryExamples(bytes) {
     permissionCredit: 0,
     contactAttempts: 0,
   });
+}
+
+function finalDescriptorMemoryExamples() {
+  let groups = 0;
+  const tested = (fn) => {
+    fn();
+    groups++;
+  };
+  const rejected = (fn) => {
+    let failed = false;
+    try {
+      fn();
+    } catch {
+      failed = true;
+    }
+    check(failed);
+    groups++;
+  };
+  const plan = httpTransitionPlans[FINAL_DESCRIPTOR_ID];
+  const description = describeModelPlan(plan);
+  tested(() => {
+    equal(
+      description.http.map((row) => row.id),
+      HTTP_IDS,
+    );
+    equal(
+      description.races.map((row) => row.id),
+      RACES,
+    );
+    equal(description.expectedStaticCounts, {
+      httpLabels: 39,
+      raceIds: 15,
+      originalHttpLexicalSites: 41,
+      retainedHttpLexicalSites: 40,
+      historical219Retained: 0,
+      currentOwnStatusSupplementals: 1,
+    });
+    check(!description.racesAvailable && !modelCheckpoint.racesAvailable);
+    check(description.http.every((row) => row.originalCasePassCredit === 0));
+    check(description.races.every((row) => row.actualRaceCredit === 0));
+  });
+  tested(() => {
+    equal(description.http[30].sourceLine, 217);
+    equal(description.http[30].assertionLines, []);
+    check(
+      description.http[30].qualification.includes("historical219-unretained"),
+    );
+    equal(
+      description.races.slice(12).map((row) => row.sourceLine),
+      [199, 200, 206],
+    );
+    check(description.races[14].components.includes("evidence-teardown"));
+  });
+  for (const [ids, rows, expected] of [
+    [HTTP_IDS, FINAL_HTTP_MAPPING, HTTP_IDS],
+    [RACES, FINAL_RACE_MAPPING, RACES],
+  ]) {
+    tested(() => equal(exactSourceDescriptorOrder(ids, rows, expected), rows));
+    rejected(() => exactSourceDescriptorOrder(ids.slice(1), rows, expected));
+    rejected(() =>
+      exactSourceDescriptorOrder([...ids, "extra"], rows, expected),
+    );
+    rejected(() =>
+      exactSourceDescriptorOrder(
+        [...ids.slice(0, -1), "unknown"],
+        rows,
+        expected,
+      ),
+    );
+    rejected(() =>
+      exactSourceDescriptorOrder([...ids.slice(0, -1), ids[0]], rows, expected),
+    );
+    rejected(() =>
+      exactSourceDescriptorOrder(
+        [ids[1], ids[0], ...ids.slice(2)],
+        rows,
+        expected,
+      ),
+    );
+    rejected(() => exactSourceDescriptorOrder(ids, rows.slice(1), expected));
+    rejected(() =>
+      exactSourceDescriptorOrder(
+        ids,
+        [{ ...rows[0], id: "unknown" }, ...rows.slice(1)],
+        expected,
+      ),
+    );
+  }
+  tested(() =>
+    equal(describeModelPlan({}), { available: false, reason: "unavailable" }),
+  );
+  return groups;
 }
 
 // Owned observations are manufactured here only, independently of the model

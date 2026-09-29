@@ -1,3 +1,19 @@
+# Moderation final source descriptor map — c1
+
+2026-09-29. **Local static checkpoint; STOP for fresh independent complete FULL review and coordinator publication.** GPT-6 Sol medium; Standard speed app controlled/unverified.
+
+Prepared clean branch `agent/TASK-021A1b3c-moderation-final-descriptor-map` at `340618c3e1a103eec6b52d801b0d6a599aef0edc`, from coordinator-supplied remote-verified main `1933489` plus exact reviewed/task-published b2 `838b5691147029e81911f41afca895cf33d26ae1`. Pre-edit helper and this MODELS matched SHA256 `eac5c387098f5448e067e4f9b956b356536e279cddb2dc63edfb4baaedc7c03a` and `695fc96603c5e1f8e8fbb12336e87521813684ba3ea92164938d16a3ba202115`. Frozen HTTP/concurrency/provider source hashes matched the parent contract. No remote contact or new remote claim.
+
+Only the existing helper and this handoff change. A new finite opaque `httpTransitionPlans["finite-final-source-descriptors"]` exposes source metadata for exactly 39 HTTP labels and 15 literal race IDs in frozen source order. The pre-existing HTTP mapping remains intact. The race metadata records each literal source line, fixed component list, assertion/result summary and source-only qualification; the final three map current-report-first, detail-first and retained-block-first without claiming an actual race. A private exact-order validator rejects unknown, missing, duplicate, extra, swapped or mismatched rows. Static counts are 39/15, original HTTP lexical41, retained40, historical219 retained0 and one current own-status[] supplemental. Separate HTTP200 hardening retains zero inherited case credit. The new description keeps `racesAvailable=false`, transport/provider/permission/runtime/original-case-pass/actual-race credit zero. It supplies no joined full54/all15 verification or authority and does not alter the first12, b1 or b2 private models.
+
+Owned inert examples pass **1,180 groups =1,161 preserved b2 +19 descriptor positives/negatives**. The cached own-module VM used source-isolated provider bytes and process/fetch/console/foreign-import traps: zero traps, twelve unchanged exports, zero narrow lint errors. Syntax, explicit Prettier `--ignore-path /dev/null`, and whitespace checks pass. Own temporary verifier `/private/tmp/pals-final-descriptor-verify.mjs`; stdout `/private/tmp/pals-final-descriptor-verify.stdout`. Helper SHA256 `978625bafddab71d6285c853153e675a6b5bfc4dbae78ed2939e9b53ef3d9a49`. The handoff/commit digest is supplied externally after freeze to avoid self-reference.
+
+No original live module/entrypoint, SQL, provider, HTTP or target was executed. No network, target API/DB/CLI/socket/process lookup, subprocess lane/install/preflight/start/reset/service/target VM/container/provider, hosted/config/force/push/shared edit or dependent dispatch occurred. Main26/source27/all fixtures remain unexecuted. Parent1a3/model1a/foundation/B3c/B3/A1c/A2/TASK-021 and transport/consumers/provider/channel/adoption/78/emission/completion/ceilings/finalrunner/freeze/ownership/exclusive release/preflight/runtime/security/cleanup/normalstop/accepted integration remain incomplete. Fresh FULL c1 review/task publication and separately reviewed/published exact c2a prerequisite/fresh reconciliation precede a NEW c2a author. No self-approval, actual race/order/permission/pass/pilot-ready/hosted/release or successor credit.
+
+---
+
+# Preserved pre-existing handoff history
+
 # Moderation final retained HTTP source composition — c2b
 
 2026-09-29. **Authored local static checkpoint; STOP for fresh independent complete FULL source/interface/privacy review and coordinator publication. No self-approval or parent completion.** GPT-6 Sol medium; Standard speed app controlled/unverified.
