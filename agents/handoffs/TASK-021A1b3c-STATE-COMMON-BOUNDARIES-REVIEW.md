@@ -25,3 +25,27 @@ Fresh independent FULL review of161 returns NOT CLEAR, exactly twoP2 findings, a
 Canonical contract/status task branchae02fa10110fb43c7fd85c298e81b5017d563aaf and main37071f8607ea606e7e6dc83dab0f16ff0716647d were independently exact remote verified by root. Current six-document status/new necessary semantic correction candidate awaits independent contract/receipt review and publication; no new code accepted.
 
 Independent FULL six-document correction-contract/status review CLEAR/no findings at597d9ed75081cb05c4ffbf64d4c25c7e80ea7678 against main37071f8; new contractSHA256d641e1c1b0ef9c1d78e4b139582126b254cc5c65ad9684b5b87de4a677cdf1ad. Reviewer confirms both narrowP2 corrections/first-original and exact unavailable identity/sixAPI-threefiles/successassertions/privacy/refusals/sourcepins/remaininggates; read-only evidence inspected not rerun, no code acceptance/runtime/permission gain. Ready for coordinator publication and fresh exact reconciliation before FRESH author; afc/161 remain unaccepted.
+
+## Fresh failure-state correction checkpoint
+
+**Independent FULL review CLEAR; static checkpoint task-published and exact remote verified.** Fresh author froze `9120fc3a5548c63834b8333cfc891b3c4f0446bb` on `agent/TASK-021A1b3c-common-failure-state-correction`, from dependency-reviewed `5ae5c06` (remote-verified main `1987a99faefb6c2bda1b9af5cb2bfca04a71c248` plus exact unaccepted `161cb61`). Exactly three existing files and six APIs.
+
+The verifier rejects retained-original/unavailable contexts before inspecting a token or window, running assertions/fingerprint SQL, consuming a token or releasing bookkeeping; it awaits the exact stored first delivery. The finish cache includes current unavailable identity at validity and settlement without repeating prior child observations or original records. Earlier empty-cache correction, same-flow verified reuse, earliest original, refusals, privacy, assertions and source pins are preserved.
+
+Author evidence: **672 own source-isolated checks** (all prior443 plus229 new), zero contact/getter/proxy traps; syntax, explicit formatting, narrow lint and whitespace clean. Root read the frozen handoff and code before fresh review. Fresh reviewer returned CLEAR/no actionable findings, closing both161 P2s and preserving the earlier empty-cache fix; author evidence was inspected, not rerun. Root pushed the task branch and independently verified exact remote `9120fc3a5548c63834b8333cfc891b3c4f0446bb`. Code remains task-only pending the later combined integration gates. Evidence and hash receipts are recorded in the review handoff. Historical afc/161 remain unaccepted and preserved in Git.
+
+Canonical main retains26 migrations; source27 and fixtures remain unexecuted. Actual adoption, ownership, exit78, emission/completion/ceiling audits, provider qualification, final runner, exclusive release, preflight, runtime/security/cleanup/normal stop and accepted main integration remain required. B3c/B3/A1c/A2/TASK-021 remain incomplete.
+
+| Frozen file | SHA256 |
+| --- | --- |
+| Common module | `45dad2183f791ec87ec69f80085a76dbf82a13efab990c1be92af17aea930fbc` |
+| Own static verifier | `63786eab7d4a1d6ef54166077e8186c8962c1e8e0717d70999509b228b6ace2a` |
+| Author handoff | `88e0abea346ec033f77c520374a9e26aee9b02ec3d99b013b003ba82f650ffe3` |
+
+Independent moderation audited reads1a2a workspace is clean at `19309edf52759f4c9b5b090fdf37a6b863964f3e`. Fresh read-only FULL dependency reconciliation is CLEAR: exact ac7 helper/MODELS/source pins, schemafull54, nineteen setup plans, private interfaces, early ordinary-operator privacy and canonical main1987. Authoring is queued and independent of this correction.
+
+Contract/status task `adb1be5792d32ab372f76ed86c5b342c0e8aa1bb` and main `1987a99faefb6c2bda1b9af5cb2bfca04a71c248` were pushed and exact remote verified by root. Author/reviewer Standard speed is app controlled and unverified.
+
+Fresh `review_common_failure_state_correction_full` inspected the entire marked namespace and static verifier read-only, returned CLEAR/no actionable findings on exact9120 against5ae, and verified source/hash/API/byte reconstruction/earliest-original/exact-unavailable/privacy/refusals/limits. Author672 checks were inspected, not rerun. No reviewer imports/tests/network/runtime/target/mutations. Root independently pushed and exact remote verified task `9120fc3a5548c63834b8333cfc891b3c4f0446bb`; main remained1987 during verification. This six-document status/dependency amendment requires independent review before canonical publication.
+
+Independent FULL documentary milestone/dependency amendment review is CLEAR at `86cfd57917ba621e8df44c314ddab0d80072b8ba` against main1987: six documents, no findings, no executable integration or new authority. Reviewer reconfirmed frozen9120 hashes and truthful static-only/task-publication evidence. Canonical publication follows; later dependent work still requires its separately published contract and fresh exact reconciliation.
