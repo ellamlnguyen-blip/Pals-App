@@ -3620,7 +3620,17 @@ function preSanctionProjection(id, actual) {
     equal(actual.status, 404);
     return { status: 404 };
   }
-  if (["queue", "detail", "http.start", "second-detail"].includes(id))
+  if (
+    [
+      "queue",
+      "detail",
+      "http.start",
+      "http.replay",
+      "second-detail",
+      "http.annotate",
+      "refresh-detail",
+    ].includes(id)
+  )
     equal(actual.status, 200);
   if (
     id.startsWith("nonoperator.") ||
@@ -7504,6 +7514,25 @@ function preSanctionMemoryExamples(source, bounds, time, later, baseline) {
     verify = (list) => verifyPreSanctionPrefix(sequence, list),
     replaceObservation = (id, change) =>
       observations.map((o) => (o.id === id ? change(o) : o));
+  for (const id of ["http.replay", "http.annotate", "refresh-detail"]) {
+    // Additional HTTP200 hardening; body and full54 after-state stay valid.
+    tested(() =>
+      verify(
+        replaceObservation(id, (o) => ({
+          ...o,
+          result: { ...o.result, status: 200 },
+        })),
+      ),
+    );
+    rejected(() =>
+      verify(
+        replaceObservation(id, (o) => ({
+          ...o,
+          result: { ...o.result, status: 201 },
+        })),
+      ),
+    );
+  }
   tested(() => equal(PRE_SANCTION_STEPS, ids));
   tested(() => {
     const terminal = verify(observations),
