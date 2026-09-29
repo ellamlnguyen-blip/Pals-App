@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-29 — B3c exact edge corrected and identity adopter proposed
+
+Exact-edge correction `1fcd1608bcf40a97a1e63fede7303abda28cdae8` clears independent correction review after d3f6 FULL review: per-case evidence clears before setup; cleanup/restoration output failures preserve original and remaining justified flow. Assigned task branch pushed/exact remote SHA verified; four instrumented predicate controls remain unexecuted/runner-excluded. Author130 dormant checks not independently rerun. State52 review/publication receipt integrated on exact verified canonical main `e706c02c167c338ee857991647010494084f7419`, source unchanged/main26. Upgrade verifier d02500482b66e31f397b7a046d881a5760f1cf79 frozen for fresh FULL review (author147 mocked checks/zero contacts, no runtime).
+
+Proposed bounded two-file identity transport/output adopter preserves204 actual L3/raw54 assertions, privately held originals, fixed contextual label envelope, first-before-cleanup evidence and conservative accepted-exit/server-settlement/reset boundaries while retaining unconditional refusal. Independent contract review/publication and exact dependency preparation precede author. Historical regression inventory is17 Node constituents, not16; source feasibility still read-only. No runtime/target release, source migration/config/permissions change or parent completion. See `tasks/active/TASK-021A1b3c-identity-bounded-output-adoption.md`.
+
 ## 2026-09-29 — B3c state output correction reviewed and published
 
 Supersedes earlier state-adopter active status. Independent FULL static review clears state output adoption `52cb26b4154b5235789bf2d6315831bedaef0d0e` against prepared `6a4f6d796ad94ef6bfe40f9e93b12aad87069c2e`; assigned task branch is pushed and exact remote SHA verified. Together with reviewed/published common projector43e44cc, this closes the identified static common/state outgoing P1 correction gate. All24 classifications/raw54 assertions and six fixed contextual wait labels remain; author479 dormant checks are not independently rerun runtime evidence. Settlement checks PID/leader PID/application name absence conservatively; no backend_start binding or actual server-settlement proof is claimed. Main remains26 migrations, code task-only/unexecuted, accepted runtime privacy/integration gates still open.
