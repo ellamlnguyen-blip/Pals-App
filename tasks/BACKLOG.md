@@ -2,6 +2,8 @@
 
 ## 2026-09-29 — Common failure-state correction checkpoint
 
+Independent FULL documentary milestone/dependency amendment review is CLEAR at `86cfd57917ba621e8df44c314ddab0d80072b8ba` against main1987: six documents, no findings, no executable integration or new authority. Reviewer reconfirmed frozen9120 hashes and truthful static-only/task-publication evidence. Canonical publication follows; later dependent work still requires its separately published contract and fresh exact reconciliation.
+
 **Independent FULL review CLEAR; static checkpoint task-published and exact remote verified.** Fresh author froze `9120fc3a5548c63834b8333cfc891b3c4f0446bb` on `agent/TASK-021A1b3c-common-failure-state-correction`, from dependency-reviewed `5ae5c06` (remote-verified main `1987a99faefb6c2bda1b9af5cb2bfca04a71c248` plus exact unaccepted `161cb61`). Exactly three existing files and six APIs.
 
 The verifier rejects retained-original/unavailable contexts before inspecting a token or window, running assertions/fingerprint SQL, consuming a token or releasing bookkeeping; it awaits the exact stored first delivery. The finish cache includes current unavailable identity at validity and settlement without repeating prior child observations or original records. Earlier empty-cache correction, same-flow verified reuse, earliest original, refusals, privacy, assertions and source pins are preserved.
