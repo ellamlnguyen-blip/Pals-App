@@ -33,6 +33,9 @@ import {
   verifiedOutcome,
   captureFailure,
   guardedFinalCleanup,
+  projectOutgoingEvidence,
+  neutralSuiteError,
+  originalSuiteError,
 } from "./pilot-admission-current-safety-concurrency.integration.mjs";
 export const absenceManifest = Object.freeze([
   {
@@ -276,7 +279,7 @@ function activationExpectation(
     expectedAfter: exactSnapshot(before, after, expected),
   });
 }
-export async function runAbsenceFixtures() {
+async function absenceFixtures() {
   requireReviewedPolicyTransport();
   const matrix = JSON.parse(
     readFileSync(
@@ -369,23 +372,25 @@ export async function runAbsenceFixtures() {
           after: census(),
         });
         console.log(
-          JSON.stringify({
-            id: cell.id,
-            setup_qualification: context.setupQualification,
-            writer:
-              "authenticated set_pilot_account_admission expected revision0",
-            result,
-            absence_denial: {
-              code: "42501",
-              message:
-                route.id === "CB"
-                  ? "Safety operation unavailable"
-                  : "Safety report unavailable",
-            },
-            later_call: "fresh eligible current success",
-            full54_values_verified: true,
-            observed_wait_credit: 0,
-          }),
+          JSON.stringify(
+            projectOutgoingEvidence({
+              id: cell.id,
+              setup_qualification: context.setupQualification,
+              writer:
+                "authenticated set_pilot_account_admission expected revision0",
+              result,
+              absence_denial: {
+                code: "42501",
+                message:
+                  route.id === "CB"
+                    ? "Safety operation unavailable"
+                    : "Safety report unavailable",
+              },
+              later_call: "fresh eligible current success",
+              full54_values_verified: true,
+              observed_wait_credit: 0,
+            }),
+          ),
         );
       } else {
         if (
@@ -450,22 +455,24 @@ export async function runAbsenceFixtures() {
           after: census(),
         });
         console.log(
-          JSON.stringify({
-            id: cell.id,
-            setup_qualification: context.setupQualification,
-            writer: loss.writer,
-            result: {
-              code: "42501",
-              message:
-                route.id === "CB"
-                  ? "Safety operation unavailable"
-                  : "Safety report unavailable",
-            },
-            later_replacement:
-              "privileged setup permits NEW rolled-back eligible call",
-            full54_values_verified: true,
-            observed_wait_credit: 0,
-          }),
+          JSON.stringify(
+            projectOutgoingEvidence({
+              id: cell.id,
+              setup_qualification: context.setupQualification,
+              writer: loss.writer,
+              result: {
+                code: "42501",
+                message:
+                  route.id === "CB"
+                    ? "Safety operation unavailable"
+                    : "Safety report unavailable",
+              },
+              later_replacement:
+                "privileged setup permits NEW rolled-back eligible call",
+              full54_values_verified: true,
+              observed_wait_credit: 0,
+            }),
+          ),
         );
       }
       context.phase = "guarded-case-reset";
@@ -473,11 +480,48 @@ export async function runAbsenceFixtures() {
     }
   } catch (error) {
     originalError = error;
-    if (error.cleanupIncomplete) cleanupSafe = false;
+    if (originalSuiteError(error).cleanupIncomplete) cleanupSafe = false;
     captureFailure(error, context);
     throw error;
   } finally {
     guardedFinalCleanup(cleanupSafe, originalError);
+  }
+}
+// Dormant pure output shapes for both serial success branches; no suite calls.
+export function runAbsenceProjectionExamples() {
+  const privateKey = "PRIVATE_ABSENCE_PROVIDER_KEY";
+  const setup = { provider_opaque_immutable_anchor_fields: [privateKey] };
+  const activation = projectOutgoingEvidence({
+    id: absenceManifest[6].id,
+    setup_qualification: setup,
+    writer: "authenticated set_pilot_account_admission expected revision0",
+    result: { state: "active", revision: 1 },
+    absence_denial: { code: "42501", message: "Safety report unavailable" },
+    later_call: "fresh eligible current success",
+    full54_values_verified: true,
+    observed_wait_credit: 0,
+  });
+  const replacement = projectOutgoingEvidence({
+    id: absenceManifest[0].id,
+    setup_qualification: setup,
+    writer: "privileged synthetic maintenance",
+    result: { code: "42501", message: "Safety report unavailable" },
+    later_replacement: "privileged setup permits NEW rolled-back eligible call",
+    full54_values_verified: true,
+    observed_wait_credit: 0,
+  });
+  assert.equal(activation.id, absenceManifest[6].id);
+  assert.equal(activation.absence_denial.code, "42501");
+  assert.equal(replacement.result.code, "42501");
+  assert.equal(replacement.observed_wait_credit, 0);
+  assert.ok(!JSON.stringify([activation, replacement]).includes(privateKey));
+  return { checks: 5, target_contact_attempts: 0 };
+}
+export async function runAbsenceFixtures() {
+  try {
+    return await absenceFixtures();
+  } catch (error) {
+    throw neutralSuiteError(error);
   }
 }
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1])
