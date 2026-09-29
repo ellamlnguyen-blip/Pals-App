@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-29 — B3c common projector published and state adoption reviewed
+
+Supersedes earlier common-correction active status. Common failure/output correction `43e44cc030e8c380705401b4d171b06099955e69` passes FULL review and two-P2 correction re-review; assigned task branch is pushed and exact remote SHA verified. Policy/absence raw exact assertions and72/24 manifests remain; private rows/values/errors are projected or withheld, precise known table/index/column diagnostics are retained. Author416 dormant checks are static evidence, not independently rerun target proof. Main code26; this code is task-only/unexecuted.
+
+State-adopter contract `1344fb1b` passes source/contract re-review with a bounded owned six-string wait-label envelope; no other private projection bypass or shared-helper edit. Canonical publication and exact prepared state89/projector43/transport404 dependencies precede fresh two-file author. P1 state adoption remains open. Reviewed exact-edge contract/receipt is on remote-verified main `f6549be7dbd5e984c5945cd7903a83eeb775f39b`; fresh four-cell static author starts at prepared `e820fde2f5256c523a47f57a22c03ba61877ced6`. Upgrade/catalog contract91dbd271 source/contract review clears, publication/interface preparation remains. Retry52a53330/cross0a983cfa task-branch publication remains verified/all18/60 unexecuted. No target/preflight/runtime release, accepted code integration or parent completion.
+
 ## 2026-09-29 — B3c retry/crossing checkpoints and exact-edge contract review
 
 Supersedes prior active retry/crossing status. Retry/rate `52a53330eaf2c196582bb0fae9788a7254db9fa3` passes full review plus exceptional-path correction re-review and is pushed with exact task remote SHA verified. All18 allocations/four waits preserve raw exact comparisons; every failed cell prohibits reset, including unexpected nonzero exits after an early assertion. Crossing `0a983cfabfc4d7f2ccc0893132ba4890a2c4deb9` passes full/correction review and is pushed with exact task remote SHA verified; all60 allocations remain unexecuted, with safely projected supplemental post-close differences and original-first failure preserved.
@@ -11,6 +17,12 @@ Exact rate-edge contract `086fed41` passes source/contract correction re-review.
 The common output correction contract and receipt are published on remote-verified canonical main `8f39696f630698f46ced6e801b75c73f14a8a127`; a fresh three-file author is implementing the pure outgoing projector from prepared `16630018e3be2abca4cd6613f6da2499b65931f4`. P1 remains open until full review and separate state adoption. Retry correction `4c16becd` preserves exact assertions and resolves two prior findings, but independent full review found a remaining P2 exceptional nonzero-exit/reset gap; correction continues. Crossing `21098c66` full review found one P2 omitted post-close survivor differences; correction continues. Neither checkpoint is published or accepted.
 
 Proposed four-cell exact rate-edge contract permits only a temporary single clock-expression replacement in the actual public function inside an always-rolled-back local test transaction. Exact lower-edge and one-microsecond-older CH/CP controls remain explicitly instrumented predicate evidence, separate from unchanged-source clock-after-wait proof. Independent contract review/publication and the reviewed projector interface precede authoring. No source migration/config/RLS change or runtime release. Main code26; all source27/fixtures unexecuted and parents incomplete. See `tasks/active/TASK-021A1b3c-rate-edge-instrumentation.md`.
+
+## 2026-09-29 — B3c state output adopter contract proposed
+
+The separate state adopter proposal preserves all24 L5 allocations and raw domain/full54 assertions while using the reviewed common projector for every success/failure/rollback/close/reset output and neutral error boundary. It preserves original-first failure identity, supplemental post-close evidence and reset-forbidden flags. Exact reviewed/published projector dependency and independent contract review/publication precede authoring; common correction `90365f50` is still under independent FULL review, so no dependent implementation is dispatched.
+
+Crossing `0a983cfabfc4d7f2ccc0893132ba4890a2c4deb9` is independently reviewed and task-branch pushed with exact remote SHA verified, all60 allocations unexecuted. Retry exceptional-exit correction continues. Exact rate-edge and true26→only27 preservation contracts remain proposed. Main code26/all source27 fixtures unexecuted/P1 privacy and parent gates incomplete; no target/preflight/runtime release. See `tasks/active/TASK-021A1b3c-state-output-adoption.md`.
 
 ## 2026-09-28 — B3c common-output privacy gate reopened
 
