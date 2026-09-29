@@ -121,6 +121,32 @@ function publish(raw, context) {
     JSON.stringify(projectEdgeEvidence(raw, context.caseID, context.phase)),
   );
 }
+function beginEdgeCase(context, cell) {
+  // Clear all case-owned observations before adopting the next literal ID or
+  // doing any setup, so an early failure cannot retain previous-case evidence.
+  context.publicResult = null;
+  context.holderSnapshot = null;
+  context.setupQualification = null;
+  context.caseID = cell.id;
+  context.phase = "edge-setup";
+}
+function outputFailure(original, error) {
+  const first = original ?? error;
+  first.edgeOutputErrors ??= [];
+  first.edgeOutputErrors.push(error);
+  forbidReset(first);
+  return first;
+}
+function publishCleanup(raw, context, original) {
+  // Cleanup output is supplementary. It cannot replace an earlier failure or
+  // interrupt the remaining backend settlement/restoration attempts.
+  try {
+    publish(raw, context);
+  } catch (error) {
+    return outputFailure(original, error);
+  }
+  return original;
+}
 export function microsecondAnchor(value) {
   assert.match(value, /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{6}\+00:00$/);
   const millis = Date.parse(value.slice(0, 23) + "Z");
@@ -627,9 +653,7 @@ function captureOriginal(
       JSON.stringify(edgeEnvelope(projected, context.caseID, context.phase)),
     );
   } catch (outputError) {
-    error.edgeOutputErrors ??= [];
-    error.edgeOutputErrors.push(outputError);
-    forbidReset(error);
+    outputFailure(error, outputError);
   }
 }
 export function requireReviewedEdgeTransport() {
@@ -722,8 +746,7 @@ async function runEdgeInner() {
       T,
     );
     for (const cell of edgeManifest) {
-      context.caseID = cell.id;
-      context.phase = "edge-setup";
+      beginEdgeCase(context, cell);
       const route = makeRoute(cell);
       const preference = cell.older ? false : "absent";
       owned.send("savepoint edge_case;");
@@ -731,7 +754,6 @@ async function runEdgeInner() {
       owned.send(setupSQL(route, preference));
       const end = Object.values(await exchange(wallQuery))[0];
       const before = await snapshot(exchange);
-      context.publicResult = null;
       context.holderSnapshot = before;
       context.setupQualification = assertCaseSetup(
         initial54,
@@ -874,7 +896,7 @@ async function runEdgeInner() {
       } catch (error) {
         original = original ?? originalSuiteError(error);
         captureOriginal(original, context);
-        publish(
+        original = publishCleanup(
           {
             original_error_preserved: true,
             cleanup_diagnostics: original.edgeRestorationErrors ?? [],
@@ -882,6 +904,7 @@ async function runEdgeInner() {
             cleanupIncomplete: true,
           },
           context,
+          original,
         );
       }
     }
@@ -891,21 +914,23 @@ async function runEdgeInner() {
         backendSettlement(binding);
         context.phase = "edge-restoration";
         restoration(initial54, initialCatalog);
-        publish(
+        original = publishCleanup(
           { full54_values_verified: true, reset_forbidden: true },
           context,
+          original,
         );
       } catch (error) {
         const restorationError = originalSuiteError(error);
         original = restorationFailure(original, restorationError);
         context.phase = "edge-restoration-failure";
-        publish(
+        original = publishCleanup(
           {
             original_error: original,
             cleanup_error: restorationError,
             reset_forbidden: true,
           },
           context,
+          original,
         );
       }
     } else if (owned) {
@@ -1228,6 +1253,86 @@ export async function runRateEdgeExamples() {
       /private-original-error|private-restoration-error/,
     );
   });
+  check(() => {
+    const context = {
+      caseID: edgeManifest[0].id,
+      phase: "edge-public-predicate",
+      publicResult: { receipt_id: "private-prior-receipt" },
+      holderSnapshot: private54,
+      setupQualification: { source_owned_rowsets_verified: true },
+    };
+    beginEdgeCase(context, edgeManifest[1]);
+    assert.deepEqual(context, {
+      caseID: edgeManifest[1].id,
+      phase: "edge-setup",
+      publicResult: null,
+      holderSnapshot: null,
+      setupQualification: null,
+    });
+    const projected = projectFailureEvidence(new Error("early setup failure"), {
+      id: context.caseID,
+      phase: context.phase,
+      publicResult: context.publicResult,
+      holderSnapshot: context.holderSnapshot,
+      setupQualification: context.setupQualification,
+    });
+    assert.deepEqual(projected.available_public_result, outgoingValue(null));
+    assert.equal(projected.holder_snapshot["auth.users"].available, false);
+    assert.equal(
+      projected.setup_qualification.source_owned_rowsets_verified.available,
+      false,
+    );
+  });
+  const savedLog = console.log;
+  const outputError = new Error("private-output-error");
+  console.log = () => {
+    throw outputError;
+  };
+  try {
+    for (const phase of [
+      "edge-owner-close",
+      "edge-restoration",
+      "edge-restoration-failure",
+    ]) {
+      check(() => {
+        const first = new Error("private-first-error");
+        const context = { caseID: edgeManifest[0].id, phase };
+        let progressed = 0;
+        const preserved = publishCleanup(
+          { cleanup_diagnostics: [new Error("private-cleanup-error")] },
+          context,
+          first,
+        );
+        progressed++; // The next settlement/restoration action remains reachable.
+        assert.equal(preserved, first);
+        assert.deepEqual(first.edgeOutputErrors, [outputError]);
+        assert.equal(first.reset_forbidden, true);
+        assert.equal(first.cleanupIncomplete, true);
+        assert.equal(progressed, 1);
+      });
+    }
+    check(() => {
+      const first = publishCleanup(
+        { full54_values_verified: true },
+        { caseID: edgeManifest[0].id, phase: "edge-restoration" },
+        null,
+      );
+      assert.equal(first, outputError);
+      assert.equal(first.reset_forbidden, true);
+      assert.equal(first.cleanupIncomplete, true);
+    });
+    check(() => {
+      const first = new Error("private-capture-first");
+      captureOriginal(first, {
+        caseID: edgeManifest[1].id,
+        phase: "edge-setup",
+      });
+      assert.deepEqual(first.edgeOutputErrors, [outputError]);
+      assert.equal(first.reset_forbidden, true);
+    });
+  } finally {
+    console.log = savedLog;
+  }
   check(() => assert.throws(requireReviewedEdgeTransport));
   return { checks, target_contacts: 0, status: "pure-static-examples-only" };
 }
