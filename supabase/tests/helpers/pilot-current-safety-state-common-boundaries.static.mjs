@@ -1284,6 +1284,389 @@ try {
   same(liveMemory.originalSuiteError(sqlError), fingerprintFailure);
   same(flows.at(-1).state.records[0].error, fingerprintFailure);
   equal(Object.keys(sqlError), []);
+  // A valid report token cannot cross a retained failure boundary. Exercise
+  // successful, pending-success, pending-rejected, refused and rejected first
+  // delivery through the owned capture API, before window/SQL/bookkeeping.
+  for (const [deliveryType, pendingDelivery] of [
+    ["success", false],
+    ["success", true],
+    ["reject", true],
+    ["refuse", false],
+    ["reject", false],
+  ]) {
+    mode = { type: "success" };
+    sessionFactory = () => owned({ text: output(result, reportAfter) });
+    const ctx = liveMemory.createStateBoundaryContext();
+    const tok = await liveMemory.executeStateSuccessAwaited(
+      ctx,
+      reportRoute,
+      reportBefore,
+      { rollback: true },
+    );
+    const state = probe.stateBoundaryContexts.get(ctx);
+    const execution = state.execution,
+      sessions = state.sessions,
+      finishing = state.finishing;
+    const actualOriginal = new Error("PRIVATE retained verifier original");
+    let releaseDelivery;
+    mode = {
+      type: deliveryType,
+      ...(pendingDelivery
+        ? {
+            wait: new Promise((resolve) => {
+              releaseDelivery = resolve;
+            }),
+          }
+        : {}),
+    };
+    const capture = liveMemory
+      .captureStateFailureAwaited(ctx, actualOriginal, {})
+      .catch((error) => error);
+    const firstDelivery = state.firstDelivery;
+    const sqlCount = sqlCalls.length,
+      eventCount = events.length;
+    let verifySettled = false;
+    const verification = liveMemory
+      .verifyStateCurrentPrecheckOutcome(ctx, tok, {
+        start: "2026-09-29T00:00:00Z",
+        end: "2026-09-29T00:00:01Z",
+      })
+      .catch((error) => {
+        verifySettled = true;
+        return error;
+      });
+    await Promise.resolve();
+    await Promise.resolve();
+    same(sqlCalls.length, sqlCount);
+    same(execution.consumed, false);
+    same(state.execution, execution);
+    same(state.sessions, sessions);
+    same(state.finishing, finishing);
+    same(state.firstDelivery, firstDelivery);
+    if (pendingDelivery) {
+      same(verifySettled, false);
+      releaseDelivery();
+    }
+    const captured = await capture;
+    const vetoed = await verification;
+    same(verifySettled, true);
+    same(liveMemory.originalSuiteError(vetoed), actualOriginal);
+    same(state.original, actualOriginal);
+    same(sqlCalls.length, sqlCount);
+    same(events.length, eventCount);
+    same(execution.consumed, false);
+    same(state.execution, execution);
+    same(state.sessions, sessions);
+    same(state.finishing, finishing);
+    same(flows.at(-1).state.records.length, 1);
+    same(
+      liveMemory.originalStateBoundaryUnavailable(vetoed),
+      state.unavailable,
+    );
+    equal(Object.keys(vetoed), []);
+    const hostileVeto = await liveMemory
+      .verifyStateCurrentPrecheckOutcome(ctx, hostile, hostile)
+      .catch((error) => error);
+    same(liveMemory.originalSuiteError(hostileVeto), actualOriginal);
+    same(inspections, 0);
+    const duplicateCapture = await liveMemory
+      .captureStateFailureAwaited(ctx, actualOriginal, hostile)
+      .catch((error) => error);
+    same(duplicateCapture, captured);
+    same(state.firstDelivery, firstDelivery);
+    same(flows.at(-1).state.records.length, 1);
+    const distinct = await liveMemory
+      .captureStateFailureAwaited(
+        ctx,
+        new Error("PRIVATE distinct verifier original"),
+        {},
+      )
+      .catch((error) => error);
+    const exactUnavailable =
+      liveMemory.originalStateBoundaryUnavailable(distinct);
+    same(exactUnavailable, state.unavailable);
+    same(exactUnavailable.required_exit_status, 78);
+    const invalidatedVeto = await liveMemory
+      .verifyStateCurrentPrecheckOutcome(ctx, tok, hostile)
+      .catch((error) => error);
+    same(liveMemory.originalSuiteError(invalidatedVeto), actualOriginal);
+    same(
+      liveMemory.originalStateBoundaryUnavailable(invalidatedVeto),
+      exactUnavailable,
+    );
+    same(state.original, actualOriginal);
+    same(execution.consumed, false);
+    same(state.execution, execution);
+    same(state.sessions, sessions);
+    same(state.finishing, finishing);
+    same(sqlCalls.length, sqlCount);
+    same(events.length, eventCount);
+    same(flows.at(-1).state.records.length, 1);
+  }
+  mode = { type: "success" };
+  // Distinct B invalidates while A's exact delivery and verifier are pending.
+  // Both retain A and await the same rejection; R propagates without token or
+  // hostile argument inspection, bookkeeping release or fingerprint SQL.
+  sessionFactory = () => owned({ text: output(result, reportAfter) });
+  const pendingVetoContext = liveMemory.createStateBoundaryContext();
+  const pendingVetoToken = await liveMemory.executeStateSuccessAwaited(
+    pendingVetoContext,
+    reportRoute,
+    reportBefore,
+    { rollback: true },
+  );
+  const pendingVetoState = probe.stateBoundaryContexts.get(pendingVetoContext);
+  const pendingVetoExecution = pendingVetoState.execution;
+  const pendingVetoSessions = pendingVetoState.sessions;
+  const pendingVetoFinishing = pendingVetoState.finishing;
+  const pendingVetoOriginal = new Error("PRIVATE pending verifier A");
+  let releasePendingVeto;
+  mode = {
+    type: "success",
+    wait: new Promise((resolve) => {
+      releasePendingVeto = resolve;
+    }),
+  };
+  const pendingVetoCapture = liveMemory
+    .captureStateFailureAwaited(pendingVetoContext, pendingVetoOriginal, {})
+    .catch((error) => error);
+  const pendingVetoFirst = pendingVetoState.firstDelivery;
+  const pendingVetoSqlCount = sqlCalls.length;
+  let pendingVetoSettled = false;
+  const pendingVetoVerification = liveMemory
+    .verifyStateCurrentPrecheckOutcome(pendingVetoContext, hostile, hostile)
+    .catch((error) => {
+      pendingVetoSettled = true;
+      return error;
+    });
+  const pendingVetoDistinct = await liveMemory
+    .captureStateFailureAwaited(
+      pendingVetoContext,
+      new Error("PRIVATE pending verifier B"),
+      {},
+    )
+    .catch((error) => error);
+  const pendingVetoReceipt =
+    liveMemory.originalStateBoundaryUnavailable(pendingVetoDistinct);
+  same(pendingVetoSettled, false);
+  same(pendingVetoState.original, pendingVetoOriginal);
+  same(pendingVetoState.firstDelivery, pendingVetoFirst);
+  same(pendingVetoExecution.consumed, false);
+  same(sqlCalls.length, pendingVetoSqlCount);
+  same(inspections, 0);
+  releasePendingVeto();
+  const pendingVetoFirstError = await pendingVetoCapture;
+  const pendingVetoError = await pendingVetoVerification;
+  same(liveMemory.originalSuiteError(pendingVetoError), pendingVetoOriginal);
+  same(
+    liveMemory.originalStateBoundaryUnavailable(pendingVetoError),
+    pendingVetoReceipt,
+  );
+  same(
+    liveMemory.originalStateBoundaryUnavailable(pendingVetoFirstError),
+    pendingVetoReceipt,
+  );
+  same(
+    await liveMemory
+      .captureStateFailureAwaited(
+        pendingVetoContext,
+        pendingVetoOriginal,
+        hostile,
+      )
+      .catch((error) => error),
+    pendingVetoFirstError,
+  );
+  same(pendingVetoState.firstDelivery, pendingVetoFirst);
+  same(pendingVetoState.execution, pendingVetoExecution);
+  same(pendingVetoState.sessions, pendingVetoSessions);
+  same(pendingVetoState.finishing, pendingVetoFinishing);
+  same(pendingVetoExecution.consumed, false);
+  same(sqlCalls.length, pendingVetoSqlCount);
+  same(flows.at(-1).state.records.length, 1);
+  same(inspections, 0);
+  // The unused owned token remains present and unconsumed, never recovery proof.
+  same(
+    probe.stateBoundaryOutcomes.get(pendingVetoToken).execution,
+    pendingVetoExecution,
+  );
+  mode = { type: "success" };
+  // Successful first delivery A makes finish reject without an unavailable
+  // receipt. Distinct B invalidates later; cached rejection must now carry R.
+  sessionFactory = () => owned();
+  const cacheContext = liveMemory.createStateBoundaryContext();
+  await liveMemory.executeStateSuccessAwaited(cacheContext, route(), before, {
+    rollback: true,
+  });
+  const cacheState = probe.stateBoundaryContexts.get(cacheContext);
+  const cacheOriginal = new Error("PRIVATE cache first A");
+  const cacheDelivery = await liveMemory.captureStateFailureAwaited(
+    cacheContext,
+    cacheOriginal,
+    {},
+  );
+  const cachedRejection = await liveMemory
+    .finishStateOwnedSessionsAwaited(cacheContext, cacheOriginal)
+    .catch((error) => error);
+  same(liveMemory.originalStateBoundaryUnavailable(cachedRejection), null);
+  const priorCache = cacheState.finishing;
+  const cacheEvents = events.length;
+  const cacheInvalidation = await liveMemory
+    .captureStateFailureAwaited(
+      cacheContext,
+      new Error("PRIVATE cache distinct B"),
+      {},
+    )
+    .catch((error) => error);
+  const cacheReceipt =
+    liveMemory.originalStateBoundaryUnavailable(cacheInvalidation);
+  const refreshed = await liveMemory
+    .finishStateOwnedSessionsAwaited(cacheContext, cacheOriginal)
+    .catch((error) => error);
+  check(refreshed !== cachedRejection);
+  check(cacheState.finishing !== priorCache);
+  same(cacheState.finishing.unavailable, cacheReceipt);
+  same(liveMemory.originalStateBoundaryUnavailable(refreshed), cacheReceipt);
+  same(liveMemory.originalSuiteError(refreshed), cacheOriginal);
+  same(cacheState.original, cacheOriginal);
+  same(events.length, cacheEvents);
+  same(flows.at(-1).state.records.length, 1);
+  same(
+    await liveMemory.captureStateFailureAwaited(
+      cacheContext,
+      cacheOriginal,
+      hostile,
+    ),
+    cacheDelivery,
+  );
+  same(
+    await liveMemory
+      .finishStateOwnedSessionsAwaited(cacheContext, cacheOriginal)
+      .catch((error) => error),
+    refreshed,
+  );
+  same(events.length, cacheEvents);
+  same(flows.at(-1).state.records.length, 1);
+  // A successful same-batch cached acknowledgement is also vetoed by exact R.
+  const successCacheContext = liveMemory.createStateBoundaryContext();
+  await liveMemory.executeStateSuccessAwaited(
+    successCacheContext,
+    route(),
+    before,
+    {
+      rollback: true,
+    },
+  );
+  const successCacheState =
+    probe.stateBoundaryContexts.get(successCacheContext);
+  const successCache = successCacheState.finishing;
+  const successEvents = events.length;
+  const unavailableCapture = await liveMemory
+    .captureStateFailureAwaited(successCacheContext, originalError, hostile)
+    .catch((error) => error);
+  const unavailableFinish = await liveMemory
+    .finishStateOwnedSessionsAwaited(successCacheContext, originalError)
+    .catch((error) => error);
+  check(successCacheState.finishing !== successCache);
+  same(
+    liveMemory.originalStateBoundaryUnavailable(unavailableFinish),
+    liveMemory.originalStateBoundaryUnavailable(unavailableCapture),
+  );
+  same(liveMemory.originalSuiteError(unavailableFinish), originalError);
+  same(events.length, successEvents);
+  same(flows.at(-1).state.records.length, 0);
+  same(
+    await liveMemory
+      .captureStateFailureAwaited(successCacheContext, originalError, {})
+      .catch((error) => error),
+    unavailableCapture,
+  );
+  // Invalidation while finish is pending cannot settle it early or duplicate
+  // close/done/first delivery when a second finish serializes behind it.
+  const pendingCacheContext = liveMemory.createStateBoundaryContext();
+  const pendingCacheState =
+    probe.stateBoundaryContexts.get(pendingCacheContext);
+  const pendingCacheOriginal = new Error("PRIVATE pending cache A");
+  await liveMemory.captureStateFailureAwaited(
+    pendingCacheContext,
+    pendingCacheOriginal,
+    {},
+  );
+  let releasePendingCache;
+  const pendingCacheWait = new Promise((resolve) => {
+    releasePendingCache = resolve;
+  });
+  const pendingCacheChild = owned();
+  pendingCacheChild.close = async () => {
+    events.push(["cache-close"]);
+    await pendingCacheWait;
+  };
+  pendingCacheState.sessions.push({
+    owned: pendingCacheChild,
+    closeObserved: false,
+    doneObserved: false,
+  });
+  let pendingCacheSettled = false;
+  const pendingCacheFinish = liveMemory
+    .finishStateOwnedSessionsAwaited(pendingCacheContext, pendingCacheOriginal)
+    .catch((error) => {
+      pendingCacheSettled = true;
+      return error;
+    });
+  // Allow the successful stored delivery to reach the pending child close.
+  for (let i = 0; i < 8; i++) await Promise.resolve();
+  const pendingCachePrior = pendingCacheState.finishing;
+  const pendingCacheDistinct = await liveMemory
+    .captureStateFailureAwaited(
+      pendingCacheContext,
+      new Error("PRIVATE pending cache B"),
+      {},
+    )
+    .catch((error) => error);
+  let refreshSettled = false;
+  const pendingCacheRefresh = liveMemory
+    .finishStateOwnedSessionsAwaited(pendingCacheContext, pendingCacheOriginal)
+    .catch((error) => {
+      refreshSettled = true;
+      return error;
+    });
+  for (let i = 0; i < 8; i++) await Promise.resolve();
+  same(pendingCacheSettled, false);
+  same(refreshSettled, false);
+  check(pendingCacheState.finishing !== pendingCachePrior);
+  const pendingCacheBeforeRelease = events.length;
+  releasePendingCache();
+  const pendingCacheError = await pendingCacheFinish;
+  const pendingCacheRefreshed = await pendingCacheRefresh;
+  const pendingCacheReceipt =
+    liveMemory.originalStateBoundaryUnavailable(pendingCacheDistinct);
+  same(
+    liveMemory.originalStateBoundaryUnavailable(pendingCacheError),
+    pendingCacheReceipt,
+  );
+  same(
+    liveMemory.originalStateBoundaryUnavailable(pendingCacheRefreshed),
+    pendingCacheReceipt,
+  );
+  same(
+    liveMemory.originalSuiteError(pendingCacheRefreshed),
+    pendingCacheOriginal,
+  );
+  same(pendingCacheState.original, pendingCacheOriginal);
+  same(events.length, pendingCacheBeforeRelease + 1);
+  same(pendingCacheState.sessions[0].closeObserved, true);
+  same(pendingCacheState.sessions[0].doneObserved, true);
+  same(flows.at(-1).state.records.length, 1);
+  same(
+    await liveMemory
+      .finishStateOwnedSessionsAwaited(
+        pendingCacheContext,
+        pendingCacheOriginal,
+      )
+      .catch((error) => error),
+    pendingCacheRefreshed,
+  );
+  same(events.length, pendingCacheBeforeRelease + 1);
+  same(flows.at(-1).state.records.length, 1);
   // Window copy/shape failures invalidate, rather than minting observation proof.
   for (const window of [
     hostile,

@@ -2367,6 +2367,7 @@ export async function finishStateOwnedSessionsAwaited(
     !previous ||
     previous.hasOriginal !== state.hasOriginal ||
     previous.original !== state.original ||
+    previous.unavailable !== state.unavailable ||
     previous.batch.length !== batch.length ||
     previous.batch.some((registration, index) => registration !== batch[index])
   ) {
@@ -2374,6 +2375,7 @@ export async function finishStateOwnedSessionsAwaited(
       batch,
       hasOriginal: state.hasOriginal,
       original: state.original,
+      unavailable: state.unavailable,
       settled: false,
       promise: null,
     };
@@ -2428,7 +2430,11 @@ export async function finishStateOwnedSessionsAwaited(
           await stateBoundaryClosureFailure(state, error);
         }
       }
-      if (failed || state.hasOriginal) throw stateBoundaryNeutral(state);
+      // Bind the cached result to the exact unavailable identity at settlement.
+      // Later invalidation must refresh rejection without reobserving children.
+      finishing.unavailable = state.unavailable;
+      if (failed || state.hasOriginal || state.unavailable)
+        throw stateBoundaryNeutral(state);
       return Object.freeze({});
     })();
     finishing.promise.then(
@@ -2619,6 +2625,21 @@ export async function verifyStateCurrentPrecheckOutcome(
 ) {
   refuseStateBoundaryContact();
   const state = stateBoundaryContext(contextHandle);
+  if (state.hasOriginal || state.unavailable) {
+    if (state.hasOriginal) {
+      try {
+        await stateBoundaryDeliver(
+          state,
+          state.original,
+          stateBoundaryEvidence(state.execution),
+        );
+      } catch {
+        // Await the exact stored first delivery, including pending/rejected
+        // attempts. Neither delivery nor token verification can recover a flow.
+      }
+    }
+    throw stateBoundaryNeutral(state);
+  }
   try {
     const owned = stateBoundaryOutcomes.get(outcomeToken);
     assert.ok(owned && owned.state === state);
