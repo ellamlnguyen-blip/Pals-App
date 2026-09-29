@@ -1,5 +1,9 @@
 # Backlog
 
+## TASK-025 next hosted release gates — 2026-09-29
+
+Reviewed health correction `56c510791edbfb227327b1f0cd9bdc746fa3d3e4` is task-pushed/remote verified; canonical integration is pending exact remote verification at this receipt. Next: establish the correct Pals Vercel staging project (the connected Vercel account currently lists only unrelated `athena-website` in `erik-8527's projects`), then configure exact HTTPS origin/Supabase callback and confirm hosted migration history without production fallback, custom SMTP with controlled UNC mailbox, named moderator coverage, approved pilot participants and smoke/rollback. Do not enable hosted gates or invite students before these checks. Paused TASK-021 has a clean local, unreviewed and unpushed c2a0 checkpoint `82d4fa19498ebc01151c1e088bb328abd9244a18`; it grants no accepted runtime or permission credit.
+
 ## Pilot priority
 - TASK-025 UNC pilot critical path — active. Close hosted HTTPS deployment, Supabase callback/migration verification, custom SMTP, named moderator operations, pilot supply, and release smoke checks before inviting students. See `tasks/active/TASK-025-unc-pilot-critical-path.md`.
 - TASK-024 Pals brand direction correction — deferred until the pilot is usable; keep the reviewed student UI baseline during staging work.

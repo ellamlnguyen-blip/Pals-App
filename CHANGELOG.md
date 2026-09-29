@@ -1,5 +1,9 @@
 # Changelog
 
+## UNC pilot health readiness correction — 2026-09-29
+
+Reviewed/task-pushed `56c510791edbfb227327b1f0cd9bdc746fa3d3e4` makes `/api/health` return HTTP 503/`not_ready` for incomplete or mismatched hosted settings and limits the proxy exception to that path. Independent read-only review CLEAR; local typecheck/build/focused tests and 503/503/200 probes passed. This does not prove hosted callback, SMTP, provider connectivity, moderation or pilot launch. The correct Vercel staging project and remaining hosted gates are still needed; TASK-021 modeling remains paused with unreviewed/unpushed local c2a0 `82d4fa19498ebc01151c1e088bb328abd9244a18`. Canonical integration of this correction is pending exact remote verification at this receipt.
+
 ## B3c c2a0 source-qualified prerequisite independent review receipt — 2026-09-29
 
 Renewed independent FULL read-only review of frozen corrected eight-doc source-qualified first12 prerequisite `9c8c2f5cbd4f51adab06dfa586a71d88b1f7aaa0` against remote-verified main `e0c91ae8d4d23b0b351b8f7e873dccd131100a9b`: CLEAR/no findings. Prior draft said five *other* pins after concurrency; corrected to four other pins of five total. Reviewer matched clean stopped c2a `3226e3cd6b6de84ebcb602bcf0af9f215ea371b1`, exact c1 helper/MODELS, frozen source actor photo/profile/gate versus historical assertEarlyOperator guard, and c2a0→c2a→c2b→c3 dependency/incomplete gates. Reviewed prerequisite accepted for coordinator task publication/doc-only canonical integration, pending exact remote verification at this receipt. Fresh latest-main/exact855a4c4 reconciliation before NEW c2a0 author; no runtime/contact/test/import.

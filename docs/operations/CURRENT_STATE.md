@@ -1,5 +1,9 @@
 # Current State
 
+## 2026-09-29 — UNC pilot health readiness reviewed
+
+TASK-025 health correction `56c510791edbfb227327b1f0cd9bdc746fa3d3e4` passed independent read-only review and is task-pushed/remote verified. The public, secret-free health route now fails closed with HTTP 503 for incomplete/mismatched hosted configuration; only the exact health path bypasses the auth-refresh proxy. Typecheck/build/focused target tests and local 503/503/200 probes passed. This is configuration readiness, not hosted pilot readiness. Correct Pals Vercel project access is missing from the connected account; Supabase staging callback/site settings and migration history, SMTP/UNC mailbox, named moderator coverage, supply and deployed smoke remain open. Main integration of this correction is pending exact remote verification at this receipt. TASK-021 modeling is paused; local c2a0 `82d4fa19498ebc01151c1e088bb328abd9244a18` remains unreviewed/unpushed and isolated.
+
 ## 2026-09-29 — UNC pilot priority
 
 TASK-025 is the active release path for a small UNC staging pilot. The local MVP building blocks for verified access, privacy/RLS, Hangout creation/joining, chat, blocking/reporting, and audited moderation are already on `main`. A secret-free `/api/health` probe and focused release runbook are published in `docs/operations/UNC_PILOT_CRITICAL_PATH.md`. Exhaustive TASK-021 static modeling is paused unless a concrete staging check requires it; TASK-024 brand correction is deferred until the pilot is usable. Hosted HTTPS deployment, exact Supabase callback/site configuration, custom SMTP, named moderator coverage, and approved pilot supply remain open blockers. No hosted gates were enabled and no student invitation was sent.

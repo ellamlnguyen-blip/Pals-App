@@ -1,5 +1,9 @@
 # NOW
 
+## TASK-025 health readiness correction — 2026-09-29
+
+Fresh independent read-only review CLEAR on `agent/TASK-025-health-readiness` commit `56c510791edbfb227327b1f0cd9bdc746fa3d3e4`, task-pushed and exact remote verified. The secret-free `/api/health` probe returns HTTP 503/`not_ready` for missing or mismatched hosted configuration and HTTP 200/`ok` only for validated configuration; the proxy exempts only this public path. Web typecheck/build, focused target tests, formatting and local HTTP 503/503/200 probes passed. Green means configuration shape only, not hosted callback/SMTP/provider connectivity or pilot release approval. HTTPS staging deployment, exact Supabase callback/site settings and migration history, custom SMTP/controlled UNC mailbox, named moderators, approved pilot supply and smoke checks remain open. TASK-021 exhaustive modeling stays paused.
+
 ## TASK-025 UNC pilot critical path
 
 The user asked to prioritize a small, safe UNC pilot. TASK-025 is the active release path from the latest canonical main. It keeps verified student access, privacy/RLS, Hangout creation/joining, chat, blocking/reporting, and human moderation in scope. The local building blocks are already on main; hosted staging, SMTP, HTTPS callbacks, named moderation coverage, and pilot supply remain release gates. The secret-free `/api/health` probe and release runbook are added in this task. See `tasks/active/TASK-025-unc-pilot-critical-path.md` and `docs/operations/UNC_PILOT_CRITICAL_PATH.md`.
