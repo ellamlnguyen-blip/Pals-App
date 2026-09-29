@@ -1,5 +1,11 @@
 # Backlog
 
+## 2026-09-29 — B3c retry/crossing checkpoints and exact-edge contract review
+
+Supersedes prior active retry/crossing status. Retry/rate `52a53330eaf2c196582bb0fae9788a7254db9fa3` passes full review plus exceptional-path correction re-review and is pushed with exact task remote SHA verified. All18 allocations/four waits preserve raw exact comparisons; every failed cell prohibits reset, including unexpected nonzero exits after an early assertion. Crossing `0a983cfabfc4d7f2ccc0893132ba4890a2c4deb9` passes full/correction review and is pushed with exact task remote SHA verified; all60 allocations remain unexecuted, with safely projected supplemental post-close differences and original-first failure preserved.
+
+Exact rate-edge contract `086fed41` passes source/contract correction re-review. Four actual-public controls use narrowly qualified temporary clock-expression instrumentation inside an always-rolled-back transaction; fixed owned label allowlists preserve new case/phase evidence without private passthrough. Canonical publication and the independently reviewed/published common projector interface precede authoring. Common projector `90365f50` full review found two P2 diagnostic-coordinate/schema omissions; correction is active, state adoption separately required. Upgrade/catalog contract and state-adopter contract are under independent review. Main code26/all source27/fixtures unexecuted; P1 privacy acceptance, combined fixture/ownership/exclusive release/preflight/runtime/security/cleanup/accepted integration and all parent gates remain incomplete.
+
 ## 2026-09-28 — B3c exact rate edge contract proposed
 
 The common output correction contract and receipt are published on remote-verified canonical main `8f39696f630698f46ced6e801b75c73f14a8a127`; a fresh three-file author is implementing the pure outgoing projector from prepared `16630018e3be2abca4cd6613f6da2499b65931f4`. P1 remains open until full review and separate state adoption. Retry correction `4c16becd` preserves exact assertions and resolves two prior findings, but independent full review found a remaining P2 exceptional nonzero-exit/reset gap; correction continues. Crossing `21098c66` full review found one P2 omitted post-close survivor differences; correction continues. Neither checkpoint is published or accepted.

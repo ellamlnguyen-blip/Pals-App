@@ -1,6 +1,6 @@
 # B3c exact rate-window edge — proposed static fixture contract
 
-Status: proposed bounded test-instrumentation exception, awaiting independent source/contract review and canonical publication. No implementation dispatch or runtime release. Four exact predicate controls supplement the separate unchanged-source retry/rate fixture; all remain unexecuted. Main code has26 migrations; reviewed source27 remains task-only.
+Status: independent read-only source/contract review and correction re-review clear086fed41fd56b2017e7bba75a7a69eeb7405cb4a; bounded test-instrumentation exception awaits canonical publication and the reviewed projector interface before author dispatch. No implementation dispatch or runtime release. Four exact predicate controls supplement the separate unchanged-source retry/rate fixture; all remain unexecuted. Main code has26 migrations; reviewed source27 remains task-only.
 
 Read AGENTS.md, parent current-source-safety and retry-rate contracts, Accepted ADR-0026/0027, DATA_MODEL/AUTHORIZATION/SECURITY_AND_SAFETY, source inventory/lock graph/fixture matrix and exact source17b72001c3c76d2002b320d92df32703141bb88e. A fresh author starts from coordinator-verified latest canonical main plus exact reviewed policy/transport and, once published, common outgoing projection dependencies. Do not dispatch before the projector interface and this contract are independently reviewed and remotely published. Sol medium; Standard speed is app controlled and unverified.
 
