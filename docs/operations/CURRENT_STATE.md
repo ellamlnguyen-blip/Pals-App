@@ -1,5 +1,15 @@
 # Current State
 
+## 2026-09-29 — Moderation audited-read checkpoint
+
+**Independent FULL review CLEAR; static checkpoint task-published and exact remote verified.** Fresh author froze `25d353b4c58ad63334bb9921bc79bd197aecb27b` on `agent/TASK-021A1b3c-moderation-model-reads`, from exact dependency-reviewed `038cce5675b000103f271d39db772d2bfc6d897a` (remote-verified main `9743842c4e34634cb11de92a470121b5721e9a9c` plus reviewed/task-published ac7 core/setup). Exactly two existing files: the moderation fixture helper and MODELS handoff; Git preserves historical ac7.
+
+Seventeen fixed opaque read/denial primitives independently derive seven-field queues, sixteen-field details and exact23-field authorized audit appends over full54. They preserve source pagination/order, conflict filtering before limits, required live operator lookups, generated UUID/time validation, source result types and six conflict denials with unchanged operation/audit state. HTTP-only REST/metadata-forgery components reject synthetic SQL setup; lawful queue/detail primitives remain reusable for later SQL models. Missing later plans and incomplete sequences remain unavailable.
+
+Author evidence: **187 own memory groups** (84 inherited plus103 new), native and inert VM checks with zero contact/import traps; syntax, explicit ignored-path formatting, narrow lint and whitespace clean. Root read the frozen handoff/source before fresh independent FULL review. Fresh reviewer returned CLEAR/no actionable findings on the entire helper/examples/source/private interfaces; author187 evidence was inspected, not rerun. Root pushed and independently verified task remote `25d353b4c58ad63334bb9921bc79bd197aecb27b`. Source/hash/interface receipts are in the operation-family handoff. Actual HTTP/JWT/permission/race coverage is pending.
+
+Code remains task-only pending later combined integration gates. Transitions/retries/first12 races1a2b, sanctions/enforcement/all39 HTTP1a2c, current/retained safety1a3, transport1b and consumers remain required. Main retains26 migrations; source27 and all fixtures remain unexecuted. Provider qualification, channel/adoption/exit78/emission/completion/ceilings/final runner/freeze/ownership/exclusive release/preflight/runtime/security/cleanup/normal stop/accepted main integration and B3c/B3/A1c/A2/TASK-021 remain incomplete.
+
 ## 2026-09-29 — Common failure-state correction checkpoint
 
 Independent FULL documentary milestone/dependency amendment review is CLEAR at `86cfd57917ba621e8df44c314ddab0d80072b8ba` against main1987: six documents, no findings, no executable integration or new authority. Reviewer reconfirmed frozen9120 hashes and truthful static-only/task-publication evidence. Canonical publication follows; later dependent work still requires its separately published contract and fresh exact reconciliation.
