@@ -642,6 +642,310 @@ try {
     };
   }
   sessionFactory = () => owned();
+  // Empty completion is only this exact batch: a later accepted execution must
+  // own-close and observe actual done before its token can be verified.
+  const emptyContext = liveMemory.createStateBoundaryContext();
+  const emptyAck = await liveMemory.finishStateOwnedSessionsAwaited(
+    emptyContext,
+    null,
+  );
+  const emptyState = probe.stateBoundaryContexts.get(emptyContext);
+  const emptyFinish = emptyState.finishing;
+  same(
+    await liveMemory.finishStateOwnedSessionsAwaited(emptyContext, null),
+    emptyAck,
+  );
+  same(emptyState.finishing, emptyFinish);
+  events.length = 0;
+  const afterEmptyToken = await liveMemory.executeStateSuccessAwaited(
+    emptyContext,
+    route(),
+    before,
+    { rollback: true },
+  );
+  check(emptyState.finishing !== emptyFinish);
+  same(emptyState.finishing.batch.length, 1);
+  same(emptyState.finishing.settled, true);
+  same(emptyState.sessions[0].closeObserved, true);
+  same(emptyState.sessions[0].doneObserved, true);
+  same(events.filter(([event]) => event === "session").length, 1);
+  same(events.filter(([event]) => event === "close").length, 1);
+  same(events.filter(([event]) => event === "done").length, 2);
+  check(
+    events.findLastIndex(([event]) => event === "done") >
+      events.findIndex(([event]) => event === "close"),
+  );
+  const completedAck = await liveMemory.finishStateOwnedSessionsAwaited(
+    emptyContext,
+    null,
+  );
+  same(
+    await liveMemory.finishStateOwnedSessionsAwaited(emptyContext, null),
+    completedAck,
+  );
+  same(events.filter(([event]) => event === "close").length, 1);
+  same(events.filter(([event]) => event === "done").length, 2);
+  await liveMemory.verifyStateCurrentPrecheckOutcome(
+    emptyContext,
+    afterEmptyToken,
+    { start: "2026-09-29T00:00:00Z", end: "2026-09-29T00:00:01Z" },
+  );
+  same(emptyState.execution, null);
+  // A later actual original never inherits the empty acknowledgement. Delivery
+  // stays pending before ANY newly registered child cleanup and retains identity.
+  for (const [deliveryType, childCount] of [
+    ["success", 0],
+    ["success", 1],
+    ["reject", 0],
+    ["reject", 1],
+  ]) {
+    const ctx = liveMemory.createStateBoundaryContext();
+    const state = probe.stateBoundaryContexts.get(ctx);
+    await liveMemory.finishStateOwnedSessionsAwaited(ctx, null);
+    const prior = state.finishing;
+    if (childCount) state.sessions.push({ owned: owned() });
+    let deliverRelease;
+    mode = {
+      type: deliveryType,
+      wait: new Promise((resolve) => {
+        deliverRelease = resolve;
+      }),
+    };
+    events.length = 0;
+    let finishSettled = false;
+    const pendingOriginal = liveMemory
+      .finishStateOwnedSessionsAwaited(ctx, originalError)
+      .catch((error) => {
+        finishSettled = true;
+        return error;
+      });
+    await Promise.resolve();
+    await Promise.resolve();
+    same(finishSettled, false);
+    same(state.original, originalError);
+    same(flows.at(-1).state.original, originalError);
+    same(flows.at(-1).state.records.length, 1);
+    check(state.finishing !== prior);
+    same(state.finishing.hasOriginal, true);
+    same(state.finishing.original, originalError);
+    same(events.filter(([event]) => event === "close").length, 0);
+    deliverRelease();
+    const outward = await pendingOriginal;
+    same(finishSettled, true);
+    same(liveMemory.originalSuiteError(outward), originalError);
+    equal(Object.keys(outward), []);
+    check(state.sessions.every((entry) => entry.closeObserved));
+    check(state.sessions.every((entry) => entry.doneObserved));
+    same(events.filter(([event]) => event === "close").length, childCount);
+    same(events.filter(([event]) => event === "done").length, childCount);
+    same(
+      await liveMemory
+        .finishStateOwnedSessionsAwaited(ctx, originalError)
+        .catch((error) => error),
+      outward,
+    );
+    same(flows.at(-1).state.records.length, 1);
+    if (deliveryType === "reject") {
+      const storedRejection = await state.firstDelivery.catch((error) => error);
+      same(
+        await liveMemory
+          .captureStateFailureAwaited(ctx, originalError, {})
+          .catch((error) => error),
+        storedRejection,
+      );
+      same(
+        liveMemory.originalStateBoundaryUnavailable(outward),
+        liveMemory.originalStateBoundaryUnavailable(storedRejection),
+      );
+      same(
+        liveMemory.originalStateBoundaryUnavailable(outward)
+          .required_exit_status,
+        78,
+      );
+    }
+    let createdAfterFailure = 0;
+    sessionFactory = () => {
+      createdAfterFailure++;
+      return owned();
+    };
+    const noRecovery = await liveMemory
+      .executeStateSuccessAwaited(ctx, route(), before, { rollback: true })
+      .catch((error) => error);
+    same(createdAfterFailure, 0);
+    same(liveMemory.originalSuiteError(noRecovery), originalError);
+    same(state.original, originalError);
+  }
+  mode = { type: "success" };
+  // A pending owning finish rejects execute before its factory. The pre-child
+  // rejection still retains/delivers its original and cannot recover the flow.
+  const pendingFinishContext = liveMemory.createStateBoundaryContext();
+  let releaseClose;
+  const closeWait = new Promise((resolve) => {
+    releaseClose = resolve;
+  });
+  const pendingChild = owned();
+  pendingChild.close = async () => {
+    events.push(["pending-close"]);
+    await closeWait;
+  };
+  const pendingFinishState =
+    probe.stateBoundaryContexts.get(pendingFinishContext);
+  pendingFinishState.sessions.push({ owned: pendingChild });
+  const firstFinish = liveMemory.finishStateOwnedSessionsAwaited(
+    pendingFinishContext,
+    null,
+  );
+  same(pendingFinishState.finishing.settled, false);
+  let pendingCreated = 0;
+  sessionFactory = () => {
+    pendingCreated++;
+    return owned();
+  };
+  const blockedExecute = liveMemory
+    .executeStateSuccessAwaited(pendingFinishContext, route(), before, {
+      rollback: true,
+    })
+    .catch((error) => error);
+  await Promise.resolve();
+  await Promise.resolve();
+  same(pendingCreated, 0);
+  same(pendingFinishState.sessions.length, 1);
+  check(pendingFinishState.hasOriginal);
+  same(flows.at(-1).state.records.length, 1);
+  releaseClose();
+  await firstFinish.catch(() => {});
+  const blockedError = await blockedExecute;
+  same(
+    liveMemory.originalSuiteError(blockedError),
+    pendingFinishState.original,
+  );
+  same(pendingFinishState.sessions[0].closeObserved, true);
+  same(pendingFinishState.sessions[0].doneObserved, true);
+  // Private isolated registrations exercise a changed batch while its earlier
+  // generation is pending. No production caller owns this inspection bridge.
+  const generationContext = liveMemory.createStateBoundaryContext();
+  const generationState = probe.stateBoundaryContexts.get(generationContext);
+  let generationRelease;
+  const generationWait = new Promise((resolve) => {
+    generationRelease = resolve;
+  });
+  const generationChild = owned();
+  generationChild.close = async () => {
+    events.push(["generation-close"]);
+    await generationWait;
+  };
+  generationState.sessions.push({ owned: generationChild });
+  const generationFirst = liveMemory.finishStateOwnedSessionsAwaited(
+    generationContext,
+    null,
+  );
+  const generationPrior = generationState.finishing;
+  generationState.sessions.push({ owned: owned() }, { owned: owned() });
+  events.length = 0;
+  const generationSecond = liveMemory.finishStateOwnedSessionsAwaited(
+    generationContext,
+    null,
+  );
+  check(generationState.finishing !== generationPrior);
+  same(generationState.finishing.batch.length, 3);
+  same(generationState.finishing.settled, false);
+  await Promise.resolve();
+  same(events.length, 0);
+  generationRelease();
+  await generationFirst;
+  const generationAck = await generationSecond;
+  check(
+    generationState.sessions.every(
+      (registration) => registration.closeObserved && registration.doneObserved,
+    ),
+  );
+  same(events.filter(([event]) => event === "close").length, 2);
+  same(events.filter(([event]) => event === "done").length, 3);
+  same(
+    await liveMemory.finishStateOwnedSessionsAwaited(generationContext, null),
+    generationAck,
+  );
+  same(events.filter(([event]) => event === "close").length, 2);
+  same(events.filter(([event]) => event === "done").length, 3);
+  // A changed original while the earlier owning close is pending begins first
+  // delivery immediately. Failed close and actual done remain independent; the
+  // later failure never replaces the supplied original or stored rejection.
+  for (const deliveryType of ["success", "reject"]) {
+    const ctx = liveMemory.createStateBoundaryContext();
+    const state = probe.stateBoundaryContexts.get(ctx);
+    const pendingCloseFailure = new Error("PRIVATE pending close failure");
+    const pendingDoneFailure = new Error("PRIVATE pending done failure");
+    let closeRelease, originalRelease;
+    const pendingCloseWait = new Promise((resolve) => {
+      closeRelease = resolve;
+    });
+    const child = owned({ doneError: pendingDoneFailure });
+    child.close = async () => {
+      events.push(["original-pending-close"]);
+      await pendingCloseWait;
+      throw pendingCloseFailure;
+    };
+    state.sessions.push({
+      owned: child,
+      closeObserved: false,
+      doneObserved: false,
+    });
+    events.length = 0;
+    const priorPending = liveMemory
+      .finishStateOwnedSessionsAwaited(ctx, null)
+      .catch((error) => error);
+    const prior = state.finishing;
+    mode = {
+      type: deliveryType,
+      wait: new Promise((resolve) => {
+        originalRelease = resolve;
+      }),
+    };
+    let changedSettled = false;
+    const changedPending = liveMemory
+      .finishStateOwnedSessionsAwaited(ctx, originalError)
+      .catch((error) => {
+        changedSettled = true;
+        return error;
+      });
+    check(state.finishing !== prior);
+    same(state.original, originalError);
+    same(flows.at(-1).state.records[0].error, originalError);
+    same(flows.at(-1).state.records[0].receipt, "first");
+    same(changedSettled, false);
+    same(events.filter(([event]) => event === "done").length, 0);
+    originalRelease();
+    await state.firstDelivery.catch(() => {});
+    closeRelease();
+    const priorError = await priorPending;
+    const changedError = await changedPending;
+    same(changedSettled, true);
+    same(liveMemory.originalSuiteError(priorError), originalError);
+    same(liveMemory.originalSuiteError(changedError), originalError);
+    same(state.original, originalError);
+    same(flows.at(-1).state.original, originalError);
+    same(events.filter(([event]) => event === "done").length, 1);
+    equal(
+      flows.at(-1).state.records.map((record) => record.error),
+      [originalError, pendingCloseFailure, pendingDoneFailure],
+    );
+    same(state.sessions[0].closeObserved, false);
+    same(state.sessions[0].doneObserved, false);
+    if (deliveryType === "reject") {
+      same(
+        await liveMemory
+          .captureStateFailureAwaited(ctx, originalError, {})
+          .catch((error) => error),
+        await state.firstDelivery.catch((error) => error),
+      );
+      same(
+        liveMemory.originalStateBoundaryUnavailable(changedError),
+        liveMemory.originalStateBoundaryUnavailable(ctx),
+      );
+    }
+    mode = { type: "success" };
+  }
+  sessionFactory = () => owned();
   const goodContext = liveMemory.createStateBoundaryContext();
   const mutableRoute = route(),
     mutableBefore = structuredClone(before);

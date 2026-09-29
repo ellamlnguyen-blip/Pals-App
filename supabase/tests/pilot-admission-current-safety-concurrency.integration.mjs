@@ -2361,10 +2361,26 @@ export async function finishStateOwnedSessionsAwaited(
   const state = stateBoundaryContext(contextHandle);
   if (originalError !== null && originalError !== undefined)
     stateBoundaryRetain(state, originalError);
-  if (!state.finishing)
-    state.finishing = (async () => {
+  const previous = state.finishing;
+  const batch = state.sessions.slice();
+  if (
+    !previous ||
+    previous.hasOriginal !== state.hasOriginal ||
+    previous.original !== state.original ||
+    previous.batch.length !== batch.length ||
+    previous.batch.some((registration, index) => registration !== batch[index])
+  ) {
+    const finishing = {
+      batch,
+      hasOriginal: state.hasOriginal,
+      original: state.original,
+      settled: false,
+      promise: null,
+    };
+    state.finishing = finishing;
+    finishing.promise = (async () => {
       let failed = false;
-      if (state.hasOriginal && !state.firstDelivery) {
+      if (state.hasOriginal) {
         try {
           await stateBoundaryDeliver(
             state,
@@ -2375,7 +2391,17 @@ export async function finishStateOwnedSessionsAwaited(
           failed = true;
         }
       }
-      for (const registration of state.sessions) {
+      // Deliver a newly retained original before waiting on prior cleanup.
+      // Serialize changed generations; a pending finish never loses ownership.
+      if (previous) {
+        try {
+          await previous.promise;
+        } catch {
+          // Retained originals/unavailability still forbid recovery below.
+        }
+      }
+      for (const registration of batch) {
+        if (previous?.batch.includes(registration)) continue;
         try {
           await registration.owned.close();
           registration.closeObserved = true;
@@ -2405,11 +2431,22 @@ export async function finishStateOwnedSessionsAwaited(
       if (failed || state.hasOriginal) throw stateBoundaryNeutral(state);
       return Object.freeze({});
     })();
-  return await state.finishing;
+    finishing.promise.then(
+      () => {
+        finishing.settled = true;
+      },
+      () => {
+        finishing.settled = true;
+      },
+    );
+  }
+  return await state.finishing.promise;
 }
 function stateBoundaryInputs(state, route, before, options) {
   assert.equal(state.hasOriginal, false);
   assert.equal(state.unavailable, null);
+  // A child cannot join a generation whose owning finish is still pending.
+  assert.ok(!state.finishing || state.finishing.settled);
   const boundRoute = stateBoundaryCopy(route),
     boundBefore = stateBoundaryCopy(before),
     boundOptions = stateBoundaryCopy(options ?? {});
