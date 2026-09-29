@@ -1,5 +1,11 @@
 # Backlog
 
+## 2026-09-29 — Exact state invalidation checkpoint reviewed and published
+
+Fresh independent FULL source/interface/privacy review clears `bdb121b60d98dc4e9dfc808a183dcb1253c8a219`; task branch `agent/TASK-021A1b3c-state-flow-invalidation` published and exact remote verified against unchanged main6400. Exactly three files; only seven helper lines add identity-only permanent `invalidate(originalError)`, with unchanged four exports, contact refusals, writer/limits and first original. Flow SHA256 `f1e8cf00283274492a244cbb518de6f2bb5854e35f9b6d49dce9a2724a823fd5`. Author3,921 static checks/0traps inspected, not rerun; no extra emission/contact or actual receiver/exit78 adoption. Code stays task-only/unexecuted.
+
+The common contract explicitly replaces its flow dependency with exactbdb/f1 and retains the original six APIs. Amendment FULL review/canonical publication/latest-main reconciliation must precede a fresh common author; removed94bc draft is never accepted. Moderation operation-family split remains proposed, clean stoppedc627 unchanged, no fresh model author dispatched. Main26/source27/all fixtures unexecuted; provider proof and all parent/runtime/release gates remain incomplete.
+
 ## 2026-09-29 — Moderation operations split proposed after clean stop
 
 State invalidation contract checkpoint `c29c7873d8bd2baf4a2c181a609b8f08f6ebdf36` passed FULL review and receipt review, task-published/exact remote verified and canonically integrated on exact remote-verified main `6400c4f7fab569be6d75b9ebf24a84eafa2db8cf`. Fresh dependency review cleared prepared state7bce32c and moderationc627e17; exact reviewed code/source/handoffs unchanged. Fresh bounded invalidation author is active, no checkpoint accepted yet.
