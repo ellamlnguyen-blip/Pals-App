@@ -930,6 +930,97 @@ export const httpTransitionPlans = freeze(
     ]),
   ),
 );
+// c1 finite source primitives. Whole39 order remains unavailable pending c2.
+const SANCTIONS = freeze({
+  "sanction.nonoperator": [
+    "reporter",
+    2,
+    "suspend",
+    "  Local decision  ",
+    false,
+  ],
+  "sanction.moderator-ban": ["actor", 2, "ban", "  Local decision  ", false],
+  "sanction.suspend": ["actor", 2, "suspend", "  Local decision  ", false],
+  "sanction.normalized-retry": ["actor", 2, "suspend", "Local decision", true],
+  "sanction.changed-retry": ["actor", 2, "suspend", "Changed", true],
+  "sanction.admin-ban": ["second", 4, "ban", "Decision", false],
+  "sanction.admin-ban-retry": ["second", 4, "ban", "Decision", true],
+  "sanction.admin-downgrade-retry": ["second", 4, "ban", "Decision", true],
+});
+const ENFORCEMENT_IDS = freeze([
+  "MODHTTP.account-enforcement.access-state",
+  "MODHTTP.account-enforcement.own-status",
+  "MODHTTP.account-enforcement.profile",
+  "MODHTTP.account-enforcement.hangouts",
+  "MODHTTP.account-enforcement.retained-ids",
+  "MODHTTP.account-enforcement.report",
+  "MODHTTP.private-sanction-rest",
+]);
+const SANCTION_WRITERS = freeze([
+  "sanction.membership",
+  "sanction.gate-enable",
+]);
+const SANCTION_COMPONENTS = freeze({
+  ...Object.fromEntries(
+    Object.keys(SANCTIONS).map((id) => [
+      id,
+      `MODHTTP.account-action.${id.slice(9)}`,
+    ]),
+  ),
+  "sanction.admin-ban": "MODHTTP.admin-ban",
+  "sanction.admin-ban-retry": null,
+  "sanction.admin-downgrade-retry": "MODHTTP.admin-downgrade-retry",
+});
+export const sanctionModelPlans = freeze(
+  Object.fromEntries(
+    [...Object.keys(SANCTIONS), ...SANCTION_WRITERS].map((id) => [
+      id,
+      opaque(
+        plans,
+        freeze({ id, family: "sanction-primitives", sourceOnly: true }),
+      ),
+    ]),
+  ),
+);
+export const enforcementModelPlans = freeze(
+  Object.fromEntries(
+    ENFORCEMENT_IDS.map((id) => [
+      id,
+      opaque(
+        plans,
+        freeze({ id, family: "restricted-enforcement", sourceOnly: true }),
+      ),
+    ]),
+  ),
+);
+const SANCTION_STEPS = freeze({
+  "focused-sanctions": [
+    "sanction.membership",
+    "sanction.gate-enable",
+    "sanction.nonoperator",
+    "sanction.moderator-ban",
+    "sanction.suspend",
+    "sanction.normalized-retry",
+    "sanction.changed-retry",
+    ...ENFORCEMENT_IDS,
+    "http.reopen",
+    "sanction.admin-ban",
+    "second-downgrade",
+    "sanction.admin-downgrade-retry",
+  ],
+});
+export const sanctionSequencePlans = freeze(
+  Object.fromEntries(
+    Object.keys(SANCTION_STEPS).map((id) => [
+      id,
+      opaque(
+        plans,
+        freeze({ id, family: "focused-sanction-sequence", sourceOnly: true }),
+      ),
+    ]),
+  ),
+);
+
 export function describeModelPlan(handle) {
   if (!plans.has(handle))
     return freeze({ available: false, reason: "unavailable" });
@@ -940,6 +1031,25 @@ export function describeModelPlan(handle) {
     id: p.id,
     sourceOnly: true,
     runtimeCredit: 0,
+    ...([
+      "sanction-primitives",
+      "restricted-enforcement",
+      "focused-sanction-sequence",
+    ].includes(p.family)
+      ? {
+          modelAvailable: true,
+          transportAvailable: false,
+          orderCredit: 0,
+          componentId:
+            SANCTION_COMPONENTS[p.id] ??
+            (ENFORCEMENT_IDS.includes(p.id) ? p.id : null),
+          steps: SANCTION_STEPS[p.id] ?? [p.id],
+          assertionQualification:
+            p.id === "MODHTTP.account-enforcement.own-status"
+              ? "current-source-supplemental-body-empty;historical219-unretained-zero-credit"
+              : "source-only;success-status200-separate-hardening",
+        }
+      : {}),
     ...([
       "transitions",
       "first-twelve-races",
@@ -971,7 +1081,7 @@ export function describeModelPlan(handle) {
   });
 }
 export const modelCheckpoint = freeze({
-  family: "core-setup-reads-transitions-first12",
+  family: "core-setup-reads-transitions-first12-sanctions-enforcement",
   modelHash: hash(
     [
       snapshot,
@@ -1009,6 +1119,14 @@ export const modelCheckpoint = freeze({
       verifyTransitionOperation,
       sequenceOperation,
       verifySequence,
+      sanctionContext,
+      sanctionDecision,
+      sanctionChanges,
+      sanctionWriter,
+      sanctionHttpResult,
+      verifySanctionOperation,
+      sanctionSequenceOperation,
+      verifySanctionSequence,
     ]
       .map((fn) => fn.toString())
       .join("\n"),
@@ -1024,7 +1142,7 @@ export const modelCheckpoint = freeze({
   schemaHash: hash(JSON.stringify(SCHEMA)),
   planHash: hash(JSON.stringify({ HTTP_IDS, RACES, PHASES, SETUP_IDS })),
   interfaceHash: hash(
-    "family1a1:setupModelPlans;describeModelPlan(handle);modelCheckpoint;runMemoryExamples(exactSourceBytes);moderationContact():unconditional-refusal;family1a2a:readModelPlans;describeModelPlan(handle)->componentId/sequenceAvailable=false/transportAvailable=false/sourceHttpStatusAllowlist;family1a2b:transitionModelPlans/raceModelPlans/httpTransitionPlans;describeModelPlan(handle)->finiteSteps/modelAvailable/transportAvailable=false/orderCredit=0",
+    "family1a1:setupModelPlans;describeModelPlan(handle);modelCheckpoint;runMemoryExamples(exactSourceBytes);moderationContact():unconditional-refusal;family1a2a:readModelPlans;describeModelPlan(handle)->componentId/sequenceAvailable=false/transportAvailable=false/sourceHttpStatusAllowlist;family1a2b:transitionModelPlans/raceModelPlans/httpTransitionPlans;describeModelPlan(handle)->finiteSteps/modelAvailable/transportAvailable=false/orderCredit=0;family1a2c1:sanctionModelPlans/enforcementModelPlans/sanctionSequencePlans;finiteSourcePlans/assertionQualification/noTransportOrOrderCredit",
   ),
   readModelHash: hash(
     [
@@ -1070,6 +1188,40 @@ export const modelCheckpoint = freeze({
   transitionInterfaceHash: hash(
     "private:transitionContext(op)->fixedSourceContext;transitionDecision(op,before,c)->independentChanges/resultOrDenial;transitionAudit(op,after,c,decision)->independentAudit23;verifyTransitionOperation(op,afterHandle,actualResult)->privateResult;sourceResult:race.detail-count=text1/race.transition=tuplesOnlyRowText/http.transition=rpcBodyArray;sequenceOperation(fixedPlan,beforeHandle,bounds,sourceHandle,setup,requestBindings)->opaqueSequence;verifySequence(sequenceHandle,orderedPrivateObservations)->privateResult;public:transitionModelPlans/raceModelPlans/httpTransitionPlans;finiteStepsOnly;noTransportOrOrderCredit",
   ),
+  sanctionModelHash: hash(
+    [
+      sanctionContext,
+      sanctionDecision,
+      sanctionChanges,
+      sanctionWriter,
+      sanctionHttpResult,
+      verifySanctionOperation,
+      sanctionSequenceOperation,
+      verifySanctionSequence,
+    ]
+      .map((fn) => fn.toString())
+      .join("\n"),
+  ),
+  sanctionPlanHash: hash(
+    JSON.stringify({
+      SANCTIONS,
+      ENFORCEMENT_IDS,
+      SANCTION_WRITERS,
+      SANCTION_COMPONENTS,
+      SANCTION_STEPS,
+    }),
+  ),
+  sanctionInterfaceHash: hash(
+    "private:sanctionContext(op)->fixedHttpContext;sanctionDecision(op,before,c)->independentDecision;sanctionChanges(op,after,c,d)->independentAccountCaseSanctionLedgerAudit23;sanctionWriter(op,after,c)->fixedMembershipOrGate;sanctionHttpResult(op,actual,expected)->literalAssertionProjection;verifySanctionOperation(op,afterHandle,actualResult)->privateResult;sanctionSequenceOperation(fixedPlan,beforeHandle,bounds,sourceHandle,setup,bindings)->opaqueSequence;verifySanctionSequence(handle,orderedPrivateObservations)->privateResult;public:sanctionModelPlans/enforcementModelPlans/sanctionSequencePlans;fixedOnly;noRawGetterOrTransport",
+  ),
+  sanctionPrimitivesAvailable: true,
+  enforcementPrimitivesAvailable: true,
+  focusedSanctionSequenceAvailable: true,
+  originalHttpLexicalAssertions: 41,
+  originalHttpRetainedAssertions: 40,
+  original219RetainedCredit: 0,
+  currentSourceOwnStatusSupplementals: 1,
+  http200HardeningCredit: 0,
   transitionPrimitivesAvailable: true,
   firstTwelveRaceModelsAvailable: true,
   httpTransitionSubsequencesAvailable: true,
@@ -1727,6 +1879,12 @@ function verifyOperation(operationHandle, afterHandle, actualResult) {
     op.id === "race.detail-count"
   )
     return verifyTransitionOperation(op, afterHandle, actualResult);
+  if (
+    Object.hasOwn(SANCTIONS, op.id) ||
+    ENFORCEMENT_IDS.includes(op.id) ||
+    SANCTION_WRITERS.includes(op.id)
+  )
+    return verifySanctionOperation(op, afterHandle, actualResult);
   let changed;
   switch (op.id) {
     case "sql-auth-four":
@@ -2479,6 +2637,569 @@ function verifyTransitionOperation(op, afterHandle, actualResult) {
     decision.result,
   );
 }
+// Same-module private seam only; all source roles/actions/revisions are finite.
+function sanctionContext(op) {
+  keys(op.context, ["setup", "input", "jwtRole", "isolation"]);
+  const c = setupContext({ ...op, context: op.context.setup });
+  check(c.lane === "http");
+  equal(op.context.jwtRole, "authenticated");
+  equal(op.context.isolation, "read committed");
+  const fixed = SANCTIONS[op.id],
+    input = op.context.input;
+  if (fixed) {
+    keys(input, [
+      "p_report_id",
+      "p_request_id",
+      "p_expected_case_revision",
+      "p_action",
+      "p_reason",
+    ]);
+    equal(input.p_report_id, c.report);
+    equal(input.p_expected_case_revision, fixed[1]);
+    equal(input.p_action, fixed[2]);
+    equal(input.p_reason, fixed[3]);
+    check(
+      typeof input.p_request_id === "string" &&
+        /^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/.test(
+          input.p_request_id,
+        ),
+    );
+    if (fixed[4]) {
+      const prior = find(
+        own(snapshots, op.beforeHandle),
+        "private.moderation_requests",
+        (r) =>
+          r.operator_id === c[fixed[0]] && r.request_id === input.p_request_id,
+      );
+      equal(prior.report_id, c.report);
+      equal(prior.result_state, "closed");
+      equal(prior.result_revision, fixed[1] + 1);
+    }
+  } else if (op.id === "MODHTTP.account-enforcement.report") {
+    keys(input, ["p_request_id", "p_target_mode", "p_target_id", "p_category"]);
+    equal(input.p_target_mode, "user");
+    equal(input.p_target_id, c.reporter);
+    equal(input.p_category, "harassment");
+    bindUuid(
+      "client_uuid_v4",
+      input.p_request_id,
+      own(snapshots, op.beforeHandle),
+      new Set(),
+    );
+  } else equal(input, {});
+  return {
+    ...c,
+    actor: fixed
+      ? c[fixed[0]]
+      : op.id === "MODHTTP.private-sanction-rest"
+        ? c.actor
+        : c.target,
+    input,
+    jwtRole: op.context.jwtRole,
+    isolation: op.context.isolation,
+  };
+}
+function sanctionDecision(op, before, c) {
+  if (op.id === "sanction.admin-downgrade-retry")
+    equal(
+      find(before, "public.platform_roles", (r) => r.user_id === c.actor).role,
+      "moderator",
+    );
+  const i = c.input,
+    fixed = SANCTIONS[op.id],
+    denied = { code: "42501", message: "Moderation unavailable" };
+  // Live gate/account/role/conflict/target-role and required ban role FIRST.
+  if (
+    !readActor(before, c.actor, c.jwtRole, c.isolation) ||
+    !reportAllowed(before, c.actor, c.report)
+  )
+    return { result: denied, changed: {} };
+  assertEarlyOperator(before, c.actor);
+  const r = find(before, "private.safety_reports", (r) => r.id === c.report);
+  const targets = before["public.accounts"].filter((r) => r.id === c.target);
+  if (
+    r.target_type !== "user" ||
+    r.target_id !== c.target ||
+    targets.length !== 1 ||
+    before["public.platform_roles"].some((r) => r.user_id === c.target) ||
+    (i.p_action === "ban" &&
+      find(before, "public.platform_roles", (r) => r.user_id === c.actor)
+        .role !== "admin")
+  )
+    return { result: denied, changed: {} };
+  const reason = i.p_reason.trim(),
+    fingerprint =
+      "account:" +
+      createHash("md5")
+        .update(
+          `[${[c.report, i.p_expected_case_revision, i.p_action, reason].map((v) => JSON.stringify(v)).join(", ")}]`,
+        )
+        .digest("hex");
+  const requests = before["private.moderation_requests"].filter(
+    (r) => r.operator_id === c.actor && r.request_id === i.p_request_id,
+  );
+  check(requests.length <= 1);
+  if (fixed[4]) check(requests.length === 1);
+  else check(requests.length === 0);
+  if (requests.length) {
+    const prior = requests[0];
+    if (prior.fingerprint !== fingerprint)
+      return { result: denied, changed: {} };
+    const saved = before["private.account_sanctions"].filter(
+      (r) =>
+        r.operator_id === c.actor &&
+        r.request_id === i.p_request_id &&
+        r.report_id === c.report,
+    );
+    check(saved.length <= 1);
+    if (saved.length !== 1) return { result: denied, changed: {} };
+    equal(
+      saved[0].new_status,
+      i.p_action === "suspend" ? "suspended" : "banned",
+    );
+    return {
+      changed: {},
+      result: [
+        {
+          case_state: prior.result_state,
+          revision: prior.result_revision,
+          account_status: saved[0].new_status,
+        },
+      ],
+    };
+  }
+  bindUuid("client_uuid_v4", i.p_request_id, before, new Set());
+  const cases = before["private.moderation_cases"].filter(
+    (r) => r.report_id === c.report,
+  );
+  check(cases.length <= 1);
+  const old = cases[0],
+    target = targets[0];
+  if (
+    !old ||
+    old.state !== "in_review" ||
+    old.revision !== i.p_expected_case_revision ||
+    (i.p_action === "suspend"
+      ? target.status !== "active"
+      : !["active", "suspended"].includes(target.status))
+  )
+    return { result: denied, changed: {} };
+  const memberships = before["public.university_memberships"].filter(
+    (r) => r.user_id === c.target,
+  );
+  check(memberships.length <= 1);
+  return {
+    reason,
+    fingerprint,
+    old,
+    target,
+    campus: memberships[0]?.university_id ?? null,
+    nextStatus: i.p_action === "suspend" ? "suspended" : "banned",
+    result: [
+      {
+        case_state: "closed",
+        revision: old.revision + 1,
+        account_status: i.p_action === "suspend" ? "suspended" : "banned",
+      },
+    ],
+  };
+}
+function sanctionChanges(op, after, c, d) {
+  const before = own(snapshots, op.beforeHandle),
+    i = c.input,
+    sanctionTable = "private.account_sanctions",
+    auditTable = "private.moderation_audit";
+  const candidate = added(
+    before,
+    after,
+    sanctionTable,
+    (r) => r.operator_id === c.actor && r.request_id === i.p_request_id,
+    1,
+  )[0];
+  const used = new Set([i.p_request_id]);
+  const sanctionId = bindUuid("database_uuid", candidate.id, before, used);
+  const sanctionTime = bindTime(
+    "clock_timestamp",
+    candidate.occurred_at,
+    op.bounds,
+  );
+  const row = {
+    id: sanctionId,
+    report_id: c.report,
+    subject_type: "user",
+    subject_id: c.target,
+    operator_id: c.actor,
+    request_id: i.p_request_id,
+    action: i.p_action,
+    previous_status: d.target.status,
+    new_status: d.nextStatus,
+    subject_campus_id: d.campus,
+    reason: d.reason,
+    occurred_at: sanctionTime,
+  };
+  equal(candidate, row);
+  const oldIds = new Set(before[auditTable].map((r) => r.id));
+  check(oldIds.size === before[auditTable].length);
+  const auditCandidate = added(
+    before,
+    after,
+    auditTable,
+    (r) => !oldIds.has(r.id),
+    1,
+  )[0];
+  const auditId = bindUuid("database_uuid", auditCandidate.id, before, used);
+  const auditTime = bindTime(
+    "clock_timestamp",
+    auditCandidate.occurred_at,
+    op.bounds,
+  );
+  const audit = {
+    id: auditId,
+    occurred_at: auditTime,
+    operator_id: c.actor,
+    action: i.p_action,
+    report_id: c.report,
+    subject_target_type: "user",
+    subject_target_id: c.target,
+    subject_campus_id: d.campus,
+    request_id: i.p_request_id,
+    previous_state: d.old.state,
+    new_state: "closed",
+    previous_revision: d.old.revision,
+    new_revision: d.old.revision + 1,
+    reason: d.reason,
+    duplicate_report_id: null,
+    page_report_ids: null,
+    page_count: null,
+    sanction_id: sanctionId,
+    previous_account_status: d.target.status,
+    new_account_status: d.nextStatus,
+    hangout_disable_id: null,
+    previous_hangout_disabled: null,
+    new_hangout_disabled: null,
+  };
+  equal(auditCandidate, audit);
+  return {
+    [sanctionTable]: insertion(before, sanctionTable, [row]),
+    [auditTable]: insertion(before, auditTable, [audit]),
+    "public.accounts": replace(
+      before,
+      "public.accounts",
+      (r) => r.id === c.target,
+      (r) => ({ ...r, status: d.nextStatus }),
+    ),
+    "private.moderation_cases": replace(
+      before,
+      "private.moderation_cases",
+      (r) => r.report_id === c.report,
+      () => ({
+        report_id: c.report,
+        state: "closed",
+        revision: d.old.revision + 1,
+        note: d.reason,
+        disposition: "action_taken",
+        duplicate_report_id: null,
+        sanction_id: sanctionId,
+        hangout_disable_id: null,
+      }),
+    ),
+    "private.moderation_requests": insertion(
+      before,
+      "private.moderation_requests",
+      [
+        {
+          operator_id: c.actor,
+          request_id: i.p_request_id,
+          fingerprint: d.fingerprint,
+          report_id: c.report,
+          result_state: "closed",
+          result_revision: d.old.revision + 1,
+        },
+      ],
+    ),
+  };
+}
+function sanctionWriter(op, after, c) {
+  const before = own(snapshots, op.beforeHandle);
+  if (op.id === "sanction.gate-enable")
+    return {
+      "private.moderation_feature_gate": replace(
+        before,
+        "private.moderation_feature_gate",
+        (r) => r.singleton === true,
+        () => ({ singleton: true, enabled: true }),
+      ),
+    };
+  equal(op.id, "sanction.membership");
+  const auth = find(before, "auth.users", (r) => r.id === c.target);
+  const campus = find(
+    before,
+    "public.universities",
+    (r) => r.slug === "unc-chapel-hill",
+  );
+  const observed = find(
+    after,
+    "public.university_memberships",
+    (r) => r.user_id === c.target,
+  );
+  const verified = bindTime(
+    "transaction_timestamp",
+    observed.verified_at,
+    op.bounds,
+  );
+  const existing = before["public.university_memberships"].filter(
+    (r) => r.user_id === c.target,
+  );
+  check(existing.length <= 1);
+  const row = {
+    user_id: c.target,
+    university_id: campus.id,
+    verified_at: verified,
+    verification_email: auth.email,
+    created_at:
+      existing[0]?.created_at ??
+      bindTime("transaction_timestamp", observed.created_at, op.bounds),
+  };
+  if (!existing.length) equal(row.created_at, verified);
+  return {
+    "public.universities": replace(
+      before,
+      "public.universities",
+      (r) => r.id === campus.id,
+      (r) => ({ ...r, allowed_email_domains: ["unc.edu"] }),
+    ),
+    "public.university_memberships": existing.length
+      ? replace(
+          before,
+          "public.university_memberships",
+          (r) => r.user_id === c.target,
+          () => row,
+        )
+      : insertion(before, "public.university_memberships", [row]),
+  };
+}
+// HTTP result qualification preserves literal assertion strength. Raw results stay
+// private. Extra sourceDenied body fields are not invented exact-body assertions.
+function sanctionHttpResult(op, actual, expected) {
+  keys(actual, ["status", "body"]);
+  if (ENFORCEMENT_IDS.includes(op.id)) {
+    if (op.id === "MODHTTP.private-sanction-rest") {
+      equal(actual.status, 404);
+      return { status: 404 };
+    }
+    if (
+      [
+        "MODHTTP.account-enforcement.retained-ids",
+        "MODHTTP.account-enforcement.report",
+      ].includes(op.id)
+    ) {
+      check([401, 403].includes(actual.status));
+      equal(actual.body?.code, "42501");
+      return { status: actual.status, code: "42501" };
+    }
+    equal(actual.status, 200);
+    equal(actual.body, expected);
+    return { status: 200, body: clone(expected) };
+  }
+  if (Array.isArray(expected)) {
+    equal(actual.status, 200);
+    equal(actual.body, expected);
+    return { status: 200, body: clone(expected) };
+  }
+  check([401, 403].includes(actual.status));
+  equal(actual.body?.code, expected.code);
+  equal(actual.body?.message, expected.message);
+  return {
+    status: actual.status,
+    code: expected.code,
+    message: expected.message,
+  };
+}
+function verifySanctionOperation(op, afterHandle, actualResult) {
+  const before = own(snapshots, op.beforeHandle),
+    after = own(snapshots, afterHandle),
+    c = sanctionContext(op);
+  if (SANCTION_WRITERS.includes(op.id))
+    return assertExact(
+      op.beforeHandle,
+      afterHandle,
+      sanctionWriter(op, after, c),
+      actualResult,
+      "",
+    );
+  if (ENFORCEMENT_IDS.includes(op.id)) {
+    if (
+      [
+        "MODHTTP.account-enforcement.retained-ids",
+        "MODHTTP.account-enforcement.report",
+      ].includes(op.id)
+    )
+      equal(
+        find(before, "private.safety_feature_gate", (r) => r.singleton === true)
+          .enabled,
+        true,
+      );
+    if (op.id !== "MODHTTP.private-sanction-rest")
+      equal(
+        find(before, "public.accounts", (r) => r.id === c.target).status,
+        "suspended",
+      );
+    const expected =
+      op.id === "MODHTTP.account-enforcement.access-state" ? "restricted" : [];
+    const projection = sanctionHttpResult(op, actualResult, expected);
+    return assertExact(
+      op.beforeHandle,
+      afterHandle,
+      {},
+      projection,
+      projection,
+    );
+  }
+  const d = sanctionDecision(op, before, c),
+    projection = sanctionHttpResult(op, actualResult, d.result);
+  return assertExact(
+    op.beforeHandle,
+    afterHandle,
+    d.old ? sanctionChanges(op, after, c, d) : d.changed,
+    projection,
+    projection,
+  );
+}
+function sanctionSequenceOperation(
+  planHandle,
+  beforeHandle,
+  bounds,
+  sourceHandle,
+  setup,
+  bindings,
+) {
+  const p = own(plans, planHandle);
+  equal(p.family, "focused-sanction-sequence");
+  own(sources, sourceHandle);
+  const c = setupContext({ beforeHandle, context: setup });
+  check(c.lane === "http");
+  equal(
+    find(
+      own(snapshots, beforeHandle),
+      "private.safety_feature_gate",
+      (r) => r.singleton === true,
+    ).enabled,
+    true,
+  );
+  keys(bindings, ["suspend", "reopen", "ban", "report"]);
+  const used = new Set();
+  for (const id of Object.values(bindings))
+    bindUuid("client_uuid_v4", id, own(snapshots, beforeHandle), used);
+  const row = find(
+    own(snapshots, beforeHandle),
+    "private.moderation_cases",
+    (r) => r.report_id === c.report,
+  );
+  equal(row, {
+    report_id: c.report,
+    state: "in_review",
+    revision: 2,
+    note: "Reviewed evidence",
+    disposition: null,
+    duplicate_report_id: null,
+    sanction_id: null,
+    hangout_disable_id: null,
+  });
+  return opaque(
+    sequences,
+    freeze({
+      id: p.id,
+      beforeHandle,
+      bounds,
+      sourceHandle,
+      setup: clone(setup),
+      bindings: clone(bindings),
+    }),
+  );
+}
+function verifySanctionSequence(sequenceHandle, observations) {
+  const s = own(sequences, sequenceHandle),
+    steps = SANCTION_STEPS[s.id];
+  check(steps);
+  check(Array.isArray(observations) && observations.length === steps.length);
+  let current = s.beforeHandle,
+    lastResult;
+  const c = setupContext({ beforeHandle: current, context: s.setup });
+  for (let n = 0; n < steps.length; n++) {
+    const id = steps[n],
+      observation = observations[n];
+    keys(observation, ["afterHandle", "result"]);
+    let plan, context;
+    if (id === "http.reopen") {
+      plan = transitionModelPlans[id];
+      context = {
+        setup: s.setup,
+        input: {
+          p_report_id: c.report,
+          p_request_id: s.bindings.reopen,
+          p_expected_revision: 3,
+          p_action: "reopen",
+          p_note: "Further review",
+        },
+        jwtRole: "authenticated",
+        isolation: "read committed",
+      };
+    } else if (id === "second-downgrade") {
+      plan = setupModelPlans[id];
+      context = s.setup;
+    } else {
+      plan = sanctionModelPlans[id] ?? enforcementModelPlans[id];
+      const f = SANCTIONS[id];
+      const input = f
+        ? {
+            p_report_id: c.report,
+            p_request_id: s.bindings[f[0] === "second" ? "ban" : "suspend"],
+            p_expected_case_revision: f[1],
+            p_action: f[2],
+            p_reason: f[3],
+          }
+        : id === "MODHTTP.account-enforcement.report"
+          ? {
+              p_request_id: s.bindings.report,
+              p_target_mode: "user",
+              p_target_id: c.reporter,
+              p_category: "harassment",
+            }
+          : {};
+      context = {
+        setup: s.setup,
+        input,
+        jwtRole: "authenticated",
+        isolation: "read committed",
+      };
+    }
+    lastResult = verifyOperation(
+      operation(plan, current, s.bounds, s.sourceHandle, context),
+      observation.afterHandle,
+      observation.result,
+    );
+    current = observation.afterHandle;
+  }
+  const final = own(snapshots, current);
+  equal(
+    find(final, "public.accounts", (r) => r.id === c.target).status,
+    "banned",
+  );
+  equal(
+    find(final, "public.platform_roles", (r) => r.user_id === c.second).role,
+    "moderator",
+  );
+  assertEarlyOperator(final, c.actor);
+  assertEarlyOperator(final, c.second);
+  equal(
+    final["private.moderation_audit"].filter(
+      (r) => r.report_id === c.report && r.action === "ban",
+    ).length,
+    1,
+  );
+  return lastResult;
+}
+
 function sequenceOperation(
   planHandle,
   beforeHandle,
@@ -3429,6 +4150,7 @@ function memoryExamples(bytes) {
   );
   groups += readMemoryExamples(source, bounds, time, later, reports, hung);
   groups += transitionMemoryExamples(source, bounds, time, later, reports);
+  groups += sanctionMemoryExamples(source, bounds, time, later, reports);
   return freeze({
     available: true,
     classification: "memory-only",
@@ -4915,5 +5637,771 @@ function transitionMemoryExamples(source, bounds, time, later, sqlReports) {
       httpMade.length === 9 &&
       preciseTime(later) >= preciseTime(time),
   );
+  return groups;
+}
+
+// Owned manufactured observations, independently written from finite source rows.
+function sanctionMemoryExamples(source, bounds, time, later, sqlReports) {
+  let groups = 0,
+    ordinal = 0;
+  const tested = (fn) => {
+    fn();
+    groups++;
+  };
+  const rejected = (fn) => {
+    let failed = false;
+    try {
+      fn();
+    } catch {
+      failed = true;
+    }
+    check(failed);
+    groups++;
+  };
+  const setup = {
+    lane: "http",
+    actor: SQL_IDS.actor,
+    reporter: SQL_IDS.reporter,
+    target: SQL_IDS.target,
+    second: SQL_IDS.second,
+    report: SQL_IDS.report,
+    selfFiledReport: SQL_IDS.report2,
+    selfTargetReport: SQL_IDS.report3,
+    ownHangoutReport: SQL_IDS.hangoutReport,
+    hangout: SQL_IDS.hangout,
+  };
+  const bindings = {
+    suspend: "67000000-0000-4000-8000-000000000001",
+    reopen: "67000000-0000-4000-8000-000000000002",
+    ban: "67000000-0000-4000-8000-000000000003",
+    report: "67000000-0000-4000-8000-000000000004",
+  };
+  const denied = {
+    status: 403,
+    body: { code: "42501", message: "Moderation unavailable", hint: null },
+  };
+  const baseline = clone(sqlReports);
+  for (const r of baseline["auth.users"]) {
+    r.raw_user_meta_data = r.id === SQL_IDS.reporter ? { role: "admin" } : {};
+    r.raw_app_meta_data = { provider: "email", providers: ["email"] };
+  }
+  baseline["private.moderation_feature_gate"][0].enabled = true;
+  baseline["private.safety_feature_gate"][0].enabled = true;
+  baseline["private.moderation_cases"] = [
+    {
+      report_id: setup.report,
+      state: "in_review",
+      revision: 2,
+      note: "Reviewed evidence",
+      disposition: null,
+      duplicate_report_id: null,
+      sanction_id: null,
+      hangout_disable_id: null,
+    },
+  ];
+  const newId = () =>
+    `68000000-0000-1000-8000-${String(++ordinal).padStart(12, "0")}`;
+  const input = (id) => {
+    const f = SANCTIONS[id];
+    return f
+      ? {
+          p_report_id: setup.report,
+          p_request_id: bindings[f[0] === "second" ? "ban" : "suspend"],
+          p_expected_case_revision: f[1],
+          p_action: f[2],
+          p_reason: f[3],
+        }
+      : id === "MODHTTP.account-enforcement.report"
+        ? {
+            p_request_id: bindings.report,
+            p_target_mode: "user",
+            p_target_id: setup.reporter,
+            p_category: "harassment",
+          }
+        : {};
+  };
+  const context = (id) => ({
+    setup,
+    input: input(id),
+    jwtRole: "authenticated",
+    isolation: "read committed",
+  });
+  const verify = (id, before, made, override = null) =>
+    verifyOperation(
+      operation(
+        sanctionModelPlans[id] ?? enforcementModelPlans[id],
+        snapshot(before),
+        bounds,
+        source,
+        override ?? context(id),
+      ),
+      snapshot(made.after),
+      made.result,
+    );
+  const manufacture = (id, before) => {
+    const after = clone(before);
+    if (id === "sanction.membership") {
+      const campus = after["public.universities"][0];
+      campus.allowed_email_domains = ["unc.edu"];
+      const row = after["public.university_memberships"].find(
+        (r) => r.user_id === setup.target,
+      );
+      const email = after["auth.users"].find(
+        (r) => r.id === setup.target,
+      ).email;
+      if (row)
+        Object.assign(row, {
+          university_id: campus.id,
+          verified_at: time,
+          verification_email: email,
+        });
+      else
+        after["public.university_memberships"].push({
+          user_id: setup.target,
+          university_id: campus.id,
+          verified_at: time,
+          verification_email: email,
+          created_at: time,
+        });
+      return { after, result: "" };
+    }
+    if (id === "sanction.gate-enable") {
+      after["private.moderation_feature_gate"][0].enabled = true;
+      return { after, result: "" };
+    }
+    if (ENFORCEMENT_IDS.includes(id))
+      return {
+        after,
+        result:
+          id === "MODHTTP.private-sanction-rest"
+            ? { status: 404, body: { message: "opaque" } }
+            : [
+                  "MODHTTP.account-enforcement.retained-ids",
+                  "MODHTTP.account-enforcement.report",
+                ].includes(id)
+              ? {
+                  status: 401,
+                  body: { code: "42501", message: "Source-specific denial" },
+                }
+              : {
+                  status: 200,
+                  body:
+                    id === "MODHTTP.account-enforcement.access-state"
+                      ? "restricted"
+                      : [],
+                },
+      };
+    if (id === "http.reopen") {
+      after["private.moderation_cases"][0] = {
+        report_id: setup.report,
+        state: "in_review",
+        revision: 4,
+        note: "Further review",
+        disposition: null,
+        duplicate_report_id: null,
+        sanction_id: null,
+        hangout_disable_id: null,
+      };
+      const fingerprint = createHash("md5")
+        .update(
+          `[${[setup.report, 3, "reopen", "Further review", null].map((v) => JSON.stringify(v)).join(", ")}]`,
+        )
+        .digest("hex");
+      after["private.moderation_requests"].push({
+        operator_id: setup.second,
+        request_id: bindings.reopen,
+        fingerprint,
+        report_id: setup.report,
+        result_state: "in_review",
+        result_revision: 4,
+      });
+      const campus =
+        before["public.university_memberships"].find(
+          (r) => r.user_id === setup.target,
+        )?.university_id ?? null;
+      after["private.moderation_audit"].push({
+        id: newId(),
+        occurred_at: time,
+        operator_id: setup.second,
+        action: "reopen",
+        report_id: setup.report,
+        subject_target_type: "user",
+        subject_target_id: setup.target,
+        subject_campus_id: campus,
+        request_id: bindings.reopen,
+        previous_state: "closed",
+        new_state: "in_review",
+        previous_revision: 3,
+        new_revision: 4,
+        reason: "Further review",
+        duplicate_report_id: null,
+        page_report_ids: null,
+        page_count: null,
+        sanction_id: null,
+        previous_account_status: null,
+        new_account_status: null,
+        hangout_disable_id: null,
+        previous_hangout_disabled: null,
+        new_hangout_disabled: null,
+      });
+      return { after, result: [{ case_state: "in_review", revision: 4 }] };
+    }
+    if (id === "second-downgrade") {
+      after["public.platform_roles"].find(
+        (r) => r.user_id === setup.second,
+      ).role = "moderator";
+      return { after, result: "" };
+    }
+    if (
+      [
+        "sanction.nonoperator",
+        "sanction.moderator-ban",
+        "sanction.changed-retry",
+        "sanction.admin-downgrade-retry",
+      ].includes(id)
+    )
+      return { after, result: clone(denied) };
+    if (id === "sanction.normalized-retry")
+      return {
+        after,
+        result: {
+          status: 200,
+          body: [
+            { case_state: "closed", revision: 3, account_status: "suspended" },
+          ],
+        },
+      };
+    const actor = id === "sanction.suspend" ? setup.actor : setup.second,
+      revision = id === "sanction.suspend" ? 3 : 5,
+      action = id === "sanction.suspend" ? "suspend" : "ban",
+      status = id === "sanction.suspend" ? "suspended" : "banned",
+      reason = id === "sanction.suspend" ? "Local decision" : "Decision",
+      request = action === "suspend" ? bindings.suspend : bindings.ban;
+    const account = after["public.accounts"].find((r) => r.id === setup.target),
+      previous = account.status;
+    const campus =
+      before["public.university_memberships"].find(
+        (r) => r.user_id === setup.target,
+      )?.university_id ?? null;
+    const sanction = newId();
+    after["private.account_sanctions"].push({
+      id: sanction,
+      report_id: setup.report,
+      subject_type: "user",
+      subject_id: setup.target,
+      operator_id: actor,
+      request_id: request,
+      action,
+      previous_status: previous,
+      new_status: status,
+      subject_campus_id: campus,
+      reason,
+      occurred_at: time,
+    });
+    account.status = status;
+    after["private.moderation_cases"][0] = {
+      report_id: setup.report,
+      state: "closed",
+      revision,
+      note: reason,
+      disposition: "action_taken",
+      duplicate_report_id: null,
+      sanction_id: sanction,
+      hangout_disable_id: null,
+    };
+    const fingerprint =
+      "account:" +
+      createHash("md5")
+        .update(
+          `[${[setup.report, revision - 1, action, reason].map((v) => JSON.stringify(v)).join(", ")}]`,
+        )
+        .digest("hex");
+    after["private.moderation_requests"].push({
+      operator_id: actor,
+      request_id: request,
+      fingerprint,
+      report_id: setup.report,
+      result_state: "closed",
+      result_revision: revision,
+    });
+    after["private.moderation_audit"].push({
+      id: newId(),
+      occurred_at: time,
+      operator_id: actor,
+      action,
+      report_id: setup.report,
+      subject_target_type: "user",
+      subject_target_id: setup.target,
+      subject_campus_id: campus,
+      request_id: request,
+      previous_state: "in_review",
+      new_state: "closed",
+      previous_revision: revision - 1,
+      new_revision: revision,
+      reason,
+      duplicate_report_id: null,
+      page_report_ids: null,
+      page_count: null,
+      sanction_id: sanction,
+      previous_account_status: previous,
+      new_account_status: status,
+      hangout_disable_id: null,
+      previous_hangout_disabled: null,
+      new_hangout_disabled: null,
+    });
+    return {
+      after,
+      result: {
+        status: 200,
+        body: [{ case_state: "closed", revision, account_status: status }],
+      },
+    };
+  };
+  const suspended = manufacture("sanction.suspend", baseline);
+  tested(() => verify("sanction.suspend", baseline, suspended));
+  for (const id of ["sanction.nonoperator", "sanction.moderator-ban"])
+    tested(() => verify(id, baseline, manufacture(id, baseline)));
+  for (const id of ["sanction.normalized-retry", "sanction.changed-retry"])
+    tested(() => verify(id, suspended.after, manufacture(id, suspended.after)));
+  rejected(() =>
+    verify(
+      "sanction.changed-retry",
+      suspended.after,
+      manufacture("sanction.normalized-retry", suspended.after),
+    ),
+  );
+  rejected(() =>
+    verify("sanction.normalized-retry", suspended.after, {
+      after: clone(suspended.after),
+      result: denied,
+    }),
+  );
+  for (const [table, field, value] of [
+    ["public.accounts", "status", "active"],
+    ["private.moderation_cases", "state", "in_review"],
+    ["private.moderation_cases", "revision", 4],
+    ["private.moderation_cases", "disposition", "no_action"],
+    ["private.moderation_cases", "note", "wrong"],
+    ["private.moderation_cases", "sanction_id", setup.target],
+    ["private.moderation_requests", "fingerprint", "wrong"],
+    ["private.moderation_requests", "result_state", "in_review"],
+    ["private.moderation_requests", "result_revision", 2],
+    ["private.moderation_requests", "operator_id", setup.reporter],
+    ...SCHEMA["private.account_sanctions"]
+      .filter((k) => !["id", "occurred_at"].includes(k))
+      .map((k) => ["private.account_sanctions", k, null]),
+    ...SCHEMA["private.moderation_audit"]
+      .filter((k) => !["id", "occurred_at"].includes(k))
+      .map((k) => ["private.moderation_audit", k, "wrong"]),
+  ]) {
+    const bad = clone(suspended);
+    const row = bad.after[table].find((r) =>
+      table === "public.accounts" ? r.id === setup.target : true,
+    );
+    row[field] = value;
+    rejected(() => verify("sanction.suspend", baseline, bad));
+  }
+  for (const table of [
+    "private.account_sanctions",
+    "private.moderation_audit",
+  ]) {
+    for (const id of [
+      setup.actor,
+      bindings.suspend,
+      "bad-uuid",
+      suspended.after["private.account_sanctions"][0].id,
+    ]) {
+      if (
+        table === "private.account_sanctions" &&
+        id === suspended.after[table][0].id
+      )
+        continue;
+      const bad = clone(suspended);
+      bad.after[table][0].id = id;
+      rejected(() => verify("sanction.suspend", baseline, bad));
+    }
+    for (const timestamp of [
+      "bad-time",
+      "2026-09-29T11:59:59.123456Z",
+      "2026-09-29T12:00:02.123456Z",
+    ]) {
+      const bad = clone(suspended);
+      bad.after[table][0].occurred_at = timestamp;
+      rejected(() => verify("sanction.suspend", baseline, bad));
+    }
+    for (const kind of ["extra-column", "duplicate-row", "missing-row"]) {
+      const bad = clone(suspended);
+      if (kind === "extra-column") bad.after[table][0].unexpected = true;
+      if (kind === "duplicate-row")
+        bad.after[table].push(clone(bad.after[table][0]));
+      if (kind === "missing-row") bad.after[table] = [];
+      rejected(() => verify("sanction.suspend", baseline, bad));
+    }
+  }
+  // Each clock is independently bounded; no invented clock equality/order.
+  const badTimeOrder = clone(suspended);
+  badTimeOrder.after["private.account_sanctions"][0].occurred_at = later;
+  tested(() => verify("sanction.suspend", baseline, badTimeOrder));
+  for (const result of [
+    { status: 201, body: suspended.result.body },
+    {
+      status: 200,
+      body: [{ case_state: "closed", revision: 3, account_status: "banned" }],
+    },
+    { status: 403, body: { code: "42501", message: "other" } },
+  ])
+    rejected(() =>
+      verify("sanction.suspend", baseline, { after: suspended.after, result }),
+    );
+  const unexplained = clone(suspended);
+  unexplained.after["private.people_feature_gate"][0].enabled = true;
+  rejected(() => verify("sanction.suspend", baseline, unexplained));
+  for (const loss of [
+    "gate",
+    "suspended",
+    "banned",
+    "role",
+    "target-role",
+    "self-filed",
+    "self-target",
+  ]) {
+    const b = clone(suspended.after);
+    if (loss === "gate")
+      b["private.moderation_feature_gate"][0].enabled = false;
+    if (["suspended", "banned"].includes(loss))
+      b["public.accounts"].find((r) => r.id === setup.actor).status = loss;
+    if (loss === "role")
+      b["public.platform_roles"] = b["public.platform_roles"].filter(
+        (r) => r.user_id !== setup.actor,
+      );
+    if (loss === "target-role")
+      b["public.platform_roles"].push({
+        user_id: setup.target,
+        role: "admin",
+        created_at: time,
+      });
+    if (loss === "self-filed")
+      b["private.safety_reports"][0].reporter_id = setup.actor;
+    if (loss === "self-target")
+      b["private.safety_reports"][0].target_id = setup.actor;
+    tested(() =>
+      verify("sanction.normalized-retry", b, { after: b, result: denied }),
+    );
+    rejected(() =>
+      verify(
+        "sanction.normalized-retry",
+        b,
+        manufacture("sanction.normalized-retry", b),
+      ),
+    );
+  }
+  const replayCurrentChanged = clone(suspended.after);
+  replayCurrentChanged["public.accounts"].find(
+    (r) => r.id === setup.target,
+  ).status = "banned";
+  tested(() =>
+    verify(
+      "sanction.normalized-retry",
+      replayCurrentChanged,
+      manufacture("sanction.normalized-retry", replayCurrentChanged),
+    ),
+  );
+  const missingSaved = clone(suspended.after);
+  missingSaved["private.account_sanctions"] = [];
+  tested(() =>
+    verify("sanction.normalized-retry", missingSaved, {
+      after: missingSaved,
+      result: denied,
+    }),
+  );
+  for (const field of ["jwtRole", "isolation"]) {
+    const ctx = context("sanction.suspend");
+    ctx[field] = "wrong";
+    rejected(() => verify("sanction.suspend", baseline, suspended, ctx));
+  }
+  const wrongInput = context("sanction.suspend");
+  wrongInput.input.p_expected_case_revision = 4;
+  rejected(() => verify("sanction.suspend", baseline, suspended, wrongInput));
+  for (const state of ["closed", "open"]) {
+    const b = clone(baseline);
+    b["private.moderation_cases"][0].state = state;
+    tested(() => verify("sanction.suspend", b, { after: b, result: denied }));
+  }
+  const noCampus = clone(baseline);
+  noCampus["public.university_memberships"] = noCampus[
+    "public.university_memberships"
+  ].filter((r) => r.user_id !== setup.target);
+  tested(() =>
+    verify(
+      "sanction.suspend",
+      noCampus,
+      manufacture("sanction.suspend", noCampus),
+    ),
+  );
+  for (const id of ENFORCEMENT_IDS) {
+    const made = manufacture(id, suspended.after);
+    tested(() => verify(id, suspended.after, made));
+    tested(() =>
+      equal(describeModelPlan(enforcementModelPlans[id]).componentId, id),
+    );
+    rejected(() =>
+      verify(id, suspended.after, {
+        ...made,
+        result: { status: 200, body: [{ status: "suspended" }] },
+      }),
+    );
+    const bad = clone(made);
+    bad.after["private.moderation_audit"].push(
+      clone(suspended.after["private.moderation_audit"][0]),
+    );
+    rejected(() => verify(id, suspended.after, bad));
+    if (id.includes("retained-ids") || id.endsWith(".report")) {
+      for (const result of [
+        { status: 400, body: { code: "42501" } },
+        { status: 403, body: { code: "P0001" } },
+      ])
+        rejected(() => verify(id, suspended.after, { ...made, result }));
+      tested(() =>
+        verify(id, suspended.after, {
+          ...made,
+          result: {
+            status: 403,
+            body: { code: "42501", arbitrary: { unasserted: true } },
+          },
+        }),
+      );
+    }
+  }
+  for (const id of SANCTION_WRITERS) {
+    const b = clone(baseline);
+    b["private.moderation_feature_gate"][0].enabled = false;
+    tested(() => verify(id, b, manufacture(id, b)));
+    const bad = manufacture(id, b);
+    bad.after["private.safety_feature_gate"][0].enabled = false;
+    rejected(() => verify(id, b, bad));
+  }
+  const missingMember = clone(baseline);
+  missingMember["public.university_memberships"] = missingMember[
+    "public.university_memberships"
+  ].filter((r) => r.user_id !== setup.target);
+  tested(() =>
+    verify(
+      "sanction.membership",
+      missingMember,
+      manufacture("sanction.membership", missingMember),
+    ),
+  );
+  const existingMember = clone(baseline);
+  existingMember["public.university_memberships"].find(
+    (r) => r.user_id === setup.target,
+  ).created_at = "2026-09-28T12:00:00.123456Z";
+  tested(() =>
+    verify(
+      "sanction.membership",
+      existingMember,
+      manufacture("sanction.membership", existingMember),
+    ),
+  );
+  const sequenceBefore = clone(baseline);
+  sequenceBefore["private.moderation_feature_gate"][0].enabled = false;
+  const sequence = sanctionSequenceOperation(
+    sanctionSequencePlans["focused-sanctions"],
+    snapshot(sequenceBefore),
+    bounds,
+    source,
+    setup,
+    bindings,
+  );
+  let raw = sequenceBefore;
+  const observations = [],
+    history = [];
+  for (const id of SANCTION_STEPS["focused-sanctions"]) {
+    const made = manufacture(id, raw);
+    history.push({ id, before: raw, made });
+    observations.push({
+      afterHandle: snapshot(made.after),
+      result: made.result,
+    });
+    raw = made.after;
+  }
+  tested(() => verifySanctionSequence(sequence, observations));
+  rejected(() => verifySanctionSequence(sequence, []));
+  rejected(() => verifySanctionSequence(sequence, observations.slice(0, -1)));
+  rejected(() =>
+    verifySanctionSequence(sequence, observations.slice().reverse()),
+  );
+  const reopened = history.find((r) => r.id === "http.reopen");
+  tested(() =>
+    equal(
+      reopened.made.after["private.account_sanctions"],
+      reopened.before["private.account_sanctions"],
+    ),
+  );
+  tested(() =>
+    equal(
+      reopened.made.after["public.accounts"],
+      reopened.before["public.accounts"],
+    ),
+  );
+  tested(() =>
+    equal(reopened.made.after["private.moderation_cases"][0].sanction_id, null),
+  );
+  const banned = history.find((r) => r.id === "sanction.admin-ban");
+  tested(() => verify("sanction.admin-ban", banned.before, banned.made));
+  const banBad = clone(banned.made);
+  banBad.after["private.moderation_audit"].push(
+    clone(banBad.after["private.moderation_audit"].at(-1)),
+  );
+  rejected(() => verify("sanction.admin-ban", banned.before, banBad));
+  tested(() =>
+    verify("sanction.admin-ban-retry", banned.made.after, {
+      after: banned.made.after,
+      result: banned.made.result,
+    }),
+  );
+  for (const loss of [
+    "gate",
+    "suspended",
+    "banned",
+    "role",
+    "target-role",
+    "self-filed",
+    "self-target",
+  ]) {
+    const b = clone(banned.made.after);
+    if (loss === "gate")
+      b["private.moderation_feature_gate"][0].enabled = false;
+    if (["suspended", "banned"].includes(loss))
+      b["public.accounts"].find((r) => r.id === setup.second).status = loss;
+    if (loss === "role")
+      b["public.platform_roles"] = b["public.platform_roles"].filter(
+        (r) => r.user_id !== setup.second,
+      );
+    if (loss === "target-role")
+      b["public.platform_roles"].push({
+        user_id: setup.target,
+        role: "admin",
+        created_at: time,
+      });
+    if (loss === "self-filed")
+      b["private.safety_reports"][0].reporter_id = setup.second;
+    if (loss === "self-target")
+      b["private.safety_reports"][0].target_id = setup.second;
+    tested(() =>
+      verify("sanction.admin-ban-retry", b, { after: b, result: denied }),
+    );
+    rejected(() =>
+      verify("sanction.admin-ban-retry", b, {
+        after: b,
+        result: banned.made.result,
+      }),
+    );
+  }
+  for (const safety of ["disabled", "missing"]) {
+    const b = clone(baseline);
+    if (safety === "missing") b["private.safety_feature_gate"] = [];
+    else b["private.safety_feature_gate"][0].enabled = false;
+    rejected(() =>
+      sanctionSequenceOperation(
+        sanctionSequencePlans["focused-sanctions"],
+        snapshot(b),
+        bounds,
+        source,
+        setup,
+        bindings,
+      ),
+    );
+    const restricted = clone(suspended.after);
+    if (safety === "missing") restricted["private.safety_feature_gate"] = [];
+    else restricted["private.safety_feature_gate"][0].enabled = false;
+    for (const id of [
+      "MODHTTP.account-enforcement.retained-ids",
+      "MODHTTP.account-enforcement.report",
+    ])
+      rejected(() => verify(id, restricted, manufacture(id, restricted)));
+  }
+  tested(() => {
+    const handle = operation(
+      enforcementModelPlans["MODHTTP.private-sanction-rest"],
+      snapshot(suspended.after),
+      bounds,
+      source,
+      context("MODHTTP.private-sanction-rest"),
+    );
+    equal(sanctionContext(own(operations, handle)).actor, setup.actor);
+  });
+  const downgrade = history.at(-1);
+  tested(() =>
+    verify("sanction.admin-downgrade-retry", downgrade.before, downgrade.made),
+  );
+  rejected(() =>
+    verify("sanction.admin-downgrade-retry", downgrade.before, {
+      after: downgrade.before,
+      result: {
+        status: 200,
+        body: [{ case_state: "closed", revision: 5, account_status: "banned" }],
+      },
+    }),
+  );
+  for (const map of [
+    sanctionModelPlans,
+    enforcementModelPlans,
+    sanctionSequencePlans,
+  ])
+    tested(() => {
+      check(Object.isFrozen(map));
+      for (const handle of Object.values(map)) {
+        check(Object.isFrozen(handle));
+        equal(Object.keys(handle), []);
+      }
+    });
+  rejected(() =>
+    sanctionSequenceOperation(
+      sanctionSequencePlans["whole39"],
+      snapshot(baseline),
+      bounds,
+      source,
+      setup,
+      bindings,
+    ),
+  );
+  const reused = { ...bindings, ban: bindings.suspend };
+  rejected(() =>
+    sanctionSequenceOperation(
+      sanctionSequencePlans["focused-sanctions"],
+      snapshot(baseline),
+      bounds,
+      source,
+      setup,
+      reused,
+    ),
+  );
+  const wrongRevision = clone(baseline);
+  wrongRevision["private.moderation_cases"][0].revision = 1;
+  rejected(() =>
+    sanctionSequenceOperation(
+      sanctionSequencePlans["focused-sanctions"],
+      snapshot(wrongRevision),
+      bounds,
+      source,
+      setup,
+      bindings,
+    ),
+  );
+  tested(() => {
+    check(
+      !modelCheckpoint.httpSequencesAvailable &&
+        !modelCheckpoint.readinessAvailable &&
+        !modelCheckpoint.retainedTeardownAvailable,
+    );
+    equal(modelCheckpoint.original219RetainedCredit, 0);
+    equal(ENFORCEMENT_IDS.length, 7);
+    equal(
+      describeModelPlan(
+        enforcementModelPlans["MODHTTP.account-enforcement.own-status"],
+      ).assertionQualification,
+      "current-source-supplemental-body-empty;historical219-unretained-zero-credit",
+    );
+  });
   return groups;
 }
