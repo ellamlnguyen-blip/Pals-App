@@ -1,5 +1,9 @@
 # NOW
 
+## Corrected prefix milestone and exact c2b prerequisite review receipt — 2026-09-29
+
+Fresh independent FULL eight-document amendment review CLEAR/no findings at `02627a7302bb0061a58fe5f73976ac499acdd5a4` against verifiedmain6a3c6922743f2efe9ff8b0f299fe2b42dba790e5. Reviewer inspected exactcorrected6e3a7d MODELS/source/helper/stdout/model/interface pins,757 author evidence, lawful opaque continuation201/membership once, source/assertion/denial qualifications and static-only incomplete gates without rerun/import/contact. Reviewed milestone/exactc2b contract accepted for coordinator task publication/documentation-only canonical integration, pending exact remote verification at this receipt. Corrected6e3a7d remains reviewed/task-published only; original1905 never separately adopted. Fresh latest-main/exact6e3a7d reconciliation must clear before NEW c2b author. Main26/source27/fixtures unexecuted; all parent/current-safety/transport/provider/consumer/runtime/security/cleanup/integration gates incomplete.
+
 ## B3c corrected pre-sanction prefix reviewed and task-published — 2026-09-29
 
 Fresh bounded correction froze `6e3a7d0f91c99aa27bb4def9d1e04f625ed94702` on `agent/TASK-021A1b3c-prefix-success-status-correction`; fresh independent complete FULL c2a/source/interface/privacy review CLEAR/no findings. Coordinator pushed and separately exact remote-verified6e3a7d; current canonical main `6a3c6922743f2efe9ff8b0f299fe2b42dba790e5` remains26. SoleP2 closed: replay/annotate/refresh independently require200, six focused status-only groups and separate check-removal evidence; additional200 hardening supplies no inherited lexical/runtime/original-case credit. Original1905 remains separately unaccepted; reachable only through corrected task history, never independently adopted or a dependent prerequisite.
