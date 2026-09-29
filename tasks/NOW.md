@@ -1,5 +1,11 @@
 # NOW
 
+## 2026-09-29 — B3c historical transport prerequisite proposed
+
+Read-only source feasibility confirms six SQL +17 historical Node constituents; old guard substitution alone is insufficient because race signatures, private exact B1 diagnostics, direct binary Storage/signed-bearer fetch, raw error outputs and unawaited cleanup differ. Proposed bounded three-file core/offline-verifier/handoff prerequisite supplies private finite known diagnostic compatibility and exact guarded binary/body-settled Storage interfaces. Independent source/contract review/publication precede author; disposable historical adaptation, moderation portions and runner/failure channel remain separate. No implementation/runtime release or source/permission/config change.
+
+Upgrade d025004 FULL review identifies four P2 corrections: namespace-qualified catalog identities/source anchors, final-boundary projected failure retention, independent Auth trigger definitions and inherited function source-default attributes. Bounded correction active, unaccepted/unpushed. State52/edge1fcd reviewed/task-published/exact remote verified and unexecuted; canonical main e706c02 source26. Proposed identity adopter5b5181c is under contract review, unpublished/undispatched. No target contact; all combined/runtime/security/cleanup/integration/parent gates remain incomplete. See `tasks/active/TASK-021A1b3c-legacy-transport-prerequisite.md`.
+
 ## 2026-09-29 — B3c state output correction reviewed and published
 
 Supersedes earlier state-adopter active status. Independent FULL static review clears state output adoption `52cb26b4154b5235789bf2d6315831bedaef0d0e` against prepared `6a4f6d796ad94ef6bfe40f9e93b12aad87069c2e`; assigned task branch is pushed and exact remote SHA verified. Together with reviewed/published common projector43e44cc, this closes the identified static common/state outgoing P1 correction gate. All24 classifications/raw54 assertions and six fixed contextual wait labels remain; author479 dormant checks are not independently rerun runtime evidence. Settlement checks PID/leader PID/application name absence conservatively; no backend_start binding or actual server-settlement proof is claimed. Main remains26 migrations, code task-only/unexecuted, accepted runtime privacy/integration gates still open.
