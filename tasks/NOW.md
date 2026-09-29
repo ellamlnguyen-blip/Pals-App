@@ -1,5 +1,11 @@
 # NOW
 
+## 2026-09-29 — B3c state output correction reviewed and published
+
+Supersedes earlier state-adopter active status. Independent FULL static review clears state output adoption `52cb26b4154b5235789bf2d6315831bedaef0d0e` against prepared `6a4f6d796ad94ef6bfe40f9e93b12aad87069c2e`; assigned task branch is pushed and exact remote SHA verified. Together with reviewed/published common projector43e44cc, this closes the identified static common/state outgoing P1 correction gate. All24 classifications/raw54 assertions and six fixed contextual wait labels remain; author479 dormant checks are not independently rerun runtime evidence. Settlement checks PID/leader PID/application name absence conservatively; no backend_start binding or actual server-settlement proof is claimed. Main remains26 migrations, code task-only/unexecuted, accepted runtime privacy/integration gates still open.
+
+Exact-edge initial `d3f6cfee` FULL review found two P2 issues: stale prior-case evidence during setup failure and cleanup output exceptions replacing first failure. Bounded two-file correction is active, checkpoint unpushed/unaccepted. Upgrade/catalog author is active from prepared `fb7e1e3a6a157ab3706f298fcd0ef5bf581a8f37`; read-only historical-regression adapter feasibility is underway. Main baseline `e53bb2216aab6c95f67d7434784bbccebaf93036` verified. No target contact, preflight or runtime release. Failure delivery/runner and identity/legacy adoption, combined fixture freeze/ownership/exclusive release/fresh preflight, true upgrade/catalog/actual runtime/security/cleanup/accepted integration and B3c/B3/A1c/A2/TASK-021 completion remain incomplete. See `agents/handoffs/TASK-021A1b3c-STATE-OUTPUT-ADOPTION-REVIEW.md`.
+
 ## 2026-09-29 — B3c upgrade/catalog contract reviewed
 
 Independent source/contract review clears `91dbd27179164c33d62d76411d988b14f5944f5c`: fixed guarded cached-binary true26 reset/prior SQL+census lane, lawful independent retained54 baseline, only frozen27/history atomic application, exact144→146 function/catalog preservation and qualified projected Auth/private diagnostics. Contract+receipt canonical publication and exact common43/transport404/source17 dependencies precede fresh two-file author; no reset or target action occurred.
