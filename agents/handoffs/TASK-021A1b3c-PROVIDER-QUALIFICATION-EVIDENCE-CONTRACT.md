@@ -1,0 +1,23 @@
+# Provider qualification evidence contract and generic review receipt
+
+Coordinator documentary planning from exact remote-verified main `172e8ec4cdf2688ac4ef90a347363b9dd5792b24`. Six owned documents: proposed bounded contract, this receipt, NOW/BACKLOG/CURRENT_STATE/CHANGELOG. No implementation or target action; independent FULL review and canonical publication precede research dispatch. Source asset remains authored/pending, not an accepted dependency.
+
+## Generic transport review and publication
+
+Initial checkpoint `b90abd94281b9008aebb6bd2b9671563c5b73e4a` received independent FULL review against prepared `a370c7119369cc9fac15fb866af2bdd32300db3a`: one P2 missing fixed crossings and retry phases, no other blocking privacy/transport finding. Fresh correction `9ca5230953ab9b871b95760ff96909e92947e53c` adds four source phases/two operator failure partitions and independent exact phase/partition comparison for ten frozen sources. Its correction review found a remaining P2: the two operator failure partitions still reject a real canonical operator case ID.
+
+Fresh sole correction `507e761f9c4b161db5768a17a7175b12d5d5b184` permits those two labels only for the independently selected operator module's canonical failure context. Real source IDs/order/phase round-trip regressions and negatives preserve finite membership, canonical order/writer checks, bounds/privacy/zero credits. Independent fresh correction review clears507 against9ca with no findings. Exactly three owned files changed; core byte identical. All ten source hashes and earlier parity additions remain source-backed.
+
+Author reports 2,880 mock-only checks, zero trapped target attempts, syntax/format/narrow lint/whitespace pass. Reviewers used read-only source/Git/hash inspection, did not import or rerun checks. Coordinator task-published and independently remote-verified `agent/TASK-021A1b3c-generic-channel` exactly507. No unfinished fixture code integrated into main. Actual adopters, exit78 propagation, max emission audit, strict actual entrypoint/TAP completion, ceiling audits and supervisor remain mandatory future gates.
+
+Legacy helper bfa remains reviewed/task-published/unexecuted/all17plans unavailable. Reviewed status-only milestone task3e1a95e and canonical integration172e8ec are exact remote-verified. No parent completion follows either task publication or documentary milestone.
+
+## Provider evidence feasibility and proposed boundary
+
+Fresh nonauthor read-only source feasibility compared legacy2fef, generic9ca candidate, fixed official Auth0204331/Storage3a37 clones and historical catalog269f4782. Existing core proves only its fixed DB container-image/Pals versions; no Auth/Storage qualification. Auth/settings returns confirmation but omits group/hooks. Source loader permits startup file/directory overlays and reload. Build recipes/version strings/historical IDs contain no executed provenance or independently verified image-digest/source binding. Existing catalog coverage omits full Auth/provider functions/triggers. Therefore qualification implementation remains STOP.
+
+The proposed two-new-document research task identifies verifiable primary artifact linkage and complete effective-configuration observation interfaces, records exact immutable evidence/trust boundaries/limits and preserves missing-evidence STOP. Public registry JSON metadata research is narrowly permitted; image/binary pulls, installs/builds, actual provider/target/process contact and executable guard/receipt minting are excluded. Future full history/catalog/default/generated/constraint/function/provider/Pals trigger comparison and private receipt binding remain separately required. Unvendored migration-library internals and file-SHA256/runtime-hash distinctions remain explicit.
+
+The coordinator's public primary-source lookup found official package version pages and Docker provenance documentation as possible research entrypoints, not actual linkage evidence or target proof. A package digest/tag association and build-action defaults alone cannot qualify source-to-binary correspondence. Research cannot be dispatched until reviewed source-asset publication, contract publication and exact reviewed dependencies are reconciled.
+
+Main26/source27/all fixtures unexecuted; no target/runtime/provider API/DB/service/container/socket/preflight/start/reset/force contact, image pull, install, hosted/pilot-ready or permission/server-cleanup claim. B3c/B3/A1c/A2/TASK-021 and all remaining integration gates stay incomplete. Explicit Sol medium; Standard app-controlled/unverified. Exact contract/main publication receipts recorded separately after review.
