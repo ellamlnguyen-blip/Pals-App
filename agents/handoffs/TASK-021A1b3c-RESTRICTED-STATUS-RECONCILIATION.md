@@ -1,6 +1,6 @@
 # B3c restricted own-status documentary reconciliation
 
-Status: independent FULL review and P3 wording follow-up CLEAR at exact `d4f7d2c292457d4601f231bf78145a6a5fe80524`; coordinator task/main publication pending remote verification. This bounded documentary amendment records a clean author stop and reconciles fixture mapping with existing accepted pilot authority; it accepts no new permission, source change, executable checkpoint or runtime pass. GPT-6 Sol medium; Standard app controlled/unverified.
+Status: independent FULL review and P3 wording follow-up CLEAR at exact `d4f7d2c292457d4601f231bf78145a6a5fe80524`; coordinator task `9a387a62c008ecb5ee964ddc71e218eef8a4d84e` and doc-only main `28fedcb3f0127f6670df7e0ecc691083e1d1af36` pushed/exact remote verified. This bounded documentary amendment records a clean author stop and reconciles fixture mapping with existing accepted pilot authority; it accepts no new permission, source change, executable checkpoint or runtime pass. GPT-6 Sol medium; Standard app controlled/unverified.
 
 ## Stopped author and exact dependency
 
@@ -39,3 +39,7 @@ After independent FULL review, publish exact task branch and documentary main wi
 Fresh independent FULL reviewer checked all17 documentary files at a1875f30cd8e28ec4c1ef4c4d1da8f83fa05b2ba against verified main5d6793555b70eb595e983be7ca09b216e318e32a and exact clean stopped/source27 checkout. OneP3 grant wording corrected in d4f7d2c292457d4601f231bf78145a6a5fe80524; read-only follow-up CLEAR/no remaining findings. Accepted pilot boundary,39=38+1 label classification,41 original lexical sites=40retained+historical219unretained and separate current-source body[] assertion are supported statically. No reviewer execution/contact or observed runtime/JWT/permission proof. Same source/helper hashes and main26 preserved.
 
 This reviewed documentary milestone is accepted for coordinator task publication and doc-only canonical integration, both pending exact remote verification at this receipt. It accepts no new executable checkpoint or permission change. After publication, fresh latest-main/exact6a55 dependency reconciliation then NEW1a2c1 author; stopped author is not extended. All parents/provider/transport/consumers/runtime/final integration gates remain incomplete. See `agents/handoffs/TASK-021A1b3c-RESTRICTED-STATUS-RECONCILIATION.md`.
+
+## Restricted own-status documentary publication verified — 2026-09-29
+
+Reviewed correction task branch `agent/TASK-021A1b3c-restricted-status-reconciliation` exact remote `9a387a62c008ecb5ee964ddc71e218eef8a4d84e`; documentation-only canonical integration exact remote main `28fedcb3f0127f6670df7e0ecc691083e1d1af36`, independently compared after successful pushes.17 reviewed documents only; no source/executable integration. Documentary reconciliation milestone complete. This later receipt records those verified commits without asserting its own future remote SHA. Fresh latest-main/exact6a55 dependency reconciliation and NEW1a2c1 author remain next; all parent/runtime/provider gates incomplete, main26/source27 unexecuted.
