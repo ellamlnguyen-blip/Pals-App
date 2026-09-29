@@ -4,6 +4,14 @@ import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { test } from "node:test";
+// BEGIN dormant state boundary imports (no original callsite adoption).
+import { types as stateNativeTypes } from "node:util";
+import {
+  createStateFailureFlow,
+  originalStateFlowUnavailable,
+} from "./helpers/pilot-current-safety-state-failure-flow.mjs";
+import { genericFailureLimits } from "./helpers/pilot-current-safety-failure-wire.mjs";
+// END dormant state boundary imports.
 import {
   quote,
   sql,
@@ -2148,6 +2156,496 @@ export function assertSuccess(
     expectedAfter: exactSnapshot(before, after, replacements),
   });
 }
+// BEGIN dormant state awaited boundaries. Original helpers/calls stay unchanged.
+const stateBoundaryContexts = new WeakMap();
+const stateBoundaryOutcomes = new WeakMap();
+const stateBoundaryUnavailable = new WeakMap();
+function refuseStateBoundaryContact() {
+  throw stateBoundaryNeutral(null);
+}
+function stateBoundaryNeutral(state) {
+  const error = new Error("State common boundary unavailable");
+  error.stack = "Error: State common boundary unavailable";
+  if (state?.hasOriginal) privateSuiteErrors.set(error, state.original);
+  if (state?.unavailable)
+    stateBoundaryUnavailable.set(error, state.unavailable);
+  return error;
+}
+function stateBoundaryContext(handle) {
+  const state = stateBoundaryContexts.get(handle);
+  if (!state) throw stateBoundaryNeutral(null);
+  return state;
+}
+function stateBoundaryRetain(state, error) {
+  const original = originalSuiteError(error);
+  if (!state.hasOriginal) {
+    state.hasOriginal = true;
+    state.original = original;
+  }
+  return original;
+}
+function stateBoundaryInvalidate(state, error) {
+  stateBoundaryRetain(state, error);
+  const unavailable = state.flow.invalidate(state.original);
+  state.unavailable = originalStateFlowUnavailable(unavailable);
+  return stateBoundaryNeutral(state);
+}
+// Owned own-data only; never inspect a proxy, invoke a getter/serialization hook
+// or read Error fields. Limits precede every await and use the fixed wire bounds.
+function stateBoundaryCopy(value) {
+  let nodes = 0;
+  const ancestors = new Set();
+  function copy(input, depth) {
+    assert.ok(++nodes <= genericFailureLimits.nodes);
+    assert.ok(depth <= genericFailureLimits.depth);
+    if (input === null || input === undefined) return input;
+    if (["boolean", "string", "bigint"].includes(typeof input)) return input;
+    if (typeof input === "number") {
+      assert.ok(Number.isFinite(input));
+      return input;
+    }
+    assert.equal(typeof input, "object");
+    assert.equal(stateNativeTypes.isProxy(input), false);
+    assert.equal(ancestors.has(input), false);
+    const array = Array.isArray(input),
+      prototype = Object.getPrototypeOf(input),
+      descriptors = Object.getOwnPropertyDescriptors(input),
+      keys = Reflect.ownKeys(input);
+    assert.ok(
+      array
+        ? prototype === Array.prototype
+        : prototype === Object.prototype || prototype === null,
+    );
+    assert.ok(keys.length <= genericFailureLimits.nodes);
+    assert.ok(keys.every((key) => typeof key === "string"));
+    if (array) assert.equal(keys.length, descriptors.length.value + 1);
+    ancestors.add(input);
+    const result = array ? [] : Object.create(prototype);
+    for (const key of keys) {
+      if (array && key === "length") continue;
+      const descriptor = descriptors[key];
+      assert.ok(Object.hasOwn(descriptor, "value") && descriptor.enumerable);
+      assert.notEqual(key, "toJSON");
+      if (array) assert.match(key, /^(0|[1-9][0-9]*)$/);
+      Object.defineProperty(result, key, {
+        value: copy(descriptor.value, depth + 1),
+        enumerable: true,
+        configurable: true,
+        writable: true,
+      });
+    }
+    if (array) assert.equal(result.length, descriptors.length.value);
+    ancestors.delete(input);
+    return Object.freeze(result);
+  }
+  return copy(value, 0);
+}
+function stateBoundaryFields(value, keys) {
+  assert.ok(value && typeof value === "object" && !Array.isArray(value));
+  assert.ok(Object.keys(value).every((key) => keys.includes(key)));
+}
+function stateBoundaryBundle(supplied) {
+  const bundle = stateBoundaryCopy(supplied ?? {});
+  stateBoundaryFields(bundle, [
+    "context",
+    "snapshots",
+    "differences",
+    "observations",
+  ]);
+  // The flow owns exact context/schema/limit validation. Never infer expected
+  // from after, collect a missing census or recognize redacted child diagnostics.
+  return bundle;
+}
+async function stateBoundaryDeliver(state, error, supplied, receipt = null) {
+  const original = stateBoundaryRetain(state, error);
+  if (receipt === null && state.firstDelivery) {
+    if (original === state.original) return await state.firstDelivery;
+    throw stateBoundaryInvalidate(state, original);
+  }
+  const attempt = {
+    receipt: receipt ?? "original-before-cleanup",
+    original,
+    bundle: null,
+    status: "copying",
+  };
+  state.deliveries.push(attempt);
+  let bundle;
+  try {
+    bundle = stateBoundaryBundle(supplied);
+    attempt.bundle = bundle;
+  } catch {
+    attempt.status = "rejected";
+    const rejection = stateBoundaryInvalidate(state, original);
+    if (receipt === null) {
+      state.firstDelivery = Promise.reject(rejection);
+      // Mark handled without converting the stored rejected promise to success.
+      state.firstDelivery.catch(() => {});
+    }
+    throw rejection;
+  }
+  const delivery = (async () => {
+    attempt.status = "pending";
+    try {
+      if (receipt === null) await state.flow.first(state.original, bundle);
+      else await state.flow.supplement(receipt, original, bundle);
+      attempt.status = "acknowledged";
+      return Object.freeze({});
+    } catch (failure) {
+      attempt.status = "rejected";
+      // The dormant flow refusal is not an unavailable receipt or success.
+      const unavailable = originalStateFlowUnavailable(failure);
+      if (unavailable) state.unavailable = unavailable;
+      throw stateBoundaryNeutral(state);
+    }
+  })();
+  if (receipt === null) state.firstDelivery = delivery;
+  return await delivery;
+}
+function stateBoundaryEvidence(execution) {
+  return {
+    snapshots: {
+      before: execution?.before
+        ? { kind: "raw", value: execution.before }
+        : { kind: "missing" },
+      after: execution?.hasSnapshot
+        ? { kind: "inherited-withheld" }
+        : { kind: "missing" },
+      expected: { kind: "missing" },
+      holder: { kind: "missing" },
+    },
+  };
+}
+export function createStateBoundaryContext() {
+  const handle = Object.freeze({});
+  stateBoundaryContexts.set(handle, {
+    flow: createStateFailureFlow(),
+    hasOriginal: false,
+    original: undefined,
+    unavailable: null,
+    firstDelivery: null,
+    deliveries: [],
+    sessions: [],
+    execution: null,
+    finishing: null,
+  });
+  return handle;
+}
+export async function captureStateFailureAwaited(
+  contextHandle,
+  originalError,
+  ownedBundle,
+) {
+  refuseStateBoundaryContact();
+  const state = stateBoundaryContext(contextHandle);
+  return await stateBoundaryDeliver(state, originalError, ownedBundle);
+}
+async function stateBoundaryClosureFailure(state, error) {
+  const first = !state.hasOriginal;
+  stateBoundaryRetain(state, error);
+  try {
+    await stateBoundaryDeliver(
+      state,
+      error,
+      stateBoundaryEvidence(state.execution),
+      first ? null : "supplemental-closure",
+    );
+  } catch {
+    // Capture failure never skips the independent actual done observation.
+  }
+}
+export async function finishStateOwnedSessionsAwaited(
+  contextHandle,
+  originalError,
+) {
+  refuseStateBoundaryContact();
+  const state = stateBoundaryContext(contextHandle);
+  if (originalError !== null && originalError !== undefined)
+    stateBoundaryRetain(state, originalError);
+  if (!state.finishing)
+    state.finishing = (async () => {
+      let failed = false;
+      if (state.hasOriginal && !state.firstDelivery) {
+        try {
+          await stateBoundaryDeliver(
+            state,
+            state.original,
+            stateBoundaryEvidence(state.execution),
+          );
+        } catch {
+          failed = true;
+        }
+      }
+      for (const registration of state.sessions) {
+        try {
+          await registration.owned.close();
+          registration.closeObserved = true;
+        } catch (error) {
+          failed = true;
+          await stateBoundaryClosureFailure(state, error);
+        }
+        // Always observe actual done, even after synchronous/asynchronous close
+        // rejection. Neither observation grants server absence/reset authority.
+        try {
+          const exit = await registration.owned.done;
+          try {
+            registration.exit = stateBoundaryCopy(exit);
+          } catch (error) {
+            throw stateBoundaryInvalidate(state, error);
+          }
+          const observedExit = registration.exit;
+          assert.ok(Array.isArray(observedExit) && observedExit.length === 2);
+          assert.equal(observedExit[0], 0);
+          assert.equal(observedExit[1], null);
+          registration.doneObserved = true;
+        } catch (error) {
+          failed = true;
+          await stateBoundaryClosureFailure(state, error);
+        }
+      }
+      if (failed || state.hasOriginal) throw stateBoundaryNeutral(state);
+      return Object.freeze({});
+    })();
+  return await state.finishing;
+}
+function stateBoundaryInputs(state, route, before, options) {
+  assert.equal(state.hasOriginal, false);
+  assert.equal(state.unavailable, null);
+  const boundRoute = stateBoundaryCopy(route),
+    boundBefore = stateBoundaryCopy(before),
+    boundOptions = stateBoundaryCopy(options ?? {});
+  stateBoundaryFields(boundRoute, [
+    "id",
+    "rpc",
+    "mode",
+    "purpose",
+    "provenance",
+    "actor",
+    "host",
+    "peer",
+    "manager",
+    "source",
+    "request",
+    "managerRequest",
+    "otherCampus",
+    "subject",
+    "target",
+    "subjects",
+  ]);
+  stateBoundaryFields(boundOptions, ["rollback", "request"]);
+  assert.equal(boundOptions.rollback, true);
+  const request = boundOptions.request ?? boundRoute.request;
+  assert.equal(request, boundRoute.request);
+  assert.match(request, uuid);
+  const definition = routes.find((candidate) => candidate.id === boundRoute.id);
+  assert.ok(definition);
+  for (const [key, value] of Object.entries(definition))
+    assert.equal(boundRoute[key], value);
+  for (const key of ["actor", "peer", "host", "source", "target"])
+    assert.match(boundRoute[key], uuid);
+  assert.equal(
+    boundRoute.target,
+    boundRoute.id === "CH" ? boundRoute.source : boundRoute.peer,
+  );
+  assert.equal(state.execution, null);
+  const execution = {
+    route: boundRoute,
+    before: boundBefore,
+    request,
+    result: undefined,
+    snapshot: undefined,
+    hasResult: false,
+    hasSnapshot: false,
+    markersAttempted: false,
+    markerFailures: [],
+    consumed: false,
+  };
+  state.execution = execution;
+  return execution;
+}
+function stateBoundaryMarkers(state, execution, output) {
+  execution.markersAttempted = true;
+  const failures = [];
+  // Independent parsing retains either marker even when the other fails. This
+  // combined child output is inherited redacted, never raw diagnostic authority.
+  for (const [key, prefix, available] of [
+    ["result", "RESULT:", "hasResult"],
+    ["snapshot", "SNAPSHOT:", "hasSnapshot"],
+  ]) {
+    try {
+      const parsed = marker(output, prefix);
+      try {
+        execution[key] = stateBoundaryCopy(parsed);
+      } catch (error) {
+        throw stateBoundaryInvalidate(state, error);
+      }
+      execution[available] = true;
+    } catch (error) {
+      failures.push(error);
+    }
+  }
+  execution.markerFailures = failures;
+  return failures;
+}
+export async function executeStateSuccessAwaited(
+  contextHandle,
+  route,
+  before,
+  options,
+) {
+  refuseStateBoundaryContact();
+  const state = stateBoundaryContext(contextHandle);
+  let execution, owned, originalError, token;
+  try {
+    try {
+      execution = stateBoundaryInputs(state, route, before, options);
+    } catch (error) {
+      throw stateBoundaryInvalidate(state, error);
+    }
+    owned = session(
+      `b3c_serial_${execution.request.replaceAll("-", "").slice(0, 16)}`,
+    );
+    // Register before send/end/await so partially initialized returned children
+    // remain owned. Children hidden inside a throwing session factory are not
+    // accessible here and confer no ownership or cleanup claim.
+    state.sessions.push({ owned, closeObserved: false, doneObserved: false });
+    owned.send(
+      `${bounds}begin;${successSQL(execution.route, { request: execution.request })}rollback;`,
+    );
+    owned.child.stdin.end();
+    let done;
+    const actualDone = await owned.done;
+    try {
+      done = stateBoundaryCopy(actualDone);
+    } catch (error) {
+      throw stateBoundaryInvalidate(state, error);
+    }
+    const output = owned.output();
+    let operationFailure;
+    try {
+      assert.equal(done[0], 0);
+      assert.doesNotMatch(output, /ERROR:/);
+    } catch (error) {
+      operationFailure = stateBoundaryRetain(state, error);
+    }
+    const markerFailures = stateBoundaryMarkers(state, execution, output);
+    if (operationFailure) throw operationFailure;
+    if (markerFailures.length) throw markerFailures[0];
+    token = Object.freeze({});
+    stateBoundaryOutcomes.set(token, { state, execution });
+  } catch (error) {
+    originalError = stateBoundaryRetain(state, error);
+    // A send/end/done failure may still have independently available markers.
+    if (execution && owned && !execution.markersAttempted) {
+      try {
+        stateBoundaryMarkers(state, execution, owned.output());
+      } catch {
+        // Missing/failed output is unavailable; no census fills it.
+      }
+    }
+    try {
+      await stateBoundaryDeliver(
+        state,
+        originalError,
+        stateBoundaryEvidence(execution),
+      );
+    } catch {
+      // Preserve first original and exact unavailable receipt before own finally.
+    }
+    for (const failure of execution?.markerFailures ?? []) {
+      if (originalSuiteError(failure) === originalError) continue;
+      try {
+        await stateBoundaryDeliver(
+          state,
+          failure,
+          stateBoundaryEvidence(execution),
+          "supplemental-observation",
+        );
+      } catch {
+        // Each independently failed marker remains a separately awaited event.
+      }
+    }
+  } finally {
+    try {
+      await finishStateOwnedSessionsAwaited(contextHandle, originalError);
+    } catch (error) {
+      stateBoundaryRetain(state, error);
+      originalError = state.original;
+    }
+  }
+  if (state.hasOriginal) throw stateBoundaryNeutral(state);
+  return token;
+}
+export async function verifyStateCurrentPrecheckOutcome(
+  contextHandle,
+  outcomeToken,
+  operationWindow,
+) {
+  refuseStateBoundaryContact();
+  const state = stateBoundaryContext(contextHandle);
+  try {
+    const owned = stateBoundaryOutcomes.get(outcomeToken);
+    assert.ok(owned && owned.state === state);
+    const execution = owned.execution;
+    assert.equal(execution, state.execution);
+    assert.equal(execution.consumed, false);
+    execution.consumed = true;
+    let window;
+    try {
+      window = stateBoundaryCopy(operationWindow);
+      stateBoundaryFields(window, ["start", "end"]);
+      assert.equal(Object.keys(window).length, 2);
+      assert.equal(typeof window.start, "string");
+      assert.equal(typeof window.end, "string");
+      assert.ok(Number.isFinite(Date.parse(window.start)));
+      assert.ok(Number.isFinite(Date.parse(window.end)));
+      assert.ok(Date.parse(window.start) <= Date.parse(window.end));
+      execution.window = window;
+    } catch (error) {
+      throw stateBoundaryInvalidate(state, error);
+    }
+    assert.equal(execution.hasResult, true);
+    assert.equal(execution.hasSnapshot, true);
+    assert.ok(state.finishing);
+    assert.ok(
+      state.sessions.every(
+        (entry) => entry.closeObserved && entry.doneObserved,
+      ),
+    );
+    const { route, before, snapshot, result } = execution;
+    // Exact current-only statePrecheck assertOperation expansion: retained CB
+    // cannot be selected. Existing assertSuccess keeps its guarded fingerprint
+    // SQL, raw field assertions and explicit full54 expected model unchanged.
+    if (route.id !== "CB") dynamicTime(result.submitted_at, window);
+    assertSuccess(route, before, snapshot, result, route.request);
+    // Only a completed, consumed successful precheck releases bookkeeping for
+    // the next fixed precheck. Its opaque token remains bound and consumed;
+    // the original internally created flow is retained without recovery/reset.
+    state.execution = null;
+    state.sessions = [];
+    state.finishing = null;
+    return Object.freeze({});
+  } catch (error) {
+    const original = stateBoundaryRetain(state, error);
+    try {
+      await stateBoundaryDeliver(
+        state,
+        original,
+        stateBoundaryEvidence(state.execution),
+      );
+    } catch {
+      // Assertion/fingerprint original survives failed delivery/caller cleanup.
+    }
+    throw stateBoundaryNeutral(state);
+  }
+}
+export function originalStateBoundaryUnavailable(exactContextOrNeutralError) {
+  return (
+    stateBoundaryContexts.get(exactContextOrNeutralError)?.unavailable ??
+    stateBoundaryUnavailable.get(exactContextOrNeutralError) ??
+    null
+  );
+}
+// END dormant state awaited boundaries.
 export async function executeSuccess(
   route,
   { rollback = false, request = route.request } = {},
