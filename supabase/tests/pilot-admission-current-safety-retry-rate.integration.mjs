@@ -439,14 +439,10 @@ export function failureReceipt(error, context, snapshot = null) {
     const diagnostic = knownDiagnostic(row.code, row.message);
     return diagnostic ? [diagnostic] : [];
   });
-  // Every unexpected SQL failure needs recovery review; an expected denial is
-  // handled and certified by deny(), never routed through this failure path.
-  if (
-    wrapped.length ||
-    !(error.name === "AssertionError" || error[privateDifferences])
-  )
-    error.cleanupIncomplete = true;
-  if (context.phase === "guarded-case-reset") error.cleanupIncomplete = true;
+  // A failure class is never evidence of settled owned exits. Every failed
+  // cell conservatively stops for fresh recovery review; deny() separately
+  // handles the exact expected neutral denial plus full54 zero delta.
+  error.cleanupIncomplete = true;
   return {
     id: context.id,
     phase: context.phase,
@@ -491,13 +487,71 @@ function recordFailure(error, context) {
   console.error(JSON.stringify(failureReceipt(error, context, snapshot)));
   error.failureRecorded = true;
 }
+// Pure exit assessment. Actual serial/wait cleanup passes no expected-denial
+// proof, so every actual nonzero exit is unaccepted. The conditional branch
+// exists for inert examples of an independently established exact denial.
+export function certifyOwnedExit(exit, output, expectedDenialProof = null) {
+  try {
+    assert.ok(
+      Array.isArray(exit) &&
+        exit.length === 2 &&
+        Number.isInteger(exit[0]) &&
+        exit[1] === null,
+      "settled normal owned exit required",
+    );
+    assert.equal(
+      typeof output,
+      "string",
+      "available owned transcript required",
+    );
+    const errorLines = output
+      .split("\n")
+      .filter((line) => line.includes("ERROR:"));
+    if (exit[0] === 0) {
+      assert.equal(
+        errorLines.length,
+        0,
+        "successful normal exit cannot carry an ERROR",
+      );
+      return { partition: "normal-zero-exit", certified: true };
+    }
+    assert.deepEqual(
+      expectedDenialProof,
+      {
+        code: "42501",
+        message: "Safety report unavailable",
+        full54_zero_delta_verified: true,
+      },
+      "explicit exact denial and independent zero-delta proof required",
+    );
+    assert.equal(
+      errorLines.length,
+      1,
+      "one complete expected denial diagnostic required",
+    );
+    assert.match(
+      errorLines[0],
+      /^ERROR:[ \t]+42501:[ \t]*Safety report unavailable$/,
+    );
+    assert.deepEqual(diagnostics(output), [
+      { code: "42501", message: "Safety report unavailable" },
+    ]);
+    assert.doesNotMatch(
+      output,
+      /(?:RESULT:|COMPLETED)/,
+      "denial transcript cannot claim success",
+    );
+    return { partition: "explicit-expected-denial", certified: true };
+  } catch (error) {
+    error.cleanupIncomplete = true;
+    error.sqlDiagnostics =
+      typeof output === "string" ? diagnostics(output) : [];
+    throw error;
+  }
+}
 export function assertOwnedSuccess(exit, output, prefixes) {
   try {
-    assert.deepEqual(
-      exit,
-      [0, null],
-      "known normal successful owned exit required",
-    );
+    certifyOwnedExit(exit, output);
     assert.deepEqual(diagnostics(output), []);
     assert.doesNotMatch(
       output,
@@ -513,17 +567,43 @@ export function assertOwnedSuccess(exit, output, prefixes) {
   } catch (error) {
     // Do this before any AssertionError escapes to the reset-safe partition.
     error.cleanupIncomplete = true;
-    error.sqlDiagnostics = diagnostics(output);
+    error.sqlDiagnostics =
+      typeof output === "string" ? diagnostics(output) : [];
     throw error;
   }
 }
 async function closeOwned(owned, error, context) {
-  const closed = await Promise.allSettled(
-    owned.filter(Boolean).map((s) => s.close()),
+  const settled = await Promise.all(
+    owned.filter(Boolean).map(async (session) => {
+      // Close initiates bounded rollback/EOF; BOTH closure and done must settle.
+      // Inherited close alone is insufficient for an ordinary nonzero exit.
+      const [closure, done] = await Promise.allSettled([
+        Promise.resolve().then(() => session.close()),
+        Promise.resolve().then(() => session.done),
+      ]);
+      let output = "",
+        certification;
+      try {
+        output = session.output();
+        if (closure.status !== "fulfilled" || done.status !== "fulfilled")
+          throw new Error("Owned settlement incomplete");
+        certification = certifyOwnedExit(done.value, output);
+      } catch (cause) {
+        cause.cleanupIncomplete = true;
+        return {
+          certified: false,
+          diagnostics: typeof output === "string" ? diagnostics(output) : [],
+          unexpected_error_available:
+            typeof output === "string" && output.includes("ERROR:"),
+        };
+      }
+      return { ...certification, diagnostics: [] };
+    }),
   );
-  if (closed.some((r) => r.status === "rejected")) {
+  if (settled.some((result) => !result.certified)) {
     const failure = error ?? new Error("Owned cleanup incomplete");
     failure.cleanupIncomplete = true;
+    // Preserve original diagnostics; closure has its own finite safe receipt.
     console.error(
       JSON.stringify({
         id: context.id,
@@ -531,6 +611,10 @@ async function closeOwned(owned, error, context) {
         partition: "owned-exit-unproven",
         reset_forbidden: true,
         original_error_preserved: Boolean(error),
+        cleanup_diagnostics: settled.flatMap((result) => result.diagnostics),
+        unexpected_error_available: settled.some(
+          (result) => result.unexpected_error_available,
+        ),
       }),
     );
     throw failure;
@@ -1195,7 +1279,16 @@ export async function runRetryRateInertExamples() {
     });
     assert.equal(failure.reset_forbidden, true);
     assert.equal(failure.original_error_preserved, true);
-    await closeOwned([mock], original, { id: "<inert>", phase: "mock-close" });
+    if (scenario.exit[0] !== 0 || scenario.output.includes("ERROR:"))
+      await assert.rejects(
+        closeOwned([mock], original, { id: "<inert>", phase: "mock-close" }),
+        (error) => error === original && error.cleanupIncomplete,
+      );
+    else
+      await closeOwned([mock], original, {
+        id: "<inert>",
+        phase: "mock-close",
+      });
     assert.equal(original.cleanupIncomplete, true);
   }
   assert.equal(closed, scenarios.length);
@@ -1210,6 +1303,8 @@ export async function runRetryRateInertExamples() {
     closeOwned(
       [
         {
+          done: Promise.resolve([0, null]),
+          output: () => "",
           close: async () => {
             throw new Error("private cleanup failure");
           },
@@ -1225,6 +1320,82 @@ export async function runRetryRateInertExamples() {
       .diagnostics,
     priorDiagnostic,
   );
+  // Exceptional serial and wait paths must assess settlement even when the
+  // successful exit check was skipped by the original lost-wait assertion.
+  for (const phase of ["mock-serial-lost-wait", "mock-wait-lost-wait"]) {
+    for (const [exit, output] of [
+      [[3, null], ""],
+      [[0, null], "ERROR: ZZZZZ: unknown private data\n"],
+    ]) {
+      let first;
+      try {
+        assert.ok(false, "lost wait");
+      } catch (error) {
+        first = error;
+      }
+      first.sqlDiagnostics = [{ code: "40P01", message: "<withheld>" }];
+      const prior = failureReceipt(first, { id: "<inert>", phase }).diagnostics;
+      const abnormal = {
+        done: Promise.resolve(exit),
+        output: () => output,
+        close: async () => {},
+      };
+      const normal = {
+        done: Promise.resolve([0, null]),
+        output: () => "",
+        close: async () => {},
+      };
+      const owned =
+        phase === "mock-wait-lost-wait" ? [normal, abnormal] : [abnormal];
+      await assert.rejects(
+        closeOwned(owned, first, { id: "<inert>", phase }),
+        (error) => error === first && error.cleanupIncomplete,
+      );
+      assert.deepEqual(
+        failureReceipt(first, { id: "<inert>", phase }).diagnostics,
+        prior,
+      );
+    }
+    await closeOwned(
+      [
+        {
+          done: Promise.resolve([0, null]),
+          output: () => "",
+          close: async () => {},
+        },
+      ],
+      null,
+      { id: "<inert>", phase: phase + ".normal0" },
+    );
+  }
+  const exactDenial = "ERROR:  42501: Safety report unavailable\n";
+  const denialProof = {
+    code: "42501",
+    message: "Safety report unavailable",
+    full54_zero_delta_verified: true,
+  };
+  assert.throws(() => certifyOwnedExit([3, null], exactDenial));
+  assert.throws(() =>
+    certifyOwnedExit([3, null], exactDenial, {
+      ...denialProof,
+      full54_zero_delta_verified: false,
+    }),
+  );
+  assert.deepEqual(certifyOwnedExit([3, null], exactDenial, denialProof), {
+    partition: "explicit-expected-denial",
+    certified: true,
+  });
+  assert.throws(() =>
+    certifyOwnedExit(
+      [3, null],
+      "ERROR: 42501: Safety report unavailable\nERROR: ZZZZZ: private\n",
+      denialProof,
+    ),
+  );
+  assert.deepEqual(certifyOwnedExit([0, null], ""), {
+    partition: "normal-zero-exit",
+    certified: true,
+  });
   const context = { id: "<inert>", phase: "mock-setup-clock-count-seed" };
   for (const code of ["42501", "40P01"]) {
     const error = new Error(
@@ -1332,6 +1503,9 @@ export async function runRetryRateInertExamples() {
     strict_wrappers: true,
     unexpected_exits_reset_forbidden: true,
     original_failures_preserved: true,
+    exceptional_serial_and_wait_exit_checks: true,
+    conditional_expected_denial_inert_only: true,
+    normal_zero_exit_checks: true,
     mock_sessions_closed: closed,
     target_attempts: 0,
     fixture_suites_invoked: 0,
