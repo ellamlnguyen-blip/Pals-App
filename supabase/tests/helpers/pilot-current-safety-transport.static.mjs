@@ -65,6 +65,10 @@ const context = vm.createContext({
   createWriteStream,
   setTimeout,
   clearTimeout,
+  URL,
+  AbortController,
+  AbortSignal,
+  Uint8Array,
 });
 // Short budgets affect only this isolated offline copy, never production exports.
 const isolated = privateUnit
@@ -73,7 +77,7 @@ const isolated = privateUnit
   .replace("close: 10_000", "close: 75")
   .replace("exit: 5_000", "exit: 100");
 vm.runInContext(
-  `${redactor}\n${isolated}\nglobalThis.unit = { command, ownedSession, runOwnedProcess, redact, moduleBudget, transportBudgets, failureReceiver, writeFailureRecord, validateHttpFailureRecord, failureWireLimits, httpFixtureKeys, httpOutcomeIds, httpFailureIds };`,
+  `${redactor}\n${isolated}\nglobalThis.unit = { command, ownedSession, runOwnedProcess, redact, moduleBudget, transportBudgets, failureReceiver, writeFailureRecord, validateHttpFailureRecord, failureWireLimits, httpFixtureKeys, httpOutcomeIds, httpFailureIds, ownedHttpTransport, guardedHttpUrl, ownedHttpBudgets };`,
   context,
 );
 const unit = context.unit;
@@ -548,10 +552,12 @@ try {
   );
   checks++;
   const rawUnit = source.slice(
-    source.indexOf("function rawSql(input)"),
+    source.indexOf("// PRIVATE SQL DIAGNOSTIC START"),
     source.indexOf("export const expectedMigrationVersions"),
   );
   const sqlContext = vm.createContext({
+    createHash,
+    Buffer,
     dockerBinary: "synthetic-only",
     args: [],
     transportBudgets: { sql: 1 },
@@ -563,23 +569,604 @@ try {
       throw error;
     },
   });
-  vm.runInContext(`${rawUnit}\nglobalThis.invoke = rawSql;`, sqlContext);
+  vm.runInContext(
+    `${rawUnit.replace("export function originalSqlDiagnostic", "function originalSqlDiagnostic")}\nglobalThis.invoke = rawSql; globalThis.diagnostic = originalSqlDiagnostic;`,
+    sqlContext,
+  );
   assert.throws(
     () => sqlContext.invoke("synthetic-only"),
     /transport failed\/interrupted/,
   );
+  checks++;
+  // Complete fixed verbose grammar only; public wrapper remains the existing neutralizer.
+  function sqlError(stderr, extra = {}) {
+    sqlContext.command = () => {
+      const error = new Error("PRIVATE CHILD");
+      Object.assign(error, { status: 1, stderr, ...extra });
+      throw error;
+    };
+    try {
+      sqlContext.invoke("PRIVATE SQL");
+      assert.fail("expected failure");
+    } catch (error) {
+      return error;
+    }
+  }
+  const approved = [
+    ["42501", "Owner operation unavailable"],
+    ["23514", "Detach a profile photo before deleting it"],
+    ["23514", "Photos must be existing owned private objects"],
+    ...[
+      "Safety report unavailable",
+      "Safety operation unavailable",
+      "Hangout operation not permitted",
+      "Hangout chat unavailable",
+      "Moderation unavailable",
+      "Pilot management unavailable",
+    ].map((message) => ["42501", message]),
+    ["40P01", "deadlock detected"],
+    ["40001", "could not serialize access due to concurrent update"],
+    [
+      "40001",
+      "could not serialize access due to read/write dependencies among transactions",
+    ],
+    ["57014", "canceling statement due to statement timeout"],
+    ["55P03", "canceling statement due to lock timeout"],
+  ];
+  for (const [code, message] of approved) {
+    const error = sqlError(
+      `ERROR:  ${code}: ${message}\nDETAIL:  PRIVATE KEY\n  PRIVATE DETAIL CONTINUATION\nHINT:  PRIVATE HINT\nCONTEXT:  SQL statement "PRIVATE SQL"\nPL/pgSQL function private.synthetic() line 14 at PERFORM\nLOCATION:  exec_stmt_raise, pl_exec.c:3924\n`,
+    );
+    assert.equal(
+      JSON.stringify(sqlContext.diagnostic(error)),
+      JSON.stringify({ code, message }),
+    );
+    assert.equal(Object.keys(error).length, 0);
+    assert.equal(error.cause, undefined);
+    assert.ok(!JSON.stringify(error).includes("PRIVATE"));
+    assert.ok(!error.stack.includes("PRIVATE"));
+    assert.equal(
+      sqlContext.diagnostic(new Error(error.message)).code,
+      "unavailable",
+    );
+    if (
+      [
+        "Owner operation unavailable",
+        "Detach a profile photo before deleting it",
+        "Photos must be existing owned private objects",
+      ].includes(message)
+    )
+      assert.equal(
+        error.message,
+        `Disposable SQL error: ${code}: operation failed`,
+      );
+  }
+  const fk = sqlError(
+    'ERROR:  23503: PRIVATE ROW KEY\nDETAIL:  Key (PRIVATE) is still referenced.\nCONTEXT:  SQL statement "PRIVATE"\nPL/pgSQL function private.synthetic() line 2 at SQL statement\nLOCATION:  ri_ReportViolation, ri_triggers.c:2600\n',
+  );
+  assert.equal(
+    JSON.stringify(sqlContext.diagnostic(fk)),
+    JSON.stringify({ code: "23503", message: "unavailable" }),
+  );
+  for (const malformed of [
+    "ERROR: 42501: Owner operation unavailable",
+    "ERROR:  4250: Owner operation unavailable",
+    "NOTICE:  PRIVATE\nERROR:  42501: Owner operation unavailable",
+    "ERROR:  42501: Owner operation unavailable\nERROR:  23503: PRIVATE",
+    "ERROR:  42501: Owner operation unavailable\n PRIVATE MESSAGE CONTINUATION",
+    "ERROR:  42501: Owner operation unavailable\nUNKNOWN:  PRIVATE",
+    "ERROR:  42501: Owner operation unavailable\nDETAIL:  PRIVATE\n unknown: PRIVATE",
+    "ERROR:  42501: Owner operation unavailable\nDETAIL:  PRIVATE\n ERROR: PRIVATE",
+    "ERROR:  42501: Owner operation unavailable\nDETAIL:  PRIVATE\nUNKNOWN PRIVATE",
+    "ERROR:  42501: Owner operation unavailable\nLOCATION:  PRIVATE\n  EXTRA",
+    "ERROR:  42501: Owner operation unavailable\nHINT:  PRIVATE\nDETAIL:  PRIVATE",
+    "ERROR:  42501: Owner operation unavailable\nDETAIL:  PRIVATE\nDETAIL:  EXTRA",
+    "ERROR:  42501: Owner operation unavailable\n\n",
+    "ERROR:  42501: Owner operation unavailable\r",
+    "ERROR:  42501: Owner operation unavailable\nDETAIL:  PRIVATE\n" +
+      " PRIVATE\n".repeat(17),
+    "ERROR:  42501: Owner operation unavailable\nDETAIL:  " + "x".repeat(4097),
+  ])
+    assert.equal(
+      sqlContext.diagnostic(sqlError(malformed)).detail.available,
+      false,
+    );
+  assert.equal(
+    sqlContext.diagnostic(
+      sqlError("ERROR:  42502: Owner operation unavailable"),
+    ).code,
+    "unavailable",
+  );
+  assert.equal(
+    sqlContext.diagnostic(
+      sqlError("ERROR:  42501: Owner operation unavailable suffix"),
+    ).code,
+    "unavailable",
+  );
+  const unknown = sqlContext.diagnostic(
+    sqlError("ERROR:  42501: PRIVATE UNKNOWN"),
+  );
+  assert.equal(unknown.code, "unavailable");
+  assert.equal(unknown.detail.available, true);
+  assert.match(unknown.detail.sha256, /^[a-f0-9]{64}$/);
+  assert.ok(!JSON.stringify(unknown).includes("PRIVATE"));
+  assert.equal(
+    sqlContext.diagnostic(
+      sqlError("ERROR:  42501: Owner operation unavailable", {
+        signal: "SIGKILL",
+      }),
+    ).code,
+    "unavailable",
+  );
+  assert.equal(
+    sqlContext.diagnostic(
+      sqlError("ERROR:  42501: Owner operation unavailable", {
+        code: "ETIMEDOUT",
+      }),
+    ).code,
+    "unavailable",
+  );
+  assert.equal(
+    sqlContext.diagnostic(
+      sqlError("ERROR:  42501: Owner operation unavailable\r\n"),
+    ).code,
+    "42501",
+  );
+  checks++;
+  // Dormant localTarget API unit only: independently guarded origin is synthetic,
+  // targetGuard is an assertion trap in this private VM, never the real guard.
+  let guardCalls = 0,
+    fetchCalls = 0;
+  const httpContext = vm.createContext({
+    URL,
+    AbortController,
+    AbortSignal,
+    Uint8Array,
+    Buffer,
+    assert,
+    setTimeout,
+    clearTimeout,
+    transportLimit: 20 * 1024 * 1024,
+    lane: "current27",
+    guardedLane: "current27",
+    key: "PRIVATE KEY",
+    targetGuard: (lane) => {
+      assert.equal(lane, "current27");
+      guardCalls++;
+    },
+  });
+  const httpUnit = source
+    .split("// PRIVATE LEGACY HTTP START:")[1]
+    .split("\n")
+    .slice(1)
+    .join("\n")
+    .split("// PRIVATE LEGACY HTTP END")[0]
+    .replace("request: 30_000", "request: 150")
+    .replace("observe: 5_000", "observe: 30");
+  const apiUnit = source.slice(
+    source.indexOf("  const transport = ownedHttpTransport();"),
+    source.indexOf(
+      "  return {\n    status,",
+      source.indexOf("  const transport = ownedHttpTransport();"),
+    ),
+  );
+  vm.runInContext(
+    `${httpUnit}\n${apiUnit}\nglobalThis.api = {request, storage, signedGet, quiescence: transport.quiescence}; globalThis.fresh = ownedHttpTransport; globalThis.path = guardedHttpUrl;`,
+    httpContext,
+  );
+  const http = httpContext.api;
+  function bodyResponse(chunks, status = 200) {
+    let index = 0;
+    return {
+      status,
+      body: {
+        getReader: () => ({
+          read: async () =>
+            index < chunks.length
+              ? { value: chunks[index++], done: false }
+              : { done: true },
+          cancel: async () => {},
+        }),
+      },
+    };
+  }
+  const pngBase64 =
+    "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+aX1sAAAAASUVORK5CYII=";
+  assert.ok(
+    readFileSync(
+      new URL("../pilot-admission-owner-http.integration.mjs", import.meta.url),
+      "utf8",
+    ).includes(pngBase64),
+    "exact frozen B1 PNG source bytes",
+  );
+  const png = Buffer.from(pngBase64, "base64");
+  const objectPath =
+    "/storage/v1/object/profile-photos/11111111-1111-1111-1111-111111111111/22222222-2222-2222-2222-222222222222.png";
+  const signed =
+    "http://127.0.0.1:54321" +
+    objectPath.replace("/object/", "/object/sign/") +
+    "?token=PRIVATE_TOKEN";
+  httpContext.fetch = async (url, init) => {
+    fetchCalls++;
+    assert.equal(url.origin, "http://127.0.0.1:54321");
+    assert.equal(init.redirect, "error");
+    assert.equal(init.method, "POST");
+    assert.equal(init.headers.apikey, "PRIVATE KEY");
+    assert.equal(init.headers.authorization, "Bearer PRIVATE TOKEN");
+    assert.equal(init.headers["content-type"], "image/png");
+    assert.equal(init.body, png);
+    return bodyResponse([Buffer.from('{"ok":true}')]);
+  };
+  assert.equal(
+    JSON.stringify(
+      await http.storage(objectPath, "PRIVATE TOKEN", png, {
+        method: "POST",
+        contentType: "image/png",
+      }),
+    ),
+    '{"status":200,"body":{"ok":true}}',
+  );
+  httpContext.fetch = async (url, init) => {
+    fetchCalls++;
+    assert.equal(init.body, '{"unchanged":true}');
+    assert.equal(init.method, "PATCH");
+    assert.equal(init.headers["content-type"], "application/json");
+    return bodyResponse([Buffer.from('{"original":[1,null]}')]);
+  };
+  assert.equal(
+    JSON.stringify(
+      await http.request(
+        "/rest/v1/profiles?x=1",
+        "PRIVATE TOKEN",
+        { unchanged: true },
+        { method: "PATCH" },
+      ),
+    ),
+    '{"status":200,"body":{"original":[1,null]}}',
+  );
+  httpContext.fetch = async (url, init) => {
+    fetchCalls++;
+    assert.equal(url.href, signed);
+    assert.equal(init.method, "GET");
+    assert.equal(init.headers, undefined);
+    assert.equal(init.body, undefined);
+    return bodyResponse([png], 200);
+  };
+  assert.equal(
+    JSON.stringify(await http.signedGet(new URL(signed))),
+    '{"status":200}',
+  );
+  httpContext.fetch = async () => {
+    fetchCalls++;
+    return bodyResponse([Buffer.from("PRIVATE expired bearer body")], 400);
+  };
+  assert.equal((await http.signedGet(signed)).status, 400);
+  assert.equal((await http.quiescence()).quiescent, true);
+  const beforeInvalid = fetchCalls;
+  for (const path of [
+    "//example.invalid/x",
+    "/\\example.invalid/x",
+    "http://example.invalid/x",
+    "/x/../rest/v1/x",
+    "/%2e%2e/x",
+    "/%2fx",
+    "/x#PRIVATE",
+    "/x\n",
+  ])
+    await assert.rejects(http.request(path));
+  for (const url of [
+    signed.replace("54321", "54322"),
+    signed.replace("127.0.0.1", "localhost"),
+    signed.replace("/sign/", "/authenticated/"),
+    signed + "&extra=PRIVATE",
+    signed + "&token=PRIVATE",
+    signed.replace("http://", "http://PRIVATE@"),
+    signed.replace("/storage/", "/x/../storage/"),
+    signed.replace(
+      "11111111-1111-1111-1111-111111111111",
+      "------------------------------------",
+    ),
+  ])
+    await assert.rejects(http.signedGet(url));
+  for (const method of ["PUT", "HEAD", "OPTIONS", "post"])
+    await assert.rejects(
+      http.request("/rest/v1/x", null, undefined, { method }),
+    );
+  await assert.rejects(
+    http.storage(
+      objectPath,
+      null,
+      { png: "changed" },
+      { contentType: "image/png" },
+    ),
+  );
+  await assert.rejects(
+    http.storage(objectPath, null, png, {
+      method: "DELETE",
+      contentType: "image/png",
+    }),
+  );
+  assert.equal(fetchCalls, beforeInvalid);
+  assert.ok(guardCalls > 0);
+  checks++;
+  function fresh() {
+    return httpContext.fresh();
+  }
+  function invoke(owner, signal, json = true) {
+    return owner.consume(
+      new URL("http://127.0.0.1:54321/rest/v1/x"),
+      { method: "GET" },
+      signal,
+      json,
+    );
+  }
+  const pre = fresh(),
+    preSignal = new AbortController();
+  preSignal.abort();
+  await assert.rejects(invoke(pre, preSignal.signal));
+  assert.equal(fetchCalls, beforeInvalid);
+  assert.equal((await pre.quiescence()).quiescent, false);
+  // AbortSignal.any remains caller-owned: the exact combined signal reaches the
+  // private controller via listener; both abort sources are exercised offline.
+  for (const which of ["caller", "module"]) {
+    const owner = fresh(),
+      caller = new AbortController(),
+      module = new AbortController();
+    let propagated = false;
+    httpContext.fetch = (url, init) => {
+      fetchCalls++;
+      return new Promise((resolve, reject) =>
+        init.signal.addEventListener("abort", () => {
+          propagated = true;
+          reject(new Error("PRIVATE CREDENTIAL FAILURE"));
+        }),
+      );
+    };
+    const pending = invoke(
+      owner,
+      AbortSignal.any([caller.signal, module.signal]),
+    );
+    (which === "caller" ? caller : module).abort();
+    await assert.rejects(pending, (error) => {
+      assert.equal(
+        error.message,
+        "Guarded loopback API transport/JSON failure",
+      );
+      assert.equal(Object.keys(error).length, 0);
+      assert.equal(error.cause, undefined);
+      return true;
+    });
+    assert.equal(propagated, true);
+    const receipt = await owner.quiescence();
+    assert.equal(receipt.pending, 0);
+    assert.equal(receipt.uncertain, 0);
+    assert.equal(receipt.quiescent, false);
+  }
+  checks++;
+  const httpOverflow = fresh();
+  let cancelled = 0;
+  httpContext.fetch = async () => ({
+    status: 200,
+    body: {
+      getReader: () => ({
+        read: async () => ({
+          done: false,
+          value: Buffer.alloc(20 * 1024 * 1024 + 1),
+        }),
+        cancel: async () => {
+          cancelled++;
+        },
+      }),
+    },
+  });
+  await assert.rejects(invoke(httpOverflow));
+  assert.equal(cancelled, 1);
+  assert.equal((await httpOverflow.quiescence()).quiescent, false);
+  const exactCap = fresh();
+  httpContext.fetch = async () =>
+    bodyResponse([Buffer.alloc(20 * 1024 * 1024)]);
+  assert.equal((await invoke(exactCap, undefined, false)).status, 200);
+  assert.equal((await exactCap.quiescence()).quiescent, true);
+  for (const stage of ["headers", "body", "cancel"]) {
+    const owner = fresh();
+    let settleFetch,
+      settleRead,
+      settleCancel,
+      bodyCancelled = false;
+    httpContext.fetch = () => {
+      fetchCalls++;
+      if (stage === "headers")
+        return new Promise((resolve) => {
+          settleFetch = resolve;
+        });
+      return Promise.resolve({
+        status: 200,
+        body: {
+          getReader: () => ({
+            read: () =>
+              new Promise((resolve) => {
+                settleRead = resolve;
+              }),
+            cancel: () => {
+              bodyCancelled = true;
+              if (stage === "body") return Promise.resolve();
+              return new Promise((resolve) => {
+                settleCancel = resolve;
+              });
+            },
+          }),
+        },
+      });
+    };
+    await assert.rejects(invoke(owner));
+    let receipt = await owner.quiescence();
+    assert.equal(receipt.quiescent, false);
+    assert.ok(receipt.pending > 0);
+    assert.ok(receipt.uncertain > 0);
+    if (stage === "headers") settleFetch(bodyResponse([]));
+    else {
+      assert.equal(bodyCancelled, true);
+      settleRead({ done: true });
+      if (stage === "cancel") settleCancel();
+    }
+    await new Promise((resolve) => setTimeout(resolve, 0));
+    receipt = await owner.quiescence();
+    assert.equal(receipt.pending, 0);
+    assert.equal(receipt.quiescent, false);
+    assert.ok(receipt.uncertain > 0);
+  }
+  // Finite header+body deadline also observes cancellation that actually settles.
+  const bounded = fresh();
+  let finishRead,
+    cancellationSeen = false;
+  httpContext.fetch = async () => ({
+    status: 200,
+    body: {
+      getReader: () => ({
+        read: () =>
+          new Promise((resolve) => {
+            finishRead = resolve;
+          }),
+        cancel: async () => {
+          cancellationSeen = true;
+          finishRead({ done: true });
+        },
+      }),
+    },
+  });
+  await assert.rejects(invoke(bounded));
+  assert.equal(cancellationSeen, true);
+  assert.equal((await bounded.quiescence()).pending, 0);
+  const cancelFailure = fresh();
+  httpContext.fetch = async () => ({
+    status: 200,
+    body: {
+      getReader: () => ({
+        read: async () => ({
+          done: false,
+          value: Buffer.alloc(20 * 1024 * 1024 + 1),
+        }),
+        cancel: async () => {
+          throw new Error("PRIVATE CANCEL");
+        },
+      }),
+    },
+  });
+  await assert.rejects(invoke(cancelFailure));
+  assert.equal((await cancelFailure.quiescence()).quiescent, false);
+  for (const responseChange of [
+    { redirected: true },
+    { url: "http://example.invalid/PRIVATE" },
+    { url: "http://127.0.0.1:54321/rest/v1/different" },
+  ]) {
+    const rejectedResponse = fresh();
+    let rejectedBodyCancelled = false;
+    httpContext.fetch = async () => ({
+      ...responseChange,
+      status: 200,
+      body: {
+        getReader: () => ({
+          read: async () => {
+            assert.fail("rejected response must not be read");
+          },
+          cancel: async () => {
+            rejectedBodyCancelled = true;
+          },
+        }),
+      },
+    });
+    await assert.rejects(invoke(rejectedResponse));
+    assert.equal(rejectedBodyCancelled, true);
+    assert.equal((await rejectedResponse.quiescence()).quiescent, false);
+  }
+  const privateJson = fresh();
+  httpContext.fetch = async () =>
+    bodyResponse([Buffer.from("PRIVATE TOKEN URL response")]);
+  await assert.rejects(
+    invoke(privateJson),
+    (error) => !error.stack.includes("PRIVATE"),
+  );
+  checks++;
+  const concurrent = fresh(),
+    releases = [];
+  httpContext.fetch = async () => {
+    let sent = false;
+    return {
+      status: 200,
+      body: {
+        getReader: () => ({
+          read: () =>
+            sent
+              ? Promise.resolve({ done: true })
+              : new Promise((resolve) => {
+                  sent = true;
+                  releases.push(() =>
+                    resolve({ value: Buffer.from("null"), done: false }),
+                  );
+                }),
+          cancel: async () => {},
+        }),
+      },
+    };
+  };
+  const first = invoke(concurrent),
+    second = invoke(concurrent);
+  const receiptInFlight = concurrent.quiescence();
+  const third = invoke(concurrent);
+  const pendingReceipt = await receiptInFlight;
+  assert.equal(pendingReceipt.started, 3);
+  assert.equal(pendingReceipt.quiescent, false);
+  assert.equal(pendingReceipt.pending, 3);
+  releases.forEach((release) => release());
+  await Promise.all([first, second, third]);
+  const completeReceipt = await concurrent.quiescence();
+  assert.equal(completeReceipt.quiescent, true);
+  assert.equal(completeReceipt.settled, 3);
   checks++;
   assert.equal(
     createHash("sha256")
       .update(
         source.slice(
           source.indexOf("const args = ["),
-          source.indexOf("// Explicit process runner."),
-        ),
+          source.indexOf("// PRIVATE SQL DIAGNOSTIC START"),
+        ) +
+          source.slice(
+            source.indexOf("export const expectedMigrationVersions"),
+            source.indexOf("  const transport = ownedHttpTransport();"),
+          ) +
+          source.slice(
+            source.indexOf("    rpc: (name, token, body) => {"),
+            source.indexOf("// Explicit process runner."),
+          ),
       )
       .digest("hex"),
-    "18fd5c5b6477fc8c7d209afca08a9c80c15526e542f71724df6180e85b588eb3",
+    "787379f27365c83d2e709276ef7d0584365d05a639d98f4d147921cd84794950",
     "fixed target/owner/source/history/environment/SQL/session/reset guards remain byte-for-byte unchanged",
+  );
+  assert.equal(
+    createHash("sha256")
+      .update(source.slice(0, source.indexOf("// PRIVATE LEGACY HTTP START")))
+      .digest("hex"),
+    "295f40d3e56a4238bdd3c88aea1814cad917533235f25ba000f2c17341b66369",
+    "existing command/session/module/fd3 schema and transport bytes unchanged",
+  );
+  assert.equal(
+    createHash("sha256")
+      .update(
+        source
+          .slice(
+            source.indexOf("function rawSql(input)"),
+            source.indexOf("export const expectedMigrationVersions"),
+          )
+          .replace("const emitted = new Error(", "throw new Error(")
+          .replace(
+            "    sqlDiagnostics.set(emitted, privateSqlDiagnostic(error.stderr));\n    throw emitted;\n",
+            "",
+          ),
+      )
+      .digest("hex"),
+    "f57e606ad7ec534a43bcda8b9b9fcfd9c89ee4a22bb9cca1eade6a88b0fefb45",
+    "public SQL wrapper behavior unchanged except private emitted-error receipt",
   );
   // Every real external site is enumerated and routed to these fixed primitives.
   assert.equal((source.match(/execFileSync\(/g) ?? []).length, 1);
@@ -600,8 +1187,9 @@ try {
     "lock_timeout=20000",
     "idle_in_transaction_session_timeout=90000",
     "idle_session_timeout=90000",
-    "AbortSignal.timeout(30_000)",
-    "AbortSignal.any([",
+    "request: 30_000, observe: 5_000",
+    "options.signal,",
+    'signal?.addEventListener("abort", abort, { once: true })',
     "if (!Number.isInteger(error.status) || error.signal || error.code)",
   ])
     assert.ok(source.includes(fragment), fragment);

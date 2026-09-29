@@ -975,6 +975,244 @@ async function runOwnedProcess(
     );
   });
 }
+// PRIVATE LEGACY HTTP START: no injection/options for origin, budgets or fetch.
+const ownedHttpBudgets = Object.freeze({ request: 30_000, observe: 5_000 });
+function guardedHttpUrl(input, signed = false) {
+  const origin = "http://127.0.0.1:54321";
+  const value = input instanceof URL ? input.href : input;
+  if (typeof value !== "string" || /[\s\\\u0000-\u001f\u007f]/.test(value))
+    throw new Error("Fixed loopback path unavailable");
+  if (!signed && (!value.startsWith("/") || value.startsWith("//")))
+    throw new Error("Fixed loopback path unavailable");
+  if (signed && !value.startsWith(`${origin}/`))
+    throw new Error("Fixed signed loopback URL unavailable");
+  const path = value.split("?")[0];
+  if (/(?:^|\/)\.{1,2}(?:\/|$)|%(?:2e|2f|5c)/i.test(path))
+    throw new Error("Fixed loopback path unavailable");
+  let url;
+  try {
+    url = new URL(value, origin);
+  } catch {
+    throw new Error("Fixed loopback path unavailable");
+  }
+  if (url.origin !== origin || url.username || url.password || url.hash)
+    throw new Error("Fixed loopback path unavailable");
+  if (
+    signed &&
+    (!/^\/storage\/v1\/object\/sign\/profile-photos\/[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}\/[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}\.png$/.test(
+      url.pathname,
+    ) ||
+      [...url.searchParams.keys()].join("|") !== "token" ||
+      !url.searchParams.get("token"))
+  )
+    throw new Error("Fixed signed loopback URL unavailable");
+  return url;
+}
+function ownedHttpTransport() {
+  const records = new Set();
+  // Observe the original promise itself; a timer only bounds observation, never settles it.
+  function track(record, promise) {
+    const item = { settled: false, rejected: false };
+    record.promises.add(item);
+    item.promise = Promise.resolve(promise).then(
+      (value) => {
+        item.settled = true;
+        return value;
+      },
+      (error) => {
+        item.settled = true;
+        item.rejected = true;
+        throw error;
+      },
+    );
+    item.promise.catch(() => {});
+    return item.promise;
+  }
+  async function consume(url, init, signal, json) {
+    if (signal !== undefined && !(signal instanceof AbortSignal))
+      throw new Error("Guarded loopback API transport/JSON failure");
+    const controller = new AbortController();
+    const record = {
+      promises: new Set(),
+      failed: false,
+      uncertain: false,
+      complete: false,
+    };
+    records.add(record);
+    let reader,
+      bodyStream,
+      cancelled = false,
+      deadline,
+      observation,
+      resolveResult,
+      rejectResult,
+      returned = false;
+    const result = new Promise((resolve, reject) => {
+      resolveResult = resolve;
+      rejectResult = reject;
+    });
+    const fail = () => {
+      record.failed = true;
+      if (!returned) {
+        returned = true;
+        rejectResult(new Error("Guarded loopback API transport/JSON failure"));
+      }
+    };
+    const cancel = () => {
+      if ((reader || bodyStream) && !cancelled) {
+        cancelled = true;
+        try {
+          track(record, reader ? reader.cancel() : bodyStream.cancel()).catch(
+            () => {
+              record.failed = true;
+            },
+          );
+        } catch {
+          record.failed = true;
+        }
+      }
+    };
+    const abort = () => {
+      controller.abort();
+      cancel();
+      observation ??= setTimeout(() => {
+        if (
+          !record.complete ||
+          [...record.promises].some((item) => !item.settled)
+        )
+          record.uncertain = true;
+        fail();
+      }, ownedHttpBudgets.observe);
+    };
+    if (signal?.aborted) {
+      record.complete = true;
+      fail(); // No fetch, body or cancel was started.
+      return result;
+    }
+    signal?.addEventListener("abort", abort, { once: true });
+    deadline = setTimeout(abort, ownedHttpBudgets.request);
+    const operation = (async () => {
+      try {
+        if (controller.signal.aborted) throw new Error("unavailable");
+        const response = await track(
+          record,
+          fetch(url, { ...init, signal: controller.signal, redirect: "error" }),
+        );
+        bodyStream = response.body;
+        if (bodyStream) reader = bodyStream.getReader();
+        if (
+          response.redirected ||
+          (response.url && new URL(response.url).href !== url.href)
+        )
+          throw new Error("unavailable");
+        let length = 0;
+        const chunks = [];
+        if (response.body) {
+          if (controller.signal.aborted) {
+            cancel();
+            throw new Error("unavailable");
+          }
+          await track(
+            record,
+            (async () => {
+              for (;;) {
+                const next = await reader.read();
+                if (controller.signal.aborted) throw new Error("unavailable");
+                if (next.done) break;
+                if (
+                  !(next.value instanceof Uint8Array) ||
+                  length + next.value.byteLength > transportLimit
+                )
+                  throw new Error("unavailable");
+                length += next.value.byteLength;
+                if (json) chunks.push(Buffer.from(next.value));
+              }
+            })(),
+          );
+        }
+        if (controller.signal.aborted) throw new Error("unavailable");
+        const raw = json ? Buffer.concat(chunks).toString("utf8") : "";
+        const value = json
+          ? { status: response.status, body: raw ? JSON.parse(raw) : null }
+          : { status: response.status };
+        if (!returned) {
+          returned = true;
+          resolveResult(value);
+        }
+      } catch {
+        record.failed = true;
+        abort();
+      } finally {
+        // A cancel promise can outlive fetch/body; observe all original promises.
+        await Promise.allSettled(
+          [...record.promises]
+            .filter((item) => item.promise)
+            .map((item) => item.promise),
+        );
+        record.complete = true;
+        clearTimeout(deadline);
+        signal?.removeEventListener("abort", abort);
+        if ([...record.promises].every((item) => item.settled)) {
+          clearTimeout(observation);
+          if (record.failed) fail();
+        }
+      }
+    })();
+    operation.catch(() => {
+      record.failed = true;
+      abort();
+    });
+    return result;
+  }
+  async function quiescence() {
+    const snapshot = [...records];
+    await new Promise((resolve) => {
+      if (
+        snapshot.every(
+          (record) =>
+            record.complete &&
+            [...record.promises].every((item) => item.settled),
+        )
+      ) {
+        resolve();
+        return;
+      }
+      const end = setTimeout(resolve, ownedHttpBudgets.observe);
+      Promise.allSettled(
+        snapshot.flatMap((record) =>
+          [...record.promises].map((item) => item.promise),
+        ),
+      ).then(() => {
+        if (snapshot.every((record) => record.complete)) {
+          clearTimeout(end);
+          resolve();
+        }
+      });
+    });
+    const settled = snapshot.filter(
+      (record) =>
+        record.complete && [...record.promises].every((item) => item.settled),
+    ).length;
+    const failed = snapshot.filter((record) => record.failed).length;
+    const uncertain = snapshot.filter((record) => record.uncertain).length;
+    const available =
+      snapshot.length === records.size &&
+      settled === snapshot.length &&
+      !failed &&
+      !uncertain;
+    return Object.freeze({
+      available,
+      quiescent: available,
+      started: records.size,
+      settled,
+      pending: records.size - settled,
+      failed,
+      uncertain,
+    });
+  }
+  return { consume, quiescence };
+}
+// PRIVATE LEGACY HTTP END
 // PRIVATE TRANSPORT END
 // HTTP-only dedicated fd3 writer; this export makes no operation until called.
 // Await each record before cleanup. It never grants pass or cleanup credit.
@@ -1007,6 +1245,104 @@ const args = [
   "-v",
   "VERBOSITY=verbose",
 ];
+// PRIVATE SQL DIAGNOSTIC START: only the exact emitted sanitized Error is keyed.
+const sqlDiagnostics = new WeakMap();
+const unavailableSqlDiagnostic = () =>
+  Object.freeze({
+    code: "unavailable",
+    detail: Object.freeze({ type: "string", available: false }),
+  });
+const originalDiagnosticPairs = new Set([
+  ...[
+    "Safety report unavailable",
+    "Safety operation unavailable",
+    "Hangout operation not permitted",
+    "Hangout chat unavailable",
+    "Moderation unavailable",
+    "Pilot management unavailable",
+    "Owner operation unavailable",
+  ].map((message) => `42501:${message}`),
+  "23514:Detach a profile photo before deleting it",
+  "23514:Photos must be existing owned private objects",
+  "40P01:deadlock detected",
+  "40001:could not serialize access due to concurrent update",
+  "40001:could not serialize access due to read/write dependencies among transactions",
+  "57014:canceling statement due to statement timeout",
+  "55P03:canceling statement due to lock timeout",
+]);
+function completeSqlDiagnostic(stderr) {
+  if (
+    typeof stderr !== "string" ||
+    Buffer.byteLength(stderr) > 64 * 1024 ||
+    /\r(?!\n)/.test(stderr)
+  )
+    return null;
+  const lines = stderr.replaceAll("\r\n", "\n").split("\n");
+  if (lines.at(-1) === "") lines.pop(); // Exactly one optional terminating newline.
+  if (
+    !lines.length ||
+    lines.length > 64 ||
+    lines.some((line) => !line || Buffer.byteLength(line) > 4096)
+  )
+    return null;
+  const main = /^ERROR: {2}([A-Z0-9]{5}): ([^\r\n]+)$/.exec(lines[0]);
+  if (!main) return null;
+  let current = null,
+    previous = -1,
+    continuations = 0;
+  const fields = ["DETAIL", "HINT", "CONTEXT", "LOCATION"];
+  for (const line of lines.slice(1)) {
+    // Even indented ERROR/unknown labeled records cannot masquerade as opaque continuation.
+    const field = /^([A-Z]+): {2}(.+)$/.exec(line);
+    if (field) {
+      const order = fields.indexOf(field[1]);
+      if (order < 0 || order <= previous) return null;
+      current = field[1];
+      previous = order;
+      continuations = 0;
+    } else {
+      if (
+        !current ||
+        current === "LOCATION" ||
+        ++continuations > 16 ||
+        /^\s*[A-Za-z][A-Za-z0-9_ -]*:/.test(line)
+      )
+        return null;
+      if (
+        !/^[ \t]+\S/.test(line) &&
+        !(
+          current === "CONTEXT" &&
+          /^PL\/pgSQL function [^\r\n]+ line [1-9][0-9]* at [^\r\n]+$/.test(
+            line,
+          )
+        )
+      )
+        return null;
+    }
+  }
+  return { code: main[1], message: main[2] };
+}
+function privateSqlDiagnostic(stderr) {
+  const parsed = completeSqlDiagnostic(stderr);
+  if (!parsed) return unavailableSqlDiagnostic();
+  if (parsed.code === "23503")
+    return Object.freeze({ code: "23503", message: "unavailable" });
+  if (originalDiagnosticPairs.has(`${parsed.code}:${parsed.message}`))
+    return Object.freeze(parsed);
+  return Object.freeze({
+    code: "unavailable",
+    detail: Object.freeze({
+      type: "object",
+      available: true,
+      sha256: createHash("sha256").update(JSON.stringify(parsed)).digest("hex"),
+    }),
+  });
+}
+// Memory-only. Never serialize this receipt or use it as cleanup/permission proof.
+export function originalSqlDiagnostic(error) {
+  return sqlDiagnostics.get(error) ?? unavailableSqlDiagnostic();
+}
+// PRIVATE SQL DIAGNOSTIC END
 function rawSql(input) {
   try {
     return command(
@@ -1037,9 +1373,11 @@ function rawSql(input) {
         "Moderation unavailable",
         "Pilot management unavailable",
       ].includes(diagnostic[2].trim());
-    throw new Error(
+    const emitted = new Error(
       `Disposable SQL error: ${diagnostic?.[1] ?? "transport"}: ${safe ? diagnostic[2].trim() : "operation failed"}`,
     );
+    sqlDiagnostics.set(emitted, privateSqlDiagnostic(error.stderr));
+    throw emitted;
   }
 }
 export const expectedMigrationVersions = Object.freeze([
@@ -1324,49 +1662,88 @@ export function localTarget(lane = "current27") {
     typeof key === "string" && key.length > 0,
     "local public credential required",
   );
-  async function request(path, token, body, options = {}) {
+  const transport = ownedHttpTransport();
+  function apiGuard() {
     assert.equal(lane, "current27", "API accepts captured current27 only");
     assert.equal(guardedLane, "current27", "API guard lane changed");
     targetGuard("current27");
-    assert.ok(
-      typeof path === "string" &&
-        path.startsWith("/") &&
-        !path.startsWith("//") &&
-        !path.includes("\\"),
-      "fixed local API path required",
-    );
-    const url = new URL(path, "http://127.0.0.1:54321");
-    assert.equal(
-      url.origin,
-      "http://127.0.0.1:54321",
-      "request must resolve to fixed local origin",
-    );
-    let response;
+  }
+  function apiRequest(path, token, body, options, contentType) {
+    apiGuard();
+    const url = guardedHttpUrl(path);
+    const method = options.method ?? (body === undefined ? "GET" : "POST");
+    if (!["GET", "POST", "PATCH", "DELETE"].includes(method))
+      throw new Error("Fixed loopback method unavailable");
+    if (
+      contentType === "image/png" &&
+      (!Buffer.isBuffer(body) ||
+        method !== "POST" ||
+        !/^\/storage\/v1\/object\/profile-photos\/[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}\/[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}\.png$/.test(
+          url.pathname,
+        ))
+    )
+      throw new Error("Fixed Storage bytes unavailable");
+    let payload;
     try {
-      response = await fetch(url, {
-        method: options.method ?? (body === undefined ? "GET" : "POST"),
-        signal: AbortSignal.any([
-          AbortSignal.timeout(30_000),
-          ...(options.signal === undefined ? [] : [options.signal]),
-        ]),
-        redirect: "error",
-        headers: {
-          apikey: key,
-          authorization: `Bearer ${token ?? key}`,
-          ...(body === undefined ? {} : { "content-type": "application/json" }),
-        },
-        ...(body === undefined ? {} : { body: JSON.stringify(body) }),
-      });
-      const raw = await response.text();
-      return { status: response.status, body: raw ? JSON.parse(raw) : null };
+      payload =
+        body === undefined
+          ? undefined
+          : contentType === "image/png"
+            ? body
+            : JSON.stringify(body);
     } catch {
       throw new Error("Guarded loopback API transport/JSON failure");
     }
+    if (payload !== undefined && Buffer.byteLength(payload) > transportLimit)
+      throw new Error("Fixed loopback body unavailable");
+    return transport.consume(
+      url,
+      {
+        method,
+        headers: {
+          apikey: key,
+          authorization: `Bearer ${token ?? key}`,
+          ...(body === undefined && contentType === null
+            ? {}
+            : { "content-type": contentType ?? "application/json" }),
+        },
+        ...(payload === undefined ? {} : { body: payload }),
+      },
+      options.signal,
+      true,
+    );
+  }
+  async function request(path, token, body, options = {}) {
+    return apiRequest(
+      path,
+      token,
+      body,
+      options,
+      body === undefined ? null : "application/json",
+    );
+  }
+  async function storage(path, token, body, options = {}) {
+    const content = options.contentType ?? "application/json";
+    if (!["application/json", "image/png"].includes(content))
+      throw new Error("Fixed Storage content unavailable");
+    return apiRequest(path, token, body, options, content);
+  }
+  async function signedGet(input, options = {}) {
+    apiGuard();
+    return transport.consume(
+      guardedHttpUrl(input, true),
+      { method: "GET" },
+      options.signal,
+      false,
+    );
   }
   return {
     status,
     key,
     request,
+    storage,
+    signedGet,
+    quiescence: transport.quiescence,
     rpc: (name, token, body) => {
       assert.match(name, /^[a-z][a-z0-9_]*$/, "RPC identifier required");
       return request(`/rest/v1/rpc/${name}`, token, body);
