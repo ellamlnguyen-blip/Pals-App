@@ -1,5 +1,9 @@
 # Current State
 
+## 2026-09-29 — B3c moderation extraction split proposed
+
+Fresh static moderation author stopped before edits at exacta370 after verifying four source hashes and mapping41 retained lexical HTTPassert-call sites/15literal races (not runtime coverage). Parent independent54 model+transport/privacy/setup obligations require three bounded author/review stages: helperfoundation, HTTP extraction, concurrency/finalmapping, two new files each/six total with two added handoffs. Acceptance/cases/exclusions remain intact. Proposed companion contracts/amendment require independent review/publication/exactdependencies before fresh authors; no partialcode accepted. Genericwire author remains staticactive; legacycompathelpercontract review pending. Main26/allsource27fixturesunexecuted/no targetcontact/runtime release/parentcompletion. See `tasks/active/TASK-021A1b3c-moderation-fixtures-foundation.md`.
+
 ## 2026-09-29 — B3c identity and historical transport corrections reviewed
 
 Supersedes earlier active correction status. Identity bounded/output adopter `0ba730e3616bbf087398f71044791da8dfa7656d` clears independent correction re-review after FULL review of75d943fb found three P2 issues. It preserves unknown subgroup cleanup state, blocks post-failure observation after uncertain exits, records supplemental close failures and captures exact census differences before rollback. Exactly two owned files; original204-cell/raw assertions and unconditional refusal remain. Author875 dormant checks and AST/assertion preservation were inspected, not independently rerun.
