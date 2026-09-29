@@ -295,6 +295,67 @@ function mapContext(input = {}) {
   return result;
 }
 function describe(value) {
+  // Only privately copied own-data reaches this traversal. Recognize inherited
+  // descendants before hashing, but visit every sibling and measure the exact
+  // generic typed encoding so withholding cannot hide an encoding overflow.
+  let inherited = false;
+  function measure(v) {
+    const type = v === null ? "null" : Array.isArray(v) ? "array" : typeof v;
+    if (type === "string" && /<redacted(?:-token)?>|<absent>/.test(v))
+      inherited = true;
+    if (!["object", "array"].includes(type)) {
+      const encoded =
+        type === "undefined" || type === "null"
+          ? [type]
+          : [
+              type,
+              type === "bigint"
+                ? String(v)
+                : type === "number"
+                  ? Object.is(v, -0)
+                    ? "-0"
+                    : String(v)
+                  : v,
+            ];
+      const bytes = Buffer.byteLength(JSON.stringify(encoded));
+      if (bytes > genericFailureLimits.frame) invalid();
+      return bytes;
+    }
+    const keys = Object.keys(v);
+    if (
+      Object.hasOwn(v, "available") &&
+      typeof v.available === "boolean" &&
+      (v.available === false ||
+        (Object.hasOwn(v, "type") &&
+          [
+            "undefined",
+            "null",
+            "boolean",
+            "number",
+            "bigint",
+            "string",
+            "array",
+            "object",
+            "unknown",
+          ].includes(v.type)) ||
+        Object.hasOwn(v, "sha256"))
+    )
+      inherited = true;
+    let bytes = Buffer.byteLength(JSON.stringify([type, []]));
+    for (const [index, key] of keys.entries()) {
+      bytes += measure(v[key]) + (index === 0 ? 0 : 1);
+      if (type === "object")
+        bytes += Buffer.byteLength(JSON.stringify(key)) + 3;
+      if (bytes > genericFailureLimits.frame) invalid();
+    }
+    return bytes;
+  }
+  measure(value);
+  if (inherited)
+    return unavailableFailureValue(
+      value === null ? "null" : Array.isArray(value) ? "array" : typeof value,
+      true,
+    );
   const descriptor = originalFailureValue(value);
   if (!descriptor.available && descriptor.precision !== "inherited-withheld")
     invalid();

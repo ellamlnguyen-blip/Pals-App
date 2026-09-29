@@ -251,6 +251,7 @@ function isolate({
   writer,
   diagnostic,
   coreReceipt,
+  originalValue,
   entry = stateEntry,
   canonical = stateEntry,
 } = {}) {
@@ -264,6 +265,7 @@ function isolate({
   );
   return factory({
     ...wire,
+    originalFailureValue: originalValue ?? wire.originalFailureValue,
     nativeTypes,
     fileURLToPath,
     process: fakeProcess,
@@ -460,6 +462,86 @@ for (const partition of manifest.partitions) {
     snapshots: { after: { kind: "raw", value: partial } },
   });
   equal(api.records.at(-1).summaries.after, { available: false, tables: null });
+}
+// Nested inherited markers retain explicit withholding for full54 snapshots and
+// both difference sides, without hashing a placeholder as the original value.
+for (const marker of ["<redacted>", "<redacted-token>", "<absent>"]) {
+  const hashed = [];
+  const local = await isolate({
+      originalValue: (value) => {
+        hashed.push(value);
+        return wire.originalFailureValue(value);
+      },
+    }),
+    [flow, state] = newFlow(local),
+    original = new Error("private nested original"),
+    nested = { outer: [false, { private: `prefix ${marker} suffix` }] },
+    snapshot = rawSnapshot(nested),
+    snapshots = Object.fromEntries(
+      ["before", "after", "expected", "holder"].map((slot) => [
+        slot,
+        { kind: "raw", value: snapshot },
+      ]),
+    );
+  const result = await local.deliverFirst(state, original, {
+    snapshots,
+    differences: [
+      {
+        segments: ["public.accounts", "0", "id"],
+        expected: nested,
+        actual: [nested],
+      },
+      { expected: marker, actual: { nested } },
+    ],
+  });
+  const record = local.records[0];
+  for (const summary of Object.values(record.summaries)) {
+    equal(summary.available, true);
+    equal(summary.tables.length, 54);
+    equal(
+      summary.tables.map(({ table }) => table),
+      wire.failureWireManifest.tables,
+    );
+    for (const table of summary.tables) {
+      equal(table.count, 1);
+      equal(table.value, wire.unavailableFailureValue("array", true));
+    }
+  }
+  equal(
+    record.differences[0].expected,
+    wire.unavailableFailureValue("object", true),
+  );
+  equal(
+    record.differences[0].observed,
+    wire.unavailableFailureValue("array", true),
+  );
+  equal(
+    record.differences[1].expected,
+    wire.unavailableFailureValue("string", true),
+  );
+  equal(
+    record.differences[1].observed,
+    wire.unavailableFailureValue("object", true),
+  );
+  equal(record.differences[0].scope, "domain");
+  equal(record.differences[1].scope, "opaque");
+  check(!JSON.stringify(record).includes(marker));
+  equal(hashed.length, 0);
+  equal(local.originalStateFailure(flow), original);
+  equal(state.unavailable, false);
+  equal(result.reset, "forbidden");
+  equal(result.credits, {
+    order: 0,
+    suite: 0,
+    allocation: 0,
+    cleanup: false,
+    pass: false,
+  });
+  const receiver = wire.createFailureWireReceiver(stateModule);
+  receiver.receive(wire.encodeFailureFrame(record, stateModule));
+  receiver.end();
+  receiver.close(0, null);
+  equal(receiver.evidence().availability, "available");
 }
 // Source-known structural paths alone gain coordinates. Catalog/provider/dotted
 // and nested paths retain only opaque descriptors, with raw paths private.
@@ -702,6 +784,132 @@ for (const malformed of (() => {
   equal(local.records.length, 0);
 }
 equal(contacts, 0);
+// Withholding is not an escape from safe capture, unknown-field normalization
+// or strict per-value limits. Invalid siblings still invalidate the whole flow.
+for (const malformed of (() => {
+  const getter = { marker: "<redacted>" };
+  Object.defineProperty(getter, "private", {
+    enumerable: true,
+    get() {
+      contacts++;
+      return "unsafe";
+    },
+  });
+  const cycle = { marker: "<absent>" };
+  cycle.self = cycle;
+  const proxy = new Proxy(
+    {},
+    {
+      ownKeys() {
+        contacts++;
+        return [];
+      },
+    },
+  );
+  const sparse = ["<redacted-token>"];
+  sparse.length = 2;
+  let deep = "<redacted>";
+  for (let i = 0; i < 18; i++) deep = { nested: deep };
+  return [
+    ...[
+      getter,
+      cycle,
+      { marker: "<redacted>", proxy },
+      { marker: "<redacted>", custom: Object.create({ private: true }) },
+      sparse,
+      deep,
+      {
+        marker: "<redacted>",
+        toJSON() {
+          contacts++;
+          return {};
+        },
+      },
+      { marker: "<redacted>", oversized: "x".repeat(65537) },
+      {
+        marker: "<redacted>",
+        combined: ["x".repeat(33000), "y".repeat(33000)],
+      },
+      { marker: "<redacted>", nodes: Array.from({ length: 4100 }, () => 1) },
+    ].map((expected) => ({ differences: [{ expected, actual: 1 }] })),
+    {
+      context: { provider: "unknown" },
+      differences: [{ expected: { marker: "<redacted>" }, actual: 1 }],
+    },
+    {
+      differences: Array.from({ length: 129 }, () => ({
+        expected: { marker: "<redacted>" },
+        actual: 1,
+      })),
+    },
+  ];
+})()) {
+  const local = await isolate(),
+    [, state] = newFlow(local),
+    original = new Error();
+  await unavailable(
+    local,
+    () => local.deliverFirst(state, original, malformed),
+    state,
+    original,
+  );
+  equal(local.records.length, 0);
+}
+equal(contacts, 0);
+// Typed encoding size is exact at64KiB, including inherited container framing.
+for (const excess of [0, 1]) {
+  const overhead = Buffer.byteLength(
+    JSON.stringify([
+      "object",
+      [
+        ["marker", ["string", "<redacted>"]],
+        ["payload", ["string", ""]],
+      ],
+    ]),
+  );
+  const expected = {
+    marker: "<redacted>",
+    payload: "x".repeat(wire.genericFailureLimits.frame - overhead + excess),
+  };
+  const local = await isolate(),
+    [, state] = newFlow(local),
+    original = new Error();
+  const action = () =>
+    local.deliverFirst(state, original, {
+      differences: [{ expected, actual: 1 }],
+    });
+  if (excess) {
+    await unavailable(local, action, state, original);
+    equal(local.records.length, 0);
+  } else {
+    await action();
+    equal(
+      local.records[0].differences[0].expected,
+      wire.unavailableFailureValue("object", true),
+    );
+    equal(state.unavailable, false);
+  }
+}
+// Non-withheld typed originals retain generic507's exact digests, including
+// bigint/undefined/negative zero and strings that are not inherited markers.
+for (const expected of [
+  undefined,
+  null,
+  false,
+  -0,
+  2n,
+  { nested: [undefined, null, 2n, -0, "<redaction>"] },
+]) {
+  const local = await isolate(),
+    [, state] = newFlow(local);
+  await local.deliverFirst(state, new Error(), {
+    differences: [{ expected, actual: 1 }],
+  });
+  equal(
+    local.records[0].differences[0].expected,
+    wire.originalFailureValue(expected),
+  );
+}
 // 128 actual differences are retained; full54 slots plus all actual differences
 // that exceed the frame bound invalidate rather than trim the evidence.
 {
