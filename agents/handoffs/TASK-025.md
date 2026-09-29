@@ -25,7 +25,13 @@ The hosted pilot still needs an HTTPS frontend deployment, exact Supabase stagin
 
 ## Scope safety
 
-No database migration, RLS policy, server action, API payload, authorization rule, or hosted setting was changed. The health route is additive and does not weaken any existing access control.
+No database migration, RLS policy, server action, student API payload, authorization rule, or hosted setting was changed. The health route is additive and does not weaken any existing access control.
+
+## Readiness correction (2026-09-29, `agent/TASK-025-health-readiness`)
+
+The original probe could return HTTP 200 and `status: "ok"` while checks were false. The corrected probe returns HTTP 503 and `status: "not_ready"` unless the app explicitly selects staging or production, the Supabase URL exactly matches the explicit project reference under the shared target validator, the configured public Supabase key passes the app's auth validation, `APP_ORIGIN` is a valid HTTPS origin, and a public Mapbox token is present. The proxy matcher exempts only `/api/health` so invalid configuration reaches this public probe instead of throwing before it; all other paths retain the existing proxy. The response contains only boolean checks and status; the no-store header remains. The release runbook now treats green as configuration readiness only. Hosted callbacks, SMTP, connectivity, end-to-end smoke, and launch approval remain separate gates.
+
+Focused verification: the web typecheck, production build, targeted Prettier check, and shared Supabase target tests passed. Live requests against the built local server returned HTTP 503 with no hosted settings, HTTP 503 with a mismatched project target, and HTTP 200 with syntactically valid placeholder staging values. Responses contained only status and boolean checks, plus `Cache-Control: no-store, max-age=0`. These placeholder checks did not establish provider connectivity or hosted readiness.
 
 ## Remote receipts
 

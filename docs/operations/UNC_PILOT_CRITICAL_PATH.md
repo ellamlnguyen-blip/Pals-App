@@ -27,7 +27,7 @@ The app is tryable locally today with the reviewed production build. A real stud
 
 ## Release smoke sequence
 
-1. Open `/api/health`; confirm `status: "ok"`, HTTPS origin, Supabase and Mapbox configuration.
+1. Open `/api/health` on the deployed build; require HTTP 200, `status: "ok"`, and every configuration check true. HTTP 503 or `status: "not_ready"` stops the smoke test. This secret-free probe validates hosted environment settings, the exact configured Supabase project target, public key configuration, HTTPS app origin, and Mapbox public token presence. It does not prove the hosted Auth callback allowlist, SMTP delivery, provider connectivity, the remaining smoke sequence, or launch authorization.
 2. Confirm a controlled UNC mailbox, complete onboarding, and sign in again after confirmation.
 3. Create a Hangout with an approximate public area, join it from a second approved account, and send a chat message.
 4. Block the second account; verify discovery, joining and messaging are denied after refresh.
