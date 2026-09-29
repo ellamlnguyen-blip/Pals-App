@@ -2,6 +2,8 @@
 
 Date: 2026-09-28.
 
+2026-09-29 preservation checkpoint: upgrade/catalog91dbd271 source/contract review clears, publication/exactdependency gate fresh author. State-adopter static author activeprepared6a4f6d under publishedb10f6/main e69c3d8; exact-edge author activepreparede820fde. No target/reset/runtime, main26/allsource27codeunexecuted/P1state+parentgatesopen.
+
 2026-09-29 output checkpoint: common43e44cc FULL/correction review clears and exacttaskremoteSHAverified; state-adopter1344fb1 contract/re-review clears including six fixed wait labels, canonical publication/dependency preparation gate author. Exact-edge static author active under publishedf6549be contract. P1 remains open pending state adoption; no target/runtime/parent completion.
 
 2026-09-29 checkpoint update: reviewed retry52a53330 and crossing0a983cfa are task-branch pushed/exact remote SHA verified, all18/60 unexecuted. Exact-edge contract086fed41 correction review clears; author remains gated on canonical publication and reviewed projector. Common projector90365 FULL review two P2 precision corrections active; state adoption/upgrade/catalog/runner/runtime and all parent gates remain incomplete. See latest fixture checkpoint receipt.

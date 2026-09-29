@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-29 — B3c upgrade/catalog contract reviewed
+
+Independent source/contract review clears `91dbd27179164c33d62d76411d988b14f5944f5c`: fixed guarded cached-binary true26 reset/prior SQL+census lane, lawful independent retained54 baseline, only frozen27/history atomic application, exact144→146 function/catalog preservation and qualified projected Auth/private diagnostics. Contract+receipt canonical publication and exact common43/transport404/source17 dependencies precede fresh two-file author; no reset or target action occurred.
+
+State-adopter contract/receipt `b10f6a4` is published on exact remote-verified canonical main `e69c3d8f37092093bd61012f5b412bd92ba7463a`; fresh two-file static adopter starts at prepared `6a4f6d796ad94ef6bfe40f9e93b12aad87069c2e` with exact state89/common43. Four-cell edge static author remains active at prepared e820fde. Common43, retry52 and crossing0a task publications/reviews remain verified, all cases unexecuted. Main code26; P1 state correction, combined regression/runner/failure delivery/ownership/exclusive release/preflight/runtime/security/cleanup/accepted integration and all parent gates stay incomplete.
+
 ## 2026-09-29 — B3c common projector published and state adoption reviewed
 
 Supersedes earlier common-correction active status. Common failure/output correction `43e44cc030e8c380705401b4d171b06099955e69` passes FULL review and two-P2 correction re-review; assigned task branch is pushed and exact remote SHA verified. Policy/absence raw exact assertions and72/24 manifests remain; private rows/values/errors are projected or withheld, precise known table/index/column diagnostics are retained. Author416 dormant checks are static evidence, not independently rerun target proof. Main code26; this code is task-only/unexecuted.
@@ -23,6 +29,12 @@ Proposed four-cell exact rate-edge contract permits only a temporary single cloc
 The separate state adopter proposal preserves all24 L5 allocations and raw domain/full54 assertions while using the reviewed common projector for every success/failure/rollback/close/reset output and neutral error boundary. It preserves original-first failure identity, supplemental post-close evidence and reset-forbidden flags. Exact reviewed/published projector dependency and independent contract review/publication precede authoring; common correction `90365f50` is still under independent FULL review, so no dependent implementation is dispatched.
 
 Crossing `0a983cfabfc4d7f2ccc0893132ba4890a2c4deb9` is independently reviewed and task-branch pushed with exact remote SHA verified, all60 allocations unexecuted. Retry exceptional-exit correction continues. Exact rate-edge and true26→only27 preservation contracts remain proposed. Main code26/all source27 fixtures unexecuted/P1 privacy and parent gates incomplete; no target/preflight/runtime release. See `tasks/active/TASK-021A1b3c-state-output-adoption.md`.
+
+## 2026-09-28 — B3c true26→only27 preservation contract proposed
+
+The proposed bounded upgrade/catalog verifier starts at exact true26, seeds independently expected lawful retained records, applies only the frozen27 body and its history receipt atomically, and compares all54 census entries and complete domain catalog. The fixed prior reset uses the exact cached guarded binary/version/network with finite bounds; the existing reset helper always produces27 and cannot itself prove a true26 upgrade. Historical25→26 evidence remains separate. Independent review/publication and the reviewed common projector interface precede fresh authoring.
+
+Common output correction `90365f50340f26363279b70b1278e7b4d1cd10f3` is frozen for independent FULL review, task-only and unexecuted; state adoption remains separately required. Crossing correction `0a983cfabfc4d7f2ccc0893132ba4890a2c4deb9` clears independent re-review and its assigned task branch is pushed with exact remote SHA verified; all60 allocations remain unexecuted. Retry exceptional-exit correction continues. Four exact rate-edge instrumented predicate controls remain a separate proposed contract. Main code26; no runtime/target/preflight release or parent completion. See `tasks/active/TASK-021A1b3c-upgrade-catalog-fixture.md`.
 
 ## 2026-09-28 — B3c common-output privacy gate reopened
 
