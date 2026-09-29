@@ -1,5 +1,17 @@
 # Backlog
 
+## Restricted own-status reconciliation review receipt — 2026-09-29
+
+Fresh independent FULL reviewer checked all17 documentary files at a1875f30cd8e28ec4c1ef4c4d1da8f83fa05b2ba against verified main5d6793555b70eb595e983be7ca09b216e318e32a and exact clean stopped/source27 checkout. OneP3 grant wording corrected in d4f7d2c292457d4601f231bf78145a6a5fe80524; read-only follow-up CLEAR/no remaining findings. Accepted pilot boundary,39=38+1 label classification,41 original lexical sites=40retained+historical219unretained and separate current-source body[] assertion are supported statically. No reviewer execution/contact or observed runtime/JWT/permission proof. Same source/helper hashes and main26 preserved.
+
+This reviewed documentary milestone is accepted for coordinator task publication and doc-only canonical integration, both pending exact remote verification at this receipt. It accepts no new executable checkpoint or permission change. After publication, fresh latest-main/exact6a55 dependency reconciliation then NEW1a2c1 author; stopped author is not extended. All parents/provider/transport/consumers/runtime/final integration gates remain incomplete. See `agents/handoffs/TASK-021A1b3c-RESTRICTED-STATUS-RECONCILIATION.md`.
+
+## B3c restricted own-status source reconciliation — 2026-09-29
+
+Fresh1a2c1 author stopped clean at `91d0012e65ab0ff2e46914d62240c4c7c89a07b1` (`agent/TASK-021A1b3c-moderation-sanction-enforcement-primitives`): frozen original219 expects suspended raw status, but accepted ADR-0027/completed B1 deny restricted raw owner/reference rows. Own draft restored; helper/MODELS exact6a55 unchanged; syntax-only draft result is not accepted evidence. Fresh read-only authority audit confirms the deliberate later pilot boundary; propose documentation/mapping reconciliation only, no migration/RLS change. See `agents/handoffs/TASK-021A1b3c-RESTRICTED-STATUS-RECONCILIATION.md`.
+
+Keep39 allocated labels (38 historical retained+one current-source own-status supplemental),40 literal-original lexical assertions+one supplemental body[]; historical219 is unretained/unexecuted with zero original pass credit. Neutral access-state remains restricted. Proposal needs independent FULL review, task publication and remote-verified documentary main integration before fresh latest-main/exact6a55 reconciliation and NEW1a2c1 author. Stopped author is not extended. Main26/source27/all fixtures unexecuted;6a55 reviewed/task-published only; all parents and runtime/provider/consumer gates remain incomplete.
+
 ## 2026-09-29 — Sanctions family split after clean stop
 
 Independent FULL eight-document split-contract review is CLEAR/no actionable findings at `52d975df3218e1d6d5afdfbc919f049c8a098e0d` against canonicalmain1179d4a. Reviewer confirmed original acceptance, same-two-file ownership, source-fixed focused writer placement, precise assertions/privacy/exclusions and exact predecessor review/publication/amendment/reconciliation sequencing before the second stage. Clean stoppedeb3dacb0 and frozen helper/handoff/original/provider hashes match. Read-only inspection; no imports/tests/network/target/mutations and prior355 evidence not rerun. Canonical publication and fresh exact dependencies still precede a FRESH1a2c1 author; all later gates and parents remain incomplete.

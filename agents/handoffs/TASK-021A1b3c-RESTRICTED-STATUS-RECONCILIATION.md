@@ -1,0 +1,41 @@
+# B3c restricted own-status documentary reconciliation
+
+Status: independent FULL review and P3 wording follow-up CLEAR at exact `d4f7d2c292457d4601f231bf78145a6a5fe80524`; coordinator task/main publication pending remote verification. This bounded documentary amendment records a clean author stop and reconciles fixture mapping with existing accepted pilot authority; it accepts no new permission, source change, executable checkpoint or runtime pass. GPT-6 Sol medium; Standard app controlled/unverified.
+
+## Stopped author and exact dependency
+
+Fresh `author_moderation_sanction_enforcement_primitives` stopped at clean prepared `91d0012e65ab0ff2e46914d62240c4c7c89a07b1`, branch `agent/TASK-021A1b3c-moderation-sanction-enforcement-primitives`, workspace `/private/tmp/pals-task021-moderation-sanction-primitives`. Own unaccepted draft restored; no commit/import/memory examples/target contact. Own draft syntax exit0 is not accepted checkpoint evidence. Coordinator independently checked clean status/diff. Helper SHA256 `21ee2d38e44c551dab0492a1b8a0def39a6d4fd6442c673cba24880814f86e10`, MODELS `c8614d8c63a0658ff8a8351510cad8a511756a71f91e6839b4b0e683d72717e7`, unchanged reviewed/task-published corrected1a2b `6a55eb349ecfb9af29cd3b6607bb059b811b94f8`. Its355 own inert groups remain author-reported evidence reviewed statically; no saved stdout transcript/no new rerun or own-status model is implied.
+
+## Authority and source audit
+
+Fresh read-only `audit_moderation_restricted_status_contract` inspected frozen originals, all migration definitions/grants/policies and accepted authority. Original `supabase/tests/moderation-http.integration.mjs`217–219 requests caller accounts status then asserts `[{status:"suspended"}]`. Historical `docs/engineering/AUTHORIZATION.md` TASK-002 foundation, Accepted ADR-0019 line25 and README local-enforcement description genuinely preserved that earlier own-status raw boundary.
+
+Later Accepted ADR-0027 live-authorization section39 permits only caller-neutral status/explicit safety exceptions when ordinary access is denied and retains independent restriction denial55/59. Completed accepted B1 contract `tasks/active/TASK-021A1b1-owner-admission.md`30 explicitly assigns accounts_owner_read and retains caller-only status RPC, not raw owner/reference rows; known-ID restricted owner SELECT denial is required44 and recorded in `agents/handoffs/TASK-021A1b1.md`. B1 test `supabase/tests/pilot-admission-owner.test.sql`116 asserts zero restricted raw account rows.
+
+Migration `20260927000200_pilot_owner_admission.sql`68–70 replaces accounts_owner_read with caller ID plus pilot_onboarding_eligible. The caller helper20–22 delegates pilot_owner_subject_eligible5–17, which requires active account13 as well as availability/onboarding/admission/confirmed UNC/current membership/campus evidence. The historical authenticated SELECT table grant persists but does not bypass RLS. No later migration, including frozen source27, replaces that accounts SELECT boundary or these owner helpers. get_access_state29–44 checks inactive account first33 and returns restricted. Existing web access/restricted flow consumes that RPC.
+
+Conclusion: deliberately accepted later pilot boundary, not accidental source defect. Normal successful authenticated REST own-status SELECT is source-derived to return `[]`; this is static policy inference, not observed HTTP/provider/JWT evidence. Preserve existing RLS/grants/migrations and Accepted ADR texts. Restoring direct restricted raw status permission would require a separate permission/schema proposal and accepted migration, outside1a2c1; no such decision is taken here.
+
+## Exact retention amendment
+
+| Mapping                                         | Required classification                                                                                                                                               |
+| ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Literal MODHTTP manifest                        | 39 allocated immutable labels:38 historical retained labels+one current-source supplemental own-status label                                                          |
+| Historical lexical static extraction assertions | 41 original sites in retained extraction regions;40 remain literal-original retained; original219 historical/unretained/unexecuted/zero original retained-pass credit |
+| MODHTTP.account-enforcement.own-status          | Same allocated ID; independently expected current body[]; one current-source supplemental assertion, no original219 pass credit                                       |
+| Access-state                                    | Original restricted expectation unchanged                                                                                                                             |
+| HTTP200 intended-success hardening              | Separately named additional assertions; no inherited41 or expanded-runtime assertion/coverage credit                                                                  |
+
+This exception overrides every-original/exact-original clauses only for original219. All other source assertions/status/body/code/message/type equality, exclusions, signup metadata,39 IDs,15 races, full54 derivation, privacy and safety/refusal/cleanup gates remain authoritative. Frozen original HTTP/concurrency/FOUND/source27/provider asset and reviewed helper hashes stay unchanged. No original entrypoint import/evaluation/execution; no actual Auth/HTTP/SQL/provider contact.
+
+## Documentary scope and continuation
+
+Update parent portions/model/foundation/operations/sanctions, c1/c2/HTTP extraction contracts and matrix to state the explicit exception/counts; qualify historical AUTHORIZATION/README status claims; record clean stop/next gate in shared records and operation-family handoff. No executable/model/provider/source migration change and no final executable-file growth. This handoff is documentary only.
+
+After independent FULL review, publish exact task branch and documentary main with remote SHA verification. A fresh read-only latest-main+exact6a55 dependency reconciliation must then clear before a NEW c1 author; do not extend stopped c1/combined authors. c1 still owns only the existing helper/MODELS two files, preserves prior lawful355 groups and all reviewed semantics, derives current own-status empty result with complete54 equality and focused negative examples. c2 remains dependent on reviewed/task-published c1 and published exact prerequisite/reconciliation. Main26/source27/all fixtures unexecuted.1a2c/model/foundation/B3c/B3/A1c/A2/TASK-021, transport/current-safety/consumers/provider/ownership/exclusive release/preflight/runtime/security/cleanup/normalstop/accepted executable integration gates remain incomplete.
+
+## Restricted own-status reconciliation review receipt — 2026-09-29
+
+Fresh independent FULL reviewer checked all17 documentary files at a1875f30cd8e28ec4c1ef4c4d1da8f83fa05b2ba against verified main5d6793555b70eb595e983be7ca09b216e318e32a and exact clean stopped/source27 checkout. OneP3 grant wording corrected in d4f7d2c292457d4601f231bf78145a6a5fe80524; read-only follow-up CLEAR/no remaining findings. Accepted pilot boundary,39=38+1 label classification,41 original lexical sites=40retained+historical219unretained and separate current-source body[] assertion are supported statically. No reviewer execution/contact or observed runtime/JWT/permission proof. Same source/helper hashes and main26 preserved.
+
+This reviewed documentary milestone is accepted for coordinator task publication and doc-only canonical integration, both pending exact remote verification at this receipt. It accepts no new executable checkpoint or permission change. After publication, fresh latest-main/exact6a55 dependency reconciliation then NEW1a2c1 author; stopped author is not extended. All parents/provider/transport/consumers/runtime/final integration gates remain incomplete. See `agents/handoffs/TASK-021A1b3c-RESTRICTED-STATUS-RECONCILIATION.md`.

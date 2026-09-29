@@ -107,8 +107,12 @@ profile writes, profile-photo Storage writes, friendship and DM cleanup writes,
 and notification preference/read-marker writes additionally hold the caller's
 account row `FOR SHARE` and recheck active status at the write boundary. A
 sanction started first denies a stale writer after its wait; an admitted writer
-holding that row lock may commit before the sanction. Public `accounts` keeps
-its owner-only status read for the restricted screen. No raw sanction, report,
+holding that row lock may commit before the sanction. At this historical local-enforcement stage, public `accounts` kept
+its owner-only status read. Later Accepted ADR-0027/completed B1 denies restricted
+raw owner/reference reads; the restricted screen uses caller-neutral
+`get_access_state()` = `restricted`. The current-source own-status REST
+expectation is `[]`, inferred from policy rather than observed here; see
+`agents/handoffs/TASK-021A1b3c-RESTRICTED-STATUS-RECONCILIATION.md`. No raw sanction, report,
 case, audit or retry table reader was added.
 
 An existing Storage signed photo URL remains a bearer capability until its
