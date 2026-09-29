@@ -1,5 +1,9 @@
 # NOW
 
+## Corrected c1 milestone and exact c2 prerequisite review receipt — 2026-09-29
+
+Fresh independent FULL eight-document review CLEAR/no findings at `f617b818ddcaa1b61686cc27077dbe72984f5e42` against verifiedmain0d56d6. Complete exactf85 MODELS/source pins/saved stdout/verifier source inspected without execution; correction identity/denial/full54/privacy/interfaces/39-label assertion qualification and incomplete gates accurately preserved. Reviewed documentary milestone/exactc2 amendment accepted for task publication and doc-only canonical integration, pending exact remote verification at this receipt. Correctedf85 remains reviewed/task-published only; original69583 has no separate acceptance. Fresh latest-main/exactf85 reconciliation must clear before NEW c2 author; whole39/model/current-safety/transport/provider/consumers/runtime/parent gates incomplete. Main26/source27/fixtures unexecuted.
+
 ## B3c corrected sanction/enforcement checkpoint reviewed and task-published — 2026-09-29
 
 Fresh bounded correction froze `f85b9255a1f36e0c65d5ecaa5ddf214a69fdb675`, branch `agent/TASK-021A1b3c-sanction-denial-binding-correction`; fresh independent complete FULL c1/source/interface/privacy review CLEAR/no findings. Coordinator pushed and separately exact remote-verified f85b925; current canonical main0d56d6fa2eaef7eaa3e44e4d0f0aeaebabb36cca remains26. Helper SHA256 is `deca574f6b35d3edcbb9d2c506f625a08c9153329a801bd3943d35c66d52ac0f`; MODELS `3a9e5003a426a9a214455ea3aba4973d95e045682462db09bf5a8093d733c047`. The soleP2 is closed by exact moderator/original Local-decision identity and fixed named-denial/zero54 obligations. Original69583 remains separately unaccepted; now reachable only as corrected task history, not independently adopted. Immutable prior6a55/read25d353/coreac7/source history retained.
