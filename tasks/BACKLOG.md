@@ -1,5 +1,11 @@
 # Backlog
 
+## 2026-09-29 — B3c historical helper compatibility proposed
+
+Identity/legacy correction receipt7b0a4f4 independently reviewed and published on exact remote-verified canonical main47ec368f8464bc3c663c18149b81504f172e5cc5, code remains26. Final next-fixture dependencya370c7119369cc9fac15fb866af2bdd32300db3a independently clears exact bytes/interfaces and latest five-document merge. Fresh static generic failure-wire author and four-new-file moderation author dispatched in separate task branches froma370; no implementation checkpoint accepted yet. Existing runner/refusals/budgets remain unchanged.
+
+Proposed bounded three-new-file historical compatibility helper supplies five fixed source namespaces, private exact raw SQL/session evidence and conservative plan/exit/settlement/projected-error machinery. Source feasibility distinguishes raw stdout/stderr from inherited redacted combined output; synchronous SQL and direct module finally/fetch/kill/raw files require later exact frozen-module transformations. Original reduced holder snapshots are qualified observed survivor anchors, never independent full54 plans. Helper-only17-module closure remains unavailable. Fresh independent contract review/canonical publication/exact dependencies precede author. Legacy17Node+6SQL/newmoderationtwo remain outside current generic wire; later adoption/completion/budget/finalrunner/combinedfreeze/ownership/exclusiverelease/preflight/runtime/security/cleanup/integration and allparents incomplete. Main26/all27fixtures unexecuted/no targetcontact/no runtime release. See `tasks/active/TASK-021A1b3c-legacy-compat-helper.md`.
+
 ## 2026-09-29 — B3c identity and historical transport corrections reviewed
 
 Supersedes earlier active correction status. Identity bounded/output adopter `0ba730e3616bbf087398f71044791da8dfa7656d` clears independent correction re-review after FULL review of75d943fb found three P2 issues. It preserves unknown subgroup cleanup state, blocks post-failure observation after uncertain exits, records supplemental close failures and captures exact census differences before rollback. Exactly two owned files; original204-cell/raw assertions and unconditional refusal remain. Author875 dormant checks and AST/assertion preservation were inspected, not independently rerun.
