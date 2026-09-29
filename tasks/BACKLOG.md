@@ -1,5 +1,9 @@
 # Backlog
 
+## 2026-09-29 — State invalidation contract review cleared
+
+Fresh independent FULL read-only review cleared the eight-document contract checkpoint `05a5745576a60cf1e2cfb5aa593aba3c01b0cd1f` against canonical main `b9e843e946d7d98f58fd73cc1f561390e2692062`, with no actionable findings. The reviewer inspected exact c593 flow sources and hashes, the common interface, clean94bc stop, and source-only moderationac7 provenance; no tests were rerun. Root independently verified main and both dependency task branch SHAs remotely. Contract publication and latest-main dependency reconciliation must precede fresh authors. This receipt accepts the bounded static prerequisite only. All executable fixtures remain task-only and unexecuted; all parent tasks and runtime/provider gates remain incomplete.
+
 ## 2026-09-29 — B3c model setup reviewed; state invalidation prerequisite proposed
 
 Independent FULL source/schema/formula/privacy/interface review clears model-core/setupac7de008928a5b1ce496b42ddb31bc22f8e14f19 with no findings; task branchagent/TASK-021A1b3c-moderation-model-core-setup published/exactremoteverified. Literal54/19opaque setup plans, AuthSQL-vs-realHTTP source formulas/Palsprovision/writers/earlyoperator shutdown are static/source-only. Author84 memorygroups/0traps inspected not rerun. Later39HTTP/15race models/current readiness/retained teardown/transport/consumers unavailable; code task-only/unexecuted. Operations dependency candidate0bf298922200fbded983168703e85127d4cac93d prepared fromb9+ac7, author not dispatched; latest-main reconciliation/review required after milestone publication.
