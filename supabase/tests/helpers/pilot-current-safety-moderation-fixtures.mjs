@@ -697,6 +697,239 @@ export const readModelPlans = freeze(
     ]),
   ),
 );
+// Finite source operations. Request UUIDs are private observations, never a
+// caller-selected action/revision/model. SQL keys below are literal originals.
+const TRANSITIONS = freeze({
+  "http.start": ["actor", "report", null, 0, "start_review", null],
+  "http.replay": ["actor", "report", null, 0, "start_review", null],
+  "http.start-changed-retry": [
+    "actor",
+    "report",
+    null,
+    1,
+    "start_review",
+    null,
+  ],
+  "http.start-changed-action-retry": [
+    "actor",
+    "report",
+    null,
+    0,
+    "annotate",
+    "Reviewed evidence",
+  ],
+  "http.annotate": [
+    "actor",
+    "report",
+    null,
+    1,
+    "annotate",
+    "Reviewed evidence",
+  ],
+  "http.annotate-normalized-replay": [
+    "actor",
+    "report",
+    null,
+    1,
+    "annotate",
+    "  Reviewed evidence  ",
+  ],
+  "http.annotate-changed-body-retry": [
+    "actor",
+    "report",
+    null,
+    1,
+    "annotate",
+    "Stale second review",
+  ],
+  "http.stale": [
+    "second",
+    "report",
+    null,
+    1,
+    "annotate",
+    "Stale second review",
+  ],
+  "http.reopen": ["second", "report", null, 3, "reopen", "Further review"],
+  "http.suspended-retry": ["actor", "report", null, 0, "start_review", null],
+  "http.banned-retry": ["actor", "report", null, 0, "start_review", null],
+  "http.gate-retry": ["actor", "report", null, 0, "start_review", null],
+  "race.target-role": [
+    "actor",
+    "report",
+    "52000000-0000-4000-8003-000000000001",
+    0,
+    "start_review",
+    null,
+  ],
+  "race.case": [
+    "actor",
+    "report",
+    "52000000-0000-4000-8003-000000000002",
+    0,
+    "start_review",
+    null,
+  ],
+  "race.case-replay-veto": [
+    "actor",
+    "report",
+    "52000000-0000-4000-8003-000000000002",
+    0,
+    "start_review",
+    null,
+  ],
+  "race.first-operator": [
+    "actor",
+    "report2",
+    "52000000-0000-4000-8003-000000000003",
+    0,
+    "start_review",
+    null,
+  ],
+  "race.second-operator": [
+    "second",
+    "report2",
+    "52000000-0000-4000-8003-000000000004",
+    0,
+    "start_review",
+    null,
+  ],
+  "race.same-key-first": [
+    "actor",
+    "report3",
+    "52000000-0000-4000-8003-000000000007",
+    0,
+    "start_review",
+    null,
+  ],
+  "race.same-key-replay": [
+    "actor",
+    "report3",
+    "52000000-0000-4000-8003-000000000007",
+    0,
+    "start_review",
+    null,
+  ],
+  "race.no-campus": [
+    "actor",
+    "report2",
+    "52000000-0000-4000-8003-000000000008",
+    1,
+    "annotate",
+    "Campus unavailable",
+  ],
+  "race.current-campus": [
+    "actor",
+    "report2",
+    "52000000-0000-4000-8003-000000000009",
+    2,
+    "annotate",
+    "Current campus",
+  ],
+});
+const LOSS_READS = freeze({
+  "race.gate-detail": "gate",
+  "race.role-detail": "role",
+  "race.account-detail": "suspended",
+  "http.banned-detail": "banned",
+});
+export const transitionModelPlans = freeze(
+  Object.fromEntries(
+    [
+      ...Object.keys(TRANSITIONS),
+      ...Object.keys(LOSS_READS),
+      "race.detail-count",
+    ].map((id) => [
+      id,
+      opaque(plans, freeze({ id, family: "transitions", sourceOnly: true })),
+    ]),
+  ),
+);
+// Each sequence is verified at every commit boundary. Restoration/serial guards
+// are explicit source steps, not inferred target waits or successful transports.
+const RACE_STEPS = freeze({
+  gate_first: ["moderation-disable", "race.gate-detail", "moderation-enable"],
+  read_first: ["race.detail-count", "moderation-disable", "moderation-enable"],
+  role_first: ["actor-role-delete", "race.role-detail", "actor-role-restore"],
+  role_read_first: [
+    "race.detail-count",
+    "actor-role-delete",
+    "race.role-detail",
+    "actor-role-restore",
+  ],
+  account_first: ["actor-suspend", "race.account-detail", "actor-restore"],
+  account_read_first: [
+    "race.detail-count",
+    "actor-suspend",
+    "race.account-detail",
+    "actor-restore",
+  ],
+  target_role_first: [
+    "target-role-insert",
+    "race.target-role",
+    "target-role-delete",
+  ],
+  case_first: [
+    "race.case",
+    "target-role-insert",
+    "race.case-replay-veto",
+    "target-role-delete",
+  ],
+  two_operators: ["race.first-operator", "race.second-operator"],
+  same_key: ["race.same-key-first", "race.same-key-replay"],
+  membership_delete_first: [
+    "target-membership-delete",
+    "race.no-campus",
+    "target-membership-restore",
+  ],
+  action_before_membership_delete: [
+    "race.current-campus",
+    "target-membership-delete",
+    "target-membership-restore",
+  ],
+});
+const HTTP_TRANSITION_STEPS = freeze({
+  "MODHTTP.start-review": ["http.start", "http.replay"],
+  "MODHTTP.second-operator-detail": ["second-detail"],
+  "MODHTTP.annotate": ["http.annotate"],
+  "MODHTTP.stale-second-operator": ["http.stale"],
+  "MODHTTP.refresh-and-audit": ["refresh-detail"],
+  "MODHTTP.actor-suspended-retry": ["actor-suspend", "http.suspended-retry"],
+  "MODHTTP.actor-banned.detail": ["actor-ban", "http.banned-detail"],
+  "MODHTTP.actor-banned.retry": ["http.banned-retry"],
+  "MODHTTP.gate-off-retry": [
+    "actor-restore",
+    "moderation-disable",
+    "http.gate-retry",
+  ],
+});
+const sequences = new WeakMap();
+export const raceModelPlans = freeze(
+  Object.fromEntries(
+    Object.keys(RACE_STEPS).map((id) => [
+      id,
+      opaque(
+        plans,
+        freeze({ id, family: "first-twelve-races", sourceOnly: true }),
+      ),
+    ]),
+  ),
+);
+export const httpTransitionPlans = freeze(
+  Object.fromEntries(
+    Object.keys(HTTP_TRANSITION_STEPS).map((id) => [
+      id,
+      opaque(
+        plans,
+        freeze({
+          id,
+          family: "http-transition-subsequences",
+          sourceOnly: true,
+        }),
+      ),
+    ]),
+  ),
+);
 export function describeModelPlan(handle) {
   if (!plans.has(handle))
     return freeze({ available: false, reason: "unavailable" });
@@ -707,6 +940,18 @@ export function describeModelPlan(handle) {
     id: p.id,
     sourceOnly: true,
     runtimeCredit: 0,
+    ...([
+      "transitions",
+      "first-twelve-races",
+      "http-transition-subsequences",
+    ].includes(p.family)
+      ? {
+          modelAvailable: true,
+          transportAvailable: false,
+          orderCredit: 0,
+          steps: RACE_STEPS[p.id] ?? HTTP_TRANSITION_STEPS[p.id] ?? [p.id],
+        }
+      : {}),
     ...(p.family === "audited-reads"
       ? {
           componentId: READ_COMPONENTS[p.id],
@@ -726,7 +971,7 @@ export function describeModelPlan(handle) {
   });
 }
 export const modelCheckpoint = freeze({
-  family: "core-setup-and-audited-reads",
+  family: "core-setup-reads-transitions-first12",
   modelHash: hash(
     [
       snapshot,
@@ -758,6 +1003,12 @@ export const modelCheckpoint = freeze({
       verifyReadOperation,
       readDenial,
       auditCounts,
+      transitionContext,
+      transitionDecision,
+      transitionAudit,
+      verifyTransitionOperation,
+      sequenceOperation,
+      verifySequence,
     ]
       .map((fn) => fn.toString())
       .join("\n"),
@@ -773,7 +1024,7 @@ export const modelCheckpoint = freeze({
   schemaHash: hash(JSON.stringify(SCHEMA)),
   planHash: hash(JSON.stringify({ HTTP_IDS, RACES, PHASES, SETUP_IDS })),
   interfaceHash: hash(
-    "family1a1:setupModelPlans;describeModelPlan(handle);modelCheckpoint;runMemoryExamples(exactSourceBytes);moderationContact():unconditional-refusal;family1a2a:readModelPlans;describeModelPlan(handle)->componentId/sequenceAvailable=false/transportAvailable=false/sourceHttpStatusAllowlist",
+    "family1a1:setupModelPlans;describeModelPlan(handle);modelCheckpoint;runMemoryExamples(exactSourceBytes);moderationContact():unconditional-refusal;family1a2a:readModelPlans;describeModelPlan(handle)->componentId/sequenceAvailable=false/transportAvailable=false/sourceHttpStatusAllowlist;family1a2b:transitionModelPlans/raceModelPlans/httpTransitionPlans;describeModelPlan(handle)->finiteSteps/modelAvailable/transportAvailable=false/orderCredit=0",
   ),
   readModelHash: hash(
     [
@@ -796,6 +1047,32 @@ export const modelCheckpoint = freeze({
   ),
   auditedReadsAvailable: true,
   readPrimitives: READ_IDS.length,
+  transitionModelHash: hash(
+    [
+      transitionContext,
+      transitionDecision,
+      transitionAudit,
+      verifyTransitionOperation,
+      sequenceOperation,
+      verifySequence,
+    ]
+      .map((fn) => fn.toString())
+      .join("\n"),
+  ),
+  transitionPlanHash: hash(
+    JSON.stringify({
+      TRANSITIONS,
+      LOSS_READS,
+      RACE_STEPS,
+      HTTP_TRANSITION_STEPS,
+    }),
+  ),
+  transitionInterfaceHash: hash(
+    "private:transitionContext(op)->fixedSourceContext;transitionDecision(op,before,c)->independentChanges/resultOrDenial;transitionAudit(op,after,c,decision)->independentAudit23;verifyTransitionOperation(op,afterHandle,actualResult)->privateResult;sourceResult:race.detail-count=text1/race.transition=tuplesOnlyRowText/http.transition=rpcBodyArray;sequenceOperation(fixedPlan,beforeHandle,bounds,sourceHandle,setup,requestBindings)->opaqueSequence;verifySequence(sequenceHandle,orderedPrivateObservations)->privateResult;public:transitionModelPlans/raceModelPlans/httpTransitionPlans;finiteStepsOnly;noTransportOrOrderCredit",
+  ),
+  transitionPrimitivesAvailable: true,
+  firstTwelveRaceModelsAvailable: true,
+  httpTransitionSubsequencesAvailable: true,
   httpTransportAvailable: false,
   httpSequencesAvailable: false,
   racesAvailable: false,
@@ -1444,6 +1721,12 @@ function verifyOperation(operationHandle, afterHandle, actualResult) {
     after = own(snapshots, afterHandle);
   if (READ_IDS.includes(op.id))
     return verifyReadOperation(op, afterHandle, actualResult);
+  if (
+    Object.hasOwn(TRANSITIONS, op.id) ||
+    Object.hasOwn(LOSS_READS, op.id) ||
+    op.id === "race.detail-count"
+  )
+    return verifyTransitionOperation(op, afterHandle, actualResult);
   let changed;
   switch (op.id) {
     case "sql-auth-four":
@@ -1846,6 +2129,566 @@ function verifyReadOperation(op, afterHandle, actualResult) {
     readAudit(op, after, c.actor, kind, rows),
     actualResult,
     rows,
+  );
+}
+function transitionContext(op) {
+  keys(op.context, ["setup", "input", "jwtRole", "isolation"]);
+  const setup = setupContext({ ...op, context: op.context.setup });
+  const fixed = TRANSITIONS[op.id];
+  const actor = fixed ? setup[fixed[0]] : setup.actor;
+  equal(op.context.jwtRole, "authenticated");
+  equal(op.context.isolation, "read committed");
+  check(
+    op.id.startsWith("http.") ? setup.lane === "http" : setup.lane === "sql",
+  );
+  if (!fixed) equal(op.context.input, { p_report_id: setup.report });
+  else {
+    const i = op.context.input;
+    const names = [
+      "p_report_id",
+      "p_request_id",
+      "p_expected_revision",
+      "p_action",
+    ];
+    keys(i, [
+      ...names,
+      ...(Object.hasOwn(i, "p_note") ? ["p_note"] : []),
+      ...(Object.hasOwn(i, "p_duplicate_report_id")
+        ? ["p_duplicate_report_id"]
+        : []),
+    ]);
+    equal(i.p_report_id, setup[fixed[1]]);
+    equal(i.p_expected_revision, fixed[3]);
+    equal(i.p_action, fixed[4]);
+    equal(i.p_note ?? null, fixed[5]);
+    equal(i.p_duplicate_report_id ?? null, null);
+    check(
+      typeof i.p_request_id === "string" &&
+        /^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/.test(
+          i.p_request_id,
+        ),
+    );
+    if (fixed[2] !== null) equal(i.p_request_id, fixed[2]);
+    if (
+      [
+        "http.replay",
+        "http.start-changed-retry",
+        "http.start-changed-action-retry",
+        "http.annotate-normalized-replay",
+        "http.annotate-changed-body-retry",
+        "http.suspended-retry",
+        "http.banned-retry",
+        "http.gate-retry",
+        "race.case-replay-veto",
+        "race.same-key-replay",
+      ].includes(op.id)
+    ) {
+      const before = own(snapshots, op.beforeHandle);
+      const prior = find(
+        before,
+        "private.moderation_requests",
+        (r) => r.operator_id === actor && r.request_id === i.p_request_id,
+      );
+      equal(prior.report_id, i.p_report_id);
+      equal(prior.result_state, "in_review");
+      equal(
+        prior.result_revision,
+        [
+          "http.annotate-normalized-replay",
+          "http.annotate-changed-body-retry",
+        ].includes(op.id)
+          ? 2
+          : 1,
+      );
+    }
+  }
+  return {
+    ...setup,
+    actor,
+    input: op.context.input,
+    jwtRole: op.context.jwtRole,
+    isolation: op.context.isolation,
+  };
+}
+function transitionDecision(op, before, c) {
+  const denied = { code: "42501", message: "Moderation unavailable" };
+  // Original SQL uses psql -qAt row text; HTTP uses the exact RPC-body array.
+  // Stream framing/marker separation stays unavailable pending transport1b.
+  const receipt = (state, revision) =>
+    op.id.startsWith("race.")
+      ? `${state}|${revision}`
+      : [{ case_state: state, revision }];
+  const loss = LOSS_READS[op.id];
+  if (loss) {
+    if (loss === "gate")
+      equal(
+        find(before, "private.moderation_feature_gate", (r) => r.singleton)
+          .enabled,
+        false,
+      );
+    else if (loss === "role")
+      check(
+        !before["public.platform_roles"].some((r) => r.user_id === c.actor),
+      );
+    else
+      equal(
+        find(before, "public.accounts", (r) => r.id === c.actor).status,
+        loss,
+      );
+    check(!readActor(before, c.actor, c.jwtRole, c.isolation));
+    return { result: denied, changed: {} };
+  }
+  const i = c.input;
+  if (op.id === "http.suspended-retry")
+    equal(
+      find(before, "public.accounts", (r) => r.id === c.actor).status,
+      "suspended",
+    );
+  if (op.id === "http.banned-retry")
+    equal(
+      find(before, "public.accounts", (r) => r.id === c.actor).status,
+      "banned",
+    );
+  if (op.id === "http.gate-retry")
+    equal(
+      find(before, "private.moderation_feature_gate", (r) => r.singleton)
+        .enabled,
+      false,
+    );
+  if (["race.target-role", "race.case-replay-veto"].includes(op.id))
+    check(before["public.platform_roles"].some((r) => r.user_id === c.target));
+  // Live authorization and target privilege veto precede the retry ledger.
+  if (
+    !readActor(before, c.actor, c.jwtRole, c.isolation) ||
+    !reportAllowed(before, c.actor, i.p_report_id)
+  )
+    return { result: denied, changed: {} };
+  assertEarlyOperator(before, c.actor);
+  const report = find(
+    before,
+    "private.safety_reports",
+    (r) => r.id === i.p_report_id,
+  );
+  if (
+    report.target_type === "user" &&
+    before["public.platform_roles"].some((r) => r.user_id === report.target_id)
+  )
+    return { result: denied, changed: {} };
+  const note = i.p_note == null ? null : i.p_note.trim() || null;
+  // jsonb_build_array(... )::text uses comma-space and JSON strings. All
+  // permitted finite revisions are integers, so no numeric rendering inference.
+  const payload = [
+    i.p_report_id,
+    i.p_expected_revision,
+    i.p_action,
+    note,
+    i.p_duplicate_report_id ?? null,
+  ];
+  const fingerprint = createHash("md5")
+    .update(`[${payload.map((v) => JSON.stringify(v)).join(", ")}]`)
+    .digest("hex");
+  const requests = before["private.moderation_requests"].filter(
+    (r) => r.operator_id === c.actor && r.request_id === i.p_request_id,
+  );
+  check(requests.length <= 1);
+  if (
+    [
+      "http.replay",
+      "http.start-changed-retry",
+      "http.start-changed-action-retry",
+      "http.annotate-normalized-replay",
+      "http.annotate-changed-body-retry",
+      "race.same-key-replay",
+    ].includes(op.id)
+  )
+    check(requests.length === 1);
+  if (
+    [
+      "http.start",
+      "http.annotate",
+      "http.stale",
+      "http.reopen",
+      "race.case",
+      "race.first-operator",
+      "race.second-operator",
+      "race.same-key-first",
+      "race.no-campus",
+      "race.current-campus",
+    ].includes(op.id)
+  )
+    check(requests.length === 0);
+  if (requests.length) {
+    const prior = requests[0];
+    return prior.fingerprint === fingerprint
+      ? {
+          changed: {},
+          result: receipt(prior.result_state, prior.result_revision),
+        }
+      : { changed: {}, result: denied };
+  }
+  bindUuid("client_uuid_v4", i.p_request_id, before, new Set());
+  const cases = before["private.moderation_cases"].filter(
+    (r) => r.report_id === report.id,
+  );
+  check(cases.length <= 1);
+  const old = cases[0],
+    oldState = old?.state ?? "open",
+    oldRevision = old?.revision ?? 0;
+  if (
+    oldRevision !== i.p_expected_revision ||
+    oldState !==
+      (i.p_action === "start_review"
+        ? "open"
+        : i.p_action === "reopen"
+          ? "closed"
+          : "in_review")
+  )
+    return { result: denied, changed: {} };
+  const revision = oldRevision + 1;
+  if (op.id === "race.no-campus")
+    check(
+      !before["public.university_memberships"].some(
+        (r) => r.user_id === c.target,
+      ),
+    );
+  if (op.id === "race.current-campus")
+    find(
+      before,
+      "public.university_memberships",
+      (r) => r.user_id === c.target,
+    );
+  const row = {
+    report_id: report.id,
+    state: "in_review",
+    revision,
+    note,
+    disposition: null,
+    duplicate_report_id: null,
+    sanction_id: null,
+    hangout_disable_id: null,
+  };
+  const request = {
+    operator_id: c.actor,
+    request_id: i.p_request_id,
+    fingerprint,
+    report_id: report.id,
+    result_state: "in_review",
+    result_revision: revision,
+  };
+  return {
+    result: receipt("in_review", revision),
+    report,
+    note,
+    oldState,
+    oldRevision,
+    changed: {
+      "private.moderation_cases": old
+        ? replace(
+            before,
+            "private.moderation_cases",
+            (r) => r.report_id === report.id,
+            () => row,
+          )
+        : insertion(before, "private.moderation_cases", [row]),
+      "private.moderation_requests": insertion(
+        before,
+        "private.moderation_requests",
+        [request],
+      ),
+    },
+  };
+}
+function transitionAudit(op, after, c, decision) {
+  const before = own(snapshots, op.beforeHandle),
+    table = "private.moderation_audit";
+  const oldIds = new Set(before[table].map((r) => r.id));
+  check(oldIds.size === before[table].length);
+  const candidates = added(before, after, table, (r) => !oldIds.has(r.id), 1);
+  const candidate = candidates[0];
+  keys(candidate, SCHEMA[table]);
+  const used = new Set([c.input.p_request_id]);
+  const id = bindUuid("database_uuid", candidate.id, before, used);
+  const occurred_at = bindTime(
+    "clock_timestamp",
+    candidate.occurred_at,
+    op.bounds,
+  );
+  const r = decision.report;
+  const campuses =
+    r.target_type === "user"
+      ? before["public.university_memberships"].filter(
+          (m) => m.user_id === r.target_id,
+        )
+      : before["public.hangouts"].filter((h) => h.id === r.target_id);
+  check(campuses.length <= 1);
+  const row = {
+    id,
+    occurred_at,
+    operator_id: c.actor,
+    action: c.input.p_action,
+    report_id: r.id,
+    subject_target_type: r.target_type,
+    subject_target_id: r.target_id,
+    subject_campus_id: campuses[0]?.university_id ?? null,
+    request_id: c.input.p_request_id,
+    previous_state: decision.oldState,
+    new_state: "in_review",
+    previous_revision: decision.oldRevision,
+    new_revision: decision.oldRevision + 1,
+    reason: decision.note,
+    duplicate_report_id: null,
+    page_report_ids: null,
+    page_count: null,
+    sanction_id: null,
+    previous_account_status: null,
+    new_account_status: null,
+    hangout_disable_id: null,
+    previous_hangout_disabled: null,
+    new_hangout_disabled: null,
+  };
+  equal(candidate, row);
+  return { [table]: insertion(before, table, [row]) };
+}
+function verifyTransitionOperation(op, afterHandle, actualResult) {
+  const before = own(snapshots, op.beforeHandle),
+    after = own(snapshots, afterHandle),
+    c = transitionContext(op);
+  if (op.id === "race.detail-count") {
+    check(readActor(before, c.actor, c.jwtRole, c.isolation));
+    assertEarlyOperator(before, c.actor);
+    check(reportAllowed(before, c.actor, c.report));
+    const rows = detailRows(before, c.report);
+    return assertExact(
+      op.beforeHandle,
+      afterHandle,
+      readAudit(op, after, c.actor, "detail_read", rows),
+      actualResult,
+      "1",
+    );
+  }
+  const decision = transitionDecision(op, before, c);
+  const changed = {
+    ...decision.changed,
+    ...(decision.report ? transitionAudit(op, after, c, decision) : {}),
+  };
+  return assertExact(
+    op.beforeHandle,
+    afterHandle,
+    changed,
+    actualResult,
+    decision.result,
+  );
+}
+function sequenceOperation(
+  planHandle,
+  beforeHandle,
+  bounds,
+  sourceHandle,
+  setup,
+  requestBindings,
+) {
+  const p = own(plans, planHandle);
+  check(
+    ["first-twelve-races", "http-transition-subsequences"].includes(p.family),
+  );
+  own(snapshots, beforeHandle);
+  own(sources, sourceHandle);
+  const c = setupContext({ beforeHandle, context: setup });
+  const http = p.family === "http-transition-subsequences";
+  check(c.lane === (http ? "http" : "sql"));
+  keys(requestBindings, http ? ["initial", "annotate", "stale"] : []);
+  if (http) {
+    check(new Set(Object.values(requestBindings)).size === 3);
+    for (const id of Object.values(requestBindings))
+      check(
+        typeof id === "string" &&
+          /^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/.test(
+            id,
+          ),
+      );
+  }
+  return opaque(
+    sequences,
+    freeze({
+      id: p.id,
+      family: p.family,
+      beforeHandle,
+      bounds,
+      sourceHandle,
+      setup: clone(setup),
+      requestBindings: clone(requestBindings),
+    }),
+  );
+}
+function verifySequence(sequenceHandle, observations) {
+  const s = own(sequences, sequenceHandle),
+    http = s.family === "http-transition-subsequences";
+  const steps = (http ? HTTP_TRANSITION_STEPS : RACE_STEPS)[s.id];
+  check(Array.isArray(observations) && observations.length === steps.length);
+  let currentHandle = s.beforeHandle,
+    firstReceipt;
+  const c = setupContext({ beforeHandle: currentHandle, context: s.setup });
+  const before = own(snapshots, currentHandle);
+  if (http) {
+    const caseRows = before["private.moderation_cases"].filter(
+      (r) => r.report_id === c.report,
+    );
+    const expectedRevision =
+      s.id === "MODHTTP.start-review"
+        ? 0
+        : ["MODHTTP.second-operator-detail", "MODHTTP.annotate"].includes(s.id)
+          ? 1
+          : 2;
+    equal(caseRows[0]?.revision ?? 0, expectedRevision);
+    if (expectedRevision) {
+      const request = find(
+        before,
+        "private.moderation_requests",
+        (r) =>
+          r.operator_id === c.actor &&
+          r.request_id === s.requestBindings.initial,
+      );
+      equal(request.report_id, c.report);
+      equal(request.result_state, "in_review");
+      equal(request.result_revision, 1);
+    }
+  }
+  for (const [index, id] of steps.entries()) {
+    const observation = observations[index];
+    keys(observation, ["afterHandle", "result"]);
+    const fixed = TRANSITIONS[id];
+    let input, context, plan;
+    if (fixed || Object.hasOwn(LOSS_READS, id) || id === "race.detail-count") {
+      input = fixed
+        ? {
+            p_report_id: c[fixed[1]],
+            p_request_id:
+              fixed[2] ??
+              s.requestBindings[
+                id === "http.annotate"
+                  ? "annotate"
+                  : id === "http.stale"
+                    ? "stale"
+                    : "initial"
+              ],
+            p_expected_revision: fixed[3],
+            p_action: fixed[4],
+            ...(fixed[5] !== null ? { p_note: fixed[5] } : {}),
+          }
+        : { p_report_id: c.report };
+      context = {
+        setup: s.setup,
+        input,
+        jwtRole: "authenticated",
+        isolation: "read committed",
+      };
+      plan = transitionModelPlans[id];
+    } else if (READ_IDS.includes(id)) {
+      input = { p_report_id: c.report };
+      context = {
+        setup: s.setup,
+        input,
+        jwtRole: "authenticated",
+        isolation: "read committed",
+      };
+      plan = readModelPlans[id];
+    } else {
+      context = s.setup;
+      plan = setupModelPlans[id];
+    }
+    const op = operation(
+      plan,
+      currentHandle,
+      s.bounds,
+      s.sourceHandle,
+      context,
+    );
+    const receipt = verifyOperation(
+      op,
+      observation.afterHandle,
+      observation.result,
+    );
+    if (id === "http.start" || id === "race.same-key-first")
+      firstReceipt = receipt;
+    if (id === "http.replay" || id === "race.same-key-replay")
+      equal(own(results, receipt), own(results, firstReceipt));
+    // A source-fixed denial cannot be substituted with a legal new operation;
+    // its derived result/full54 comparison must be zero delta.
+    if (
+      [
+        "http.stale",
+        "http.suspended-retry",
+        "http.banned-retry",
+        "http.gate-retry",
+        "race.target-role",
+        "race.case-replay-veto",
+        "race.second-operator",
+      ].includes(id)
+    )
+      equal(observation.result, {
+        code: "42501",
+        message: "Moderation unavailable",
+      });
+    currentHandle = observation.afterHandle;
+  }
+  const after = own(snapshots, currentHandle);
+  const readCount = (raw) =>
+    raw["private.moderation_audit"].filter(
+      (r) => r.report_id === c.report && r.action === "detail_read",
+    ).length;
+  if (["read_first", "role_read_first", "account_read_first"].includes(s.id))
+    equal(readCount(after), readCount(before) + 1);
+  if (["two_operators", "same_key"].includes(s.id)) {
+    const reportId = s.id === "two_operators" ? c.report2 : c.report3;
+    equal(
+      find(after, "private.moderation_cases", (r) => r.report_id === reportId)
+        .revision,
+      1,
+    );
+    equal(
+      after["private.moderation_audit"].filter(
+        (r) => r.report_id === reportId && r.action === "start_review",
+      ).length,
+      1,
+    );
+    equal(
+      after["private.moderation_requests"].filter(
+        (r) => r.report_id === reportId,
+      ).length,
+      1,
+    );
+  }
+  if (
+    s.id === "membership_delete_first" ||
+    s.id === "action_before_membership_delete"
+  ) {
+    const id =
+      s.id === "membership_delete_first"
+        ? TRANSITIONS["race.no-campus"][2]
+        : TRANSITIONS["race.current-campus"][2];
+    const campus = find(
+      after,
+      "private.moderation_audit",
+      (r) => r.request_id === id,
+    ).subject_campus_id;
+    check(
+      s.id === "membership_delete_first" ? campus === null : campus !== null,
+    );
+  }
+  if (s.id === "MODHTTP.refresh-and-audit") {
+    const counts = auditCounts(currentHandle, s.setup);
+    equal(counts.startReview, 1);
+    equal(counts.queueContainingReport, 1);
+    equal(detailRows(after, c.report)[0].case_revision, 2);
+    equal(counts.total, before["private.moderation_audit"].length + 1);
+  }
+  return opaque(
+    results,
+    freeze({
+      classification: "source-only-sequence",
+      id: s.id,
+      verifiedSteps: steps.length,
+    }),
   );
 }
 function assertEarlyOperator(before, actor) {
@@ -2578,6 +3421,7 @@ function memoryExamples(bytes) {
     ),
   );
   groups += readMemoryExamples(source, bounds, time, later, reports, hung);
+  groups += transitionMemoryExamples(source, bounds, time, later, reports);
   return freeze({
     available: true,
     classification: "memory-only",
@@ -3183,6 +4027,833 @@ function readMemoryExamples(source, bounds, time, later, sqlReports, sqlHung) {
       snapshot(detailAfter),
       detail,
     ),
+  );
+  return groups;
+}
+
+// Manufactured observations only. These examples execute no source SQL/module,
+// waits, transport or permission operation; every production expectation above
+// is independently built from the before snapshot and finite source operation.
+function transitionMemoryExamples(source, bounds, time, later, sqlReports) {
+  let groups = 0,
+    ordinal = 0;
+  const tested = (fn) => {
+    fn();
+    groups++;
+  };
+  const rejected = (fn) => {
+    let failed = false;
+    try {
+      fn();
+    } catch {
+      failed = true;
+    }
+    check(failed);
+    groups++;
+  };
+  const denial = { code: "42501", message: "Moderation unavailable" };
+  const baseline = clone(sqlReports);
+  baseline["private.moderation_feature_gate"][0].enabled = true;
+  const newId = () =>
+    `64000000-0000-1000-8000-${String(++ordinal).padStart(12, "0")}`;
+  const bindings = {
+    initial: "65000000-0000-4000-8000-000000000001",
+    annotate: "65000000-0000-4000-8000-000000000002",
+    stale: "65000000-0000-4000-8000-000000000003",
+  };
+  const context = (input, setup = {}) => ({
+    setup,
+    input,
+    jwtRole: "authenticated",
+    isolation: "read committed",
+  });
+  const requestInput = (id, c, b = bindings) => {
+    const [actor, report, request, revision, action, note] = TRANSITIONS[id];
+    check(actor);
+    return {
+      p_report_id: c[report],
+      p_request_id:
+        request ??
+        b[
+          [
+            "http.annotate",
+            "http.annotate-normalized-replay",
+            "http.annotate-changed-body-retry",
+          ].includes(id)
+            ? "annotate"
+            : id === "http.stale"
+              ? "stale"
+              : "initial"
+        ],
+      p_expected_revision: revision,
+      p_action: action,
+      ...(note === null ? {} : { p_note: note }),
+    };
+  };
+  const audit = (
+    raw,
+    actor,
+    action,
+    report,
+    request,
+    previous,
+    revision,
+    note,
+    campus,
+    ids = null,
+  ) => {
+    raw["private.moderation_audit"].push({
+      id: newId(),
+      occurred_at: time,
+      operator_id: actor,
+      action,
+      report_id: report?.id ?? null,
+      subject_target_type: report?.target_type ?? null,
+      subject_target_id: report?.target_id ?? null,
+      subject_campus_id: campus,
+      request_id: request,
+      previous_state: previous,
+      new_state: revision === null ? null : "in_review",
+      previous_revision: revision === null ? null : revision - 1,
+      new_revision: revision,
+      reason: note,
+      duplicate_report_id: null,
+      page_report_ids: ids,
+      page_count: ids === null ? null : ids.length,
+      sanction_id: null,
+      previous_account_status: null,
+      new_account_status: null,
+      hangout_disable_id: null,
+      previous_hangout_disabled: null,
+      new_hangout_disabled: null,
+    });
+  };
+  const manufactured = (id, raw, setup = {}, b = bindings) => {
+    const after = clone(raw),
+      c = { ...SQL_IDS, ...setup };
+    if (
+      Object.hasOwn(LOSS_READS, id) ||
+      [
+        "race.target-role",
+        "race.case-replay-veto",
+        "race.second-operator",
+        "http.stale",
+        "http.suspended-retry",
+        "http.banned-retry",
+        "http.gate-retry",
+      ].includes(id)
+    )
+      return { after, result: clone(denial) };
+    if (TRANSITIONS[id]) {
+      const [actorKey, reportKey, , expectedRevision, action, note] =
+        TRANSITIONS[id];
+      const input = requestInput(id, c, b),
+        actor = c[actorKey],
+        reportId = c[reportKey];
+      if (id === "http.replay" || id === "race.same-key-replay")
+        return {
+          after,
+          result: id.startsWith("race.")
+            ? "in_review|1"
+            : [{ case_state: "in_review", revision: 1 }],
+        };
+      const report = raw["private.safety_reports"].find(
+        (r) => r.id === reportId,
+      );
+      const old = raw["private.moderation_cases"].find(
+        (r) => r.report_id === reportId,
+      );
+      const revision = expectedRevision + 1;
+      after["private.moderation_cases"] = after[
+        "private.moderation_cases"
+      ].filter((r) => r.report_id !== reportId);
+      after["private.moderation_cases"].push({
+        report_id: reportId,
+        state: "in_review",
+        revision,
+        note,
+        disposition: null,
+        duplicate_report_id: null,
+        sanction_id: null,
+        hangout_disable_id: null,
+      });
+      // Source-literal text, separate from transitionDecision's value serializer.
+      const text = `["${reportId}", ${expectedRevision}, "${action}", ${note === null ? "null" : '"' + note + '"'}, null]`;
+      after["private.moderation_requests"].push({
+        operator_id: actor,
+        request_id: input.p_request_id,
+        fingerprint: createHash("md5").update(text).digest("hex"),
+        report_id: reportId,
+        result_state: "in_review",
+        result_revision: revision,
+      });
+      const campus =
+        raw["public.university_memberships"].find(
+          (r) => r.user_id === report.target_id,
+        )?.university_id ?? null;
+      audit(
+        after,
+        actor,
+        action,
+        report,
+        input.p_request_id,
+        old?.state ?? "open",
+        revision,
+        note,
+        campus,
+      );
+      return {
+        after,
+        result: id.startsWith("race.")
+          ? `in_review|${revision}`
+          : [{ case_state: "in_review", revision }],
+      };
+    }
+    if (
+      [
+        "detail",
+        "second-detail",
+        "refresh-detail",
+        "queue",
+        "race.detail-count",
+      ].includes(id)
+    ) {
+      const actor = ["second-detail", "refresh-detail"].includes(id)
+        ? c.second
+        : c.actor;
+      const r = raw["private.safety_reports"].find((r) => r.id === c.report);
+      const caseRow = raw["private.moderation_cases"].find(
+        (row) => row.report_id === c.report,
+      );
+      const row = {
+        report_id: r.id,
+        submitted_at: r.submitted_at,
+        target_type: r.target_type,
+        target_id: r.target_id,
+        reporter_id: r.reporter_id,
+        category: r.category,
+        case_state: caseRow?.state ?? "open",
+      };
+      if (id !== "queue")
+        Object.assign(row, {
+          case_revision: caseRow?.revision ?? 0,
+          narrative: r.narrative,
+          provenance_kind: r.provenance_kind,
+          provenance_ref_id: r.provenance_ref_id,
+          case_note: caseRow?.note ?? null,
+          disposition: caseRow?.disposition ?? null,
+          target_status: "active",
+          target_campus_id:
+            raw["public.university_memberships"].find(
+              (m) => m.user_id === r.target_id,
+            )?.university_id ?? null,
+          target_disabled: null,
+        });
+      audit(
+        after,
+        actor,
+        id === "queue" ? "queue_read" : "detail_read",
+        id === "queue" ? null : { id: r.id },
+        newId(),
+        null,
+        null,
+        null,
+        null,
+        id === "queue" ? [r.id] : null,
+      );
+      return { after, result: id === "race.detail-count" ? "1" : [row] };
+    }
+    switch (id) {
+      case "moderation-disable":
+        after["private.moderation_feature_gate"][0].enabled = false;
+        break;
+      case "moderation-enable":
+        after["private.moderation_feature_gate"][0].enabled = true;
+        after["private.safety_feature_gate"][0].enabled = true;
+        break;
+      case "actor-suspend":
+      case "actor-ban":
+      case "actor-restore":
+        after["public.accounts"].find((r) => r.id === c.actor).status =
+          id === "actor-suspend"
+            ? "suspended"
+            : id === "actor-ban"
+              ? "banned"
+              : "active";
+        break;
+      case "actor-role-delete":
+      case "target-role-delete":
+        after["public.platform_roles"] = after["public.platform_roles"].filter(
+          (r) =>
+            r.user_id !== (id === "actor-role-delete" ? c.actor : c.target),
+        );
+        break;
+      case "actor-role-restore":
+      case "target-role-insert":
+        after["public.platform_roles"].push({
+          user_id: id === "actor-role-restore" ? c.actor : c.target,
+          role: "moderator",
+          created_at: time,
+        });
+        break;
+      case "target-membership-delete":
+        after["public.university_memberships"] = after[
+          "public.university_memberships"
+        ].filter((r) => r.user_id !== c.target);
+        break;
+      case "target-membership-restore":
+        after["public.university_memberships"].push({
+          user_id: c.target,
+          university_id: raw["public.universities"][0].id,
+          verified_at: time,
+          verification_email: "moderation-race-3@unc.edu",
+          created_at: time,
+        });
+        break;
+      default:
+        throw new Error("Moderation model unavailable");
+    }
+    return { after, result: "" };
+  };
+  const seqObservations = (ids, raw, setup = {}, b = bindings) => {
+    let state = raw;
+    const observations = ids.map((id) => {
+      const observation = manufactured(id, state, setup, b);
+      state = observation.after;
+      return { afterHandle: snapshot(state), result: observation.result };
+    });
+    return { observations, after: state };
+  };
+  const verify = (id, raw, observed, setup = {}, input) =>
+    verifyOperation(
+      operation(
+        transitionModelPlans[id],
+        snapshot(raw),
+        bounds,
+        source,
+        context(
+          input ??
+            (TRANSITIONS[id]
+              ? requestInput(id, { ...SQL_IDS, ...setup })
+              : { p_report_id: SQL_IDS.report }),
+          setup,
+        ),
+      ),
+      snapshot(observed.after),
+      observed.result,
+    );
+  tested(() =>
+    equal(Object.keys(RACE_STEPS), [
+      "gate_first",
+      "read_first",
+      "role_first",
+      "role_read_first",
+      "account_first",
+      "account_read_first",
+      "target_role_first",
+      "case_first",
+      "two_operators",
+      "same_key",
+      "membership_delete_first",
+      "action_before_membership_delete",
+    ]),
+  );
+  let raceState = clone(baseline);
+  const allRaceObservations = [];
+  for (const id of Object.keys(RACE_STEPS)) {
+    const seq = sequenceOperation(
+      raceModelPlans[id],
+      snapshot(raceState),
+      bounds,
+      source,
+      {},
+      {},
+    );
+    const made = seqObservations(RACE_STEPS[id], raceState);
+    tested(() => verifySequence(seq, made.observations));
+    rejected(() => verifySequence(seq, made.observations.slice(1)));
+    if (id === "same_key")
+      tested(() => verifySequence(seq, made.observations.slice().reverse()));
+    else
+      rejected(() => verifySequence(seq, made.observations.slice().reverse()));
+    tested(() =>
+      check(describeModelPlan(raceModelPlans[id]).orderCredit === 0),
+    );
+    allRaceObservations.push(made);
+    raceState = made.after;
+  }
+  tested(() =>
+    equal(
+      raceState["private.moderation_audit"].filter(
+        (r) => r.action === "start_review",
+      ).length,
+      3,
+    ),
+  );
+  tested(() => equal(raceState["private.moderation_requests"].length, 5));
+  tested(() =>
+    equal(
+      find(
+        raceState,
+        "private.moderation_cases",
+        (r) => r.report_id === SQL_IDS.report2,
+      ).revision,
+      3,
+    ),
+  );
+  tested(() =>
+    equal(
+      find(
+        raceState,
+        "private.moderation_audit",
+        (r) => r.request_id === "52000000-0000-4000-8003-000000000008",
+      ).subject_campus_id,
+      null,
+    ),
+  );
+  tested(() =>
+    equal(
+      find(
+        raceState,
+        "private.moderation_audit",
+        (r) => r.request_id === "52000000-0000-4000-8003-000000000009",
+      ).subject_campus_id,
+      baseline["public.universities"][0].id,
+    ),
+  );
+  const first = manufactured("race.case", baseline);
+  tested(() => verify("race.case", baseline, first));
+  const countRead = manufactured("race.detail-count", baseline);
+  tested(() => verify("race.detail-count", baseline, countRead));
+  rejected(() =>
+    verify("race.detail-count", baseline, { ...countRead, result: 1 }),
+  );
+  rejected(() =>
+    verify("race.detail-count", baseline, { ...countRead, result: "0" }),
+  );
+  for (const [table, field, value] of [
+    ["private.moderation_cases", "revision", 2],
+    ["private.moderation_cases", "note", "private changed"],
+    ["private.moderation_cases", "disposition", "no_action"],
+    ["private.moderation_cases", "sanction_id", SQL_IDS.target],
+    ["private.moderation_requests", "fingerprint", "wrong"],
+    ["private.moderation_requests", "result_revision", "1"],
+    ["private.moderation_requests", "operator_id", SQL_IDS.second],
+    ["private.moderation_audit", "operator_id", SQL_IDS.second],
+    ["private.moderation_audit", "request_id", SQL_IDS.report],
+    ["private.moderation_audit", "reason", "wrong"],
+    ["private.moderation_audit", "subject_campus_id", null],
+    ["private.moderation_audit", "sanction_id", SQL_IDS.target],
+    ["private.moderation_audit", "new_revision", "1"],
+    ["private.moderation_audit", "occurred_at", "2026-09-29T12:02:00Z"],
+    ["private.moderation_audit", "id", SQL_IDS.target],
+    ["public.accounts", "status", "banned"],
+  ]) {
+    const changed = clone(first);
+    changed.after[table][0][field] = value;
+    rejected(() => verify("race.case", baseline, changed));
+  }
+  const extra = clone(first);
+  extra.after["private.moderation_audit"].push({
+    ...extra.after["private.moderation_audit"][0],
+    id: newId(),
+  });
+  rejected(() => verify("race.case", baseline, extra));
+  const column = clone(first);
+  column.after["private.moderation_cases"][0].secret = "private";
+  rejected(() => verify("race.case", baseline, column));
+  const wrongResult = clone(first);
+  wrongResult.result = "in_review|01";
+  rejected(() => verify("race.case", baseline, wrongResult));
+  for (const [key, value] of [
+    ["p_action", "annotate"],
+    ["p_expected_revision", 1],
+    ["p_report_id", SQL_IDS.report2],
+    ["p_note", "changed"],
+    ["p_duplicate_report_id", SQL_IDS.report2],
+    ["p_request_id", "52000000-0000-4000-8003-000000000099"],
+  ]) {
+    const changed = { ...requestInput("race.case", SQL_IDS), [key]: value };
+    rejected(() => verify("race.case", baseline, first, {}, changed));
+  }
+  for (const loss of ["gate", "role", "account", "target-role"]) {
+    const state = clone(baseline);
+    if (loss === "gate")
+      state["private.moderation_feature_gate"][0].enabled = false;
+    if (loss === "role")
+      state["public.platform_roles"] = state["public.platform_roles"].filter(
+        (r) => r.user_id !== SQL_IDS.actor,
+      );
+    if (loss === "account")
+      state["public.accounts"].find((r) => r.id === SQL_IDS.actor).status =
+        "banned";
+    if (loss === "target-role")
+      state["public.platform_roles"].push({
+        user_id: SQL_IDS.target,
+        role: "admin",
+        created_at: time,
+      });
+    tested(() => verify("race.case", state, { after: state, result: denial }));
+    rejected(() => verify("race.case", state, first));
+  }
+  // Retry mismatch is derived independently even when an old receipt exists.
+  for (const field of ["fingerprint", "result_state", "result_revision"]) {
+    const state = clone(first.after);
+    state["private.moderation_requests"][0][field] =
+      field === "result_revision" ? 2 : "changed";
+    if (field === "fingerprint") {
+      const op = own(
+        operations,
+        operation(
+          transitionModelPlans["race.case"],
+          snapshot(state),
+          bounds,
+          source,
+          context(requestInput("race.case", SQL_IDS)),
+        ),
+      );
+      const c = {
+        ...SQL_IDS,
+        input: requestInput("race.case", SQL_IDS),
+        jwtRole: "authenticated",
+        isolation: "read committed",
+      };
+      tested(() =>
+        equal(
+          transitionDecision({ ...op, id: "race.same-key-replay" }, state, c)
+            .result,
+          denial,
+        ),
+      );
+    } else
+      rejected(() =>
+        verify("race.case-replay-veto", state, {
+          after: state,
+          result: denial,
+        }),
+      );
+  }
+  // Independent, source-bound HTTP before fixture; no signup/JWT/provider proof.
+  const httpSetup = {
+    lane: "http",
+    actor: SQL_IDS.actor,
+    reporter: SQL_IDS.reporter,
+    target: SQL_IDS.target,
+    second: SQL_IDS.second,
+    report: SQL_IDS.report,
+    selfFiledReport: SQL_IDS.report2,
+    selfTargetReport: SQL_IDS.report3,
+    ownHangoutReport: SQL_IDS.hangoutReport,
+    hangout: SQL_IDS.hangout,
+  };
+  let httpState = clone(baseline);
+  for (const r of httpState["auth.users"]) {
+    r.raw_user_meta_data = r.id === SQL_IDS.reporter ? { role: "admin" } : {};
+    r.raw_app_meta_data = { provider: "email", providers: ["email"] };
+  }
+  httpState["private.safety_reports"][0].category = "other";
+  httpState["private.safety_reports"][0].narrative = "Local allegation";
+  httpState["private.safety_reports"][1].reporter_id = SQL_IDS.actor;
+  httpState["private.safety_reports"][2].target_id = SQL_IDS.actor;
+  for (const id of ["queue", "detail"]) {
+    const made = manufactured(id, httpState, httpSetup);
+    const input =
+      id === "queue"
+        ? { p_after_submitted_at: null, p_after_id: null, p_limit: 24 }
+        : { p_report_id: SQL_IDS.report };
+    tested(() =>
+      verifyOperation(
+        operation(
+          readModelPlans[id],
+          snapshot(httpState),
+          bounds,
+          source,
+          context(input, httpSetup),
+        ),
+        snapshot(made.after),
+        made.result,
+      ),
+    );
+    httpState = made.after;
+  }
+  const beforeHttp = clone(httpState),
+    httpMade = [];
+  for (const id of Object.keys(HTTP_TRANSITION_STEPS)) {
+    const seq = sequenceOperation(
+      httpTransitionPlans[id],
+      snapshot(httpState),
+      bounds,
+      source,
+      httpSetup,
+      bindings,
+    );
+    const made = seqObservations(
+      HTTP_TRANSITION_STEPS[id],
+      httpState,
+      httpSetup,
+    );
+    tested(() => verifySequence(seq, made.observations));
+    rejected(() => verifySequence(seq, []));
+    tested(() =>
+      equal(
+        describeModelPlan(httpTransitionPlans[id]).steps,
+        HTTP_TRANSITION_STEPS[id],
+      ),
+    );
+    httpMade.push({ id, before: httpState, seq, made });
+    httpState = made.after;
+  }
+  tested(() =>
+    equal(
+      httpState["private.moderation_audit"].length,
+      beforeHttp["private.moderation_audit"].length + 4,
+    ),
+  );
+  const reviewState = httpMade.find(
+    (r) => r.id === "MODHTTP.refresh-and-audit",
+  ).before;
+  tested(() =>
+    verify(
+      "http.annotate-normalized-replay",
+      reviewState,
+      {
+        after: reviewState,
+        result: [{ case_state: "in_review", revision: 2 }],
+      },
+      httpSetup,
+    ),
+  );
+  tested(() =>
+    verify(
+      "http.start-changed-retry",
+      reviewState,
+      { after: reviewState, result: denial },
+      httpSetup,
+    ),
+  );
+  tested(() =>
+    verify(
+      "http.start-changed-action-retry",
+      reviewState,
+      { after: reviewState, result: denial },
+      httpSetup,
+    ),
+  );
+  tested(() =>
+    verify(
+      "http.annotate-changed-body-retry",
+      reviewState,
+      { after: reviewState, result: denial },
+      httpSetup,
+    ),
+  );
+  const changedKey = {
+    ...requestInput("http.start", httpSetup),
+    p_request_id: "65000000-0000-4000-8000-000000000010",
+  };
+  tested(() =>
+    verify(
+      "http.start",
+      reviewState,
+      { after: reviewState, result: denial },
+      httpSetup,
+      changedKey,
+    ),
+  );
+  const deniedDelta = clone(reviewState);
+  deniedDelta["private.moderation_requests"].push({
+    ...deniedDelta["private.moderation_requests"][0],
+    request_id: changedKey.p_request_id,
+  });
+  rejected(() =>
+    verify(
+      "http.start",
+      reviewState,
+      { after: deniedDelta, result: denial },
+      httpSetup,
+      changedKey,
+    ),
+  );
+  const normalizedDelta = clone(reviewState);
+  normalizedDelta["private.moderation_audit"].push({
+    ...normalizedDelta["private.moderation_audit"][0],
+    id: newId(),
+  });
+  rejected(() =>
+    verify(
+      "http.annotate-normalized-replay",
+      reviewState,
+      {
+        after: normalizedDelta,
+        result: [{ case_state: "in_review", revision: 2 }],
+      },
+      httpSetup,
+    ),
+  );
+  const closed = clone(reviewState);
+  closed["private.moderation_cases"][0] = {
+    report_id: SQL_IDS.report,
+    state: "closed",
+    revision: 3,
+    note: "Local decision",
+    disposition: "no_action",
+    duplicate_report_id: null,
+    sanction_id: null,
+    hangout_disable_id: null,
+  };
+  const reopenInput = {
+    p_report_id: SQL_IDS.report,
+    p_request_id: "65000000-0000-4000-8000-000000000004",
+    p_expected_revision: 3,
+    p_action: "reopen",
+    p_note: "Further review",
+  };
+  const reopened = manufactured("http.reopen", closed, httpSetup, {
+    ...bindings,
+    initial: reopenInput.p_request_id,
+  });
+  tested(() => verify("http.reopen", closed, reopened, httpSetup, reopenInput));
+  tested(() =>
+    equal(reopened.after["private.moderation_cases"][0].revision, 4),
+  );
+  // Source-bound closed action_taken before fixture only. No action RPC model or
+  // sanction-to-reopen HTTP sequence is supplied by this independent primitive.
+  const sanctioned = clone(closed),
+    sanctionId = "65000000-0000-4000-8000-000000000020";
+  sanctioned["private.account_sanctions"].push({
+    id: sanctionId,
+    report_id: SQL_IDS.report,
+    subject_type: "user",
+    subject_id: SQL_IDS.target,
+    operator_id: SQL_IDS.actor,
+    request_id: "65000000-0000-4000-8000-000000000021",
+    action: "suspend",
+    previous_status: "active",
+    new_status: "suspended",
+    subject_campus_id: baseline["public.universities"][0].id,
+    reason: "Local decision",
+    occurred_at: time,
+  });
+  sanctioned["private.moderation_cases"][0].disposition = "action_taken";
+  sanctioned["private.moderation_cases"][0].sanction_id = sanctionId;
+  sanctioned["public.accounts"].find((r) => r.id === SQL_IDS.target).status =
+    "suspended";
+  const sanctionReopen = manufactured("http.reopen", sanctioned, httpSetup, {
+    ...bindings,
+    initial: reopenInput.p_request_id,
+  });
+  tested(() =>
+    verify("http.reopen", sanctioned, sanctionReopen, httpSetup, reopenInput),
+  );
+  tested(() =>
+    equal(
+      sanctionReopen.after["private.account_sanctions"],
+      sanctioned["private.account_sanctions"],
+    ),
+  );
+  tested(() =>
+    equal(
+      find(
+        sanctionReopen.after,
+        "public.accounts",
+        (r) => r.id === SQL_IDS.target,
+      ).status,
+      "suspended",
+    ),
+  );
+  const retainedLink = clone(sanctionReopen);
+  retainedLink.after["private.moderation_cases"][0].sanction_id = sanctionId;
+  rejected(() =>
+    verify("http.reopen", sanctioned, retainedLink, httpSetup, reopenInput),
+  );
+  const unchangedClosed = clone(reopened);
+  unchangedClosed.after["private.moderation_cases"][0].disposition =
+    "no_action";
+  rejected(() =>
+    verify("http.reopen", closed, unchangedClosed, httpSetup, reopenInput),
+  );
+  rejected(() =>
+    verify("http.reopen", reviewState, reopened, httpSetup, reopenInput),
+  );
+  for (const id of ["current_report_first", "detail_first", "block_first"]) {
+    tested(() =>
+      equal(describeModelPlan(raceModelPlans[id]), {
+        available: false,
+        reason: "unavailable",
+      }),
+    );
+    rejected(() =>
+      sequenceOperation(
+        raceModelPlans[id],
+        snapshot(baseline),
+        bounds,
+        source,
+        {},
+        {},
+      ),
+    );
+  }
+  for (const object of [
+    transitionModelPlans,
+    raceModelPlans,
+    httpTransitionPlans,
+  ])
+    tested(() => {
+      check(Object.isFrozen(object));
+      for (const handle of Object.values(object)) {
+        check(Object.isFrozen(handle));
+        equal(Object.keys(handle), []);
+      }
+    });
+  rejected(() =>
+    sequenceOperation(
+      httpTransitionPlans["MODHTTP.start-review"],
+      snapshot(baseline),
+      bounds,
+      source,
+      {},
+      bindings,
+    ),
+  );
+  rejected(() =>
+    sequenceOperation(
+      raceModelPlans.gate_first,
+      snapshot(baseline),
+      bounds,
+      source,
+      {},
+      { initial: bindings.initial },
+    ),
+  );
+  rejected(() => verifySequence({}, []));
+  tested(() =>
+    equal(TRANSITIONS["race.no-campus"].slice(2), [
+      "52000000-0000-4000-8003-000000000008",
+      1,
+      "annotate",
+      "Campus unavailable",
+    ]),
+  );
+  tested(() =>
+    equal(TRANSITIONS["race.current-campus"].slice(2), [
+      "52000000-0000-4000-8003-000000000009",
+      2,
+      "annotate",
+      "Current campus",
+    ]),
+  );
+  tested(() =>
+    check(
+      !modelCheckpoint.httpTransportAvailable &&
+        !modelCheckpoint.httpSequencesAvailable &&
+        !modelCheckpoint.racesAvailable &&
+        !modelCheckpoint.readinessAvailable,
+    ),
+  );
+  check(
+    allRaceObservations.length === 12 &&
+      httpMade.length === 9 &&
+      preciseTime(later) >= preciseTime(time),
   );
   return groups;
 }
