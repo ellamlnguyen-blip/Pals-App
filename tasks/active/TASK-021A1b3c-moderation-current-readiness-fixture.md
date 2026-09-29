@@ -19,3 +19,7 @@ Meaningful owned inert positives/negatives cover each readiness gate and actor/h
 ## Reviewed/task-published a1 outcome — 2026-09-29
 
 Frozen fc26c20a77d5d479e79e24bf7ec946cdf41ce23d on agent/TASK-021A1b3c-moderation-current-readiness-fixture received fresh independent complete FULL review CLEAR/no findings; coordinator pushed/separately exactremoteverified. Static full54 source readiness fixture only,1014=938+76 author inert groups inspected without rerun; current report receipt/ledger/rollback/last3races/actual provider/JWT/permission remain unavailable. Exact a2 amendment must independently review/canonically publish then fresh latest-main/exactfc26c20 reconcile before NEWa2 author. All parent/model/foundation/transport/consumer/provider/runtime gates incomplete; source27 offmain/unexecuted.
+
+## Source-binding review correction — 2026-09-29
+
+Fresh a2 FULL review NOT CLEAR soleP1: frozen current races require SQL actor ...0001, distinct source request IDs ...0005/...0006 and category harassment; reviewed a1 bound historical reporter ...0002 and unaccepted a2 used invented key/category. A1 remains source-valid static alternate only, not original race readiness. Draft ff8421284deaac605ed81a8e0b9f2130fdc24c42 local unaccepted/unpublished; stopped author not reused. Proceed only through independently reviewed/published `TASK-021A1b3c-moderation-current-source-binding-correction.md`, fresh exact dependency reconciliation and NEW correction author. No a2/parent/runtime credit; source27 offmain/unexecuted.
