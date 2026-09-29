@@ -1,5 +1,11 @@
 # Current State
 
+## 2026-09-29 — B3c state output adopter contract proposed
+
+The separate state adopter proposal preserves all24 L5 allocations and raw domain/full54 assertions while using the reviewed common projector for every success/failure/rollback/close/reset output and neutral error boundary. It preserves original-first failure identity, supplemental post-close evidence and reset-forbidden flags. Exact reviewed/published projector dependency and independent contract review/publication precede authoring; common correction `90365f50` is still under independent FULL review, so no dependent implementation is dispatched.
+
+Crossing `0a983cfabfc4d7f2ccc0893132ba4890a2c4deb9` is independently reviewed and task-branch pushed with exact remote SHA verified, all60 allocations unexecuted. Retry exceptional-exit correction continues. Exact rate-edge and true26→only27 preservation contracts remain proposed. Main code26/all source27 fixtures unexecuted/P1 privacy and parent gates incomplete; no target/preflight/runtime release. See `tasks/active/TASK-021A1b3c-state-output-adoption.md`.
+
 ## 2026-09-28 — B3c common-output privacy gate reopened
 
 Fresh read-only assessment confirmsP1 commonpolicy/absence/state failure/cleanup/rollback paths expose rawprivatefull54values/arbitrarydiagnostictext;P2 successsetup emitsunknownprovideranchor keys. No actualleak/execution claimed. Proposed boundedpolicy/absence pure outgoingprojector+neutral suiteerror correction requiresindependentreview/publication beforeauthor, then separatestateadopter. Priorcad9/state89 functionalstaticclear isnotoutputprivacy/runtimeacceptance; allrefusalsremain. Retained44ebc58aeb73c21a5c9ecae85c4c19677105ab5a twoP2corrections rereviewclear/pushed/exactremoteSHAverifiedagainstmain4d0bb937f3a013eb1ddf240d27e4c4067ce5108d. Retry18 initial2a636FULLreviewfound3P2 unknownfieldpath/placeholderhash, unexpectedexit-reset andomittedwrapperSQLdiag; boundedcorrectionactive. Cross60authoractivepreparedf74111. Main26/allsource27fixturecodeunexecuted; exactedge/upgrade/catalog/regression/runner/ownership/runtime/security/cleanup/acceptedparentintegrationremaining. Seecommon-failure-projectioncontract andCOMMON-OUTPUT-PRIVACY-REVIEW.
