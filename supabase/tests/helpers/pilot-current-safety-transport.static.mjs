@@ -8,6 +8,12 @@ import { join } from "node:path";
 import vm from "node:vm";
 import * as childProcess from "node:child_process";
 import { syncBuiltinESMExports } from "node:module";
+import * as failureWire from "./pilot-current-safety-failure-wire.mjs";
+
+if (process.argv[2] === "--generic-failure-wire-only") {
+  await runGenericFailureWireExamples();
+  process.exit(0);
+}
 
 const source = readFileSync(
   new URL("./pilot-admission-current-safety.mjs", import.meta.url),
@@ -1234,7 +1240,18 @@ try {
   );
   assert.equal(
     createHash("sha256")
-      .update(source.slice(0, source.indexOf("// PRIVATE LEGACY HTTP START")))
+      .update(
+        source
+          .slice(0, source.indexOf("// PRIVATE LEGACY HTTP START"))
+          .replace(
+            /import \{\n  failureWireManifest,[\s\S]*?from "\.\/pilot-current-safety-failure-wire\.mjs";\n/,
+            "",
+          )
+          .replace(
+            /\/\/ PRIVATE GENERIC FAILURE START:[\s\S]*?\/\/ PRIVATE GENERIC FAILURE END\n/,
+            "",
+          ),
+      )
       .digest("hex"),
     "295f40d3e56a4238bdd3c88aea1814cad917533235f25ba000f2c17341b66369",
     "existing command/session/module/fd3 schema and transport bytes unchanged",
@@ -1298,4 +1315,889 @@ try {
   );
 } finally {
   rmSync(directory, { recursive: true, force: true });
+}
+
+// Explicit mock-only lane: exits before the historical synthetic-process lane.
+// No actual fixture is imported/evaluated or target/helper operation invoked.
+async function runGenericFailureWireExamples() {
+  const {
+    failureWireManifest: manifest,
+    genericFailureLimits: limits,
+    normalizeFailureEnvelope: normalize,
+    encodeFailureFrame: encode,
+    decodeFailurePayload: decode,
+    createFailureWireReceiver: receiver,
+    originalFailureValue: value,
+    unavailableFailureValue: unavailable,
+    futureFailureInterruptionCeiling: ceiling,
+  } = failureWire;
+  let checked = 0,
+    contacts = 0;
+  const check = (truth) => {
+    assert.ok(truth);
+    checked++;
+  };
+  const rejects = (operation) => {
+    assert.throws(operation);
+    checked++;
+  };
+  const copy = (v) => JSON.parse(JSON.stringify(v));
+  const names = Object.keys(manifest.modules);
+  const make = (name, sequence = 0) => ({
+    version: 1,
+    module: name,
+    sequence,
+    original_sequence: 0,
+    receipt:
+      sequence === 0 ? "original-before-cleanup" : "supplemental-observation",
+    context: {
+      case_id: null,
+      phase: null,
+      partition: null,
+      order: null,
+      writer: null,
+      wait: null,
+      resource: null,
+      classification: null,
+      suite: name.includes("rate-edge") ? "B3c-instrumented-rate-edge" : null,
+      qualification: name.includes("rate-edge")
+        ? "instrumented-actual-public-predicate-only"
+        : null,
+    },
+    diagnostic: { code: null, message: null, detail: unavailable() },
+    summaries: Object.fromEntries(
+      ["before", "after", "expected", "holder"].map((k) => [
+        k,
+        { available: false, tables: null },
+      ]),
+    ),
+    differences: [],
+    flags: {
+      cleanup: "unverified",
+      reset: "forbidden",
+      target: "unestablished",
+      settlement: "unproven",
+    },
+    credits: { order: 0, suite: 0, allocation: 0, cleanup: false, pass: false },
+  });
+  check(names.length === 10);
+  check(
+    manifest.tables.length === 54 &&
+      Object.keys(manifest.columns).length === 54 &&
+      Object.values(manifest.columns).flat().length === 306,
+  );
+  const counts = [72, 24, 204, 24, 37, 60, 18, 4, 0, 76];
+  const hours = [36, 12, 96, 12, 24, 36, 12, 2, 2, 48];
+  for (let i = 0; i < names.length; i++) {
+    const name = names[i],
+      m = manifest.modules[name];
+    check(m.cases.length === counts[i] && ceiling(name) === hours[i] * 3600000);
+    check(normalize(make(name), name).credits.pass === false);
+    for (const cell of m.cases) {
+      const record = make(name);
+      record.context.case_id = cell.id;
+      record.context.order = cell.order ?? null;
+      check(normalize(record, name).context.case_id === cell.id);
+      const wrong = copy(record);
+      wrong.context.order = "wrong-order";
+      rejects(() => normalize(wrong, name));
+      const cross = copy(record);
+      cross.module = names.find((n) => n !== name);
+      rejects(() => normalize(cross, name));
+    }
+    for (const phase of m.phases) {
+      const r = make(name);
+      r.context.phase = phase;
+      check(normalize(r, name).context.phase === phase);
+    }
+    for (const partition of m.partitions) {
+      const r = make(name);
+      r.context.partition = partition;
+      check(normalize(r, name).context.partition === partition);
+    }
+    const r = make(name);
+    r.context.case_id = "unknown-id";
+    rejects(() => normalize(r, name));
+    r.context.case_id = null;
+    r.context.phase = "Safety report unavailable private UUID body";
+    rejects(() => normalize(r, name));
+  }
+  check(
+    ceiling("pilot-admission-current-safety-http.integration.mjs") ===
+      24 * 3600000,
+  );
+  for (const name of [
+    "../arbitrary.mjs",
+    "pilot-admission-owner.integration.mjs",
+    "pilot-moderation-http.integration.mjs",
+    "pilot-current-safety-operator.test.sql",
+    "__proto__",
+    "",
+  ])
+    rejects(() => ceiling(name));
+  rejects(() =>
+    receiver("pilot-admission-current-safety-http.integration.mjs"),
+  );
+  const diagnosticPairs = [
+    ...[
+      "Safety report unavailable",
+      "Safety operation unavailable",
+      "Hangout operation not permitted",
+      "Hangout chat unavailable",
+      "Moderation unavailable",
+      "Pilot management unavailable",
+      "Owner operation unavailable",
+    ].map((message) => ["42501", message]),
+    ["23514", "Detach a profile photo before deleting it"],
+    ["23514", "Photos must be existing owned private objects"],
+    ["40P01", "deadlock detected"],
+    ["40001", "could not serialize access due to concurrent update"],
+    [
+      "40001",
+      "could not serialize access due to read/write dependencies among transactions",
+    ],
+    ["57014", "canceling statement due to statement timeout"],
+    ["55P03", "canceling statement due to lock timeout"],
+  ];
+  for (const name of names)
+    for (const [code, message] of diagnosticPairs) {
+      const r = make(name);
+      r.diagnostic = { code, message, detail: null };
+      check(normalize(r, name).diagnostic.message === message);
+      r.diagnostic.message += " PRIVATE";
+      rejects(() => normalize(r, name));
+    }
+  const name = names[0],
+    original = make(name),
+    frame = encode(original, name);
+  check(decode(frame.subarray(4), name).module === name);
+  for (const text of [
+    "private RPC receipt",
+    "title narrative 29e86a47-0e27-4ffc-8b56-a1403c42afe1",
+    "Safety report unavailable",
+    "Auth bearer body provider secret",
+    "neutral-looking operation failed",
+  ]) {
+    const r = copy(original);
+    r.extra = text;
+    rejects(() => normalize(r, name));
+    r.extra = undefined;
+    delete r.extra;
+    r.diagnostic.message = text;
+    rejects(() => normalize(r, name));
+    check(!JSON.stringify(value({ unknownKey: text })).includes(text));
+  }
+  let getters = 0;
+  const accessor = copy(original);
+  Object.defineProperty(accessor, "version", {
+    get() {
+      getters++;
+      return 1;
+    },
+    enumerable: true,
+  });
+  rejects(() => normalize(accessor, name));
+  check(getters === 0);
+  const symbol = copy(original);
+  symbol[Symbol("private")] = 1;
+  rejects(() => normalize(symbol, name));
+  const custom = Object.assign(Object.create({ private: 1 }), original);
+  rejects(() => normalize(custom, name));
+  const toJSON = copy(original);
+  toJSON.toJSON = () => {
+    getters++;
+    return original;
+  };
+  rejects(() => normalize(toJSON, name));
+  check(getters === 0);
+  const proxy = new Proxy(original, {
+    ownKeys() {
+      getters++;
+      return [];
+    },
+  });
+  rejects(() => normalize(proxy, name));
+  check(getters === 0);
+  const cycle = copy(original);
+  cycle.extra = cycle;
+  rejects(() => normalize(cycle, name));
+  const sparse = copy(original);
+  sparse.differences = new Array(2);
+  rejects(() => normalize(sparse, name));
+  const hidden = copy(original);
+  Object.defineProperty(hidden, "private", { value: 1 });
+  rejects(() => normalize(hidden, name));
+  for (const n of [
+    -1,
+    NaN,
+    Infinity,
+    -0,
+    0.5,
+    Number.MAX_SAFE_INTEGER + 1,
+    limits.count + 1,
+  ]) {
+    const r = copy(original);
+    r.sequence = n;
+    rejects(() => normalize(r, name));
+  }
+  check(value("<redacted>").precision === "inherited-withheld");
+  for (const projected of [
+    { available: false },
+    { type: "string", available: false, original_value_unavailable: true },
+    value("already private"),
+    { nested: { type: "object", available: true, sha256: "a".repeat(64) } },
+  ])
+    check(value(projected).precision === "inherited-withheld");
+  check(value({ body: "<absent>" }).available === false);
+  check(
+    value({ a: 1, b: "private" }).sha256 ===
+      value({ b: "private", a: 1 }).sha256,
+  );
+  check(value("1").sha256 !== value(1).sha256);
+  check(value({ a: 1 }).sha256 !== value({ a: 2 }).sha256);
+  check(value(accessor).available === false && getters === 0);
+  check(value(new Error("private error")).available === false);
+  const summary = copy(original);
+  summary.summaries.before = {
+    available: true,
+    tables: manifest.tables.map((table) => ({
+      table,
+      count: 0,
+      value: value([]),
+    })),
+  };
+  check(normalize(summary, name).summaries.before.tables.length === 54);
+  for (const mutation of [
+    (r) => r.summaries.before.tables.pop(),
+    (r) => (r.summaries.before.tables[0].table = "private.unknown"),
+    (r) => (r.summaries.before.tables[0].count = null),
+    (r) => (r.summaries.before.tables[0].count = limits.count + 1),
+    (r) => (r.summaries.before.available = false),
+    (r) => (r.summaries.after.tables = []),
+    (r) => (r.summaries.before.tables[0].value.sha256 = "placeholder"),
+    (r) => (r.summaries.before.tables[0].value.available = false),
+  ]) {
+    const r = copy(summary);
+    mutation(r);
+    rejects(() => normalize(r, name));
+  }
+  const diff = {
+    scope: "domain",
+    table: "public.hangouts",
+    row: 0,
+    column: "title",
+    kind: "value",
+    expected: value("private before"),
+    observed: value("private after"),
+  };
+  const delta = copy(original);
+  delta.differences = [diff];
+  check(normalize(delta, name).differences[0].column === "title");
+  for (const mutation of [
+    (r) => (r.differences[0].column = "title.private"),
+    (r) => (r.differences[0].column = "provider_unknown"),
+    (r) => (r.differences[0].table = "public.unknown"),
+    (r) => (r.differences[0].row = limits.count + 1),
+    (r) => (r.differences[0].expected.precision = "inherited-withheld"),
+    (r) => (r.differences[0].expected.type = "unknown"),
+    (r) => (r.differences[0].scope = "catalog"),
+  ]) {
+    const r = copy(delta);
+    mutation(r);
+    rejects(() => normalize(r, name));
+  }
+  const opaque = copy(delta);
+  Object.assign(opaque.differences[0], {
+    scope: "opaque",
+    table: null,
+    row: null,
+    column: null,
+  });
+  check(normalize(opaque, name).differences[0].table === null);
+  const wide = copy(summary);
+  for (const slot of ["after", "expected", "holder"])
+    wide.summaries[slot] = copy(wide.summaries.before);
+  wide.differences = Array.from({ length: 128 }, () => copy(diff));
+  rejects(() => encode(wide, name));
+  const cap = copy(original);
+  cap.differences = Array.from({ length: 128 }, () => copy(diff));
+  check(normalize(cap, name).differences.length === 128);
+  cap.differences.push(copy(diff));
+  rejects(() => normalize(cap, name));
+  for (const mutation of [
+    (r) => (r.credits.pass = true),
+    (r) => (r.credits.cleanup = true),
+    (r) => (r.credits.order = 1),
+    (r) => (r.credits.suite = 1),
+    (r) => (r.credits.allocation = 1),
+    (r) => (r.flags.cleanup = "verified"),
+    (r) => (r.flags.reset = "allowed"),
+    (r) => (r.original_sequence = 1),
+    (r) => (r.sequence = 16),
+    (r) => (r.receipt = "supplemental-closure"),
+  ]) {
+    const r = copy(original);
+    mutation(r);
+    rejects(() => normalize(r, name));
+  }
+  for (const sequence of [1, 2, 15]) {
+    const r = make(name, sequence);
+    check(normalize(r, name).sequence === sequence);
+    r.receipt = "original-before-cleanup";
+    rejects(() => normalize(r, name));
+  }
+  for (const receipt of [
+    "supplemental-observation",
+    "supplemental-rollback",
+    "supplemental-closure",
+    "supplemental-reset",
+    "supplemental-restoration",
+  ]) {
+    const r = make(name, 1);
+    r.receipt = receipt;
+    check(normalize(r, name).receipt === receipt);
+  }
+  const state = names.find((n) => n.includes("state-races"));
+  const waits = [
+    "social (16016,1) exclusive before moderation/pilot/lane selection; no lower current tuple credit",
+    "social (16016,1) exclusive before shared pilot/lifecycle and current lane selection; no lower tuple credit",
+    "public opt-out account UPDATE waits on current peer account SHARE, before preference UPSERT",
+    "current peer account SHARE waits on public opt-out account UPDATE, before required preference lookup",
+    "required peer preference SHARE versus actual preference DELETE tuple/transaction wait; privileged synthetic maintenance only",
+    "social (16016,1) exclusive before shared pilot/current-or-retained lane selection; no lower tuple/no-upgrade/no-fallback credit",
+  ];
+  const seenWaits = new Set();
+  for (const cell of manifest.modules[state].cases) {
+    const r = make(state);
+    r.context.case_id = cell.id;
+    r.context.order = cell.order;
+    r.context.writer =
+      {
+        source_disable: "disable",
+        source_cancel: "cancel",
+        peer_opt_out: "optout",
+        peer_preference_delete: "delete",
+      }[cell.loss] ?? "block";
+    const index =
+      cell.loss === "source_disable"
+        ? 0
+        : cell.loss === "source_cancel"
+          ? 1
+          : cell.loss === "peer_opt_out"
+            ? cell.order === "operation-first"
+              ? 2
+              : 3
+            : cell.loss === "peer_preference_delete"
+              ? 4
+              : 5;
+    r.context.wait = waits[index];
+    r.context.classification =
+      cell.id === "L5.CB.actor_peer_block_inbound.operation-first"
+        ? "public-writer-denial-no-committed-loss-order"
+        : cell.id === "L5.CB.actor_peer_block_outbound.operation-first"
+          ? "retained-repair-no-new-loss"
+          : "planned-committed-state-loss";
+    seenWaits.add(index);
+    check(normalize(r, state).context.wait === waits[index]);
+    const wrong = copy(r);
+    wrong.context.writer = "disable-private";
+    rejects(() => normalize(wrong, state));
+    wrong.context.writer = r.context.writer;
+    wrong.context.order = null;
+    rejects(() => normalize(wrong, state));
+    wrong.context.order = r.context.order;
+    wrong.context.wait = waits[(index + 1) % 6];
+    rejects(() => normalize(wrong, state));
+  }
+  check(seenWaits.size === 6);
+  const identity = names.find((n) => n.includes("identity-races"));
+  for (const cell of manifest.modules[identity].cases) {
+    const r = make(identity);
+    const phase =
+      cell.loss === "object_detach_delete"
+        ? "profile UPDATE; formerly referenced DELETE after detach"
+        : cell.loss.startsWith("campus_")
+          ? "campus"
+          : cell.loss.startsWith("email_") && cell.loss !== "email_equality"
+            ? "Auth"
+            : cell.loss.startsWith("membership_") ||
+                cell.loss === "email_equality"
+              ? "membership"
+              : cell.loss.startsWith("profile_")
+                ? "profile"
+                : "account";
+    Object.assign(r.context, {
+      case_id: cell.id,
+      order: cell.order,
+      phase,
+      resource: phase,
+      writer:
+        "privileged synthetic identity preparation; not permission evidence",
+    });
+    check(normalize(r, identity).context.resource === phase);
+    r.context.phase = phase === "Auth" ? "account" : "Auth";
+    rejects(() => normalize(r, identity));
+  }
+  // Split/coalesced frames, all ordered supplements, and every invalidation keep
+  // all module credits zero. A valid failure with exit zero is still a failure.
+  for (const exitCode of [0, 1, 3]) {
+    const r = receiver(name);
+    for (let i = 0; i < frame.length; i++) r.receive(frame.subarray(i, i + 1));
+    r.end();
+    check(r.evidence().availability === "unavailable");
+    r.close(exitCode, null);
+    check(
+      r.evidence().availability === "available" &&
+        r.evidence().module_failed &&
+        r.evidence().module_credit === 0,
+    );
+  }
+  const ordered = receiver(name);
+  ordered.receive(
+    Buffer.concat(
+      Array.from({ length: 16 }, (_, i) => encode(make(name, i), name)),
+    ),
+  );
+  ordered.end();
+  ordered.close(1, null);
+  check(ordered.evidence().records.length === 16);
+  const invalidate = (
+    chunks,
+    ending = true,
+    closeCode = 1,
+    closeSignal = null,
+  ) => {
+    const r = receiver(name);
+    r.receive(frame);
+    for (const c of chunks) r.receive(c);
+    if (ending) r.end();
+    r.close(closeCode, closeSignal);
+    check(
+      r.evidence().availability === "unavailable" &&
+        r.evidence().records.length === 0,
+    );
+  };
+  invalidate([frame]);
+  invalidate([encode(make(name, 2), name)]);
+  invalidate([Buffer.alloc(4)]);
+  invalidate([Buffer.from([0, 0, 0])]);
+  invalidate([Buffer.from([0, 1, 0, 1])]);
+  invalidate([Buffer.alloc(limits.total)]);
+  invalidate([], true, failureWire.genericWireUnavailableExit, null);
+  invalidate([], true, null, null);
+  invalidate([], true, 1, "SIGKILL");
+  invalidate([], true, 0, "unknown");
+  invalidate([], false);
+  const seventeenth = receiver(name);
+  for (let i = 0; i < 16; i++) seventeenth.receive(encode(make(name, i), name));
+  seventeenth.receive(frame);
+  seventeenth.end();
+  seventeenth.close(1, null);
+  check(seventeenth.evidence().records.length === 0);
+  for (const method of ["error", "interrupt"]) {
+    const r = receiver(name);
+    r.receive(frame);
+    r[method]();
+    r.end();
+    r.close(1, null);
+    check(r.evidence().records.length === 0);
+  }
+  const late = receiver(name);
+  late.receive(frame);
+  late.end();
+  late.receive(frame);
+  late.close(1, null);
+  check(late.evidence().records.length === 0);
+  const json = frame.subarray(4).toString();
+  const badPayloads = [
+    Buffer.from(json.replace('"version":1', '"version":1,"version":1')),
+    Buffer.from(json + "\n"),
+    Buffer.from(" " + json),
+    Buffer.from(json.replace('"sequence":0', '"sequence":NaN')),
+    Buffer.from(json.replace('"sequence":0', '"sequence":-0')),
+    Buffer.from(json.replace('"version":1', '"version":1.0')),
+    Buffer.from([0xff]),
+    Buffer.alloc(0),
+    Buffer.alloc(limits.frame + 1),
+  ];
+  for (const payload of badPayloads) {
+    rejects(() => decode(payload, name));
+    const bad = Buffer.alloc(payload.length + 4);
+    bad.writeUInt32BE(payload.length);
+    payload.copy(bad, 4);
+    invalidate([bad]);
+  }
+  const privateMalformed = Buffer.from("{PRIVATE NARRATIVE ERROR}");
+  assert.throws(
+    () => decode(privateMalformed, name),
+    (error) =>
+      error.message === "Generic failure evidence unavailable" &&
+      !error.message.includes("PRIVATE"),
+  );
+  checked++;
+  check(value("x".repeat(limits.frame + 1)).available === false);
+  const deep = copy(original);
+  deep.extra = {};
+  let level = deep.extra;
+  for (let i = 0; i < 17; i++) {
+    level.next = {};
+    level = level.next;
+  }
+  rejects(() => normalize(deep, name));
+  const nodes = copy(original);
+  nodes.extra = Array.from({ length: 4097 }, () => null);
+  rejects(() => normalize(nodes, name));
+  // Read-only source reconciliation, never execution/import of source modules.
+  const ts = (
+    await import("/private/tmp/pals-task024/node_modules/typescript/lib/typescript.js")
+  ).default;
+  const literal = (n) => {
+    if (ts.isStringLiteral(n)) return n.text;
+    if (n.kind === ts.SyntaxKind.TrueKeyword) return true;
+    if (n.kind === ts.SyntaxKind.FalseKeyword) return false;
+    if (ts.isNumericLiteral(n)) return Number(n.text);
+    if (ts.isArrayLiteralExpression(n)) return n.elements.map(literal);
+    if (ts.isObjectLiteralExpression(n))
+      return Object.fromEntries(
+        n.properties.map((p) => {
+          assert.ok(ts.isPropertyAssignment(p));
+          return [p.name.text, literal(p.initializer)];
+        }),
+      );
+    if (
+      ts.isCallExpression(n) &&
+      n.expression.getText().startsWith("Object.freeze")
+    )
+      return literal(n.arguments[0]);
+    if (
+      ts.isCallExpression(n) &&
+      ts.isPropertyAccessExpression(n.expression) &&
+      n.expression.name.text === "map"
+    )
+      return literal(n.expression.expression);
+    throw new Error("Trusted source literal unavailable");
+  };
+  const extract = (text, label) => {
+    const tree = ts.createSourceFile(
+      "source.mjs",
+      text,
+      ts.ScriptTarget.Latest,
+      true,
+      ts.ScriptKind.JS,
+    );
+    let result;
+    const visit = (n) => {
+      if (ts.isVariableDeclaration(n) && n.name.getText() === label)
+        result = literal(n.initializer);
+      ts.forEachChild(n, visit);
+    };
+    visit(tree);
+    assert.notEqual(result, undefined, "Trusted source literal unavailable");
+    return result;
+  };
+  const roots = [
+    null,
+    null,
+    "identity-adoption",
+    "state-output-adoption",
+    "retained",
+    "crossings",
+    "retry-rate",
+    "rate-edge",
+    "upgrade-fixture",
+    "operators",
+  ];
+  const labels = [
+    "policyManifest",
+    "absenceManifest",
+    "identityPlans",
+    "stateManifest",
+    "retainedManifest",
+    "crossingManifest",
+    "retryRateManifest",
+    "edgeManifest",
+    "labels",
+    "operatorManifest",
+  ];
+  for (let i = 0; i < names.length; i++) {
+    const base = roots[i]
+      ? `/private/tmp/pals-task021-${roots[i]}`
+      : new URL("../../../", import.meta.url).pathname;
+    const text = readFileSync(join(base, "supabase/tests", names[i]), "utf8");
+    check(
+      createHash("sha256").update(text).digest("hex") ===
+        manifest.modules[names[i]].sha256,
+    );
+    const expected = extract(text, labels[i]);
+    if (i === 8) {
+      assert.deepEqual(expected, manifest.modules[names[i]].phases);
+      checked++;
+      continue;
+    }
+    const keys = [
+      "id",
+      "route",
+      "subject",
+      "loss",
+      "order",
+      "writer",
+      "wait",
+      "partition",
+      "outcome_classification",
+      "kind",
+      "family",
+      "older",
+      "caller",
+    ];
+    assert.deepEqual(
+      expected.map((cell) =>
+        Object.fromEntries(
+          keys.filter((k) => cell[k] !== undefined).map((k) => [k, cell[k]]),
+        ),
+      ),
+      copy(manifest.modules[names[i]].cases),
+    );
+    checked++;
+  }
+  const stateText = readFileSync(
+    "/private/tmp/pals-task021-state-output-adoption/supabase/tests/pilot-admission-current-safety-state-races.integration.mjs",
+    "utf8",
+  );
+  assert.deepEqual(extract(stateText, "stateWaits"), waits);
+  checked++;
+  const helperText = readFileSync(
+    new URL("./pilot-admission-current-safety.mjs", import.meta.url),
+    "utf8",
+  );
+  const oldCore = helperText
+    .replace(
+      /import \{\n  failureWireManifest,[\s\S]*?from "\.\/pilot-current-safety-failure-wire\.mjs";\n/,
+      "",
+    )
+    .replace(
+      /\/\/ PRIVATE GENERIC FAILURE START:[\s\S]*?\/\/ PRIVATE GENERIC FAILURE END\n/,
+      "",
+    );
+  check(
+    createHash("sha256").update(oldCore).digest("hex") ===
+      "f6555a07f557ea8306b6ae3bbb90b728c247cda71e6724ff8be9873db9c899f9",
+  );
+  const policyText = readFileSync(
+    new URL(
+      "../pilot-admission-current-safety-concurrency.integration.mjs",
+      import.meta.url,
+    ),
+    "utf8",
+  );
+  assert.deepEqual(
+    extract(policyText, "projectionColumns"),
+    copy(manifest.columns),
+  );
+  checked++;
+  const fixtureText = readFileSync(
+    new URL("./pilot-current-safety-fixtures.mjs", import.meta.url),
+    "utf8",
+  );
+  assert.deepEqual(extract(fixtureText, "censusTables"), copy(manifest.tables));
+  checked++;
+  const matrixText = readFileSync(
+    new URL(
+      "../../../agents/handoffs/TASK-021A1b3c-MATRIX.json",
+      import.meta.url,
+    ),
+    "utf8",
+  );
+  check(
+    createHash("sha256").update(matrixText).digest("hex") ===
+      manifest.matrix_sha256,
+  );
+  const matrix = JSON.parse(matrixText);
+  for (const prefix of ["L2.", "L3.", "L4.", "L5."]) {
+    const matching = Object.values(manifest.modules)
+      .flatMap((m) => m.cases)
+      .filter((c) => c.id.startsWith(prefix));
+    assert.deepEqual(
+      matching.map((c) => c.id).sort(),
+      (prefix === "L4." ? matrix.serial_cells : matrix.cells)
+        .filter((c) => c.id.startsWith(prefix))
+        .map((c) => c.id)
+        .sort(),
+    );
+    checked++;
+  }
+  // Exact unchanged production segment and runner allowlist are byte preserved.
+  check(
+    createHash("sha256")
+      .update(
+        helperText
+          .split("// PRIVATE TRANSPORT START:")[1]
+          .split("// PRIVATE TRANSPORT END")[0],
+      )
+      .digest("hex") ===
+      "21d22022e7e95e736053a4feb8758e26950f69c094dc58b8c21f54d603e252f9",
+  );
+  check(
+    helperText.includes(
+      '"pilot-admission-current-safety-http.integration.mjs",',
+    ) &&
+      helperText.includes(
+        '"pilot-admission-current-safety-concurrency.integration.mjs",',
+      ) &&
+      helperText.includes(
+        '"pilot-admission-current-safety-absence.integration.mjs",',
+      ) &&
+      helperText.includes(
+        '"pilot-admission-current-safety-identity-races.integration.mjs",',
+      ),
+  );
+  // Inert imports under contact traps; all stream operations below are mocks.
+  const originalSpawn = childProcess.default.spawn,
+    originalExec = childProcess.default.execFileSync,
+    originalFetch = globalThis.fetch;
+  try {
+    childProcess.default.spawn =
+      childProcess.default.execFileSync =
+      globalThis.fetch =
+        () => {
+          contacts++;
+          throw new Error("Forbidden contact");
+        };
+    syncBuiltinESMExports();
+    await import("./pilot-admission-current-safety.mjs");
+    check(contacts === 0);
+  } finally {
+    childProcess.default.spawn = originalSpawn;
+    childProcess.default.execFileSync = originalExec;
+    globalThis.fetch = originalFetch;
+    syncBuiltinESMExports();
+  }
+  const genericSource = helperText
+    .split("// PRIVATE GENERIC FAILURE START:")[1]
+    .split("\n")
+    .slice(1)
+    .join("\n")
+    .split("// PRIVATE GENERIC FAILURE END")[0]
+    .replace(
+      "export { futureFailureInterruptionCeiling, createFailureWireReceiver };",
+      "",
+    )
+    .replace(
+      "export async function writeGenericFailureEvidence",
+      "async function writeGenericFailureEvidence",
+    )
+    .replace(
+      "export function originalGenericWireFailure",
+      "function originalGenericWireFailure",
+    )
+    .replaceAll("genericFailureLimits.write", "15");
+  function mock(mode = "success", pathName = name) {
+    const frames = [];
+    let creation = 0;
+    const listeners = new Map();
+    const stream = {
+      on(event, fn) {
+        listeners.set(event, fn);
+      },
+      once(event, fn) {
+        listeners.set(event, fn);
+      },
+      removeListener(event, fn) {
+        if (listeners.get(event) === fn) listeners.delete(event);
+      },
+      write(chunk, callback) {
+        frames.push(Buffer.from(chunk));
+        if (mode === "success") queueMicrotask(() => callback());
+        if (mode === "error")
+          queueMicrotask(() => callback(new Error("private channel error")));
+      },
+      destroy() {},
+    };
+    const c = vm.createContext({
+      failureWireManifest: manifest,
+      genericFailureLimits: limits,
+      encodeFailureFrame: encode,
+      futureFailureInterruptionCeiling: ceiling,
+      createFailureWireReceiver: receiver,
+      genericWireUnavailableExit: failureWire.genericWireUnavailableExit,
+      performance,
+      process: { argv: ["node", `/fixed/supabase/tests/${pathName}`] },
+      root: "/fixed",
+      resolve: (...pieces) => pieces.join("/"),
+      realpathSync: (p) => p,
+      createWriteStream: () => {
+        creation++;
+        return stream;
+      },
+      Buffer,
+      setTimeout,
+      clearTimeout,
+      queueMicrotask,
+    });
+    vm.runInContext(
+      genericSource +
+        "\nglobalThis.unit={writeGenericFailureEvidence,originalGenericWireFailure};",
+      c,
+    );
+    return {
+      writer: c.unit.writeGenericFailureEvidence,
+      receipt: c.unit.originalGenericWireFailure,
+      frames,
+      created: () => creation,
+    };
+  }
+  const w = mock();
+  await w.writer(original);
+  await w.writer(make(name, 1));
+  check(w.frames.length === 2 && w.created() === 1);
+  await assert.rejects(w.writer(original));
+  checked++;
+  check(w.frames.at(-1).equals(Buffer.alloc(4)));
+  for (const mode of ["error", "stall"]) {
+    const w = mock(mode);
+    await assert.rejects(
+      w.writer(original),
+      /Generic failure evidence unavailable/,
+    );
+    checked++;
+    await assert.rejects(w.writer(make(name, 1)));
+    checked++;
+    check(w.frames.length === 1);
+  }
+  const concurrent = mock("stall");
+  const first = concurrent.writer(original),
+    second = concurrent.writer(make(name, 1));
+  const outcomes = await Promise.allSettled([first, second]);
+  check(outcomes.every((r) => r.status === "rejected"));
+  check(
+    concurrent.frames.filter((f) => f.equals(Buffer.alloc(4))).length === 0,
+  );
+  const receiptMock = mock("stall");
+  let wireError;
+  try {
+    await receiptMock.writer(original);
+  } catch (error) {
+    wireError = error;
+  }
+  check(receiptMock.receipt(wireError).required_exit_status === 78);
+  check(receiptMock.receipt(new Error(wireError.message)) === null);
+  const wrongEntry = mock("success", "unknown.mjs");
+  await assert.rejects(wrongEntry.writer(original));
+  checked++;
+  check(wrongEntry.created() === 0);
+  const httpEntry = mock(
+    "success",
+    "pilot-admission-current-safety-http.integration.mjs",
+  );
+  await assert.rejects(httpEntry.writer(original));
+  checked++;
+  check(httpEntry.created() === 0);
+  console.log(
+    JSON.stringify({
+      generic_failure_offline_checks: checked,
+      import_target_attempts: contacts,
+      mocked_transport_only: true,
+      target_runtime_credit: 0,
+      production_runner_adopted: false,
+    }),
+  );
 }

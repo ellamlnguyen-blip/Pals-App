@@ -16,6 +16,14 @@ import { resolve } from "node:path";
 import { performance } from "node:perf_hooks";
 import assert from "node:assert/strict";
 import { execFileSync, spawn } from "node:child_process";
+import {
+  failureWireManifest,
+  genericFailureLimits,
+  encodeFailureFrame,
+  futureFailureInterruptionCeiling,
+  createFailureWireReceiver,
+  genericWireUnavailableExit,
+} from "./pilot-current-safety-failure-wire.mjs";
 
 export const quote = (value) => `'${String(value).replaceAll("'", "''")}'`;
 export const dockerBinary = "/private/tmp/pals-runtime/docker/docker";
@@ -23,6 +31,152 @@ export const supabaseBinary = "/private/tmp/pals-runtime/bin/supabase";
 export const socket =
   "unix:///private/tmp/pals-lima/pals-task002/sock/docker.sock";
 const root = fileURLToPath(new URL("../../../", import.meta.url));
+// PRIVATE GENERIC FAILURE START: dormant; production runner is not adopted.
+export { futureFailureInterruptionCeiling, createFailureWireReceiver };
+const genericObservedEntry = process.argv[1];
+let genericWriter = null,
+  genericWriterModule = null,
+  genericWriterInvalid = false,
+  genericWriterPending = null,
+  genericInvalidationPending = null,
+  genericWriterDeadline = null,
+  genericChannelUncertain = false,
+  genericWrites = 0,
+  genericBytes = 0;
+const genericWireFailures = new WeakMap();
+function genericWireError() {
+  const error = new Error("Generic failure evidence unavailable");
+  genericWireFailures.set(
+    error,
+    Object.freeze({
+      classification: "wire-unavailable",
+      required_exit_status: genericWireUnavailableExit,
+      cleanup: "unverified",
+      reset: "forbidden",
+    }),
+  );
+  return error;
+}
+export function originalGenericWireFailure(error) {
+  return genericWireFailures.get(error) ?? null;
+}
+function currentGenericEntry() {
+  const selected = Object.keys(failureWireManifest.modules).find(
+    (name) => genericObservedEntry === resolve(root, "supabase/tests", name),
+  );
+  if (
+    !selected ||
+    process.argv[1] !== genericObservedEntry ||
+    realpathSync(genericObservedEntry) !== genericObservedEntry ||
+    (genericWriterModule !== null && genericWriterModule !== selected)
+  )
+    throw new Error("Generic failure evidence unavailable");
+  return selected;
+}
+function sendGenericFrame(frame, deadlineAt) {
+  return new Promise((resolveWrite, rejectWrite) => {
+    let deadline,
+      done = false;
+    const finish = (error) => {
+      if (done) return;
+      done = true;
+      clearTimeout(deadline);
+      genericWriter?.removeListener("error", finish);
+      if (error) {
+        genericWriterInvalid = true;
+        genericChannelUncertain = true;
+        rejectWrite(genericWireError());
+      } else resolveWrite();
+    };
+    try {
+      if (!genericWriter) {
+        genericWriter = createWriteStream(null, { fd: 3, autoClose: false });
+        genericWriter.on("error", () => {
+          genericWriterInvalid = true;
+          genericChannelUncertain = true;
+        });
+      }
+      genericWriter.once("error", finish);
+      const remaining = deadlineAt - performance.now();
+      if (remaining <= 0) {
+        finish(true);
+        return;
+      }
+      deadline = setTimeout(() => finish(true), remaining);
+      genericWriter.write(frame, finish);
+    } catch {
+      finish(true);
+    }
+  });
+}
+function invalidateGenericWriter(deadlineAt) {
+  genericWriterInvalid = true;
+  if (genericInvalidationPending) return genericInvalidationPending;
+  genericInvalidationPending = (async () => {
+    // A single monotonic two-second public-call deadline includes any sentinel.
+    // A timed-out write is not settlement: never write again on that channel.
+    const pending = genericWriterPending;
+    if (pending) {
+      try {
+        await pending;
+      } catch {
+        /* unavailable */
+      }
+    }
+    if (!genericChannelUncertain && performance.now() < deadlineAt) {
+      try {
+        await sendGenericFrame(Buffer.alloc(4), deadlineAt);
+      } catch {
+        /* unavailable */
+      }
+    }
+    genericWriter?.destroy();
+    throw genericWireError();
+  })();
+  return genericInvalidationPending;
+}
+// Future module adopters must await this original receipt before cleanup and
+// separately map/await every late supplement. Nothing invokes this on import.
+export async function writeGenericFailureEvidence(record) {
+  const deadlineAt = performance.now() + genericFailureLimits.write;
+  let selected;
+  try {
+    selected = currentGenericEntry();
+  } catch {
+    throw genericWireError();
+  }
+  if (genericWriterInvalid || genericWriterPending)
+    return invalidateGenericWriter(genericWriterDeadline ?? deadlineAt);
+  let frame;
+  try {
+    genericWriterModule = selected;
+    frame = encodeFailureFrame(record, selected);
+    if (
+      JSON.parse(frame.subarray(4).toString("utf8")).sequence !==
+        genericWrites ||
+      genericWrites >= genericFailureLimits.records ||
+      genericBytes + frame.length > genericFailureLimits.total
+    )
+      throw new Error("Generic failure evidence unavailable");
+  } catch {
+    return invalidateGenericWriter(deadlineAt);
+  }
+  genericWrites++;
+  genericBytes += frame.length;
+  genericWriterDeadline = deadlineAt;
+  genericWriterPending = sendGenericFrame(frame, deadlineAt);
+  try {
+    await genericWriterPending;
+    if (genericWriterInvalid)
+      throw new Error("Generic failure evidence unavailable");
+  } catch {
+    genericWriterPending = null;
+    return invalidateGenericWriter(deadlineAt);
+  } finally {
+    genericWriterPending = null;
+  }
+}
+// PRIVATE GENERIC FAILURE END
 // PRIVATE TRANSPORT START: offline verifier isolates this unit; no public injection.
 const transportBudgets = Object.freeze({
   metadata: 10_000,
