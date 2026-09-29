@@ -1,0 +1,5 @@
+# B3c exact rate edge contract review
+
+Fresh independent Sol-medium source/contract review of f30415a9f77e49edf10377b589939d855e186470 against canonical8f39696f630698f46ced6e801b75c73f14a8a127 found one P2 missing literal L1E/phase output qualification. Narrow correction086fed41fd56b2017e7bba75a7a69eeb7405cb4a passes independent re-review: owned fixed source allowlist envelope after pure projection, unknown labels unavailable/hash/no precision, no private bypass/shared projector edit. Exact frozen27 source matches17b; one sampled-clock expression, inclusive BETWEEN/threshold5 and schema support the four proposed controls. Savepoint/outer rollback/restoration remain runtime requirements, not observed proof.
+
+Read-only source/git review; no edits/imports/tests/target/runtime/publication. Standard speed app controlled/unverified. Canonical publication and independently reviewed/published projector interface precede fresh bounded author. Main code26/source27+fixtures task-only/unexecuted; all ownership/runtime/security/cleanup/upgrade/catalog/regression/runner/integration/parent gates remain. Coordinator receipt/status-only changes do not authorize runtime.
