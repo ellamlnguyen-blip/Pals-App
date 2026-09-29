@@ -64,3 +64,32 @@ This six-document correction proposal contains no executable/source/config/schem
 ## Independent restoration correction contract review
 
 Independent FULL six-document correction-contract review is CLEAR/no actionable findings at `ae62ceab159e340ced3736b8278d133acab1dcc6` against canonicalmain89dc6dc. Contract SHA256 `6516dee8c5d536f5d94fca436a2dcb625061f43c81ae31094dcf0d620c8cb6f6`. Reviewer confirmed the original safety-enabled setup, bounded gate-race precondition, unchanged reviewed setup writer/full54/prior187/nine exports/privacy/refusals and truthful unaccepted148601 evidence. Read-only inspection; author evidence inspected, not rerun. Canonical contract publication and fresh dependency reconciliation still precede a FRESH correction author. No executable acceptance, target contact or parent completion.
+
+## 2026-09-29 — Moderation transition correction reviewed and task-published
+
+**Independent FULL review CLEAR; static checkpoint task-published and exact remote verified.** Fresh correction author froze `6a55eb349ecfb9af29cd3b6607bb059b811b94f8` on `agent/TASK-021A1b3c-moderation-restoration-correction`, from dependency-reviewed `5c77e3f95a1f22cb67a1bc2da043f39b5f6ae38a` (remote-verified canonical main `e5ce3e3a9f4d4146e897ded9f36eaf7d79454006` plus exact unaccepted148601). Exactly two existing files. Git preserves earlier148601/read25d353/coreac7 handoffs;148601 is superseded for this static prerequisite and is not separately accepted.
+
+Both gate races now require an existing enabled singleton safety gate before sequence creation or observations. This closes the restoration P2 without changing the reviewed setup writer or full54 comparisons.26 fixed primitives,12 literal race models and nine HTTP subsequences independently derive transitions, fingerprints, request ledger, audit23, exact SQL/HTTP results, current permission/retry checks and membership-campus distinctions. Prior setup/read semantics, nine opaque exports, early ordinary privacy, source/provider pins and missing-family exclusions remain preserved.
+
+Author reports355 own inert groups (187 unchanged +154 preserved with lawful baseline +14 correction), zero contact/import traps; syntax, explicit ignored-path formatting, narrow lint and whitespace clean. Root inspected the frozen handoff/source before fresh independent FULL review. Reviewer returned CLEAR/no actionable findings and independently matched source/model/interface hashes. Author-reported evidence and verifier source were inspected, not rerun; no saved execution transcript was available. Root pushed and independently verified exact task remote6a55 with canonical main still e5ce. No actual source27/HTTP/JWT/permission/wait/order/cleanup/provider credit.
+
+Code remains task-only pending later combined gates. Exact sanctions1a2c dependency amendment and this documentary milestone require independent review/canonical publication/fresh reconciliation before a FRESH author. Sanctions/enforcement/all39 HTTP1a2c, current/retained safety1a3, transport1b and consumers remain mandatory. Main26/source27/all fixtures stay unexecuted. Provider qualification, channel/adoption/78/emission/completion/ceilings/finalrunner/freeze/ownership/exclusive release/preflight/runtime/security/cleanup/normal stop/accepted integration and B3c/B3/A1c/A2/TASK-021 remain incomplete.
+
+| Frozen corrected receipt | SHA256 |
+| --- | --- |
+| Helper6a55 | `21ee2d38e44c551dab0492a1b8a0def39a6d4fd6442c673cba24880814f86e10` |
+| Author MODELS handoff6a55 | `c8614d8c63a0658ff8a8351510cad8a511756a71f91e6839b4b0e683d72717e7` |
+| Literal54 schema, unchanged | `e0a7cee77c4b9ef3424f8a92dfbf3886fb2fb93049f02cbb6ecc656b58b08410` |
+| HTTP/race/phase/setup manifest, unchanged | `2374639c4a77b0e692c13318c680c401a68408fad1b0383f4533c3a52541f2cd` |
+| Transition/sequence builders | `d2f38d642b036d89be0bb83ff309f28cd3076d3ffe8d55ca41c3f534e807f08c` |
+| Transition/loss/race/HTTP-subsequence manifest | `00f4d8feba618744e07b2f1556fec4df709c753fc13ddae47e238bf7da1daf42` |
+| Transition/sequence private descriptor | `f78387c08950d3573a327d096019eb5a5d13401c66964af5276930b27ae31217` |
+| Complete public descriptor | `f341d715df62c288c8ef3e8ea4df14dc127badf15dca55deac50c75710829931` |
+
+Fresh `review_moderation_restoration_correction_full` reviewed the entire6a55 helper/examples/private/public namespace, governing source/contracts and preservation against5c77e3. CLEAR/no actionable findings; previous sole restoration P2 closed. Independent hashes match, exact two-file scope clean, source-only/provider flags and privacy/refusal/exclusion limits preserved. Evidence355/zero traps/static checks is author reported and inspected with verifier source, not rerun; no saved execution transcript. No imports/evaluation/tests/network/target/mutations by reviewer. Root task publication and exact remote verification6a55/e5ce are recorded above.
+
+Only this static prerequisite supersedes unaccepted148601. Executable code/migration27 stay off main and unexecuted. Contract/source/plan counts and final-file ownership are unchanged; documentary milestone/exact1a2c amendment must be independently reviewed and canonically published before fresh exact dependencies and author dispatch. Standard speed remains app controlled/unverified.
+
+## Independent transition milestone and sanctions dependency review
+
+Independent FULL six-document milestone/exact sanctions prerequisite amendment review is CLEAR/no actionable findings at `5ab02c782470eb57229d93bdb4c9791d02b1ce86` against main e5ce3e3. Reviewer independently matched corrected6a55 helper/handoff and preserved source/interface/privacy/plan-count/exclusion constraints; author-reported355/zero-trap/static evidence and no-saved-transcript/no-rerun limits remain accurate. No executable/source/schema/config or new authority changes. Canonical amendment publication and fresh exact dependency reconciliation still precede a FRESH sanctions author; all later gates and parents remain incomplete.
