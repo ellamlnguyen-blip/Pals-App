@@ -713,6 +713,95 @@ try {
     "42501",
   );
   checks++;
+  // Exact source-shaped nested SQL statement frame between PL/pgSQL frames.
+  const ownerSource = readFileSync(
+    new URL(
+      "../../migrations/20260927000200_pilot_owner_admission.sql",
+      import.meta.url,
+    ),
+    "utf8",
+  );
+  assert.ok(
+    ownerSource.includes(
+      "perform private.pilot_lock_owner_evidence(auth.uid());",
+    ),
+  );
+  assert.ok(
+    ownerSource.includes("perform private.pilot_lock_owner_evidence(subject);"),
+  );
+  const ownerContext =
+    'CONTEXT:  PL/pgSQL function private.pilot_lock_owner_evidence(uuid) line 24 at RAISE\nSQL statement "SELECT private.pilot_lock_owner_evidence(auth.uid())"\nPL/pgSQL function private.require_active_profile_write() line 4 at PERFORM\nLOCATION:  exec_stmt_raise, pl_exec.c:3924\n';
+  const photoContext = ownerContext
+    .replace("auth.uid()", "subject")
+    .replace("require_active_profile_write()", "require_active_photo_write()");
+  const multilineContext = ownerContext.replace(
+    'SQL statement "SELECT private.pilot_lock_owner_evidence(auth.uid())"',
+    'SQL statement "SELECT private.pilot_lock_owner_evidence(\nauth.uid()\n)"',
+  );
+  const initialMultiline =
+    'CONTEXT:  SQL statement "SELECT private.pilot_lock_owner_evidence(\n  auth.uid()\n)"\nPL/pgSQL function private.require_active_profile_write() line 4 at PERFORM\nLOCATION:  exec_stmt_raise, pl_exec.c:3924\n';
+  for (const context of [
+    ownerContext,
+    photoContext,
+    multilineContext,
+    initialMultiline,
+  ]) {
+    const error = sqlError(
+      `ERROR:  42501: Owner operation unavailable\n${context}`,
+    );
+    assert.equal(
+      JSON.stringify(sqlContext.diagnostic(error)),
+      '{"code":"42501","message":"Owner operation unavailable"}',
+    );
+    assert.equal(
+      error.message,
+      "Disposable SQL error: 42501: operation failed",
+    );
+    assert.equal(Object.keys(error).length, 0);
+    assert.ok(!error.stack.includes("pilot_lock_owner_evidence"));
+    const wrongPair = sqlContext.diagnostic(
+      sqlError(`ERROR:  23514: Owner operation unavailable\n${context}`),
+    );
+    assert.equal(wrongPair.code, "unavailable");
+    assert.equal(wrongPair.detail.available, true);
+    const unknownPair = sqlContext.diagnostic(
+      sqlError(`ERROR:  42501: PRIVATE CONTEXT MESSAGE\n${context}`),
+    );
+    assert.equal(unknownPair.code, "unavailable");
+    assert.ok(
+      !JSON.stringify(unknownPair).includes("pilot_lock_owner_evidence"),
+    );
+  }
+  const contextError = "ERROR:  42501: Owner operation unavailable\n";
+  for (const invalidContext of [
+    'CONTEXT:  SQL statement "unterminated',
+    ownerContext.replace('auth.uid())"', "auth.uid())"),
+    'CONTEXT:  SQL statement "SELECT\nERROR:  42501: Owner operation unavailable\n)"',
+    'CONTEXT:  SQL statement "SELECT\n UNKNOWN:  PRIVATE\n)"',
+    'CONTEXT:  SQL statement "SELECT\nPL/pgSQL function private.other() line 1 at PERFORM\n)"',
+    'CONTEXT:  SQL statement "SELECT\nSQL statement "nested"\n)"',
+    'CONTEXT:  SQL statement "SELECT\nLOCATION:  PRIVATE',
+    "CONTEXT:  SQL statement without quotes",
+    'CONTEXT:  SQL statement ""',
+    'CONTEXT:  SQL statement "\n"',
+    ownerContext + "TRAILING PRIVATE\n",
+    'CONTEXT:  SQL statement "SELECT\n' + "  PRIVATE\n".repeat(16) + ')"',
+    ' SQL statement "SELECT private.pilot_lock_owner_evidence(auth.uid())"\n' +
+      ownerContext,
+  ])
+    assert.equal(
+      sqlContext.diagnostic(sqlError(contextError + invalidContext)).detail
+        .available,
+      false,
+    );
+  // Auxiliaries cannot add or replace the main message, including an approved-looking SQL string.
+  const cannotSupplyMessage = sqlContext.diagnostic(
+    sqlError(
+      'ERROR:  42501: PRIVATE ORIGINAL\nCONTEXT:  SQL statement "Owner operation unavailable"\n',
+    ),
+  );
+  assert.equal(cannotSupplyMessage.code, "unavailable");
+  checks++;
   // Dormant localTarget API unit only: independently guarded origin is synthetic,
   // targetGuard is an assertion trap in this private VM, never the real guard.
   let guardCalls = 0,

@@ -1289,17 +1289,36 @@ function completeSqlDiagnostic(stderr) {
   if (!main) return null;
   let current = null,
     previous = -1,
-    continuations = 0;
+    continuations = 0,
+    quotedContext = false,
+    quotedContent = false;
+  // PostgreSQL quotes the whole SQL statement, including physical SQL lines.
+  // Quotes inside that opaque SQL are not parsed; only the final physical quote
+  // closes a frame. Recognized diagnostic/stack records cannot occur while open.
+  function sqlContextFrame(text) {
+    if (!text.startsWith('SQL statement "')) return false;
+    const content = text.slice(15);
+    quotedContext = !content.endsWith('"');
+    quotedContent =
+      (quotedContext ? content : content.slice(0, -1)).trim().length > 0;
+    return quotedContext || quotedContent;
+  }
   const fields = ["DETAIL", "HINT", "CONTEXT", "LOCATION"];
   for (const line of lines.slice(1)) {
     // Even indented ERROR/unknown labeled records cannot masquerade as opaque continuation.
     const field = /^([A-Z]+): {2}(.+)$/.exec(line);
     if (field) {
       const order = fields.indexOf(field[1]);
-      if (order < 0 || order <= previous) return null;
+      if (quotedContext || order < 0 || order <= previous) return null;
       current = field[1];
       previous = order;
       continuations = 0;
+      if (
+        current === "CONTEXT" &&
+        /^SQL statement\b/.test(field[2]) &&
+        !sqlContextFrame(field[2])
+      )
+        return null;
     } else {
       if (
         !current ||
@@ -1308,7 +1327,16 @@ function completeSqlDiagnostic(stderr) {
         /^\s*[A-Za-z][A-Za-z0-9_ -]*:/.test(line)
       )
         return null;
-      if (
+      if (quotedContext) {
+        if (/^(?:SQL statement\b|PL\/pgSQL function\b)/.test(line.trimStart()))
+          return null;
+        const closes = line.endsWith('"');
+        quotedContent ||= (closes ? line.slice(0, -1) : line).trim().length > 0;
+        if (closes && !quotedContent) return null;
+        quotedContext = !closes;
+      } else if (current === "CONTEXT" && /^SQL statement\b/.test(line)) {
+        if (!sqlContextFrame(line)) return null;
+      } else if (
         !/^[ \t]+\S/.test(line) &&
         !(
           current === "CONTEXT" &&
@@ -1320,6 +1348,7 @@ function completeSqlDiagnostic(stderr) {
         return null;
     }
   }
+  if (quotedContext) return null;
   return { code: main[1], message: main[2] };
 }
 function privateSqlDiagnostic(stderr) {
