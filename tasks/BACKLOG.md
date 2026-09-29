@@ -1,5 +1,9 @@
 # Backlog
 
+## 2026-09-29 — Common checkpoint review found one finish-cache P2
+
+Fresh common author froze clean `afc4df78dcae6bc5f43e334b20057b8379ac4856`, branch `agent/TASK-021A1b3c-state-common-awaited-boundaries-resumed`: exactly three files, six guarded APIs,292 static checks/0traps, all42 original functions/complete common43 bytes preserved. Fresh independent FULL review finds soleP2: cached empty finish can skip later child cleanup or acknowledge a later original without delivery. No other actionable findings; author evidence inspected, not rerun. Checkpoint local/unaccepted/unpublished; original author stopped. Proposed same-three-file private batch/original-bound cache correction requires reviewed/published contract/exact dependencies before a FRESH author; no seventh API/contact/reset/ownership scope. Moderation audited reads remain queued unchanged at1727 after dependency CLEAR; attempted dispatch refused by agent task limit, no author started. Main exact remote-verifiede35 remains26 migrations; source27/all fixtures unexecuted and all parents/runtime/provider/release gates incomplete.
+
 ## 2026-09-29 — Operation-family contracts and common amendment review cleared
 
 Fresh independent FULL read-only source/interface/privacy review clears ten-document `f32a1d08870e8d82e4245077079c221d6f2c6a11` against canonicalmain6400, no actionable findings. Reviewer inspected exact clean c627/ac7 and bdb source/handoffs, independently checked frozen source/model/provider/flow/verifier hashes and all sequencing/exclusion/interface obligations; author evidence inspected, not rerun. This review accepts only bounded contracts/common dependency amendment and source-only milestone, no executable integration or runtime/parent completion. Task publication/canonical integration/exact latest-main reconciliation must precede fresh authors. Main26/source27/all fixtures remain unexecuted and all parent/provider/runtime/release gates incomplete.
