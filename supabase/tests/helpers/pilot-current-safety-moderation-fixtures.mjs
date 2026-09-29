@@ -1508,6 +1508,21 @@ export function describeModelPlan(handle) {
 // actor, host, operation, expected delta or authority. A later family consumes
 // only the opaque validated frame, never a public raw-row getter.
 const currentReadinessFrames = new WeakMap();
+const currentReportFrames = new WeakMap();
+const CURRENT_REPORT_REQUEST_ID = "6e000000-0000-4000-8000-000000000001";
+const CURRENT_REPORT_DESCRIPTION = freeze({
+  family: "current-hangout-report-receipt",
+  sourceOnly: true,
+  targetMode: "hangout",
+  category: "safety concern",
+  narrative: null,
+  reporter: "existing SQL reporter",
+  provenance: "current_hangout",
+  fullTables: 54,
+  rollback: "public-positive-to-validated-ready-before",
+  actualPermissionCredit: 0,
+  raceOrderAvailable: false,
+});
 const CURRENT_READINESS_DESCRIPTION = freeze({
   family: "current-hangout-report-readiness",
   actor: "existing SQL reporter",
@@ -1860,6 +1875,113 @@ function currentReadinessFixture(
     }),
   );
 }
+// The only report input is the fixed current-Hangout operation. Observed rows
+// supply database-generated candidates, never expected row bodies or authority.
+function currentReportOperation(readinessHandle, afterHandle, bounds, receipt) {
+  const ready = own(currentReadinessFrames, readinessHandle),
+    before = own(snapshots, ready.readyHandle),
+    after = own(snapshots, afterHandle);
+  check(
+    bounds && typeof bounds.low === "bigint" && typeof bounds.high === "bigint",
+  );
+  check(ready.actor === SQL_IDS.reporter && ready.host === SQL_IDS.target);
+  check(ready.hangout === SQL_IDS.hangout);
+  own(sources, ready.sourceHandle);
+  currentReadinessSource(
+    before,
+    ready.actor,
+    ready.host,
+    ready.hangout,
+    bounds,
+  );
+  check(
+    !before["private.safety_report_requests"].some(
+      (r) =>
+        r.reporter_id === ready.actor &&
+        r.request_id === CURRENT_REPORT_REQUEST_ID,
+    ),
+  );
+  const reports = added(
+    before,
+    after,
+    "private.safety_reports",
+    (r) => !before["private.safety_reports"].some((old) => old.id === r.id),
+    1,
+  );
+  const requestRows = added(
+    before,
+    after,
+    "private.safety_report_requests",
+    (r) =>
+      r.reporter_id === ready.actor &&
+      r.request_id === CURRENT_REPORT_REQUEST_ID,
+    1,
+  );
+  const reportId = bindUuid("database_uuid", reports[0].id, before, new Set());
+  const submittedAt = bindTime(
+    "clock_timestamp",
+    reports[0].submitted_at,
+    bounds,
+  );
+  check(reportId !== CURRENT_REPORT_REQUEST_ID);
+  const fingerprint = createHash("md5")
+    .update(
+      `[${["hangout", ready.hangout, "safety concern", null]
+        .map((v) => JSON.stringify(v))
+        .join(", ")}]`,
+    )
+    .digest("hex");
+  const changed = {
+    "private.safety_reports": insertion(before, "private.safety_reports", [
+      {
+        id: reportId,
+        submitted_at: submittedAt,
+        reporter_id: ready.actor,
+        target_type: "hangout",
+        target_id: ready.hangout,
+        category: "safety concern",
+        narrative: null,
+        provenance_kind: "current_hangout",
+        provenance_ref_id: ready.hangout,
+      },
+    ]),
+    "private.safety_report_requests": insertion(
+      before,
+      "private.safety_report_requests",
+      [
+        {
+          reporter_id: ready.actor,
+          request_id: CURRENT_REPORT_REQUEST_ID,
+          input_fingerprint: fingerprint,
+          report_id: reportId,
+        },
+      ],
+    ),
+  };
+  equal(requestRows[0], changed["private.safety_report_requests"].at(-1));
+  const expectedReceipt = { receipt_id: reportId, submitted_at: submittedAt };
+  assertExact(
+    ready.readyHandle,
+    afterHandle,
+    changed,
+    receipt,
+    expectedReceipt,
+  );
+  return opaque(
+    currentReportFrames,
+    freeze({ readinessHandle, afterHandle, receipt: expectedReceipt }),
+  );
+}
+function currentReportRollback(reportHandle, rollbackHandle) {
+  const report = own(currentReportFrames, reportHandle),
+    ready = own(currentReadinessFrames, report.readinessHandle),
+    before = own(snapshots, ready.readyHandle),
+    rollback = own(snapshots, rollbackHandle);
+  // Public-positive rollback has no persisted report, ledger, or unrelated delta.
+  for (const table of TABLES)
+    equal(unorderedRows(rollback[table]), unorderedRows(before[table]));
+  return opaque(results, freeze({ rolledBack: true, sourceOnly: true }));
+}
 export const modelCheckpoint = freeze({
   family: "core-setup-reads-transitions-first12-sanctions-enforcement",
   modelHash: hash(
@@ -2068,7 +2190,7 @@ export const modelCheckpoint = freeze({
   plannedHttpCases: HTTP_IDS.length,
   plannedRaces: RACES.length,
   laterOperationsAvailable: false,
-  readinessAvailable: false,
+  readinessAvailable: true,
   currentReadinessFixtureAvailable: true,
   currentReadinessModelHash: hash(
     [
@@ -2085,6 +2207,17 @@ export const modelCheckpoint = freeze({
   ),
   currentReadinessPrivateInterfaceHash: hash(
     "private:currentReadinessFixture(fixedExistingEarlySourceBefore,observedReady,boundedWindow,exactSourceOnlyHandle)->opaqueValidatedActorImmutableHostFrame;full54;noReportOrTransport",
+  ),
+  currentReportModelHash: hash(
+    [currentReportOperation, currentReportRollback]
+      .map((fn) => fn.toString())
+      .join("\n"),
+  ),
+  currentReportDescriptionHash: hash(
+    JSON.stringify(CURRENT_REPORT_DESCRIPTION),
+  ),
+  currentReportPrivateInterfaceHash: hash(
+    "private:currentReportOperation(opaqueValidatedReadiness,observedAfter,boundedWindow,observedReceipt)->opaqueQualifiedReport;currentReportRollback(opaqueQualifiedReport,observedRollback)->opaqueKnownReadyBefore;fixedModeCategoryNarrativeRequest;full54;noAuth/JWT/ACL/HTTP/provider/raceCredit",
   ),
   retainedTeardownAvailable: false,
   runtimeCredit: 0,
@@ -5672,7 +5805,7 @@ function memoryExamples(bytes) {
     });
     check(
       !modelCheckpoint.laterOperationsAvailable &&
-        !modelCheckpoint.readinessAvailable &&
+        modelCheckpoint.readinessAvailable &&
         !modelCheckpoint.retainedTeardownAvailable,
     );
   });
@@ -7221,7 +7354,7 @@ function transitionMemoryExamples(source, bounds, time, later, sqlReports) {
       !modelCheckpoint.httpTransportAvailable &&
         !modelCheckpoint.httpSequencesAvailable &&
         !modelCheckpoint.racesAvailable &&
-        !modelCheckpoint.readinessAvailable,
+        modelCheckpoint.readinessAvailable,
     ),
   );
   check(
@@ -8099,7 +8232,7 @@ function sanctionMemoryExamples(source, bounds, time, later, sqlReports) {
   tested(() => {
     check(
       !modelCheckpoint.httpSequencesAvailable &&
-        !modelCheckpoint.readinessAvailable &&
+        modelCheckpoint.readinessAvailable &&
         !modelCheckpoint.retainedTeardownAvailable,
     );
     equal(modelCheckpoint.original219RetainedCredit, 0);
@@ -9706,7 +9839,7 @@ function currentReadinessMemoryExamples(source, bounds, time, later) {
     equal(own(currentReadinessFrames, frame).campus, campus);
     check(modelCheckpoint.currentReadinessFixtureAvailable);
     check(
-      !modelCheckpoint.readinessAvailable &&
+      modelCheckpoint.readinessAvailable &&
         !modelCheckpoint.laterOperationsAvailable,
     );
   });
@@ -9871,5 +10004,132 @@ function currentReadinessMemoryExamples(source, bounds, time, later) {
   rejected(() =>
     currentReadinessFixture(snapshot(before), snapshot(ready), bounds, {}),
   );
+  groups += currentReportMemoryExamples(verify(), ready, bounds, later);
+  return groups;
+}
+
+function currentReportMemoryExamples(readinessHandle, ready, bounds, later) {
+  let groups = 0;
+  const tested = (fn) => {
+    fn();
+    groups++;
+  };
+  const rejected = (fn) => {
+    let failed = false;
+    try {
+      fn();
+    } catch {
+      failed = true;
+    }
+    check(failed);
+    groups++;
+  };
+  const reportId = "6f000000-0000-4000-8000-000000000001";
+  const fingerprint = createHash("md5")
+    .update(
+      `[${["hangout", SQL_IDS.hangout, "safety concern", null]
+        .map((v) => JSON.stringify(v))
+        .join(", ")}]`,
+    )
+    .digest("hex");
+  const after = clone(ready);
+  after["private.safety_reports"].push({
+    id: reportId,
+    submitted_at: later,
+    reporter_id: SQL_IDS.reporter,
+    target_type: "hangout",
+    target_id: SQL_IDS.hangout,
+    category: "safety concern",
+    narrative: null,
+    provenance_kind: "current_hangout",
+    provenance_ref_id: SQL_IDS.hangout,
+  });
+  after["private.safety_report_requests"].push({
+    reporter_id: SQL_IDS.reporter,
+    request_id: CURRENT_REPORT_REQUEST_ID,
+    input_fingerprint: fingerprint,
+    report_id: reportId,
+  });
+  const receipt = { receipt_id: reportId, submitted_at: later };
+  const verify = (rows = after, result = receipt) =>
+    currentReportOperation(readinessHandle, snapshot(rows), bounds, result);
+  tested(() => {
+    const handle = verify();
+    check(currentReportFrames.has(handle));
+    equal(Object.keys(handle), []);
+    currentReportRollback(handle, snapshot(ready));
+    check(
+      modelCheckpoint.readinessAvailable &&
+        modelCheckpoint.permissionCredit === 0 &&
+        modelCheckpoint.runtimeCredit === 0 &&
+        CURRENT_REPORT_DESCRIPTION.actualPermissionCredit === 0 &&
+        !CURRENT_REPORT_DESCRIPTION.raceOrderAvailable,
+    );
+  });
+  const reportChanges = [
+    (r) => (r.reporter_id = SQL_IDS.target),
+    (r) => (r.target_type = "user"),
+    (r) => (r.target_id = SQL_IDS.target),
+    (r) => (r.provenance_kind = "retained_hangout"),
+    (r) => (r.provenance_ref_id = SQL_IDS.target),
+    (r) => (r.category = "other"),
+    (r) => (r.narrative = "Invented"),
+    (r) => (r.id = "malformed"),
+    (r) => (r.submitted_at = "1900-01-01T00:00:00Z"),
+  ];
+  for (const change of reportChanges) {
+    const bad = clone(after);
+    change(bad["private.safety_reports"][0]);
+    rejected(() => verify(bad));
+  }
+  const ledgerChanges = [
+    (r) => (r.reporter_id = SQL_IDS.target),
+    (r) => (r.request_id = SQL_IDS.target),
+    (r) => (r.input_fingerprint = "false-fingerprint"),
+    (r) => (r.report_id = SQL_IDS.target),
+  ];
+  for (const change of ledgerChanges) {
+    const bad = clone(after);
+    change(bad["private.safety_report_requests"][0]);
+    rejected(() => verify(bad));
+  }
+  for (const table of [
+    "private.safety_reports",
+    "private.safety_report_requests",
+  ]) {
+    const missing = clone(after);
+    missing[table] = [];
+    rejected(() => verify(missing));
+    const extra = clone(after);
+    extra[table].push(
+      table === "private.safety_reports"
+        ? { ...extra[table][0], id: SQL_IDS.target }
+        : {
+            ...extra[table][0],
+            request_id: SQL_IDS.target,
+            report_id: SQL_IDS.target,
+          },
+    );
+    rejected(() => verify(extra));
+  }
+  const unrelated = clone(after);
+  unrelated["public.profiles"][0].bio = "Unexpected";
+  rejected(() => verify(unrelated));
+  const privateChange = clone(after);
+  privateChange["private.pilot_availability"][0].revision++;
+  rejected(() => verify(privateChange));
+  rejected(() => verify(after, { ...receipt, actual_permission_pass: true }));
+  rejected(() =>
+    verify(after, { receipt_id: SQL_IDS.target, submitted_at: later }),
+  );
+  rejected(() => verify(after, { receipt_id: reportId, submitted_at: "bad" }));
+  rejected(() => currentReportOperation({}, snapshot(after), bounds, receipt));
+  const qualified = verify();
+  const wrongRollback = clone(ready);
+  wrongRollback["private.safety_reports"].push(
+    after["private.safety_reports"][0],
+  );
+  rejected(() => currentReportRollback(qualified, snapshot(wrongRollback)));
+  rejected(() => currentReportRollback({}, snapshot(ready)));
   return groups;
 }
