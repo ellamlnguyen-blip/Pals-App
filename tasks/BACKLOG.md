@@ -1,5 +1,13 @@
 # Backlog
 
+## 2026-09-29 — Moderation transition review found one restoration P2
+
+Fresh author froze clean local `14860164a77c65ffd201696d5442b42e0210a87e` on `agent/TASK-021A1b3c-moderation-model-transitions`, from dependency-reviewed `10504b41a2b6c56b55f297a97f9d461560ba8231` (remote-verified main89dc6dc plus exact reviewed/task-published reads25d353). Exactly two existing files;26 fixed primitives,12 race models and nine HTTP subsequences. Author341 own inert groups (187 inherited +154 new), zero traps, syntax/explicit format/narrow lint/whitespace clean; evidence inspected, not reviewer-rerun.
+
+Fresh independent FULL review is NOT CLEAR: exactly one P2. Gate/read-first restoration reuses preserved setup moderation-enable, which also enables safety, while the original races restore only moderation. New sequence preconditions permit safety=false and the new example baseline accepts that extra change. No other actionable findings; full helper/source/privacy/interfaces and frozen hashes inspected. Checkpoint148601 remains LOCAL/UNACCEPTED/UNPUBLISHED and the author has stopped.
+
+Proposed same-two-file restoration correction requires source-fixed safety=true before both gate races, truthful lawful/false/missing-state examples, unchanged setup writer and full54 equality. Independent contract review/canonical publication/fresh exact dependencies precede a FRESH correction author; no extending the stopped author. Sanctions1a2c waits for corrected reviewed/task-published1a2b. Main26/source27/all fixtures remain unexecuted; provider/runtime/release/integration gates and B3c/B3/A1c/A2/TASK-021 remain incomplete.
+
 ## 2026-09-29 — Moderation audited-read checkpoint
 
 Independent FULL six-document milestone/exact1a2b predecessor amendment review is CLEAR at `1720ee99c2d16543aeeab96ae9a77f24d2f60d9b` against main9743842; no findings or executable/source/config/schema changes. Reviewer reconfirmed frozen helper/handoff hashes, truthful source-only187-group evidence and bounded transition/first12-race scope. Canonical publication and fresh exact latest-main reconciliation still precede a fresh author; all parent/runtime gates remain incomplete.

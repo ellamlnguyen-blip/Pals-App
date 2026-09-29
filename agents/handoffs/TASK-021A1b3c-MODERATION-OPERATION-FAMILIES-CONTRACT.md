@@ -43,3 +43,20 @@ Public extension adds only fixed opaque readModelPlans and finite descriptions; 
 Fresh `review_moderation_audited_reads_full` independently inspected exact25d353 against038cce, including the entire helper/new examples, descriptors/integration, historical core/setup handoff and governing SQL/HTTP/concurrency sources. CLEAR/no actionable findings; exact helper/handoff/original/provider/current moderation source hashes match. Evidence187 groups/zero traps was inspected, not rerun; read-only source/Git/hash only, no imports/tests/network/target/runtime/mutations. Root pushed task25d353 and independently verified exact remote with canonical main still9743842. This six-document milestone/next-dependency amendment requires independent review and canonical publication before fresh1a2b author.
 
 Independent FULL six-document milestone/exact1a2b predecessor amendment review is CLEAR at `1720ee99c2d16543aeeab96ae9a77f24d2f60d9b` against main9743842; no findings or executable/source/config/schema changes. Reviewer reconfirmed frozen helper/handoff hashes, truthful source-only187-group evidence and bounded transition/first12-race scope. Canonical publication and fresh exact latest-main reconciliation still precede a fresh author; all parent/runtime gates remain incomplete.
+
+## 2026-09-29 — Moderation transition review found one restoration P2
+
+Fresh author froze clean local `14860164a77c65ffd201696d5442b42e0210a87e` on `agent/TASK-021A1b3c-moderation-model-transitions`, from dependency-reviewed `10504b41a2b6c56b55f297a97f9d461560ba8231` (remote-verified main89dc6dc plus exact reviewed/task-published reads25d353). Exactly two existing files;26 fixed primitives,12 race models and nine HTTP subsequences. Author341 own inert groups (187 inherited +154 new), zero traps, syntax/explicit format/narrow lint/whitespace clean; evidence inspected, not reviewer-rerun.
+
+Fresh independent FULL review is NOT CLEAR: exactly one P2. Gate/read-first restoration reuses preserved setup moderation-enable, which also enables safety, while the original races restore only moderation. New sequence preconditions permit safety=false and the new example baseline accepts that extra change. No other actionable findings; full helper/source/privacy/interfaces and frozen hashes inspected. Checkpoint148601 remains LOCAL/UNACCEPTED/UNPUBLISHED and the author has stopped.
+
+Proposed same-two-file restoration correction requires source-fixed safety=true before both gate races, truthful lawful/false/missing-state examples, unchanged setup writer and full54 equality. Independent contract review/canonical publication/fresh exact dependencies precede a FRESH correction author; no extending the stopped author. Sanctions1a2c waits for corrected reviewed/task-published1a2b. Main26/source27/all fixtures remain unexecuted; provider/runtime/release/integration gates and B3c/B3/A1c/A2/TASK-021 remain incomplete.
+
+| Frozen local unaccepted receipt | SHA256 |
+| --- | --- |
+| Helper148601 | `090c8675bce5f9a504c101014bd6cab17cc4c9ebfabbe2ac3e71290cf743765c` |
+| Author handoff148601 | `33e2a6e201dc41d00cc8303fbfe76d3cd33a680b4cd09e416516e4433be2cf89` |
+
+Reviewer `review_moderation_transitions_1a2b_full` inspected exact148601 against10504b. Finding at helper851/1607–1620 and new baseline4055–4056 corresponds to original concurrency112/117. Required bounded correction preserves the reviewed setup writer and supplies source-state preconditions before the new race sequences. Frozen source/provider/read/core hashes, exact26/12/9 plan mappings, independently derived changes/results, opaque interfaces, early ordinary privacy, refusal and missing-family exclusions otherwise pass FULL review. No imports/evaluation/tests/network/target/mutations or acceptance/publication claim for148601.
+
+This six-document correction proposal contains no executable/source/config/schema changes. Canonical contract publication and fresh latest-main/local148601 reconciliation remain required before the new author. All later gates and parents remain incomplete. Standard speed remains app controlled/unverified.
