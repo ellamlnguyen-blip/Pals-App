@@ -27,3 +27,7 @@ This exact amendment must independently FULL-review/canonically publish, then fr
 ## Clean author stop and bounded sequencing — 2026-09-29
 
 Fresh whole1a3 author stopped clean before edits at prepared bfc9f9a282d36d811568ab2b6b28112781ecf727; exact helper/MODELS preserved and no target contact. The combined stage is oversized. Original1a3 acceptance remains authoritative across NEW sequential1a3a current-lawful-prep/report/rollback, 1a3b shutdown/retained-block/last3race, 1a3c final39+15 static composition. Each same two files, independently FULL-reviewed/task-published; exact dependency amendment review/canonical publication/fresh reconciliation before each new author. Stopped author is never extended. No intermediate parent/model/foundation/runtime completion.
+
+## Clean a-stage stop and a1/a2 sequencing — 2026-09-29
+
+Fresh1a3a author stopped clean at prepared6c732f3a7fc9df3e89fa076a68ce4492c9f978bb before edits/execution/contact; helper/MODELS exact7b3555a. Original bounded a scope remains authoritative across new1a3a1 readiness full54 fixture then1a3a2 current report/provenance/ledger/rollback; remaining1a3b retained block/last3races and1a3c final mapping unchanged. Both same2files and independently FULL-reviewed/task-published, exact amendment review/canonical publication/fresh reconciliation before each new author. No intermediate model/foundation/parent/runtime completion, stopped author never extended.
