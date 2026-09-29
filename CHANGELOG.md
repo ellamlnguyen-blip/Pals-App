@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-29 — B3c required moderation extraction proposed
+
+Read-only source feasibility freezes required moderation HTTP report/operator/action-conflict portions and exactly15 original concurrency races, with explicit Storage/deferredendpoint exclusions (zero corresponding credit). Source27 current-report pairs need narrow actor+host readiness/admission/actualpurpose additions; published status was already inheriteddefault. Early moderation proves active unadmitted/incomplete operators during ordinaryshutdown; retainedblock independentofPeople/pilot. Proposed four-new-file contract preserves raw54/originalassertions/first-before-cleanup/settlement/refusal; independent source/contract review/publication+exactdependencies precedeauthor. New two entrypoints remain excluded from current genericwire/runner until separateadoption.
+
+Genericwire contract4febdf8 reviewed/published on exactmain7d386708006230a85983f43fd162b7ea1c8d2fbe, author gated on reviewedlegacycheckpoint. Identity75d943fb frozen forfreshFULLreview, interimP2 missingclose/mismatchdetails and unknownfresh-group observation underreview/unaccepted; legacy32offlinegroup draft active/unreviewed. Main26/allfixturesunexecuted/notarget/runtime release/allparentsopen. MandatoryFOUNDrepairSQL+111operators remainseparate, historicaltrustedDOnegativecontrol zero permissioncredit/notnewL6rerun. See `tasks/active/TASK-021A1b3c-moderation-portions-fixture.md`.
+
 ## 2026-09-29 — B3c generic failure wire proposed
 
 Read-only feasibility inventories eleven future current Node modules (nine behavior+upgrade+operators) and separate current/operator SQL; existing runner four names/HTTP-onlyfd3/default30min is incomplete. Proposed bounded four-file generic transport uses strict independently normalized failure-only schema, fixed module/context manifest,64KiB frames/16records/1MiB/128diff, zero-credit records, invalidation on overflow/malformed/unfinished channel and qualified fixed per-module interruption ceilings. Preserves separate HTTP schema/24h and current runner/refusals; Independent source/interface review clearsbee7cfa; canonical publication + exact reviewed legacy prerequisite/interface reconciliation precede author. No adopter/release/runtime action.
