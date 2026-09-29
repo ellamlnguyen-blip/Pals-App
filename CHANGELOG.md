@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-29 — B3c common projector published and state adoption reviewed
+
+Supersedes earlier common-correction active status. Common failure/output correction `43e44cc030e8c380705401b4d171b06099955e69` passes FULL review and two-P2 correction re-review; assigned task branch is pushed and exact remote SHA verified. Policy/absence raw exact assertions and72/24 manifests remain; private rows/values/errors are projected or withheld, precise known table/index/column diagnostics are retained. Author416 dormant checks are static evidence, not independently rerun target proof. Main code26; this code is task-only/unexecuted.
+
+State-adopter contract `1344fb1b` passes source/contract re-review with a bounded owned six-string wait-label envelope; no other private projection bypass or shared-helper edit. Canonical publication and exact prepared state89/projector43/transport404 dependencies precede fresh two-file author. P1 state adoption remains open. Reviewed exact-edge contract/receipt is on remote-verified main `f6549be7dbd5e984c5945cd7903a83eeb775f39b`; fresh four-cell static author starts at prepared `e820fde2f5256c523a47f57a22c03ba61877ced6`. Upgrade/catalog contract91dbd271 source/contract review clears, publication/interface preparation remains. Retry52a53330/cross0a983cfa task-branch publication remains verified/all18/60 unexecuted. No target/preflight/runtime release, accepted code integration or parent completion.
+
 ## 2026-09-29 — B3c retry/crossing checkpoints and exact-edge contract review
 
 Supersedes prior active retry/crossing status. Retry/rate `52a53330eaf2c196582bb0fae9788a7254db9fa3` passes full review plus exceptional-path correction re-review and is pushed with exact task remote SHA verified. All18 allocations/four waits preserve raw exact comparisons; every failed cell prohibits reset, including unexpected nonzero exits after an early assertion. Crossing `0a983cfabfc4d7f2ccc0893132ba4890a2c4deb9` passes full/correction review and is pushed with exact task remote SHA verified; all60 allocations remain unexecuted, with safely projected supplemental post-close differences and original-first failure preserved.
