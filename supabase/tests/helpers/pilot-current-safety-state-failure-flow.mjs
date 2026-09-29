@@ -108,6 +108,13 @@ export function createStateFailureFlow() {
       requireReviewedStateFailureFlow();
       return deliverSupplement(state, receipt, error, bundle);
     },
+    invalidate(originalError) {
+      if (!state.hasOriginal) {
+        state.hasOriginal = true;
+        state.original = originalError;
+      }
+      return fail(state);
+    },
     disposition() {
       return disposition(state);
     },

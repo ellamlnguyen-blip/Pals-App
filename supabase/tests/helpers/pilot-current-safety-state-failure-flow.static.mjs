@@ -45,6 +45,20 @@ function equal(actual, expected) {
         : value;
   assert.deepEqual(plain(actual), plain(expected));
 }
+// Every original byte remains unchanged outside the one memory-only method.
+const invalidationMethod = `    invalidate(originalError) {
+      if (!state.hasOriginal) {
+        state.hasOriginal = true;
+        state.original = originalError;
+      }
+      return fail(state);
+    },
+`;
+equal(source.split(invalidationMethod).length, 2);
+equal(
+  sha(source.replace(invalidationMethod, "")),
+  "eae2d66d75660187f3d4c26bc34f7002ec59c0920d81d81d83c522eea8f3791b",
+);
 const manifest = wire.failureWireManifest.modules[stateModule];
 const externalState =
   "/private/tmp/pals-task021-state-output-adoption/supabase/tests/pilot-admission-current-safety-state-races.integration.mjs";
@@ -232,6 +246,41 @@ try {
   }
   equal(flow.disposition().reset, "forbidden");
   equal(publicAPI.originalStateFailure(flow), null);
+  check(Object.isFrozen(flow));
+  equal(Object.keys(flow).sort(), [
+    "disposition",
+    "first",
+    "invalidate",
+    "supplement",
+  ]);
+  const invalidated = flow.invalidate(trap);
+  check(invalidated instanceof Error);
+  check(publicAPI.originalStateFailure(flow) === trap);
+  check(publicAPI.originalStateFailure(invalidated) === trap);
+  check(flow.invalidate(new Error("later private error")) === invalidated);
+  equal(publicAPI.originalStateFlowUnavailable(invalidated), {
+    classification: "state-flow-unavailable",
+    required_exit_status: 78,
+    cleanup: "unverified",
+    reset: "forbidden",
+    target: "unestablished",
+    settlement: "unproven",
+  });
+  for (const call of [
+    () => flow.first(trap, trap),
+    () => flow.supplement(trap, trap, trap),
+  ]) {
+    let refused;
+    try {
+      await call();
+    } catch (error) {
+      refused = error;
+    }
+    check(refused instanceof Error);
+    equal(publicAPI.originalStateFlowUnavailable(refused), null);
+    equal(publicAPI.originalStateFailure(refused), null);
+    check(flow.invalidate(trap) === invalidated);
+  }
 } finally {
   for (const [name, original] of originals) mutableChild[name] = original;
   globalThis.fetch = savedFetch;
@@ -324,11 +373,319 @@ async function unavailable(api, action, state, original) {
   equal(api.originalStateFlowUnavailable(error)?.required_exit_status, 78);
   equal(api.originalStateFlowUnavailable(new Error(error.message)), null);
   equal(api.originalStateFlowUnavailable({ ...error }), null);
-  if (state.hasOriginal) equal(api.originalStateFailure(error), original);
+  if (state.hasOriginal) check(api.originalStateFailure(error) === original);
   equal(state.unavailable, true);
   return error;
 }
 const api = await isolate();
+// Invalidation retains only identity, including errors that cannot be inspected.
+// Neither a copied receipt nor a neutral lookalike has private authority.
+function verifyInvalidated(local, flow, state, original, error) {
+  check(local.originalStateFailure(flow) === original);
+  check(local.originalStateFailure(error) === original);
+  check(error === state.unavailableError);
+  equal(error.message, "State failure evidence unavailable");
+  equal(error.stack, "Error: State failure evidence unavailable");
+  equal(Object.keys(error), []);
+  check(!Object.hasOwn(error, "cause"));
+  const receipt = local.originalStateFlowUnavailable(error);
+  check(Object.isFrozen(receipt));
+  equal(receipt, {
+    classification: "state-flow-unavailable",
+    required_exit_status: 78,
+    cleanup: "unverified",
+    reset: "forbidden",
+    target: "unestablished",
+    settlement: "unproven",
+  });
+  const disposition = flow.disposition();
+  check(Object.isFrozen(disposition));
+  equal(disposition, {
+    cleanup: "unverified",
+    reset: "forbidden",
+    target: "unestablished",
+    settlement: "unproven",
+    credits: { order: 0, suite: 0, allocation: 0, cleanup: false, pass: false },
+    evidence: "unavailable",
+    required_exit_status: 78,
+  });
+  for (const forged of [
+    new Error(error.message),
+    { ...error },
+    { ...receipt },
+    disposition,
+    Object.assign(new Error(error.message), receipt),
+    new Proxy(error, {
+      get() {
+        contacts++;
+        throw new Error("Inspected unavailable proxy");
+      },
+    }),
+  ]) {
+    equal(local.originalStateFlowUnavailable(forged), null);
+    equal(local.originalStateFailure(forged), null);
+  }
+  const later = new Proxy(
+    {},
+    {
+      get() {
+        contacts++;
+        throw new Error("Inspected later original");
+      },
+      ownKeys() {
+        contacts++;
+        throw new Error("Inspected later original keys");
+      },
+    },
+  );
+  check(flow.invalidate(later) === error);
+  check(flow.invalidate(error) === error);
+  check(local.originalStateFlowUnavailable(error) === receipt);
+  check(local.originalStateFailure(error) === original);
+  equal(state.unavailable, true);
+}
+const hostileOriginals = (() => {
+  const getter = new Error("private original text");
+  for (const name of [
+    "message",
+    "name",
+    "stack",
+    "cause",
+    "actual",
+    "expected",
+  ])
+    Object.defineProperty(getter, name, {
+      get() {
+        contacts++;
+        throw new Error("Inspected original getter");
+      },
+    });
+  return [
+    getter,
+    new Proxy(
+      {},
+      {
+        get() {
+          contacts++;
+          throw new Error("Inspected original proxy");
+        },
+        ownKeys() {
+          contacts++;
+          throw new Error("Inspected original proxy keys");
+        },
+        getOwnPropertyDescriptor() {
+          contacts++;
+          throw new Error("Inspected original proxy descriptor");
+        },
+        getPrototypeOf() {
+          contacts++;
+          throw new Error("Inspected original proxy prototype");
+        },
+      },
+    ),
+  ];
+})();
+for (const original of hostileOriginals) {
+  const local = await isolate(),
+    [flow, state] = newFlow(local);
+  const error = flow.invalidate(original);
+  verifyInvalidated(local, flow, state, original, error);
+  equal([state.sequence, state.bytes, state.captures.length], [0, 0, 0]);
+  equal(local.records.length, 0);
+  check(
+    (await unavailable(
+      local,
+      () => local.deliverFirst(state, original, {}),
+      state,
+      original,
+    )) === error,
+  );
+  check(
+    (await unavailable(
+      local,
+      () =>
+        local.deliverSupplement(state, "supplemental-closure", new Error(), {}),
+      state,
+      original,
+    )) === error,
+  );
+  equal([state.sequence, state.bytes, state.captures.length], [0, 0, 0]);
+  equal(local.records.length, 0);
+}
+// Prior first/supplement records are vetoed without allocating another frame.
+for (const supplemental of [false, true]) {
+  const local = await isolate(),
+    [flow, state] = newFlow(local),
+    original = new Error("first private original");
+  await local.deliverFirst(state, original, {});
+  if (supplemental)
+    await local.deliverSupplement(
+      state,
+      "supplemental-closure",
+      new Error("private closure"),
+      {},
+    );
+  const before = [state.sequence, state.bytes, state.captures.length];
+  const error = flow.invalidate(hostileOriginals[0]);
+  verifyInvalidated(local, flow, state, original, error);
+  equal([state.sequence, state.bytes, state.captures.length], before);
+  equal(local.records.length, supplemental ? 2 : 1);
+  check(
+    (await unavailable(
+      local,
+      () => local.deliverFirst(state, original, {}),
+      state,
+      original,
+    )) === error,
+  );
+  check(
+    (await unavailable(
+      local,
+      () =>
+        local.deliverSupplement(
+          state,
+          "supplemental-observation",
+          new Error(),
+          {},
+        ),
+      state,
+      original,
+    )) === error,
+  );
+  equal(local.records.length, supplemental ? 2 : 1);
+  const receiver = wire.createFailureWireReceiver(stateModule);
+  for (const record of local.records)
+    receiver.receive(wire.encodeFailureFrame(record, stateModule));
+  receiver.end();
+  receiver.close(
+    local.originalStateFlowUnavailable(error).required_exit_status,
+    null,
+  );
+  equal(receiver.evidence().availability, "unavailable");
+  equal(receiver.evidence().records, []);
+}
+// A pending first or supplement may succeed, fail or remain stalled. The veto
+// neither cancels nor forces settlement, and never emits a sentinel/retry.
+for (const supplemental of [false, true])
+  for (const mode of ["success", "failure", "stalled"]) {
+    let resolveWriter,
+      rejectWriter,
+      writerCalls = 0;
+    const delivered = [],
+      transportError = new Error("private late transport error"),
+      transportReceipt = Object.freeze({ required_exit_status: 78 });
+    const local = await isolate({
+      writer: (record) => {
+        writerCalls++;
+        delivered.push(record);
+        if (supplemental && writerCalls === 1) return Promise.resolve();
+        return new Promise((resolve, reject) => {
+          resolveWriter = resolve;
+          rejectWriter = reject;
+        });
+      },
+      coreReceipt: (error) =>
+        error === transportError ? transportReceipt : null,
+    });
+    const [flow, state] = newFlow(local),
+      original = hostileOriginals[1];
+    if (supplemental) await local.deliverFirst(state, original, {});
+    let settled = false,
+      outcome;
+    const pending = (
+      supplemental
+        ? local.deliverSupplement(
+            state,
+            "supplemental-closure",
+            new Error("late suite closure"),
+            {},
+          )
+        : local.deliverFirst(state, original, {})
+    ).then(
+      (value) => {
+        settled = true;
+        outcome = value;
+      },
+      (failure) => {
+        settled = true;
+        outcome = failure;
+      },
+    );
+    check(state.pending);
+    check(!settled);
+    const before = [state.sequence, state.bytes, state.captures.length];
+    const error = flow.invalidate(new Error("later normalization error"));
+    verifyInvalidated(local, flow, state, original, error);
+    equal([state.sequence, state.bytes, state.captures.length], before);
+    equal(writerCalls, supplemental ? 2 : 1);
+    equal(delivered.length, writerCalls);
+    equal(state.wireReceipt, null);
+    if (mode === "success") resolveWriter();
+    if (mode === "failure") rejectWriter(transportError);
+    if (mode === "stalled") {
+      await Promise.resolve();
+      await Promise.resolve();
+      check(!settled);
+      check(state.pending);
+      // This promise deliberately stays unresolved, without a timer or contact.
+    } else {
+      await pending;
+      check(settled);
+      check(outcome === error);
+      equal(state.pending, false);
+      check(
+        state.wireReceipt === (mode === "failure" ? transportReceipt : null),
+      );
+    }
+    verifyInvalidated(local, flow, state, original, error);
+    equal([state.sequence, state.bytes, state.captures.length], before);
+    equal(writerCalls, supplemental ? 2 : 1);
+    equal(delivered.length, writerCalls);
+    const receiver = wire.createFailureWireReceiver(stateModule);
+    for (const record of delivered)
+      receiver.receive(wire.encodeFailureFrame(record, stateModule));
+    receiver.end();
+    receiver.close(78, null);
+    equal(receiver.evidence().availability, "unavailable");
+    equal(receiver.evidence().records, []);
+  }
+// A previously failed channel keeps its exact receipt and original on veto.
+{
+  const local = await isolate({
+      writer: async () => {
+        throw new Error("private transport");
+      },
+    }),
+    [flow, state] = newFlow(local),
+    original = new Error("private suite original");
+  const error = await unavailable(
+    local,
+    () => local.deliverFirst(state, original, {}),
+    state,
+    original,
+  );
+  check(flow.invalidate(new Error("replacement forbidden")) === error);
+  verifyInvalidated(local, flow, state, original, error);
+  equal(local.records.length, 0);
+}
+// Even a pre-first private failure never creates recovery or a new receipt.
+{
+  const local = await isolate(),
+    [flow, state] = newFlow(local),
+    original = hostileOriginals[1];
+  const error = await unavailable(
+    local,
+    () =>
+      local.deliverSupplement(state, "supplemental-closure", new Error(), {}),
+    state,
+    undefined,
+  );
+  check(flow.invalidate(original) === error);
+  verifyInvalidated(local, flow, state, original, error);
+  equal([state.sequence, state.bytes, state.captures.length], [0, 0, 0]);
+  equal(local.records.length, 0);
+}
+equal(contacts, 0);
 equal(manifest.cases.length, 24);
 equal(
   manifest.cases.filter(
