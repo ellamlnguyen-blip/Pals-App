@@ -12,6 +12,7 @@ import {
   assertClean,
   session,
   until,
+  migrationFiles,
 } from "./helpers/pilot-admission-current-safety.mjs";
 import {
   routes,
@@ -757,6 +758,7 @@ const projectionCaseIDs = new Set([
   "L4.CB.actor.activate_later",
   "L4.CB.peer.activate_later",
 ]);
+// Literal source-backed schema names only; never derived from target observations.
 const projectionColumns = {
   "public.universities": [
     "active",
@@ -1015,19 +1017,51 @@ const projectionColumns = {
     "state",
     "updated_at",
   ],
-  "private.pilot_admission_managers": ["revision", "singleton"],
-  "private.pilot_capabilities": ["created_at", "enabled", "key"],
+  "private.pilot_admission_managers": [
+    "account_id",
+    "created_at",
+    "revision",
+    "state",
+    "updated_at",
+  ],
+  "private.pilot_capabilities": [
+    "created_at",
+    "enabled",
+    "key",
+    "revision",
+    "updated_at",
+  ],
   "private.pilot_management_audit": [
+    "actor_id",
     "id",
+    "new_revision",
+    "new_value",
+    "occurred_at",
     "operation",
+    "policy_key",
+    "previous_revision",
     "previous_value",
     "reason",
     "request_id",
+    "target_id",
   ],
-  "private.pilot_management_requests": ["actor_id", "result_value"],
+  "private.pilot_management_requests": [
+    "actor_id",
+    "audit_id",
+    "fingerprint",
+    "request_id",
+    "result_revision",
+    "result_value",
+  ],
   "private.pilot_manager_audit": [
+    "account_id",
+    "executor_backend_pid",
     "executor_original_role",
+    "executor_session_user",
     "id",
+    "new_revision",
+    "new_state",
+    "occurred_at",
     "previous_revision",
     "previous_state",
     "reason",
@@ -1049,6 +1083,33 @@ const projectionColumns = {
     "name",
     "owner_id",
     "updated_at",
+  ],
+  "private.hangout_peer_provenance": ["hangout_id", "high_id", "low_id"],
+  "private.notification_feature_gate": ["enabled", "singleton"],
+  "private.notification_items": [
+    "actor_id",
+    "created_at",
+    "event_code",
+    "id",
+    "read_at",
+    "recipient_id",
+    "source_id",
+    "source_kind",
+    "target_id",
+  ],
+  "private.notification_preferences": ["category", "enabled", "recipient_id"],
+  "private.pilot_availability": [
+    "created_at",
+    "enabled",
+    "revision",
+    "singleton",
+    "updated_at",
+  ],
+  "private.safety_feature_gate": ["enabled", "singleton"],
+  "private.safety_reconciliation_effects": [
+    "account_id",
+    "effect",
+    "hangout_id",
   ],
 };
 const projectionPhases = new Set([
@@ -2000,6 +2061,7 @@ export function exactSnapshot(before, after, replacements) {
           rows[candidate],
           actual,
           `${table}[${candidate}]`,
+          [table, String(candidate)],
         );
         throw error;
       }
@@ -2904,6 +2966,293 @@ export async function runOutgoingProjectionExamples() {
     checks,
     target_contact_attempts: 0,
     classification: "dormant pure/mocked author examples only",
+  };
+}
+
+// Dormant committed-source inventory/example check. Reads only the exact frozen
+// migration files; it never derives or widens the projector schema at runtime.
+export function runProjectionCorrectionExamples() {
+  let checks = 0;
+  const check = (predicate) => {
+    assert.ok(predicate);
+    checks++;
+  };
+  const sourceColumns = {};
+  const splitFields = (body) => {
+    const fields = [];
+    let depth = 0,
+      quoted = false,
+      start = 0;
+    for (let i = 0; i < body.length; i++) {
+      const character = body[i];
+      if (character === "'") {
+        if (quoted && body[i + 1] === "'") {
+          i++;
+          continue;
+        }
+        quoted = !quoted;
+      } else if (!quoted) {
+        if (character === "(") depth++;
+        else if (character === ")") depth--;
+        else if (character === "," && depth === 0) {
+          fields.push(body.slice(start, i).trim());
+          start = i + 1;
+        }
+      }
+    }
+    fields.push(body.slice(start).trim());
+    return fields;
+  };
+  for (const [filename, hash] of Object.entries(migrationFiles).sort()) {
+    const raw = readFileSync(
+      new URL(`../migrations/${filename}`, import.meta.url),
+      "utf8",
+    );
+    assert.equal(createHash("sha256").update(raw).digest("hex"), hash);
+    const source = raw.replace(/--[^\n]*/g, "");
+    for (const match of source.matchAll(
+      /create table\s+([a-z_]+\.[a-z_]+)\s*\(/gi,
+    )) {
+      const start = match.index + match[0].length;
+      let end = start,
+        depth = 1,
+        quoted = false;
+      while (depth > 0 && end < source.length) {
+        const character = source[end];
+        if (character === "'") {
+          if (quoted && source[end + 1] === "'") {
+            end += 2;
+            continue;
+          }
+          quoted = !quoted;
+        } else if (!quoted) {
+          if (character === "(") depth++;
+          else if (character === ")") depth--;
+        }
+        end++;
+      }
+      assert.equal(depth, 0);
+      const columns = new Set();
+      for (const field of splitFields(source.slice(start, end - 1))) {
+        const inherited = /^like\s+([a-z_]+\.[a-z_]+)\b/i.exec(field);
+        if (inherited)
+          for (const column of sourceColumns[inherited[1]]) columns.add(column);
+        const column =
+          /^([a-z_]+)\s+(?:uuid|text|boolean|integer|bigint|timestamptz|timestamp|jsonb|numeric|double|date|smallint|real)\b/i.exec(
+            field,
+          );
+        if (column) columns.add(column[1]);
+      }
+      assert.ok(columns.size > 0);
+      sourceColumns[match[1]] = [...columns].sort();
+    }
+    for (const match of source.matchAll(
+      /alter table\s+([a-z_]+\.[a-z_]+)\s+(.*?);/gis,
+    )) {
+      for (const column of match[2].matchAll(/\badd column\s+([a-z_]+)\b/gi))
+        sourceColumns[match[1]] = [
+          ...new Set([...sourceColumns[match[1]], column[1]]),
+        ].sort();
+    }
+  }
+  // Auth is the exact frozen census projection; Storage names below are only
+  // the independently constrained setup/source binding fields, not defaults.
+  sourceColumns["auth.users"] = [
+    "deleted_at",
+    "email",
+    "email_confirmed_at",
+    "id",
+    "raw_app_meta_data",
+    "raw_user_meta_data",
+  ];
+  sourceColumns["storage.objects"] = [
+    "bucket_id",
+    "created_at",
+    "id",
+    "last_accessed_at",
+    "name",
+    "owner_id",
+    "updated_at",
+  ];
+  assert.deepEqual(
+    Object.keys(sourceColumns).sort(),
+    censusTables.slice().sort(),
+  );
+  checks++;
+  assert.deepEqual(
+    Object.keys(projectionColumns).sort(),
+    censusTables.slice().sort(),
+  );
+  checks++;
+  for (const table of censusTables) {
+    assert.deepEqual(projectionColumns[table], sourceColumns[table], table);
+    checks++;
+  }
+  const cases = [
+    [
+      "public.hangouts",
+      "title",
+      "PRIVATE_EXACT_TITLE",
+      "PRIVATE_CHANGED_TITLE",
+    ],
+    [
+      "auth.users",
+      "raw_user_meta_data",
+      { PRIVATE_AUTH_KEY: "PRIVATE_AUTH_VALUE" },
+      { PRIVATE_AUTH_KEY: "PRIVATE_CHANGED_AUTH" },
+    ],
+    [
+      "storage.objects",
+      "PRIVATE_PROVIDER_KEY",
+      { PRIVATE_NESTED_PROVIDER_KEY: "PRIVATE_PROVIDER_VALUE" },
+      { PRIVATE_NESTED_PROVIDER_KEY: "PRIVATE_CHANGED_PROVIDER" },
+    ],
+    ...[
+      [
+        "private.pilot_admission_managers",
+        ["account_id", "state", "revision", "created_at", "updated_at"],
+      ],
+      [
+        "private.pilot_capabilities",
+        ["key", "enabled", "revision", "created_at", "updated_at"],
+      ],
+      [
+        "private.pilot_management_audit",
+        [
+          "id",
+          "actor_id",
+          "operation",
+          "target_id",
+          "policy_key",
+          "previous_value",
+          "new_value",
+          "previous_revision",
+          "new_revision",
+          "reason",
+          "request_id",
+          "occurred_at",
+        ],
+      ],
+      [
+        "private.pilot_management_requests",
+        [
+          "actor_id",
+          "request_id",
+          "fingerprint",
+          "result_value",
+          "result_revision",
+          "audit_id",
+        ],
+      ],
+      [
+        "private.pilot_manager_audit",
+        [
+          "id",
+          "account_id",
+          "executor_session_user",
+          "executor_original_role",
+          "executor_backend_pid",
+          "previous_state",
+          "new_state",
+          "previous_revision",
+          "new_revision",
+          "reason",
+          "request_id",
+          "occurred_at",
+        ],
+      ],
+      [
+        "private.pilot_availability",
+        ["singleton", "enabled", "revision", "created_at", "updated_at"],
+      ],
+      ["private.safety_feature_gate", ["singleton", "enabled"]],
+    ].flatMap(([table, columns]) =>
+      columns.map((column) => [
+        table,
+        column,
+        "PRIVATE_ORIGINAL_FIELD",
+        "PRIVATE_CHANGED_FIELD",
+      ]),
+    ),
+  ];
+  for (const [table, column, expectedValue, actualValue] of cases) {
+    const before = Object.fromEntries(censusTables.map((name) => [name, []]));
+    const after = structuredClone(before);
+    after[table] = [{ [column]: actualValue }];
+    let original;
+    try {
+      exactSnapshot(before, after, { [table]: [{ [column]: expectedValue }] });
+    } catch (error) {
+      original = error;
+    }
+    check(original?.preciseDifferences?.length === 1);
+    const raw = original.preciseDifferences[0];
+    check(
+      raw.segments[0] === table &&
+        raw.segments[1] === "0" &&
+        raw.segments[2] === column,
+    );
+    const outgoing = projectFailureEvidence(
+      original,
+      { id: policyManifest[0].id, phase: "release-and-assert-outcome" },
+      after,
+    );
+    const difference = outgoing.differences[0];
+    check(
+      difference.table === table &&
+        difference.row_index === 0 &&
+        difference.path_precision === "structural",
+    );
+    check(
+      difference.expected.available &&
+        difference.actual.available &&
+        difference.expected.sha256 !== difference.actual.sha256,
+    );
+    check(
+      column === "PRIVATE_PROVIDER_KEY"
+        ? difference.column === undefined && difference.column_segment.available
+        : difference.column === column,
+    );
+    if (column === "raw_user_meta_data")
+      check(
+        difference.opaque_segments.length === 1 &&
+          difference.opaque_segments[0].available,
+      );
+    if (column === "PRIVATE_PROVIDER_KEY")
+      check(
+        difference.opaque_segments.length === 1 &&
+          difference.opaque_segments[0].available,
+      );
+    check(!JSON.stringify(outgoing).includes("PRIVATE_"));
+  }
+  // A known-looking nested metadata key never receives schema-column authority.
+  const nested = projectDifferences(
+    differences(
+      {
+        "auth.users": [
+          { raw_app_meta_data: { email: "PRIVATE_NESTED_EMAIL" } },
+        ],
+      },
+      {
+        "auth.users": [
+          { raw_app_meta_data: { email: "PRIVATE_CHANGED_NESTED_EMAIL" } },
+        ],
+      },
+    ),
+  )[0];
+  check(
+    nested.column === "raw_app_meta_data" &&
+      nested.opaque_segments[0].sha256 === outgoingValue("email").sha256,
+  );
+  check(!JSON.stringify(nested).includes("PRIVATE_"));
+  return {
+    checks,
+    table_count: 54,
+    column_count: Object.values(projectionColumns).reduce(
+      (sum, columns) => sum + columns.length,
+      0,
+    ),
+    target_contact_attempts: 0,
   };
 }
 
