@@ -1,5 +1,11 @@
 # Current State
 
+## 2026-09-28 — B3c true26→only27 preservation contract proposed
+
+The proposed bounded upgrade/catalog verifier starts at exact true26, seeds independently expected lawful retained records, applies only the frozen27 body and its history receipt atomically, and compares all54 census entries and complete domain catalog. The fixed prior reset uses the exact cached guarded binary/version/network with finite bounds; the existing reset helper always produces27 and cannot itself prove a true26 upgrade. Historical25→26 evidence remains separate. Independent review/publication and the reviewed common projector interface precede fresh authoring.
+
+Common output correction `90365f50340f26363279b70b1278e7b4d1cd10f3` is frozen for independent FULL review, task-only and unexecuted; state adoption remains separately required. Crossing correction `0a983cfa` awaits re-review; retry exceptional-exit correction continues. Four exact rate-edge instrumented predicate controls remain a separate proposed contract. Main code26; no runtime/target/preflight release or parent completion. See `tasks/active/TASK-021A1b3c-upgrade-catalog-fixture.md`.
+
 ## 2026-09-28 — B3c common-output privacy gate reopened
 
 Fresh read-only assessment confirmsP1 commonpolicy/absence/state failure/cleanup/rollback paths expose rawprivatefull54values/arbitrarydiagnostictext;P2 successsetup emitsunknownprovideranchor keys. No actualleak/execution claimed. Proposed boundedpolicy/absence pure outgoingprojector+neutral suiteerror correction requiresindependentreview/publication beforeauthor, then separatestateadopter. Priorcad9/state89 functionalstaticclear isnotoutputprivacy/runtimeacceptance; allrefusalsremain. Retained44ebc58aeb73c21a5c9ecae85c4c19677105ab5a twoP2corrections rereviewclear/pushed/exactremoteSHAverifiedagainstmain4d0bb937f3a013eb1ddf240d27e4c4067ce5108d. Retry18 initial2a636FULLreviewfound3P2 unknownfieldpath/placeholderhash, unexpectedexit-reset andomittedwrapperSQLdiag; boundedcorrectionactive. Cross60authoractivepreparedf74111. Main26/allsource27fixturecodeunexecuted; exactedge/upgrade/catalog/regression/runner/ownership/runtime/security/cleanup/acceptedparentintegrationremaining. Seecommon-failure-projectioncontract andCOMMON-OUTPUT-PRIVACY-REVIEW.
