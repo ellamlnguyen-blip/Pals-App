@@ -1,6 +1,6 @@
 # B3c true26→only27 upgrade and catalog — proposed static fixture contract
 
-Status: proposed mandatory preservation verifier; independent source/contract review and canonical publication precede fresh author. No implementation dispatch or runtime release. Historical25→26 evidence cannot close this gate. Main code has26 migrations, source27 is reviewed task-only and unexecuted.
+Status: independent read-only source/contract review clears91dbd27179164c33d62d76411d988b14f5944f5c. Mandatory preservation verifier awaits canonical contract publication and exact dependency preparation before fresh author. No implementation dispatch or runtime release. Historical25→26 evidence cannot close this gate. Main code has26 migrations, source27 is reviewed task-only and unexecuted.
 
 Read AGENTS.md, parent current-source-safety, Accepted ADR-0026/0027, DATA_MODEL/AUTHORIZATION/SECURITY_AND_SAFETY, source inventory/lock graph/matrix, source17b72001c3c76d2002b320d92df32703141bb88e, foundation3e9973 and transport404edfabae9ede3a80aa4350937302b989339c20 handoffs. Historical cohost-chat upgrade verifier/catalog are read-only references. Start from coordinator-verified latest canonical main plus exact reviewed source/foundation/transport and, once published, the common outgoing projector dependency. Missing reviewed interface stops as a finding. Fresh Sol medium author/reviewer; Standard speed app controlled/unverified.
 

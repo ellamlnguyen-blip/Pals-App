@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-29 — B3c upgrade/catalog contract reviewed
+
+Independent source/contract review clears `91dbd27179164c33d62d76411d988b14f5944f5c`: fixed guarded cached-binary true26 reset/prior SQL+census lane, lawful independent retained54 baseline, only frozen27/history atomic application, exact144→146 function/catalog preservation and qualified projected Auth/private diagnostics. Contract+receipt canonical publication and exact common43/transport404/source17 dependencies precede fresh two-file author; no reset or target action occurred.
+
+State-adopter contract/receipt `b10f6a4` is published on exact remote-verified canonical main `e69c3d8f37092093bd61012f5b412bd92ba7463a`; fresh two-file static adopter starts at prepared `6a4f6d796ad94ef6bfe40f9e93b12aad87069c2e` with exact state89/common43. Four-cell edge static author remains active at prepared e820fde. Common43, retry52 and crossing0a task publications/reviews remain verified, all cases unexecuted. Main code26; P1 state correction, combined regression/runner/failure delivery/ownership/exclusive release/preflight/runtime/security/cleanup/accepted integration and all parent gates stay incomplete.
+
 ## 2026-09-29 — B3c common projector published and state adoption reviewed
 
 Supersedes earlier common-correction active status. Common failure/output correction `43e44cc030e8c380705401b4d171b06099955e69` passes FULL review and two-P2 correction re-review; assigned task branch is pushed and exact remote SHA verified. Policy/absence raw exact assertions and72/24 manifests remain; private rows/values/errors are projected or withheld, precise known table/index/column diagnostics are retained. Author416 dormant checks are static evidence, not independently rerun target proof. Main code26; this code is task-only/unexecuted.
