@@ -2491,11 +2491,18 @@ function sequenceOperation(
   check(
     ["first-twelve-races", "http-transition-subsequences"].includes(p.family),
   );
-  own(snapshots, beforeHandle);
+  const before = own(snapshots, beforeHandle);
   own(sources, sourceHandle);
   const c = setupContext({ beforeHandle, context: setup });
   const http = p.family === "http-transition-subsequences";
   check(c.lane === (http ? "http" : "sql"));
+  // Both source races start after safety is enabled; their restoration writes
+  // moderation only. The preserved setup writer must leave safety unchanged.
+  if (!http && ["gate_first", "read_first"].includes(p.id))
+    check(
+      find(before, "private.safety_feature_gate", (r) => r.singleton === true)
+        .enabled === true,
+    );
   keys(requestBindings, http ? ["initial", "annotate", "stale"] : []);
   if (http) {
     check(new Set(Object.values(requestBindings)).size === 3);
@@ -4054,6 +4061,7 @@ function transitionMemoryExamples(source, bounds, time, later, sqlReports) {
   const denial = { code: "42501", message: "Moderation unavailable" };
   const baseline = clone(sqlReports);
   baseline["private.moderation_feature_gate"][0].enabled = true;
+  baseline["private.safety_feature_gate"][0].enabled = true;
   const newId = () =>
     `64000000-0000-1000-8000-${String(++ordinal).padStart(12, "0")}`;
   const bindings = {
@@ -4358,6 +4366,58 @@ function transitionMemoryExamples(source, bounds, time, later, sqlReports) {
       "action_before_membership_delete",
     ]),
   );
+  for (const id of ["gate_first", "read_first"]) {
+    const seq = sequenceOperation(
+      raceModelPlans[id],
+      snapshot(baseline),
+      bounds,
+      source,
+      {},
+      {},
+    );
+    const made = seqObservations(RACE_STEPS[id], baseline);
+    tested(() => {
+      verifySequence(seq, made.observations);
+      equal(
+        made.after["private.safety_feature_gate"],
+        baseline["private.safety_feature_gate"],
+      );
+      equal(made.after["private.moderation_feature_gate"], [
+        { singleton: true, enabled: true },
+      ]);
+    });
+    for (const state of ["disabled", "missing"]) {
+      const invalid = clone(baseline);
+      if (state === "disabled")
+        invalid["private.safety_feature_gate"][0].enabled = false;
+      else invalid["private.safety_feature_gate"] = [];
+      rejected(() =>
+        sequenceOperation(
+          raceModelPlans[id],
+          snapshot(invalid),
+          bounds,
+          source,
+          {},
+          {},
+        ),
+      );
+    }
+    for (const table of [
+      "private.safety_feature_gate",
+      "private.people_feature_gate",
+    ]) {
+      const changed = clone(made.after);
+      changed[table][0].enabled = !changed[table][0].enabled;
+      const observations = made.observations.slice();
+      observations[observations.length - 1] = {
+        afterHandle: snapshot(changed),
+        result: "",
+      };
+      rejected(() => verifySequence(seq, observations));
+    }
+    rejected(() => verifySequence(seq, made.observations.slice(0, -1)));
+    rejected(() => verifySequence(seq, made.observations.slice().reverse()));
+  }
   let raceState = clone(baseline);
   const allRaceObservations = [];
   for (const id of Object.keys(RACE_STEPS)) {
