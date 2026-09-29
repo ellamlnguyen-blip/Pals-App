@@ -19,12 +19,12 @@ import {
   auth,
   census,
   censusQuery,
+  censusTables,
   campus,
   assertCurrentOnly,
   selectedLaterLane,
   peerProofsQuery,
   denialFor,
-  sanitized,
 } from "./helpers/pilot-current-safety-fixtures.mjs";
 import {
   assertCaseSetup,
@@ -35,13 +35,239 @@ import {
   executeSuccess,
   successSQL,
   exactDiagnostic,
-  credentialFree,
-  captureFailure,
+  projectOutgoingEvidence,
+  projectFailureEvidence,
+  outgoingValue,
+  safeDiagnostic,
+  originalSuiteError,
+  neutralSuiteError,
   finishOwnedSessions,
   guardedFinalCleanup,
   removeOwnBlock,
   bounds,
 } from "./pilot-admission-current-safety-concurrency.integration.mjs";
+
+// Only these exact authored wait strings have caller-owned disclosure authority.
+const stateWaits = Object.freeze([
+  "social (16016,1) exclusive before moderation/pilot/lane selection; no lower current tuple credit",
+  "social (16016,1) exclusive before shared pilot/lifecycle and current lane selection; no lower tuple credit",
+  "public opt-out account UPDATE waits on current peer account SHARE, before preference UPSERT",
+  "current peer account SHARE waits on public opt-out account UPDATE, before required preference lookup",
+  "required peer preference SHARE versus actual preference DELETE tuple/transaction wait; privileged synthetic maintenance only",
+  "social (16016,1) exclusive before shared pilot/current-or-retained lane selection; no lower tuple/no-upgrade/no-fallback credit",
+]);
+function stateWaitIndex(cell) {
+  if (cell.loss === "source_disable") return 0;
+  if (cell.loss === "source_cancel") return 1;
+  if (cell.loss === "peer_opt_out")
+    return cell.order === "operation-first" ? 2 : 3;
+  if (cell.loss === "peer_preference_delete") return 4;
+  return 5;
+}
+function stateOwn(value, key) {
+  try {
+    const descriptor = Object.getOwnPropertyDescriptor(value ?? {}, key);
+    return descriptor && Object.hasOwn(descriptor, "value")
+      ? descriptor.value
+      : undefined;
+  } catch {
+    return undefined;
+  }
+}
+function withStateWait(projected, context, suppliedWait) {
+  const cell = stateManifest.find(
+    (candidate) => candidate.id === stateOwn(context, "id"),
+  );
+  // Both the canonical cell/order and actual writer classification are required.
+  if (
+    cell &&
+    projected.id === cell.id &&
+    stateOwn(context, "order") === cell.order &&
+    stateOwn(context, "writerKind") ===
+      ({
+        source_disable: "disable",
+        source_cancel: "cancel",
+        peer_opt_out: "optout",
+        peer_preference_delete: "delete",
+      }[cell.loss] ?? "block") &&
+    suppliedWait === stateWaits[stateWaitIndex(cell)]
+  )
+    projected.wait_location = suppliedWait;
+  return projected;
+}
+function projectStateEvidence(record, context) {
+  return withStateWait(
+    projectOutgoingEvidence(record),
+    context,
+    stateOwn(record, "wait_location"),
+  );
+}
+function emitStateEvidence(record, context, output = console.error) {
+  output(JSON.stringify(projectStateEvidence(record, context)));
+}
+const stateFailureContexts = new WeakMap();
+const stateSettledErrors = new WeakMap();
+function neutralStateError(input, context) {
+  const original = originalSuiteError(input);
+  if (context && original && typeof original === "object")
+    stateFailureContexts.set(original, context);
+  const neutral = neutralSuiteError(input);
+  const remembered = stateFailureContexts.get(original);
+  // Common evidence is already projected; attach only the fixed validated label.
+  withStateWait(neutral.evidence, remembered, stateOwn(remembered, "wait"));
+  return neutral;
+}
+function captureStateFailure(input, context, snapshot, censusFailure) {
+  const error = originalSuiteError(input);
+  if (
+    arguments.length < 3 &&
+    error.cleanupIncomplete &&
+    stateSettledErrors.get(error) !== true
+  ) {
+    snapshot = null;
+    censusFailure = new Error(
+      "owned backend settlement unavailable; no post-close observation",
+    );
+  } else if (arguments.length < 3) {
+    try {
+      snapshot = census();
+    } catch (cause) {
+      censusFailure = originalSuiteError(cause);
+    }
+  }
+  const projected = projectFailureEvidence(
+    error,
+    context,
+    snapshot ?? null,
+    censusFailure ?? null,
+  );
+  withStateWait(projected, context, context?.wait);
+  console.error(JSON.stringify(projected));
+  // Never suppress newly discovered close/rollback/reset evidence with this flag.
+  error.failureRecorded = true;
+  error.failedCellID = context?.id;
+  stateFailureContexts.set(error, context);
+}
+function ownedPID(owned) {
+  const rows = owned
+    .output()
+    .split("\n")
+    .filter((line) => line.startsWith("OWNED_PID:"));
+  assert.equal(rows.length, 1, "one owned backend binding required");
+  const literal = rows[0].slice("OWNED_PID:".length);
+  assert.match(literal, /^[1-9][0-9]*$/);
+  const pid = Number(literal);
+  assert.ok(Number.isSafeInteger(pid) && pid > 0);
+  return pid;
+}
+function acceptedStateExit(exit, diagnostics) {
+  return (
+    Array.isArray(exit) &&
+    exit.length === 2 &&
+    exit[1] === null &&
+    Number.isSafeInteger(exit[0]) &&
+    (exit[0] === 0 ||
+      (exit[0] === 3 &&
+        diagnostics.length === 1 &&
+        ["42501", "40P01", "40001", "57014", "55P03"].includes(
+          diagnostics[0].code,
+        ) &&
+        safeDiagnostic(diagnostics[0]).code === diagnostics[0].code))
+  );
+}
+// Server/parallel-descendant absence is independent of child-exit/close receipt.
+// Common's conservative cleanupIncomplete flag is never cleared by this proof.
+async function finishStateSessions(
+  sessions,
+  names,
+  inputError,
+  context,
+  dependencies = {},
+) {
+  const finish = dependencies.finish ?? finishOwnedSessions;
+  let original = inputError == null ? null : originalSuiteError(inputError),
+    closeError = null;
+  const owned = sessions.filter(Boolean);
+  try {
+    await finish(owned, original);
+  } catch (failure) {
+    closeError = originalSuiteError(failure);
+    original ??= closeError;
+    emitStateEvidence(
+      {
+        id: context?.id,
+        phase: context?.phase,
+        partition: "owned-exit-unproven",
+        error: closeError,
+        cleanup_diagnostics: original.cleanupDiagnostics ?? [closeError],
+        differences: (original.cleanupDiagnostics ?? [closeError]).flatMap(
+          (failure) => originalSuiteError(failure)?.preciseDifferences ?? [],
+        ),
+        reset_forbidden: true,
+        original_error_preserved: inputError != null,
+        successful_wait_order_credit: false,
+        observed_wait_credit: 0,
+        wait_location: context?.wait,
+      },
+      context,
+    );
+  }
+  let settled = false;
+  try {
+    const exits = await Promise.allSettled(owned.map((s) => s.done));
+    assert.ok(owned.length > 0 && names.length === owned.length);
+    assert.ok(
+      exits.every(
+        (exit, index) =>
+          exit.status === "fulfilled" &&
+          acceptedStateExit(exit.value, exactDiagnostic(owned[index].output())),
+      ),
+      "accepted owned exits required",
+    );
+    const pids = owned.map(ownedPID);
+    assert.equal(new Set(pids).size, pids.length);
+    if (pids.length === 2 && context?.observation?.holder_pid !== undefined) {
+      assert.equal(pids[0], context.observation.holder_pid);
+      assert.equal(pids[1], context.observation.waiter_pid);
+    }
+    (dependencies.guard ?? localTarget)("current27");
+    const active = (dependencies.query ?? sql)(
+      `select count(*) from pg_stat_activity where pid in (${pids.join(",")}) or leader_pid in (${pids.join(",")}) or application_name in (${names.map(quote).join(",")})`,
+    );
+    assert.equal(
+      active,
+      "0",
+      "owned backend/parallel descendant settlement required",
+    );
+    settled = true;
+  } catch (failure) {
+    const settlement = originalSuiteError(failure);
+    original ??= settlement;
+    original.cleanupIncomplete = true;
+    original.cleanupDiagnostics = [
+      ...(original.cleanupDiagnostics ?? []),
+      settlement,
+    ];
+    emitStateEvidence(
+      {
+        id: context?.id,
+        phase: context?.phase,
+        partition: "owned-exit-unproven",
+        error: settlement,
+        differences: settlement.preciseDifferences ?? [],
+        reset_forbidden: true,
+        original_error_preserved: inputError != null,
+        successful_wait_order_credit: false,
+        observed_wait_credit: 0,
+        wait_location: context?.wait,
+      },
+      context,
+    );
+  }
+  if (original && typeof original === "object")
+    stateSettledErrors.set(original, settled);
+  return { original, closeError, settled };
+}
 
 // Literal canonical allocations, not computed mappings or execution receipts.
 export const stateManifest = Object.freeze([
@@ -701,7 +927,7 @@ export function assertOperation(
     request,
   );
 }
-export async function statePrecheck(route) {
+async function statePrecheckInner(route) {
   assertCurrentOnly(route);
   const before = census(),
     start = windowStart();
@@ -723,13 +949,14 @@ export async function statePrecheck(route) {
   exactDelta(before, census(), {}, "positive current rollback");
   assertCurrentOnly(route);
 }
-export async function stateDenied(route, before, request) {
+async function stateDeniedInner(route, before, request) {
   let owned, originalError;
+  const name = "b3c_state_denied_" + request.replaceAll("-", "").slice(0, 16);
   try {
-    owned = session(
-      "b3c_state_denied_" + request.replaceAll("-", "").slice(0, 16),
+    owned = session(name);
+    owned.send(
+      `${bounds}select 'OWNED_PID:'||pg_backend_pid();begin;${successSQL(route, { request })}commit;`,
     );
-    owned.send(`${bounds}begin;${successSQL(route, { request })}commit;`);
     owned.child.stdin.end();
     assert.deepEqual(await owned.done, [3, null]);
     const diagnostics = exactDiagnostic(owned.output());
@@ -747,11 +974,17 @@ export async function stateDenied(route, before, request) {
       after: census(),
     });
   } catch (error) {
-    originalError = error;
-    error.sqlDiagnostics = exactDiagnostic(owned?.output() ?? "");
-    throw error;
+    originalError = originalSuiteError(error);
+    originalError.sqlDiagnostics = exactDiagnostic(owned?.output() ?? "");
+    throw originalError;
   } finally {
-    await finishOwnedSessions([owned], originalError);
+    const finished = await finishStateSessions(
+      [owned],
+      owned ? [name] : [],
+      originalError,
+      null,
+    );
+    if (finished.original) throw finished.original;
   }
 }
 export function expectedLaterLane(route, writer, operationFirst) {
@@ -802,7 +1035,7 @@ function assertCurrentOnlyAfterLoss(route) {
     );
   }
 }
-export async function postLoss(cell, route, writer, context) {
+async function postLossInner(cell, route, writer, context) {
   const lane = expectedLaterLane(
     route,
     writer,
@@ -879,25 +1112,28 @@ export function stateEffectClassification(cell) {
     return "retained-repair-no-new-loss";
   return "planned-committed-state-loss";
 }
-export async function observeStateRace(cell, route, writer, before, context) {
+async function observeStateRaceInner(cell, route, writer, before, context) {
   let holder, waiter, originalError;
   const operationFirst = cell.order === "operation-first",
     start = windowStart();
   const name = "b3c_state_" + route.request.replaceAll("-", "").slice(0, 20);
+  context.order = cell.order;
+  context.writerKind = writer.kind;
+  context.wait = writer.wait;
   const writerSQL = writer.sql + `select 'SNAPSHOT:'||(${censusQuery})::text;`;
   try {
     holder = session(name + "_h");
     waiter = session(name + "_w");
     context.phase = "holder-execution";
     holder.send(
-      `${bounds}begin;${operationFirst ? successSQL(route) : writerSQL}select 'HELD';`,
+      `${bounds}select 'OWNED_PID:'||pg_backend_pid();begin;${operationFirst ? successSQL(route) : writerSQL}select 'HELD';`,
     );
     await until(() => holder.output().split("\n").includes("HELD"));
     assert.deepEqual(exactDiagnostic(holder.output()), []);
     context.holderSnapshot = marker(holder.output(), "SNAPSHOT:");
     context.phase = "waiter-execution";
     waiter.send(
-      `${bounds}begin;${operationFirst ? writerSQL : successSQL(route)}select 'COMPLETED';commit;select 'WAITER_COMMITTED';`,
+      `${bounds}select 'OWNED_PID:'||pg_backend_pid();begin;${operationFirst ? writerSQL : successSQL(route)}select 'COMPLETED';commit;select 'WAITER_COMMITTED';`,
     );
     context.phase = "actual-lock-observation";
     const observationSQL = `select jsonb_build_object('holder_pid',h.pid,'waiter_pid',w.pid,'blocking_pids',pg_blocking_pids(w.pid),
@@ -1039,14 +1275,14 @@ export async function observeStateRace(cell, route, writer, before, context) {
         order: cell.order,
         writer_public: true,
         writer_actor: writer.actor,
-        actual_writer_result: context.managerResult,
+        actual_manager_result: context.managerResult,
         wait_location: writer.wait,
         ...observation,
-        holder_current_snapshot: sanitized(held),
+        holder_snapshot: held,
         holder_snapshot_kind:
           "successful current block; no competing loss committed",
         operation_selected_lane: "current",
-        operation_result: initialResult,
+        actual_public_result: initialResult,
         writer_effect_classification: stateEffectClassification(cell),
         writer_full54_rollback_verified: true,
         post_loss: recovery,
@@ -1138,14 +1374,14 @@ export async function observeStateRace(cell, route, writer, before, context) {
       order: cell.order,
       writer_public: writer.public,
       writer_actor: writer.actor,
-      actual_writer_result: result,
+      actual_manager_result: result,
       wait_location: writer.wait,
       ...observation,
-      holder_loss_snapshot: operationFirst
-        ? sanitized(marker(waiter.output(), "SNAPSHOT:"))
-        : sanitized(held),
+      holder_snapshot: operationFirst
+        ? marker(waiter.output(), "SNAPSHOT:")
+        : held,
       operation_selected_lane: operationFirst ? "current" : lossLane,
-      operation_result:
+      actual_public_result:
         currentResult === null
           ? { code: "42501", message: denialFor(route) }
           : route.id === "CB"
@@ -1166,7 +1402,7 @@ export async function observeStateRace(cell, route, writer, before, context) {
           : 1,
     };
   } catch (error) {
-    originalError = error;
+    originalError = originalSuiteError(error);
     context.diagnostics = [
       ...exactDiagnostic(holder?.output() ?? ""),
       ...exactDiagnostic(waiter?.output() ?? ""),
@@ -1203,16 +1439,33 @@ export async function observeStateRace(cell, route, writer, before, context) {
           ),
         );
       } catch (cause) {
-        context.observation = { unavailable: credentialFree(cause.message) };
+        context.observation = { unavailable: originalSuiteError(cause) };
       }
     }
-    captureFailure(error, context);
-    throw error;
+    captureStateFailure(originalError, context);
+    throw originalError;
   } finally {
-    await finishOwnedSessions([holder, waiter], originalError);
+    const finished = await finishStateSessions(
+      [holder, waiter],
+      [holder && name + "_h", waiter && name + "_w"].filter(Boolean),
+      originalError,
+      context,
+    );
+    originalError = finished.original;
+    if (finished.closeError || (!finished.settled && originalError)) {
+      if (finished.settled) captureStateFailure(originalError, context);
+      else
+        captureStateFailure(
+          originalError,
+          context,
+          null,
+          finished.closeError ?? originalError,
+        );
+    }
     if (
       originalError &&
-      context.diagnostics.some((d) =>
+      finished.settled &&
+      (context.diagnostics ?? []).some((d) =>
         ["40P01", "40001", "57014", "55P03"].includes(d.code),
       )
     ) {
@@ -1227,38 +1480,110 @@ export async function observeStateRace(cell, route, writer, before, context) {
         .split("\n")
         .includes("WAITER_COMMITTED");
       if (!waiterCommitted) {
-        try {
-          exactDelta(
-            holderCommitted ? context.holderSnapshot : before,
-            census(),
-            {},
-            "failed/abort waiter exact rollback; zero order credit",
-          );
-          console.error(
-            JSON.stringify({
-              id: cell.id,
-              partition: "failed-abort-exact-rollback",
-              full54_verified: true,
-              successful_wait_order_credit: false,
-              holder_commit_preserved: holderCommitted,
-            }),
-          );
-        } catch (rollback) {
-          originalError.rollbackDifferences = rollback.preciseDifferences ?? [];
-          console.error(
-            JSON.stringify(
-              credentialFree({
-                id: cell.id,
-                partition: "failed-abort-rollback-mismatch",
-                differences: originalError.rollbackDifferences,
-                diagnostic: rollback.message,
-                successful_wait_order_credit: false,
-              }),
-            ),
-          );
-        }
+        recordStateRollback(
+          originalError,
+          context,
+          holderCommitted ? context.holderSnapshot : before,
+          holderCommitted,
+        );
       }
     }
+    if (originalError) throw originalError;
+  }
+}
+
+function recordStateRollback(
+  originalError,
+  context,
+  expected,
+  holderCommitted,
+  readCensus = census,
+) {
+  let after = null;
+  try {
+    after = readCensus();
+    exactDelta(
+      expected,
+      after,
+      {},
+      "failed/abort waiter exact rollback; zero order credit",
+    );
+    emitStateEvidence(
+      {
+        id: context.id,
+        phase: context.phase,
+        partition: "failed-abort-exact-rollback",
+        full54_verified: true,
+        committed_census: after,
+        successful_wait_order_credit: false,
+        holder_commit_preserved: holderCommitted,
+        wait_location: context.wait,
+      },
+      context,
+    );
+  } catch (inputRollback) {
+    const rollback = originalSuiteError(inputRollback);
+    originalError.rollbackDifferences = rollback.preciseDifferences ?? [];
+    emitStateEvidence(
+      {
+        id: context.id,
+        phase: context.phase,
+        partition: "failed-abort-rollback-mismatch",
+        differences: originalError.rollbackDifferences,
+        diagnostics: rollback.sqlDiagnostics ?? [],
+        error: rollback,
+        committed_census: after,
+        census_failure: after === null ? rollback : null,
+        successful_wait_order_credit: false,
+        wait_location: context.wait,
+      },
+      context,
+    );
+  }
+}
+
+function finishStateCleanup(
+  cleanupSafe,
+  inputError,
+  context,
+  dependencies = {},
+) {
+  const originalError =
+    inputError == null ? null : originalSuiteError(inputError);
+  if (!cleanupSafe || originalError?.cleanupIncomplete) return;
+  try {
+    (dependencies.cleanup ?? guardedFinalCleanup)(cleanupSafe, originalError);
+  } catch (failure) {
+    const cleanup = originalSuiteError(failure);
+    const first = originalError ?? cleanup;
+    let snapshot = null,
+      observationFailure = null;
+    try {
+      snapshot = (dependencies.census ?? census)();
+    } catch (failure) {
+      observationFailure = originalSuiteError(failure);
+    }
+    emitStateEvidence(
+      {
+        id: context?.id,
+        phase: context?.phase,
+        partition: "cleanup-failed",
+        error: cleanup,
+        cleanup_diagnostics: first.cleanupDiagnostics ?? [cleanup],
+        differences: (first.cleanupDiagnostics ?? [cleanup]).flatMap(
+          (failure) => originalSuiteError(failure)?.preciseDifferences ?? [],
+        ),
+        committed_census: snapshot,
+        census_failure: observationFailure,
+        original_error_preserved: originalError != null,
+        successful_wait_order_credit: false,
+        observed_wait_credit: 0,
+        wait_location: context?.wait,
+      },
+      context,
+    );
+    captureStateFailure(first, context, snapshot, observationFailure);
+    throw first;
   }
 }
 
@@ -1267,7 +1592,7 @@ export function requireReviewedStateRelease() {
     "B3c state fixtures refuse before target contact: state is not runner allowlisted; separately reviewed bounded failure delivery/adoption, combined fixture/ownership review and explicit exclusive serial release remain required",
   );
 }
-export async function runStateFixtures() {
+async function runStateFixturesInner() {
   requireReviewedStateRelease(); // unconditional; no environment/argument bypass
   verifyStateManifest();
   localTarget("current27");
@@ -1277,7 +1602,11 @@ export async function runStateFixtures() {
     context;
   try {
     for (const cell of stateManifest) {
-      context = { id: cell.id, phase: "independent-case-setup" };
+      context = {
+        id: cell.id,
+        order: cell.order,
+        phase: "independent-case-setup",
+      };
       const clean = census(),
         start = windowStart(),
         actorPreference = cell.order === "operation-first" ? false : "absent";
@@ -1296,6 +1625,8 @@ export async function runStateFixtures() {
       context.phase = "absent-or-false-current-rollback-positive";
       await statePrecheck(route);
       const writer = stateWriter(cell, route);
+      context.writerKind = writer.kind;
+      context.wait = writer.wait;
       context.phase = "separate-companion-writer-preparation";
       context.setupQualification.companion = prepareCompanion(
         cell,
@@ -1317,20 +1648,537 @@ export async function runStateFixtures() {
         evidence.post_loss = await postLoss(cell, route, writer, context);
       evidence.setup_qualification = context.setupQualification;
       // Successful ordered evidence is emitted only after all post-loss checks.
-      console.log(JSON.stringify(credentialFree(evidence)));
+      emitStateEvidence(evidence, context, console.log);
       context.phase = "guarded-case-reset";
       resetDisposable("current27");
       assertClean();
     }
   } catch (error) {
-    originalError = error;
-    if (error.cleanupIncomplete) cleanupSafe = false;
-    captureFailure(error, context);
-    throw error;
+    originalError = originalSuiteError(error);
+    if (originalError.cleanupIncomplete) cleanupSafe = false;
+    captureStateFailure(originalError, context);
+    throw originalError;
   } finally {
-    guardedFinalCleanup(cleanupSafe, originalError);
+    finishStateCleanup(cleanupSafe, originalError, context);
   }
 }
+// Actual async boundaries expose only common fixed neutral errors and safe evidence.
+export async function statePrecheck(...args) {
+  try {
+    return await statePrecheckInner(...args);
+  } catch (error) {
+    throw neutralStateError(error);
+  }
+}
+export async function stateDenied(...args) {
+  try {
+    return await stateDeniedInner(...args);
+  } catch (error) {
+    throw neutralStateError(error);
+  }
+}
+export async function postLoss(...args) {
+  try {
+    return await postLossInner(...args);
+  } catch (error) {
+    throw neutralStateError(error, args[3]);
+  }
+}
+export async function observeStateRace(...args) {
+  try {
+    return await observeStateRaceInner(...args);
+  } catch (error) {
+    throw neutralStateError(error, args[4]);
+  }
+}
+export async function runStateFixtures(...args) {
+  try {
+    return await runStateFixturesInner(...args);
+  } catch (error) {
+    throw neutralStateError(error);
+  }
+}
+
+// Dormant pure/mocked author checks; never registered or called by a suite/import.
+export async function runStateOutputExamples() {
+  let checks = 0;
+  const check = (condition) => {
+    assert.ok(condition);
+    checks++;
+  };
+  const privateText = "PRIVATE narrative 90263dcd-5f39-4738-bdaf-4f43e63b234d";
+  const providerKey = "privateProvider_90263dcd";
+  const privateRow = {
+    id: privateText,
+    email: privateText,
+    raw_user_meta_data: { email: privateText },
+    title: privateText,
+    narrative: privateText,
+    [providerKey]: { code: "42501", message: privateText },
+  };
+  const before = Object.fromEntries(censusTables.map((table) => [table, []]));
+  before["auth.users"] = [privateRow];
+  before["storage.objects"] = [privateRow];
+  before["public.hangouts"] = [{ id: privateText, title: privateText }];
+  const after = structuredClone(before);
+  after["public.hangouts"][0].title = "PRIVATE changed title";
+  const cell = stateManifest[0];
+  const contextFor = (candidate) => ({
+    id: candidate.id,
+    order: candidate.order,
+    phase: "actual-lock-observation",
+    writerKind:
+      {
+        source_disable: "disable",
+        source_cancel: "cancel",
+        peer_opt_out: "optout",
+        peer_preference_delete: "delete",
+      }[candidate.loss] ?? "block",
+    wait: stateWaits[stateWaitIndex(candidate)],
+    holderSnapshot: before,
+    diagnostics: [{ code: "40P01", message: "deadlock detected" }],
+    observation: {
+      holder_pid: 101,
+      waiter_pid: 102,
+      blocking_pids: [101],
+      ungranted_locks: [
+        {
+          locktype: "advisory",
+          mode: "ExclusiveLock",
+          classid: 16016,
+          objid: 1,
+          objsubid: 2,
+        },
+      ],
+      application_name: privateText,
+    },
+    setupQualification: {
+      provider_opaque_immutable_anchor_fields: [providerKey],
+    },
+  });
+  const context = contextFor(cell);
+  const cleanOutput = (value) => {
+    const serialized = JSON.stringify(value);
+    check(
+      !serialized.includes(privateText) &&
+        !serialized.includes(providerKey) &&
+        !serialized.includes("PRIVATE changed title"),
+    );
+    return serialized;
+  };
+  check(verifyStateManifest().literal_allocations === 24);
+  check(
+    stateManifest.filter(
+      (candidate) =>
+        stateEffectClassification(candidate) === "planned-committed-state-loss",
+    ).length === 22,
+  );
+  check(
+    stateManifest.filter(
+      (candidate) =>
+        stateEffectClassification(candidate) === "retained-repair-no-new-loss",
+    ).length === 1,
+  );
+  check(
+    stateManifest.filter(
+      (candidate) =>
+        stateEffectClassification(candidate) ===
+        "public-writer-denial-no-committed-loss-order",
+    ).length === 1,
+  );
+  const seenWaits = new Set();
+  for (const candidate of stateManifest) {
+    const ctx = contextFor(candidate);
+    const actualWriter = stateWriter(candidate, {
+      id: candidate.route,
+      actor: "11111111-1111-4111-8111-111111111111",
+      host: "22222222-2222-4222-8222-222222222222",
+      peer: "33333333-3333-4333-8333-333333333333",
+      manager: "44444444-4444-4444-8444-444444444444",
+      source: "55555555-5555-4555-8555-555555555555",
+    });
+    check(
+      actualWriter.wait === ctx.wait && actualWriter.kind === ctx.writerKind,
+    );
+    const evidence = projectStateEvidence(
+      {
+        id: candidate.id,
+        phase: ctx.phase,
+        partition: candidate.partition,
+        order: candidate.order,
+        writer_public: true,
+        writer_actor: privateText,
+        actual_manager_result: privateRow,
+        actual_public_result: privateRow,
+        holder_snapshot: before,
+        post_loss: privateRow,
+        writer_effect_classification: stateEffectClassification(candidate),
+        committed_loss_order_credit:
+          stateEffectClassification(candidate) ===
+          "planned-committed-state-loss"
+            ? 1
+            : 0,
+        full54_values_verified: true,
+        state_observation_verified: true,
+        wait_location: ctx.wait,
+        lock_observation: ctx.observation,
+        setup_qualification: ctx.setupQualification,
+      },
+      ctx,
+    );
+    check(
+      evidence.id === candidate.id &&
+        evidence.partition === candidate.partition,
+    );
+    check(
+      evidence.writer_effect_classification ===
+        stateEffectClassification(candidate),
+    );
+    check(evidence.wait_location === ctx.wait);
+    check(Object.keys(evidence.holder_snapshot).length === 54);
+    cleanOutput(evidence);
+    seenWaits.add(evidence.wait_location);
+    for (const invalid of [
+      ctx.wait + privateText,
+      "Safety operation unavailable",
+      privateText,
+    ]) {
+      const withheld = projectStateEvidence(
+        { id: candidate.id, wait_location: invalid },
+        ctx,
+      );
+      check(typeof withheld.wait_location !== "string");
+      cleanOutput(withheld);
+    }
+    check(
+      typeof projectStateEvidence(
+        { id: candidate.id, wait_location: ctx.wait },
+        { ...ctx, order: "private" },
+      ).wait_location !== "string",
+    );
+    check(
+      typeof projectStateEvidence(
+        { id: candidate.id, wait_location: ctx.wait },
+        { ...ctx, writerKind: "private" },
+      ).wait_location !== "string",
+    );
+    check(
+      typeof projectStateEvidence(
+        { id: privateText, wait_location: ctx.wait },
+        ctx,
+      ).wait_location !== "string",
+    );
+  }
+  check(seenWaits.size === 6);
+  const deniedCell = stateManifest.find(
+    (candidate) =>
+      candidate.id === "L5.CB.actor_peer_block_inbound.operation-first",
+  );
+  check(
+    projectStateEvidence(
+      {
+        id: deniedCell.id,
+        actual_manager_result: {
+          code: "42501",
+          message: "Safety operation unavailable",
+        },
+      },
+      contextFor(deniedCell),
+    ).actual_manager_result.code === "42501",
+  );
+  const phases = [
+    "independent-case-setup",
+    "holder-execution",
+    "waiter-execution",
+    "actual-lock-observation",
+    "release-and-exact-outcome",
+    "absent-or-false-current-rollback-positive",
+    "separate-companion-writer-preparation",
+    "current-provenance-and-no-retained-recheck",
+    "actual-state-race",
+    "fresh-post-loss-lane-and-outcome",
+    "guarded-case-reset",
+    "authorized-unblock-for-separate-current-denial",
+  ];
+  for (const phase of phases)
+    check(projectOutgoingEvidence({ phase }).phase === phase);
+  const original = new Error(privateText);
+  original.actual = privateRow;
+  original.expected = privateRow;
+  original.cause = new Error(privateText);
+  original.preciseDifferences = [
+    {
+      segments: ["public.hangouts", "0", "title"],
+      expected: privateText,
+      actual: "PRIVATE changed title",
+    },
+  ];
+  original.failedCellID = cell.id;
+  original.cleanupIncomplete = true;
+  const neutral = neutralStateError(original, context);
+  check(originalSuiteError(neutral) === original);
+  check(neutralStateError(neutral) === neutral);
+  check(
+    neutral.evidence.cleanupIncomplete &&
+      neutral.evidence.reset_forbidden &&
+      neutral.evidence.wait_location === context.wait,
+  );
+  check(
+    !Object.hasOwn(neutral, "cause") &&
+      !Object.hasOwn(neutral, "actual") &&
+      !neutral.stack.includes(privateText),
+  );
+  cleanOutput(neutral);
+  for (const partition of [
+    "failed-no-success-credit",
+    "failed-abort-exact-rollback",
+    "failed-abort-rollback-mismatch",
+    "owned-exit-unproven",
+    "cleanup-failed",
+    "supplemental-failure-no-credit",
+  ]) {
+    const projected = projectStateEvidence(
+      {
+        id: cell.id,
+        phase: context.phase,
+        partition,
+        error: original,
+        cleanup_diagnostics: [original],
+        census_failure: original,
+        differences: original.preciseDifferences,
+        committed_census: after,
+        holder_snapshot: before,
+        lock_observation: context.observation,
+        diagnostics: context.diagnostics,
+        wait_location: context.wait,
+        successful_wait_order_credit: false,
+        observed_wait_credit: 0,
+      },
+      context,
+    );
+    check(
+      projected.partition === partition &&
+        projected.successful_wait_order_credit === false,
+    );
+    check(
+      projected.differences[0].table === "public.hangouts" &&
+        projected.differences[0].column === "title",
+    );
+    check(Object.keys(projected.committed_census).length === 54);
+    cleanOutput(projected);
+  }
+  check(
+    safeDiagnostic({ code: "42501", message: "Safety operation unavailable" })
+      .code === "42501",
+  );
+  for (const malformed of [
+    new Error("Safety operation unavailable"),
+    {
+      code: "42501",
+      message: "Safety operation unavailable",
+      extra: privateText,
+    },
+    "Disposable SQL error: 42501: Safety operation unavailable\n" + privateText,
+  ]) {
+    check(safeDiagnostic(malformed).code === "unavailable");
+    cleanOutput(safeDiagnostic(malformed));
+  }
+  check(
+    outgoingValue(privateText).sha256 !==
+      outgoingValue(privateText + "2").sha256,
+  );
+  cleanOutput(
+    projectStateEvidence(
+      {
+        id: cell.id,
+        result: "Safety operation unavailable",
+        unknown: privateRow,
+      },
+      context,
+    ),
+  );
+  const cyclic = {};
+  cyclic.self = cyclic;
+  check(outgoingValue(cyclic).available === false);
+  const accessor = Object.defineProperty({}, "private", {
+    enumerable: true,
+    get() {
+      throw new Error("must not execute");
+    },
+  });
+  check(outgoingValue(accessor).available === false);
+  check(outgoingValue(Symbol("private")).available === false);
+  const records = [],
+    previous = console.error;
+  console.error = (line) => records.push(JSON.parse(line));
+  try {
+    captureStateFailure(original, context, before, null);
+    captureStateFailure(original, context, after, null);
+    check(
+      records.length === 2 &&
+        records.every((record) => record.wait_location === context.wait),
+    );
+    check(records[1].committed_census["public.hangouts"].count === 1);
+    const mock = (exit, diagnostic, pid = 101) => ({
+      done: Promise.resolve(exit),
+      output: () => `OWNED_PID:${pid}\n${diagnostic}`,
+    });
+    let guards = 0,
+      queries = 0;
+    const deps = {
+      finish: async () => {},
+      guard: () => {
+        guards++;
+      },
+      query: () => {
+        queries++;
+        return "0";
+      },
+    };
+    const closeFailure = new Error(privateText);
+    closeFailure.preciseDifferences = original.preciseDifferences;
+    const first = new Error(privateText);
+    first.failedCellID = cell.id;
+    const failure = await finishStateSessions(
+      [mock([3, null], "ERROR: 40P01: deadlock detected")],
+      ["owned_mock"],
+      first,
+      context,
+      {
+        ...deps,
+        finish: async (_sessions, error) => {
+          error.cleanupIncomplete = true;
+          error.cleanupDiagnostics = [closeFailure];
+          throw neutralSuiteError(error);
+        },
+      },
+    );
+    check(
+      failure.original === first &&
+        failure.settled &&
+        failure.closeError === first,
+    );
+    check(first.cleanupIncomplete && guards === 1 && queries === 1);
+    const count = records.length;
+    recordStateRollback(first, context, before, false, () => after);
+    check(
+      records.length === count + 1 &&
+        records.at(-1).partition === "failed-abort-rollback-mismatch",
+    );
+    check(
+      records.at(-1).differences[0].table === "public.hangouts" &&
+        records.at(-1).differences[0].column === "title",
+    );
+    check(
+      records.at(-1).committed_census["auth.users"].count === 1 &&
+        first.rollbackDifferences.length > 0,
+    );
+    check(originalSuiteError(neutralStateError(first, context)) === first);
+    recordStateRollback(first, context, before, false, () => before);
+    check(
+      records.at(-1).partition === "failed-abort-exact-rollback" &&
+        records.at(-1).full54_verified === true,
+    );
+    recordStateRollback(first, context, before, false, () => {
+      throw closeFailure;
+    });
+    check(
+      records.at(-1).committed_census["public.hangouts"].available === false,
+    );
+    for (const [exit, diagnostic] of [
+      [[null, "SIGTERM"], ""],
+      [[null, null], ""],
+      [[1, null], ""],
+      [[3, null], "ERROR: 42501: private denial"],
+      [[1.5, null], ""],
+    ]) {
+      const result = await finishStateSessions(
+        [mock(exit, diagnostic)],
+        ["owned_mock"],
+        null,
+        context,
+        deps,
+      );
+      check(!result.settled && result.original.cleanupIncomplete === true);
+      check(
+        neutralStateError(result.original, context).evidence.reset_forbidden ===
+          true,
+      );
+      captureStateFailure(result.original, context);
+      check(records.at(-1).committed_census["auth.users"].available === false);
+    }
+    check(guards === 1 && queries === 1);
+    const unknownServer = await finishStateSessions(
+      [mock([0, null], "")],
+      ["owned_mock"],
+      null,
+      context,
+      { ...deps, query: () => "1" },
+    );
+    check(!unknownServer.settled && unknownServer.original.cleanupIncomplete);
+    const normal = await finishStateSessions(
+      [mock([0, null], "")],
+      ["owned_mock"],
+      null,
+      context,
+      deps,
+    );
+    check(normal.settled && normal.original === null);
+    let cleanupAttempts = 0;
+    const resetFirst = new Error(privateText);
+    resetFirst.failedCellID = cell.id;
+    const resetError = new Error(privateText);
+    resetError.preciseDifferences = original.preciseDifferences;
+    try {
+      finishStateCleanup(true, resetFirst, context, {
+        cleanup: (_safe, error) => {
+          cleanupAttempts++;
+          error.cleanupDiagnostics = [resetError];
+          throw neutralSuiteError(error);
+        },
+        census: () => after,
+      });
+      check(false);
+    } catch (error) {
+      check(error === resetFirst);
+    }
+    check(cleanupAttempts === 1);
+    const resetRecord = records.findLast(
+      (record) => record.partition === "cleanup-failed",
+    );
+    check(
+      resetRecord.differences[0].table === "public.hangouts" &&
+        resetRecord.committed_census["auth.users"].count === 1,
+    );
+    finishStateCleanup(true, first, context, {
+      cleanup: () => {
+        cleanupAttempts++;
+      },
+    });
+    finishStateCleanup(false, null, context, {
+      cleanup: () => {
+        cleanupAttempts++;
+      },
+    });
+    check(cleanupAttempts === 1);
+    try {
+      finishStateCleanup(true, null, context, {
+        cleanup: () => {
+          throw resetError;
+        },
+        census: () => after,
+      });
+      check(false);
+    } catch (error) {
+      check(error === resetError);
+    }
+    for (const record of records) cleanOutput(record);
+  } finally {
+    console.error = previous;
+  }
+  return { checks, target_attempts: 0, runtime_credit: 0 };
+}
+
 if (process.argv[1] && fileURLToPath(import.meta.url) === process.argv[1])
   test(
     "B3c literal24 state cells (unconditionally blocked before contact)",
