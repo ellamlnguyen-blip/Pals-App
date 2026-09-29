@@ -1,5 +1,17 @@
 # Current State
 
+## 2026-09-29 — State invalidation contract review cleared
+
+Fresh independent FULL read-only review cleared the eight-document contract checkpoint `05a5745576a60cf1e2cfb5aa593aba3c01b0cd1f` against canonical main `b9e843e946d7d98f58fd73cc1f561390e2692062`, with no actionable findings. The reviewer inspected exact c593 flow sources and hashes, the common interface, clean94bc stop, and source-only moderationac7 provenance; no tests were rerun. Root independently verified main and both dependency task branch SHAs remotely. Contract publication and latest-main dependency reconciliation must precede fresh authors. This receipt accepts the bounded static prerequisite only. All executable fixtures remain task-only and unexecuted; all parent tasks and runtime/provider gates remain incomplete.
+
+## 2026-09-29 — B3c model setup reviewed; state invalidation prerequisite proposed
+
+Independent FULL source/schema/formula/privacy/interface review clears model-core/setupac7de008928a5b1ce496b42ddb31bc22f8e14f19 with no findings; task branchagent/TASK-021A1b3c-moderation-model-core-setup published/exactremoteverified. Literal54/19opaque setup plans, AuthSQL-vs-realHTTP source formulas/Palsprovision/writers/earlyoperator shutdown are static/source-only. Author84 memorygroups/0traps inspected not rerun. Later39HTTP/15race models/current readiness/retained teardown/transport/consumers unavailable; code task-only/unexecuted. Operations dependency candidate0bf298922200fbded983168703e85127d4cac93d prepared fromb9+ac7, author not dispatched; latest-main reconciliation/review required after milestone publication.
+
+Reviewed common contractf8b9877fb648f98bae798319cf53d267339323fc task-published/exactremoteverified/canonically integrated on exactremoteverified mainb9e843e946d7d98f58fd73cc1f561390e2692062. Fresh author at94bc9b finds missing memory-only exact invalidation for pre-flow copy/normalization rejection. Unaccepted draft445 mocked checks/0traps is not completion evidence; authored common changes/new static file removed, exact clean94bc restored, no checkpoint/handoff/push. Proposed3file flow invalidation plus parent/common amendments preserve four flow exports/six common APIs, contact refusals/strictlimits/firstoriginal/zero-credit while supplying exact private permanent unavailable identity/required78, no writer/records/targetcontact. Independent FULL review/canonical publication/exact dependencies precede invalidation author and fresh subsequent common author; no malformed-envelope or Boolean/copied-receipt substitute.
+
+Main26/source27allfixturesunexecuted/no actual target/runtimecontact; providerAuth context/effective-config proof remains STOP. Models2/3/transport/consumers/common-state adoption/childcapture/ownership/reset/exit78/emission/completion/supervisor/ceiling audits, legacy plans/drivers/copies/finalrunner/combinedfreeze/ownership/exclusiverelease/preflight/runtime/security/cleanup/normalstop/accepted integration and B3c/B3/A1c/A2/TASK-021 incomplete. Standard app-controlled/unverified.
+
 ## 2026-09-29 — B3c state common awaited boundaries proposed
 
 Independent FULL review plus sole nested-withholding correction re-review clears stateflowc59356c847854bd40e8394611e135189104c81c9; task branch published/exactremoteverified. Author3193 memorychecks/0traps are inspected, not reviewer-rerun; code remains dormant/task-only. Childdiagnostic/adoption/settlement/exit78/emission/supervisor/ceiling/runtime gates unchanged.
