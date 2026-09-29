@@ -74,14 +74,13 @@ function stateOwn(value, key) {
     return undefined;
   }
 }
-function withStateWait(projected, context, suppliedWait) {
+function validStateWait(id, context, suppliedWait) {
   const cell = stateManifest.find(
     (candidate) => candidate.id === stateOwn(context, "id"),
   );
-  // Both the canonical cell/order and actual writer classification are required.
-  if (
+  return !!(
     cell &&
-    projected.id === cell.id &&
+    id === cell.id &&
     stateOwn(context, "order") === cell.order &&
     stateOwn(context, "writerKind") ===
       ({
@@ -91,16 +90,42 @@ function withStateWait(projected, context, suppliedWait) {
         peer_preference_delete: "delete",
       }[cell.loss] ?? "block") &&
     suppliedWait === stateWaits[stateWaitIndex(cell)]
-  )
+  );
+}
+function withStateWait(projected, context, suppliedWait) {
+  if (validStateWait(projected.id, context, suppliedWait))
     projected.wait_location = suppliedWait;
   return projected;
 }
 function projectStateEvidence(record, context) {
-  return withStateWait(
-    projectOutgoingEvidence(record),
-    context,
-    stateOwn(record, "wait_location"),
-  );
+  const wait = stateOwn(record, "wait_location");
+  let input = record;
+  if (
+    record &&
+    typeof record === "object" &&
+    !Array.isArray(record) &&
+    !validStateWait(stateOwn(record, "id"), context, wait)
+  ) {
+    // Preserve original own data/accessors for the projector, but a withheld wait
+    // cannot support a precise wait or committed-order claim. No getter runs.
+    const descriptors = Object.getOwnPropertyDescriptors(record);
+    for (const key of [
+      "lower_current_tuple_wait_credit",
+      "state_observation_verified",
+      "successful_wait_order_credit",
+    ])
+      if (Object.hasOwn(descriptors, key))
+        descriptors[key] = {
+          value: false,
+          enumerable: true,
+          configurable: true,
+        };
+    for (const key of ["observed_wait_credit", "committed_loss_order_credit"])
+      if (Object.hasOwn(descriptors, key))
+        descriptors[key] = { value: 0, enumerable: true, configurable: true };
+    input = Object.defineProperties({}, descriptors);
+  }
+  return withStateWait(projectOutgoingEvidence(input), context, wait);
 }
 function emitStateEvidence(record, context, output = console.error) {
   output(JSON.stringify(projectStateEvidence(record, context)));
@@ -1870,6 +1895,30 @@ export async function runStateOutputExamples() {
     );
   }
   check(seenWaits.size === 6);
+  for (const wait of [privateText, context.wait + privateText]) {
+    const withheld = projectStateEvidence(
+      {
+        id: cell.id,
+        wait_location: wait,
+        lower_current_tuple_wait_credit: true,
+        state_observation_verified: true,
+        successful_wait_order_credit: true,
+        observed_wait_credit: 1,
+        committed_loss_order_credit: 1,
+      },
+      context,
+    );
+    check(
+      withheld.lower_current_tuple_wait_credit === false &&
+        withheld.state_observation_verified === false &&
+        withheld.successful_wait_order_credit === false,
+    );
+    check(
+      withheld.observed_wait_credit === 0 &&
+        withheld.committed_loss_order_credit === 0,
+    );
+    cleanOutput(withheld);
+  }
   const deniedCell = stateManifest.find(
     (candidate) =>
       candidate.id === "L5.CB.actor_peer_block_inbound.operation-first",
