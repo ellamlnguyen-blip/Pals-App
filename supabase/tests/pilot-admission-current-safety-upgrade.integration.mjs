@@ -536,6 +536,11 @@ function compareCatalog(before, after, frozen) {
     assert.equal(f.raw.prosupport, "-");
     assert.equal(f.raw.proretset, lock);
     assert.equal(f.raw.pronargs, lock ? 2 : 3);
+    assert.equal(f.raw.prorows, lock ? 1000 : 0);
+    assert.equal(f.raw.provariadic, "0");
+    assert.equal(f.raw.probin, null);
+    assert.equal(f.raw.prosqlbody, null);
+    assert.equal(f.raw.protrftypes, null);
   }
   for (const name of [...replacements, "public.set_people_block"]) {
     const f = after.functions.filter((f) => f.name === name);
@@ -1525,6 +1530,11 @@ export async function runUpgradeExamples() {
         prosupport: "-",
         proretset: lock,
         pronargs: lock ? 2 : 3,
+        prorows: lock ? 1000 : 0,
+        provariadic: "0",
+        probin: null,
+        prosqlbody: null,
+        protrftypes: null,
       },
     };
   });
