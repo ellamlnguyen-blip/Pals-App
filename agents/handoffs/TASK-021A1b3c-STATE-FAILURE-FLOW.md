@@ -1,0 +1,95 @@
+# B3c dormant state failure-flow foundation — author handoff
+
+2026-09-29. **Corrected local static checkpoint awaiting fresh independent FULL source/interface/privacy correction review. No common/state boundary adoption, runtime enablement, accepted integration or parent completion.** Fresh GPT-6 Sol medium correction author; Standard speed is app controlled/unverified.
+
+Checkout `/private/tmp/pals-task021-state-failure-flow-foundation`, branch `agent/TASK-021A1b3c-state-failure-flow-foundation`. Clean prepared baseline `d8b3ea8ce070a44caf8fdad5132c3dd57a565d73`, coordinator supplied latest remote-verified canonical main `f17545242822ea2c2f2c085900150108eb352e99` and exact reviewed/task-published generic `507e761f9c4b161db5768a17a7175b12d5d5b184`. The prepared dependency-reconciliation commit retains canonical contract/source receipts and exact generic executable dependencies. Author performed no network or independent remote verification. Immutable local author SHA is delivered separately after commit, avoiding self-reference.
+
+Read AGENTS, assigned foundation contract and planning/correction receipt, generic channel contract/handoff, state-output contract/review, parent current-source-safety/FIXTURE-MATRIX, fixture foundation handoff, relevant DATA_MODEL/AUTHORIZATION/SECURITY_AND_SAFETY/REALTIME_AND_MESSAGING and Accepted ADR-0026/0027. No moving dependency was selected.
+
+## Exactly three new owned files
+
+- `supabase/tests/helpers/pilot-current-safety-state-failure-flow.mjs`
+- `supabase/tests/helpers/pilot-current-safety-state-failure-flow.static.mjs`
+- This handoff.
+
+Common/state/core/wire/fixture/source/provider asset/manifest/runner/schema/config/RLS/ACL files remain unchanged. The reviewed inert provider asset receives source-only qualification from its exact receipt/hash, never target authority from its historical pending/false Boolean flags. No shared records or original integration fixture were edited, imported, registered or evaluated. Inert core/fixture-helper imports retain their existing behavior.
+
+## Finite exported interface and refusal
+
+Only four exports:
+
+- `createStateFailureFlow()` is memory-only, accepts no options/selectors and returns a frozen object with `first(error,bundle)`, `supplement(receipt,error,bundle)` and `disposition()`.
+- `requireReviewedStateFailureFlow()` unconditionally throws a fixed-message, fixed-stack neutral error.
+- `originalStateFailure(exactFlowOrNeutralError)` retrieves the privately retained first original for later adapter use. Its raw return is memory-only and must never be logged/serialized. Copies/lookalikes cannot recover an original.
+- `originalStateFlowUnavailable(exactError)` returns only the privately recognized conservative unavailable receipt or null. Copies, Boolean claims and matching text cannot mint an identity.
+
+Both contact-bearing methods execute the unconditional refusal as their **first statement**, before supplied argument/property inspection. No environment/budget/path/module/sink/callback/registration/evaluation/bypass option exists. Imports do nothing beyond inert imports/constants. The dormant private implementation binds independently to the import-time observed `process.argv[1]`, the exact checkout state entry path and its exact realpath; changed argv, foreign module and symlink mismatch cannot reach the fixed core writer. Removing this refusal is a separately reviewed adopter change, not authorized by this foundation.
+
+Public disposition contains only conservative `cleanup:unverified`, `reset:forbidden`, `target:unestablished`, `settlement:unproven`, zero/false order/suite/allocation/cleanup/pass credits, `evidence:unestablished|unavailable`, and required future exit78 only when unavailable. It never returns a wire envelope, raw value, error, stream or captured context. A repeated same-original first catch returns the same conservative fields plus `duplicate_original:true`; independently justified events must use explicit supplements even when they concern the same original object.
+
+## Private raw input contract → exact generic507 normalized schema
+
+Future callsites must pass the **actual original**, recovering it with existing `originalSuiteError` where appropriate before invoking this interface. This helper imports no common integration module and cannot infer original identity from a neutral wrapper's message. It does not inspect any original error message/name/stack/cause/custom fields. Original error objects stay private by identity; raw bundle own-data is bounded, copied and frozen privately before the await, protecting captured snapshots from later caller mutation.
+
+Exact bundle fields are optional `context,snapshots,differences,observations`; unknown top-level fields make the whole flow unavailable. `observations` are retained privately only: caller claims of close/done/server absence never change outward settlement/reset/credit. They are not an independent owned-close/done proof and perform no observation or census.
+
+Exact context fields: `id,phase,partition,order,writerKind,wait,resource,classification`. Exact canonical state IDs come from the frozen generic manifest. All24 retain their source context:22 new-loss orders, CB outbound operation-first retained repair and CB inbound operation-first expected writer denial. Both specials have zero wire credit. All12 state phases/nine partitions use the exact generic allowlists; six wait strings match canonical case/order/writer kind. Five writer kinds, the two non-null resources and three classifications reconcile with state52 literals. Known contradictory order/writer/wait/resource/classification or canonical partition invalidates the whole flow; unknown sentinels become unavailable/null contextual fields rather than fabricated precision. Unknown case IDs remove all case-specific order/writer/wait/resource/classification precision. Suite/qualification remain null.
+
+Snapshot slots are exactly `before,after,expected,holder`. A supplied slot is `{kind:"raw",value:ownedSnapshot}`, `{kind:"missing"}` or `{kind:"inherited-withheld"}`. No arbitrary object called projected is accepted as raw/normalized evidence. Missing slots or missing original table rows produce explicit `{available:false,tables:null}`; the private bundle retains whether the absence was missing versus inherited withholding because generic507's whole-slot unavailable shape has no distinction field. Expected is never inferred from after or before. Available slots require exact54 known table keys and original row arrays; output table order is canonical, count is the actual owned array length and descriptor hashes the original raw per-table value with **generic507's exact typed encoding**. Projected/placeholder descendants remain explicit inherited-withheld descriptors, never rehashed as original values. Invalid/nonarray/unknown-table snapshots make the whole flow unavailable. A hash is failure metadata only; no original permission/raw comparison is replaced by hash equality.
+
+Original common differences accept only `field,segments,expected,actual`. Precision requires an entire direct structural path of one to three segments: exact table, canonical bounded row index and known direct column. Unknown/provider/catalog/dotted/nested paths have opaque scope with all coordinates null; their raw path stays private. No arbitrary dotted key parsing. Original expected/actual values use generic typed descriptors; absent fields receive explicit unavailable descriptors, whereas an explicitly owned undefined value retains its original type. Missing raw fields never receive a fabricated undefined digest. Finite kinds are value/missing/unexpected/unavailable, with original raw differences retained privately. No difference/event truncation.
+
+Own-data capture rejects getters, symbols, sparse arrays, custom prototypes, proxies, cycles, toJSON and nonfinite values without executing getters/proxy traps/serialization hooks. Depth16/node4096 apply to the entire copied bundle, conservatively before generic normalization; these may withhold a large otherwise valid source capture. Per-value encoding overflow or other non-withholding descriptor failure makes the whole flow unavailable. Generic framing/schema limits remain64KiB/frame,128 differences,16 records and1MiB including prefixes. No quota increase or fabricated digest.
+
+## Diagnostics: exact synchronous identity only
+
+Known diagnostics arise exclusively from the reviewed core's `originalSqlDiagnostic(exactOriginalError)`, then pass the independently validated exact generic code/message pairs. Caller-supplied pairs, copied errors, code-looking text, public combined/redacted child output and arbitrary error fields cannot confer diagnostic authority. Unrecognized diagnostics use typed explicit unavailable detail. No SQL/parser/diagnostic/stream accessor is exported.
+
+**Core identity covers original synchronous SQL errors, not private child stderr.** This foundation attaches no child-stream listener or raw-stderr parser, and gives child-session diagnostics no known/complete/permission credit. Separately reviewed common/state boundary variants must provide the exact complete private stream receipt under corrected legacy2fef grammar if actual child diagnostic precision is required. Missing complete source evidence stays unavailable; this helper does not reconstruct it from combined output.
+
+## Original-first ordering, unavailable identity and required future exit78
+
+One first original remains private across nested wrappers, supplemental errors, normalization/transport/rollback/closure/reset failures. Initial sequence0 is `original-before-cleanup`; ordered explicit supplements are observation/rollback/closure/reset/restoration, all with `original_sequence:0`. Same-original repeated first catches are distinguishable and do not create replacement originals; separate events require explicit supplements and are retained even if they refer to the same error. Different subsequent first identity, wrong supplement class, absent first, concurrent/pending call, malformed data or any limit failure invalidates the whole flow.
+
+The sole private delivery uses the existing fixed core `writeGenericFailureEvidence`, with its existing monotonic two-second delivery contract. It is awaited before the future caller's own finally can proceed. No additional timeout/retry/recovery/sink/write path is introduced. The exact core `originalGenericWireFailure` receipt is retained separately and never exposed as original suite data. Any uncertain/failed delivery or safe normalization failure receives a private exact state-flow unavailable identity requiring future reserved module exit78, with first-original identity preserved and reset forbidden. A copied core error does not become a core receipt; it still makes this flow conservatively unavailable. Later emissions cannot restore availability.
+
+This foundation **does not fix existing own finally callsites**, does not emit at runtime because of its public refusal, and does not set an actual process exit status. Future common awaited variants must capture complete raw evidence before their own cleanup; state adoption must await every original/justified late boundary and propagate exact unavailable identity to actual exit78. The future supervisor must observe EOF plus actual direct-child close; available failure records or zero-exit records never make a module pass. Broken/stalled channels cannot guarantee an unavailable sentinel, so mandatory exit78 propagation is essential.
+
+No census, target check, SQL/HTTP/Storage operation, child creation/close/kill, reset or restoration occurs. No Boolean/timer/settlement field certifies server/PID/name absence. Future adapters must independently observe partially constructed close **and actual done**, prohibit census after any unknown group and separately establish required PID/name absence/request quiescence. Backend-start binding remains an existing limitation; no stronger receipt is invented.
+
+## Exact unchanged source evidence
+
+Static read-only source/hash comparisons pin:
+
+| Source | Exact reference / SHA256 |
+| --- | --- |
+| External state52 | HEAD `52cb26b4154b5235789bf2d6315831bedaef0d0e`; file `94fc316708079c921a14e2a4178dbdae10d57d465f02a4f5ce7caf242bee5db6` |
+| Common43 concurrency | `4126c80132c8a644986dfe28f7640b87c3a2555a175f252782e220306bfc3582` |
+| Generic507 core | `eafb99908353512261751a0aefe3aa62e0567d439a395e5b327236f9480e0003` |
+| Generic507 pure wire | `ad2b570bd23be284a9bbd08acd45028d9711e23486e2243f52b5cdbec605e153` |
+| Foundation fixture helper | `6664002d668795d59b3ec01d89030a81848d96621011e9131bfac7fbb3506db7` |
+| Reviewed inert provider source asset52db | `bc149f083a52daf9b53de7d61b946d5d40bc676df6314377f682d14ca21c3269` |
+
+Inherited foundation3e9973/source17b/HTTPe751 and corrected legacy2fef remain unchanged dependencies; no original diagnostic parser is copied or altered. Exact external state hash equals the pure manifest's state receipt. Independent read-only TypeScript AST extraction compares state24 case/order/partition projections, six wait literals and all five stateWriter return-object kind/wait/relation fields to the new flow mappings. No fixture source is executed.
+
+## Static evidence and stop
+
+Original immutable author checkpoint `9182d9f8b338d0d2cf60410086caac9e54adf2d6` passed **1,683 static checks**. Independent FULL source/interface/privacy review found one P2: `describe()` at original lines297–301 rejected nested `<redacted>`, `<redacted-token>` or `<absent>` strings in full54 snapshot rows or difference values because generic507 labels those nested markers unavailable rather than inherited-withheld. The original check count did not cover this case; it is historical evidence, not correction acceptance.
+
+This correction changes only the same three owned files. Private `describe()` traverses already copied/frozen own-data, recognizes inherited placeholder strings and the existing generic projection shapes anywhere in a value, and returns a typed explicit inherited-withheld descriptor with null digest. It never sends an inherited value to `originalFailureValue()` for hashing. It visits every sibling and measures the exact generic typed encoding byte length before withholding, so a marker or projected descendant cannot mask an oversized value. Whole-bundle capture still rejects getters/proxies/custom prototypes/sparse arrays/cycles/hooks/nonfinite values and enforces depth16/node4096 before traversal. Unknown normalization and frame/difference/record/accumulator limits remain strict; no generic/core/common/state/dependency change or public export/injection was added.
+
+Cached Node24.18, Prettier3.9.8, ESLint9 and TypeScript only, under the existing cached tool directory. Explicit verifier runs only inert imports under contact/argument traps and private memory mocks/source isolation, including the byte-identical existing core writer unit with mocked streams. **Corrected verifier: 3,193 checks pass, 1,510 more than the historical1,683; zero trapped contact attempts; zero target-runtime credit; actual_state_adopted false.** Source-isolated injection is confined to the verifier; no public injection/export/bypass exists.
+
+Correction checks cover each of the three nested markers in all four full54 slots, exact canonical table order/actual row counts, expected and observed object/array/string difference descriptors, opaque/domain paths, no marker in normalized output, and zero calls to original-value hashing for these inherited inputs. Unsafe siblings include getters, proxies, cycles, custom prototypes, sparse arrays, hooks, excessive depth/nodes, unknown context fields and129 differences; all make the entire flow unavailable with no emitted record. Encoding checks reject both oversized strings and combined smaller siblings; exactly64KiB inherited typed encoding succeeds while64KiB+1 fails. Non-withheld undefined/null/boolean/negative-zero/bigint/nested originals retain exact generic507 digests.
+
+Checks cover all24 canonical contexts/22 new-loss and two specials, actual raw vs withheld digests, missing snapshot/raw difference fields, mutation after capture, strict unknown keys/getters/prototypes/proxies/cycles/sparse arrays/encoding limits, known vs copied/raw-error diagnostic rejection, canonical mismatch/unknown withholding, exact first identity/deduplicated catch distinction and separately justified late events, awaited delivery/concurrency,128/129 differences, independently measured normalized64KiB frame overflow,16/17 records and1MiB accumulator branch, altered/foreign/symlink entry, exact core receipt vs copied lookalike, stalled two-second delivery, receiver reserved78 invalidation and conservative no-reset/no-credit. No check count is runtime coverage.
+
+Both new modules pass syntax, explicit formatting equality with the repository's ignored Supabase path included, and narrow no-unused-vars/no-undef/no-unreachable lint with zero errors/warnings; whitespace checks pass. The original author's initial lint configuration omitted URL. The correction's initial narrow lint configuration omitted the existing queueMicrotask/performance globals; adding those verifier-only globals yields the clean result without implementation change.
+
+Corrected frozen flow SHA256 `eae2d66d75660187f3d4c26bc34f7002ec59c0920d81d81d83c522eea8f3791b`; corrected static verifier SHA256 `5607a98e78e8db4e6e79f00ab3d15bafead4441243be80d7575822e5b9925aa3`. Correction immutable local SHA is delivered separately after commit; this handoff makes no self-referential SHA claim.
+
+Freeze this clean immutable three-file checkpoint and STOP for fresh FULL source/interface/privacy review before coordinator publication. No targetAPI/DB/CLI/Pals binary/socket/process checks/preflight/start/reset/services/VM/container/runtime lint/original fixture entrypoint/provider/hosted/config/install/force/network/push/shared records/dependent dispatch occurred.
+
+Remaining mandatory gates: separately reviewed common awaited-boundary variants/private raw bundle captures and child diagnostics, state-only actual adoption/exit78 propagation, every added boundary's combined16-emission audit, actual Node/TAP entrypoint completion/fixed supervisor, successful-path ceiling adequacy/amendment, final combined source+fixture/ownership/exclusive release/fresh preflight, actual runtime/upgrade/catalog/regressions/security/server cleanup/normal stop and accepted remote-verified integration. Existing failed state chain's six synchronous projections are not a future combined emission bound. Successful source audit25 resets/26 assertClean/122 SQL children/43 settlement groups/48 polls/344 explicit census excludes cleanup internals; allowance sum25h36m20s is not an analytic duration. Dormant state12h stays unchanged and needs separate adequacy review; existing30-minute test/supervisor gates remain.
+
+Main26/source27/all actual fixtures stay unexecuted. No provider qualification, target release, pilot-ready/hosted claim or B3c/B3/A1c/A2/TASK-021 completion.
