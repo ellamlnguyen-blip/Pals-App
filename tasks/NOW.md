@@ -1,5 +1,13 @@
 # NOW
 
+## B3c c1 fixed-denial review correction required — 2026-09-29
+
+Fresh c1 author froze clean exact-two-file69583c7dff47e5c223d53d1a61ebddefc9063b49, branch `agent/TASK-021A1b3c-moderation-sanction-primitives-resumed`, prepared9e2a987(latest verifiedmain8e4eed+reviewed6a55). Fresh independent FULL review NOT CLEAR: oneP2, named moderator-ban/changed-retry components can accept legal successful ban/replay under altered source role/saved identity without fixed denial/zero-delta obligation. No other actionable finding; correctly bound admin-downgrade preserved.69583 stays LOCAL UNACCEPTED/UNPUBLISHED; author stopped; no extending that author.
+
+Helperee086ca6af6dc4a43cc49d323f692413287d6d44bccb53259156b0aaab38bdca; MODELSbc7678b4cde0773da200df80d0d7aac252c60d2c112c718a762e4e6fc01fbe0b. Saved stdout `/private/tmp/pals-sanction-verify.stdout` hashbcad8fc29fe47fec37c58587808b512fba8d526e1a2fc706ee3a744bf8a726aa supports author-reported529=355preserved+174new,0traps/12exports/narrowlint/syntax/explicitformat/whitespace; reviewer inspected source/stdout/hashes, did not rerun. Passing inert examples did not close the P2. Source/hash/privacy preserved; no target contact.
+
+Propose bounded `TASK-021A1b3c-moderation-sanction-denial-binding-correction.md`: exact source moderator/saved original Local-decision retry identity and fixed named-denial/zero54 obligations, focused negative examples, same two final files. Independent contract review/publication then fresh latest-main/exact69583 reconciliation precede a FRESH correction author; full corrected review/task publication and exactc2 dependency amendment/reconciliation remain later. Reviewed restricted-status documentary milestone task9a387/main28fed/receipt7965 latestmain8e4eed remains accepted. Main26/source27/fixtures unexecuted; all parents/whole39/current-safety/transport/provider/consumers/runtime/integration gates incomplete.
+
 ## Restricted own-status documentary publication verified — 2026-09-29
 
 Reviewed correction task branch `agent/TASK-021A1b3c-restricted-status-reconciliation` exact remote `9a387a62c008ecb5ee964ddc71e218eef8a4d84e`; documentation-only canonical integration exact remote main `28fedcb3f0127f6670df7e0ecc691083e1d1af36`, independently compared after successful pushes.17 reviewed documents only; no source/executable integration. Documentary reconciliation milestone complete. This later receipt records those verified commits without asserting its own future remote SHA. Fresh latest-main/exact6a55 dependency reconciliation and NEW1a2c1 author remain next; all parent/runtime/provider gates incomplete, main26/source27 unexecuted.
