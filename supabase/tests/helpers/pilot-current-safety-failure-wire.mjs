@@ -4817,6 +4817,12 @@ function context(record, manifest, name) {
         "failed-uncredited",
         "post-close-failure-settlement",
       ].includes(record.partition) &&
+      !(
+        name === "pilot-current-safety-operator-races.integration.mjs" &&
+        ["abort-rollback-no-credit", "failed-no-credit"].includes(
+          record.partition,
+        )
+      ) &&
       record.partition !== (cell.partition ?? null)
     )
       invalid();

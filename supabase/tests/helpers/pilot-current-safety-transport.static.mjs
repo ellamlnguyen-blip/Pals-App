@@ -1440,8 +1440,18 @@ async function runGenericFailureWireExamples() {
       null,
     ],
     [names[6], "L1R.CP.same_key_wait", "same-key-social-wait", null],
-    [names[9], null, null, "abort-rollback-no-credit"],
-    [names[9], null, null, "failed-no-credit"],
+    [
+      names[9],
+      "M.list_moderation_reports.gate_delete_replace.loss-first",
+      "eligible-public-precheck",
+      "abort-rollback-no-credit",
+    ],
+    [
+      names[9],
+      "M.list_moderation_reports.gate_delete_replace.operation-first",
+      "eligible-public-precheck",
+      "failed-no-credit",
+    ],
   ];
   for (const [name, candidateID, phase, partition] of correctedContexts) {
     const r = make(name);
@@ -1479,6 +1489,32 @@ async function runGenericFailureWireExamples() {
     invalid.context[phase === null ? "partition" : "phase"] =
       "untrusted-private-context";
     rejects(() => encode(invalid, name));
+    if (name === names[9]) {
+      // Operator failure labels do not replace canonical order/partition checks.
+      const wrongOrder = copy(r);
+      wrongOrder.context.order =
+        canonical.order === "loss-first" ? "operation-first" : "loss-first";
+      rejects(() => encode(wrongOrder, name));
+      const wrongPartition = copy(r);
+      wrongPartition.context.partition = "actual-exact-retry-wait";
+      rejects(() => encode(wrongPartition, name));
+      wrongPartition.context.partition = "untrusted-private-context";
+      rejects(() => encode(wrongPartition, name));
+      const wrongWriter = copy(r);
+      wrongWriter.context.writer = "untrusted-private-context";
+      rejects(() => encode(wrongWriter, name));
+      for (const otherName of names.filter((n) => n !== name)) {
+        const other = make(otherName);
+        other.context.partition = partition;
+        rejects(() => encode(other, otherName));
+        const otherCell = manifest.modules[otherName].cases[0];
+        if (otherCell) {
+          other.context.case_id = otherCell.id;
+          other.context.order = otherCell.order ?? null;
+          rejects(() => encode(other, otherName));
+        }
+      }
+    }
   }
   check(
     ceiling("pilot-admission-current-safety-http.integration.mjs") ===
