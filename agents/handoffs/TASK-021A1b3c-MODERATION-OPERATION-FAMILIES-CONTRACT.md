@@ -1,5 +1,9 @@
 # Moderation operation-family split and clean stop receipt
 
+## Corrected current-report milestone and exact retained-races prerequisite review receipt — 2026-09-29
+
+Fresh independent FULL nine-document amendment review CLEAR/no findings at `bbafced71edc17f74c9017ee0271fcf87ddb42aa` against verifiedmain4c5be662bd312804c1cf10afd5cbf61ba7f57220. Reviewer matched exact753792a helper/MODELS/stdout/pins, literal source actor/host/two IDs/category, saved1085 author evidence, b order/shutdown/retained block scope and all incomplete gates without rerun/import/network/contact. Reviewed milestone/exactb amendment accepted for coordinator task publication/documentation-only canonical integration, pending exact remote verification at this receipt. Fresh latest-main/exact753792a reconciliation before NEWb author. Main26/source27/fixtures unexecuted; all parent/model/foundation/transport/provider/consumer/runtime/security/cleanup/integration gates incomplete.
+
 ## B3c literal current-report source correction reviewed and task-published — 2026-09-29
 
 Fresh bounded correction froze `753792acc66e62ab6045a8bd59b141765e06522f` on `agent/TASK-021A1b3c-moderation-current-source-binding-correction`; fresh independent complete FULL literal1a3a1+a2/source/interface/privacy/evidence review CLEAR/no findings. Coordinator pushed and separately exact remote-verified753792a. Canonical main4c5be662bd312804c1cf10afd5cbf61ba7f57220 remains26; exactly two task files/source27 offmain/unexecuted. Original a1fc26c20 remains reviewed/task-published source-valid historical alternate without literal original-race readiness; unacceptedff842 draft never separately adopted. Correction replaces required literal a1/a2 static modeling only, not actual race/order/permission credit.
