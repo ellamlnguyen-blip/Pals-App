@@ -1952,6 +1952,7 @@ const rawEvidence = new WeakMap();
 const errorState = new WeakMap();
 const sessions = new WeakMap();
 const ownedBindings = new Map();
+const rawComparisonFailures = new WeakMap();
 const own = (value, key) => {
   try {
     const d = Object.getOwnPropertyDescriptor(value ?? {}, key);
@@ -2123,6 +2124,7 @@ function failureRecord(
   state,
   snapshot = null,
   observationError = null,
+  cleanupError = null,
 ) {
   const carrier = new Error(
     "Identity fixture incomplete; projected evidence only",
@@ -2132,9 +2134,20 @@ function failureRecord(
   if (typeof message === "string") carrier.message = message;
   const sqlDiagnostics = own(first, "sqlDiagnostics");
   if (Array.isArray(sqlDiagnostics)) carrier.sqlDiagnostics = sqlDiagnostics;
-  const preciseDifferences = own(first, "preciseDifferences");
+  const preciseDifferences =
+    rawComparisonFailures.get(first)?.differences ??
+    own(first, "preciseDifferences");
   if (Array.isArray(preciseDifferences))
     carrier.preciseDifferences = preciseDifferences;
+  if (cleanupError !== null) {
+    const cleanupOriginal = privateState(cleanupError).original;
+    carrier.cleanupDiagnostics = [
+      {
+        message: own(cleanupOriginal, "message"),
+        code: own(cleanupOriginal, "code"),
+      },
+    ];
+  }
   try {
     const record = projectFailureEvidence(
       carrier,
@@ -2157,6 +2170,32 @@ function failureRecord(
   } catch (error) {
     if (state) (state.outputErrors ??= []).push(error);
   }
+}
+function identityCloseFailure(original, closeError, state, cell) {
+  const preserved = {
+    ...privateState(original),
+    ...state,
+    cleanupIncomplete: true,
+    closeError,
+  };
+  const supplemental = {
+    ...cell,
+    ...state.outcome,
+    partition: "supplemental-failure-no-credit",
+  };
+  failureRecord(original, cell, supplemental, null, null, closeError);
+  if (supplemental.outputErrors)
+    preserved.outputErrors = [
+      ...(preserved.outputErrors ?? []),
+      ...supplemental.outputErrors,
+    ];
+  return safeError(original, preserved, cell);
+}
+// Only privately proven settlement reaches the supplied observation. Actual caller
+// supplies census after its own race closure; dormant checks supply a memory spy.
+function observeSettledFailure(state, observe) {
+  if (state.cleanupIncomplete) throw safeError(state.original, state);
+  return observe();
 }
 function captureBeforeCleanup(error, cell, group) {
   const state = { ...cell, diagnostics: group.map(diagnostic) };
@@ -2276,11 +2315,36 @@ const sorted = (rows) =>
     .sort((a, b) => JSON.stringify(a).localeCompare(JSON.stringify(b)));
 // Compare order independently of JSONB serialization; every field and all54 tables remain exact.
 function equal54(actual, expected) {
-  assert.deepEqual(Object.keys(actual).sort(), censusTables.slice().sort());
-  assert.deepEqual(Object.keys(expected).sort(), censusTables.slice().sort());
-  for (const table of censusTables)
-    assert.deepEqual(sorted(actual[table]), sorted(expected[table]), table);
+  try {
+    assert.deepEqual(Object.keys(actual).sort(), censusTables.slice().sort());
+    assert.deepEqual(Object.keys(expected).sort(), censusTables.slice().sort());
+    for (const table of censusTables)
+      assert.deepEqual(sorted(actual[table]), sorted(expected[table]), table);
+  } catch (error) {
+    // Preserve the original raw assertion and capture its full original inputs
+    // immediately, before a session rollback can erase transactional evidence.
+    const comparable = (snapshot) =>
+      Object.fromEntries(
+        censusTables.map((table) => [
+          table,
+          Array.isArray(own(snapshot, table))
+            ? sorted(own(snapshot, table))
+            : own(snapshot, table),
+        ]),
+      );
+    try {
+      rawComparisonFailures.set(error, {
+        actual,
+        expected,
+        differences: differences(comparable(expected), comparable(actual)),
+      });
+    } catch (comparisonError) {
+      rawComparisonFailures.set(error, { actual, expected, comparisonError });
+    }
+    throw error;
+  }
 }
+
 const timestamp = (value) => {
   assert.ok(
     typeof value === "string" && Number.isFinite(Date.parse(value)),
@@ -2688,11 +2752,7 @@ async function positiveRollbackInner(route, cell) {
     try {
       await closeAll(group);
     } catch (error) {
-      throw safeError(
-        original ?? error,
-        { cleanupIncomplete: true, closeError: error },
-        cell,
-      );
+      throw identityCloseFailure(original ?? error, error, {}, cell);
     }
   }
 }
@@ -2792,11 +2852,7 @@ async function freshAfterLossInner(route, cell, replacement) {
     try {
       await closeAll(group);
     } catch (error) {
-      throw safeError(
-        original ?? error,
-        { cleanupIncomplete: true, closeError: error },
-        cell,
-      );
+      throw identityCloseFailure(original ?? error, error, {}, cell);
     }
   }
 }
@@ -2819,7 +2875,8 @@ async function runIdentityCellInner(cell) {
     knownCommitted,
     operationResult,
     blocker,
-    blockedOutput;
+    blockedOutput,
+    caughtState;
   try {
     const { holder: holderName, waiter: waiterName } =
       identitySessionNames(cell);
@@ -2928,6 +2985,7 @@ async function runIdentityCellInner(cell) {
     );
   } catch (error) {
     // No retry or serial substitution. Exact cell remains incomplete, even for safe external-sync aborts.
+    caughtState = privateState(error);
     blocker = {
       id: cell.id,
       status: "blocked-uncredited",
@@ -2943,6 +3001,7 @@ async function runIdentityCellInner(cell) {
       diagnostics: owned.map(diagnostic),
       successful_order_credit: false,
       full54_before: before,
+      cleanupIncomplete: caughtState.cleanupIncomplete === true,
     };
     // Classify already-observed abort diagnostics before any fallible cleanup/observation.
     blocker.abort_partition = blocker.diagnostics.some(
@@ -2974,18 +3033,21 @@ async function runIdentityCellInner(cell) {
         blocker.classification = "settlement-unavailable";
         failureRecord(blocker.originalError, cell, blocker, null, error);
       }
-      throw safeError(
+      throw identityCloseFailure(
         blocker?.originalError ?? error,
-        { outcome: blocker, cleanupIncomplete: true, closeError: error },
+        error,
+        { ...caughtState, outcome: blocker },
         cell,
       );
     }
     if (blocker) {
       blocker.owned_children_awaited = true;
       try {
-        blocker.full54_after = census();
+        blocker.full54_after = observeSettledFailure(caughtState, census);
       } catch (observationError) {
-        blocker.classification = "observation-unavailable";
+        blocker.classification = caughtState.cleanupIncomplete
+          ? "settlement-unavailable"
+          : "observation-unavailable";
         failureRecord(
           blocker.originalError,
           cell,
@@ -2993,6 +3055,12 @@ async function runIdentityCellInner(cell) {
           null,
           observationError,
         );
+        if (caughtState.cleanupIncomplete)
+          throw safeError(
+            caughtState.original,
+            { ...caughtState, outcome: blocker, cleanupIncomplete: true },
+            cell,
+          );
         throw identityObservationFailure(
           outgoing(blocker, cell),
           observationError,
@@ -3421,6 +3489,246 @@ export async function runIdentityOutputExamples() {
   } finally {
     console.error = savedError;
   }
+
+  // Review correction: a closed race does not settle a separate unknown group.
+  for (const group of ["positive", "fresh", "race"]) {
+    let observations = 0;
+    const unsettled = safeError(
+      original,
+      { cleanupIncomplete: true, unknownGroup: group },
+      cell,
+    );
+    let blocked;
+    try {
+      observeSettledFailure(privateState(unsettled), () => {
+        observations++;
+        return before;
+      });
+    } catch (error) {
+      blocked = error;
+    }
+    check(() => assert.equal(observations, 0));
+    check(() => assert.equal(privateState(blocked).original, original));
+    check(() => assert.equal(privateState(blocked).cleanupIncomplete, true));
+    const failedSuite = identitySuiteFailure([], blocked, cell.id);
+    check(() =>
+      assert.equal(privateState(failedSuite).cleanupIncomplete, true),
+    );
+    check(() => assert.equal(privateState(failedSuite).original, original));
+  }
+  let settledObservations = 0;
+  observeSettledFailure({ original, cleanupIncomplete: false }, () => {
+    settledObservations++;
+    return before;
+  });
+  check(() => assert.equal(settledObservations, 1));
+  // Exercise the actual inner+outer cell bodies against memory-only dependencies.
+  // No suite/refusal/target function is called or injected into actual execution.
+  for (const failedGroup of ["positive", "fresh"]) {
+    let censusCalls = 0,
+      callsAtFailure = null;
+    const failed = safeError(
+      original,
+      { cleanupIncomplete: true, unknownGroup: failedGroup },
+      cell,
+    );
+    const fakeRoute = { id: "CH", subjects: { actor: "bound-actor" } };
+    const fakeSessions = new WeakMap();
+    let serial = 0;
+    const mocks = {
+      cell,
+      own,
+      assert,
+      identityPlans,
+      routes: [{ id: "CH" }],
+      prepare: () => fakeRoute,
+      identityLoss: () => ({
+        loss: "memory-loss",
+        contention: "account",
+        writer: identityOutputManifest.writers[0],
+        replacement: false,
+      }),
+      positiveRollback: async () => {
+        if (failedGroup === "positive") {
+          callsAtFailure = censusCalls;
+          throw failed;
+        }
+        return outgoing({ result: true });
+      },
+      census: () => {
+        censusCalls++;
+        return structuredClone(before);
+      },
+      identitySessionNames,
+      createSession: (_name, group) => {
+        const child = {
+          send() {},
+          output: () => "HELD",
+          child: { stdin: { end() {} } },
+        };
+        group.push(child);
+        fakeSessions.set(child, { binding: { pid: ++serial } });
+        return child;
+      },
+      bindSession: async () => outgoing({}),
+      until: async () => {},
+      diagnostic: () => null,
+      marked: (_owned, prefix) =>
+        prefix === "TIME:" ? "2026-09-29T00:00:00Z" : structuredClone(before),
+      expectedIdentityLoss: () => structuredClone(before),
+      expectedOperation: () => structuredClone(before),
+      equal54,
+      observedWait: async () =>
+        outgoing({ observation: { holder_pid: 1, waiter_pid: 2 } }),
+      sessions: fakeSessions,
+      finish: async () => outgoing({ receipt: [0, null] }),
+      success() {},
+      denied() {},
+      closeAll: async () => outgoing({}),
+      acceptDenial() {},
+      requireAccepted() {},
+      assertStoredProvenance() {},
+      freshAfterLoss: async () => {
+        callsAtFailure = censusCalls;
+        throw failed;
+      },
+      raw,
+      outgoing,
+      privateState,
+      identityCloseFailure,
+      observeSettledFailure,
+      failureRecord() {},
+      identityObservationFailure,
+      differences,
+      projectDifferences,
+      projectCensusEvidence,
+      contextEnvelope,
+      console: { error() {} },
+      beginSQL: "",
+      rpcSQL: () => "",
+      snapshotSQL: "",
+      safeError,
+    };
+    const evaluate = new Function(
+      "mocks",
+      `const { ${Object.keys(mocks).join(",")} } = mocks;
+      const runIdentityCellInner = (${runIdentityCellInner.toString()});
+      return (${runIdentityCell.toString()})(cell);`,
+    );
+    let caught;
+    try {
+      await evaluate(mocks);
+    } catch (error) {
+      caught = error;
+    }
+    check(() => assert.equal(censusCalls, callsAtFailure));
+    check(() => assert.equal(privateState(caught).original, original));
+    check(() => assert.equal(privateState(caught).cleanupIncomplete, true));
+    check(() =>
+      assert.equal(
+        privateState(identitySuiteFailure([], caught, cell.id))
+          .cleanupIncomplete,
+        true,
+      ),
+    );
+    if (failedGroup === "fresh")
+      check(() =>
+        assert.equal(
+          privateState(caught).outcome.classification,
+          "settlement-unavailable",
+        ),
+      );
+  }
+  const correctionRecords = [],
+    savedCorrectionError = console.error;
+  try {
+    console.error = (text) => correctionRecords.push(JSON.parse(text));
+    // Review correction: closure has its own record, while the first stays private.
+    for (const group of ["positive", "fresh"]) {
+      const closeError = new Error(secret + " close " + group);
+      const failed = identityCloseFailure(
+        original,
+        closeError,
+        { unknownGroup: group },
+        cell,
+      );
+      check(() => assert.equal(privateState(failed).original, original));
+      check(() => assert.equal(privateState(failed).closeError, closeError));
+      check(() => assert.equal(privateState(failed).cleanupIncomplete, true));
+      const record = correctionRecords.at(-1);
+      check(() =>
+        assert.equal(
+          record.identity_context.partition,
+          "supplemental-failure-no-credit",
+        ),
+      );
+      check(() => assert.equal(record.cleanup_diagnostics.available, true));
+      check(() => assert.ok(!JSON.stringify(record).includes(secret)));
+    }
+    // Review correction: actual failing equal54 inputs produce structural coordinates
+    // before rollback; later restored state must not erase the private mismatch.
+    const expected = structuredClone(before),
+      actual = structuredClone(before);
+    expected["public.profiles"].push({
+      user_id: "bound-user",
+      bio: "expected bio",
+    });
+    actual["public.profiles"].push({ user_id: "bound-user", bio: secret });
+    let firstMismatch;
+    try {
+      equal54(actual, expected);
+    } catch (error) {
+      firstMismatch = error;
+    }
+    check(() => assert.ok(firstMismatch));
+    const captured = rawComparisonFailures.get(firstMismatch);
+    check(() => assert.equal(captured.actual, actual));
+    check(() => assert.equal(captured.expected, expected));
+    check(() => assert.equal(captured.differences[0].actual, secret));
+    actual["public.profiles"][0].bio = "expected bio";
+    failureRecord(firstMismatch, cell, context, actual);
+    const mismatchRecord = correctionRecords.at(-1),
+      mismatch = mismatchRecord.differences[0];
+    check(() => assert.equal(mismatch.table, "public.profiles"));
+    check(() => assert.equal(mismatch.row_index, 0));
+    check(() => assert.equal(mismatch.column, "bio"));
+    check(() => assert.equal(mismatch.path_precision, "structural"));
+    check(() =>
+      assert.equal(
+        mismatch.actual.sha256,
+        projectDifferences([
+          {
+            segments: ["public.profiles", "0", "bio"],
+            actual: secret,
+            expected: "expected bio",
+          },
+        ])[0].actual.sha256,
+      ),
+    );
+    check(() => assert.ok(!JSON.stringify(mismatchRecord).includes(secret)));
+    const failed = identityCloseFailure(
+      firstMismatch,
+      new Error(secret),
+      {},
+      cell,
+    );
+    check(() => assert.equal(privateState(failed).original, firstMismatch));
+    console.error = () => {
+      throw new Error(secret);
+    };
+    const outputFailed = identityCloseFailure(
+      original,
+      new Error(secret),
+      {},
+      cell,
+    );
+    check(() => assert.equal(privateState(outputFailed).original, original));
+    check(() =>
+      assert.equal(privateState(outputFailed).outputErrors.length, 1),
+    );
+  } finally {
+    console.error = savedCorrectionError;
+  }
   const source = readFileSync(new URL(import.meta.url), "utf8");
   check(() =>
     assert.match(
@@ -3441,8 +3749,6 @@ export function runIdentityPreservationExamples(parse) {
         "41bedd6b18e60c22df339a837c2b48aa28036ac78dd146bcb207000cb067f3dc",
       validateIdentityPlans:
         "cd697e4a849ad6f2202f24f59390769d6f3328a2456bea16e1aa70e40c4679a1",
-      equal54:
-        "8bb12f07f3d3b56bfd1d70b7cdeea8b825e708adf2db1c26168f7abe5cd3332d",
       row: "07328748375d85a03e0f6709597f3b66fe4932350452d6c3ea7f3512c1a33ebd",
       expectedIdentityLoss:
         "6f615e8f69164719b982658154d429d59a6a456694c01c6f49269b839ddc24b6",
@@ -3510,6 +3816,11 @@ export function runIdentityPreservationExamples(parse) {
       name,
     );
   const expectedRaw = {
+    equal54: [
+      "e56d89c0ab3244acbb0eadac32dcc63eefd9d99748f41626e21efe7f7cdce4a1",
+      "6635f38a4c749a402a9c129e38da1042848dd8874e7349f647407b8bd72418a7",
+      "9d530b148b9ac879cb9e5b305e2e52be9a09b778d042e75e0f7bb5898529ed69",
+    ],
     positiveRollback: [
       "345101414f6c7fd19e8c4678ca8a2735cb264d98913535d22d5902f7cee08f03",
       "25fd37a701d571e605203afecc87e696edde9fbfa741b3c85b267151b754acd5",
@@ -3550,7 +3861,7 @@ export function runIdentityPreservationExamples(parse) {
       declarations.find(
         (node) =>
           node?.type === "FunctionDeclaration" &&
-          node.id.name === name + "Inner",
+          node.id.name === (name === "equal54" ? name : name + "Inner"),
       ),
       actual,
     );
@@ -3561,9 +3872,9 @@ export function runIdentityPreservationExamples(parse) {
     }
   }
   return {
-    unchanged_functions: 8,
+    unchanged_functions: 7,
     unchanged_values: 6,
-    preserved_raw_assertions: 20,
+    preserved_raw_assertions: 23,
     executed_cells: 0,
   };
 }
