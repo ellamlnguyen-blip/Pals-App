@@ -1,0 +1,45 @@
+# B3c state failure-flow foundation
+
+Status: Proposed bounded static prerequisite. Independent FULL source/interface/privacy review and canonical publication precede fresh author. Generic transport507 is reviewed/task-published; state52/common43 remain reviewed source references. No actual common/state boundary adoption, registration, supervisor or runtime enablement here.
+
+## Why this prerequisite
+
+Read-only source feasibility finds synchronous common/state console captures and nested helper cleanup before outer state capture. A state-only console replacement cannot deliver the first failure before each owning helper's cleanup. Existing projections also cannot reconstruct original raw full54 snapshot hashes; no private complete evidence-bundle accessor exists. Foundation supplies a dormant state-only private flow/normalized-delivery API, followed by separately reviewed common boundary variants and state adoption. Existing original exports/behavior stay unchanged in this task.
+
+Exactly THREE NEW owned files:
+
+- `supabase/tests/helpers/pilot-current-safety-state-failure-flow.mjs`
+- `supabase/tests/helpers/pilot-current-safety-state-failure-flow.static.mjs`
+- `agents/handoffs/TASK-021A1b3c-STATE-FAILURE-FLOW.md`
+
+No common/state/core/pure-wire/original fixture/source/manifest/runner/provider source asset/migration/schema/config/RLS/ACL/shared edits. No live case/model driver or helper substitution. Start latest remote-verified main plus exact published generic507 dependencies; independently reconcile before author. Read AGENTS, generic-failure-channel, state-output-adoption and parent current-source-safety/FIXTURE-MATRIX contracts/handoffs; exact state52cb26b4154b5235789bf2d6315831bedaef0d0e, common43e44cc030e8c380705401b4d171b06099955e69, generic507e761f9c4b161db5768a17a7175b12d5d5b184, corrected legacy2fef57270581a8d9d0481e84298bfa6e4a2e0987; DATA_MODEL/AUTHORIZATION/SECURITY_AND_SAFETY and Accepted ADR-0026/0027. Sol medium; Standard app-controlled/unverified.
+
+## Fixed private state flow
+
+Imports inert; every contact-bearing entry/refusal before supplied argument/property inspection. No caller-selected module/path/sink/timeout/environment/callback/evaluation/registration/bypass. Fixed state module only; independently bound observed executable entry and exact checkout path plus core writer binding. Pure memory examples use private mocks, never a public injection interface or real fixture import. Preserve current precontact refusals.
+
+Freeze a finite API for the later common/state adapters: retain owned raw original error and full54 before/after/expected/holder snapshots/context/differences privately; create one original-before-cleanup receipt, await ordered supplements; obtain only conservative outward flags and exact private unavailable-receipt identity. Raw values/errors/streams/causes/stacks/custom properties never attach to public returned objects/errors/files. Existing `originalSuiteError` may recover exact originals at later callsites; do not guess from neutral messages. No arbitrary object merely called projected is accepted as a normalized wire envelope.
+
+Construct generic normalized records from owned original inputs using exact generic507 schema/descriptor encoding and state52 context literals. Complete available summaries require all54 tables in canonical order; retain actual count and hash the original raw per-table value, not a projected descriptor or placeholder. Missing actual raw snapshots/expected values are explicit unavailable slots. Preserve inherited withholding explicitly; never infer expected from after-state or fabricate original-value precision. This transports failures, not new independent success models.
+
+Differences retain only exact known structural coordinates; unknown/provider/catalog/nested paths become opaque descriptors or unavailable. No dotted arbitrary key parsing into precision. Canonical case/order/writer/wait/resource/phase/classification correspondence must reconcile against exact state52/common43/foundation source; unknown local sentinels map to unavailable context, never invented precise labels. Explicit safe normalization failure makes the entire flow unavailable; no truncation/drop at128differences/64KiB/16records/1MiB or fabricated digest.
+
+Known SQL diagnostics come only from exact private core originalSqlDiagnostic identity or owned complete original child stderr under the byte/AST-identical corrected2fef grammar. If raw stream attachment is required, freeze bounded private listeners attached before any caller query, total existing20MiB, retain through close+done, overflow/listener/incomplete/signal unavailability. Public combined redacted output cannot certify private diagnostics. No raw SQL/diagnostic/parser export. Unknown diagnostics remain typed/unavailable; copied errors cannot mint known receipts. Fixed source-known business literals do not grant permission/order credit.
+
+## Ordered delivery and unavailable identity
+
+One private first suite original survives nested helper wrappers and transport/closure/rollback errors. First normalized emission is awaited before its own caller's future finally; this task cannot fix existing callsites and must disclose that limitation. Later justified observation/rollback/closure/reset/restoration events remain separate ordered supplements with original_sequence0, never replacement original. Duplicate catches of one original are distinguishable from independently justified supplements; no silent suppression of an actual event.
+
+Use the reviewed core writer's finite two-second delivery contract; do not add another retry/recovery/write path or arbitrary sink. Exact core originalGenericWireFailure receipt is retained separately; safe normalization/flow failures receive their own private exact unavailable identity and required exit78 disposition. Public errors remain neutral and preserve the first suite original privately. A caller Boolean, copied/lookalike error or neutral message cannot confer availability. After any uncertain/failed emission, channel evidence unavailable and reset forbidden. Reserved exit propagation through actual entrypoint remains a separately reviewed adopter gate.
+
+All order/suite/allocation/permission/cleanup/pass/reset credits zero/false. The foundation collects no census, creates no SQL/HTTP/Storage operation, closes/kills no child, checks no backend and performs no reset/restoration. Settlement flags cannot certify server/PID/name absence. It may retain explicit owned settlement observations for failure metadata only; future common/state variants must independently observe all partially built close AND actual done, prohibit census after any unknown group, preserve original raw assertions, and separately prove required PID/name absence/request quiescence. A timer is not settlement.
+
+## Verification and stop
+
+Cached inert own-data/memory-only mocks/import/contact traps, syntax/format/narrow lint only. No original live module or fixture entrypoint imports/evaluation, subprocess lane, install/network/process/target/provider/socket/API/DB/preflight/start/reset/service/VM/container/hosted/config/force contact/push/shared/dependent dispatch.
+
+Meaningful tests cover all24 state contexts/22 new-loss orders/two zero-credit specials, exact descriptor/source mappings, original-vs-withheld hashes, missing raw slots, unknown keys/getters/prototypes/cycles/private diagnostic rejection, canonical mismatch, actual first identity/ordered late failures, writer exact receipt vs copied error, 16/17records/size/difference overflow invalidating the whole flow, stalled delivery, safe outward withholding and no reset/credit. Verify unchanged common/state/core/wire source hashes and source-accurate API limitations. No test count is runtime coverage.
+
+Existing failed state chain has at most six source-inspected synchronous projections; this is NOT the future combined wire emission count. Common variants/adopter must audit every added first and late boundary against16 or propose an amendment. Successful-path source audit counts25resets/26assertClean/122SQLchildren/43settlementgroups/48polls/344explicitcensus, excluding cleanup internals. Census/reset allowance sum25h36m20s is not a prediction or analytic duration. Dormant12h ceiling needs a separate adequacy/amendment audit; no budget change here. Actual30-minute test/supervisor and false-zero-exit/TAP completion remain separate gates.
+
+Freeze clean immutable three-file checkpoint/handoff with exact API/schema/privacy/limits/source hashes/mock evidence, then STOP fresh FULL source/interface/privacy review before coordinator publication. Later bounded common awaited-boundary variants/private snapshots, state-only adoption/exit78/combined emission audit, actual entrypoint/TAP completion/fixed supervisor/ceiling adequacy remain mandatory. Main26/source27/all fixtures unexecuted; no provider qualification/target release or B3c/B3/A1c/A2/TASK-021 completion.
