@@ -1,5 +1,9 @@
 # B3c Current and retained safety composition — static stage1a3
 
+## c-stage source seam and split — 2026-09-29
+
+Fresh c author stopped clean at prepared `0ca44ee8b55677d304bf038883e89ea0f67a85e1`; independent audit confirmed first12 actor primary/profile/Hangout gate state conflicts with existing currentReadinessFixture before and no opaque validated first12 terminal. c1 descriptors, c2a terminal, c2b source bridge and c3 joined full54 mapping are sequential reviewed/published sub-stages of original c, with no intermediate parent or actual race/permission credit. Main26/source27/fixtures unexecuted; all runtime gates pending.
+
 ## b2 reviewed checkpoint; final c mapping pending — 2026-09-29
 
 Fresh independent FULL review CLEAR on exact clean b2 `838b5691147029e81911f41afca895cf33d26ae1`, task-pushed/remote verified. Helper `eac5c387098f5448e067e4f9b956b356536e279cddb2dc63edfb4baaedc7c03a`; MODELS `695fc96603c5e1f8e8fbb12336e87521813684ba3ea92164938d16a3ba202115`. b1+b2 supply static current-report and retained-block last-three source plans, post-both ordinary shutdown and evidence-preserving teardown; final all39+15 mapping, parent/model/foundation and actual runtime/permission gates remain pending. Exact c prerequisite review/canonical publication/fresh reconciliation before NEW author. No actual race/order/permission credit.
