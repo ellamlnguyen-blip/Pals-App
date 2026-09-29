@@ -1,5 +1,11 @@
 # NOW
 
+## TASK-025 UNC pilot critical path
+
+The user asked to prioritize a small, safe UNC pilot. TASK-025 is the active release path from the latest canonical main. It keeps verified student access, privacy/RLS, Hangout creation/joining, chat, blocking/reporting, and human moderation in scope. The local building blocks are already on main; hosted staging, SMTP, HTTPS callbacks, named moderation coverage, and pilot supply remain release gates. The secret-free `/api/health` probe and release runbook are added in this task. See `tasks/active/TASK-025-unc-pilot-critical-path.md` and `docs/operations/UNC_PILOT_CRITICAL_PATH.md`.
+
+Exhaustive TASK-021 static migration/modeling is paused unless a concrete staging check requires it. TASK-024 brand correction is deferred until the pilot path is usable; it is a polish task, not a pilot safety dependency. Do not enable hosted gates or invite students until the release blockers and smoke sequence are complete.
+
 ## B3c c1 milestone and c2a exact prerequisite review receipt — 2026-09-29
 
 Independent FULL read-only review of frozen eight-doc amendment `fd784f74490e93c9f888b20db0384693bdca67c5` against remote-verified main `1933489780f11b3cb7c75033b44fecb716138b97`: CLEAR/no findings. Reviewer matched exact clean reviewed/task-pushed c1 `855a4c4e6df24809739e229a143e738243c0b502`, helper/MODELS/stdout, private/source pins and inert1180=1161+19; c1 remains metadata-only with `racesAvailable=false`. c2a terminal, c2b bridge, c3 joined mapping and all parent/actual gates remain pending. Reviewed c1 milestone/exact c2a prerequisite accepted for coordinator task publication/doc-only canonical integration, pending exact remote verification at this receipt. Fresh latest-main/exact855a4c4 reconciliation before NEW c2a author; no runtime/contact/test/import.

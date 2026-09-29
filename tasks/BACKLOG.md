@@ -1,5 +1,10 @@
 # Backlog
 
+## Pilot priority
+- TASK-025 UNC pilot critical path — active. Close hosted HTTPS deployment, Supabase callback/migration verification, custom SMTP, named moderator operations, pilot supply, and release smoke checks before inviting students. See `tasks/active/TASK-025-unc-pilot-critical-path.md`.
+- TASK-024 Pals brand direction correction — deferred until the pilot is usable; keep the reviewed student UI baseline during staging work.
+- TASK-021 staging launch rehearsal — pause exhaustive static modeling. Resume only for a concrete migration, permission, recovery, or target mismatch found by TASK-025.
+
 ## B3c c1 milestone and c2a exact prerequisite review receipt — 2026-09-29
 
 Independent FULL read-only review of frozen eight-doc amendment `fd784f74490e93c9f888b20db0384693bdca67c5` against remote-verified main `1933489780f11b3cb7c75033b44fecb716138b97`: CLEAR/no findings. Reviewer matched exact clean reviewed/task-pushed c1 `855a4c4e6df24809739e229a143e738243c0b502`, helper/MODELS/stdout, private/source pins and inert1180=1161+19; c1 remains metadata-only with `racesAvailable=false`. c2a terminal, c2b bridge, c3 joined mapping and all parent/actual gates remain pending. Reviewed c1 milestone/exact c2a prerequisite accepted for coordinator task publication/doc-only canonical integration, pending exact remote verification at this receipt. Fresh latest-main/exact855a4c4 reconciliation before NEW c2a author; no runtime/contact/test/import.
