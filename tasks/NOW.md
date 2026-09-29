@@ -4,7 +4,7 @@
 
 The proposed bounded upgrade/catalog verifier starts at exact true26, seeds independently expected lawful retained records, applies only the frozen27 body and its history receipt atomically, and compares all54 census entries and complete domain catalog. The fixed prior reset uses the exact cached guarded binary/version/network with finite bounds; the existing reset helper always produces27 and cannot itself prove a true26 upgrade. Historical25→26 evidence remains separate. Independent review/publication and the reviewed common projector interface precede fresh authoring.
 
-Common output correction `90365f50340f26363279b70b1278e7b4d1cd10f3` is frozen for independent FULL review, task-only and unexecuted; state adoption remains separately required. Crossing correction `0a983cfa` awaits re-review; retry exceptional-exit correction continues. Four exact rate-edge instrumented predicate controls remain a separate proposed contract. Main code26; no runtime/target/preflight release or parent completion. See `tasks/active/TASK-021A1b3c-upgrade-catalog-fixture.md`.
+Common output correction `90365f50340f26363279b70b1278e7b4d1cd10f3` is frozen for independent FULL review, task-only and unexecuted; state adoption remains separately required. Crossing correction `0a983cfabfc4d7f2ccc0893132ba4890a2c4deb9` clears independent re-review and its assigned task branch is pushed with exact remote SHA verified; all60 allocations remain unexecuted. Retry exceptional-exit correction continues. Four exact rate-edge instrumented predicate controls remain a separate proposed contract. Main code26; no runtime/target/preflight release or parent completion. See `tasks/active/TASK-021A1b3c-upgrade-catalog-fixture.md`.
 
 ## 2026-09-28 — B3c common-output privacy gate reopened
 
