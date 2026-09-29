@@ -1,5 +1,9 @@
 # B3c final HTTP and fifteen-race model composition — safety1a3c
 
+## c2a literal verifier prerequisite — 2026-09-29
+
+Clean c2a author stop `3226e3cd6b6de84ebcb602bcf0af9f215ea371b1`; source audit confirms historical first12 actor guard conflicts with frozen actor photo/profile setup. Sequential path is c1 reviewed metadata → new c2a0 source-qualified private setup/verifier → c2a opaque terminal → c2b source-correct readiness bridge → c3 joined full54 mapping, with fresh FULL review/task publication/exact amendment/canonical publication/reconciliation between stages. No intermediate parent or actual race/permission credit; stopped author never extended.
+
 ## c1 reviewed checkpoint; c2a/c2b/c3 pending — 2026-09-29
 
 Fresh independent FULL read-only review CLEAR on exact clean c1 `855a4c4e6df24809739e229a143e738243c0b502`, task-pushed/remote verified; helper `978625bafddab71d6285c853153e675a6b5bfc4dbae78ed2939e9b53ef3d9a49`, MODELS `cb143e1bb79970159103b0b9a455b29a541d04de0011c0d2b29b063312ba0d78`. Source descriptors cover39 HTTP+15 races as metadata only; joined full54 and `racesAvailable` remain unavailable. c2a terminal, c2b bridge, c3 joined mapping and all parent/runtime/permission gates remain incomplete. Exact c2a prerequisite review/canonical publication/fresh reconciliation before NEW author.
