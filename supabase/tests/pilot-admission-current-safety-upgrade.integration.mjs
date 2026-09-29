@@ -262,14 +262,14 @@ function fixedPriorReset() {
 // dropped-column slots and attacl, accompany human-readable type/default fields.
 const relations =
   "(n.nspname in('public','private') or (n.nspname='storage' and c.relname='objects'))";
-const catalogQuery = `with rel as(select c.oid from pg_class c join pg_namespace n on n.oid=c.relnamespace where c.relkind in('r','p') and ${relations})
+const catalogQuery = `with rel as(select c.oid,n.nspname||'.'||c.relname name from pg_class c join pg_namespace n on n.oid=c.relnamespace where c.relkind in('r','p') and ${relations})
 select jsonb_build_object(
  'tables',(select coalesce(jsonb_agg(jsonb_build_object('name',n.nspname||'.'||c.relname,'raw',to_jsonb(c),'owner',pg_get_userbyid(c.relowner),'acl',c.relacl,'rls',c.relrowsecurity,'forced',c.relforcerowsecurity,'columns',(select coalesce(jsonb_agg(jsonb_build_object('raw',to_jsonb(a),'name',a.attname,'type',format_type(a.atttypid,a.atttypmod),'notnull',a.attnotnull,'identity',a.attidentity,'generated',a.attgenerated,'acl',a.attacl,'default',pg_get_expr(d.adbin,d.adrelid),'default_raw',to_jsonb(d)) order by a.attnum),'[]') from pg_attribute a left join pg_attrdef d on d.adrelid=a.attrelid and d.adnum=a.attnum where a.attrelid=c.oid and a.attnum>0)) order by n.nspname,c.relname),'[]') from pg_class c join pg_namespace n on n.oid=c.relnamespace where c.oid in(select oid from rel)),
- 'policies',(select coalesce(jsonb_agg(jsonb_build_object('raw',to_jsonb(p),'table',p.polrelid::regclass::text,'using',pg_get_expr(p.polqual,p.polrelid),'check',pg_get_expr(p.polwithcheck,p.polrelid)) order by p.polrelid,p.polname),'[]') from pg_policy p where p.polrelid in(select oid from rel)),
+ 'policies',(select coalesce(jsonb_agg(jsonb_build_object('raw',to_jsonb(p),'table',(select name from rel where oid=p.polrelid),'using',pg_get_expr(p.polqual,p.polrelid),'check',pg_get_expr(p.polwithcheck,p.polrelid)) order by p.polrelid,p.polname),'[]') from pg_policy p where p.polrelid in(select oid from rel)),
  'policy_views',(select coalesce(jsonb_agg(to_jsonb(p) order by schemaname,tablename,policyname),'[]') from pg_policies p where schemaname in('public','private') or (schemaname='storage' and tablename='objects')),
- 'constraints',(select coalesce(jsonb_agg(jsonb_build_object('raw',to_jsonb(k),'table',k.conrelid::regclass::text,'name',k.conname,'definition',pg_get_constraintdef(k.oid)) order by k.conrelid,k.conname),'[]') from pg_constraint k where k.conrelid in(select oid from rel)),
- 'indexes',(select coalesce(jsonb_agg(jsonb_build_object('raw',to_jsonb(i),'class',to_jsonb(c),'table',i.indrelid::regclass::text,'name',c.relname,'definition',pg_get_indexdef(i.indexrelid),'expression',pg_get_expr(i.indexprs,i.indrelid),'predicate',pg_get_expr(i.indpred,i.indrelid)) order by i.indrelid,c.relname),'[]') from pg_index i join pg_class c on c.oid=i.indexrelid where i.indrelid in(select oid from rel)),
- 'triggers',(select coalesce(jsonb_agg(jsonb_build_object('raw',to_jsonb(t),'table',t.tgrelid::regclass::text,'name',t.tgname,'function',t.tgfoid::regprocedure::text,'definition',pg_get_triggerdef(t.oid)) order by t.tgrelid,t.tgname),'[]') from pg_trigger t where t.tgrelid in(select oid from rel) or t.tgrelid='auth.users'::regclass),
+ 'constraints',(select coalesce(jsonb_agg(jsonb_build_object('raw',to_jsonb(k),'table',(select name from rel where oid=k.conrelid),'name',k.conname,'definition',pg_get_constraintdef(k.oid)) order by k.conrelid,k.conname),'[]') from pg_constraint k where k.conrelid in(select oid from rel)),
+ 'indexes',(select coalesce(jsonb_agg(jsonb_build_object('raw',to_jsonb(i),'class',to_jsonb(c),'table',(select name from rel where oid=i.indrelid),'name',c.relname,'definition',pg_get_indexdef(i.indexrelid),'expression',pg_get_expr(i.indexprs,i.indrelid),'predicate',pg_get_expr(i.indpred,i.indrelid)) order by i.indrelid,c.relname),'[]') from pg_index i join pg_class c on c.oid=i.indexrelid where i.indrelid in(select oid from rel)),
+ 'triggers',(select coalesce(jsonb_agg(jsonb_build_object('raw',to_jsonb(t),'table',tn.nspname||'.'||tc.relname,'name',t.tgname,'function',fn.nspname||'.'||tp.proname||'('||pg_get_function_identity_arguments(tp.oid)||')','definition',pg_get_triggerdef(t.oid)) order by t.tgrelid,t.tgname),'[]') from pg_trigger t join pg_class tc on tc.oid=t.tgrelid join pg_namespace tn on tn.oid=tc.relnamespace join pg_proc tp on tp.oid=t.tgfoid join pg_namespace fn on fn.oid=tp.pronamespace where t.tgrelid in(select oid from rel) or t.tgrelid='auth.users'::regclass),
  'sequences',(select coalesce(jsonb_agg(jsonb_build_object('raw',to_jsonb(s),'class',to_jsonb(c),'dependencies',(select coalesce(jsonb_agg(to_jsonb(d) order by d.refobjid,d.refobjsubid),'[]') from pg_depend d where d.objid=c.oid)) order by c.oid),'[]') from pg_sequence s join pg_class c on c.oid=s.seqrelid join pg_namespace n on n.oid=c.relnamespace where n.nspname in('public','private') or exists(select 1 from pg_depend d where d.objid=c.oid and d.refobjid in(select oid from rel))),
  'types',(select coalesce(jsonb_agg(jsonb_build_object('raw',to_jsonb(t),'enum',(select coalesce(jsonb_agg(to_jsonb(e) order by enumsortorder),'[]') from pg_enum e where e.enumtypid=t.oid),'constraints',(select coalesce(jsonb_agg(to_jsonb(k) order by oid),'[]') from pg_constraint k where k.contypid=t.oid)) order by t.oid),'[]') from pg_type t where t.typtype in('e','d') and (t.oid in(select a.atttypid from pg_attribute a where a.attrelid in(select oid from rel)) or t.oid in(select b.typelem from pg_type b join pg_attribute a on a.atttypid=b.oid where a.attrelid in(select oid from rel)))),
  'schemas',(select jsonb_agg(to_jsonb(n) order by n.nspname) from pg_namespace n where n.nspname in('public','private','storage')),
@@ -304,6 +304,101 @@ function sortRecords(rows, keys) {
       .localeCompare(keys.map((k) => String(b[k])).join("\0")),
   );
 }
+function qualifiedHistoricalTable(table, tables) {
+  if (table.includes(".")) return table;
+  const qualified = "public." + table;
+  assert.ok(
+    tables.some((t) => t.name === qualified),
+    "historical unqualified public relation must match pinned manifest",
+  );
+  return qualified;
+}
+function assertHistoricalCatalogRows(key, expected, actual, tables) {
+  const rows = (input) =>
+    sortRecords(
+      input
+        .map((row) => ({
+          ...row,
+          table: qualifiedHistoricalTable(row.table, tables),
+        }))
+        .filter(
+          (row) =>
+            (/^(public|private)\./.test(row.table) ||
+              row.table === "storage.objects") &&
+            (key !== "triggers" || !row.raw?.tgisinternal),
+        )
+        .map(({ table, name, definition, function: fn }) => ({
+          table,
+          name,
+          definition,
+          ...(key === "triggers" ? { function: fn } : {}),
+        })),
+      ["table", "name"],
+    );
+  // Auth triggers have no historical shape entry. Their full source definitions
+  // are independently checked below, including timing/events/update columns.
+  assertExact(rows(expected), rows(actual), ["catalog", key]);
+}
+function inheritedDefaults(expected) {
+  // Pinned final26 declarations specify neither nondefault optimizer/strictness
+  // attributes nor a variadic parameter. Reject a changed source assumption.
+  const attributes = expected.attributes_source;
+  assert.ok(/\blanguage\s+(sql|plpgsql)\b/i.test(attributes));
+  assert.ok(
+    !/\b(strict|leakproof|parallel|cost|rows|support)\b|returns null on null input/i.test(
+      attributes,
+    ),
+  );
+  assert.ok(!/\bvariadic\b/i.test(expected.arguments_source));
+  const set = /^(TABLE\(|SETOF\s)/i.test(expected.catalog_inherited26.result);
+  return {
+    prokind: "f",
+    proleakproof: false,
+    proisstrict: false,
+    proparallel: "u",
+    procost: 100,
+    prorows: set ? 1000 : 0,
+    prosupport: "-",
+    provariadic: "0",
+    proretset: set,
+    pronargdefaults: [...expected.arguments_source.matchAll(/\bdefault\b/gi)]
+      .length,
+    probin: null,
+    prosqlbody: null,
+    protrftypes: null,
+  };
+}
+function assertInheritedDefaults(installed, expected) {
+  for (const [key, value] of Object.entries(inheritedDefaults(expected)))
+    assertExact(value, installed.raw[key], [
+      "catalog",
+      expected.name,
+      "source_default",
+      key,
+    ]);
+}
+function triggerDefinition(text) {
+  // These two pinned Auth triggers have no arguments/string predicates. Only
+  // keyword case, spacing and the source trailing semicolon are normalized.
+  assert.ok(!/["']/.test(text), "simple reviewed Auth trigger definition");
+  return text.toLowerCase().replaceAll(/\s/g, "").replace(/;$/, "");
+}
+function assertAuthTriggerSources(triggers, inventory) {
+  const expected = inventory.triggers.filter((t) => t.table === "auth.users");
+  assert.equal(expected.length, 2);
+  for (const source of expected) {
+    const rows = triggers.filter(
+      (t) => t.table === source.table && t.name === source.name,
+    );
+    assert.equal(rows.length, 1);
+    assert.equal(rows[0].raw.tgenabled, "O");
+    assert.equal(
+      triggerDefinition(rows[0].definition),
+      triggerDefinition(source.definition_source),
+      "independent pinned Auth trigger timing/events/columns/function binding",
+    );
+  }
+}
 function assertPriorCatalog(c, frozen) {
   assertExact(frozen.oldShape.tables, c.tables.map(legacyTable), [
     "catalog",
@@ -313,35 +408,20 @@ function assertPriorCatalog(c, frozen) {
     /^(public|private)\./.test(
       row.table ?? `${row.schemaname}.${row.tablename}`,
     ) ||
+    row.table === "auth.users" ||
     row.table === "storage.objects" ||
     (row.schemaname === "storage" && row.tablename === "objects");
   assertExact(frozen.oldShape.policies.filter(relevant), c.policy_views, [
     "catalog",
     "policies",
   ]);
-  for (const key of ["constraints", "triggers"]) {
-    const project = ({ table, name, definition, function: fn }) => ({
-      table,
-      name,
-      definition,
-      ...(key === "triggers" ? { function: fn } : {}),
-    });
-    assertExact(
-      sortRecords(frozen.oldShape[key].filter(relevant).map(project), [
-        "table",
-        "name",
-      ]),
-      sortRecords(
-        c[key]
-          .filter(
-            (r) => relevant(r) && (key !== "triggers" || !r.raw.tgisinternal),
-          )
-          .map(project),
-        ["table", "name"],
-      ),
-      ["catalog", key],
+  for (const key of ["constraints", "triggers"])
+    assertHistoricalCatalogRows(
+      key,
+      frozen.oldShape[key],
+      c[key],
+      frozen.oldShape.tables,
     );
-  }
   // OIDs in historical defaultACL belong to a different reset. Independent
   // roles/schema/object-kind/ACL anchors are exact; live OIDs stay raw for27.
   const aclAnchor = ({ oid, ...row }) => {
@@ -370,6 +450,7 @@ function assertPriorCatalog(c, frozen) {
       /LANGUAGE (\w+)/.exec(historical.definition)[1],
     );
     assert.equal(installed[0].public_execute, false);
+    assertInheritedDefaults(installed[0], expected);
   }
   const domain = c.triggers.filter(
     (t) => !t.raw.tgisinternal && t.function.startsWith("private."),
@@ -382,6 +463,7 @@ function assertPriorCatalog(c, frozen) {
   );
   for (const t of domain)
     assert.equal(t.raw.tgenabled, "O", "source enabled trigger");
+  assertAuthTriggerSources(c.triggers, frozen.inventory);
   // Every explicit source index plus every constraint-backed index is anchored.
   // Domain migration source has no sequence or enum/domain declaration.
   assert.equal(
@@ -1271,19 +1353,28 @@ async function upgradeFixtures() {
   }
   if (first) {
     first.cleanupIncomplete = true;
-    first.upgradeRecords = records;
-    const safe = neutralSuiteError(first);
-    safe.evidence.upgrade_records = records;
-    throw safe;
+    upgradeFailureRecords.set(first, records);
+    throw neutralSuiteError(first);
   }
   return records;
 }
-export async function runUpgradeFixtures() {
+const upgradeFailureRecords = new WeakMap();
+async function upgradeSuiteBoundary(operation) {
   try {
-    return await upgradeFixtures();
+    return await operation();
   } catch (error) {
-    throw neutralSuiteError(error);
+    const original = originalSuiteError(error);
+    const safe = neutralSuiteError(error);
+    // The shared final boundary refreshes evidence. Attach only the module's
+    // private, already-projected records afterwards; arbitrary error properties
+    // or caller-provided records never gain outgoing authority.
+    const records = upgradeFailureRecords.get(original);
+    if (records) safe.evidence.upgrade_records = records;
+    throw safe;
   }
+}
+export async function runUpgradeFixtures() {
+  return upgradeSuiteBoundary(upgradeFixtures);
 }
 
 // Explicit pure/mocked examples only. Production transport has no injection
@@ -1410,6 +1501,90 @@ export async function runUpgradeExamples() {
       }).includes("::jsonb"),
     ),
   );
+  ok(() =>
+    assert.ok(!/::regclass::text|::regprocedure::text/.test(catalogQuery)),
+  );
+  ok(() =>
+    assert.ok(
+      catalogQuery.includes("select c.oid,n.nspname||'.'||c.relname name"),
+    ),
+  );
+  for (const key of ["constraints", "triggers"]) {
+    const historical = frozen.oldShape[key];
+    const qualified = historical.map((row) => ({
+      ...row,
+      table: qualifiedHistoricalTable(row.table, frozen.oldShape.tables),
+    }));
+    ok(() =>
+      assertHistoricalCatalogRows(
+        key,
+        historical,
+        qualified,
+        frozen.oldShape.tables,
+      ),
+    );
+    const publicRow = qualified.find((row) => row.table.startsWith("public."));
+    assert.ok(publicRow);
+    const changed = structuredClone(qualified);
+    changed.find(
+      (row) => row.name === publicRow.name && row.table === publicRow.table,
+    ).definition += " changed";
+    ok(() =>
+      assert.throws(() =>
+        assertHistoricalCatalogRows(
+          key,
+          historical,
+          changed,
+          frozen.oldShape.tables,
+        ),
+      ),
+    );
+    ok(() =>
+      assert.throws(() =>
+        assertHistoricalCatalogRows(
+          key,
+          historical,
+          qualified.filter((row) => row !== publicRow),
+          frozen.oldShape.tables,
+        ),
+      ),
+    );
+  }
+  ok(() =>
+    assert.throws(() =>
+      qualifiedHistoricalTable("unknown", frozen.oldShape.tables),
+    ),
+  );
+  const authTriggers = frozen.inventory.triggers
+    .filter((t) => t.table === "auth.users")
+    .map((t) => ({
+      ...t,
+      definition: t.definition_source,
+      raw: { tgenabled: "O" },
+    }));
+  ok(() => assertAuthTriggerSources(authTriggers, frozen.inventory));
+  for (const mutate of [
+    (text) => text.replace(/after/i, "before"),
+    (text) => text.replace(/after insert/i, "after delete"),
+    (text) => text.replace("email_confirmed_at", "deleted_at"),
+  ]) {
+    const changed = structuredClone(authTriggers);
+    const index = changed.findIndex(
+      (t) => t.name === "pals_sync_confirmed_membership",
+    );
+    changed[index].definition = mutate(changed[index].definition);
+    ok(() =>
+      assert.throws(() => assertAuthTriggerSources(changed, frozen.inventory)),
+    );
+  }
+  for (const source of frozen.inventory.functions) {
+    const row = { raw: inheritedDefaults(source) };
+    ok(() => assertInheritedDefaults(row, source));
+    for (const key of Object.keys(row.raw)) {
+      const wrong = { raw: { ...row.raw, [key]: "changed" } };
+      ok(() => assert.throws(() => assertInheritedDefaults(wrong, source)));
+    }
+  }
   const plan = retainedPlan(123);
   ok(() => assertRetained(plan, structuredClone(plan)));
   for (const table of censusTables) {
@@ -1469,6 +1644,36 @@ export async function runUpgradeExamples() {
   await assert.rejects(
     runUpgradeFixtures(),
     (e) => e.message === "B3c fixture failed; projected evidence only",
+  );
+  checks++;
+  // Invoke the exact private boundary used by runUpgradeFixtures with a pure
+  // mocked inner failure, so re-neutralization itself is exercised.
+  upgradeFailureRecords.set(error, events);
+  await assert.rejects(
+    upgradeSuiteBoundary(async () => {
+      const inner = neutralSuiteError(error);
+      inner.evidence.upgrade_records = events;
+      throw inner;
+    }),
+    (outer) => {
+      assert.equal(originalSuiteError(outer), error);
+      assert.deepEqual(outer.evidence.upgrade_records, events);
+      assert.ok(!JSON.stringify(outer).includes(privateMarker));
+      return true;
+    },
+  );
+  checks++;
+  const arbitrary = new Error(privateMarker);
+  arbitrary.upgradeRecords = [privateMarker];
+  await assert.rejects(
+    upgradeSuiteBoundary(async () => {
+      throw arbitrary;
+    }),
+    (outer) => {
+      assert.equal(outer.evidence.upgrade_records, undefined);
+      assert.ok(!JSON.stringify(outer).includes(privateMarker));
+      return true;
+    },
   );
   checks++;
   // Complete inherited function/overload mocks exercise the actual comparator.
