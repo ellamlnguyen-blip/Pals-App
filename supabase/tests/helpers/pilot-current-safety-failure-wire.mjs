@@ -3320,6 +3320,8 @@ export const failureWireManifest = freeze({
         "companion",
         "postcheck",
         "reset",
+        "serial",
+        "cleanup",
       ],
       partitions: [
         "failed-no-success-credit",
@@ -3442,6 +3444,8 @@ export const failureWireManifest = freeze({
         "clock_after_account_wait",
         "mode_distinction",
         "reference_distinction",
+        "account-share-wait-before-expiry",
+        "same-key-social-wait",
       ],
       partitions: [
         "failed-no-success-credit",
@@ -4085,6 +4089,8 @@ export const failureWireManifest = freeze({
         "failed-no-success-credit",
         "supplemental-failure-no-credit",
         "owned-exit-unproven",
+        "abort-rollback-no-credit",
+        "failed-no-credit",
       ],
     },
   },

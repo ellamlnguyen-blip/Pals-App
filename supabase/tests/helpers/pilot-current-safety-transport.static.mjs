@@ -1422,6 +1422,64 @@ async function runGenericFailureWireExamples() {
     r.context.phase = "Safety report unavailable private UUID body";
     rejects(() => normalize(r, name));
   }
+  // Regression contexts from the independently reviewed frozen runtime paths.
+  // Carry each original phase/partition through sender, framing and receiver;
+  // even a complete zero-exit record remains failure-only with zero credits.
+  const correctedContexts = [
+    [
+      names[5],
+      "X.CH.actor.referenced_primary_protection.serial",
+      "serial",
+      null,
+    ],
+    [names[5], null, "cleanup", null],
+    [
+      names[6],
+      "L1R.CH.clock_after_account_wait",
+      "account-share-wait-before-expiry",
+      null,
+    ],
+    [names[6], "L1R.CP.same_key_wait", "same-key-social-wait", null],
+    [names[9], null, null, "abort-rollback-no-credit"],
+    [names[9], null, null, "failed-no-credit"],
+  ];
+  for (const [name, candidateID, phase, partition] of correctedContexts) {
+    const r = make(name);
+    const cell =
+      candidateID === null
+        ? null
+        : manifest.modules[name].cases.find((cell) => cell.id === candidateID);
+    const canonical = cell;
+    if (candidateID !== null) check(Boolean(canonical));
+    Object.assign(r.context, {
+      case_id: canonical?.id ?? null,
+      order: canonical?.order ?? null,
+      phase,
+      partition,
+    });
+    const encoded = encode(r, name);
+    assert.deepEqual(
+      decode(encoded.subarray(4), name).context,
+      normalize(r, name).context,
+    );
+    checked++;
+    const received = receiver(name);
+    received.receive(encoded);
+    received.end();
+    received.close(0, null);
+    const evidence = received.evidence();
+    check(
+      evidence.availability === "available" &&
+        evidence.module_failed &&
+        evidence.module_credit === 0,
+    );
+    assert.deepEqual(copy(evidence.records[0].credits), r.credits);
+    checked++;
+    const invalid = copy(r);
+    invalid.context[phase === null ? "partition" : "phase"] =
+      "untrusted-private-context";
+    rejects(() => encode(invalid, name));
+  }
   check(
     ceiling("pilot-admission-current-safety-http.integration.mjs") ===
       24 * 3600000,
@@ -1857,6 +1915,8 @@ async function runGenericFailureWireExamples() {
     if (n.kind === ts.SyntaxKind.FalseKeyword) return false;
     if (ts.isNumericLiteral(n)) return Number(n.text);
     if (ts.isArrayLiteralExpression(n)) return n.elements.map(literal);
+    if (ts.isNewExpression(n) && n.expression.getText() === "Set")
+      return literal(n.arguments[0]);
     if (ts.isObjectLiteralExpression(n))
       return Object.fromEntries(
         n.properties.map((p) => {
@@ -1895,6 +1955,80 @@ async function runGenericFailureWireExamples() {
     assert.notEqual(result, undefined, "Trusted source literal unavailable");
     return result;
   };
+  // Independently derive finite contexts from source syntax, never by importing
+  // fixtures or iterating the wire's own allowlists. Exclude only authored inert
+  // example bodies; unknown source sentinels map to explicit unavailable context.
+  const sourceContexts = (text) => {
+    const tree = ts.createSourceFile(
+      "source.mjs",
+      text,
+      ts.ScriptTarget.Latest,
+      true,
+      ts.ScriptKind.JS,
+    );
+    const contexts = { phase: new Set(), partition: new Set() };
+    const values = (n, field) => {
+      if (ts.isStringLiteral(n)) {
+        if (!["unknown", "<unknown>"].includes(n.text))
+          contexts[field].add(n.text);
+      } else if (ts.isConditionalExpression(n)) {
+        values(n.whenTrue, field);
+        values(n.whenFalse, field);
+      }
+    };
+    const visit = (n) => {
+      if (
+        ts.isFunctionDeclaration(n) &&
+        /Examples|Offline/.test(n.name?.text ?? "")
+      )
+        return;
+      if (
+        ts.isPropertyAssignment(n) &&
+        ["phase", "partition"].includes(n.name.getText())
+      )
+        values(n.initializer, n.name.getText());
+      if (
+        ts.isBinaryExpression(n) &&
+        n.operatorToken.kind === ts.SyntaxKind.EqualsToken &&
+        ts.isPropertyAccessExpression(n.left) &&
+        n.left.name.text === "phase"
+      )
+        values(n.right, "phase");
+      ts.forEachChild(n, visit);
+    };
+    visit(tree);
+    return contexts;
+  };
+  const sameLabels = (actual, expected) => {
+    assert.equal(
+      new Set(actual).size,
+      actual.length,
+      "Duplicate context label",
+    );
+    assert.deepEqual(
+      actual.slice().sort(),
+      [...expected].sort(),
+      "Frozen source context parity",
+    );
+  };
+  const commonText = readFileSync(
+    new URL(
+      "../pilot-admission-current-safety-concurrency.integration.mjs",
+      import.meta.url,
+    ),
+    "utf8",
+  );
+  // These four already-existing failure support labels belong to the inherited
+  // projector, including modules whose local source emits its own partitions.
+  const supportPartitions = [
+    "failed-no-success-credit",
+    "supplemental-failure-no-credit",
+    "cleanup-failed",
+    "owned-exit-unproven",
+  ];
+  const commonPartitions = extract(commonText, "projectionPartitions");
+  for (const label of supportPartitions)
+    check(commonPartitions.includes(label));
   const roots = [
     null,
     null,
@@ -1928,6 +2062,36 @@ async function runGenericFailureWireExamples() {
       createHash("sha256").update(text).digest("hex") ===
         manifest.modules[names[i]].sha256,
     );
+    const contexts = sourceContexts(text);
+    // Source enums supplement emitted labels where the module deliberately
+    // keeps dormant/cleanup labels or derives its phase from canonical cells.
+    if (i === 2) {
+      const output = extract(text, "identityOutputManifest");
+      output.phases.forEach((label) => contexts.phase.add(label));
+      output.partitions.forEach((label) => contexts.partition.add(label));
+    }
+    if (i === 5)
+      extract(text, "phases").forEach((label) => contexts.phase.add(label));
+    if (i === 6)
+      extract(text, "retryRateManifest").forEach((cell) =>
+        contexts.phase.add(cell.kind),
+      );
+    if (i === 7)
+      extract(text, "edgePhases").forEach((label) => contexts.phase.add(label));
+    if (i === 8)
+      extract(text, "labels").forEach((label) => contexts.phase.add(label));
+    supportPartitions.forEach((label) => contexts.partition.add(label));
+    for (const [field, sourceLabels] of Object.entries(contexts)) {
+      const wireLabels = manifest.modules[names[i]][`${field}s`];
+      sameLabels(wireLabels, sourceLabels);
+      checked++;
+      // Prove the independent comparison catches both omission and arbitrary
+      // extension for every module/field, including inherited support labels.
+      rejects(() => sameLabels(wireLabels.slice(1), sourceLabels));
+      rejects(() =>
+        sameLabels([...wireLabels, "untrusted-private-context"], sourceLabels),
+      );
+    }
     const expected = extract(text, labels[i]);
     if (i === 8) {
       assert.deepEqual(expected, manifest.modules[names[i]].phases);
