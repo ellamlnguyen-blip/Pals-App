@@ -1,0 +1,64 @@
+# B3c exact rate-window edge — static author handoff
+
+2026-09-29. **Local static author checkpoint; fresh independent FULL source/instrumentation/privacy review required. No runtime release, publication or parent completion.**
+
+Fresh GPT-6 Sol medium task author; Standard speed is app controlled and unverified. Prepared clean checkout `/private/tmp/pals-task021-rate-edge`, branch `agent/TASK-021A1b3c-rate-edge-fixture`, baseline `e820fde2f5256c523a47f57a22c03ba61877ced6`. Coordinator supplied remote-verified canonical main `f6549be7dbd5e984c5945cd7903a83eeb775f39b`, exact reviewed/pushed common projector `43e44cc030e8c380705401b4d171b06099955e69`, reviewed source `17b72001c3c76d2002b320d92df32703141bb88e`, foundation `3e9973ce573a48c9879286624b92fb2d72ca7769`, policy `cad9a596b76dac2f0dbe2b51908ca2899ba6c915` and transport `404edfabae9ede3a80aa4350937302b989339c20`. Contract correction review clears `086fed41fd56b2017e7bba75a7a69eeb7405cb4a`; coordinator supplied final canonical publication receipt `e2198`. Author performed no remote/network verification. Final clean immutable author SHA is supplied separately, avoiding self-reference.
+
+Read AGENTS, full assigned rate-edge contract, current-source-safety and retry/rate contracts, Accepted ADR-0026/0027, DATA_MODEL/AUTHORIZATION/SECURITY_AND_SAFETY, source inventory/graph/fixture allocation, exact frozen migration27 report/current helper bodies and inherited report schema, rate-edge review and foundation/transport/common projector contracts and handoffs. Main code retains26 migrations; source27 and all target-exercising fixtures remain task-only/unexecuted.
+
+## Exactly two owned files
+
+- `supabase/tests/pilot-admission-current-safety-rate-edge.integration.mjs`
+- This handoff.
+
+No source/migration/helper/config/RLS/ACL/constraint/other module/matrix/runner/shared-record edit. No push, integration, dependent dispatch or task status update. The coordinator owns shared records and publication.
+
+## Four instrumented predicate controls
+
+The literal frozen manifest is exactly:
+
+- `L1E.CH.exact_lower_edge`
+- `L1E.CH.one_microsecond_older`
+- `L1E.CP.exact_lower_edge`
+- `L1E.CP.one_microsecond_older`
+
+These are **instrumented actual-public predicate controls only**, with no unchanged-source clock, permission, concurrency or cleanup evidence from static authoring. The separate18 unchanged-source retry/rate fixture supplies CH/CP after-account-wait placement controls. Supporting assertions and the fixed suite label have zero allocation credit. Every outgoing edge record explicitly carries `instrumented-actual-public-predicate-only` and zero allocation credit; the four future actual observations require separately qualified acceptance.
+
+Each fresh case uses deterministic distinct actor/host/peer/manager/source/request bindings, independently verified complete54 setup with qualified opaque provider anchors and all seven retained proofs absent. CH asserts distinct nonparticipant actor and lawful joined immutable published host. CP asserts only peer opt-in; exact-edge uses absent actor preference and older control uses false actor preference. Setup is privileged synthetic preparation. Readiness/admission/purpose/source/primary ownership expected fields are asserted in memory by the exact reviewed setup checker. Deferred joined-host constraints are checked immediately after lawful setup; none is disabled.
+
+A fresh real authenticated public positive call occurs before each case's instrumentation. Its one receipt and exact independently expected complete report+ledger addition are verified in all54 tables, then its savepoint is rolled back and baseline rechecked. No privileged permission imitation or real Auth/HTTP claim. Setup time windows include the owned outer transaction's independently observed transaction timestamp because `now()` defaults refer to that earlier time; upper bounds are separate actual clock observations.
+
+The owned backend captures finite T with six fractional digits and UTC timezone. Before any temporary DDL, the exact frozen migration27 hash/body, original full54 rows, complete catalogue and public definition are verified. The pure transformer requires the exact frozen body and exactly one `saved_at:=clock_timestamp();` occurrence in body and definition. It changes only that expression to safely quoted `timestamp with time zone` T. Full original canonical header, signature/defaults/result/owner/ACL/OID/volatility/security/search_path and every captured catalogue attribute stay asserted. Temporary CREATE OR REPLACE stays in the owned transaction and its expected catalogue differs only in the report body/definition/prosrc. Any additional attribute difference fails before predicate execution; no default/catalog field is ignored to force instrumentation through.
+
+Five independently complete immutable report rows and lawful reporter/request ledgers are inserted initially, never updated/deleted/retimed. Four timestamps are T−10/20/30/40 minutes. The fifth is exactly T−one hour or T−one hour−one microsecond. UUID/time bindings are constrained, every report/ledger field and original mode/input UUID fingerprint is independently prescribed; all remaining54 values must stay exact. PostgreSQL JSON timestamp trailing-zero formatting is applied to prescribed T/seeds only. Fingerprints independently encode the exact scalar JSONB array `[mode, input UUID, normalized category, null]` and MD5 it; no resolved-target substitution or observed fingerprint acceptance.
+
+The exact-edge public call catches only actual42501 inside an authenticated anonymous block, requires exact `Safety report unavailable`, and emits a bounded neutral NOTICE containing the caught SQLSTATE/message. It introduces no diagnostic table/function/ACL. The enclosing owned backend remains alive; privileged observation explicitly restores role. Denial requires full54 zero delta. Older control requires exactly one receipt/time, byte-exact canonical submitted_at T and microsecond equality, complete independently expected report+ledger additions and no other54 changes. Savepoint rollback removes each isolated case and temporary function replacement before the next unchanged-source positive guard.
+
+## Original anchors and restoration
+
+The independently guarded original observer verifies the exact27 history manifest,146 public/private functions and overload set:142 unchanged inherited entries, two reviewed public replacements and two new private helpers. Inherited144 catalogue input is SHA pinned. Public replacement bodies and canonical complete definitions match frozen migration27 and the accepted original headers/ABI; new helper signatures/results/defaults/security/internal-only ACL are explicit. Original OIDs and complete pg_proc records are captured in addition to the authoritative function body/definition/default/result/ACL fields. Surrounding anchors capture schemas/types/classes/columns/defaults/constraints/policies/triggers/indexes/default ACL and complete migration-history rows. This is an authored fresh27 anchor requirement; it does not replace true26→only27 upgrade preservation.
+
+All four cases and replacements are inside one outer transaction. The module has no COMMIT/reset/recovery path. Its owned session close always sends ROLLBACK/EOF, including failure paths. It awaits close and `done` and accepts only exact `[0, null]`. Signal, null/noninteger/malformed/unaccepted nonzero/rejected close or done preserves the first private error, records separate cleanup failures, forbids reset and receives no restoration credit.
+
+Clean client completion alone is not backend settlement proof. Only afterward a fresh independently guarded PostgreSQL observer requires the captured owner PID and fixed application name both absent from pg_stat_activity. Missing backend binding, failed observer or unknown exit remains incomplete/reset forbidden. After that settlement, a separate fresh guarded observer requires byte-exact original definition/body, identical OID/every captured catalogue attribute/history row and exact54 original rowsets. Another connection's catalogue visibility while the owner transaction is open supplies no final restoration credit. No process discovery/kill, reset, service/VM/container restart or evidence erasure is added.
+
+Initial failure is captured before close, with the original case/phase, actual owned parsed diagnostics, setup qualification/public result if available, precise original differences and attempted role-restored owned snapshot. An aborted/unavailable snapshot stays explicitly unavailable, never substituted by a stale success snapshot. Private first error survives later close/restoration failure; restoration errors are separately projected. Public suite errors use fixed neutral text/stack and only safe edge evidence. Original errors remain memory-only through the reviewed WeakMap interface.
+
+## Projection and public interfaces
+
+`projectEdgeEvidence(originalRecord, caseID, phase)` first uses the reviewed pure `projectOutgoingEvidence` once on original values, then adds a fixed source-owned envelope for exactly four IDs and15 finite phases. A separate private envelope function handles already projected `projectFailureEvidence` output once, avoiding double projection. Unknown/lookalike/nonliteral case/phase labels receive the reviewed original-value descriptor, never raw text or precise label credit. No private field bypasses the projector. Full54 success/failure snapshots use raw-census contexts that produce exactly54 safe counts/digests; raw receipt UUID/time/report/Auth/provider/title/narrative values stay private. Strict neutral denial remains available only in its authorized diagnostic context.
+
+Pure/dormant exports: `edgeManifest`, `edgePhases`, `projectEdgeEvidence`, `microsecondAnchor`, `rateAnchors`, `instrumentDefinition`, `expectedReportRows`, `certifyDone`, `restorationFailure`, `runRateEdgeExamples`. `requireReviewedEdgeTransport` always refuses; `runRateEdgeFixtures` invokes the refusal as its first inner statement, before localTarget, source reading or any target contact, and neutralizes its public rejection. Imports register no tests or runtime entrypoint. The existing runner allowlist remains unchanged and excludes this module. Runner failure-delivery/whole-module bounds/adoption require a later contract.
+
+## Static evidence only
+
+- Dormant `runRateEdgeExamples()`: **124 checks passed**. Exact one-occurrence transformation/reversal; malformed/multiple/wrong-body/timestamp rejection; microsecond lower/older anchors; four literal IDs; complete seed fields/fresh IDs; exact full54 seeded/success/zero-denial expectations and unexpected mutation rejection; every literal edge phase/case preserved; unknown/lookalike labels withheld; approved neutral error preserved; private full54/email/metadata/title/provider/assertion/cause/UUID output withheld; first-error identity and separate restoration failure; signal/null/noninteger/nonzero mock completion reset refusal; neutral public errors; unconditional refusal.
+- `/usr/local/bin/node`24.18 syntax check passes. Cached `/private/tmp/pals-task024/node_modules/prettier` API format/check passes. Cached ESLint narrow no-unused-vars/no-unreachable/no-undef: **0 errors/0 warnings**. Whitespace diff check passes. No dependency installation.
+- Inert imports plus all dormant pure/mocked examples executed with child-process APIs and fetch patched to traps: **0 attempted target contacts**. No synthetic child process was spawned; mock close/done promises only.
+- No DB/API/CLI/Pals binary/socket/listener/process check/preflight/start/reset/runtime entrypoint/runtime lint/services/VM/container/provider/hosted/config/install/force/contact/push/shared record/dependent operation executed.
+
+These checks prove JavaScript/static expectation and output properties only. They do not prove PostgreSQL compilation, actual catalog/DDL compatibility, actual permission/predicate results, server settlement/rollback/restoration, concurrency/clock placement, upgrade/catalog preservation, real Auth/HTTP, runner failure delivery or target cleanup. Strict complete catalogue equality intentionally rejects any unexpected temporary DDL attribute/default difference; no runtime compatibility claim is made.
+
+## Freeze and stop
+
+Stop after the clean immutable local commit for fresh independent **FULL source/instrumentation/privacy review**, then coordinator publication. Exact source27, runner bounds/failure delivery/adoption, combined fixture freeze/fresh ownership review/exclusive serial release/preflight, actual runtime/restoration/security/cleanup, true26→only27 upgrade/catalog/regressions and reviewed remote-verified accepted integration remain required. B3c/B3/A1c/A2/TASK-021 remain incomplete. No inherited release/force exception, pilot-ready, hosted or successor claim.
