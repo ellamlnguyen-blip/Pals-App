@@ -1,0 +1,9 @@
+# B3c legacy transport prerequisite — contract review receipt
+
+2026-09-29. Fresh independent Sol medium read-only source/interface review of41c3be9 finds two P2 contract framing/cancellation clarifications. Correction re-review clears exact `4b7979b94667c322de7f15b8a01a6469312d1bce`. Standard app-controlled/unverified.
+
+Complete one-ERROR private verbose diagnostic grammar accepts only recognized opaque DETAIL/HINT/CONTEXT/LOCATION auxiliaries, rejects ambiguous/extra/duplicate/message continuations and unknown framing, preserves source-pinned B1 pairs/23503 code-only handling and emitted sanitized Error WeakMap key. Actual implementation grammar/examples still require FULL review before adapter dispatch. Existing public wrappers stay unchanged.
+
+Caller AbortSignals/module deadlines preserved, pre-aborted nofetch; original fetch/body/cancel completion observed within fixed5seconds after abort, uncertainty unavailable/false quiescence. Fixed30second headers+body/20MiB cap; signed GET retains original unauthenticated request; methods only GET/POST/PATCH/DELETE. Binary PNG and JSON assertions unchanged. Threefile prerequisite scope feasible; no genericrace/runner/legacyadaptation/source/permission widening.17Node+6SQL source manifest sound; moderation extraction separate.
+
+Reviewer source/Git only, no imports/examples/tests/process/target/network/edits/push. Canonical latestmain479283f merged into documentation branch, four queue records manually concatenated preserving both reviewed histories; final narrow reconciliation/receipt review precedes publication. Main code26; state52/edge1fcd taskpublished/unexecuted; identity contractreview/publishedmain479 authorpreparedc113 active; upgrade d025 fourP2 correction8c5c91 pendingre-review. All target/runtime/combinedfreeze/runner/failurechannel/ownership/exclusiverelease/preflight/actualupgradecatalogregressionsecuritycleanupnormalstopintegration and parent gates incomplete.
