@@ -1503,6 +1503,363 @@ export function describeModelPlan(handle) {
       : {}),
   });
 }
+// Fixed, private source-only preparation for the later current-Hangout report.
+// The input is an existing early-operator/source frame; no caller can choose an
+// actor, host, operation, expected delta or authority. A later family consumes
+// only the opaque validated frame, never a public raw-row getter.
+const currentReadinessFrames = new WeakMap();
+const CURRENT_READINESS_DESCRIPTION = freeze({
+  family: "current-hangout-report-readiness",
+  actor: "existing SQL reporter",
+  host: "existing immutable SQL Hangout host",
+  sourceOnly: true,
+  fullTables: 54,
+  sourceGuard: [
+    "ready actor and immutable host in the same verified UNC campus",
+    "pilot availability and Hangouts capability",
+    "Hangout and safety source gates",
+    "published campus-visible approximate Hangout without disable or pair block",
+  ],
+  setupOnly: ["open joining", "eligible start time"],
+  providerPermissionCredit: 0,
+  reportReceiptAvailable: false,
+  raceOrderAvailable: false,
+});
+function currentReadinessNoSeven(raw, actor, host, hangout) {
+  check(actor !== host);
+  check(
+    !raw["private.people_blocks"].some(
+      (r) => r.blocker_id === actor && r.blocked_id === host,
+    ),
+  );
+  const low = actor < host ? actor : host,
+    high = actor < host ? host : actor;
+  check(
+    !raw["private.friendships"].some(
+      (r) => r.low_id === low && r.high_id === high,
+    ) &&
+      !raw["private.friendship_create_requests"].some(
+        (r) =>
+          (r.actor_id === actor && r.target_id === host) ||
+          (r.actor_id === host && r.target_id === actor),
+      ) &&
+      !raw["private.dm_pairs"].some(
+        (r) => r.low_id === low && r.high_id === high,
+      ) &&
+      !raw["public.hangout_participants"].some(
+        (r) =>
+          r.account_id === actor &&
+          raw["public.hangouts"].some(
+            (h) => h.id === r.hangout_id && h.host_id === host,
+          ),
+      ) &&
+      !raw["private.hangout_peer_provenance"].some(
+        (r) => r.low_id === low && r.high_id === high,
+      ),
+  );
+  const own = raw["public.hangout_participants"].filter(
+    (r) => r.account_id === actor,
+  );
+  for (const mine of own)
+    for (const peer of raw["public.hangout_participants"].filter(
+      (r) => r.account_id === host && r.hangout_id === mine.hangout_id,
+    ))
+      check(
+        !(
+          preciseTime(mine.joined_at) <
+            (peer.left_at || peer.removed_at
+              ? preciseTime(peer.left_at ?? peer.removed_at)
+              : 10n ** 30n) &&
+          preciseTime(peer.joined_at) <
+            (mine.left_at || mine.removed_at
+              ? preciseTime(mine.left_at ?? mine.removed_at)
+              : 10n ** 30n)
+        ),
+      );
+  check(
+    !raw["public.hangout_participants"].some(
+      (r) => r.hangout_id === hangout && r.account_id === actor,
+    ),
+  );
+}
+function currentReadinessSubject(raw, id, campus) {
+  const account = find(raw, "public.accounts", (r) => r.id === id),
+    user = find(raw, "auth.users", (r) => r.id === id),
+    membership = find(
+      raw,
+      "public.university_memberships",
+      (r) => r.user_id === id,
+    ),
+    profile = find(raw, "public.profiles", (r) => r.user_id === id),
+    admission = find(
+      raw,
+      "private.pilot_account_admission",
+      (r) => r.account_id === id,
+    );
+  check(account.status === "active" && admission.state === "active");
+  check(/^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/.test(campus));
+  check(
+    user.deleted_at === null &&
+      user.email_confirmed_at !== null &&
+      membership.verified_at !== null &&
+      membership.university_id === campus &&
+      typeof user.email === "string" &&
+      /^[^@\s]+@[^@\s]+$/.test(user.email) &&
+      user.email.toLowerCase() === membership.verification_email?.toLowerCase(),
+  );
+  preciseTime(user.email_confirmed_at);
+  preciseTime(membership.verified_at);
+  const university = find(raw, "public.universities", (r) => r.id === campus);
+  check(
+    university.active &&
+      university.slug === "unc-chapel-hill" &&
+      university.allowed_email_domains.includes(
+        user.email.split("@")[1].toLowerCase(),
+      ),
+  );
+  check(
+    profile.is_complete === true &&
+      typeof profile.real_name === "string" &&
+      profile.real_name.length > 0 &&
+      Number.isInteger(profile.graduation_year) &&
+      typeof profile.major === "string" &&
+      profile.major.length > 0 &&
+      typeof profile.bio === "string" &&
+      profile.bio.length > 0 &&
+      profile.primary_photo_path === `${id}/primary.png`,
+  );
+  find(
+    raw,
+    "storage.objects",
+    (r) =>
+      r.bucket_id === "profile-photos" &&
+      r.name === profile.primary_photo_path &&
+      r.owner_id === id &&
+      r.name.split("/")[0] === id,
+  );
+}
+function currentReadinessSource(raw, actor, host, hangout, bounds) {
+  const h = find(raw, "public.hangouts", (r) => r.id === hangout),
+    campus = h.university_id;
+  check(h.host_id === host && h.status === "published");
+  check(
+    h.visibility === "campus" && h.location_precision === "approximate_area",
+  );
+  // Open joining and future time establish this fixture; source27 does not
+  // add either as an authorization predicate for can_read_hangout(false).
+  check(
+    h.joining_state === "open" &&
+      preciseTime(h.starts_at) > bounds.high &&
+      preciseTime(h.starts_at) <= bounds.high + 366n * 86_400_000_000n,
+  );
+  preciseTime(h.created_at);
+  preciseTime(h.updated_at);
+  check(
+    h.ends_at === null || preciseTime(h.ends_at) > preciseTime(h.starts_at),
+  );
+  const joined = find(
+    raw,
+    "public.hangout_participants",
+    (r) => r.hangout_id === hangout && r.account_id === host,
+  );
+  check(
+    joined.state === "joined" &&
+      joined.left_at === null &&
+      joined.removed_at === null,
+  );
+  preciseTime(joined.joined_at);
+  preciseTime(joined.updated_at);
+  currentReadinessSubject(raw, actor, campus);
+  currentReadinessSubject(raw, host, campus);
+  equal(
+    raw["private.pilot_availability"].map((r) => [r.singleton, r.enabled]),
+    [[true, true]],
+  );
+  equal(
+    raw["private.pilot_capabilities"].map((r) => r.key).sort(),
+    CAPABILITIES.slice().sort(),
+  );
+  check(
+    find(raw, "private.pilot_capabilities", (r) => r.key === "hangouts")
+      .enabled,
+  );
+  for (const gate of [
+    "private.hangout_feature_gate",
+    "private.safety_feature_gate",
+  ])
+    equal(raw[gate], [{ singleton: true, enabled: true }]);
+  check(!raw["private.hangout_disables"].some((r) => r.hangout_id === hangout));
+  check(
+    !raw["private.people_blocks"].some(
+      (r) =>
+        (r.blocker_id === actor && r.blocked_id === host) ||
+        (r.blocker_id === host && r.blocked_id === actor),
+    ),
+  );
+  currentReadinessNoSeven(raw, actor, host, hangout);
+  return campus;
+}
+function currentReadinessFixture(
+  beforeHandle,
+  readyHandle,
+  bounds,
+  sourceHandle,
+) {
+  own(sources, sourceHandle);
+  const before = own(snapshots, beforeHandle),
+    ready = own(snapshots, readyHandle),
+    actor = SQL_IDS.reporter,
+    host = SQL_IDS.target,
+    hangout = SQL_IDS.hangout;
+  check(
+    bounds && typeof bounds.low === "bigint" && typeof bounds.high === "bigint",
+  );
+  const original = find(before, "public.hangouts", (r) => r.id === hangout);
+  check(original.host_id === host && original.status === "published");
+  currentReadinessNoSeven(before, actor, host, hangout);
+  for (const id of [actor, host]) {
+    find(before, "public.accounts", (r) => r.id === id);
+    find(before, "auth.users", (r) => r.id === id);
+    find(before, "public.university_memberships", (r) => r.user_id === id);
+    const profile = find(before, "public.profiles", (r) => r.user_id === id);
+    check(profile.is_complete === false && profile.primary_photo_path === null);
+    check(
+      !before["private.pilot_account_admission"].some(
+        (r) => r.account_id === id,
+      ),
+    );
+  }
+  equal(
+    before["private.pilot_availability"].map((r) => r.enabled),
+    [false],
+  );
+  check(
+    before["private.pilot_capabilities"].length === CAPABILITIES.length &&
+      before["private.pilot_capabilities"].every((r) => !r.enabled),
+  );
+  equal(before["private.hangout_feature_gate"], [
+    { singleton: true, enabled: false },
+  ]);
+  equal(before["private.safety_feature_gate"], [
+    { singleton: true, enabled: true },
+  ]);
+  const used = new Set();
+  const photos = [actor, host].map((id) => {
+    const path = `${id}/primary.png`;
+    const observed = find(
+      ready,
+      "storage.objects",
+      (r) => r.bucket_id === "profile-photos" && r.name === path,
+    );
+    return syntheticStorageRow(
+      before,
+      { ...ready, "storage.objects": [...before["storage.objects"], observed] },
+      id,
+      path,
+      bounds,
+      sourceHandle,
+      used,
+    );
+  });
+  const admissions = [actor, host].map((id) => {
+    check(
+      !before["private.pilot_account_admission"].some(
+        (r) => r.account_id === id,
+      ),
+    );
+    const observed = find(
+      ready,
+      "private.pilot_account_admission",
+      (r) => r.account_id === id,
+    );
+    return {
+      account_id: id,
+      state: "active",
+      revision: 1,
+      created_at: bindTime("clock_timestamp", observed.created_at, bounds),
+      updated_at: bindTime("clock_timestamp", observed.updated_at, bounds),
+    };
+  });
+  const availability = find(
+    ready,
+    "private.pilot_availability",
+    (r) => r.singleton,
+  );
+  const purpose = find(
+    ready,
+    "private.pilot_capabilities",
+    (r) => r.key === "hangouts",
+  );
+  const expected = derive(before, {
+    "public.profiles": before["public.profiles"].map((r) =>
+      [actor, host].includes(r.user_id)
+        ? {
+            ...r,
+            real_name: "Current safety fixture",
+            graduation_year: 2028,
+            major: "Mathematics",
+            bio: "Local safety fixture",
+            primary_photo_path: `${r.user_id}/primary.png`,
+            is_complete: true,
+            revision: r.revision + 1,
+          }
+        : clone(r),
+    ),
+    "storage.objects": insertion(before, "storage.objects", photos),
+    "private.pilot_account_admission": insertion(
+      before,
+      "private.pilot_account_admission",
+      admissions,
+    ),
+    "private.pilot_availability": [
+      {
+        ...before["private.pilot_availability"][0],
+        enabled: true,
+        revision: before["private.pilot_availability"][0].revision + 1,
+        updated_at: bindTime(
+          "clock_timestamp",
+          availability.updated_at,
+          bounds,
+        ),
+      },
+    ],
+    "private.pilot_capabilities": before["private.pilot_capabilities"].map(
+      (r) =>
+        r.key === "hangouts"
+          ? {
+              ...r,
+              enabled: true,
+              revision: r.revision + 1,
+              updated_at: bindTime(
+                "clock_timestamp",
+                purpose.updated_at,
+                bounds,
+              ),
+            }
+          : clone(r),
+    ),
+    "private.hangout_feature_gate": [{ singleton: true, enabled: true }],
+  });
+  equal(
+    unorderedRows(ready["storage.objects"]),
+    unorderedRows(expected["storage.objects"]),
+  );
+  for (const table of TABLES)
+    equal(unorderedRows(ready[table]), unorderedRows(expected[table]));
+  const campus = currentReadinessSource(ready, actor, host, hangout, bounds);
+  return opaque(
+    currentReadinessFrames,
+    freeze({
+      beforeHandle,
+      readyHandle,
+      actor,
+      host,
+      hangout,
+      campus,
+      sourceHandle,
+    }),
+  );
+}
 export const modelCheckpoint = freeze({
   family: "core-setup-reads-transitions-first12-sanctions-enforcement",
   modelHash: hash(
@@ -1712,6 +2069,23 @@ export const modelCheckpoint = freeze({
   plannedRaces: RACES.length,
   laterOperationsAvailable: false,
   readinessAvailable: false,
+  currentReadinessFixtureAvailable: true,
+  currentReadinessModelHash: hash(
+    [
+      currentReadinessNoSeven,
+      currentReadinessSubject,
+      currentReadinessSource,
+      currentReadinessFixture,
+    ]
+      .map((fn) => fn.toString())
+      .join("\n"),
+  ),
+  currentReadinessDescriptionHash: hash(
+    JSON.stringify(CURRENT_READINESS_DESCRIPTION),
+  ),
+  currentReadinessPrivateInterfaceHash: hash(
+    "private:currentReadinessFixture(fixedExistingEarlySourceBefore,observedReady,boundedWindow,exactSourceOnlyHandle)->opaqueValidatedActorImmutableHostFrame;full54;noReportOrTransport",
+  ),
   retainedTeardownAvailable: false,
   runtimeCredit: 0,
   providerCredit: 0,
@@ -5368,6 +5742,7 @@ function memoryExamples(bytes) {
   groups += transitionMemoryExamples(source, bounds, time, later, reports);
   groups += sanctionMemoryExamples(source, bounds, time, later, reports);
   groups += preSanctionMemoryExamples(source, bounds, time, later, baseline);
+  groups += currentReadinessMemoryExamples(source, bounds, time, later);
   return freeze({
     available: true,
     classification: "memory-only",
@@ -9157,5 +9532,344 @@ function finalCompositionMemoryExamples(
     equal(describeModelPlan(httpTransitionPlans[FINAL_SUFFIX_ID]).steps, ids);
     equal(describeModelPlan({}), { available: false, reason: "unavailable" });
   });
+  return groups;
+}
+
+// An independently manufactured source frame. These checks exercise the
+// private setup seam only; no SQL, Storage provider, JWT or public call runs.
+function currentReadinessMemoryExamples(source, bounds, time, later) {
+  let groups = 0;
+  const tested = (fn) => {
+    fn();
+    groups++;
+  };
+  const rejected = (fn) => {
+    let failed = false;
+    try {
+      fn();
+    } catch {
+      failed = true;
+    }
+    check(failed);
+    groups++;
+  };
+  const actor = SQL_IDS.reporter,
+    host = SQL_IDS.target,
+    hangout = SQL_IDS.hangout,
+    campus = "00000000-0000-4000-8000-000000000001";
+  const before = Object.fromEntries(TABLES.map((table) => [table, []]));
+  before["public.universities"] = [
+    {
+      id: campus,
+      slug: "unc-chapel-hill",
+      name: "UNC Chapel Hill",
+      active: true,
+      allowed_email_domains: ["unc.edu"],
+      created_at: time,
+    },
+  ];
+  before["private.pilot_availability"] = [
+    {
+      singleton: true,
+      enabled: false,
+      revision: 1,
+      created_at: time,
+      updated_at: time,
+    },
+  ];
+  before["private.pilot_capabilities"] = CAPABILITIES.map((key) => ({
+    key,
+    enabled: false,
+    revision: 1,
+    created_at: time,
+    updated_at: time,
+  }));
+  for (const table of TABLES.filter((name) => name.endsWith("feature_gate")))
+    before[table] = [
+      table === "private.large_hangout_feature_gate"
+        ? { singleton: true, enabled: false, ranking_epoch: 0 }
+        : { singleton: true, enabled: table === "private.safety_feature_gate" },
+    ];
+  for (const [id, label] of [
+    [actor, "actor"],
+    [host, "host"],
+  ]) {
+    const email = `${label}@unc.edu`;
+    before["auth.users"].push({
+      id,
+      email,
+      email_confirmed_at: time,
+      deleted_at: null,
+      raw_user_meta_data: {},
+      raw_app_meta_data: {},
+    });
+    before["public.accounts"].push({ id, status: "active", created_at: time });
+    before["public.university_memberships"].push({
+      user_id: id,
+      university_id: campus,
+      verified_at: time,
+      verification_email: email,
+      created_at: time,
+    });
+    before["public.profiles"].push(blankProfile(id, time));
+  }
+  before["public.hangouts"] = [
+    {
+      id: hangout,
+      university_id: campus,
+      host_id: host,
+      title: "Current safety fixture",
+      description: null,
+      starts_at: "2026-09-29T13:00:00.123456Z",
+      ends_at: null,
+      status: "published",
+      joining_state: "open",
+      visibility: "campus",
+      public_place: "Approximate place",
+      public_latitude: 35,
+      public_longitude: -79,
+      campus_zone: null,
+      location_precision: "approximate_area",
+      revision: 1,
+      created_at: time,
+      updated_at: time,
+    },
+  ];
+  before["public.hangout_participants"] = [
+    {
+      hangout_id: hangout,
+      account_id: host,
+      state: "joined",
+      joined_at: time,
+      left_at: null,
+      removed_at: null,
+      updated_at: time,
+    },
+  ];
+  const ready = clone(before);
+  ready["private.pilot_availability"][0] = {
+    ...ready["private.pilot_availability"][0],
+    enabled: true,
+    revision: 2,
+    updated_at: later,
+  };
+  const purpose = ready["private.pilot_capabilities"].find(
+    (r) => r.key === "hangouts",
+  );
+  Object.assign(purpose, { enabled: true, revision: 2, updated_at: later });
+  ready["private.hangout_feature_gate"][0].enabled = true;
+  for (const [index, id] of [actor, host].entries()) {
+    const path = `${id}/primary.png`;
+    Object.assign(
+      ready["public.profiles"].find((r) => r.user_id === id),
+      {
+        real_name: "Current safety fixture",
+        graduation_year: 2028,
+        major: "Mathematics",
+        bio: "Local safety fixture",
+        primary_photo_path: path,
+        is_complete: true,
+        revision: 1,
+      },
+    );
+    ready["storage.objects"].push({
+      id: `6b000000-0000-4000-8000-00000000000${index + 1}`,
+      bucket_id: "profile-photos",
+      name: path,
+      owner: null,
+      created_at: time,
+      updated_at: time,
+      last_accessed_at: time,
+      metadata: null,
+      path_tokens: path.split("/"),
+      version: null,
+      owner_id: id,
+      user_metadata: null,
+      archived_at: null,
+      is_delete_marker: false,
+      is_versioned: false,
+    });
+    ready["private.pilot_account_admission"].push({
+      account_id: id,
+      state: "active",
+      revision: 1,
+      created_at: later,
+      updated_at: later,
+    });
+  }
+  const verify = (b = before, a = ready) =>
+    currentReadinessFixture(snapshot(b), snapshot(a), bounds, source);
+  tested(() => {
+    const frame = verify();
+    check(currentReadinessFrames.has(frame));
+    equal(Object.keys(frame), []);
+    equal(own(currentReadinessFrames, frame).campus, campus);
+    check(modelCheckpoint.currentReadinessFixtureAvailable);
+    check(
+      !modelCheckpoint.readinessAvailable &&
+        !modelCheckpoint.laterOperationsAvailable,
+    );
+  });
+  const afterLosses = [
+    (a) =>
+      (a["public.accounts"].find((r) => r.id === actor).status = "suspended"),
+    (a) => (a["public.universities"][0].active = false),
+    (a) =>
+      (a["auth.users"].find((r) => r.id === host).email_confirmed_at = null),
+    (a) =>
+      (a["auth.users"].find((r) => r.id === host).email_confirmed_at =
+        "invalid-time"),
+    (a) =>
+      (a["auth.users"].find((r) => r.id === host).email = "host@other.edu"),
+    (a) =>
+      (a["public.university_memberships"].find(
+        (r) => r.user_id === actor,
+      ).verification_email = "wrong@unc.edu"),
+    (a) =>
+      (a["public.university_memberships"].find(
+        (r) => r.user_id === host,
+      ).university_id = "10000000-0000-4000-8000-000000000001"),
+    (a) =>
+      (a["private.pilot_account_admission"].find(
+        (r) => r.account_id === host,
+      ).state = "revoked"),
+    (a) =>
+      (a["public.profiles"].find((r) => r.user_id === actor).is_complete =
+        false),
+    (a) =>
+      (a["public.profiles"].find((r) => r.user_id === host).primary_photo_path =
+        null),
+    (a) =>
+      (a["storage.objects"].find((r) => r.owner_id === actor).owner_id = host),
+    (a) =>
+      (a["storage.objects"].find((r) => r.owner_id === host).bucket_id =
+        "other"),
+    (a) => (a["private.pilot_availability"][0].enabled = false),
+    (a) =>
+      (a["private.pilot_capabilities"].find(
+        (r) => r.key === "hangouts",
+      ).enabled = false),
+    (a) => (a["private.hangout_feature_gate"][0].enabled = false),
+    (a) => (a["private.safety_feature_gate"][0].enabled = false),
+    (a) => (a["public.hangouts"][0].status = "cancelled"),
+    (a) => (a["public.hangouts"][0].visibility = "invite_only"),
+    (a) => (a["public.hangouts"][0].location_precision = "exact"),
+    (a) =>
+      (a["public.hangouts"][0].university_id =
+        "10000000-0000-4000-8000-000000000001"),
+    (a) => (a["public.hangouts"][0].university_id = "invalid-campus"),
+    (a) => (a["public.hangouts"][0].host_id = actor),
+    (a) => (a["public.hangout_participants"][0].state = "left"),
+    (a) =>
+      a["private.hangout_disables"].push({
+        ...Object.fromEntries(
+          SCHEMA["private.hangout_disables"].map((k) => [k, null]),
+        ),
+        hangout_id: hangout,
+      }),
+    (a) =>
+      a["private.people_blocks"].push({ blocker_id: host, blocked_id: actor }),
+    (a) =>
+      a["private.people_blocks"].push({ blocker_id: actor, blocked_id: host }),
+    (a) => (a["public.hangouts"][0].joining_state = "closed"),
+    (a) => (a["public.hangouts"][0].starts_at = time),
+    (a) => (a["public.hangouts"][0].starts_at = "2028-09-29T13:00:00.123456Z"),
+    (a) => (a["storage.objects"][0].id = "bad"),
+    (a) =>
+      (a["private.pilot_account_admission"][0].created_at =
+        "1900-01-01T00:00:00Z"),
+    (a) => (a["public.profiles"][0].favorite_music = "unrelated"),
+    (a) =>
+      a["private.moderation_audit"].push(
+        Object.fromEntries(
+          SCHEMA["private.moderation_audit"].map((k) => [k, null]),
+        ),
+      ),
+  ];
+  for (const change of afterLosses) {
+    const bad = clone(ready);
+    change(bad);
+    rejected(() => verify(before, bad));
+  }
+  // Independent source checks distinguish a failed guard/setup from the
+  // separate full54 changed-row assertion above.
+  for (const change of afterLosses.slice(0, 28)) {
+    const bad = clone(ready);
+    change(bad);
+    rejected(() => currentReadinessSource(bad, actor, host, hangout, bounds));
+  }
+  const sourceLosses = [
+    (a) =>
+      a["private.friendships"].push({
+        low_id: actor < host ? actor : host,
+        high_id: actor < host ? host : actor,
+        requester_id: actor,
+        campus_id: campus,
+        generation_id: "6c000000-0000-4000-8000-000000000001",
+        state: "active",
+      }),
+    (a) =>
+      a["private.friendship_create_requests"].push({
+        actor_id: actor,
+        request_id: "6c000000-0000-4000-8000-000000000002",
+        target_id: host,
+        generation_id: "6c000000-0000-4000-8000-000000000003",
+      }),
+    (a) =>
+      a["private.dm_pairs"].push({
+        generation_id: "6c000000-0000-4000-8000-000000000004",
+        low_id: actor < host ? actor : host,
+        high_id: actor < host ? host : actor,
+        initiator_id: actor,
+        campus_id: campus,
+        state: "active",
+        created_at: time,
+        next_sequence: 1,
+      }),
+    (a) =>
+      a["public.hangout_participants"].push({
+        hangout_id: hangout,
+        account_id: actor,
+        state: "joined",
+        joined_at: time,
+        left_at: null,
+        removed_at: null,
+        updated_at: time,
+      }),
+    (a) =>
+      a["private.hangout_peer_provenance"].push({
+        hangout_id: hangout,
+        low_id: actor < host ? actor : host,
+        high_id: actor < host ? host : actor,
+      }),
+    (a) => {
+      const other = "6d000000-0000-4000-8000-000000000001";
+      for (const id of [actor, host])
+        a["public.hangout_participants"].push({
+          hangout_id: other,
+          account_id: id,
+          state: "left",
+          joined_at: time,
+          left_at: later,
+          removed_at: null,
+          updated_at: later,
+        });
+    },
+  ];
+  for (const change of sourceLosses) {
+    const bad = clone(ready);
+    change(bad);
+    rejected(() => verify(before, bad));
+    rejected(() => currentReadinessNoSeven(bad, actor, host, hangout));
+  }
+  rejected(() =>
+    verify(before, {
+      ...ready,
+      "storage.objects": ready["storage.objects"].slice(1),
+    }),
+  );
+  rejected(() =>
+    currentReadinessFixture(snapshot(before), snapshot(ready), bounds, {}),
+  );
   return groups;
 }
