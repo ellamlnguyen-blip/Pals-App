@@ -60,3 +60,8 @@ Proposed same-two-file restoration correction requires source-fixed safety=true 
 Reviewer `review_moderation_transitions_1a2b_full` inspected exact148601 against10504b. Finding at helper851/1607–1620 and new baseline4055–4056 corresponds to original concurrency112/117. Required bounded correction preserves the reviewed setup writer and supplies source-state preconditions before the new race sequences. Frozen source/provider/read/core hashes, exact26/12/9 plan mappings, independently derived changes/results, opaque interfaces, early ordinary privacy, refusal and missing-family exclusions otherwise pass FULL review. No imports/evaluation/tests/network/target/mutations or acceptance/publication claim for148601.
 
 This six-document correction proposal contains no executable/source/config/schema changes. Canonical contract publication and fresh latest-main/local148601 reconciliation remain required before the new author. All later gates and parents remain incomplete. Standard speed remains app controlled/unverified.
+
+## Independent restoration correction contract review
+
+Independent FULL six-document correction-contract review is CLEAR/no actionable findings at `ae62ceab159e340ced3736b8278d133acab1dcc6` against canonicalmain89dc6dc. Contract SHA256 `6516dee8c5d536f5d94fca436a2dcb625061f43c81ae31094dcf0d620c8cb6f6`. Reviewer confirmed the original safety-enabled setup, bounded gate-race precondition, unchanged reviewed setup writer/full54/prior187/nine exports/privacy/refusals and truthful unaccepted148601 evidence. Read-only inspection; author evidence inspected, not rerun. Canonical contract publication and fresh dependency reconciliation still precede a FRESH correction author. No executable acceptance, target contact or parent completion.
+
