@@ -1,5 +1,9 @@
 # Backlog
 
+## 2026-09-29 — B3c moderation extraction split proposed
+
+Fresh static moderation author stopped before edits at exacta370 after verifying four source hashes and mapping41 retained lexical HTTPassert-call sites/15literal races (not runtime coverage). Parent independent54 model+transport/privacy/setup obligations require three bounded author/review stages: helperfoundation, HTTP extraction, concurrency/finalmapping, two new files each/six total with two added handoffs. Acceptance/cases/exclusions remain intact. Independent FULL source/scope review clearsdc3bd324; companion contracts/amendment require canonical publication/exactdependencies before fresh authors; no partialcode accepted. Genericwire author remains staticactive; legacycompathelpercontractdeadf68 reviewed/published on exactverifiedmain1fd2858, author gated on fresh exact dependency reconciliation. Main26/allsource27fixturesunexecuted/no targetcontact/runtime release/parentcompletion. See `tasks/active/TASK-021A1b3c-moderation-fixtures-foundation.md`.
+
 ## 2026-09-29 — B3c historical helper compatibility proposed
 
 Identity/legacy correction receipt7b0a4f4 independently reviewed and published on exact remote-verified canonical main47ec368f8464bc3c663c18149b81504f172e5cc5, code remains26. Final next-fixture dependencya370c7119369cc9fac15fb866af2bdd32300db3a independently clears exact bytes/interfaces and latest five-document merge. Fresh static generic failure-wire author and four-new-file moderation author dispatched in separate task branches froma370; no implementation checkpoint accepted yet. Existing runner/refusals/budgets remain unchanged.
