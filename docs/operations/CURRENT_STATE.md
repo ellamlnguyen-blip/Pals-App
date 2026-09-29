@@ -1,5 +1,9 @@
 # Current State
 
+## 2026-09-29 — UNC pilot priority
+
+TASK-025 is the active release path for a small UNC staging pilot. The local MVP building blocks for verified access, privacy/RLS, Hangout creation/joining, chat, blocking/reporting, and audited moderation are already on `main`. A secret-free `/api/health` probe and focused release runbook are published in `docs/operations/UNC_PILOT_CRITICAL_PATH.md`. Exhaustive TASK-021 static modeling is paused unless a concrete staging check requires it; TASK-024 brand correction is deferred until the pilot is usable. Hosted HTTPS deployment, exact Supabase callback/site configuration, custom SMTP, named moderator coverage, and approved pilot supply remain open blockers. No hosted gates were enabled and no student invitation was sent.
+
 ## B3c c1 milestone and c2a exact prerequisite review receipt — 2026-09-29
 
 Independent FULL read-only review of frozen eight-doc amendment `fd784f74490e93c9f888b20db0384693bdca67c5` against remote-verified main `1933489780f11b3cb7c75033b44fecb716138b97`: CLEAR/no findings. Reviewer matched exact clean reviewed/task-pushed c1 `855a4c4e6df24809739e229a143e738243c0b502`, helper/MODELS/stdout, private/source pins and inert1180=1161+19; c1 remains metadata-only with `racesAvailable=false`. c2a terminal, c2b bridge, c3 joined mapping and all parent/actual gates remain pending. Reviewed c1 milestone/exact c2a prerequisite accepted for coordinator task publication/doc-only canonical integration, pending exact remote verification at this receipt. Fresh latest-main/exact855a4c4 reconciliation before NEW c2a author; no runtime/contact/test/import.

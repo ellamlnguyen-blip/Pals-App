@@ -17,6 +17,8 @@ Added `docs/operations/UNC_PILOT_CRITICAL_PATH.md` and the bounded task contract
 - Prettier check passed for all changed files.
 - `git diff --check` passed.
 
+The production build enumerated `/api/health` as a dynamic route. A live curl probe was attempted with intentionally placeholder provider credentials and was correctly rejected by the existing hosted-environment credential validation; no real credential was created or stored.
+
 ## Remaining blockers
 
 The hosted pilot still needs an HTTPS frontend deployment, exact Supabase staging site/callback configuration and reviewed migration verification, custom SMTP with a controlled UNC mailbox, named moderator coverage/retention handling, and approved pilot participants/genuine Hangouts. No hosted gates were enabled and no students were invited by this task.
@@ -24,3 +26,8 @@ The hosted pilot still needs an HTTPS frontend deployment, exact Supabase stagin
 ## Scope safety
 
 No database migration, RLS policy, server action, API payload, authorization rule, or hosted setting was changed. The health route is additive and does not weaken any existing access control.
+
+## Remote receipts
+
+- Task branch: `agent/TASK-025-unc-pilot-critical-path` at `ed9e82d7488aaed87c66acfa44f394f57fc7f84f`.
+- Integrated `main`: `ed9e82d7488aaed87c66acfa44f394f57fc7f84f`.
