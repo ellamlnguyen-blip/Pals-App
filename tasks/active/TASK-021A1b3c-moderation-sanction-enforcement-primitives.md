@@ -1,5 +1,11 @@
 # Moderation sanctions and retained enforcement primitives — static1a2c1
 
+## Current-source restricted own-status reconciliation — 2026-09-29
+
+The explicit documentary amendment in `agents/handoffs/TASK-021A1b3c-RESTRICTED-STATUS-RECONCILIATION.md` governs retention statements in this contract. Accepted ADR-0027 and completed B1 retain caller-neutral `get_access_state()` = `restricted` but deny restricted raw owner/reference rows. Keep allocated `MODHTTP.account-enforcement.own-status`; its source-derived current authenticated REST body expectation is `[]`, a separately qualified current-source supplemental, not the frozen historical `[{status:"suspended"}]` assertion at original line219. No policy/migration/source/hash change or observed HTTP proof is supplied.
+
+Exact classification: 39 allocated MODHTTP labels = 38 historical retained labels + one current-source supplemental own-status label; the original extraction scope contains 41 lexical static assert-call sites, of which 40 remain literal-original retained assertions and line219 is recorded historical/unretained/unexecuted with zero original retained-pass credit. Add one current-source supplemental assertion; separately named HTTP200 success hardening is additional and is not inherited41 or expanded runtime assertion/coverage credit. All other original assertions, exclusions, full54 requirements, immutable label IDs/source hashes and parent gates stay unchanged. This exception supersedes any generic every-original/exact-original retention wording for line219 only. Fresh review/canonical publication, then fresh latest-main/exact6a55 reconciliation precede a NEW1a2c1 author; do not extend the stopped author.
+
 Read AGENTS.md, this task, the published moderation-model-sanctions/transitions/operations/fixed-models/foundation/portions/current-source contracts, FIXTURE-MATRIX M/L6, relevant DATA_MODEL/AUTHORIZATION/SECURITY_AND_SAFETY, Accepted ADR-0026/0027 and exact dependency handoffs. Original1a2c acceptance remains authoritative across1a2c1+1a2c2; splitting changes sequencing only. GPT-6 Sol medium; Standard app controlled/unverified. Contract review/canonical publication and fresh FULL latest-main/exact dependency reconciliation precede a FRESH author. Do not extend stopped combined1a2c author.
 
 ## Ownership, dependencies and restrictions
