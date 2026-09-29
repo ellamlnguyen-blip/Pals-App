@@ -2674,6 +2674,31 @@ function sanctionContext(op) {
       equal(prior.report_id, c.report);
       equal(prior.result_state, "closed");
       equal(prior.result_revision, fixed[1] + 1);
+      if (op.id === "sanction.changed-retry") {
+        // This label retries the original Local decision, never a saved Changed.
+        const originalFingerprint =
+          "account:" +
+          createHash("md5")
+            .update(
+              `[${[c.report, 2, "suspend", "Local decision"].map((v) => JSON.stringify(v)).join(", ")}]`,
+            )
+            .digest("hex");
+        equal(prior.fingerprint, originalFingerprint);
+        const saved = find(
+          own(snapshots, op.beforeHandle),
+          "private.account_sanctions",
+          (r) =>
+            r.operator_id === c.actor &&
+            r.request_id === input.p_request_id &&
+            r.report_id === c.report,
+        );
+        equal(saved.subject_type, "user");
+        equal(saved.subject_id, c.target);
+        equal(saved.action, "suspend");
+        equal(saved.reason, "Local decision");
+        equal(saved.previous_status, "active");
+        equal(saved.new_status, "suspended");
+      }
     }
   } else if (op.id === "MODHTTP.account-enforcement.report") {
     keys(input, ["p_request_id", "p_target_mode", "p_target_id", "p_category"]);
@@ -2700,7 +2725,9 @@ function sanctionContext(op) {
   };
 }
 function sanctionDecision(op, before, c) {
-  if (op.id === "sanction.admin-downgrade-retry")
+  if (
+    ["sanction.moderator-ban", "sanction.admin-downgrade-retry"].includes(op.id)
+  )
     equal(
       find(before, "public.platform_roles", (r) => r.user_id === c.actor).role,
       "moderator",
@@ -3055,8 +3082,28 @@ function verifySanctionOperation(op, afterHandle, actualResult) {
       projection,
     );
   }
-  const d = sanctionDecision(op, before, c),
-    projection = sanctionHttpResult(op, actualResult, d.result);
+  const d = sanctionDecision(op, before, c);
+  if (
+    [
+      "sanction.nonoperator",
+      "sanction.moderator-ban",
+      "sanction.changed-retry",
+      "sanction.admin-downgrade-retry",
+    ].includes(op.id)
+  ) {
+    const denied = { code: "42501", message: "Moderation unavailable" };
+    equal(d.result, denied);
+    equal(d.changed, {});
+    const projection = sanctionHttpResult(op, actualResult, denied);
+    return assertExact(
+      op.beforeHandle,
+      afterHandle,
+      {},
+      projection,
+      projection,
+    );
+  }
+  const projection = sanctionHttpResult(op, actualResult, d.result);
   return assertExact(
     op.beforeHandle,
     afterHandle,
@@ -5963,6 +6010,111 @@ function sanctionMemoryExamples(source, bounds, time, later, sqlReports) {
     tested(() => verify(id, baseline, manufacture(id, baseline)));
   for (const id of ["sanction.normalized-retry", "sanction.changed-retry"])
     tested(() => verify(id, suspended.after, manufacture(id, suspended.after)));
+  // A lawful source-shaped admin ban must not inherit the moderator denial.
+  const adminBefore = clone(baseline);
+  adminBefore["public.platform_roles"].find(
+    (r) => r.user_id === setup.actor,
+  ).role = "admin";
+  const adminBan = clone(suspended);
+  adminBan.after["public.platform_roles"] = clone(
+    adminBefore["public.platform_roles"],
+  );
+  adminBan.after["public.accounts"].find((r) => r.id === setup.target).status =
+    "banned";
+  adminBan.after["private.moderation_cases"][0].note = "Local decision";
+  for (const table of [
+    "private.account_sanctions",
+    "private.moderation_audit",
+  ]) {
+    adminBan.after[table][0].action = "ban";
+    const statusField =
+      table === "private.account_sanctions"
+        ? "new_status"
+        : "new_account_status";
+    adminBan.after[table][0][statusField] = "banned";
+  }
+  adminBan.after["private.moderation_requests"][0].fingerprint =
+    "account:" +
+    createHash("md5")
+      .update(
+        `[${[setup.report, 2, "ban", "Local decision"].map((v) => JSON.stringify(v)).join(", ")}]`,
+      )
+      .digest("hex");
+  adminBan.result.body[0].account_status = "banned";
+  rejected(() => verify("sanction.moderator-ban", adminBefore, adminBan));
+  rejected(() =>
+    verify("sanction.moderator-ban", adminBefore, {
+      after: adminBefore,
+      result: denied,
+    }),
+  );
+  // Saved Changed is a different lawful identity; the original denial refuses it.
+  const changedSaved = clone(suspended.after);
+  changedSaved["private.moderation_cases"][0].note = "Changed";
+  changedSaved["private.account_sanctions"][0].reason = "Changed";
+  changedSaved["private.moderation_audit"][0].reason = "Changed";
+  changedSaved["private.moderation_requests"][0].fingerprint =
+    "account:" +
+    createHash("md5")
+      .update(
+        `[${[setup.report, 2, "suspend", "Changed"].map((v) => JSON.stringify(v)).join(", ")}]`,
+      )
+      .digest("hex");
+  rejected(() =>
+    verify("sanction.changed-retry", changedSaved, {
+      after: changedSaved,
+      result: suspended.result,
+    }),
+  );
+  rejected(() =>
+    verify("sanction.changed-retry", changedSaved, {
+      after: changedSaved,
+      result: denied,
+    }),
+  );
+  for (const [table, field, value] of [
+    ["private.moderation_requests", "request_id", bindings.ban],
+    ["private.moderation_requests", "fingerprint", "account:forged"],
+    ["private.moderation_requests", "report_id", setup.selfFiledReport],
+    ["private.account_sanctions", "request_id", bindings.ban],
+    ["private.account_sanctions", "operator_id", setup.second],
+    ["private.account_sanctions", "report_id", setup.selfFiledReport],
+    ["private.account_sanctions", "subject_type", "hangout"],
+    ["private.account_sanctions", "subject_id", setup.reporter],
+    ["private.account_sanctions", "action", "ban"],
+    ["private.account_sanctions", "reason", "Changed"],
+    ["private.account_sanctions", "previous_status", "suspended"],
+    ["private.account_sanctions", "new_status", "banned"],
+  ]) {
+    const bad = clone(suspended.after);
+    bad[table][0][field] = value;
+    rejected(() =>
+      verify("sanction.changed-retry", bad, { after: bad, result: denied }),
+    );
+  }
+  for (const id of [
+    "sanction.nonoperator",
+    "sanction.moderator-ban",
+    "sanction.changed-retry",
+  ]) {
+    const b = id === "sanction.changed-retry" ? suspended.after : baseline;
+    const extraWrite = clone(b);
+    extraWrite["private.people_feature_gate"][0].enabled = true;
+    rejected(() => verify(id, b, { after: extraWrite, result: denied }));
+    rejected(() => verify(id, b, { after: b, result: suspended.result }));
+    for (const result of [
+      { status: 200, body: denied.body },
+      {
+        status: 403,
+        body: { code: "P0001", message: "Moderation unavailable" },
+      },
+      { status: 401, body: { code: "42501", message: "other" } },
+    ])
+      rejected(() => verify(id, b, { after: b, result }));
+    tested(() =>
+      verify(id, b, { after: b, result: { ...denied, status: 401 } }),
+    );
+  }
   rejected(() =>
     verify(
       "sanction.changed-retry",
@@ -6333,6 +6485,17 @@ function sanctionMemoryExamples(source, bounds, time, later, sqlReports) {
   const downgrade = history.at(-1);
   tested(() =>
     verify("sanction.admin-downgrade-retry", downgrade.before, downgrade.made),
+  );
+  const downgradeWrite = clone(downgrade.made);
+  downgradeWrite.after["private.people_feature_gate"][0].enabled = true;
+  rejected(() =>
+    verify("sanction.admin-downgrade-retry", downgrade.before, downgradeWrite),
+  );
+  tested(() =>
+    verify("sanction.admin-downgrade-retry", downgrade.before, {
+      after: downgrade.before,
+      result: { ...denied, status: 401 },
+    }),
   );
   rejected(() =>
     verify("sanction.admin-downgrade-retry", downgrade.before, {

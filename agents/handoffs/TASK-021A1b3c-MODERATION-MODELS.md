@@ -1,8 +1,20 @@
-# Moderation sanctions and retained enforcement primitives — c1
+# Moderation sanctions and retained enforcement primitives — corrected c1
 
 2026-09-29. **Authored static checkpoint; fresh independent FULL source/interface/privacy review and coordinator publication required. STOP after local freeze. All parents remain incomplete.** GPT-6 Sol medium; Standard speed app controlled/unverified.
 
-## Baseline and immutable history
+## Fixed-denial correction checkpoint
+
+Fresh bounded correction checkout `/private/tmp/pals-task021-sanction-denial-binding-correction`, branch `agent/TASK-021A1b3c-sanction-denial-binding-correction`, clean prepared HEAD `a938e8750e1774ba5620476665f671283b765d43`. Coordinator supplied remote-verified main `0d56d6fa2eaef7eaa3e44e4d0f0aeaebabb36cca` plus exact local **unaccepted/unpublished** c1 `69583c7dff47e5c223d53d1a61ebddefc9063b49`; fresh FULL contract/dependency reconciliation CLEAR preceded this NEW author. No remote contact or new remote claim. Correction contract SHA256 `0fdbdc5f054e84ec4b9e795f7bcd090f7d733d0de8ff2b3f1a9a7fa36bed3c7c`.
+
+The sole fresh FULL P2 is corrected inside the existing private c1 functions. `sanction.moderator-ban` now requires the original actor's before-role moderator. `sanction.changed-retry` independently derives the original `account:` MD5 fingerprint from source JSONB-array text `[report, 2, suspend, Local decision]`, binds the original closed/revision3 ledger and the unique matching operator/request/report sanction, then validates original user target, suspend action, normalized reason and active→suspended saved statuses. Current target status is not used as the saved receipt identity. No observed-after row is copied as an expected change.
+
+All four named original account-action denials independently require `{code:42501,message:Moderation unavailable}` and an empty changed-table set before literal401/403 result qualification; exact full54 comparison uses independently supplied `{}`. Success receipts, new writes and success replays cannot earn denial credit. Live gate/account/role/conflict/target-role and ban-role checks remain before replay decision; auxiliary authorized admin replay stays separate with zero original case/credit. Restricted sourceDenied body strength, safety guard, private REST operator, source clocks and prior semantics remain unchanged.
+
+Exactly four existing function declarations differ from69583: `sanctionContext`, `sanctionDecision`, `verifySanctionOperation`, `sanctionMemoryExamples`. Removing the two bounded new example blocks restores exact original c1 example source. Native and source-isolated owned-module VM pass **565 memory-only groups =529 preserved+36 focused corrections** with zero traps and zero narrow lint findings. New examples reject an admin before-role plus source-shaped successful ban under moderator-ban; a saved Changed identity plus matching successful replay under changed-retry; forged request/fingerprint/report/sanction bindings; success receipts, wrong status/code/message and unexplained full54 writes under original denials. Original baseline denials and both allowed401/403 statuses remain valid, including admin-downgrade zero-delta verification.
+
+Git preserves the [unaccepted original69583 handoff](https://github.com/ellamlnguyen-blip/Pals-App/blob/69583c7dff47e5c223d53d1a61ebddefc9063b49/agents/handoffs/TASK-021A1b3c-MODERATION-MODELS.md); that local historical link may not resolve remotely and receives no separate acceptance. Original helper69583 SHA256 `ee086ca6af6dc4a43cc49d323f692413287d6d44bccb53259156b0aaab38bdca`; original MODELS69583 `bc7678b4cde0773da200df80d0d7aac252c60d2c112c718a762e4e6fc01fbe0b`. Fresh independent FULL review of the complete corrected helper/source/interfaces, coordinator publication and exact corrected c2 dependency amendment/reconciliation remain required. Author STOP after clean local freeze; no self-approval, publication, acceptance, dispatch or runtime claim.
+
+## Original c1 baseline and immutable history
 
 Assigned checkout `/private/tmp/pals-task021-moderation-sanction-primitives-resumed`, branch `agent/TASK-021A1b3c-moderation-sanction-primitives-resumed`, clean prepared HEAD `9e2a987ddabc8d6aeafd64c244646046ae7efc7e`. Coordinator supplied remote-verified canonical main `8e4eedca0c651e1a238a5eba521cdbb8aaadfdad` plus exact independently FULL-reviewed/task-published corrected predecessor `6a55eb349ecfb9af29cd3b6607bb059b811b94f8`, with a fresh FULL dependency reconciliation CLEAR/no findings. Author verified local branch/HEAD/clean status and frozen bytes without remote contact. No new task/main remote claim is made here.
 
@@ -57,13 +69,13 @@ Missing whole39/current-safety/last-three-race/readiness/retained-teardown/trans
 
 ## Frozen hashes
 
-Helper SHA256 **`ee086ca6af6dc4a43cc49d323f692413287d6d44bccb53259156b0aaab38bdca`**.
+Helper SHA256 **`deca574f6b35d3edcbb9d2c506f625a08c9153329a801bd3943d35c66d52ac0f`**.
 
 | Digest                                      | SHA256                                                             |
 | ------------------------------------------- | ------------------------------------------------------------------ |
 | Literal54 schema                            | `e0a7cee77c4b9ef3424f8a92dfbf3886fb2fb93049f02cbb6ecc656b58b08410` |
 | Original HTTP/race/phase/setup manifest     | `2374639c4a77b0e692c13318c680c401a68408fad1b0383f4533c3a52541f2cd` |
-| Combined builder source including c1        | `9ac6d2a3116cce5d8280828d237676c72904223a9a27dd6336d1ce042906c2a0` |
+| Combined builder source including c1        | `d85f4f2f312f126903fef2ef980112755ee91f690aad58761059d82e52cbcb24` |
 | Original private core descriptor            | `bfbc37ce9a572ab713882878c33f1527244fe7647ee7fd7f6bfba74995e615b8` |
 | Read builders unchanged                     | `b65fab7812843e47d139ecf48a75aef0fb2895e51950e0d54586c8fce70e5031` |
 | Read plans unchanged                        | `8d179465e8f79b70bb429ab4fdac7665a21b574b8055248046fd40f2897d5136` |
@@ -71,7 +83,7 @@ Helper SHA256 **`ee086ca6af6dc4a43cc49d323f692413287d6d44bccb53259156b0aaab38bdc
 | Transition builders unchanged               | `d2f38d642b036d89be0bb83ff309f28cd3076d3ffe8d55ca41c3f534e807f08c` |
 | Transition/race/subsequence plans unchanged | `00f4d8feba618744e07b2f1556fec4df709c753fc13ddae47e238bf7da1daf42` |
 | Transition descriptor unchanged             | `f78387c08950d3573a327d096019eb5a5d13401c66964af5276930b27ae31217` |
-| Sanction/enforcement/focused builders       | `312271e0af2bbd5c0c273a415db24079ea2c4ef565c5e178cf594dcb4a6b5440` |
+| Sanction/enforcement/focused builders       | `f0b80b1dfef3d65ca99011f5726deb8b8df78ffd227fc5e715bc864fc07897c6` |
 | Finite c1 plan/component manifest           | `32341dd977c06c97ec25d5fe44842ea2a7426b79586f08b4256e16aee75fdd4a` |
 | Private c1 extension descriptor             | `c7628ffbeb8d3298d81d4b5aa2b4f9579f63530350d18b95ddfb15a199e697b2` |
 | Complete public descriptor                  | `ea40ae545d95539f277662bdf9591793a9a8240bace1d21d4c8c2363602b53ad` |
@@ -88,11 +100,13 @@ All five source/provider pins and assigned contract were locally recomputed. Pro
 
 ## Owned inert evidence
 
-**529 memory-only groups =355 preserved+174 new.** Native owned helper and source-isolated owned-module Node VM both pass with zero process/fetch/console/foreign-import traps. VM permits node:crypto/node:util only and uses its same-realm inert clone; native examples use structuredClone. AST preservation checks and exact twelve-export comparison pass. Cached Node24.18, Prettier3.9.8, ESLint9 and TypeScript parser only; no installation. Syntax, explicit formatting with `--ignore-path /dev/null`, narrow no-unused-vars/no-unreachable/no-undef lint and whitespace pass. These groups are structural owned memory examples, not original SQL/HTTP assertions, public permissions or observed races.
+**565 memory-only groups =355 preserved+174 original c1+36 correction groups.** Native owned helper and source-isolated owned-module Node VM both pass with zero process/fetch/console/foreign-import traps. VM permits node:crypto/node:util only and uses its same-realm inert clone; native examples use structuredClone. AST preservation checks and exact twelve-export comparison pass. Cached Node24.18, Prettier3.9.8, ESLint9 and TypeScript parser only; no installation. Syntax, explicit formatting with `--ignore-path /dev/null`, narrow no-unused-vars/no-unreachable/no-undef lint and whitespace pass. These groups are structural owned memory examples, not original SQL/HTTP assertions, public permissions or observed races.
 
 New positives/negatives cover every account/case/sanction/ledger/audit/result field, normalized versus changed reason retries, generated UUID/time bounds/newness/distinctness, separate legal clock strings, nonoperator/moderator/admin restrictions, all live losses before suspend and ban replays, original saved status despite current status change, missing saved sanction, stale/closed case, null membership campus, exact source membership insertion/upsert, gate writer safety preservation, false/missing safety rejection, source-precision restricted projections/denials, operator private-REST identity, unexpected private rows/columns/unrelated deltas, reopened link clearing with historical sanction/account retention, admin downgrade/single audit, fixed IDs/opaque handles and absent later-plan rejection.
 
-Temporary owned verifier `/private/tmp/pals-sanction-verify.mjs` and predecessor/example/author files remain outside final files; saved stdout `/private/tmp/pals-sanction-verify.stdout` contains successful native/isolated529 results, zero traps, exact exports, lint count and complete checkpoint hashes. Prior temporary verifiers were read/adapted only for allowed own AST/inert patterns. Node emits its ordinary experimental VM warning; no target VM/service was started. No original module/entrypoint or upstream SQL/provider code execution, subprocess lane, install/network/target API/DB/CLI/Pals binary/socket/process lookup/preflight/start/reset/service/container/provider/hosted/config/force/push/shared edit/dependent dispatch occurred.
+Temporary owned verifier `/private/tmp/pals-sanction-verify.mjs` and predecessor/example/author files remain outside final files; saved stdout `/private/tmp/pals-sanction-verify.stdout` contains historical successful native/isolated529 results, zero traps, exact exports, lint count and complete checkpoint hashes. Prior temporary verifiers were read/adapted only for allowed own AST/inert patterns. Node emits its ordinary experimental VM warning; no target VM/service was started. No original module/entrypoint or upstream SQL/provider code execution, subprocess lane, install/network/target API/DB/CLI/Pals binary/socket/process lookup/preflight/start/reset/service/container/provider/hosted/config/force/push/shared edit/dependent dispatch occurred.
+
+Correction verifier `/private/tmp/pals-sanction-correction-verify.mjs` and saved stdout `/private/tmp/pals-sanction-correction-verify.stdout` are new temporary owned files, never final repository files. Correction stdout SHA256 `adcd0b463ce50227ffd25fbe048e2d2b589374bac82ab770de587a35938bfa2c`; preserved original stdout SHA256 `bcad8fc29fe47fec37c58587808b512fba8d526e1a2fc706ee3a744bf8a726aa`. Cached checks repeat only authorized owned inert examples, AST preservation/import traps, syntax, explicit Prettier ignore-path `/dev/null`, narrow lint and whitespace. All unchanged source/schema/plan/private/public interface hashes above remain exact; only helper, combined builder and sanction builder hashes change. Immutable corrected commit and handoff hash supplied externally after freeze.
 
 ## Required stop and remaining gates
 
