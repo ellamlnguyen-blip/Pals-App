@@ -1509,6 +1509,8 @@ export function describeModelPlan(handle) {
 // only the opaque validated frame, never a public raw-row getter.
 const currentReadinessFrames = new WeakMap();
 const currentReportFrames = new WeakMap();
+const currentRaceFrames = new WeakMap();
+const currentCommittedReports = new WeakSet();
 const CURRENT_REPORT_PLANS = freeze({
   current_report_first: "52000000-0000-4000-8003-000000000005",
   detail_first: "52000000-0000-4000-8003-000000000006",
@@ -1887,15 +1889,19 @@ function currentReportOperationForPlan(
   bounds,
   receipt,
   requestId,
+  committedBeforeHandle,
 ) {
   const ready = own(currentReadinessFrames, readinessHandle),
-    before = own(snapshots, ready.readyHandle),
+    beforeHandle = committedBeforeHandle ?? ready.readyHandle,
+    before = own(snapshots, beforeHandle),
     after = own(snapshots, afterHandle);
   check(
     bounds && typeof bounds.low === "bigint" && typeof bounds.high === "bigint",
   );
   check(ready.actor === SQL_IDS.actor && ready.host === SQL_IDS.target);
   check(Object.values(CURRENT_REPORT_PLANS).includes(requestId));
+  if (committedBeforeHandle !== undefined)
+    check(requestId === CURRENT_REPORT_PLANS.detail_first);
   check(ready.hangout === SQL_IDS.hangout);
   own(sources, ready.sourceHandle);
   currentReadinessSource(
@@ -1976,17 +1982,12 @@ function currentReportOperationForPlan(
   };
   equal(requestRows[0], changed["private.safety_report_requests"].at(-1));
   const expectedReceipt = { receipt_id: reportId, submitted_at: submittedAt };
-  assertExact(
-    ready.readyHandle,
-    afterHandle,
-    changed,
-    receipt,
-    expectedReceipt,
-  );
+  assertExact(beforeHandle, afterHandle, changed, receipt, expectedReceipt);
   return opaque(
     currentReportFrames,
     freeze({
       readinessHandle,
+      beforeHandle,
       afterHandle,
       requestId,
       receipt: expectedReceipt,
@@ -2007,6 +2008,7 @@ function detailFirstCurrentReportOperation(
   afterHandle,
   bounds,
   receipt,
+  committedBeforeHandle,
 ) {
   return currentReportOperationForPlan(
     readinessHandle,
@@ -2014,9 +2016,11 @@ function detailFirstCurrentReportOperation(
     bounds,
     receipt,
     CURRENT_REPORT_PLANS.detail_first,
+    committedBeforeHandle,
   );
 }
 function currentReportRollback(reportHandle, rollbackHandle) {
+  check(!currentCommittedReports.has(reportHandle));
   const report = own(currentReportFrames, reportHandle),
     ready = own(currentReadinessFrames, report.readinessHandle),
     before = own(snapshots, ready.readyHandle),
@@ -2025,6 +2029,170 @@ function currentReportRollback(reportHandle, rollbackHandle) {
   for (const table of TABLES)
     equal(unorderedRows(rollback[table]), unorderedRows(before[table]));
   return opaque(results, freeze({ rolledBack: true, sourceOnly: true }));
+}
+const CURRENT_RACE_ORDERS = freeze([
+  {
+    id: "current_report_first",
+    sourceLine: 199,
+    leader: "submit_safety_report:request-0005",
+    leaderResult: "receipt_id,submitted_at",
+    waiter: "get_moderation_report:historical-hangout-report",
+    waiterResult: "one audited detail row",
+    committed: ["report-0005", "detail-read-1"],
+  },
+  {
+    id: "detail_first",
+    sourceLine: 200,
+    leader: "get_moderation_report:historical-hangout-report",
+    leaderResult: "one audited detail row",
+    waiter: "submit_safety_report:request-0006",
+    waiterResult: "receipt_id,submitted_at",
+    committed: ["detail-read-2", "report-0006"],
+  },
+]);
+const CURRENT_RACE_DESCRIPTION = freeze({
+  family: "current-hangout-report-static-orders",
+  orders: CURRENT_RACE_ORDERS,
+  fullTables: 54,
+  sourceOnly: true,
+  actualOrderCredit: 0,
+  actualPermissionCredit: 0,
+  blockFirstAvailable: false,
+});
+// A detail always reads the original historical Hangout report. The first
+// report is committed before detail 1; detail 2 commits before report 2.
+function currentRaceDetail(priorHandle, afterHandle, bounds, result, ordinal) {
+  check(ordinal === 1 || ordinal === 2);
+  const prior =
+    ordinal === 1
+      ? own(currentReportFrames, priorHandle)
+      : own(currentRaceFrames, priorHandle);
+  if (ordinal === 1)
+    check(prior.requestId === CURRENT_REPORT_PLANS.current_report_first);
+  else check(prior.phase === "detail-1");
+  const beforeHandle = prior.afterHandle,
+    before = own(snapshots, beforeHandle),
+    after = own(snapshots, afterHandle);
+  check(
+    bounds && typeof bounds.low === "bigint" && typeof bounds.high === "bigint",
+  );
+  check(readActor(before, SQL_IDS.actor, "authenticated", "read committed"));
+  check(reportAllowed(before, SQL_IDS.actor, SQL_IDS.hangoutReport));
+  const rows = detailRows(before, SQL_IDS.hangoutReport);
+  const changed = readAudit(
+    { beforeHandle, bounds },
+    after,
+    SQL_IDS.actor,
+    "detail_read",
+    rows,
+  );
+  assertExact(beforeHandle, afterHandle, changed, result, rows);
+  const priorTime =
+    ordinal === 1
+      ? preciseTime(prior.receipt.submitted_at)
+      : preciseTime(
+          find(
+            before,
+            "private.moderation_audit",
+            (r) => r.id === prior.auditId,
+          ).occurred_at,
+        );
+  const audit = changed["private.moderation_audit"].at(-1);
+  check(preciseTime(audit.occurred_at) >= priorTime);
+  if (ordinal === 1) currentCommittedReports.add(priorHandle);
+  return opaque(
+    currentRaceFrames,
+    freeze({
+      phase: ordinal === 1 ? "detail-1" : "detail-2",
+      readinessHandle: prior.readinessHandle,
+      afterHandle,
+      auditId: audit.id,
+      firstReportHandle: ordinal === 1 ? priorHandle : prior.firstReportHandle,
+    }),
+  );
+}
+function currentRaceReport2(detailHandle, afterHandle, bounds, receipt) {
+  const detail = own(currentRaceFrames, detailHandle);
+  check(detail.phase === "detail-2");
+  const first = own(currentReportFrames, detail.firstReportHandle);
+  check(first.requestId === CURRENT_REPORT_PLANS.current_report_first);
+  const report2 = detailFirstCurrentReportOperation(
+    detail.readinessHandle,
+    afterHandle,
+    bounds,
+    receipt,
+    detail.afterHandle,
+  );
+  check(
+    preciseTime(receipt.submitted_at) >=
+      preciseTime(
+        find(
+          own(snapshots, detail.afterHandle),
+          "private.moderation_audit",
+          (r) => r.id === detail.auditId,
+        ).occurred_at,
+      ),
+  );
+  const ready = own(currentReadinessFrames, detail.readinessHandle),
+    base = own(snapshots, ready.readyHandle),
+    final = own(snapshots, afterHandle);
+  check(
+    final["private.safety_reports"].length ===
+      base["private.safety_reports"].length + 2,
+  );
+  check(
+    final["private.safety_report_requests"].length ===
+      base["private.safety_report_requests"].length + 2,
+  );
+  check(
+    final["private.moderation_audit"].length ===
+      base["private.moderation_audit"].length + 2,
+  );
+  currentCommittedReports.add(report2);
+  return opaque(
+    currentRaceFrames,
+    freeze({
+      phase: "both-reports-committed",
+      readinessHandle: detail.readinessHandle,
+      firstReportHandle: detail.firstReportHandle,
+      secondReportHandle: report2,
+      afterHandle,
+    }),
+  );
+}
+function currentRaceOrdinaryShutdown(terminalHandle, afterHandle) {
+  const terminal = own(currentRaceFrames, terminalHandle);
+  check(terminal.phase === "both-reports-committed");
+  own(currentReportFrames, terminal.firstReportHandle);
+  own(currentReportFrames, terminal.secondReportHandle);
+  const before = own(snapshots, terminal.afterHandle),
+    after = own(snapshots, afterHandle);
+  equal(
+    before["private.pilot_availability"].map((r) => r.enabled),
+    [true],
+  );
+  check(before["private.pilot_capabilities"].length === CAPABILITIES.length);
+  check(
+    find(before, "private.pilot_capabilities", (r) => r.key === "hangouts")
+      .enabled,
+  );
+  const changed = ordinaryShutdown(before);
+  assertExact(terminal.afterHandle, afterHandle, changed, "", "");
+  equal(
+    after["private.pilot_availability"].map((r) => r.enabled),
+    [false],
+  );
+  check(after["private.pilot_capabilities"].every((r) => !r.enabled));
+  // Shutdown changes only ordinary policy. Operator and safety gates, as well
+  // as all report, ledger and audit evidence, are checked by full54 equality.
+  return opaque(
+    currentRaceFrames,
+    freeze({
+      phase: "ordinary-off-after-both-reports",
+      readinessHandle: terminal.readinessHandle,
+      afterHandle,
+    }),
+  );
 }
 export const modelCheckpoint = freeze({
   family: "core-setup-reads-transitions-first12-sanctions-enforcement",
@@ -2266,8 +2434,19 @@ export const modelCheckpoint = freeze({
     JSON.stringify(CURRENT_REPORT_DESCRIPTION),
   ),
   currentReportPrivateInterfaceHash: hash(
-    "private:currentReportOperation(opaqueValidatedReadiness,observedAfter,boundedWindow,observedReceipt)->opaqueFirstReport;detailFirstCurrentReportOperation(opaqueValidatedReadiness,observedAfter,boundedWindow,observedReceipt)->opaqueSecondReport;currentReportRollback(opaqueQualifiedReport,observedRollback)->opaqueKnownReadyBefore;literalActorHostModeCategoryNarrativeTwoRequests;independentReadyFrames;full54;noAuth/JWT/ACL/HTTP/provider/raceCredit",
+    "private:currentReportOperation(opaqueValidatedReadiness,observedAfter,boundedWindow,observedReceipt)->opaqueFirstReport;detailFirstCurrentReportOperation(opaqueValidatedReadiness,observedAfter,boundedWindow,observedReceipt[,privateCommittedBefore])->opaqueSecondReport;currentReportRollback(opaqueQualifiedUncommittedReport,observedRollback)->opaqueKnownReadyBefore;literalActorHostModeCategoryNarrativeTwoRequests;independentReadyFramesOrSequencedCommit;full54;noAuth/JWT/ACL/HTTP/provider/raceCredit",
   ),
+  currentRaceSourceOrdersAvailable: true,
+  currentRaceDescriptionHash: hash(JSON.stringify(CURRENT_RACE_DESCRIPTION)),
+  currentRaceModelHash: hash(
+    [currentRaceDetail, currentRaceReport2, currentRaceOrdinaryShutdown]
+      .map((fn) => fn.toString())
+      .join("\n"),
+  ),
+  currentRacePrivateInterfaceHash: hash(
+    "private:fixed-current-report-first->audited-detail-1->audited-detail-2->fixed-detail-first-report->ordinary-off;opaquePrivateFrames;full54EachCommit;twoSourceOrdersOnly;blockFirstUnavailable;noActualOrderOrPermissionCredit",
+  ),
+  currentRaceShutdownAvailable: true,
   retainedTeardownAvailable: false,
   runtimeCredit: 0,
   providerCredit: 0,
@@ -10072,6 +10251,22 @@ function currentReadinessMemoryExamples(source, bounds, time, later) {
     currentReadinessFixture(snapshot(before), snapshot(ready), bounds, {}),
   );
   groups += currentReportMemoryExamples(verify(), ready, bounds, later);
+  const raceBefore = clone(before),
+    raceReady = clone(ready);
+  for (const frame of [raceBefore, raceReady]) {
+    frame["private.moderation_feature_gate"][0].enabled = true;
+    frame["public.platform_roles"].push({
+      user_id: actor,
+      role: "moderator",
+      created_at: time,
+    });
+  }
+  groups += currentRaceMemoryExamples(
+    verify(raceBefore, raceReady),
+    raceReady,
+    bounds,
+    later,
+  );
   return groups;
 }
 
@@ -10235,6 +10430,288 @@ function currentReportMemoryExamples(readinessHandle, ready, bounds, later) {
     );
     rejected(() => currentReportRollback(qualified, snapshot(wrongRollback)));
     rejected(() => currentReportRollback({}, snapshot(ready)));
+  }
+  return groups;
+}
+
+function currentRaceMemoryExamples(readinessHandle, ready, bounds, later) {
+  let groups = 0;
+  const tested = (fn) => {
+    fn();
+    groups++;
+  };
+  const rejected = (fn) => {
+    let failed = false;
+    try {
+      fn();
+    } catch {
+      failed = true;
+    }
+    check(failed);
+    groups++;
+  };
+  const fingerprint = createHash("md5")
+    .update(
+      `[${["hangout", SQL_IDS.hangout, "harassment", null]
+        .map((v) => JSON.stringify(v))
+        .join(", ")}]`,
+    )
+    .digest("hex");
+  const reportAfter = (before, ordinal) => {
+    const after = clone(before),
+      id = `6f000000-0000-4000-8000-00000000000${ordinal}`,
+      requestId =
+        ordinal === 1
+          ? CURRENT_REPORT_PLANS.current_report_first
+          : CURRENT_REPORT_PLANS.detail_first;
+    after["private.safety_reports"].push({
+      id,
+      submitted_at: later,
+      reporter_id: SQL_IDS.actor,
+      target_type: "hangout",
+      target_id: SQL_IDS.hangout,
+      category: "harassment",
+      narrative: null,
+      provenance_kind: "current_hangout",
+      provenance_ref_id: SQL_IDS.hangout,
+    });
+    after["private.safety_report_requests"].push({
+      reporter_id: SQL_IDS.actor,
+      request_id: requestId,
+      input_fingerprint: fingerprint,
+      report_id: id,
+    });
+    return { after, receipt: { receipt_id: id, submitted_at: later } };
+  };
+  const detailAfter = (before, ordinal) => {
+    const after = clone(before),
+      audit = Object.fromEntries(
+        SCHEMA["private.moderation_audit"].map((key) => [key, null]),
+      );
+    Object.assign(audit, {
+      id: `6e000000-0000-4000-8000-00000000000${ordinal * 2 - 1}`,
+      occurred_at: later,
+      operator_id: SQL_IDS.actor,
+      action: "detail_read",
+      report_id: SQL_IDS.hangoutReport,
+      request_id: `6e000000-0000-4000-8000-00000000000${ordinal * 2}`,
+    });
+    after["private.moderation_audit"].push(audit);
+    return after;
+  };
+  const first = reportAfter(ready, 1);
+  const firstHandle = currentReportOperation(
+    readinessHandle,
+    snapshot(first.after),
+    bounds,
+    first.receipt,
+  );
+  tested(() => {
+    equal(
+      own(currentReportFrames, firstHandle).requestId,
+      CURRENT_REPORT_PLANS.current_report_first,
+    );
+    rejected(() => currentReportRollback(firstHandle, snapshot(first.after)));
+  });
+  const d1 = detailAfter(first.after, 1);
+  const detailResult = detailRows(first.after, SQL_IDS.hangoutReport);
+  const d1Handle = currentRaceDetail(
+    firstHandle,
+    snapshot(d1),
+    bounds,
+    detailResult,
+    1,
+  );
+  tested(() => equal(own(currentRaceFrames, d1Handle).phase, "detail-1"));
+  const d2 = detailAfter(d1, 2);
+  const d2Handle = currentRaceDetail(
+    d1Handle,
+    snapshot(d2),
+    bounds,
+    detailResult,
+    2,
+  );
+  tested(() => equal(own(currentRaceFrames, d2Handle).phase, "detail-2"));
+  const second = reportAfter(d2, 2);
+  const terminal = currentRaceReport2(
+    d2Handle,
+    snapshot(second.after),
+    bounds,
+    second.receipt,
+  );
+  tested(() => {
+    equal(own(currentRaceFrames, terminal).phase, "both-reports-committed");
+    equal(
+      second.after["private.safety_reports"].length,
+      ready["private.safety_reports"].length + 2,
+    );
+    equal(
+      second.after["private.safety_report_requests"].length,
+      ready["private.safety_report_requests"].length + 2,
+    );
+    equal(
+      second.after["private.moderation_audit"].length,
+      ready["private.moderation_audit"].length + 2,
+    );
+  });
+  rejected(() => currentReportRollback(firstHandle, snapshot(ready)));
+  rejected(() =>
+    currentReportRollback(
+      own(currentRaceFrames, terminal).secondReportHandle,
+      snapshot(ready),
+    ),
+  );
+  const shutdown = derive(second.after, ordinaryShutdown(second.after));
+  tested(() => {
+    const off = currentRaceOrdinaryShutdown(terminal, snapshot(shutdown));
+    equal(own(currentRaceFrames, off).phase, "ordinary-off-after-both-reports");
+    check(
+      !CURRENT_RACE_DESCRIPTION.blockFirstAvailable &&
+        CURRENT_RACE_DESCRIPTION.actualOrderCredit === 0 &&
+        modelCheckpoint.permissionCredit === 0 &&
+        !modelCheckpoint.racesAvailable,
+    );
+    equal(
+      CURRENT_RACE_DESCRIPTION.orders.map((r) => r.id),
+      ["current_report_first", "detail_first"],
+    );
+    equal(
+      CURRENT_RACE_DESCRIPTION.orders.map((r) => r.committed),
+      [
+        ["report-0005", "detail-read-1"],
+        ["detail-read-2", "report-0006"],
+      ],
+    );
+  });
+  rejected(() => currentRaceDetail({}, snapshot(d1), bounds, detailResult, 1));
+  rejected(() =>
+    currentRaceDetail(firstHandle, snapshot(d1), bounds, detailResult, 2),
+  );
+  rejected(() =>
+    currentRaceDetail(d1Handle, snapshot(d2), bounds, detailResult, 1),
+  );
+  rejected(() =>
+    currentRaceReport2(
+      d1Handle,
+      snapshot(second.after),
+      bounds,
+      second.receipt,
+    ),
+  );
+  rejected(() => currentRaceOrdinaryShutdown(d2Handle, snapshot(shutdown)));
+  rejected(() => currentRaceOrdinaryShutdown(terminal, snapshot(second.after)));
+  rejected(() => currentRaceOrdinaryShutdown({}, snapshot(shutdown)));
+  const wrongOrder = reportAfter(first.after, 2);
+  rejected(() =>
+    currentRaceReport2(
+      d1Handle,
+      snapshot(wrongOrder.after),
+      bounds,
+      wrongOrder.receipt,
+    ),
+  );
+  for (const [ordinal, prior, after, result] of [
+    [1, firstHandle, d1, detailResult],
+    [2, d1Handle, d2, detailResult],
+  ]) {
+    const badAudit = clone(after);
+    badAudit["private.moderation_audit"].at(-1).report_id = SQL_IDS.report;
+    rejected(() =>
+      currentRaceDetail(prior, snapshot(badAudit), bounds, result, ordinal),
+    );
+    const missing = clone(after);
+    missing["private.moderation_audit"].pop();
+    rejected(() =>
+      currentRaceDetail(prior, snapshot(missing), bounds, result, ordinal),
+    );
+    rejected(() =>
+      currentRaceDetail(prior, snapshot(after), bounds, [], ordinal),
+    );
+  }
+  for (const table of [
+    "private.safety_reports",
+    "private.safety_report_requests",
+  ]) {
+    const missing = clone(second.after);
+    missing[table].pop();
+    rejected(() =>
+      currentRaceReport2(d2Handle, snapshot(missing), bounds, second.receipt),
+    );
+    const extra = clone(second.after);
+    extra[table].push({
+      ...extra[table].at(-1),
+      ...(table === "private.safety_reports"
+        ? { id: SQL_IDS.target }
+        : { request_id: SQL_IDS.target }),
+    });
+    rejected(() =>
+      currentRaceReport2(d2Handle, snapshot(extra), bounds, second.receipt),
+    );
+  }
+  const wrongRequest = clone(second.after);
+  wrongRequest["private.safety_report_requests"].at(-1).request_id =
+    CURRENT_REPORT_PLANS.current_report_first;
+  rejected(() =>
+    currentRaceReport2(
+      d2Handle,
+      snapshot(wrongRequest),
+      bounds,
+      second.receipt,
+    ),
+  );
+  const wrongProvenance = clone(second.after);
+  wrongProvenance["private.safety_reports"].at(-1).provenance_kind =
+    "retained_hangout";
+  rejected(() =>
+    currentRaceReport2(
+      d2Handle,
+      snapshot(wrongProvenance),
+      bounds,
+      second.receipt,
+    ),
+  );
+  const wrongTime = clone(second.after);
+  wrongTime["private.safety_reports"].at(-1).submitted_at =
+    "1900-01-01T00:00:00Z";
+  rejected(() =>
+    currentRaceReport2(d2Handle, snapshot(wrongTime), bounds, second.receipt),
+  );
+  const repeatedAuditId = clone(d2);
+  repeatedAuditId["private.moderation_audit"].at(-1).id =
+    repeatedAuditId["private.moderation_audit"][0].id;
+  rejected(() =>
+    currentRaceDetail(
+      d1Handle,
+      snapshot(repeatedAuditId),
+      bounds,
+      detailResult,
+      2,
+    ),
+  );
+  const wrongReceipt = { ...second.receipt, actual_order_pass: true };
+  rejected(() =>
+    currentRaceReport2(d2Handle, snapshot(second.after), bounds, wrongReceipt),
+  );
+  for (const mutate of [
+    (r) => {
+      r["private.pilot_availability"][0].enabled = true;
+    },
+    (r) => {
+      r["private.pilot_capabilities"][0].enabled = true;
+    },
+    (r) => {
+      r["private.moderation_feature_gate"][0].enabled = false;
+    },
+    (r) => {
+      r["private.safety_reports"][0].category = "other";
+    },
+    (r) => {
+      r["public.profiles"][0].bio = "Unexpected";
+    },
+  ]) {
+    const bad = clone(shutdown);
+    mutate(bad);
+    rejected(() => currentRaceOrdinaryShutdown(terminal, snapshot(bad)));
   }
   return groups;
 }
