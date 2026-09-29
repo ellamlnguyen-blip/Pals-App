@@ -2,6 +2,12 @@
 
 Status: **Authored, unexecuted, awaiting fresh independent FULL review.** This is a bounded fixture substage, not B3c completion or runtime release.
 
+## Bounded review correction
+
+Independent FULL review of author freeze `21098c6622b1d75e580e6e50f2b16731ad521772` found one P2: post-close survivor mismatches were stored after the original failure record, while the separately emitted settlement record omitted their precise differences and observer diagnostics. This correction changes only the same two owned files. The original pre-cleanup error and record now remain unchanged; a separately projected post-close record includes hashed precise differences, a strictly parsed finite settlement diagnostic, qualified full54 census summary when available, explicit reset prohibition and false success/cleanup credit. Unknown keys/values/messages are withheld or hashed. All60 allocations/48 planned orders/12 serial controls, sources/helpers and unconditional precontact refusal remain unchanged.
+
+The dormant `purePostCloseFailureOutputExamples` checks the actual post-close output shape for a full54 mismatch, guarded SQL observer failure, unknown message/key/privacy projection and original-error precedence. It is pure and contacts no target. Existing pure allocation/delta examples remain separate. Cached inert syntax, formatting, narrow lint and both pure example sets passed again. Final correction freeze is delivered in the author receipt; stop for independent re-review. Separate real B1 Storage HTTP/inversion coverage and all runtime/release gates remain unexecuted and incomplete.
+
 Branch: `agent/TASK-021A1b3c-crossings-fixture`.
 Worktree: `/private/tmp/pals-task021-crossings`.
 Prepared baseline: `f74111d96f7fd2f80f601105e941206f0cfc6fa7` (coordinator supplied canonical main `4d0bb937f3a013eb1ddf240d27e4c4067ce5108d` plus reviewed policy `cad9a596b76dac2f0dbe2b51908ca2899ba6c915`, transport `404edfabae9ede3a80aa4350937302b989339c20`, source17b and foundation `3e9973`). Crossing contract publication/verification and prerequisite review were supplied by coordinator; this author performed no network publication or verification.

@@ -1050,6 +1050,91 @@ function recordFailure(error, context) {
   console.error(JSON.stringify(failureEvidence(error, context)));
   error.crossingFailureRecorded = true;
 }
+const settlements = new Set([
+  "unavailable",
+  "unavailable or mismatched; reset forbidden",
+  "commit settlement unavailable; reset forbidden",
+  "pending owned close and survivor verification",
+  "exact committed writer and public outcome verified",
+]);
+function settlementDifferences(error) {
+  // The post-close error is separate from the original. Only fixed projection
+  // keys survive; unknown fields/values are hashed rather than serialized.
+  if (Array.isArray(error?.crossingDifferences))
+    return error.crossingDifferences.map((d) => ({
+      table: censusTables.includes(d.table) ? d.table : "unknown",
+      field_sha256: /^[a-f0-9]{64}$/.test(d.field_sha256 ?? "")
+        ? d.field_sha256
+        : digest(d.field_sha256),
+      expected_sha256: digest(d.expected),
+      actual_sha256: digest(d.actual),
+    }));
+  if (Array.isArray(error?.preciseDifferences))
+    return error.preciseDifferences.map((d) => ({
+      field_sha256: digest(d.field),
+      expected_sha256: digest(d.expected),
+      actual_sha256: digest(d.actual),
+    }));
+  return privateDifferences(error?.expected, error?.actual).map((d) => ({
+    table: d.table,
+    field_sha256: d.field_sha256,
+    expected_sha256: digest(d.expected),
+    actual_sha256: digest(d.actual),
+  }));
+}
+export function postCloseFailureEvidence(original, context = {}) {
+  const settlement = context.settlement;
+  const projectedSettlement =
+    settlement && typeof settlement === "object"
+      ? {
+          holder_committed: settlement.holder_committed === true,
+          waiter_committed: settlement.waiter_committed === true,
+          full54_survivor_verified:
+            settlement.full54_survivor_verified === true,
+        }
+      : settlements.has(settlement)
+        ? settlement
+        : "unavailable";
+  return {
+    id: crossingManifest.some((c) => c.id === context.id)
+      ? context.id
+      : "withheld",
+    partition: "post-close-failure-settlement",
+    original_error_preserved: true,
+    original_precleanup_record_preserved:
+      original?.crossingFailureRecorded === true,
+    settlement: projectedSettlement,
+    differences: settlementDifferences(context.settlementError),
+    settlement_diagnostic: context.settlementError
+      ? strictDiagnostic(context.settlementError.message)
+      : null,
+    committed_full54_summary: context.postCloseCensus
+      ? Object.fromEntries(
+          censusTables.map((table) => {
+            const row = context.postCloseCensus[table];
+            return [
+              table,
+              {
+                count:
+                  Number.isSafeInteger(row?.count) && row.count >= 0
+                    ? row.count
+                    : null,
+                sha256: /^[a-f0-9]{64}$/.test(row?.sha256 ?? "")
+                  ? row.sha256
+                  : digest(row),
+              },
+            ];
+          }),
+        )
+      : null,
+    cleanup_diagnostics: original?.crossingCleanup?.length
+      ? [{ classification: "owned-exit-unproven", reset_forbidden: true }]
+      : [],
+    reset_forbidden: true,
+    successful_wait_order_credit: false,
+    cleanup_credit: false,
+  };
+}
 async function race(cell, route, d, before, context) {
   const start = clock(),
     prefix = "xc_" + caseIds(cell.id).request.replaceAll("-", "").slice(0, 24);
@@ -1245,7 +1330,9 @@ async function race(cell, route, d, before, context) {
               );
             }
           }
-          exact(expected, census());
+          const settledCensus = census();
+          context.postCloseCensus = sanitized(settledCensus);
+          exact(expected, settledCensus);
           context.settlement = {
             holder_committed: hcommit,
             waiter_committed: wcommit,
@@ -1253,8 +1340,9 @@ async function race(cell, route, d, before, context) {
           };
         } catch (settlement) {
           context.settlement = "unavailable or mismatched; reset forbidden";
-          if (settlement.crossingDifferences)
-            failure.crossingDifferences = settlement.crossingDifferences;
+          // Preserve the original pre-cleanup error and its differences. This
+          // later comparison/observer error has its own finite safe output.
+          context.settlementError = settlement;
         }
       }
     }
@@ -1403,14 +1491,7 @@ export async function runCrossingFixtures() {
     // Emit post-close settlement separately; it does not replace the original
     // pre-cleanup failure or turn an abort into successful-order credit.
     console.error(
-      JSON.stringify({
-        id: context?.id ?? "withheld",
-        partition: "post-close-failure-settlement",
-        settlement: context?.settlement ?? "unavailable",
-        cleanup_diagnostics: error.crossingCleanup ?? [],
-        reset_forbidden: true,
-        successful_wait_order_credit: false,
-      }),
+      JSON.stringify(postCloseFailureEvidence(error, context ?? {})),
     );
     throw new Error(
       "Crossing failed and uncredited; private diagnostics withheld; reset forbidden",
@@ -1424,6 +1505,114 @@ export async function runCrossingFixtures() {
   }
 }
 // Pure authoring examples only. No SQL, sessions, guards, reset or target calls.
+export function purePostCloseFailureOutputExamples() {
+  const text = "00000000-0000-4000-8000-000000000099";
+  const privateMessage = "private observer " + text;
+  const original = new Error(privateMessage);
+  original.crossingFailureRecorded = true;
+  original.crossingDifferences = privateDifferences(
+    { narrative: text },
+    { narrative: "original-private" },
+  );
+  const originalDifferences = structuredClone(original.crossingDifferences);
+  const context = {
+    id: crossingManifest[0].id,
+    phase: "wait",
+    settlement: "unavailable or mismatched; reset forbidden",
+  };
+  const originalRecord = failureEvidence(original, context);
+  const base = Object.fromEntries(censusTables.map((table) => [table, []]));
+  const changed = structuredClone(base);
+  changed["auth.users"] = [
+    { id: text, raw_user_meta_data: { [text]: privateMessage } },
+  ];
+  let mismatch;
+  try {
+    exact(base, changed);
+  } catch (error) {
+    mismatch = error;
+  }
+  assert.ok(mismatch?.crossingDifferences.length > 0);
+  mismatch[text] = privateMessage;
+  context.settlementError = mismatch;
+  context.postCloseCensus = {
+    ...sanitized(changed),
+    [text]: { [text]: privateMessage },
+  };
+  const output = postCloseFailureEvidence(original, context);
+  assert.deepEqual(
+    Object.keys(output).sort(),
+    [
+      "id",
+      "partition",
+      "original_error_preserved",
+      "original_precleanup_record_preserved",
+      "settlement",
+      "differences",
+      "settlement_diagnostic",
+      "committed_full54_summary",
+      "cleanup_diagnostics",
+      "reset_forbidden",
+      "successful_wait_order_credit",
+      "cleanup_credit",
+    ].sort(),
+  );
+  assert.equal(output.partition, "post-close-failure-settlement");
+  assert.ok(output.differences.length > 0);
+  assert.equal(output.original_error_preserved, true);
+  assert.equal(output.original_precleanup_record_preserved, true);
+  assert.equal(output.successful_wait_order_credit, false);
+  assert.equal(output.cleanup_credit, false);
+  assert.equal(output.reset_forbidden, true);
+  assert.deepEqual(output.settlement_diagnostic, {
+    classification: "unexpected-withheld",
+  });
+  assert.deepEqual(
+    Object.keys(output.committed_full54_summary).sort(),
+    censusTables.slice().sort(),
+  );
+  assert.deepEqual(original.crossingDifferences, originalDifferences);
+  assert.deepEqual(failureEvidence(original, context), originalRecord);
+  const observer = new Error("Disposable SQL error: 57014: " + privateMessage);
+  const observerOutput = postCloseFailureEvidence(original, {
+    ...context,
+    settlementError: observer,
+    postCloseCensus: null,
+  });
+  assert.deepEqual(observerOutput.settlement_diagnostic, {
+    code: "57014",
+    message: "operation failed",
+  });
+  assert.deepEqual(observerOutput.differences, []);
+  assert.equal(observerOutput.committed_full54_summary, null);
+  const unknown = postCloseFailureEvidence(original, {
+    ...context,
+    settlementError: new Error(privateMessage),
+    settlement: {
+      holder_committed: false,
+      waiter_committed: false,
+      full54_survivor_verified: false,
+      [text]: privateMessage,
+    },
+  });
+  assert.deepEqual(unknown.settlement, {
+    holder_committed: false,
+    waiter_committed: false,
+    full54_survivor_verified: false,
+  });
+  for (const record of [output, observerOutput, unknown]) {
+    const serialized = JSON.stringify(record);
+    assert.ok(!serialized.includes(text));
+    assert.ok(!serialized.includes(privateMessage));
+  }
+  return {
+    post_close_mismatch: "pass",
+    observer_failure: "pass",
+    original_precedence: "pass",
+    private_output: "pass",
+    runtime: "unexecuted",
+  };
+}
 export function pureExpectedDeltaExamples() {
   assert.equal(crossingManifest.length, 60);
   assert.equal(crossingManifest.filter((c) => c.order === "serial").length, 12);
