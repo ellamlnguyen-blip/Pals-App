@@ -1510,6 +1510,7 @@ export function describeModelPlan(handle) {
 const currentReadinessFrames = new WeakMap();
 const currentReportFrames = new WeakMap();
 const currentRaceFrames = new WeakMap();
+const retainedBlockFrames = new WeakMap();
 const currentCommittedReports = new WeakSet();
 const CURRENT_REPORT_PLANS = freeze({
   current_report_first: "52000000-0000-4000-8003-000000000005",
@@ -2059,6 +2060,18 @@ const CURRENT_RACE_DESCRIPTION = freeze({
   actualPermissionCredit: 0,
   blockFirstAvailable: false,
 });
+const RETAINED_BLOCK_DESCRIPTION = freeze({
+  family: "joined-retained-block-static-order",
+  sourceLine: 206,
+  order: ["set_safety_block:target:true", "list_moderation_reports"],
+  actor: SQL_IDS.actor,
+  immutableHostAndTarget: SQL_IDS.target,
+  fullTables: 54,
+  ordinaryAvailability: false,
+  sourceOnly: true,
+  actualOrderCredit: 0,
+  actualPermissionCredit: 0,
+});
 // A detail always reads the original historical Hangout report. The first
 // report is committed before detail 1; detail 2 commits before report 2.
 function currentRaceDetail(priorHandle, afterHandle, bounds, result, ordinal) {
@@ -2192,6 +2205,239 @@ function currentRaceOrdinaryShutdown(terminalHandle, afterHandle) {
       readinessHandle: terminal.readinessHandle,
       afterHandle,
     }),
+  );
+}
+// Separate privileged fixture preparation. This is not an ordinary join while
+// pilot availability is off and never establishes a student join permission.
+function retainedBlockJoinedFixture(shutdownHandle, joinedHandle, bounds) {
+  const terminal = own(currentRaceFrames, shutdownHandle);
+  check(terminal.phase === "ordinary-off-after-both-reports");
+  const before = own(snapshots, terminal.afterHandle);
+  const after = own(snapshots, joinedHandle);
+  check(before["private.pilot_availability"][0].enabled === false);
+  check(before["private.pilot_capabilities"].length === CAPABILITIES.length);
+  check(before["private.pilot_capabilities"].every((r) => !r.enabled));
+  equal(before["private.people_feature_gate"], [
+    { singleton: true, enabled: false },
+  ]);
+  equal(before["private.safety_feature_gate"], [
+    { singleton: true, enabled: true },
+  ]);
+  check(readActor(before, SQL_IDS.actor, "authenticated", "read committed"));
+  const h = find(before, "public.hangouts", (r) => r.id === SQL_IDS.hangout);
+  check(h.host_id === SQL_IDS.target);
+  const host = find(
+    before,
+    "public.hangout_participants",
+    (r) => r.hangout_id === h.id && r.account_id === h.host_id,
+  );
+  check(
+    host.state === "joined" &&
+      host.left_at === null &&
+      host.removed_at === null,
+  );
+  check(
+    !before["public.hangout_participants"].some(
+      (r) => r.hangout_id === h.id && r.account_id === SQL_IDS.actor,
+    ),
+  );
+  const actor = find(
+    after,
+    "public.hangout_participants",
+    (r) => r.hangout_id === h.id && r.account_id === SQL_IDS.actor,
+  );
+  const joinedAt = bindTime("clock_timestamp", actor.joined_at, bounds);
+  const updatedAt = bindTime("clock_timestamp", actor.updated_at, bounds);
+  const dmCandidate = find(
+    after,
+    "private.dm_pairs",
+    (r) => r.low_id === SQL_IDS.actor && r.high_id === SQL_IDS.target,
+  );
+  const dmCreatedAt = bindTime(
+    "clock_timestamp",
+    dmCandidate.created_at,
+    bounds,
+  );
+  check(preciseTime(joinedAt) <= preciseTime(updatedAt));
+  const changed = {
+    "public.hangout_participants": insertion(
+      before,
+      "public.hangout_participants",
+      [
+        {
+          hangout_id: h.id,
+          account_id: SQL_IDS.actor,
+          state: "joined",
+          joined_at: joinedAt,
+          left_at: null,
+          removed_at: null,
+          updated_at: updatedAt,
+        },
+      ],
+    ),
+    "private.friendships": insertion(before, "private.friendships", [
+      {
+        low_id: SQL_IDS.actor,
+        high_id: SQL_IDS.target,
+        requester_id: SQL_IDS.actor,
+        campus_id: h.university_id,
+        generation_id: "6d000000-0000-4000-8000-000000000021",
+        state: "active",
+      },
+    ]),
+    "private.dm_pairs": insertion(before, "private.dm_pairs", [
+      {
+        generation_id: "6d000000-0000-4000-8000-000000000022",
+        low_id: SQL_IDS.actor,
+        high_id: SQL_IDS.target,
+        initiator_id: SQL_IDS.actor,
+        campus_id: h.university_id,
+        state: "accepted",
+        created_at: dmCreatedAt,
+        next_sequence: 1,
+      },
+    ]),
+  };
+  assertExact(terminal.afterHandle, joinedHandle, changed, "", "");
+  return opaque(
+    retainedBlockFrames,
+    freeze({ phase: "joined", afterHandle: joinedHandle }),
+  );
+}
+function retainedBlockFirst(joinedHandle, blockedHandle, bounds, result) {
+  const frame = own(retainedBlockFrames, joinedHandle);
+  check(frame.phase === "joined");
+  const before = own(snapshots, frame.afterHandle);
+  const after = own(snapshots, blockedHandle);
+  check(before["private.pilot_availability"][0].enabled === false);
+  check(before["private.pilot_capabilities"].every((r) => !r.enabled));
+  equal(before["private.people_feature_gate"], [
+    { singleton: true, enabled: false },
+  ]);
+  equal(before["private.safety_feature_gate"], [
+    { singleton: true, enabled: true },
+  ]);
+  check(
+    !before["private.people_blocks"].some(
+      (r) => r.blocker_id === SQL_IDS.actor && r.blocked_id === SQL_IDS.target,
+    ),
+  );
+  const h = find(before, "public.hangouts", (r) => r.id === SQL_IDS.hangout);
+  check(h.host_id === SQL_IDS.target);
+  const actor = find(
+    before,
+    "public.hangout_participants",
+    (r) => r.hangout_id === h.id && r.account_id === SQL_IDS.actor,
+  );
+  const host = find(
+    before,
+    "public.hangout_participants",
+    (r) => r.hangout_id === h.id && r.account_id === SQL_IDS.target,
+  );
+  check(actor.state === "joined" && host.state === "joined");
+  find(
+    before,
+    "private.friendships",
+    (r) =>
+      r.low_id === SQL_IDS.actor &&
+      r.high_id === SQL_IDS.target &&
+      r.state === "active",
+  );
+  find(
+    before,
+    "private.dm_pairs",
+    (r) =>
+      r.low_id === SQL_IDS.actor &&
+      r.high_id === SQL_IDS.target &&
+      r.state === "accepted",
+  );
+  check(
+    !before["private.hangout_peer_provenance"].some(
+      (r) =>
+        r.hangout_id === h.id &&
+        r.low_id === SQL_IDS.actor &&
+        r.high_id === SQL_IDS.target,
+    ),
+  );
+  const observed = find(
+    after,
+    "public.hangout_participants",
+    (r) => r.hangout_id === h.id && r.account_id === SQL_IDS.actor,
+  );
+  const leftAt = bindTime("clock_timestamp", observed.left_at, bounds);
+  const updatedAt = bindTime("clock_timestamp", observed.updated_at, bounds);
+  check(preciseTime(leftAt) > preciseTime(actor.joined_at));
+  check(preciseTime(updatedAt) >= preciseTime(leftAt));
+  const changed = {
+    "private.people_blocks": insertion(before, "private.people_blocks", [
+      { blocker_id: SQL_IDS.actor, blocked_id: SQL_IDS.target },
+    ]),
+    "private.hangout_peer_provenance": insertion(
+      before,
+      "private.hangout_peer_provenance",
+      [{ hangout_id: h.id, low_id: SQL_IDS.actor, high_id: SQL_IDS.target }],
+    ),
+    "public.hangout_participants": before["public.hangout_participants"].map(
+      (r) =>
+        r.hangout_id === h.id && r.account_id === SQL_IDS.actor
+          ? { ...r, state: "left", left_at: leftAt, updated_at: updatedAt }
+          : clone(r),
+    ),
+    "private.friendships": before["private.friendships"].filter(
+      (r) => !(r.low_id === SQL_IDS.actor && r.high_id === SQL_IDS.target),
+    ),
+    "private.dm_pairs": before["private.dm_pairs"].map((r) =>
+      r.low_id === SQL_IDS.actor && r.high_id === SQL_IDS.target
+        ? { ...r, state: "blocked" }
+        : clone(r),
+    ),
+  };
+  assertExact(frame.afterHandle, blockedHandle, changed, result, true);
+  return opaque(
+    retainedBlockFrames,
+    freeze({ phase: "blocked", afterHandle: blockedHandle }),
+  );
+}
+function retainedBlockQueue(blockedHandle, queuedHandle, bounds, result) {
+  const frame = own(retainedBlockFrames, blockedHandle);
+  check(frame.phase === "blocked");
+  const before = own(snapshots, frame.afterHandle);
+  const after = own(snapshots, queuedHandle);
+  check(readActor(before, SQL_IDS.actor, "authenticated", "read committed"));
+  const rows = queueRows(before, SQL_IDS.actor, {
+    p_after_submitted_at: null,
+    p_after_id: null,
+    p_limit: 24,
+  });
+  const changed = readAudit(
+    { beforeHandle: frame.afterHandle, bounds },
+    after,
+    SQL_IDS.actor,
+    "queue_read",
+    rows,
+  );
+  assertExact(frame.afterHandle, queuedHandle, changed, result, rows);
+  return opaque(
+    retainedBlockFrames,
+    freeze({ phase: "queued", afterHandle: queuedHandle }),
+  );
+}
+function retainedBlockTeardown(queuedHandle, teardownHandle) {
+  const frame = own(retainedBlockFrames, queuedHandle);
+  check(frame.phase === "queued");
+  const after = own(snapshots, teardownHandle);
+  const changed = {
+    "private.safety_feature_gate": [{ singleton: true, enabled: false }],
+    "private.moderation_feature_gate": [{ singleton: true, enabled: false }],
+    "private.hangout_feature_gate": [{ singleton: true, enabled: false }],
+  };
+  assertExact(frame.afterHandle, teardownHandle, changed, "", "");
+  check(after["private.pilot_availability"][0].enabled === false);
+  check(after["private.pilot_capabilities"].every((r) => !r.enabled));
+  // Reports, ledgers, audits, overlap, block and participant history survive.
+  return opaque(
+    retainedBlockFrames,
+    freeze({ phase: "teardown", afterHandle: teardownHandle }),
   );
 }
 export const modelCheckpoint = freeze({
@@ -2447,7 +2693,24 @@ export const modelCheckpoint = freeze({
     "private:fixed-current-report-first->audited-detail-1->audited-detail-2->fixed-detail-first-report->ordinary-off;opaquePrivateFrames;full54EachCommit;twoSourceOrdersOnly;blockFirstUnavailable;noActualOrderOrPermissionCredit",
   ),
   currentRaceShutdownAvailable: true,
-  retainedTeardownAvailable: false,
+  retainedBlockStaticAvailable: true,
+  retainedBlockDescriptionHash: hash(
+    JSON.stringify(RETAINED_BLOCK_DESCRIPTION),
+  ),
+  retainedBlockModelHash: hash(
+    [
+      retainedBlockJoinedFixture,
+      retainedBlockFirst,
+      retainedBlockQueue,
+      retainedBlockTeardown,
+    ]
+      .map((fn) => fn.toString())
+      .join("\n"),
+  ),
+  retainedBlockPrivateInterfaceHash: hash(
+    "private:ordinary-off-opaque->separateJoinedSourceFixture->blockFirst->auditedQueue->evidencePreservingGateTeardown;fixedActorHostTarget;full54Each;noOrdinaryJoinOrActualOrderOrPermissionCredit",
+  ),
+  retainedTeardownAvailable: true,
   runtimeCredit: 0,
   providerCredit: 0,
   permissionCredit: 0,
@@ -6034,7 +6297,7 @@ function memoryExamples(bytes) {
     check(
       !modelCheckpoint.laterOperationsAvailable &&
         modelCheckpoint.readinessAvailable &&
-        !modelCheckpoint.retainedTeardownAvailable,
+        !modelCheckpoint.racesAvailable,
     );
   });
   let touched = false;
@@ -8461,7 +8724,7 @@ function sanctionMemoryExamples(source, bounds, time, later, sqlReports) {
     check(
       !modelCheckpoint.httpSequencesAvailable &&
         modelCheckpoint.readinessAvailable &&
-        !modelCheckpoint.retainedTeardownAvailable,
+        !modelCheckpoint.racesAvailable,
     );
     equal(modelCheckpoint.original219RetainedCredit, 0);
     equal(ENFORCEMENT_IDS.length, 7);
@@ -10562,8 +10825,9 @@ function currentRaceMemoryExamples(readinessHandle, ready, bounds, later) {
     ),
   );
   const shutdown = derive(second.after, ordinaryShutdown(second.after));
+  let off;
   tested(() => {
-    const off = currentRaceOrdinaryShutdown(terminal, snapshot(shutdown));
+    off = currentRaceOrdinaryShutdown(terminal, snapshot(shutdown));
     equal(own(currentRaceFrames, off).phase, "ordinary-off-after-both-reports");
     check(
       !CURRENT_RACE_DESCRIPTION.blockFirstAvailable &&
@@ -10712,6 +10976,284 @@ function currentRaceMemoryExamples(readinessHandle, ready, bounds, later) {
     const bad = clone(shutdown);
     mutate(bad);
     rejected(() => currentRaceOrdinaryShutdown(terminal, snapshot(bad)));
+  }
+  groups += retainedBlockMemoryExamples(off, shutdown, bounds, later);
+  return groups;
+}
+
+function retainedBlockMemoryExamples(shutdownHandle, shutdown, bounds, later) {
+  let groups = 0;
+  const tested = (fn) => {
+    fn();
+    groups++;
+  };
+  const rejected = (fn) => {
+    let failed = false;
+    try {
+      fn();
+    } catch {
+      failed = true;
+    }
+    check(failed);
+    groups++;
+  };
+  const joined = clone(shutdown);
+  joined["public.hangout_participants"].push({
+    hangout_id: SQL_IDS.hangout,
+    account_id: SQL_IDS.actor,
+    state: "joined",
+    joined_at: "2026-09-29T12:00:00.623456Z",
+    left_at: null,
+    removed_at: null,
+    updated_at: "2026-09-29T12:00:00.623456Z",
+  });
+  const campus = find(
+    joined,
+    "public.hangouts",
+    (r) => r.id === SQL_IDS.hangout,
+  ).university_id;
+  joined["private.friendships"].push({
+    low_id: SQL_IDS.actor,
+    high_id: SQL_IDS.target,
+    requester_id: SQL_IDS.actor,
+    campus_id: campus,
+    generation_id: "6d000000-0000-4000-8000-000000000021",
+    state: "active",
+  });
+  joined["private.dm_pairs"].push({
+    generation_id: "6d000000-0000-4000-8000-000000000022",
+    low_id: SQL_IDS.actor,
+    high_id: SQL_IDS.target,
+    initiator_id: SQL_IDS.actor,
+    campus_id: campus,
+    state: "accepted",
+    created_at: "2026-09-29T12:00:00.623456Z",
+    next_sequence: 1,
+  });
+  let joinedHandle;
+  tested(() => {
+    joinedHandle = retainedBlockJoinedFixture(
+      shutdownHandle,
+      snapshot(joined),
+      bounds,
+    );
+  });
+  const blocked = clone(joined);
+  blocked["private.people_blocks"].push({
+    blocker_id: SQL_IDS.actor,
+    blocked_id: SQL_IDS.target,
+  });
+  blocked["private.hangout_peer_provenance"].push({
+    hangout_id: SQL_IDS.hangout,
+    low_id: SQL_IDS.actor,
+    high_id: SQL_IDS.target,
+  });
+  blocked["private.friendships"] = [];
+  blocked["private.dm_pairs"][0].state = "blocked";
+  const participant = find(
+    blocked,
+    "public.hangout_participants",
+    (r) => r.hangout_id === SQL_IDS.hangout && r.account_id === SQL_IDS.actor,
+  );
+  Object.assign(participant, {
+    state: "left",
+    left_at: later,
+    updated_at: later,
+  });
+  let blockedHandle;
+  tested(() => {
+    blockedHandle = retainedBlockFirst(
+      joinedHandle,
+      snapshot(blocked),
+      bounds,
+      true,
+    );
+  });
+  const rows = queueRows(blocked, SQL_IDS.actor, {
+    p_after_submitted_at: null,
+    p_after_id: null,
+    p_limit: 24,
+  });
+  const queued = clone(blocked);
+  const audit = Object.fromEntries(
+    SCHEMA["private.moderation_audit"].map((key) => [key, null]),
+  );
+  Object.assign(audit, {
+    id: "6d000000-0000-4000-8000-000000000011",
+    occurred_at: later,
+    operator_id: SQL_IDS.actor,
+    action: "queue_read",
+    request_id: "6d000000-0000-4000-8000-000000000012",
+    page_report_ids: rows.map((r) => r.report_id),
+    page_count: rows.length,
+  });
+  queued["private.moderation_audit"].push(audit);
+  let queuedHandle;
+  tested(() => {
+    queuedHandle = retainedBlockQueue(
+      blockedHandle,
+      snapshot(queued),
+      bounds,
+      rows,
+    );
+  });
+  const teardown = clone(queued);
+  for (const name of [
+    "private.safety_feature_gate",
+    "private.moderation_feature_gate",
+    "private.hangout_feature_gate",
+  ])
+    teardown[name][0].enabled = false;
+  tested(() => {
+    const terminal = retainedBlockTeardown(queuedHandle, snapshot(teardown));
+    equal(own(retainedBlockFrames, terminal).phase, "teardown");
+    check(
+      modelCheckpoint.retainedTeardownAvailable &&
+        !modelCheckpoint.racesAvailable,
+    );
+    equal(RETAINED_BLOCK_DESCRIPTION.order, [
+      "set_safety_block:target:true",
+      "list_moderation_reports",
+    ]);
+    check(
+      rows.every(
+        (r) => r.reporter_id !== SQL_IDS.actor && r.target_id !== SQL_IDS.actor,
+      ),
+    );
+  });
+  rejected(() => retainedBlockJoinedFixture({}, snapshot(joined), bounds));
+  rejected(() =>
+    retainedBlockFirst(shutdownHandle, snapshot(blocked), bounds, true),
+  );
+  rejected(() =>
+    retainedBlockQueue(joinedHandle, snapshot(queued), bounds, rows),
+  );
+  rejected(() => retainedBlockTeardown(blockedHandle, snapshot(teardown)));
+  rejected(() =>
+    retainedBlockFirst(joinedHandle, snapshot(blocked), bounds, false),
+  );
+  for (const mutate of [
+    (s) => {
+      s["private.pilot_availability"][0].enabled = true;
+    },
+    (s) => {
+      s["private.pilot_capabilities"][0].enabled = true;
+    },
+    (s) => {
+      s["private.people_feature_gate"][0].enabled = true;
+    },
+    (s) => {
+      s["public.hangouts"][0].host_id = SQL_IDS.actor;
+    },
+    (s) => {
+      s["public.hangout_participants"].at(-1).account_id = SQL_IDS.reporter;
+    },
+    (s) => {
+      s["private.safety_reports"][0].provenance_kind = "retained_host";
+    },
+    (s) => {
+      s["private.friendships"][0].generation_id = SQL_IDS.report;
+    },
+    (s) => {
+      s["private.dm_pairs"][0].state = "blocked";
+    },
+  ]) {
+    const bad = clone(joined);
+    mutate(bad);
+    rejected(() =>
+      retainedBlockJoinedFixture(shutdownHandle, snapshot(bad), bounds),
+    );
+  }
+  for (const mutate of [
+    (s) => {
+      s["private.people_blocks"].pop();
+    },
+    (s) => {
+      s["private.people_blocks"].at(-1).blocked_id = SQL_IDS.reporter;
+    },
+    (s) => {
+      s["private.hangout_peer_provenance"].pop();
+    },
+    (s) => {
+      s["public.hangout_participants"].at(-1).state = "removed";
+    },
+    (s) => {
+      s["public.hangout_participants"].at(-1).left_at = null;
+    },
+    (s) => {
+      s["public.hangout_participants"][0].state = "left";
+    },
+    (s) => {
+      s["private.safety_reports"].pop();
+    },
+    (s) => {
+      s["private.friendships"].push(joined["private.friendships"][0]);
+    },
+    (s) => {
+      s["private.dm_pairs"][0].state = "accepted";
+    },
+  ]) {
+    const bad = clone(blocked);
+    mutate(bad);
+    rejected(() =>
+      retainedBlockFirst(joinedHandle, snapshot(bad), bounds, true),
+    );
+  }
+  for (const mutate of [
+    (s) => {
+      s["private.moderation_audit"].pop();
+    },
+    (s) => {
+      s["private.moderation_audit"].at(-1).page_count = 0;
+    },
+    (s) => {
+      s["private.moderation_audit"].at(-1).action = "detail_read";
+    },
+    (s) => {
+      s["private.people_blocks"].pop();
+    },
+  ]) {
+    const bad = clone(queued);
+    mutate(bad);
+    rejected(() =>
+      retainedBlockQueue(blockedHandle, snapshot(bad), bounds, rows),
+    );
+  }
+  rejected(() =>
+    retainedBlockQueue(blockedHandle, snapshot(queued), bounds, []),
+  );
+  for (const mutate of [
+    (s) => {
+      s["private.safety_reports"].pop();
+    },
+    (s) => {
+      s["private.safety_report_requests"].pop();
+    },
+    (s) => {
+      s["private.moderation_audit"].pop();
+    },
+    (s) => {
+      s["private.people_blocks"].pop();
+    },
+    (s) => {
+      s["private.hangout_peer_provenance"].pop();
+    },
+    (s) => {
+      s["public.hangout_participants"].pop();
+    },
+    (s) => {
+      s["public.hangouts"].pop();
+    },
+    (s) => {
+      s["private.moderation_feature_gate"][0].enabled = true;
+    },
+    (s) => {
+      s["private.pilot_capabilities"][0].enabled = true;
+    },
+  ]) {
+    const bad = clone(teardown);
+    mutate(bad);
+    rejected(() => retainedBlockTeardown(queuedHandle, snapshot(bad)));
   }
   return groups;
 }
