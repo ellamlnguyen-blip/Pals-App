@@ -1,5 +1,11 @@
 # Current State
 
+## 2026-09-29 — B3c generic failure wire proposed
+
+Read-only feasibility inventories eleven future current Node modules (nine behavior+upgrade+operators) and separate current/operator SQL; existing runner four names/HTTP-onlyfd3/default30min is incomplete. Proposed bounded four-file generic transport uses strict independently normalized failure-only schema, fixed module/context manifest,64KiB frames/16records/1MiB/128diff, zero-credit records, invalidation on overflow/malformed/unfinished channel and qualified fixed per-module interruption ceilings. Preserves separate HTTP schema/24h and current runner/refusals; independent review/publication + exact reviewed legacy prerequisite precede author. No adopter/release/runtime action.
+
+Reviewed legacy prerequisite contract/upgrade receipt4182 published exactmain8928c5556ee3341c744523afcdd545db49004e67 source26. Exact dependencyreconciliation84efd98 cleared; fresh three-file static legacy author active. Identityadopter activec113, upgrade8c5/state52/edge1fcd/common43 and other reviewed fixtures taskpublished/unexecuted. Historical17Node+6SQL/moderationportion adaptation, channeladopters/finalrunner/combinedfreeze/ownership/exclusiverelease/freshpreflight/actualruntime/upgradecatalog/regressions/security/cleanup/integration/parentsremain incomplete. See `tasks/active/TASK-021A1b3c-generic-failure-channel.md`.
+
 ## 2026-09-29 — B3c upgrade correction and legacy prerequisite reviewed
 
 Upgrade/catalog correction `8c5c91ce5c1565f78aaa2efe687ccc388fbd92c6` clears independent correction review after d025 FULL review's four P2 findings. Assigned task branch pushed and exactremote SHA verified; true26→only27/full54/catalog verifier remains unexecuted/runner-excluded. Qualified catalog identities, independent Auth trigger/source-default anchors and final-boundary projected failure retention corrected; author2178 inert checks/zero contacts inspected, not independently rerun. Main code26; no actual upgrade/restoration/cleanup or accepted code integration.
