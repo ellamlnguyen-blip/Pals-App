@@ -1,5 +1,11 @@
 # Current State
 
+## 2026-09-29 — B3c upgrade correction and legacy prerequisite reviewed
+
+Upgrade/catalog correction `8c5c91ce5c1565f78aaa2efe687ccc388fbd92c6` clears independent correction review after d025 FULL review's four P2 findings. Assigned task branch pushed and exactremote SHA verified; true26→only27/full54/catalog verifier remains unexecuted/runner-excluded. Qualified catalog identities, independent Auth trigger/source-default anchors and final-boundary projected failure retention corrected; author2178 inert checks/zero contacts inspected, not independently rerun. Main code26; no actual upgrade/restoration/cleanup or accepted code integration.
+
+Historical transport prerequisite source/contract4b7979b and final documentation reconciliation9b4e595 are independently reviewed clear. Canonical publication plus exact reviewed common43/HTTPe751 dependency reconciliation precede fresh three-file author. Identity author active from c113 with published contractmain479; generic current failure-channel/fixed-budget feasibility read-only. State52/edge1fcd reviewed/taskpublished/unexecuted. No target/preflight/runtime release; all historical/moderation/runner/failure-delivery/combinedfreeze/ownership/exclusiverelease/preflight/actualruntime/security/cleanup/integration and B3c/B3/A1c/A2/TASK-021 gates remain incomplete.
+
 ## 2026-09-29 — B3c historical transport prerequisite proposed
 
 Read-only source feasibility confirms six SQL +17 historical Node constituents; old guard substitution alone is insufficient because race signatures, private exact B1 diagnostics, direct binary Storage/signed-bearer fetch, raw error outputs and unawaited cleanup differ. Proposed bounded three-file core/offline-verifier/handoff prerequisite supplies private finite known diagnostic compatibility and exact guarded binary/body-settled Storage interfaces. Independent source/contract review/publication precede author; disposable historical adaptation, moderation portions and runner/failure channel remain separate. No implementation/runtime release or source/permission/config change.
