@@ -1,5 +1,9 @@
 # Current State
 
+## 2026-09-30 — release scope changed to open verified UNC MVP
+
+The user directed that People, discovery, DMs, notifications, analytics and the other public-UNC MVP capabilities ship now, and that pilot access blockers be removed. ADR-0028 and `docs/product/MVP.md` record the decision: active confirmed and currently verified UNC accounts with complete required onboarding may use the app without a separate pilot-roster row. Non-UNC, unconfirmed, incomplete, suspended and banned accounts remain denied. Implementation has not yet removed admission checks, enabled gates, or opened hosted access. TASK-027 is active. The deployed page still reports the pilot-pending state until the code and hosted database are corrected. The same named primary/backup moderator is a single operator and does not establish independent backup coverage. Analytics remains opt-in/privacy constrained; external hosted capture and large-Hangout safeguards remain independently gated.
+
 ## 2026-09-29 — UNC pilot health readiness reviewed
 
 TASK-025 health correction `56c510791edbfb227327b1f0cd9bdc746fa3d3e4` passed independent read-only review and is task-pushed/remote verified. The public, secret-free health route now fails closed with HTTP 503 for incomplete/mismatched hosted configuration; only the exact health path bypasses the auth-refresh proxy. Typecheck/build/focused target tests and local 503/503/200 probes passed. This is configuration readiness, not hosted pilot readiness. Correct Pals Vercel project access is missing from the connected account; Supabase staging callback/site settings and migration history, SMTP/UNC mailbox, named moderator coverage, supply and deployed smoke remain open. Main integration of this correction is pending exact remote verification at this receipt. TASK-021 modeling is paused; local c2a0 `82d4fa19498ebc01151c1e088bb328abd9244a18` remains unreviewed/unpushed and isolated.

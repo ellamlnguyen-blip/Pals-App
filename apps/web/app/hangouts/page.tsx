@@ -7,9 +7,13 @@ import { localHangoutsAvailable } from "../../lib/hangouts";
 import { localPeopleAvailable } from "../../lib/people";
 import { OwnedHangouts } from "./owned-list";
 import { localNotificationsAvailable } from "../../lib/notifications";
+import { parseAppEnvironment } from "@pals/config";
+import { redirect } from "next/navigation";
 
 export default async function Hangouts() {
   const { client, user } = await requireAccess("ready");
+  if (parseAppEnvironment(process.env.APP_ENV) !== "local")
+    redirect("/hangouts/saved");
   const localCreate = localHangoutsAvailable();
   const { data: profile } = await client
     .from("profiles")

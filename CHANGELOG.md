@@ -1,12 +1,16 @@
 # Changelog
 
+## Open verified UNC MVP scope — 2026-09-30
+
+The user changed the release target from invite-only pilot to full MVP access for active, confirmed, currently verified UNC accounts with complete onboarding. People discovery, DMs, notifications and analytics are MVP scope. See accepted product decision ADR-0028. Implementation, feature gate reconciliation, nonproduction deployment and safety verification are pending under TASK-027; no hosted access has been opened.
+
 ## UNC pilot health readiness correction — 2026-09-29
 
 Reviewed/task-pushed `56c510791edbfb227327b1f0cd9bdc746fa3d3e4` makes `/api/health` return HTTP 503/`not_ready` for incomplete or mismatched hosted settings and limits the proxy exception to that path. Independent read-only review CLEAR; local typecheck/build/focused tests and 503/503/200 probes passed. This does not prove hosted callback, SMTP, provider connectivity, moderation or pilot launch. The correct Vercel staging project and remaining hosted gates are still needed; TASK-021 modeling remains paused with unreviewed/unpushed local c2a0 `82d4fa19498ebc01151c1e088bb328abd9244a18`. Canonical integration of this correction is pending exact remote verification at this receipt.
 
 ## B3c c2a0 source-qualified prerequisite independent review receipt — 2026-09-29
 
-Renewed independent FULL read-only review of frozen corrected eight-doc source-qualified first12 prerequisite `9c8c2f5cbd4f51adab06dfa586a71d88b1f7aaa0` against remote-verified main `e0c91ae8d4d23b0b351b8f7e873dccd131100a9b`: CLEAR/no findings. Prior draft said five *other* pins after concurrency; corrected to four other pins of five total. Reviewer matched clean stopped c2a `3226e3cd6b6de84ebcb602bcf0af9f215ea371b1`, exact c1 helper/MODELS, frozen source actor photo/profile/gate versus historical assertEarlyOperator guard, and c2a0→c2a→c2b→c3 dependency/incomplete gates. Reviewed prerequisite accepted for coordinator task publication/doc-only canonical integration, pending exact remote verification at this receipt. Fresh latest-main/exact855a4c4 reconciliation before NEW c2a0 author; no runtime/contact/test/import.
+Renewed independent FULL read-only review of frozen corrected eight-doc source-qualified first12 prerequisite `9c8c2f5cbd4f51adab06dfa586a71d88b1f7aaa0` against remote-verified main `e0c91ae8d4d23b0b351b8f7e873dccd131100a9b`: CLEAR/no findings. Prior draft said five _other_ pins after concurrency; corrected to four other pins of five total. Reviewer matched clean stopped c2a `3226e3cd6b6de84ebcb602bcf0af9f215ea371b1`, exact c1 helper/MODELS, frozen source actor photo/profile/gate versus historical assertEarlyOperator guard, and c2a0→c2a→c2b→c3 dependency/incomplete gates. Reviewed prerequisite accepted for coordinator task publication/doc-only canonical integration, pending exact remote verification at this receipt. Fresh latest-main/exact855a4c4 reconciliation before NEW c2a0 author; no runtime/contact/test/import.
 
 ## B3c c2a clean stop and literal first-twelve verifier prerequisite — 2026-09-29
 
@@ -273,6 +277,7 @@ Fresh independent FULL review of161 returns NOT CLEAR, exactly twoP2 findings, a
 Fresh exact-cache correction author froze local clean161cb61cd4c17bc9f9a054e789b08187dbeeb2fb on agent/TASK-021A1b3c-common-finish-cache-correction from dependency-reviewed9efbff3 (latest remote-verified main37071f8607ea606e7e6dc83dab0f16ff0716647d plus exact local/unacceptedafc). Exactly same3files/6APIs; private finish record now binds exact registration batch and retained original, serializes changed finishes, rejects pending execution before child creation, and awaits a later original instead of cached acknowledgement. Author443 own source-isolated checks (292original+151new)/0contact/getter/proxytraps, syntax/explicitformat/narrowlint/whitespaceclean. CommonSHAd6db5fcfab14457d2c009c7cf17a8ec9368213da156a38180b3850285fa86553/staticfceabf689d8d9eeb2801491c2e269be1aa1b5bd1a1b02a12a93dc3195e597778; strippedcommon43/sourcepins unchanged. Fresh FULL review NOT CLEAR (two newP2 findings); original empty-cacheP2 closed, no code accepted/pushed/mainintegrated. Originalafc remains unaccepted/unpublished; Git preserves its handoff. Main26/source27/allfixturesunexecuted; actualadoption/ownership/78/emission/ceiling/provider/release/runtime/accepted integration and allparents remain incomplete.
 
 Independent FULL correction-contract review of b7b43b47d4b7a2fc29f65e27e8bd66d75a521ad0 identified soleP2 regression wording ambiguity; exact two-document clarification c7ba31a9998f699d7008b1fbacf8dc9cd488d383 re-review CLEAR, no other findings or scope/authority change. Both pre-child rejection and independent close plus actual done for every accepted child are expressly permitted. Read-only source/Git review; evidence inspected, not rerun; no imports/tests/network/runtime/target/mutations. Contract ready for coordinator publication; fresh exact dependency reconciliation precedes fresh correction author. afc implementation remains local/unaccepted/unpublished and parent/runtime gates incomplete.
+
 ## 2026-09-29 — Common checkpoint review found one finish-cache P2
 
 Fresh common author froze clean `afc4df78dcae6bc5f43e334b20057b8379ac4856`, branch `agent/TASK-021A1b3c-state-common-awaited-boundaries-resumed`: exactly three files, six guarded APIs,292 static checks/0traps, all42 original functions/complete common43 bytes preserved. Fresh independent FULL review finds soleP2: cached empty finish can skip later child cleanup or acknowledge a later original without delivery. No other actionable findings; author evidence inspected, not rerun. Checkpoint local/unaccepted/unpublished; original author stopped. Proposed same-three-file private batch/original-bound cache correction requires reviewed/published contract/exact dependencies before a FRESH author; no seventh API/contact/reset/ownership scope. Moderation audited reads remain queued unchanged at1727 after dependency CLEAR; attempted dispatch refused by agent task limit, no author started. Main exact remote-verifiede35 remains26 migrations; source27/all fixtures unexecuted and all parents/runtime/provider/release gates incomplete.
@@ -485,33 +490,27 @@ Operator111-cell author is active under the independently reviewed/published con
 
 Independent source review reopened state contractP1: CB inbound operation-first must reject peer writer after actor current block, even with companion opt-in; outbound operation-first is retained idempotent repair/no new loss. Proposed matrix/contract correction preserves24 literal IDs as22 planned new-loss orders+one repair+one expected writer rejection, both specialized orders zero committed-loss credit. State author confirms original assumption would fail and freezes qualified static checkpoint with contract gap; exact reconciliation review/publication/adoption remain required. No fabricated retained proof/intervening unblock/source or permission change. All300 planned observations unexecuted; main code26 and parent/runtime gates incomplete.
 
-
 ## 2026-09-28 — B3c reviewed HTTP diagnostics and remaining fixtures
 
 HTTP5f428bc7 and HTTPtransportc7fb190 independently reviewed/pushed/exact remote SHAs verified; original failurecapture and arbitrary-key/private-string projection corrections cleared. Dedicated validated failure channel/HTTP24h runner remains unexecuted; fresh two-file HTTP cadence/channel adoption author active from main7b8078d plus exact dependencies at c6dd76a. Fresh two-file24L5 state author active from published main7b8078d contract plus policycad9/transport404 at79fd728; state checkpoint/review pending. Proposed operator contract111 IDs partitions35serial SQL+76Node waits; independent review foundP1 unsupported nonoperator role values, amended to lawful permanent assignment removal with honest shared-absence-predicate classification, no schema/permission change. Review/publication required before operator author. Main code26, all target outcomes/cleanup/exclusive release/parent gates remain incomplete.
-
 
 ## 2026-09-28 — B3c HTTP corrections and required state authoring
 
 Reviewed HTTP correction contract tasked96e624 and documentation mainbe2d4a4 exact remote SHAs verified. Fresh bounded transport author dispatched from mainbe2d4a4 plus reviewedtransport404edfaba for HTTP24h-only deadline and dedicated schema-validated failure-only child evidence channel; all target code unexecuted. HTTP evidence-only checkpoint6ef017db frozen for review; rate/cadence/helper adoption still pending. Proposed two-file24-cell L5 state assignment is under independent contract review; aP2 writer-prerequisite gap is amended with separate exact companion People/target-preference preparation after absent/false current precheck. Source/permission/config unchanged; no runtime or parent completion.
 
-
 ## 2026-09-28 — B3c static checkpoints reviewed and published
 
 Identity4d702510, policycad9a596 and transport404edfaba independently reviewed and exact remote SHAs verified on assigned task branches. HTTPb52f1eb remains unpushed/unaccepted with twoP1 issues:904 real signups exceed frozen100/hour/30-minute feasibility, and failed-case evidence is discarded before cleanup. Evidence-only correction is dispatched; proposed unchanged-config paced Auth/24-hour HTTP runner amendment requires review/publication before schedule edits. All target code remains unexecuted, main code26 and parent gates incomplete. See `agents/handoffs/TASK-021A1b3c-FIXTURE-CHECKPOINTS.md` and `tasks/active/TASK-021A1b3c-http-corrections.md`. No runtime release.
 
-
 ## 2026-09-28 — B3c fixture authoring resumed
 
 The user requested continuation after the published capacity blocker. Fresh bounded GPT-6 Sol medium HTTP, policy and identity authors successfully dispatched from verified canonical main `c74beae0f50b42e048dd643b137f55ab84d32e96`, each in a separate isolated branch plus exact reviewed foundation `3e9973ce573a48c9879286624b92fb2d72ca7769` (source `17b72001c3c76d2002b320d92df32703141bb88e`). Disjoint published two/three/two-file contracts remain authoritative. Static authoring only; no runtime or target access is released. All plans remain unexecuted. Source27/foundation/fixture code stays task-only; main code remains26. Standard speed is app-controlled and not verifiable through dispatch tools. The original TASK-021 coordinator was notified to avoid duplicate author or runtime dispatch. See `agents/handoffs/TASK-021A1b3c-FIXTURE-RESUMPTION.md`. Parent B3c/B3/A1c/A2/TASK-021 remains incomplete.
-
 
 ## 2026-09-28 — B3c foundation reviewed; next authoring dispatch held
 
 Independently cleared and remote-verified foundation3e9973ce573a48c9879286624b92fb2d72ca7769, exact six assigned helper/verifier/handoff files; source17b remains unchanged/unexecuted. Two fixture P2 corrections separately rereviewed: partial session construction gets awaited own-child cleanup with finite failure/no force; API tests honor cancellation+finite transport. Static/inert checks pass with zero target attempts, no runtime evidence. Canonicalmain code26, unfinished27/source+foundation task-only. See TASK-021A1b3c-FIXTURE-FOUNDATION-REVIEW.md.
 
 Next HTTP/policy/identity bounded assignments reviewed (72policywait+24serial/204identitywait plans, all unexecuted). HTTPfive-report capacity does not claim exact one-hour boundary/clock evidence. Original-author follow-up and freshcorrector spawn returned agent thread limit reached; next fresh authors remain explicitly undispatched pending agent capacity, no duplicate/reviewer-as-author/runtime action. Remaining state/retained/rate/crossing/operator111/upgrade/catalog/regression contracts/execution/security/cleanup/publication/acceptedmainintegration and B3c/B3/A1c/A2/TASK-021 incomplete. No parent completion, hosted/pilot-ready/force release or productsuccessor.
-
 
 ## 2026-09-28 — B3c fixture foundation author dispatched
 
@@ -659,13 +658,11 @@ After fresh source-only clearance at aeeb67a, main executor owns database/helper
 
 All fixtures remain unexecuted; source frozen pending reviewed defect. Fresh combined fixture/ownership review and explicit coordinator serial release still gate runtime. Source clearance alone is not permission evidence, runtime release or completion. B3b/c/A1c/A2/TASK-021 incomplete; no hosted/pilot-ready claim or product successor. Standard speed app-controlled/unverifiable.
 
-
 ## 2026-09-28 — B3b source cleared; fixtures authoring, runtime unreleased
 
 Fresh independent source/security review cleared exact local/unpushed aeeb67a76d7a4cc40e72fbe51334e5d934e3a8a3 with no finding. All25 historical bytes/23 inventory body hashes, two private scalar helpers/five public interfaces, sorted required actor/host/eligible-target tuples, exact denial/retry/revision behavior and held authority through later writer/hook waits reconcile. Conditional common-identity source gate is cleared;424 planned actual+170 mapped cells still wholly uncovered, every route SQL/real Auth controls mandatory.
 
 Executor resumed only bounded fixture/helper/catalog/upgrade/regression authoring; source remains frozen pending reviewed defect. Fresh fixture+ownership review and explicit serial local runtime release remain before any start/mutation/reset. No code branch push, live compilation/runtime/lint/catalog/evidence or accepted code integration yet. Coordinator receipt TASK-021A1b3b-SOURCE-REVIEW.md. B3b/c/A1c/A2/TASK-021 incomplete; no hosted/pilot-ready claim/product successor. Current owned services/VM remain stopped.
-
 
 ## 2026-09-28 — B3b local source checkpoint; independent review in progress
 
@@ -673,13 +670,11 @@ Executor checkpoint `aeeb67a76d7a4cc40e72fbe51334e5d934e3a8a3` on `agent/TASK-02
 
 Fixtures, PostgreSQL compilation/live catalog/permissions/observed races/lint/upgrade/regressions and runtime remain unrun/unreleased. Current owned services/VM remain stopped. B3b/c/A1c/A2/TASK-021 incomplete; no hosted/pilot-ready claim. Reviewed contract publication1340e27 and dispatch receipt6c4d05 remain canonical prerequisites. Source/fixture/ownership reviews and explicit serial release gate any runtime use.
 
-
 ## 2026-09-27 — B3b reviewed contract remotely published; source stage dispatched
 
 Contract/source inventory/graph/matrix/reconciliation/review and queue records published on independently remote-verified canonical main `1340e27bee4247506547934678b60adf713707c1` before fresh Sol-medium `implement_pilot_cohost_chat` dispatch. Executor uses independent no-hardlinks `/private/tmp/pals-task021a1b3b-cohost-chat`, branch `agent/TASK-021A1b3b-cohost-chat`. No implementation branch push yet. First checkpoint is migration26 plus exact source/ABI/graph/conditional identity-partition handoff, then fresh independent source review; source/fixture/ownership review and explicit coordinator serial runtime release remain before any test-runtime start/mutation/reset. Current services/VM remain stopped.
 
 Five public operations only; scalar private interface, inherited25 untouched; exact S/SR denial partition and target-authority-before-revision correction are contractual.424 actual+170 conditional coverage all unobserved; conditional equivalence requires source proof and per-route actual controls. B3b/c/A1c/A2/TASK-021 incomplete; no hosted/pilot readiness or substage product successor. Standard speed app-controlled and not tool-verifiable.
-
 
 ## 2026-09-27 — B3b contract independently reviewed; publication prepared
 
@@ -687,13 +682,11 @@ B3a complete on independently remote-verified accepted main62e47dc/completion255
 
 Evidence plan is424 actual cells plus170 explicitly conditional equivalents,594 conceptual cases all unobserved. Independent implementation source review must establish identical unbranched tuple evidence; all per-route SQL/real Auth controls remain actual, divergence restores race requirements. Source/fixture/ownership review and explicit serial runtime release remain; no runtime/source implementation/hosted operation yet. B3b/c/A1c/A2/TASK-021 incomplete. Coordinator review in TASK-021A1b3b-CONTRACT-REVIEW.md.
 
-
 ## 2026-09-27 — B3a complete after verified canonical integration
 
 Reviewed task `fe4f23c5b43b4b042c3a8e8a99f38da412d4f3fa` and accepted canonical integration `62e47dc8908d6486e544333b169147ee4e735524` are independently remote-verified. B3a is complete only for its six disposable-local Hangout lifecycle mutations and private evidence helpers. Fresh final review has no unresolved finding; 350 new observed waits, bounded SQL/HTTP, inherited regressions, true24 upgrade, catalog and static evidence are accepted with the exact single structural lint advisory recorded as an incompatible-check exception (standard db:lint exit1, not clean/pass). Normal final reset/shutdown and coordinator read-only ownership audit are verified; no runtime remains active.
 
 Next: reconcile B3b co-host/chat contract against accepted25 source, independently review and publish it before fresh implementation dispatch. B3b/c, combined B3, A1c, A2 and TASK-021 remain incomplete. No hosted operations, pilot-ready claim or product successor from this sub-stage. See B3a ORDINARY-LIFECYCLE and REVIEW handoffs for evidence limits and both remote receipts.
-
 
 ## 2026-09-27 — B3a reviewed task published; canonical integration prepared
 

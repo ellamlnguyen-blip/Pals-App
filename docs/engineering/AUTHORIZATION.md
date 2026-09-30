@@ -1,10 +1,10 @@
 # Authorization
 
-## Current pilot phase — 2026-09-27
+## Current release phase — open verified UNC MVP (2026-09-30)
 
-[Accepted ADR-0026](../../decisions/ADR-0026-invite-only-pilot-scope.md) introduces a nominated verified-UNC pilot before the later public MVP. Product timing changes only: existing required identity/profile/primary photo, Hangout map/list/create/join/leave/chat/host management and all block/report/removal/report-only moderation/audit/enforcement/private-location/RLS protections remain. Calendar/People discovery/friendship/DM/notifications/co-host UI/attendance surveys/optional rich profile/extra photos/analytics are deferred from pilot exposure. Existing backend role, teardown and evidence-retention rules below remain preserved.
+[Accepted ADR-0028](../../decisions/ADR-0028-open-verified-unc-mvp.md) supersedes the invite-only audience for the current release. Every active, email-confirmed, currently verified UNC account with complete required onboarding may use the MVP without manual pilot admission. Other-campus, unconfirmed/unverified, incomplete, suspended, and banned accounts remain denied. Calendar/People/friendship/DM/in-app notification/attendance and privacy-scoped analytics are included MVP capabilities. The separate production access switch and each source feature authorization still must be reviewed and verified before hosted release.
 
-Admission mechanism/tester list and hosted operator/staffing/MFA/retention/recovery/photo bearer policy remain separately reviewed/unresolved. Scope acceptance creates no grant, RLS bypass or hosted authority. Deferred routes/actions/APIs must fail closed without breaking retained safety; exact shared gate dependencies and tests need a narrower reviewed contract. Named human report handling is required but not yet assigned; no response commitment is invented. Earlier initial-release amendments below describe the later ADR-0025 public phase.
+Existing operator/staffing/MFA/retention/recovery/photo bearer policy remains separately reviewed. Scope acceptance creates no client grant or RLS bypass. Named human report handling is required. The same person as primary and backup does not provide independent backup coverage. Analytics remains opt-in and under ADR-0023's hosted privacy requirements. Earlier amendments below are historical where they conflict with ADR-0028.
 
 
 ## Initial-release scope amendment — 2026-09-26

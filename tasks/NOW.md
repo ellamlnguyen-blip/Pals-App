@@ -1,5 +1,11 @@
 # NOW
 
+## TASK-027 — open verified UNC MVP (2026-09-30)
+
+The user changed the release target from a nominated pilot to the full MVP, open to every active, confirmed, currently verified UNC account after required onboarding. People, discovery, DMs, notifications, and analytics belong in the MVP. Product scope is recorded in ADR-0028 and `docs/product/MVP.md`; the access implementation, complete feature route integration, hosted staging and smoke evidence are still pending. Keep UNC verification, complete-profile readiness, RLS, consent, blocks, moderation, audit, suspension and ban protections. Do not interpret open UNC access as cross-campus or anonymous access. The user nominated herself as both primary and backup moderator; that is one person, not independent backup coverage.
+
+This supersedes TASK-025's small nominated-cohort release audience. Do not enable broad hosted access until the TASK-027 acceptance/security checks pass; exact nonproduction target/access change and its confirmation remain a final release gate. TASK-021 remains paused except concrete security/migration checks required by this release.
+
 ## TASK-025 health readiness correction — 2026-09-29
 
 Fresh independent read-only review CLEAR on `agent/TASK-025-health-readiness` commit `56c510791edbfb227327b1f0cd9bdc746fa3d3e4`, task-pushed and exact remote verified. The secret-free `/api/health` probe returns HTTP 503/`not_ready` for missing or mismatched hosted configuration and HTTP 200/`ok` only for validated configuration; the proxy exempts only this public path. Web typecheck/build, focused target tests, formatting and local HTTP 503/503/200 probes passed. Green means configuration shape only, not hosted callback/SMTP/provider connectivity or pilot release approval. HTTPS staging deployment, exact Supabase callback/site settings and migration history, custom SMTP/controlled UNC mailbox, named moderators, approved pilot supply and smoke checks remain open. TASK-021 exhaustive modeling stays paused.
