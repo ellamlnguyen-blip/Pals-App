@@ -1,8 +1,9 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { localPeopleAvailable } from "../../lib/people";
 import { Frame, Intro } from "../components";
 import { ResendForm } from "../forms";
-import { access } from "../../lib/access";
+import { access, accessPath } from "../../lib/access";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 export default async function Verify({
@@ -12,13 +13,16 @@ export default async function Verify({
 }) {
   const params = await searchParams;
   let signedIn = false;
+  let currentState: string | undefined;
   try {
     const account = await access();
+    currentState = account.state;
     signedIn =
       !!account.user && !["signed_out", "restricted"].includes(account.state);
   } catch {
     /* Keep the verification view neutral while Auth is unavailable. */
   }
+  if (currentState === "pilot_unavailable") redirect(accessPath(currentState));
   return (
     <Frame signedIn={signedIn}>
       <div className="auth-layout">

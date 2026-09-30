@@ -14,9 +14,14 @@ export async function access() {
   if (gateError)
     throw new Error("We could not check account access. Please try again.");
   if (
-    !["signed_out", "restricted", "unverified", "onboarding", "ready"].includes(
-      data,
-    )
+    ![
+      "signed_out",
+      "restricted",
+      "unverified",
+      "onboarding",
+      "ready",
+      "pilot_unavailable",
+    ].includes(data)
   )
     throw new Error("Account access unavailable.");
   return { client, user, state: data as string };
@@ -28,9 +33,11 @@ export function accessPath(state: string) {
       ? "/onboarding"
       : state === "restricted"
         ? "/restricted"
-        : state === "unverified"
-          ? "/verify"
-          : "/signin";
+        : state === "pilot_unavailable"
+          ? "/pilot-pending"
+          : state === "unverified"
+            ? "/verify"
+            : "/signin";
 }
 export async function requireAccess(expected: "onboarding" | "ready") {
   const result = await access();
