@@ -2,6 +2,9 @@ begin;
 create extension if not exists pgtap with schema extensions;
 set search_path=public,extensions;
 select no_plan();
+-- Historical fixture runs under the open-UNC release switches, locally only.
+update private.pilot_availability set enabled=true where singleton;
+update private.pilot_capabilities set enabled=true where key in ('onboarding','hangouts','hangout_chat','people');
 
 insert into auth.users(id,email,email_confirmed_at)
 select ('11000000-0000-4000-8000-'||lpad(n::text,12,'0'))::uuid,
@@ -45,7 +48,7 @@ select is(public.set_people_preference(true),true,'ready owner opts in');
 select set_config('request.jwt.claims','{"sub":"11000000-0000-4000-8000-000000000003","role":"authenticated"}',true);
 select is(public.set_people_preference(true),true,'admin has only ordinary ready permissions');
 select set_config('request.jwt.claims','{"sub":"11000000-0000-4000-8000-000000000004","role":"authenticated"}',true);
-select is(public.set_people_preference(true),true,'other campus owner may opt in locally');
+select throws_ok($$select public.set_people_preference(true)$$,'42501','People operation unavailable','non-UNC campus owner cannot opt in');
 select set_config('request.jwt.claims','{"sub":"11000000-0000-4000-8000-000000000001","role":"authenticated"}',true);
 select is((select count(*) from public.browse_people()),2::bigint,'browse shows opted-in same-campus peers only');
 select is((select count(*) from public.browse_people(p_search=>'%_')),1::bigint,'wildcards are literal text');

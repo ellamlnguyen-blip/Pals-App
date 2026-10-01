@@ -2,6 +2,9 @@ begin;
 create extension if not exists pgtap with schema extensions;
 set search_path = public, extensions;
 select no_plan();
+-- Historical fixture runs under the open-UNC release switches, locally only.
+update private.pilot_availability set enabled=true where singleton;
+update private.pilot_capabilities set enabled=true where key in ('onboarding','hangouts','hangout_chat','people');
 
 insert into auth.users(id,email,email_confirmed_at)
 select ('51300000-0000-4000-8000-'||lpad(n::text,12,'0'))::uuid,

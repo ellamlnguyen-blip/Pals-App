@@ -15,7 +15,7 @@ reset role;
 update private.pilot_availability set enabled=true;
 update private.pilot_capabilities set enabled=true where key='onboarding';
 set local role authenticated;
-select is(public.get_access_state(),'pilot_unavailable','absent roster neutral');
+select is(public.get_access_state(),'onboarding','verified UNC owner needs no roster row');
 reset role;
 insert into private.pilot_account_admission(account_id,state,revision) values('a1000000-0000-4000-8000-000000000001','active',1);
 set local role authenticated;
@@ -42,7 +42,7 @@ set local request.jwt.claims='{"sub":"a1000000-0000-4000-8000-000000000001","rol
 update private.pilot_account_admission set state='revoked';
 update auth.users set email='owner-b1@example.com' where id='a1000000-0000-4000-8000-000000000001';
 set local role authenticated;
-select is(public.get_access_state(),'pilot_unavailable','revoked precedes unverified');
+select is(public.get_access_state(),'unverified','changed email revokes UNC verification regardless of roster');
 select is((select count(*)::integer from storage.objects),0,'revoked object read denied');
 reset role;
 update public.accounts set status='suspended' where id='a1000000-0000-4000-8000-000000000001';

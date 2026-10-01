@@ -13,6 +13,10 @@ insert into auth.users(id,email,email_confirmed_at,raw_user_meta_data) values
 select is((select count(*) from public.university_memberships),4::bigint,'only confirmed exact domains assigned');
 select is((select count(*) from public.platform_roles),0::bigint,'metadata cannot grant roles');
 select is((select public from storage.buckets where id='profile-photos'),false,'photos bucket private');
+-- The open-UNC release switch remains off by default; enable it only in this
+-- rolled-back owner lifecycle test.
+update private.pilot_availability set enabled=true where singleton;
+update private.pilot_capabilities set enabled=true where key='onboarding';
 set local role anon;
 select throws_ok('select public.get_access_state()','42501',null,'anonymous cannot invoke account RPC');
 set local role authenticated;

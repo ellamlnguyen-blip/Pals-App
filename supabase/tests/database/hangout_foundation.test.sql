@@ -2,6 +2,9 @@ begin;
 create extension if not exists pgtap with schema extensions;
 set search_path=public,extensions;
 select no_plan();
+-- Historical fixture runs under the open-UNC release switches, locally only.
+update private.pilot_availability set enabled=true where singleton;
+update private.pilot_capabilities set enabled=true where key in ('onboarding','hangouts','hangout_chat','people');
 insert into auth.users(id,email,email_confirmed_at)
 select ('50000000-0000-4000-8000-'||lpad(n::text,12,'0'))::uuid,'task005-'||n||'@unc.edu',now() from generate_series(1,8) n;
 insert into storage.objects(bucket_id,name,owner_id)
@@ -131,7 +134,7 @@ reset role;
 update public.accounts set status='suspended' where id='50000000-0000-4000-8000-000000000001';
 set local role authenticated;
 select set_config('request.jwt.claims','{"sub":"50000000-0000-4000-8000-000000000002","role":"authenticated"}',true);
-select is((select count(account_id) from public.hangout_participants),1::bigint,'public roster hides no-longer-ready host');
+select is((select count(account_id) from public.hangout_participants),0::bigint,'suspended host hides entire Hangout source');
 reset role;
 update public.accounts set status='active' where id='50000000-0000-4000-8000-000000000001';
 set local role authenticated;
