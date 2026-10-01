@@ -1,6 +1,6 @@
 # TASK-027 progress handoff — 2026-09-30
 
-Status: **In progress / blocked at hosted access-policy implementation**
+Status: **In progress — local implementation verified; hosted preview and activation pending**
 
 ## Direction
 
@@ -45,6 +45,8 @@ Two attempts to add the migration that removes manual roster admission while ret
 6. Review exact nonproduction target and access-change action at action time; no production or domain cutover is included.
 
 ## Implementation continuation — 2026-09-30
+
+Task-branch implementation commit `5e2ae325c32adf47899139ccbba5a6dbf3ea37c4` was pushed to `origin/agent/TASK-027-open-unc-mvp` and independently verified against the remote ref.
 
 - Migration `20260930000100_open_verified_unc_mvp.sql` removes the roster as an application eligibility predicate from both readiness helpers and the three live lock chains. Existing Auth, account, membership, campus, profile, Storage, source and safety checks remain. `TASK-027-SECURITY-REVIEW.md` records the source and lock review. An independent reviewer found no clear bypass and required the expanded tests below.
 - New SQL coverage exercises roster-free onboarding, owned photo, ready state, Hangout creation and valid chat after a roster row is revoked or deleted, plus unconfirmed, non-UNC, suspended, banned, and changed-email denials. Historical pilot tests now assert roster independence while preserving live revocation checks.
