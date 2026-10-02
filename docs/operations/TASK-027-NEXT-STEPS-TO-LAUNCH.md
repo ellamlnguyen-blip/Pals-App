@@ -17,7 +17,7 @@ This runbook follows the locally verified open verified-UNC MVP work. A complete
 
 ## Hosted preview sequence
 
-1. **Reconcile and review the release commit.** Fetch current `origin/main`, resolve any intervening changes, review TASK-027's exact migration and app diff, and record the immutable source SHA. The agent last verified pushed SHA `3b1f448dc0e5868f2d4c396d0ac38e217074aaae`; coordinator commit `87c6f4a` adds the schema-lint repair and launch records but still needs remote verification/push.
+1. **Reconcile and review the release commit.** Current `origin/main` is `c1bc45b5ed233b36f4501036808f2d3b65425124`; TASK-027's merged-main implementation, verification fixes, and handoff are on `agent/TASK-027-open-unc-mvp` at remotely verified commit `be780dc0d6669becb6aee61667fa1d33501bf5bd`. Fresh read-only review found no blocking issue. Keep that immutable source SHA through the preview build, check it against the deployed Vercel deployment, and do not promote until the hosted checks pass.
 2. **Select the exact nonproduction targets.** Confirm the Pals Vercel team/project, Supabase project reference, and preview HTTPS origin. Record them before any hosted write. Do not use a similarly named or unrelated project.
 3. **Configure the preview.** Set only the reviewed preview environment variables. Configure Supabase's exact HTTPS site URL and `/auth/callback` redirect. Keep confirmation enabled. Configure approved SMTP and a controlled UNC test mailbox. Verify public Mapbox configuration and never expose service-role credentials.
 4. **Deploy an immutable Vercel preview.** Deploy the reviewed commit to the verified Pals project. Check `/api/health`: require HTTP 200, `status: "ok"`, and all checks true. Stop on a target mismatch, HTTP 503, or any false check.
@@ -42,7 +42,7 @@ This runbook follows the locally verified open verified-UNC MVP work. A complete
 - Retired pilot HTTP matrices still pin earlier migration history and assert roster-revocation denial. They were not rerun against the roster-free migration. Port the relevant source, safety, lifecycle, and race scenarios to a guarded disposable target before treating them as current release evidence.
 - Supabase SMTP is configured to use `smtp.resend.com` with sender `no-reply@auth.usepals.com`, but delivery to `ella_nguyen@unc.edu` has not been tested. Run the controlled confirmation test only on a nonproduction project with its exact HTTPS callback configured.
 - The proposed backup address `ella_nguyen@kenan-flagler.unc.edu` appears to be Ella's address too; confirm a different person's identity and grant only the separately approved least-privilege moderator role.
-- The coordinator's latest TASK-027 commit is local-only. GitHub resolution/push must be retried, then the task branch and current canonical `main` refs verified before integration.
+- TASK-027 task branch commit `be780dc0d6669becb6aee61667fa1d33501bf5bd` is pushed and remote-verified; it has not yet been integrated into `main`. The task remains incomplete pending staging, moderator coverage, deployed smoke checks, and the release workflow.
 - No production deployment or `usepals.com` DNS change has been made.
 
 Do not invite all UNC students until these blockers are closed and the deployed positive/negative smoke sequence passes on the exact target.
