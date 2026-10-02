@@ -76,6 +76,7 @@ create or replace function private.pilot_lock_ordinary_lifecycle(p_operation tex
 returns table(actor_id uuid,host_id uuid,campus_id uuid,source_row public.hangouts,prior_hangout_id uuid,prior_payload_fingerprint text,locked_subject_bindings jsonb)
 language plpgsql volatile security definer set search_path='' as $$
 declare subjects uuid[]; subject uuid; campus uuid; photo text; object_id uuid; binding jsonb;
+ locked_source public.hangouts;
  memberships jsonb:='{}'::jsonb; photos jsonb:='{}'::jsonb; objects jsonb:='{}'::jsonb;
 begin
  -- Social is first, including its established stronger-isolation error.
@@ -98,12 +99,14 @@ begin
     from private.hangout_create_requests r where r.host_id=actor_id and r.request_id=p_request_id;
   end if;
   if prior_hangout_id is not null then
-   select h.* into source_row from public.hangouts h where h.id=prior_hangout_id for update;
+   select h.* into locked_source from public.hangouts h where h.id=prior_hangout_id for update;
    if not found then raise exception 'Hangout operation not permitted' using errcode='42501'; end if;
+   source_row:=locked_source;
   end if;
  else
-  select h.* into source_row from public.hangouts h where h.id=p_hangout_id for update;
+  select h.* into locked_source from public.hangouts h where h.id=p_hangout_id for update;
   if not found then raise exception 'Hangout operation not permitted' using errcode='42501'; end if;
+  source_row:=locked_source;
  end if;
  host_id:=coalesce(source_row.host_id,actor_id);
  campus_id:=source_row.university_id;
@@ -167,7 +170,7 @@ begin
   end if;
  end if;
  perform private.pilot_require_ordinary_lifecycle(p_operation,coalesce(p_hangout_id,prior_hangout_id));
- return next;
+ return query select actor_id,host_id,campus_id,source_row,prior_hangout_id,prior_payload_fingerprint,locked_subject_bindings;
 end; $$;
 
 create or replace function private.pilot_lock_cohost_chat(p_operation text,p_hangout_id uuid,p_account_id uuid)

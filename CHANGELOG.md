@@ -1,5 +1,9 @@
 # Changelog
 
+## TASK-027 local authorization and verification — 2026-10-01
+
+Removed pilot-roster admission from verified-UNC readiness and source lock helpers while retaining verification, confirmed email, complete onboarding, sanctions, RLS, and safety rules. Clean local database verification passed twice after fixing the lifecycle helper's composite output lint warning: 1,735 pgTAP assertions per run and no schema lint diagnostics. Local feature HTTP/concurrency checks passed as recorded in the handoff. Retired pilot HTTP matrices remain unported and cannot be counted as passing because their fixture guards and roster-denial expectations target the earlier admission model. Hosted preview, target-specific gate activation, UNC SMTP delivery, independent moderator backup, public deployment, and domain cutover remain pending. See `agents/handoffs/TASK-027.md` and `docs/operations/TASK-027-NEXT-STEPS-TO-LAUNCH.md`.
+
 ## Open verified UNC MVP scope — 2026-09-30
 
 The user changed the release target from invite-only pilot to full MVP access for active, confirmed, currently verified UNC accounts with complete onboarding. People discovery, DMs, notifications and analytics are MVP scope. See accepted product decision ADR-0028. Implementation, feature gate reconciliation, nonproduction deployment and safety verification are pending under TASK-027; no hosted access has been opened.

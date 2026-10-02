@@ -1,7 +1,7 @@
 # TASK-027 — Open verified UNC MVP
 
-Status: In progress — local migration/security review verified; hosted preview and release checks pending
-Date: 2026-09-30
+Status: In progress — local implementation and database verification passed; hosted preview and release checks pending
+Date: 2026-10-01
 Branch: `agent/TASK-027-open-unc-mvp`
 
 ## Goal
