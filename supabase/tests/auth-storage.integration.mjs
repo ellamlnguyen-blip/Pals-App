@@ -129,6 +129,9 @@ async function signup(instance, suffix) {
   return { email, password, id: data.user.id, callback };
 }
 test("real confirmation, SSR callback, RLS and private photo ownership", async () => {
+  // Model the explicitly enabled staging MVP. Defaults remain closed after
+  // every local database reset; this fixture opens only the features it uses.
+  sql("update private.pilot_availability set enabled=true; update private.pilot_capabilities set enabled=true where key=any(array['onboarding','hangouts','hangout_chat','calendar','people','friendship','dm','notifications','attendance','optional_profile','extra_photos']);");
   const owner = client(),
     peer = client();
   try {
@@ -348,5 +351,6 @@ test("real confirmation, SSR callback, RLS and private photo ownership", async (
         `delete from auth.users where id='${id}' and email like 'task003-%@live.unc.edu'`,
       );
     }
+    sql("update private.pilot_availability set enabled=false; update private.pilot_capabilities set enabled=false;");
   }
 });

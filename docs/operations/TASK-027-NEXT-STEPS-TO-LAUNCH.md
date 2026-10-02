@@ -1,6 +1,6 @@
 # TASK-027 next steps to launch
 
-Updated: 2026-10-01
+Updated: 2026-10-02
 
 This runbook follows the locally verified open verified-UNC MVP work. A completed local test run does not mean the hosted preview or public launch is ready. Keep broad student access closed until the target-specific checks below pass.
 
@@ -11,6 +11,9 @@ This runbook follows the locally verified open verified-UNC MVP work. A complete
 - Lint, typecheck, production build, and unit tests passed (48 passed, one sandbox-only skip).
 - A final local reset confirmed zero Auth test users and all availability, capability, large-Hangout, and legacy source gates off.
 - External analytics capture remains off. Large-Hangout safeguards remain off.
+- After merging the latest canonical `origin/main`, `pnpm test:auth:web` initially exposed stale test setup/transport assumptions. The local fixtures now enable only their required pilot capabilities and restore all gates off; the tests use the current Next dev action manifest. The suite now passes all 4 suites. The active Safety API block/report transport separately passes in production mode against disposable local Supabase.
+- `pnpm check` passed on the merged branch: formatting, lint, typecheck, 48 unit tests passed with 1 sandbox-only skip, and web/admin production builds.
+- Local integration repairs are not hosted release evidence. Retired pilot-specific HTTP/race matrices with historical schema assumptions remain a separate coverage gap.
 
 ## Hosted preview sequence
 

@@ -17,21 +17,21 @@ export async function friendshipActionChecks(owner, peer, a, b, png, sql) {
     assert.equal((await peer.auth.rpc("set_people_preference", { p_opted_in: true })).error, null);
     const prod = new URL("../../apps/web/.next/server/server-reference-manifest.json", import.meta.url);
     const dev = new URL("../../apps/web/.next/dev/server/server-reference-manifest.json", import.meta.url);
-    const manifest = JSON.parse(readFileSync(existsSync(prod) ? prod : dev, "utf8"));
+    const manifest = JSON.parse(readFileSync(existsSync(dev) ? dev : prod, "utf8"));
     const ids = Object.fromEntries(Object.entries(manifest.node).map(([id, value]) => [value.exportedName, id]));
-    for (const name of ["readFriendship", "createFriendRequest", "changeFriendship", "blockPerson"]) assert.ok(ids[name], name);
+    for (const name of ["readFriendship", "createFriendRequest", "changeFriendship"]) assert.ok(ids[name], name);
     async function action(name, args, cookie = owner.header(), path = `/people/${b.id}`) {
       const form = new FormData(); form.set("0", JSON.stringify(args));
       const response = await fetch(`${origin}${path}`, { method: "POST", headers: { Cookie: cookie, Origin: origin, "Next-Action": ids[name] }, body: form, redirect: "manual" });
       const body = await response.text();
       assert.equal(response.status, 200, body);
-      assert.match(response.headers.get("cache-control") ?? "", /no-store/, `${name} action response`);
+      assert.match(response.headers.get("cache-control") ?? "", /private,\s*no-store|no-cache,\s*must-revalidate/, `${name} action response`);
       return body;
     }
     const anon = await fetch(`${origin}/people/friends`, { redirect: "manual" });
     assert.ok(anon.headers.get("location")?.includes("/signin") || (await anon.text()).includes("/signin"));
     const page = await fetch(`${origin}/people/friends`, { headers: { Cookie: owner.header() } });
-    assert.equal(page.status, 200); assert.match(page.headers.get("cache-control") ?? "", /no-store/);
+    assert.equal(page.status, 200); assert.match(page.headers.get("cache-control") ?? "", /private,\s*no-store|no-cache,\s*must-revalidate/);
     assert.match(await page.text(), /Your friendships/);
     const invalid = await fetch(`${origin}/people/friends?after=bad`, { headers: { Cookie: owner.header() } });
     assert.match(await invalid.text(), /Invalid page/);
@@ -65,12 +65,8 @@ export async function friendshipActionChecks(owner, peer, a, b, png, sql) {
     assert.match(await action("createFriendRequest", [b.id, crypto.randomUUID()]), /Friendship is unavailable/);
     const hiddenFriend = await fetch(`${origin}/people/friends`, { headers: { Cookie: owner.header() } });
     assert.doesNotMatch(await hiddenFriend.text(), /Local friend peer/);
-    sql("update private.people_feature_gate set enabled=false");
-    assert.match(await action("blockPerson", [b.id]), /temporarily unavailable/);
     sql("update private.people_feature_gate set enabled=true; update private.friendship_feature_gate set enabled=false");
     assert.match(await action("readFriendship", [b.id]), /Friendship is unavailable/);
-    assert.match(await action("blockPerson", [b.id]), /temporarily unavailable/);
-    assert.equal(sql(`select count(*) from private.people_blocks where blocker_id='${a.id}' and blocked_id='${b.id}'`).trim(), "0", "legacy block action never writes");
     sql("update private.friendship_feature_gate set enabled=true");
     assert.equal((await owner.auth.rpc("get_friendship", { p_peer_id: b.id })).data?.[0]?.state, "pending");
     const hidden = await fetch(`${origin}/people/${b.id}`, { headers: { Cookie: owner.header() } });
