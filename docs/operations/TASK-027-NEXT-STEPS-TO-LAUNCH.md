@@ -14,7 +14,7 @@ This runbook follows the locally verified open verified-UNC MVP work. A complete
 
 ## Hosted preview sequence
 
-1. **Reconcile and review the release commit.** Fetch current `origin/main`, resolve any intervening changes, review TASK-027's exact migration and app diff, and record the immutable source SHA. The implementation branch's last reported pushed SHA is `3b1f448dc0e5868f2d4c396d0ac38e217074aaae`; re-verify it against GitHub before basing a deployment on it.
+1. **Reconcile and review the release commit.** Fetch current `origin/main`, resolve any intervening changes, review TASK-027's exact migration and app diff, and record the immutable source SHA. The agent last verified pushed SHA `3b1f448dc0e5868f2d4c396d0ac38e217074aaae`; coordinator commit `87c6f4a` adds the schema-lint repair and launch records but still needs remote verification/push.
 2. **Select the exact nonproduction targets.** Confirm the Pals Vercel team/project, Supabase project reference, and preview HTTPS origin. Record them before any hosted write. Do not use a similarly named or unrelated project.
 3. **Configure the preview.** Set only the reviewed preview environment variables. Configure Supabase's exact HTTPS site URL and `/auth/callback` redirect. Keep confirmation enabled. Configure approved SMTP and a controlled UNC test mailbox. Verify public Mapbox configuration and never expose service-role credentials.
 4. **Deploy an immutable Vercel preview.** Deploy the reviewed commit to the verified Pals project. Check `/api/health`: require HTTP 200, `status: "ok"`, and all checks true. Stop on a target mismatch, HTTP 503, or any false check.
@@ -34,11 +34,12 @@ This runbook follows the locally verified open verified-UNC MVP work. A complete
 
 ## Current release blockers
 
-- Hosted Supabase/Vercel configuration and credentials for the correct Pals targets were not available during local verification; no hosted preview or access-gate change has been made.
+- Vercel target is confirmed as team `pals8`, project `pals-app`. The production deployment remains on `main` commit `c1bc45b` at `pals-app-eta.vercel.app`. The existing TASK-027 preview health endpoint currently returns `{"status":"not_ready","checks":{"hostedEnvironment":false,"supabaseTarget":false,"publishableKeyPresent":false,"appOrigin":false,"mapboxPublicTokenPresent":false,"authConfiguration":false}}`. Vercel settings show the required variables are configured for Production only; Preview has none. Do not copy production Supabase values into a preview.
+- The signed-in Supabase `Pals App` organization has one project, `plqhsyhdfgqygauntsts`, on its `main PRODUCTION` branch; no separate staging project/branch is available. No preview migration or access-gate change has been made.
 - Retired pilot HTTP matrices still pin earlier migration history and assert roster-revocation denial. They were not rerun against the roster-free migration. Port the relevant source, safety, lifecycle, and race scenarios to a guarded disposable target before treating them as current release evidence.
-- Real UNC email delivery has not been tested on the deployed HTTPS callback.
-- A distinct backup moderator has not been named.
-- GitHub DNS was unavailable during coordinator review, so the task branch and canonical `main` refs could not be re-verified from this session. The task handoff records the agent's earlier successful remote SHA check.
+- Supabase SMTP is configured to use `smtp.resend.com` with sender `no-reply@auth.usepals.com`, but delivery to `ella_nguyen@unc.edu` has not been tested. Run the controlled confirmation test only on a nonproduction project with its exact HTTPS callback configured.
+- The proposed backup address `ella_nguyen@kenan-flagler.unc.edu` appears to be Ella's address too; confirm a different person's identity and grant only the separately approved least-privilege moderator role.
+- The coordinator's latest TASK-027 commit is local-only. GitHub resolution/push must be retried, then the task branch and current canonical `main` refs verified before integration.
 - No production deployment or `usepals.com` DNS change has been made.
 
 Do not invite all UNC students until these blockers are closed and the deployed positive/negative smoke sequence passes on the exact target.
