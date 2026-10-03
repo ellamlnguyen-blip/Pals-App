@@ -79,7 +79,9 @@ test("DM sends serialize with both gates and live account, photo, campus and opt
     insert into public.universities(id,slug,name,active,allowed_email_domains)
       values('${otherCampus}','dm-race-campus','DM race campus',true,array['unc.edu']);
     update private.people_feature_gate set enabled=true;
-    update private.dm_feature_gate set enabled=true;`);
+    update private.dm_feature_gate set enabled=true;
+    update private.pilot_availability set enabled=true;
+    update private.pilot_capabilities set enabled=true where key in ('onboarding','people','dm');`);
   try {
     const generation=sql(`begin; ${claims(a)} select public.create_dm_request('${b}',
       '${crypto.randomUUID()}','Initial'); commit;`).split("\n")[0];
@@ -120,6 +122,8 @@ test("DM sends serialize with both gates and live account, photo, campus and opt
         '${generation}'); commit;`).split("\n")[0],"0","later body page is empty");
     } finally { reader.child.kill(); }
   } finally {
+    sql(`update private.pilot_capabilities set enabled=false where key in ('onboarding','people','dm');
+      update private.pilot_availability set enabled=false;`);
     sql(`update private.dm_feature_gate set enabled=false;
       update private.people_feature_gate set enabled=false;
       set dm.allow_fixture_cleanup='true';

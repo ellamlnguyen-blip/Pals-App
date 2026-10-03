@@ -97,7 +97,7 @@ select ok(not private.has_verified_membership(), 'inactive campus denied');
 select set_config('request.jwt.claims', '{"sub":"10000000-0000-4000-8000-000000000006","role":"authenticated"}', true);
 select ok(not private.has_verified_membership(), 'suspended account denied with existing JWT');
 select is((select count(*) from public.profiles), 0::bigint, 'suspended cannot read profiles');
-select is((select count(*) from public.accounts), 0::bigint, 'suspended account cannot read raw account state');
+select is((select count(*) from public.accounts), 1::bigint, 'suspended owner can read only their own account status');
 with changed as (update public.profiles set bio='bypass' returning *)
 select is(count(*), 0::bigint, 'suspended profile edits affect zero rows') from changed;
 select throws_ok($$update public.accounts set status='active'$$, '42501', null, 'suspended cannot self-reinstate');

@@ -83,7 +83,9 @@ test("report retries, fifth slot and revocations observe database lock waits", {
       insert into private.people_preferences(account_id,opted_in)
         values ('${actor}',true),('${peer}',true);
       update private.safety_feature_gate set enabled=true;
-      update private.people_feature_gate set enabled=true;`);
+      update private.people_feature_gate set enabled=true;
+    update private.pilot_availability set enabled=true;
+    update private.pilot_capabilities set enabled=true where key in ('onboarding','people','hangouts');`);
 
     await race("same_key", submit(1), submit(1));
     assert.equal(count(), 1, "same-key race inserted only once");
@@ -137,6 +139,8 @@ test("report retries, fifth slot and revocations observe database lock waits", {
       select public.submit_safety_report('${key(8)}','user','${peer}','harassment',null);
       rollback;`), /Safety operation unavailable/);
   } finally {
+    sql(`update private.pilot_capabilities set enabled=false where key in ('onboarding','people','hangouts');
+      update private.pilot_availability set enabled=false;`);
     sql(`update private.safety_feature_gate set enabled=false;
       update private.people_feature_gate set enabled=false;
       delete from private.safety_report_requests where reporter_id='${actor}';

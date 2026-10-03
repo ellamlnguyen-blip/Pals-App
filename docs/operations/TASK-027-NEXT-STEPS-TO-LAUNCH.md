@@ -13,6 +13,7 @@ This runbook follows the locally verified open verified-UNC MVP work. A complete
 - External analytics capture remains off. Large-Hangout safeguards remain off.
 - After merging the latest canonical `origin/main`, `pnpm test:auth:web` initially exposed stale test setup/transport assumptions. The local fixtures now enable only their required pilot capabilities and restore all gates off; the tests use the current Next dev action manifest. The suite now passes all 4 suites. The active Safety API block/report transport separately passes in production mode against disposable local Supabase.
 - `pnpm check` passed on the merged branch: formatting, lint, typecheck, 48 unit tests passed with 1 sandbox-only skip, and web/admin production builds.
+- Final current-fixture verification: 12/12 concurrency integration tests pass together from a clean reset; Auth/web lifecycle passes 4/4 from a clean reset; the eight current non-moderation HTTP suites pass 8/8, and moderation HTTP passes 1/1 on a separate clean reset because its retained report queue assertion is order-sensitive. `pnpm check` passed again after regenerating stale `.next/dev` types.
 - Local integration repairs are not hosted release evidence. Retired pilot-specific HTTP/race matrices with historical schema assumptions remain a separate coverage gap.
 
 ## Hosted preview sequence

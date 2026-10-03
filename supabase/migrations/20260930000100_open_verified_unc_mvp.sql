@@ -48,6 +48,13 @@ language sql stable security definer set search_path='' as $$
   else 'ready' end;
 $$;
 
+-- Keep an account's own status readable so suspended/banned users can learn
+-- why access is restricted. This exposes only the caller's own account row;
+-- it does not grant access to profiles, memberships, or product operations.
+drop policy accounts_owner_read on public.accounts;
+create policy accounts_owner_read on public.accounts for select to authenticated
+using(id=(select auth.uid()));
+
 create or replace function private.pilot_lock_owner_evidence(subject uuid) returns void
 language plpgsql volatile security definer set search_path='' as $$
 declare campus uuid;

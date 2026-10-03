@@ -52,10 +52,10 @@ select lives_ok($$select public.create_hangout(gen_random_uuid(),'Second UNC tes
 select lives_ok($$select public.send_hangout_message((select id from public.hangouts where host_id=auth.uid() and title='Second UNC test Hangout'),gen_random_uuid(),'See you soon')$$,'deleted roster row does not deny valid Hangout chat');
 select set_config('request.jwt.claims','{"sub":"27000000-0000-4000-8000-000000000002","role":"authenticated"}',true);
 select is(public.get_access_state(),'unverified','unconfirmed account stays unverified');
-select is((select count(*) from public.accounts where id=auth.uid()),0::bigint,'unconfirmed owner RLS denied');
+select is((select count(*) from public.accounts where id=auth.uid()),1::bigint,'unconfirmed owner can read only their own account status');
 select set_config('request.jwt.claims','{"sub":"27000000-0000-4000-8000-000000000004","role":"authenticated"}',true);
 select is(public.get_access_state(),'restricted','suspended account restricted');
-select is((select count(*) from public.accounts where id=auth.uid()),0::bigint,'suspended owner RLS denied');
+select is((select count(*) from public.accounts where id=auth.uid()),1::bigint,'suspended owner can read only their own account status');
 reset role;
 
 update auth.users set email='open-unc@example.edu' where id='27000000-0000-4000-8000-000000000001';

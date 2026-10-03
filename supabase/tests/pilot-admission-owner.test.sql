@@ -8,7 +8,7 @@ insert into auth.users(id,email,email_confirmed_at,raw_user_meta_data) values
 set local role authenticated;
 set local request.jwt.claims='{"sub":"a1000000-0000-4000-8000-000000000001","role":"authenticated","admitted":true}';
 select is(public.get_access_state(),'pilot_unavailable','off takes precedence; forged claims ignored');
-select is((select count(*)::integer from public.accounts),0,'denied account raw read');
+select is((select count(*)::integer from public.accounts),1,'caller reads only their own status while access is unavailable');
 select is((select count(*)::integer from public.profiles),0,'denied profile raw read');
 select is((select count(*)::integer from public.universities),0,'denied references');
 reset role;
@@ -81,7 +81,7 @@ update storage.objects set owner_id='a1000000-0000-4000-8000-000000000001' where
 update auth.users set email_confirmed_at=null where id='a1000000-0000-4000-8000-000000000001';
 set local role authenticated;
 select is(public.get_access_state(),'unverified','live Auth confirmation missing');
-select is((select count(*)::integer from public.accounts),0,'unverified account raw known ID denied');
+select is((select count(*)::integer from public.accounts),1,'unverified caller reads only their own account status');
 select is((select count(*)::integer from public.university_memberships),0,'unverified membership raw denied');
 select is((select count(*)::integer from public.universities),0,'unverified reference denied');
 with changed as(update public.profiles set bio='Unverified intrusion' returning *) select is(count(*),0::bigint,'unverified direct update changes zero') from changed;
@@ -113,7 +113,7 @@ insert into private.pilot_availability(singleton,enabled,revision) values(true,t
 update public.accounts set status='banned' where id='a1000000-0000-4000-8000-000000000001';
 set local role authenticated;
 select is(public.get_access_state(),'restricted','banned restriction');
-select is((select count(*)::integer from public.accounts),0,'restricted raw owner account denied');
+select is((select count(*)::integer from public.accounts),1,'restricted caller reads only their own account status');
 reset role;
 update public.accounts set status='active' where id='a1000000-0000-4000-8000-000000000001';
 set local role authenticated;

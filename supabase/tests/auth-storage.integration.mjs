@@ -36,9 +36,12 @@ async function assertGate(response, path) {
     assert.equal(response.headers.get("location"), path);
   else {
     const html = await response.text();
+    const streamedRedirects = [...html.matchAll(/url=[^\"'\s<>]+/g)]
+      .map((match) => match[0]);
     assert.ok(
       html.includes(`url=${path}`),
-      `streamed response redirects to ${path}`,
+      `streamed response redirects to ${path}; status=${response.status}; ` +
+        `observed=${streamedRedirects.slice(0, 3).join(",") || "none"}`,
     );
     assert.ok(
       !html.includes("These are development examples"),
