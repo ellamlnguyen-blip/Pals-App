@@ -1,5 +1,9 @@
 # Changelog
 
+## TASK-027 access rule expansion — 2026-10-04
+
+By explicit user decision, a confirmed email on the existing exact UNC allowlist grants immediate app/source access for active accounts, without pilot roster, separate enrollment check, complete profile, or primary photo. The security migration, empty-profile behavior, direct-RLS/HTTP coverage, and full regression suite are in progress. Preserve all non-UNC/unconfirmed/stale-email/suspension/ban denials, RLS, blocks, reporting, privacy, consent, external analytics-off, and large-Hangout-safeguards-off constraints. The accepted policy is recorded in ADR-0030; no hosted gates have been opened.
+
 ## TASK-027 local authorization and verification — 2026-10-01
 
 Removed pilot-roster admission from verified-UNC readiness and source lock helpers while retaining verification, confirmed email, complete onboarding, sanctions, RLS, and safety rules. Clean local database verification passed twice after fixing the lifecycle helper's composite output lint warning: 1,735 pgTAP assertions per run and no schema lint diagnostics. Local feature HTTP/concurrency checks passed as recorded in the handoff. Retired pilot HTTP matrices remain unported and cannot be counted as passing because their fixture guards and roster-denial expectations target the earlier admission model. Hosted preview, target-specific gate activation, UNC SMTP delivery, independent moderator backup, public deployment, and domain cutover remain pending. See `agents/handoffs/TASK-027.md` and `docs/operations/TASK-027-NEXT-STEPS-TO-LAUNCH.md`.

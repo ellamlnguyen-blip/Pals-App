@@ -156,11 +156,24 @@ test("real confirmation, SSR callback, RLS and private photo ownership", async (
         owner.jar.set(pair.slice(0, at), pair.slice(at + 1));
         assert.match(cookie, /httponly/i);
       }
-      const blocked = await fetch("http://127.0.0.1:3000/hangouts", {
+      const hangouts = await fetch("http://127.0.0.1:3000/hangouts", {
         headers: { Cookie: owner.header() },
         redirect: "manual",
       });
-      await assertGate(blocked, "/onboarding");
+      assert.equal(hangouts.status, 307);
+      assert.equal(
+        new URL(hangouts.headers.get("location")).pathname,
+        "/hangouts/saved",
+        "confirmed UNC user enters real Hangout discovery before profile completion",
+      );
+      const discovery = await fetch(
+        "http://127.0.0.1:3000/hangouts/saved",
+        {
+          headers: { Cookie: owner.header() },
+          redirect: "manual",
+        },
+      );
+      assert.equal(discovery.status, 200);
       const anon = await fetch("http://127.0.0.1:3000/hangouts", {
         redirect: "manual",
       });
@@ -195,7 +208,7 @@ test("real confirmation, SSR callback, RLS and private photo ownership", async (
         null,
       );
     }
-    assert.equal((await owner.auth.rpc("get_access_state")).data, "onboarding");
+    assert.equal((await owner.auth.rpc("get_access_state")).data, "ready");
     assert.equal(
       (await owner.auth.from("platform_roles").select()).data.length,
       0,

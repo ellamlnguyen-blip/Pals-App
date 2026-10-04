@@ -1,17 +1,18 @@
 # TASK-027 — Open verified UNC MVP
 
-Status: In progress — local implementation and database verification passed; hosted preview and release checks pending
-Date: 2026-10-01
+Status: In progress — revised immediate confirmed-UNC-email access policy; implementation and hosted preview checks pending
+Date: 2026-10-04
 Branch: `agent/TASK-027-open-unc-mvp`
 
 ## Goal
 
-Implement the accepted scope in ADR-0028 so all active, confirmed, currently verified UNC accounts with complete onboarding can test the full MVP without pilot roster admission. Preserve required identity, privacy, consent, RLS, block/report, moderation, and account-enforcement boundaries.
+Implement ADR-0028 as amended by ADR-0030 so every active account with a confirmed email on the exact UNC allowlist can enter and use the MVP immediately, without pilot-roster, separate current-enrollment, profile-completion, or primary-photo requirements. Preserve identity/email evidence, privacy, consent, RLS, block/report, moderation, and account-enforcement boundaries.
 
 ## In scope
 
 - Replace pilot-pending behavior and copy with normal UNC verification/onboarding flow.
 - Remove the private pilot admission roster as an application eligibility requirement in a committed migration, including owner, ready-subject, Storage, Hangout, People, and other source guards.
+- Remove profile-completion and primary-photo requirements from app/source eligibility consistently in a committed migration, while retaining exact allowlist, confirmed-email, active-campus, active-account and current Auth-to-membership checks. Ensure required profile/photo editing remains reachable after app entry and incomplete profiles are not exposed to other users without consent.
 - Reconcile capability gates and legacy feature gates with included MVP features: Hangouts/discovery, Calendar, People/friendship, Hangout chat, DMs, in-app notifications, attendance, profile enrichment, and extra photos.
 - Remove environment-only local guards that make implemented production routes/APIs return `notFound` or unavailable; keep actual authorization in Supabase/RLS/caller-session checks.
 - Run clean-migration, actual-role RLS and HTTP tests against a disposable/nonproduction database; build and smoke-test the deployed preview across positive and negative cases.
@@ -26,12 +27,12 @@ Implement the accepted scope in ADR-0028 so all active, confirmed, currently ver
 
 ## Acceptance criteria
 
-1. A confirmed, currently verified UNC account with complete required profile and owned primary photo is `ready` without a roster row.
-2. Unconfirmed, non-UNC, stale/unverified, suspended, banned, and incomplete accounts remain denied at database/RLS and app layers.
+1. An active account with a confirmed email on the exact active UNC allowlist is `ready` without a roster row, complete profile, or owned primary photo.
+2. Unconfirmed, non-allowlisted, stale/changed-email, inactive-campus, suspended, and banned accounts remain denied at database/RLS and app layers. A confirmed allowlisted account with no profile/photo is a positive access case.
 3. All included MVP routes and APIs work in the deployed nonproduction environment; feature authorization is source-side and revocation/block behavior still applies.
 4. All required gates are aligned, and no route says “coming later” for a capability included in the MVP.
 5. Analytics consent and data minimization remain enforced; external capture remains off unless independently verified.
-6. Migration reset, SQL policy tests, relevant concurrency/HTTP suites, lint, typecheck and production build pass; a browser smoke test verifies sign-in, onboarding, Hangout, People, DM, notifications, attendance and safety paths.
+6. Migration reset, SQL policy tests, relevant concurrency/HTTP suites, lint, typecheck and production build pass; a browser smoke test verifies sign-in, app entry before profile completion, profile editing, Hangout, People, DM, notifications, attendance and safety paths.
 7. `CURRENT_STATE.md`, `NOW.md`, `CHANGELOG.md`, and a final handoff document actual results and remaining release blockers.
 
 ## Release boundary

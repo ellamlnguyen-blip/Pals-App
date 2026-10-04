@@ -122,11 +122,11 @@ update public.profiles set primary_photo_path=null where user_id='51300000-0000-
 set local role authenticated;
 select set_config('request.jwt.claims','{"sub":"51300000-0000-4000-8000-000000000001","role":"authenticated"}',true);
 select is((select author_id from public.read_hangout_messages(pg_temp.hid()) where sequence=2),
-  null::uuid,'unready author ID withheld');
+  '51300000-0000-4000-8000-000000000002'::uuid,'photo-free author ID retained');
 select is((select author_label from public.read_hangout_messages(pg_temp.hid()) where sequence=2),
-  'Former participant','unready author neutral label');
+  null::text,'photo-free author has no neutral label');
 select set_config('request.jwt.claims','{"sub":"51300000-0000-4000-8000-000000000002","role":"authenticated"}',true);
-select throws_ok($$select public.read_hangout_messages(pg_temp.hid())$$,'42501',null,'unready member denied');
+select lives_ok($$select public.read_hangout_messages(pg_temp.hid())$$,'photo-free member remains authorized');
 reset role;
 update public.profiles set primary_photo_path=user_id::text||'/primary.png'
   where user_id='51300000-0000-4000-8000-000000000002';

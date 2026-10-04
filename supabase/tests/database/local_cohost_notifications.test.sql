@@ -51,11 +51,11 @@ set local role authenticated;
 select set_config('request.jwt.claims',
  '{"sub":"54020000-0000-4000-8000-000000000003","role":"authenticated"}',true);
 select is((select actor_id from public.list_notifications()
- where label='Unavailable'),null::uuid,
- 'unready former source ID is hidden');
+ where event_code='hangout_edited'),'54020000-0000-4000-8000-000000000002'::uuid,
+ 'photo-free edit actor remains visible');
 select is((select count(*) from public.list_notifications()
- where event_code='hangout_edited'),0::bigint,
- 'unready actor makes old edit neutral');
+ where event_code='hangout_edited'),1::bigint,
+ 'photo loss does not revoke an edit');
 reset role;
 update public.profiles set primary_photo_path=user_id::text||'/primary.png'
  where user_id='54020000-0000-4000-8000-000000000002';

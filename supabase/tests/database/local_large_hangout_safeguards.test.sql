@@ -222,8 +222,8 @@ select set_config('request.jwt.claims',
   '{"sub":"52000000-0000-4000-8000-000000000001","role":"authenticated"}',true);
 select is((select is_large from public.get_hangout_large_state(pg_temp.hid(2))),true,
   'host count includes a nonready joined member');
-select is(pg_temp.saved()->'pins'->1->>'id',pg_temp.hid(2)::text,
-  'nonready joined member no longer makes the viewer-relative class large');
+select is(pg_temp.saved()->'pins'->1->>'id',pg_temp.hid(3)::text,
+  'photo-free joined member remains in viewer-relative size class');
 reset role;
 update public.profiles set primary_photo_path=pg_temp.uid(25)::text||'/primary.png'
   where user_id=pg_temp.uid(25);

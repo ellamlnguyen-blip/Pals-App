@@ -1,6 +1,6 @@
 # ADR-0028 — Open verified UNC MVP
 
-- Status: Accepted for product scope; implementation and hosted release are pending
+- Status: Accepted for MVP scope; its profile-readiness access condition is superseded by ADR-0030
 - Date: 2026-09-30
 - Supersedes: ADR-0026 for the current release audience and capability scope; ADR-0025 deferrals that conflict with the user's current MVP scope
 
@@ -15,6 +15,8 @@ The current production experience says student features are unavailable while th
 The MVP includes Calendar, People discovery, friendship, DMs, in-app notifications, attendance confirmation, and analytics alongside the existing Hangout, identity, and safety flows. Analytics remains opt-in and respects ADR-0023's privacy conditions. Large-Hangout safeguards retain ADR-0024's independent deferral.
 
 This decision does not authorize weakening RLS, campus verification, block enforcement, consent, privacy, moderation audit, or account enforcement. Each capability must work through its normal server/database authorization path. UI switches alone do not authorize a feature. The pilot admission system may remain as an administrative artifact, but no application read/write path may require an account-roster entry for current verified-UNC eligibility.
+
+**Access-readiness amendment:** [ADR-0030](ADR-0030-confirmed-unc-email-immediate-access.md), accepted by the user's explicit direction on 2026-10-04, supersedes the complete-profile/owned-photo requirement for entering the app and source eligibility. Confirmed email on the exact approved UNC allowlist is the accepted signal; no independent enrollment check is required. All suspension/ban and safety boundaries remain.
 
 ## Consequences
 

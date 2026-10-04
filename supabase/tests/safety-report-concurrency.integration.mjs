@@ -135,6 +135,15 @@ test("report retries, fifth slot and revocations observe database lock waits", {
     await race("account_first_new", `update public.accounts set status='suspended'
       where id='${actor}';`, submit(7), true);
     assert.equal(count(), 6);
+    sql(`update public.accounts set status='active' where id='${actor}'`);
+    await race("profile_text_first", `update public.profiles set bio=null
+      where user_id='${peer}';`, submit(9), true);
+    assert.equal(count(), 6, "profile revocation before report is observed");
+    sql(`update public.profiles set bio='Fixture' where user_id='${peer}'`);
+    await race("report_first_profile_text", submit(10), `update public.profiles set bio=null
+      where user_id='${peer}';`);
+    assert.equal(count(), 7, "profile edit waits for an already authorized report");
+    sql(`update public.profiles set bio='Fixture' where user_id='${peer}'`);
     assert.throws(() => sql(`begin isolation level repeatable read; ${claims(actor)}
       select public.submit_safety_report('${key(8)}','user','${peer}','harassment',null);
       rollback;`), /Safety operation unavailable/);

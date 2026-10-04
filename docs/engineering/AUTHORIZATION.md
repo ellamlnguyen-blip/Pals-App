@@ -2,7 +2,7 @@
 
 ## Current release phase — open verified UNC MVP (2026-09-30)
 
-[Accepted ADR-0028](../../decisions/ADR-0028-open-verified-unc-mvp.md) supersedes the invite-only audience for the current release. Every active, email-confirmed, currently verified UNC account with complete required onboarding may use the MVP without manual pilot admission. Other-campus, unconfirmed/unverified, incomplete, suspended, and banned accounts remain denied. Calendar/People/friendship/DM/in-app notification/attendance and privacy-scoped analytics are included MVP capabilities. The separate production access switch and each source feature authorization still must be reviewed and verified before hosted release.
+[Accepted ADR-0028](../../decisions/ADR-0028-open-verified-unc-mvp.md), as amended by [ADR-0030](../../decisions/ADR-0030-confirmed-unc-email-immediate-access.md), supersedes the invite-only audience for the current release. Every active account with a confirmed email whose exact domain matches the active UNC allowlist may use the MVP without a pilot row or completed profile/photo. Confirmed allowlisted email is the accepted campus-access proxy, not an independent current-enrollment/real-identity check. Other-domain, unconfirmed, stale-email, inactive-campus, suspended, and banned accounts remain denied. Calendar/People/friendship/DM/in-app notification/attendance and privacy-scoped analytics are included MVP capabilities. The separate production access switch and each source feature authorization still must be reviewed and verified before hosted release.
 
 Existing operator/staffing/MFA/retention/recovery/photo bearer policy remains separately reviewed. Scope acceptance creates no client grant or RLS bypass. Named human report handling is required. The same person as primary and backup does not provide independent backup coverage. Analytics remains opt-in and under ADR-0023's hosted privacy requirements. Earlier amendments below are historical where they conflict with ADR-0028.
 
@@ -25,7 +25,7 @@ Help edit permitted details, invite, manage attendees/chat as policy allows. Can
 Review reports, inspect moderation-relevant records, suspend/ban, disable hangouts, record actions. Access must be auditable.
 
 ## Visibility
-Campus: eligible verified students at university. Friends: permitted friend graph. Invite-only: invited/permitted users only.
+Campus: active accounts with a confirmed email on the current exact UNC allowlist, as accepted by ADR-0030. Friends: permitted friend graph. Invite-only: invited/permitted users only.
 
 ## Blocking
 Stop DMs, new friend requests, direct invitations; suppress discovery where reasonable; enforce restricted/private access server-side.
@@ -41,7 +41,7 @@ Server-owned state (verification, campus assignment, suspension, platform roles)
 
 ## TASK-003 onboarding and photos
 
-`get_access_state()` is executable only by authenticated callers and returns their live gate: signed_out, restricted, unverified, onboarding or ready. Ready additionally requires structural profile completion and an existing owned photo. Future feature RLS must enforce this boundary independently; a web page gate is not a substitute for feature policies.
+`get_access_state()` is executable only by authenticated callers and returns their live gate: signed_out, restricted, unverified or ready. Under ADR-0030, active confirmed UNC-allowlist accounts are ready without a complete profile or owned photo; profile editing remains available after entry. Future feature RLS must enforce this boundary independently; a web page gate is not a substitute for feature policies.
 
 The private `profile-photos` bucket permits reads/inserts/deletes only to its active verified owner. Insert paths must be under that caller's UUID. Updates/overwrite have no policy; upload a new object for replacement. A referenced primary photo cannot be deleted through the client Storage API until detached. Profile assignment checks actual object existence/ownership using a fixed-search-path trigger. No peer visibility or blanket platform-role access is granted. App photo delivery rechecks access on every uncached request; normal Storage bearer URL behavior remains relevant if an owner deliberately creates a signed URL directly.
 

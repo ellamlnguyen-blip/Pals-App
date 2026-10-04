@@ -92,8 +92,9 @@ select set_config('request.jwt.claims','{"sub":"50000000-0000-4000-8000-00000000
 select is((select count(*) from public.hangouts),0::bigint,'unconfirmed reader denied');
 select throws_ok($$select public.join_hangout(pg_temp.hid())$$,'42501',null,'unconfirmed join denied');
 select set_config('request.jwt.claims','{"sub":"50000000-0000-4000-8000-000000000008","role":"authenticated"}',true);
-select is((select count(*) from public.hangouts),0::bigint,'missing photo reader denied');
-select throws_ok($$select public.join_hangout(pg_temp.hid())$$,'42501',null,'missing photo join denied');
+select is((select count(*) from public.hangouts),1::bigint,'confirmed UNC reader needs no photo');
+select lives_ok($$select public.join_hangout(pg_temp.hid())$$,'confirmed UNC joins without photo');
+select lives_ok($$select public.leave_hangout(pg_temp.hid())$$,'incomplete-profile peer may leave');
 select set_config('request.jwt.claims','{"sub":"50000000-0000-4000-8000-000000000004","role":"authenticated"}',true);
 select is((select count(*) from public.hangouts),0::bigint,'banned moderator reader denied');
 select throws_ok($$select public.join_hangout(pg_temp.hid())$$,'42501',null,'banned moderator join denied');

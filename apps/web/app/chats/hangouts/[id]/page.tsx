@@ -51,7 +51,7 @@ export default async function ThreadPage({
     <Frame signedIn navigation>
       <section className="chat-page" aria-labelledby="thread-title">
         <Link href="/chats">← All chats</Link>
-        <p className="badge">Hangout chat · local only</p>
+        <p className="badge">Hangout chat</p>
         <h1 id="thread-title">{record.title}</h1>
         <Link href={`/hangouts/saved/${id}`}>View Hangout details</Link>
         <Thread

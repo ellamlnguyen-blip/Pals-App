@@ -100,7 +100,7 @@ select id,true from public.accounts where id::text between
   '11000000-0000-4000-8000-000000000007' and '11000000-0000-4000-8000-000000000032';
 insert into private.people_preferences(account_id,opted_in)
 values ('11000000-0000-4000-8000-000000000034',true),
-  ('11000000-0000-4000-8000-000000000035',true);
+  ('11000000-0000-4000-8000-000000000035',false);
 insert into private.people_blocks(blocker_id,blocked_id)
 values ('11000000-0000-4000-8000-000000000001','11000000-0000-4000-8000-000000000034');
 set local role authenticated;
@@ -186,7 +186,7 @@ update public.profiles set primary_photo_path=null
 where user_id='11000000-0000-4000-8000-000000000003';
 set local role authenticated;
 select set_config('request.jwt.claims','{"sub":"11000000-0000-4000-8000-000000000001","role":"authenticated"}',true);
-select is((select count(*) from public.get_people_detail('11000000-0000-4000-8000-000000000003')),0::bigint,'missing photo revokes opted-in admin subject');
+select is((select count(*) from public.get_people_detail('11000000-0000-4000-8000-000000000003')),1::bigint,'photo-free opted-in subject with text remains visible');
 reset role;
 update public.accounts set status='suspended' where id='11000000-0000-4000-8000-000000000003';
 set local role authenticated;

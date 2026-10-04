@@ -45,7 +45,7 @@ export async function friendshipActionChecks(owner, peer, a, b, png, sql) {
     assert.equal((await owner.auth.rpc("get_friendship", { p_peer_id: b.id })).data?.[0]?.state, "accepted");
     assert.match(await action("changeFriendship", [b.id, crypto.randomUUID(), "unfriend"]), /This request changed/);
     assert.equal((await owner.auth.from("profiles").update({ primary_photo_path: null }).eq("user_id", a.id)).error, null);
-    assert.equal((await owner.auth.rpc("get_access_state")).data, "onboarding");
+    assert.equal((await owner.auth.rpc("get_access_state")).data, "ready");
     const idOnly = await fetch(`${origin}/people/friends`, { headers: { Cookie: owner.header() } });
     assert.equal(idOnly.status, 200);
     const idOnlyHtml = await idOnly.text();

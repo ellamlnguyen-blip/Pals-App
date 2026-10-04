@@ -21,7 +21,7 @@ set local role anon;
 select throws_ok('select public.get_access_state()','42501',null,'anonymous cannot invoke account RPC');
 set local role authenticated;
 select set_config('request.jwt.claims','{"sub":"20000000-0000-4000-8000-000000000001","role":"authenticated"}',true);
-select is(public.get_access_state(),'onboarding','confirmed incomplete user needs onboarding');
+select is(public.get_access_state(),'ready','confirmed incomplete user enters immediately');
 select throws_ok($$update public.profiles set primary_photo_path='https://evil.test/p.png'$$,'23514',null,'remote photo URLs denied');
 select throws_ok($$update public.profiles set primary_photo_path='20000000-0000-4000-8000-000000000001/missing.jpg'$$,'23514',null,'nonexistent photo denied');
 select lives_ok($$insert into storage.objects(bucket_id,name,owner_id) values('profile-photos','20000000-0000-4000-8000-000000000001/aaaaaaaa.jpg',auth.uid()::text)$$,'verified owner can upload own path');
@@ -40,7 +40,7 @@ select throws_ok($$insert into storage.objects(bucket_id,name,owner_id) values('
 reset role;
 update auth.users set email_confirmed_at=now() where id='20000000-0000-4000-8000-000000000002';
 set local role authenticated;
-select is(public.get_access_state(),'onboarding','confirmation grants membership without client writes');
+select is(public.get_access_state(),'ready','confirmation grants access without client writes');
 reset role;
 update public.accounts set status='suspended' where id='20000000-0000-4000-8000-000000000001';
 set local role authenticated;
