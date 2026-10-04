@@ -10,9 +10,9 @@ export default async function PilotPending() {
     <Frame signedIn>
       <section className="welcome">
         <Intro title="Your email is confirmed.">
-          Student access is temporarily unavailable. Pals is currently open to
-          active UNC students with confirmed email, current campus verification,
-          and a complete profile. Check your account status or try again later.
+          Pals is not open at UNC yet. When the launch opens, an active account
+          with a confirmed email from an approved UNC domain can get started. No
+          roster or completed profile is required.
         </Intro>
       </section>
     </Frame>
