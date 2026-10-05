@@ -1,6 +1,6 @@
 # ADR-0033 — Live UNC eligibility for moderation authority
 
-Status: Proposed
+Status: Rejected
 Date: 2026-10-05
 Scope: TASK-027 operator authorization
 
@@ -20,4 +20,4 @@ Actual-role SQL and genuine Auth HTTP tests must prove the five RPCs reject unco
 
 ## Acceptance
 
-AGENTS.md requires explicit acceptance for this authorization change. A read-only independent design review found the lock order above suitable for acceptance, subject to actual race tests and hosted Auth validation. Current user instructions already require live email/campus enforcement, but implementation and hosted rollout still need this reviewed decision.
+The user explicitly rejected rechecking UNC email/campus eligibility on every moderation action on 2026-10-05, prioritizing the shortest route to a working MVP. This proposal is retained as a rejected design record; TASK-027M will not implement it. Existing active-account, current-role, live AAL2 session/factor and source-gate checks remain. A granted operator role must be removed through the existing reviewed administrative path if the operator later loses UNC eligibility; this is an operational limitation to verify during launch review.

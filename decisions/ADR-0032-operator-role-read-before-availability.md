@@ -1,6 +1,6 @@
 # ADR-0032 — Own operator role read before launch availability
 
-Status: Proposed
+Status: Accepted
 Date: 2026-10-05
 Scope: TASK-027 staging preparation
 
@@ -20,4 +20,4 @@ Prove under actual `anon` and `authenticated` roles that an active confirmed all
 
 ## Acceptance
 
-This permission change requires explicit acceptance under AGENTS.md's ADR policy. A read-only independent design review required the exact UNC slug correction above; no further design blocker was found. The proposed status grants no migration or hosted write authorization by itself. Production remains out of scope.
+The user accepted this narrow prelaunch own-role permission on 2026-10-05. A read-only independent design review required the exact UNC slug correction above; no further design blocker was found. Acceptance grants no hosted gate enablement by itself. Production remains out of scope.

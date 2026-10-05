@@ -1,6 +1,6 @@
 # TASK-027M — Enforce live operator UNC eligibility
 
-Status: Ready only after ADR-0033 acceptance
+Status: Cancelled; ADR-0033 rejected by explicit user decision. Do not implement.
 Parent: TASK-027
 Date: 2026-10-05
 

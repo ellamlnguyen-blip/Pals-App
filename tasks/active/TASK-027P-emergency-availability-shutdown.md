@@ -1,6 +1,6 @@
 # TASK-027P — Audited emergency availability-off operation
 
-Status: Ready only after ADR-0035 acceptance
+Status: Ready after reviewed migration lane; ADR-0035 accepted for staging only
 Parent: TASK-027
 Date: 2026-10-05
 

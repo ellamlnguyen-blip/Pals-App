@@ -1,6 +1,6 @@
 # ADR-0035 — Emergency availability shutdown without Ella's session
 
-Status: Proposed
+Status: Accepted
 Date: 2026-10-05
 Scope: TASK-027 staging-first safety operation
 
@@ -20,4 +20,4 @@ Test exact true→false transition, revision increment, immutable audit with pre
 
 ## Acceptance
 
-This is a deliberate exception to ADR-0029's no-SQL-policy-substitute rule and therefore needs explicit user acceptance under AGENTS.md. It authorizes no operation by itself.
+The user accepted this narrow staging emergency exception to ADR-0029 on 2026-10-05. It authorizes no routine SQL policy changes or production operation by itself.
