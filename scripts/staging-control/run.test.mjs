@@ -50,7 +50,7 @@ if(args.includes('--version')) console.log('2.119.0');
 else if(args[0]==='projects') console.log(JSON.stringify(process.env.FAKE_MODE==='wrong-project'?[{id:'production',name:'Pals Production'}]:[{id:'ffabdrgsmtfylrehwmfo',name:'Pals Staging'}]));
 else if(args[0]==='db') { const sql=fs.readFileSync(args[args.indexOf('--file')+1],'utf8');
  if(!args.includes('--project-ref') || args[args.indexOf('--project-ref')+1]!=='ffabdrgsmtfylrehwmfo') process.exit(3);
- if(sql.includes('select id, request_id')) console.log(JSON.stringify(process.env.FAKE_MODE==='bad-receipt'?{rows:[],error:'97000000-0000-4000-8000-000000000100 first_manager postgres'}:{rows:[{id:'97000000-0000-4000-8000-000000000101',request_id:'97000000-0000-4000-8000-000000000100',operation:'first_manager',subject_id:'8ebd74bb-2a72-4689-9580-72268106d91b',executor_session_user:'postgres'}]}));
+ if(sql.includes('select id, request_id')) console.log(JSON.stringify(process.env.FAKE_MODE==='bad-receipt'?{rows:[],error:'97000000-0000-4000-8000-000000000100 first_manager postgres'}:{rows:[{id:'97000000-0000-4000-8000-000000000101',request_id:'97000000-0000-4000-8000-000000000100',operation:'first_manager',subject_id:'8ebd74bb-2a72-4689-9580-72268106d91b',gate_key:null,previous_value:null,new_value:'active',previous_revision:0,new_revision:1,reason:'Reviewed staging authorization',authorization_ref:'TASK-027-2026-10-05',credential_ref:'existing Supabase CLI session',executor_session_user:'postgres'}]}));
  else console.log(JSON.stringify({rows:[]}));
 } else process.exit(4);
 `);
