@@ -1,10 +1,16 @@
 # MVP Scope
 
+## Current launch phase — open confirmed UNC MVP
+
+Accepted ADR-0028/0030 supersede the historical invite-only pilot below. Every active account with a confirmed current email on the exact UNC allowlist can enter immediately once the launch is enabled. No roster, separate enrollment approval, completed profile or primary photo is required. Include Hangouts/map and Calendar discovery, People/friendship, Hangout chat, DMs, in-app notifications, attendance and owner profile enrichment under existing source authorization and consent. Keep external analytics capture and large-Hangout safeguards off.
+
+The user accepted ADR-0029/0031 and selected both admin and moderator authority for sole operator Ella. MFA protects privileged operator sessions only. Students and their ordinary Hangout/social actions require no individual human approval or MFA. Reports and enforcement use the existing moderation boundary; routine app usage is automatic. Preserve current account/email/campus checks, privacy/RLS, blocks/reports, suspensions/bans, consent, conflicts and immutable audit. Hosted operator implementation/enrollment, enabled staging smoke and reviewed release evidence remain unfinished. The older scope sections below are historical where they conflict with this amendment.
+
 ## 2026-10-05 launch staffing amendment
 
 The current explicit user decision makes Ella Nguyen (`ella_nguyen@unc.edu`) the sole launch moderation owner. No backup moderator role or independent backup coverage is required for the initial launch. Least privilege, MFA/recovery, report response/retention handling, incident contact, immutable audit, conflict checks, RLS, blocks, suspensions and bans remain required. This staffing decision grants no hosted role or gate by itself.
 
-## Current phase — invite-only UNC pilot before public MVP
+## Historical phase — invite-only UNC pilot before public MVP
 
 [Accepted ADR-0026](../../decisions/ADR-0026-invite-only-pilot-scope.md) introduces a small nominated verified-UNC cohort before public campus launch. “Invite-only” means pilot admission; retained Hangouts are campus-visible within admitted students, not invite-only Hangout visibility. Tester list and enforceable admission mechanism remain separately reviewed/unselected; a hidden link is not enforcement.
 
