@@ -1,5 +1,9 @@
 # NOW
 
+## 2026-10-05 — Additional lifecycle expectation reconciliation
+
+Ten current feature HTTP tests pass. Further friendship/DM/block/report/account concurrency is 4/5: global-block concurrency waits for a profile-row lock and photo-removal join denial retired by ADR-0030. The source now permits that join as intended. TASK-027C's published amendment replaces only this obsolete expectation with positive no-photo access and an actual eligibility-revocation lock wait; preserve all other races. No full concurrency pass is claimed yet.
+
 ## 2026-10-05 — Local blockers corrected and final checks pass
 
 Reviewed C9c782ed/Dc3b86ba preparation passes final clean db:verify twice (1,678 assertions each), schema lint, real Auth/Storage1/1, full Auth/web4/4, formatting/lint/typecheck, 49 unit tests with no skip and both builds. Local Storage reset/start version mismatch was resolved by aligned nonsecret CLI metadata and official preserved restart; no provider schema workaround. TASK-027 remains incomplete: hosted proposals29/31 acceptance/exact Ella role, personal MFA/recovery, policy controls/shutdown, staging gates/smoke and parent integration/public cutover remain. No backup prerequisite remains.

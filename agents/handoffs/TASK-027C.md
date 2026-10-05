@@ -18,7 +18,20 @@ Status: Test expectations reconciled; parent TASK-027 and this acceptance gate r
 - Focused local preload test: **1/1 passed**, covering loopback matching, a completed response held until release, single queue consumption and the existing after-commit transport fault.
 - Syntax checks, Prettier check and `git diff --check` passed for changed files. Exact disposable Auth/Hangout leftovers from deadlocked exploratory runs were removed; the final diagnostic run cleaned its own fixtures.
 
-## Remaining work
+## Remaining work at initial handoff
 
 1. Resolve the stale edit web action's repeated `40001`/`uncertain` behavior without weakening stale-revision denial. Rerun the full `test:auth:web` suite and any directly relevant regression checks.
 2. Coordinator review, shared status records and remote-verified main integration remain with TASK-027. No hosted service was changed.
+
+## Follow-up: current-policy concurrency tests (2026-10-05)
+
+The coordinator integrated the separate TASK-027D source correction and verified Auth/Storage and Auth/web suites on the reviewed parent baseline. This follow-up merged that baseline at `5021f65` and the published TASK-027C concurrency contract before changing only `supabase/tests/global-block-concurrency.integration.mjs`.
+
+The old `photo_then_join` race expected an active confirmed UNC caller to lose Hangout eligibility after primary-photo removal. It now proves that caller remains `ready` and can join without a photo, then observes a real database lock wait and denial when account suspension commits before a later join. Running the full file exposed a second adjacent obsolete photo prerequisite in `photo_then_new_block`. It now proves a visible no-photo peer can be blocked; target suspension before a waiting new block denies, and a block that commits first survives the later suspension. Other block, message, membership, notification and revocation races remain in the file.
+
+Verification on the disposable `pals-local` stack, with Storage version metadata pinned to v1.77.5:
+
+- Clean local database reset applied all 29 committed migrations successfully.
+- Full global-block concurrency suite: **1/1 passed**.
+- Sequential friendship, DM, global-block, safety-report and account-enforcement concurrency collection: **5/5 passed**. Account enforcement ran last because it intentionally retains immutable audit fixtures until the next reset.
+- Syntax and diff checks passed. No app, migration, provider schema or hosted state changed in this follow-up.
