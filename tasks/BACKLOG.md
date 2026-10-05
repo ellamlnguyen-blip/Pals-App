@@ -1,5 +1,7 @@
 # Backlog
 
+- TASK-027E — active supported local Storage reset compatibility investigation; required before full real-upload/lifecycle acceptance. Never patch provider indexes to bypass runtime mismatch.
+
 - TASK-027D — actual stale Hangout web conflict retry bug; active bounded correction under TASK-027, required before full Auth/web acceptance. Retain fail-closed revision/privacy coverage. Staging MFA/bootstrap proposals remain awaiting acceptance.
 
 ## 2026-10-05 — TASK-027 launch continuation and sole moderator decision

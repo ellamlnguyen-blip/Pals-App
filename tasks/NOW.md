@@ -1,5 +1,9 @@
 # NOW
 
+## 2026-10-05 — TASK-027E local Storage reset blocker
+
+TASK-027D's revised business-conflict migration passed two clean 1,678-assertion database runs and lint, but the full web suite failed at local upload after reset. Storage v1.77.5 now uses a COLLATE C arbiter absent from the reset catalog; preserved official stop/start did not fix the fresh failure. TASK-027E investigates a supported repeatable runtime path, with no provider schema workaround. Earlier Storage 1/1 pass is a prior result, not a durable clean-replay proof. No hosted access is open.
+
 ## 2026-10-05 — TASK-027D stale Hangout conflict blocker
 
 TASK-027C corrected obsolete immediate-access expectations and preserved actual in-flight chat revocation using a consumed-response barrier. Direct Auth/Storage passes 1/1, but the full Auth/web suite is 3/4: stale edit raises SQLSTATE 40001 repeatedly and eventually surfaces an uncertain response. A diagnostic bypass passed downstream checks but was restored; no full-suite pass is claimed. TASK-027D is a separate bounded source diagnosis/correction, contract `tasks/active/TASK-027D-hangout-conflict-retry.md`. Keep all revision and privacy assertions. No hosted controls have been changed.
