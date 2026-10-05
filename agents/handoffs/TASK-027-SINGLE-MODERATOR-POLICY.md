@@ -1,8 +1,11 @@
 # TASK-027 — sole launch moderation owner policy handoff
 
-Date: 2026-10-05  
-Branch: `agent/TASK-027-open-unc-mvp`  
-Starting branch SHA: `f89bf3031edf036c02b728bdad60e192533624b1`  
+Date: 2026-10-05
+
+Branch: `agent/TASK-027-open-unc-mvp`
+
+Starting branch SHA: `f89bf3031edf036c02b728bdad60e192533624b1`
+
 Status: Documentation update for coordinator review; TASK-027 remains incomplete.
 
 ## Decision and outcome
