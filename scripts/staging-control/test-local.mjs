@@ -35,6 +35,7 @@ const wrongGate = op('source_gate',7,{PALS_CONTROL_GATE:'hangouts',PALS_CONTROL_
 const emergency = op('emergency_availability_off',11,{PALS_CONTROL_EXPECTED_REVISION:'1'});
 const changedEmergencyRetry = op('emergency_availability_off',11,{PALS_CONTROL_EXPECTED_REVISION:'1',PALS_CONTROL_REASON:'Changed incident reason'});
 const changedEmergencyRevision = op('emergency_availability_off',11,{PALS_CONTROL_EXPECTED_REVISION:'2'});
+const crossOperationEmergency = op('emergency_availability_off',1,{PALS_CONTROL_EXPECTED_REVISION:'1'});
 const staleEmergency = op('emergency_availability_off',12,{PALS_CONTROL_EXPECTED_REVISION:'1'});
 const wrongEmergencyRevision = op('emergency_availability_off',13,{PALS_CONTROL_EXPECTED_REVISION:'2'});
 const blocks = [
@@ -71,6 +72,7 @@ const blocks = [
   mustFail(wrongGate,'gate stale state'),
   check("(select count(*) from private.staging_control_audit)=4 and (select enabled from private.hangout_feature_gate where singleton)",'role and gate atomicity'),
   "update private.pilot_availability set enabled=true where singleton;",
+  mustFail(crossOperationEmergency,'emergency cannot reuse manager request UUID'),
   emergency,
   emergency,
   check("(select enabled=false and revision=2 from private.pilot_availability where singleton) and (select count(*) from private.staging_control_audit where operation='emergency_availability_off' and subject_id is null and gate_key is null and previous_value='true'::jsonb and new_value='false'::jsonb and previous_revision=1 and new_revision=2 and executor_session_user='postgres')=1 and (select count(*) from private.pilot_management_audit)=0",'one-way emergency shutdown, separate audit and exact retry'),
