@@ -5,9 +5,15 @@ set local search_path=public,extensions;
 select no_plan();
 insert into auth.users(id,email,email_confirmed_at) values('b2500000-0000-4000-8000-000000000001','mandatory-operator@unc.edu',now());
 insert into public.platform_roles(user_id,role) values('b2500000-0000-4000-8000-000000000001','moderator');
+
+-- SQL-role fixture: live Auth rows model a verified operator session; HTTP uses real TOTP.
+insert into auth.mfa_factors(id,user_id,factor_type,status,created_at,updated_at) values
+ ('a396b1b7-de4a-f2e8-0aa7-6d486cc3d0f2','b2500000-0000-4000-8000-000000000001','totp','verified',now(),now());
+insert into auth.sessions(id,user_id,factor_id,aal) values
+ ('4a2eff4c-d45d-21be-1252-8b92c5806712','b2500000-0000-4000-8000-000000000001','a396b1b7-de4a-f2e8-0aa7-6d486cc3d0f2','aal2');
 update private.moderation_feature_gate set enabled=true;
 set local role authenticated;
-set local request.jwt.claims='{"sub":"b2500000-0000-4000-8000-000000000001","role":"authenticated"}';
+set local request.jwt.claims='{"sub":"b2500000-0000-4000-8000-000000000001","role":"authenticated","aal":"aal2","session_id":"4a2eff4c-d45d-21be-1252-8b92c5806712"}';
 select lives_ok($$select public.list_moderation_reports(null,null,1)$$,'unadmitted incomplete operator works during pilot shutdown');
 reset role;
 delete from private.moderation_feature_gate where singleton;

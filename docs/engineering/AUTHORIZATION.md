@@ -4,6 +4,10 @@
 
 The current explicit user decision makes Ella Nguyen (`ella_nguyen@unc.edu`) the sole launch moderation owner. No backup moderator role or independent backup coverage is required for the initial launch. Least privilege, MFA/recovery, report response/retention handling, incident contact, immutable audit, conflict checks, RLS, blocks, suspensions and bans remain required. This staffing decision grants no hosted role or gate by itself.
 
+## TASK-027H privileged session boundary
+
+The five moderation queue, detail, case, account sanction and Hangout disable RPCs share `private.moderation_actor`. The guard requires the caller's signed Auth JWT to claim AAL2 and a session ID, then rechecks a live session owned by `auth.uid()` at AAL2 with an unexpired `not_after` and a current verified TOTP factor owned by that same user. It locks the operator gate, account, role, factor and session before the final check, so committed role/status/session/factor revocations deny cached AAL2 tokens. Ordinary confirmed UNC student access does not require MFA or manual approval. Local Auth enables TOTP enrollment/verification for operator testing; no enrollment or challenge is added to ordinary student flows.
+
 ## Current pilot phase — 2026-09-27
 
 [Accepted ADR-0026](../../decisions/ADR-0026-invite-only-pilot-scope.md) introduces a nominated verified-UNC pilot before the later public MVP. Product timing changes only: existing required identity/profile/primary photo, Hangout map/list/create/join/leave/chat/host management and all block/report/removal/report-only moderation/audit/enforcement/private-location/RLS protections remain. Calendar/People discovery/friendship/DM/notifications/co-host UI/attendance surveys/optional rich profile/extra photos/analytics are deferred from pilot exposure. Existing backend role, teardown and evidence-retention rules below remain preserved.

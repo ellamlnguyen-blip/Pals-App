@@ -30,9 +30,21 @@ select ok(not has_table_privilege('authenticated','private.account_sanctions','S
  'no client sanction table reader');
 select ok(not has_table_privilege('service_role','private.account_sanctions','SELECT'),
  'service role has no raw sanction table reader');
+
+
+-- SQL-role fixture: live Auth rows model a verified operator session; HTTP uses real TOTP.
+insert into auth.mfa_factors(id,user_id,factor_type,status,created_at,updated_at) values
+ ('ff0b987c-b1e2-b6e8-f8ee-f7ca53aabd84','53100000-0000-4000-8000-000000000002','totp','verified',now(),now());
+insert into auth.sessions(id,user_id,factor_id,aal) values
+ ('f4593bc4-91a0-7146-3678-13c3c0b0f09a','53100000-0000-4000-8000-000000000002','ff0b987c-b1e2-b6e8-f8ee-f7ca53aabd84','aal2');
+-- SQL-role fixture: live Auth rows model a verified operator session; HTTP uses real TOTP.
+insert into auth.mfa_factors(id,user_id,factor_type,status,created_at,updated_at) values
+ ('5a9eb6b1-6246-d0eb-0ba5-63bbac705598','53100000-0000-4000-8000-000000000001','totp','verified',now(),now());
+insert into auth.sessions(id,user_id,factor_id,aal) values
+ ('8a2340fd-534b-4faf-d07a-2a0d4e011819','53100000-0000-4000-8000-000000000001','5a9eb6b1-6246-d0eb-0ba5-63bbac705598','aal2');
 set local role authenticated;
 select set_config('request.jwt.claims',
- '{"sub":"53100000-0000-4000-8000-000000000001","role":"authenticated"}',true);
+ '{"sub":"53100000-0000-4000-8000-000000000001","role":"authenticated","aal":"aal2","session_id":"8a2340fd-534b-4faf-d07a-2a0d4e011819"}',true);
 select throws_ok($$select * from public.apply_account_moderation_action(
  '53100000-0000-4000-8002-000000000001',
  '53100000-0000-4000-8003-000000000001',1,'suspend','Cause')$$,
@@ -43,7 +55,7 @@ reset role;
 update private.moderation_feature_gate set enabled=true;
 set local role authenticated;
 select set_config('request.jwt.claims',
- '{"sub":"53100000-0000-4000-8000-000000000001","role":"authenticated"}',true);
+ '{"sub":"53100000-0000-4000-8000-000000000001","role":"authenticated","aal":"aal2","session_id":"8a2340fd-534b-4faf-d07a-2a0d4e011819"}',true);
 select is((select revision from public.transition_moderation_case(
  '53100000-0000-4000-8002-000000000001',
  '53100000-0000-4000-8003-000000000010',0,'start_review')),1::bigint,
@@ -124,7 +136,7 @@ select throws_ok($$delete from private.moderation_audit where sanction_id is not
  '42501',null,'enforcement audit is immutable');
 set local role authenticated;
 select set_config('request.jwt.claims',
- '{"sub":"53100000-0000-4000-8000-000000000001","role":"authenticated"}',true);
+ '{"sub":"53100000-0000-4000-8000-000000000001","role":"authenticated","aal":"aal2","session_id":"8a2340fd-534b-4faf-d07a-2a0d4e011819"}',true);
 select is((select revision from public.transition_moderation_case(
  '53100000-0000-4000-8002-000000000001',
  '53100000-0000-4000-8003-000000000012',2,'reopen','New evidence')),3::bigint,
@@ -143,7 +155,7 @@ select is((select revision from public.transition_moderation_case(
  '53100000-0000-4000-8003-000000000013',3,'annotate','Reviewed')),4::bigint,
  'reopened case can be reviewed');
 select set_config('request.jwt.claims',
- '{"sub":"53100000-0000-4000-8000-000000000002","role":"authenticated"}',true);
+ '{"sub":"53100000-0000-4000-8000-000000000002","role":"authenticated","aal":"aal2","session_id":"f4593bc4-91a0-7146-3678-13c3c0b0f09a"}',true);
 select is((select account_status from public.apply_account_moderation_action(
  '53100000-0000-4000-8002-000000000001',
  '53100000-0000-4000-8003-000000000014',4,'reinstate','Review complete')),
