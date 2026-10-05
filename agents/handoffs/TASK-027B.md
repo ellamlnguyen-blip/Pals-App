@@ -2,7 +2,7 @@
 Date: 2026-10-05
 Agent: task-specific staging-control implementation agent
 Branch/worktree: `agent/TASK-027B-staging-controls` at `/private/tmp/pals-task027-controls`
-Task branch and pushed implementation commit SHA: `9c7c030c79277492cb8b33f464bc4f9e564d57e0`, remote verified 2026-10-05
+Task branch and previously pushed implementation commit SHA: `9c7c030c79277492cb8b33f464bc4f9e564d57e0`, remote verified 2026-10-05; a later TASK-027B transport correction is pending a new remote SHA receipt
 Integrated `main` commit SHA: pending coordinator review/integration
 Main status-record path and last published milestone: `tasks/active/TASK-027B-staging-control-bootstrap.md`, published on canonical main before dispatch
 Outstanding review/integration blockers: Proposed ADR-0029 acceptance, coordinator integration, and hosted launch gates; no hosted operation in this task
@@ -29,6 +29,9 @@ The Management API SQL session is shared `postgres`. Its login/PID prove databas
 - Read-only local CLI query confirmed installed CLI JSON is `{boundary, rows, warning}`; runner parses `rows` exactly. Existing logged-in CLI `projects list --output-format json` shape was separately confirmed by coordinator as `{projects:[...]}`.
 - Independent security reviewer examined clean SHA `9c7c030c79277492cb8b33f464bc4f9e564d57e0`, reran runner tests 4/4, checked installed CLI flags, and found no remaining blocking local-code issue. No hosted operation was part of that review.
 - `git ls-remote origin refs/heads/agent/TASK-027B-staging-controls` returned `9c7c030c79277492cb8b33f464bc4f9e564d57e0` after push. The final documentation receipt commit SHA is separately reported to the coordinator after its push.
+
+## 2026-10-05 bounded transport correction
+The coordinator's actual read-only hosted CLI query found `--project-ref` alone fails with `LegacyDbQueryMutuallyExclusiveFlagsError`; the runner now uses `db query --linked --project-ref ffabdrgsmtfylrehwmfo`. It also requires the audit migration `20261005000100` and the deployed TASK-027 migration `20261005000200`, with `20261005000200` as the latest version. The audit migration is not yet deployed to staging, so this preflight currently fails closed. Focused tests cover exact CLI flags, migration preflight metadata, and missing-migration denial before control SQL. No hosted control SQL, role, manager, or gate write was made. This correction requires a fresh independent review before any hosted operation.
 
 ## Decisions and limitations
 ADR-0029 remains Proposed and requires independent review/acceptance before any hosted administrative query. The runner requires the reviewed Git commit and latest migration version exactly; new migrations require a reviewed runner update. A Manager/role grant requires live current confirmed Ella Auth/account/UNC evidence. Role/manager rollback accepts the exact UUID after status/email loss. This task does not build Ella's signed-in policy UI or an emergency policy shutdown path. Hosted MFA/authorization, operator attribution evidence, exact hosted migration application and TASK-027 action-time access-opening gate remain with the coordinator. No `admin` role is provisioned. External analytics and large-Hangout safeguards stay off.

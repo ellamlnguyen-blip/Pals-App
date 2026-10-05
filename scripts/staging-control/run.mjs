@@ -46,7 +46,7 @@ const query = (sql) => {
   const path = join(dir, 'query.sql');
   try {
     writeFileSync(path, sql, { mode: 0o600 });
-    return call(['db','query','--project-ref',REF,'--file',path,'--output-format','json']);
+    return call(['db','query','--linked','--project-ref',REF,'--file',path,'--output-format','json']);
   } finally {
     try { unlinkSync(path); } catch {}
     try { rmdirSync(dir); } catch {}
@@ -108,6 +108,20 @@ export function buildOperation(env = process.env) {
   return { operation, request, sql, expected };
 }
 
+export function buildPreflightSql() {
+  return `do $preflight$ begin
+    if current_database()<>'postgres' or session_user<>'postgres'
+      or current_setting('role',true) not in ('none','postgres')
+      or not exists(select 1 from supabase_migrations.schema_migrations where version='20261005000100')
+      or not exists(select 1 from supabase_migrations.schema_migrations where version='20261005000200')
+      or not exists(select 1 from supabase_migrations.schema_migrations where version='20261004000100')
+      or (select max(version) from supabase_migrations.schema_migrations)<>'20261005000200'
+      or to_regclass('private.staging_control_audit') is null then
+      raise exception 'Wrong staging database or migration state' using errcode='42501';
+    end if;
+  end $preflight$;`;
+}
+
 export async function main() {
   const { operation, request, sql, expected } = buildOperation();
   const reviewedCommit = required(process.env, 'PALS_CONTROL_REVIEWED_COMMIT', 40);
@@ -121,16 +135,7 @@ export async function main() {
   if (!Array.isArray(projects) || !projects.some((p) => p.id === REF && p.name === 'Pals Staging')) throw new Error('CLI project identity mismatch');
   // The CLI's --project-ref queries use the existing logged-in credential manager.
   // All checks are SQL errors, so a malformed/empty JSON result cannot approve a write.
-  query(`do $preflight$ begin
-    if current_database()<>'postgres' or session_user<>'postgres'
-      or current_setting('role',true) not in ('none','postgres')
-      or not exists(select 1 from supabase_migrations.schema_migrations where version='20261005000100')
-      or not exists(select 1 from supabase_migrations.schema_migrations where version='20261004000100')
-      or (select max(version) from supabase_migrations.schema_migrations)<>'20261005000100'
-      or to_regclass('private.staging_control_audit') is null then
-      raise exception 'Wrong staging database or migration state' using errcode='42501';
-    end if;
-  end $preflight$;`);
+  query(buildPreflightSql());
   // A failed/uncertain write is never automatically retried. Reconcile by request UUID.
   try { query(sql); }
   catch { throw new Error(`Operation result uncertain. Read-only reconcile request ${request}; do not generate a new request ID or retry blindly.`); }

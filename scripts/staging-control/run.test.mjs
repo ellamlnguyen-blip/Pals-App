@@ -5,7 +5,7 @@ import { mkdtempSync, writeFileSync, chmodSync, readFileSync, rmSync } from 'nod
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { buildOperation } from './run.mjs';
+import { buildOperation, buildPreflightSql } from './run.mjs';
 
 const here = fileURLToPath(new URL('.', import.meta.url));
 const runner = join(here, 'run.mjs');
@@ -39,6 +39,14 @@ test('escapes reviewed text and binds exact target in prepared SQL', () => {
   assert.doesNotMatch(sql,/{{/);
 });
 
+test('preflight pins audit and current staging migrations', () => {
+  const sql = buildPreflightSql();
+  assert.match(sql,/version='20261005000100'/);
+  assert.match(sql,/version='20261005000200'/);
+  assert.match(sql,/max\(version\).*'20261005000200'/);
+  assert.match(sql,/to_regclass\('private.staging_control_audit'\)/);
+});
+
 function fakeRun(mode) {
   const dir = mkdtempSync(join(tmpdir(),'pals-control-test-'));
   const fake = join(dir,'supabase');
@@ -49,7 +57,8 @@ fs.appendFileSync(process.env.FAKE_LOG,args.join(' ')+'\\n');
 if(args.includes('--version')) console.log('2.119.0');
 else if(args[0]==='projects') console.log(JSON.stringify(process.env.FAKE_MODE==='wrong-project'?[{id:'production',name:'Pals Production'}]:[{id:'ffabdrgsmtfylrehwmfo',name:'Pals Staging'}]));
 else if(args[0]==='db') { const sql=fs.readFileSync(args[args.indexOf('--file')+1],'utf8');
- if(!args.includes('--project-ref') || args[args.indexOf('--project-ref')+1]!=='ffabdrgsmtfylrehwmfo') process.exit(3);
+ if(!args.includes('--linked') || !args.includes('--project-ref') || args[args.indexOf('--project-ref')+1]!=='ffabdrgsmtfylrehwmfo') process.exit(3);
+ if(process.env.FAKE_MODE==='missing-migration' && sql.includes('$preflight$')) process.exit(5);
  if(sql.includes('select id, request_id')) console.log(JSON.stringify(process.env.FAKE_MODE==='bad-receipt'?{rows:[],error:'97000000-0000-4000-8000-000000000100 first_manager postgres'}:{rows:[{id:'97000000-0000-4000-8000-000000000101',request_id:'97000000-0000-4000-8000-000000000100',operation:'first_manager',subject_id:'8ebd74bb-2a72-4689-9580-72268106d91b',gate_key:null,previous_value:null,new_value:'active',previous_revision:0,new_revision:1,reason:'Reviewed staging authorization',authorization_ref:'TASK-027-2026-10-05',credential_ref:'existing Supabase CLI session',executor_session_user:'postgres'}]}));
  else console.log(JSON.stringify({rows:[]}));
 } else process.exit(4);
@@ -66,13 +75,16 @@ test('CLI session uses fixed ref, checks project and database before operation',
   assert.equal(result.status,0,result.stderr);
   assert.match(result.stdout,/"operation":"first_manager"/);
   assert.match(calls,/projects list --output-format json/);
-  assert.equal((calls.match(/db query --project-ref ffabdrgsmtfylrehwmfo/g)||[]).length,3);
+  assert.equal((calls.match(/db query --linked --project-ref ffabdrgsmtfylrehwmfo/g)||[]).length,3);
 });
 
-test('wrong project fails before SQL and malformed receipt fails closed', () => {
+test('wrong project and missing migration fail before control SQL; malformed receipt fails closed', () => {
   const wrong=fakeRun('wrong-project');
   assert.notEqual(wrong.result.status,0);
   assert.doesNotMatch(wrong.calls,/db query/);
+  const missing=fakeRun('missing-migration');
+  assert.notEqual(missing.result.status,0);
+  assert.equal((missing.calls.match(/db query --linked --project-ref ffabdrgsmtfylrehwmfo/g)||[]).length,1);
   const malformed=fakeRun('bad-receipt');
   assert.notEqual(malformed.result.status,0);
   assert.match(malformed.result.stderr,/Audit receipt mismatch/);
