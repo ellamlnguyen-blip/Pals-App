@@ -1,5 +1,13 @@
 # Current State
 
+## 2026-10-05 — Final local lifecycle and runtime verification
+
+Independent source review clears TASK-027D `c3b86bab604fc1ff34a179a2db34ff244ace8850`: the revision predicate, null handling, helper ACL and caller authorization order remain unchanged; only the stale business conflict is PT409, and real 40001 remains uncertain. TASK-027C `9c782ed417c7fffc86c6b3f17699cb61dbd4a450` test review found no blocking issue. Its older peer-folder HTTP wording refers specifically to owner-path overwrite/claim denial; direct SQL separately covers a fresh peer-folder upload denial.
+
+The coordinator proved the actual local Storage mismatch and aligned the ignored checkout version pin plus preserved official service restart. Actual Docker now uses Storage v1.77.5, matching provider-generated COLLATE C index and API. No provider DDL workaround occurred. Fresh final db:verify passed twice from clean resets (26 files, 1,678 assertions each, lint clean); subsequent real Auth/Storage passed 1/1 and full Auth/web passed 4/4 with no skips. Full formatting/lint/typecheck, 49 unit tests without skips, and both web/admin builds passed. Earlier failure receipts remain historical. See TASK-027E handoff for the required fresh-checkout version alignment.
+
+These are local proofs for the reviewed combined Task27/C/D preparation, not full hosted release evidence. Parent app work remains task-branch-only pending staging smoke/main integration. Staging manager/operator provisioning, accepted hosted MFA and exact role choice, Ella's personal MFA/recovery, policy UI/emergency shutdown, enabled access/denial/product smoke and usepals.com cutover remain incomplete. Availability/capabilities/source gates remain closed, external analytics and large safeguards off. The bootstrap runner's reviewed max-migration pin must be refreshed for the new D002 migration before its future execution.
+
 ## 2026-10-05 — Current launch verification and remaining work
 
 TASK-027C test preparation is pushed/remote verified at `9c782ed417c7fffc86c6b3f17699cb61dbd4a450`; fresh independent test review is underway. Actual Auth/Storage passes 1/1 after the supported Storage runtime restart. The complete Auth/web run is 3/4: stale Hangout edit retries SQLSTATE 40001 before returning uncertain. TASK-027D is correcting this business-conflict transport behavior while retaining all revision and privacy checks. Diagnostic bypass was reverted, so no complete pass is claimed. Earlier database/build receipts are historical pending final-source rerun.
