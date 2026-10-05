@@ -1,8 +1,8 @@
 # TASK-027S — Legacy owner HTTP access expectation
 
-Date: 2026-10-05  
-Branch: `agent/TASK-027S-owner-http`  
-Base: `0c1bc49`  
+Date: 2026-10-05
+Branch: `agent/TASK-027S-owner-http`
+Base: `0c1bc49`
 Status: implementation and focused local verification complete; fresh review and coordinator integration pending.
 
 ## Outcome
