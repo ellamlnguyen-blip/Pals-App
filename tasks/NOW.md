@@ -1,5 +1,9 @@
 # NOW
 
+## Accepted operator setup and automatic student use
+
+The user explicitly accepted ADR29 staging setup and ADR31 operator MFA, selecting both admin and moderator authority for sole owner Ella. Ordinary confirmed UNC students require no manual approval/MFA; normal Hangout/social operations are automatic under existing source authorization. Publish G fixed-admin bootstrap, H MFA guard and I admin HTTPS/MFA contracts before fresh task-specific Sol-medium dispatch. H owns the shared local stack initially; G/I static preparation can proceed independently. No hosted grant/gate action has occurred. Parent remains incomplete pending exact review, operator enrollment/recovery, policy/shutdown controls and staged smoke.
+
 ## 2026-10-05 — Attendance completion receipt
 
 F55e2296 pushed/remote verified and fresh review clear; all 18 attendance race orders plus three schedule checks and attendance fixture-token HTTP pass, with all local gates restored false. Reviewed F is integrated into parent360d8e8, pushed/remote verified; canonical main app integration waits for parent staging acceptance. B8c20 transport review clear/5units; Cbd7c815 race review clear/5suites. Ella solely owns moderation. Proposed ADR29/31 acceptance and exact operator role, Mac unlock for signed-in browser smoke, MFA/recovery and policy/shutdown controls remain outstanding. Staging gates stay closed; production cutover and invitations are not ready.

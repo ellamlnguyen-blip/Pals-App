@@ -1,8 +1,12 @@
 # ADR-0031 — Hosted moderator MFA and sole-operator launch
 
-Status: Proposed
+Status: Accepted
 Date: 2026-10-05
 Scope: TASK-027, Pals Staging first; no hosted mutation authorized by this document
+
+## Explicit user acceptance
+
+The user approved this design after choosing both admin and moderator authority for Ella. They clarified that ordinary users require no individual approval or MFA, and Ella does not manually moderate routine app operations. MFA applies to the operator's privileged session/actions only; Hangouts, discovery, joining and messaging follow accepted automated source authorization for active confirmed UNC accounts. The design does not add a manual approval queue or require a new authenticator challenge for each normal user or each routine action. Hosted privilege/session checks and operator enrollment/recovery remain necessary.
 
 ## Concrete decision proposed
 
