@@ -1,6 +1,6 @@
 # TASK-027J — Pre-activation own operator role read
 
-Status: Ready; ADR-0032 accepted
+Status: Complete locally; independently reviewed and integrated into TASK-027 parent, unpublished
 Parent: TASK-027
 Date: 2026-10-05
 
