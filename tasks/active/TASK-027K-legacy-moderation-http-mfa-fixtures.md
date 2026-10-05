@@ -1,6 +1,6 @@
 # TASK-027K — Reconcile legacy moderation HTTP tests with live MFA
 
-Status: Ready for isolated implementation
+Status: Complete locally; reviewed and integrated into TASK-027 parent. TASK-027O tracks the separate concurrency fixture.
 Parent: TASK-027
 Date: 2026-10-05
 

@@ -2,7 +2,7 @@
 
 Date: 2026-10-05
 Branch: `agent/TASK-027K-legacy-mfa-fixtures`
-Status: HTTP fixture implementation verified locally; fresh review and parent integration pending. A separate legacy concurrency test remains a release blocker.
+Status: HTTP fixture implementation verified locally, independently reviewed and integrated into TASK-027 parent. A separate legacy concurrency test remains a release blocker.
 
 ## Outcome
 
@@ -21,4 +21,4 @@ Replace only the positive moderator setup in `moderation-concurrency.integration
 
 ## Limits
 
-No hosted operation, branch push or main integration was performed. TASK-027 parent must review the implementation and track the concurrency follow-up before making any release claim.
+No hosted operation, branch push or main integration was performed. TASK-027 parent tracked the concurrency follow-up as TASK-027O and must not make a release claim until it passes.
