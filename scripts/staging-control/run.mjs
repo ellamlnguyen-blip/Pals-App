@@ -22,7 +22,7 @@ const GATES = Object.freeze({
   safety: 'private.safety_feature_gate',
   moderation: 'private.moderation_feature_gate',
 });
-const operations = new Set(['first_manager','revoke_manager','grant_moderator','revoke_moderator','grant_admin','revoke_admin','source_gate']);
+const operations = new Set(['first_manager','revoke_manager','grant_moderator','revoke_moderator','grant_admin','revoke_admin','source_gate','emergency_availability_off']);
 const literal = (value) => `'${String(value).replaceAll("'", "''")}'`;
 const required = (env, name, max = 200) => {
   const value = env[name];
@@ -67,7 +67,7 @@ export function buildOperation(env = process.env) {
     REASON: literal(reason), AUTHORIZATION_REF: literal(authorization), CREDENTIAL_REF: literal(credential),
     OPERATION: literal(operation),
   };
-  const expected = { operation, request_id: request, subject_id: operation === 'source_gate' ? null : SUBJECT,
+  const expected = { operation, request_id: request, subject_id: ['source_gate','emergency_availability_off'].includes(operation) ? null : SUBJECT,
     gate_key: null, reason, authorization_ref: authorization, credential_ref: credential };
   let file;
   if (operation === 'first_manager' || operation === 'revoke_manager') {
@@ -92,6 +92,18 @@ export function buildOperation(env = process.env) {
     expected.gate_key = gate;
     expected.previous_value = replacements.EXPECTED_ENABLED === 'true';
     expected.new_value = replacements.NEW_ENABLED === 'true';
+  } else if (operation === 'emergency_availability_off') {
+    file = 'emergency-availability-off.sql';
+    const revision = env.PALS_CONTROL_EXPECTED_REVISION;
+    if (!/^[1-9][0-9]*$/.test(revision ?? '') || BigInt(revision) >= 9223372036854775807n)
+      throw new Error('Positive availability revision required');
+    if (env.PALS_CONTROL_GATE !== undefined || env.PALS_CONTROL_EXPECTED_ENABLED !== undefined || env.PALS_CONTROL_NEW_ENABLED !== undefined)
+      throw new Error('Emergency availability operation has no gate or selectable state');
+    replacements.EXPECTED_REVISION = revision;
+    expected.previous_value = true;
+    expected.new_value = false;
+    expected.previous_revision = revision;
+    expected.new_revision = String(BigInt(revision) + 1n);
   } else {
     file = 'moderator.sql';
     const roleTransition = {
@@ -122,8 +134,11 @@ export function buildPreflightSql() {
       or not exists(select 1 from supabase_migrations.schema_migrations where version='20261005000200')
       or not exists(select 1 from supabase_migrations.schema_migrations where version='20261005000300')
       or not exists(select 1 from supabase_migrations.schema_migrations where version='20261005000400')
+      or not exists(select 1 from supabase_migrations.schema_migrations where version='20261005000500')
+      or not exists(select 1 from supabase_migrations.schema_migrations where version='20261005000600')
+      or not exists(select 1 from supabase_migrations.schema_migrations where version='20261005000700')
       or not exists(select 1 from supabase_migrations.schema_migrations where version='20261004000100')
-      or (select max(version) from supabase_migrations.schema_migrations)<>'20261005000400'
+      or (select max(version) from supabase_migrations.schema_migrations)<>'20261005000700'
       or to_regclass('private.staging_control_audit') is null then
       raise exception 'Wrong staging database or migration state' using errcode='42501';
     end if;
