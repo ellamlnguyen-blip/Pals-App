@@ -1,5 +1,9 @@
 # NOW
 
+## 2026-10-05 — TASK-027D stale Hangout conflict blocker
+
+TASK-027C corrected obsolete immediate-access expectations and preserved actual in-flight chat revocation using a consumed-response barrier. Direct Auth/Storage passes 1/1, but the full Auth/web suite is 3/4: stale edit raises SQLSTATE 40001 repeatedly and eventually surfaces an uncertain response. A diagnostic bypass passed downstream checks but was restored; no full-suite pass is claimed. TASK-027D is a separate bounded source diagnosis/correction, contract `tasks/active/TASK-027D-hangout-conflict-retry.md`. Keep all revision and privacy assertions. No hosted controls have been changed.
+
 ## 2026-10-05 — TASK-027 launch continuation and sole moderator decision
 
 TASK-027 is active and incomplete on `agent/TASK-027-open-unc-mvp`, latest verified published baseline `f89bf3031edf036c02b728bdad60e192533624b1`. The current user expressly chose immediate access for active accounts with confirmed exact-allowlisted UNC email, with no roster/profile/photo prerequisite, and authorized staging launch activation. Ella Nguyen (`ella_nguyen@unc.edu`) is the sole launch moderator; the backup moderator requirement is removed by current explicit instruction. This does not remove MFA/recovery, least privilege, immutable moderation audit, report handling, RLS, blocks, suspensions or bans.
