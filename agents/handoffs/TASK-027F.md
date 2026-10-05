@@ -1,7 +1,9 @@
 # TASK-027F — Attendance lifecycle test fixture
 
-Date: 2026-10-05  
-Branch: `agent/TASK-027F-attendance-lifecycle`  
+Date: 2026-10-05
+
+Branch: `agent/TASK-027F-attendance-lifecycle`
+
 Status: Local verification passed; independent review and coordinator integration pending.
 
 ## Outcome
