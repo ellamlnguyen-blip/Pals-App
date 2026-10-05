@@ -306,12 +306,40 @@ p {
   max-width: 45ch;
 }
 .sign-in form,
+.mfa-setup form,
 label {
   display: grid;
   gap: 0.4rem;
 }
 .sign-in form {
   gap: 1rem;
+}
+.mfa-setup form {
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+.mfa-setup form button {
+  justify-self: start;
+}
+.mfa-qr {
+  display: block;
+  width: min(100%, 14rem);
+  aspect-ratio: 1;
+  margin: 1rem 0;
+  padding: 0.5rem;
+  background: white;
+  border: 1px solid var(--pals-line);
+  border-radius: 0.6rem;
+}
+.mfa-note {
+  font-size: 0.9rem;
+}
+.mfa-key {
+  display: block;
+  overflow-wrap: anywhere;
+  padding: 0.5rem 0;
+  color: var(--pals-ink);
+  user-select: all;
 }
 .sign-in form button {
   justify-self: start;
