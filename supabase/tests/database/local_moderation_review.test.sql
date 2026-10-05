@@ -54,9 +54,21 @@ select ok(not has_table_privilege('authenticated','private.moderation_audit','SE
 select ok(not has_table_privilege('service_role','private.moderation_audit','SELECT')
  and not has_table_privilege('service_role','private.moderation_cases','SELECT'),
  'platform service role has no raw moderation reader');
+
+
+-- SQL-role fixture: live Auth rows model a verified operator session; HTTP uses real TOTP.
+insert into auth.mfa_factors(id,user_id,factor_type,status,created_at,updated_at) values
+ ('0c53f956-6535-2350-4b07-669e5d3dff60','51900000-0000-4000-8000-000000000004','totp','verified',now(),now());
+insert into auth.sessions(id,user_id,factor_id,aal) values
+ ('0c68cedf-7d69-481f-0ba0-12de0bcbc798','51900000-0000-4000-8000-000000000004','0c53f956-6535-2350-4b07-669e5d3dff60','aal2');
+-- SQL-role fixture: live Auth rows model a verified operator session; HTTP uses real TOTP.
+insert into auth.mfa_factors(id,user_id,factor_type,status,created_at,updated_at) values
+ ('51dbbdc3-41d9-9421-6113-4c6156f8c79d','51900000-0000-4000-8000-000000000001','totp','verified',now(),now());
+insert into auth.sessions(id,user_id,factor_id,aal) values
+ ('90cfbfa2-369d-5d04-53d9-292495cb19d7','51900000-0000-4000-8000-000000000001','51dbbdc3-41d9-9421-6113-4c6156f8c79d','aal2');
 set local role authenticated;
 select set_config('request.jwt.claims',
- '{"sub":"51900000-0000-4000-8000-000000000001","role":"authenticated"}',true);
+ '{"sub":"51900000-0000-4000-8000-000000000001","role":"authenticated","aal":"aal2","session_id":"90cfbfa2-369d-5d04-53d9-292495cb19d7"}',true);
 select throws_ok($$select * from public.list_moderation_reports()$$,
  '42501',null,'operator denied while gate off');
 select throws_ok($$select * from private.moderation_audit$$,
@@ -251,7 +263,7 @@ insert into public.platform_roles(user_id,role) values
  ('51900000-0000-4000-8000-000000000003','moderator');
 set local role authenticated;
 select set_config('request.jwt.claims',
- '{"sub":"51900000-0000-4000-8000-000000000004","role":"authenticated"}',true);
+ '{"sub":"51900000-0000-4000-8000-000000000004","role":"authenticated","aal":"aal2","session_id":"0c68cedf-7d69-481f-0ba0-12de0bcbc798"}',true);
 select throws_ok($$select * from public.transition_moderation_case(
  '51900000-0000-4000-8002-000000000001',
  '51900000-0000-4000-8003-000000000009',4,'annotate','Target is operator')$$,
@@ -261,7 +273,7 @@ update public.accounts set status='suspended'
  where id='51900000-0000-4000-8000-000000000001';
 set local role authenticated;
 select set_config('request.jwt.claims',
- '{"sub":"51900000-0000-4000-8000-000000000001","role":"authenticated"}',true);
+ '{"sub":"51900000-0000-4000-8000-000000000001","role":"authenticated","aal":"aal2","session_id":"90cfbfa2-369d-5d04-53d9-292495cb19d7"}',true);
 select throws_ok($$select * from public.transition_moderation_case(
  '51900000-0000-4000-8002-000000000001',
  '51900000-0000-4000-8003-000000000001',0,'start_review')$$,

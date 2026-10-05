@@ -170,7 +170,13 @@ select throws_ok($$select public.submit_safety_report('b2300000-0000-4000-8000-0
 select throws_ok($$select public.submit_safety_report('b2300000-0000-4000-8000-000000000002','user','b2000000-0000-4000-8000-000000000007','harassment')$$,'42501','Safety report unavailable','S8 no evidence target');
 reset role;
 insert into public.platform_roles(user_id,role) values('b2000000-0000-4000-8000-000000000006','moderator');
-set local role authenticated;set local request.jwt.claims='{"sub":"b2000000-0000-4000-8000-000000000006","role":"authenticated","admitted":true}';
+-- SQL-role fixture: live Auth rows model a verified operator session; HTTP uses real TOTP.
+insert into auth.mfa_factors(id,user_id,factor_type,status,created_at,updated_at) values
+ ('8eefc3cc-82c2-9afd-fec6-853f3386f70b','b2000000-0000-4000-8000-000000000006','totp','verified',now(),now());
+insert into auth.sessions(id,user_id,factor_id,aal) values
+ ('2d37a13d-4b6d-dcb7-3923-12d2e0ef6ddc','b2000000-0000-4000-8000-000000000006','8eefc3cc-82c2-9afd-fec6-853f3386f70b','aal2');
+
+set local role authenticated;set local request.jwt.claims='{"sub":"b2000000-0000-4000-8000-000000000006","role":"authenticated","admitted":true,"aal":"aal2","session_id":"2d37a13d-4b6d-dcb7-3923-12d2e0ef6ddc"}';
 select is((select count(*) from public.list_moderation_reports(null,null,1))::integer,1,'S9 unadmitted moderator shutdown queue');
 select lives_ok($$select public.get_moderation_report((select report_id from public.list_moderation_reports(null,null,1)))$$,'S9 report-only detail');
 select is((select count(*) from public.hangouts)::integer,0,'S9 operator no broad source');
