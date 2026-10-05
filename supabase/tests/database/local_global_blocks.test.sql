@@ -2,6 +2,9 @@ begin;
 create extension if not exists pgtap with schema extensions;
 set search_path=public,extensions;
 select no_plan();
+-- Historical fixture runs under the open-UNC release switches, locally only.
+update private.pilot_availability set enabled=true where singleton;
+update private.pilot_capabilities set enabled=true where key in ('onboarding','hangouts','hangout_chat','people');
 
 -- Disposable fixtures: host 1, peer 2, other attendee 3, other host 4.
 insert into auth.users(id,email,email_confirmed_at)

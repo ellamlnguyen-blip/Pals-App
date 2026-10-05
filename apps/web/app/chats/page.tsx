@@ -75,7 +75,7 @@ export default async function ChatsPage({
   return (
     <Frame signedIn navigation={account.state === "ready"}>
       <section className="chat-page" aria-labelledby="chats-title">
-        <p className="badge">Chats · local only</p>
+        <p className="badge">Chats</p>
         <h1 id="chats-title">Your chats</h1>
         <DmInbox actor={account.user.id} />
         <h2>Hangout chats</h2>
