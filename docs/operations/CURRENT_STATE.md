@@ -1,5 +1,9 @@
 # Current State
 
+## Accepted operator MFA with automatic ordinary app usage
+
+The user explicitly approved both ADR29 staging setup and ADR31 MFA design, clarifying no MFA or manual approval for each ordinary user/action. Ella has both admin and moderator authority selected; no role is yet provisioned hosted. G fixed-admin bootstrap and H database MFA guard are dispatched to fresh Sol-medium agents from published mainc2db92d. H owns the shared local stack; G is static until H releases it. I hosted-admin MFA contract/worktree is published/prepared; initial fresh-agent dispatch was rejected by the agent thread limit, so UI implementation has not begun. Retry after available capacity; no coordinator app implementation substituted. Fresh final Preview health passes all six checks; existing confirmed UNC session remains at the expected launch-closed page. Hosted gates remain closed pending operator/policy controls and enabled smoke.
+
 ## 2026-10-05 — Explicit sole-operator authority and browser continuation
 
 The user explicitly selected both admin and moderator authority for Ella. Role choice is resolved, including bans/reinstatement; there is no backup prerequisite. No hosted role grant has been performed. Existing B preparation grants moderator only, so admin grant/revoke support needs bounded implementation and independent review before provisioning. ADR-0029 setup-method acceptance and ADR-0031 MFA-design acceptance remain pending; the user requested a plain-language explanation and both questions were restated.
