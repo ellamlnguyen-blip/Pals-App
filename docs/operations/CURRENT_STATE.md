@@ -1,5 +1,17 @@
 # Current State
 
+## 2026-10-05 — Staging migration and additional feature verification
+
+The reviewed parent branch `5021f65d03b992171b2f6dd2a6fd8ca4d95127cc` has a Ready Vercel Preview at `https://pals-a4j2jjzu7-pals8.vercel.app`. Its reviewed D002 Hangout revision migration was applied alone to Pals Staging after an exact-target dry run. All 29 local/remote migration versions match; a read-only query confirms PT409. Availability is false, all 13 capabilities are false, and there are zero managers/operator roles. No hosted launch-control operation occurred. External analytics and large safeguards remain off.
+
+Ten additional local feature HTTP tests passed, covering current confirmed UNC access, co-hosting, chat, friendship, DMs, notifications, blocking, reporting and disabling Hangouts. TASK-027C follow-up `bd7c8157dfcdbe94f2aa9cece24cc8e9e495dbac` is task-pushed and remote verified. It reconciles only two obsolete photo eligibility race cases with positive no-photo join/block proofs and real account-suspension lock-wait denial. Full global-block passes 1/1 and the sequential friendship/DM/global-block/report/account-enforcement collection passes 5/5 after a compatible disposable local reset. Main app integration and final parent acceptance remain pending.
+
+TASK-027B transport correction `1560f8faeb391f61b81ca3edb24fb00401a1e9cb`, final handoff `8c20de9b1240e2d8e7f87f51c53a645ecea556d4`, is task-pushed and remote verified; fresh independent transport review found no blocking issue and reran clean runner tests 5/5. Actual read-only CLI execution requires both `--linked` and the exact staging project ref. Updated preflight requires audit001 and D002 with D002 latest. Audit001 is absent staging, so controls fail closed. Proposed ADR-0029/0031 acceptance and exact Ella moderator/admin choice remain outstanding.
+
+Fresh independent review clears C's bd7c815 follow-up without mutating the shared stack. Attendance fixture-token PostgREST checks pass for owner/foreign/gate/projection/raw-table/embed/isolation boundaries. Existing attendance concurrency passes gate/sanction orders then fails at leave_hangout because current availability/capability fixture setup is absent; this is not a full attendance concurrency pass. TASK-027F bounds diagnosis/test-fixture reconciliation and full rerun without authorization changes. Immutable retained local evidence requires the normal disposable reset.
+
+Fresh health verification of the latest Preview could not finish: the in-app browser blocked navigation and the Mac is locked, preventing the signed-in Safari check. Earlier all-six-green health, callback and SMTP evidence remains prior evidence. Full enabled staging product/access/denial smoke, personal MFA/recovery, policy controls/shutdown, canonical app integration and public release/cutover remain incomplete. Ella is the sole operator; no backup signup or standing backup role is required.
+
 ## 2026-10-05 — Final local lifecycle and runtime verification
 
 Independent source review clears TASK-027D `c3b86bab604fc1ff34a179a2db34ff244ace8850`: the revision predicate, null handling, helper ACL and caller authorization order remain unchanged; only the stale business conflict is PT409, and real 40001 remains uncertain. TASK-027C `9c782ed417c7fffc86c6b3f17699cb61dbd4a450` test review found no blocking issue. Its older peer-folder HTTP wording refers specifically to owner-path overwrite/claim denial; direct SQL separately covers a fresh peer-folder upload denial.
