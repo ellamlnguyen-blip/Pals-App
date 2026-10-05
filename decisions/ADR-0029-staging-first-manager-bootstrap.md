@@ -1,8 +1,12 @@
 # ADR-0029 — Staging administrative control channel
 
-Status: **Proposed — implementation passed independent local review; acceptance and hosted execution pending**
+Status: **Accepted — user approved the staging setup method; hosted execution pending**
 Date: 2026-10-05
 Scope: TASK-027B, exact Pals Staging project `ffabdrgsmtfylrehwmfo` only
+
+## Acceptance and operator-authority amendment
+
+The user explicitly approved this setup method and ADR-0031, and selected both admin and moderator authority for Ella. Extend the fixed-subject operational allowlist with separate grant_admin/revoke_admin requests using the same current identity rechecks, locking, idempotency, atomic immutable audit and rollback semantics as moderator requests. No arbitrary subject/role input is introduced. Committed inert audit schema changes, if necessary, may only expand the action allowlist; replay must not grant any role. Existing scripts remain moderator-only until bounded TASK-027G implementation and independent review are complete. All hosted operations still require exact reviewed source, live target/evidence checks and their release sequence. Acceptance authorizes this bounded staging preparation/execution sequence; it does not prove hosted grants or open access.
 
 ## Decision proposed for review
 
