@@ -1,5 +1,13 @@
 # Current State
 
+## 2026-10-05 — Operator verification and domain inventory
+
+H reports a fresh clean local migration run with 27 pgTAP files/1,691 assertions, schema lint, genuine Auth TOTP access for all five moderation RPCs, live revocation denials, actual Auth factor removal, a session downgrade during a lock wait, and ordinary confirmed UNC AAL1 access without a profile/manual approval requirement. These are author-reported pending final pushed handoff and independent review. Prior broad HTTP results predate the MFA guard: the legacy moderation HTTP positive fixture remains AAL1 and fails, while the isolated Hangout-disable HTTP runner cannot resolve its borrowed SSR dependency. Do not treat those as current passing suites. G awaits H's local stack release for combined admin upgrade/rollback verification.
+
+Fresh I agent dispatch was rejected again by the agent thread limit. The published admin MFA UI contract remains unimplemented; the user workflow-exception question is pending. No coordinator app implementation has substituted for the required fresh agent.
+
+Read-only browser inspection of https://usepals.com/ returned Vercel 404 DEPLOYMENT_NOT_FOUND. The signed-in Pals Vercel project's domain inventory lists pals-app-eta.vercel.app for Production and does not list usepals.com. Public apex DNS resolves to 216.198.79.1 with ns55.domaincontrol.com/ns56.domaincontrol.com nameservers. No domain/DNS write occurred. The healthy exact staging Preview and existing confirmed Ella session do not establish fresh sign-in, enabled feature smoke, or public launch readiness. Staging availability/capabilities remain closed.
+
 ## Accepted operator MFA with automatic ordinary app usage
 
 The user explicitly approved both ADR29 staging setup and ADR31 MFA design, clarifying no MFA or manual approval for each ordinary user/action. Ella has both admin and moderator authority selected; no role is yet provisioned hosted. G fixed-admin bootstrap and H database MFA guard are dispatched to fresh Sol-medium agents from published mainc2db92d. H owns the shared local stack; G is static until H releases it. I hosted-admin MFA contract/worktree is published/prepared; initial fresh-agent dispatch was rejected by the agent thread limit, so UI implementation has not begun. Retry after available capacity; no coordinator app implementation substituted. Fresh final Preview health passes all six checks; existing confirmed UNC session remains at the expected launch-closed page. Hosted gates remain closed pending operator/policy controls and enabled smoke.
