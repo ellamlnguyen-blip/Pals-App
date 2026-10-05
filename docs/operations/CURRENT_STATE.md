@@ -1,5 +1,11 @@
 # Current State
 
+## 2026-10-05 — Current launch verification and remaining work
+
+TASK-027C test preparation is pushed/remote verified at `9c782ed417c7fffc86c6b3f17699cb61dbd4a450`; fresh independent test review is underway. Actual Auth/Storage passes 1/1 after the supported Storage runtime restart. The complete Auth/web run is 3/4: stale Hangout edit retries SQLSTATE 40001 before returning uncertain. TASK-027D is correcting this business-conflict transport behavior while retaining all revision and privacy checks. Diagnostic bypass was reverted, so no complete pass is claimed. Earlier database/build receipts are historical pending final-source rerun.
+
+Accepted ADR-0028/0030 and the current launch plan are now durable on main. Ella solely owns moderation; there is no backup prerequisite. Proposed ADR-0029/0031 acceptance and exact moderator/admin role choice remain pending. No hosted manager/role/gate write occurred. MFA enrollment/recovery, caller-bound policy controls, shutdown, full staging access/denial/product smoke, final reviewed main integration and public cutover remain. Existing Git integration rebuilds main automatically; no verified MVP production release or usepals.com cutover is claimed.
+
 ## 2026-10-05 — verified launch continuation milestone
 
 Ella is the sole launch moderation owner; no backup role is required. The task checkout was recovered from its published branch after temporary Git metadata disappeared. The existing dirty app checkout was preserved.
