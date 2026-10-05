@@ -26,8 +26,8 @@ export default function Home() {
           </div>
         </section>
         <p className="notice">
-          This local build includes UNC account setup and a clearly labeled mock
-          Hangouts map. Saved plans require running local services.
+          Pals is starting at UNC Chapel Hill. Confirm an email from an approved
+          UNC domain to get started.
         </p>
       </main>
     </div>

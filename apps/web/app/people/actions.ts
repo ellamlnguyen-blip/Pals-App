@@ -69,7 +69,7 @@ export async function blockPerson(id: string): Promise<PeopleActionResult> {
   return {
     state: "unknown",
     message:
-      "Creating a block is temporarily unavailable in this local build. A confirmed block now affects Hangout access and may end shared attendance; the new confirmation flow is being added.",
+      "Open this person’s profile or Safety to review and confirm a block. A confirmed block can change shared Hangout access and attendance.",
   };
 }
 

@@ -484,7 +484,8 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
             <p id="chat-disclosure" className="help">
               Future eligible joiners can read chat history. Confirmed blocks
               can end shared Hangout attendance and hide messages from blocked
-              peers. Creating a new block is temporarily unavailable.
+              peers. Open a person’s profile or Safety to review and confirm a
+              block.
             </p>
             {pending && (
               <p className="help">

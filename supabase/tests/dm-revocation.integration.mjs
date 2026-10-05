@@ -66,7 +66,7 @@ async function afterLock(name,revoke,generation) {
   } finally { sender.child.kill(); writer.child.kill(); }
 }
 
-test("DM sends serialize with both gates and live account, photo, campus and opt-in evidence", async () => {
+test("DM sends serialize with gates and live account, profile visibility, campus and opt-in evidence", async () => {
   sql(`insert into auth.users(id,email,email_confirmed_at) values
     ('${a}','dm-revoke-a@unc.edu',now()),('${b}','dm-revoke-b@unc.edu',now());
     insert into storage.objects(bucket_id,name,owner_id)
@@ -79,7 +79,9 @@ test("DM sends serialize with both gates and live account, photo, campus and opt
     insert into public.universities(id,slug,name,active,allowed_email_domains)
       values('${otherCampus}','dm-race-campus','DM race campus',true,array['unc.edu']);
     update private.people_feature_gate set enabled=true;
-    update private.dm_feature_gate set enabled=true;`);
+    update private.dm_feature_gate set enabled=true;
+    update private.pilot_availability set enabled=true;
+    update private.pilot_capabilities set enabled=true where key in ('onboarding','people','dm');`);
   try {
     const generation=sql(`begin; ${claims(a)} select public.create_dm_request('${b}',
       '${crypto.randomUUID()}','Initial'); commit;`).split("\n")[0];
@@ -91,8 +93,8 @@ test("DM sends serialize with both gates and live account, photo, campus and opt
         restore:"update private.people_feature_gate set enabled=true" },
       { name:"account", revoke:`update public.accounts set status='suspended' where id='${b}'`,
         restore:`update public.accounts set status='active' where id='${b}'` },
-      { name:"photo", revoke:`update public.profiles set primary_photo_path=null where user_id='${b}'`,
-        restore:`update public.profiles set primary_photo_path=user_id::text||'/primary.png' where user_id='${b}'` },
+      { name:"profile_text", revoke:`update public.profiles set bio=null where user_id='${b}'`,
+        restore:`update public.profiles set bio='Local fixture' where user_id='${b}'` },
       { name:"campus", revoke:`update public.university_memberships set university_id='${otherCampus}' where user_id='${b}'`,
         restore:`update public.university_memberships set university_id='00000000-0000-4000-8000-000000000001' where user_id='${b}'` },
       { name:"preference", revoke:`update private.people_preferences set opted_in=false where account_id='${b}'`,
@@ -120,6 +122,8 @@ test("DM sends serialize with both gates and live account, photo, campus and opt
         '${generation}'); commit;`).split("\n")[0],"0","later body page is empty");
     } finally { reader.child.kill(); }
   } finally {
+    sql(`update private.pilot_capabilities set enabled=false where key in ('onboarding','people','dm');
+      update private.pilot_availability set enabled=false;`);
     sql(`update private.dm_feature_gate set enabled=false;
       update private.people_feature_gate set enabled=false;
       set dm.allow_fixture_cleanup='true';
