@@ -18,7 +18,7 @@ Implement ADR-0028 as amended by ADR-0030 so every active account with a confirm
 - Run clean-migration, actual-role RLS and HTTP tests against a disposable/nonproduction database; build and smoke-test the deployed preview across positive and negative cases.
 - Keep analytics opt-in and privacy-compliant under ADR-0023; do not enable external hosted capture unless its data-location, access, deletion, IP-retention and consent requirements are verified.
 - Keep large-Hangout safeguards off per ADR-0024.
-- Record moderator coverage honestly; the same person cannot provide independent primary and backup coverage.
+- Record Ella Nguyen (`ella_nguyen@unc.edu`) as the sole launch moderation owner under the user's 2026-10-05 decision. A backup moderator is not a launch prerequisite. Verify her least-privilege moderator access, MFA/recovery, audit visibility, report response/retention handling, and incident contact before student invitations. Do not describe one person as independent backup coverage.
 
 ## Out of scope
 
@@ -37,4 +37,4 @@ Implement ADR-0028 as amended by ADR-0030 so every active account with a confirm
 
 ## Release boundary
 
-The task may prepare and verify a staging release. The action that changes hosted access to all eligible UNC accounts must be separately confirmed at action time after the exact target, checks, moderator coverage and rollback are presented. No production or domain change is implied.
+The task may prepare and verify a staging release. The action that changes hosted access to all eligible UNC accounts must be separately confirmed at action time after the exact target, checks, Ella's moderation readiness and rollback are presented. No production or domain change is implied.

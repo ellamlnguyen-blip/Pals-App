@@ -24,7 +24,7 @@ This decision does not authorize weakening RLS, campus verification, block enfor
 - Review every direct roster join, feature capability gate, legacy feature gate, and app environment guard before enabling routes.
 - Ship only after migration-chain, direct-RLS, source authorization, moderation, and end-to-end checks pass on nonproduction.
 - Opening hosted access to all eligible UNC accounts is a distinct release action and requires its own action-time confirmation after a concrete staging result is reviewed.
-- A primary moderator and a backup must be distinct people for independent coverage. Naming one person for both roles does not establish backup coverage.
+- **Moderation staffing amendment (2026-10-05):** The user's explicit decision makes Ella Nguyen (`ella_nguyen@unc.edu`) the sole launch moderation owner. A backup moderator is not required for this launch. Her role and least-privilege access, MFA/recovery, audit visibility, report response/retention handling and incident contact remain release checks. This staffing choice does not change moderator conflict rules, sanction authority, immutable audit, account enforcement or RLS. Earlier distinct-backup language in task receipts is historical.
 
 ## Rollout
 

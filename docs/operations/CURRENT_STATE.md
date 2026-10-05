@@ -1,5 +1,9 @@
 # Current State
 
+## 2026-10-05 — TASK-027 launch moderation ownership
+
+The user removed the backup moderator requirement. Ella Nguyen (`ella_nguyen@unc.edu`) is the sole launch moderation owner. The earlier `ella_nguyen@kenan-flagler.unc.edu` backup nomination and independent-coverage language in dated receipts below are historical, not current launch gates. Ella's account identity, least-privilege moderator assignment, MFA/recovery, audit visibility, report response/retention process and incident contact remain unverified release checks. Moderator conflict rules, immutable audit, blocks, suspensions/bans and RLS remain in force. No hosted role, gate, database, app or production setting changed in this documentation update. TASK-027 remains incomplete; see the current launch plan and task contract.
+
 ## 2026-10-04 — TASK-027 access-policy expansion
 
 The user explicitly chose that any active account with a confirmed email on the existing exact UNC allowlist may enter and use Pals immediately, without separate current-enrollment verification, pilot-roster admission, complete profile, or primary photo. This is the user's accepted first-launch test for UNC status; technically, the system checks control of a confirmed mailbox at an approved UNC domain. ADR-0030 records the access rule and supersedes ADR-0009/ADR-0028 profile-readiness requirements for app/source eligibility. A reviewed local migration updates the access and source predicates; the user-access rule remains behind disabled gates on staging. The independent review found no SQL authorization bypass and called for positive incomplete-profile lifecycle coverage, which has been added. Current clean local `db:verify` passes twice (1,678 pgTAP assertions per run; 26 files; schema lint clean). Current `pnpm check` passes formatting, ESLint, typecheck, 48 unit tests with one sandbox-only loopback skip, and web/admin builds. Confirmed-email HTTP access and co-host HTTP tests pass locally. The Auth/Storage and Auth/web suites still fail their photo upload at the Supabase Storage API with PostgreSQL `42P10` (no matching unique index for its `ON CONFLICT`); this leaves extra-photo upload unverified. No hosted migration, gate, manager role, deployment, or production access changed. Staging sign-in and product-flow browser smoke remain pending. See updated TASK-027 and its launch plan.
@@ -10,7 +14,7 @@ The TASK-027 Preview app code commit `c3fcc943e58229b68ab34e261577cb6d59403c94` 
 
 ## 2026-10-04 — TASK-027 staging readiness follow-up
 
-The previous version of this record is a historical checkpoint: it records the migration as pending and sign-in as awaiting action. The current facts are in the heading above. Resend `auth.usepals.com` remains Verified and the controlled confirmation email to `ella_nguyen@unc.edu` remains Delivered. SMTP remains enabled on Pals Staging. The user designated `ella_nguyen@kenan-flagler.unc.edu` as distinct backup moderator; role assignment, MFA/recovery, and operating coverage remain outstanding. The migration was applied to staging with all gates left false. No production setting changed.
+The previous version of this record is a historical checkpoint: it records the migration as pending and sign-in as awaiting action. The later migration and Preview update above supersedes those facts. Resend `auth.usepals.com` remains Verified and the controlled confirmation email to `ella_nguyen@unc.edu` remains Delivered. SMTP remains enabled on Pals Staging. The backup nomination recorded here was superseded by the 2026-10-05 sole-owner decision at the top of this file. The migration was applied to staging with all gates left false. No production setting changed.
 
 ## 2026-10-02 — hosted targets inspected
 

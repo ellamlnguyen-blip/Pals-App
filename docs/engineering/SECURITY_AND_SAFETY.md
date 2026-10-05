@@ -8,7 +8,7 @@ Admission mechanism/tester list and hosted operator/staffing/MFA/retention/recov
 
 Because Pals helps strangers meet offline, safety is core architecture.
 
-Launch requirements: verified identity, report/block, attendee removal, moderation console, suspension/ban, moderation audit trail, location privacy, RLS tests.
+Launch requirements: verified identity, report/block, attendee removal, moderation console, suspension/ban, moderation audit trail, location privacy, RLS tests. Under the user's 2026-10-05 decision, Ella Nguyen (`ella_nguyen@unc.edu`) is the sole launch moderation owner; a backup moderator is not required. Before student invitations, verify her least-privilege role, MFA/recovery, audit visibility, report response/retention handling and incident contact. Existing moderator conflict checks, immutable audit and source authorization are unchanged.
 
 Never expose private exact location to unauthorized users.
 
