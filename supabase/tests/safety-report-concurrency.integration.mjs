@@ -83,7 +83,9 @@ test("report retries, fifth slot and revocations observe database lock waits", {
       insert into private.people_preferences(account_id,opted_in)
         values ('${actor}',true),('${peer}',true);
       update private.safety_feature_gate set enabled=true;
-      update private.people_feature_gate set enabled=true;`);
+      update private.people_feature_gate set enabled=true;
+    update private.pilot_availability set enabled=true;
+    update private.pilot_capabilities set enabled=true where key in ('onboarding','people','hangouts');`);
 
     await race("same_key", submit(1), submit(1));
     assert.equal(count(), 1, "same-key race inserted only once");
@@ -133,10 +135,21 @@ test("report retries, fifth slot and revocations observe database lock waits", {
     await race("account_first_new", `update public.accounts set status='suspended'
       where id='${actor}';`, submit(7), true);
     assert.equal(count(), 6);
+    sql(`update public.accounts set status='active' where id='${actor}'`);
+    await race("profile_text_first", `update public.profiles set bio=null
+      where user_id='${peer}';`, submit(9), true);
+    assert.equal(count(), 6, "profile revocation before report is observed");
+    sql(`update public.profiles set bio='Fixture' where user_id='${peer}'`);
+    await race("report_first_profile_text", submit(10), `update public.profiles set bio=null
+      where user_id='${peer}';`);
+    assert.equal(count(), 7, "profile edit waits for an already authorized report");
+    sql(`update public.profiles set bio='Fixture' where user_id='${peer}'`);
     assert.throws(() => sql(`begin isolation level repeatable read; ${claims(actor)}
       select public.submit_safety_report('${key(8)}','user','${peer}','harassment',null);
       rollback;`), /Safety operation unavailable/);
   } finally {
+    sql(`update private.pilot_capabilities set enabled=false where key in ('onboarding','people','hangouts');
+      update private.pilot_availability set enabled=false;`);
     sql(`update private.safety_feature_gate set enabled=false;
       update private.people_feature_gate set enabled=false;
       delete from private.safety_report_requests where reporter_id='${actor}';

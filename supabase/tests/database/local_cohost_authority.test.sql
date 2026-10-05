@@ -2,9 +2,12 @@ begin;
 create extension if not exists pgtap with schema extensions;
 set search_path = public, extensions;
 select no_plan();
+-- Historical fixture runs under the open-UNC release switches, locally only.
+update private.pilot_availability set enabled=true where singleton;
+update private.pilot_capabilities set enabled=true where key in ('onboarding','hangouts','hangout_chat','people');
 insert into auth.users(id,email,email_confirmed_at)
 select ('54000000-0000-4000-8000-'||lpad(n::text,12,'0'))::uuid,
-  'cohost-'||n||'@unc.edu',now() from generate_series(1,7) n;
+  'cohost-'||n||'@unc.edu',now() from generate_series(1,8) n;
 insert into storage.objects(bucket_id,name,owner_id)
 select 'profile-photos',id::text||'/primary.png',id::text
 from public.accounts where id::text like '54000000-%';
@@ -139,7 +142,7 @@ select is((select count(*) from public.list_hangout_cohosts(pg_temp.hid())),
   2::bigint,'host sees suspended retained assignment');
 select is((select count(*) from public.list_hangout_roster_roles(pg_temp.hid())
   where account_id='54000000-0000-4000-8000-000000000004'),
-  0::bigint,'nonready assignee hidden from roster');
+  1::bigint,'photo-free assignee remains in roster');
 select is(public.demote_hangout_cohost(pg_temp.hid(),
   '54000000-0000-4000-8000-000000000004',7),8::bigint,
   'host demotes nonready assignee');
@@ -197,6 +200,35 @@ select is(public.remove_hangout_participant(pg_temp.hid(),
 reset role;
 select is((select count(*) from private.hangout_cohosts where hangout_id=pg_temp.hid()),
   0::bigint,'cancelled removal clears assignment');
+-- An account with no profile fields or primary photo can still participate in
+-- authorized co-host management under the confirmed-email access policy.
+reset role;
+update public.profiles set real_name=null,major=null,graduation_year=null,bio=null,
+  primary_photo_path=null where user_id='54000000-0000-4000-8000-000000000008';
+set local role authenticated;
+select set_config('request.jwt.claims',
+  '{"sub":"54000000-0000-4000-8000-000000000001","role":"authenticated"}',true);
+select set_config('cohost.empty_profile',public.create_hangout(
+  '54000000-0000-4000-8003-000000000002','Empty profile',now()+interval '1 hour',
+  'Area',35,-79)::text,true);
+select set_config('request.jwt.claims',
+  '{"sub":"54000000-0000-4000-8000-000000000008","role":"authenticated"}',true);
+select public.join_hangout(current_setting('cohost.empty_profile')::uuid);
+select set_config('request.jwt.claims',
+  '{"sub":"54000000-0000-4000-8000-000000000001","role":"authenticated"}',true);
+select is(public.promote_hangout_cohost(current_setting('cohost.empty_profile')::uuid,
+  '54000000-0000-4000-8000-000000000008',1),2::bigint,
+  'host adds profileless photo-free joined cohost');
+select is((select count(*) from public.list_hangout_cohosts(
+  current_setting('cohost.empty_profile')::uuid)
+  where account_id='54000000-0000-4000-8000-000000000008'),1::bigint,
+  'host reads profileless cohost assignment');
+select is(public.demote_hangout_cohost(current_setting('cohost.empty_profile')::uuid,
+  '54000000-0000-4000-8000-000000000008',2),3::bigint,
+  'host removes profileless cohost role');
+select is(public.remove_hangout_participant(current_setting('cohost.empty_profile')::uuid,
+  '54000000-0000-4000-8000-000000000008',3),4::bigint,
+  'host removes profileless participant');
 -- Direct safety teardown uses the participant trigger; unblock cannot revive
 -- membership or the former co-host assignment.
 reset role;
@@ -263,7 +295,7 @@ set local role authenticated;
 select set_config('request.jwt.claims',
   '{"sub":"54000000-0000-4000-8000-000000000001","role":"authenticated"}',true);
 select set_config('cohost.attendance',public.create_hangout(
-  '54000000-0000-4000-8003-000000000002','Short plan',
+  '54000000-0000-4000-8003-000000000004','Short plan',
   clock_timestamp()+interval '2 seconds','Area',35,-79,
   p_ends_at=>clock_timestamp()+interval '3 seconds')::text,true);
 select set_config('request.jwt.claims',

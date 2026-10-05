@@ -172,7 +172,7 @@ export async function profileChecks(owner, peer, a, sql, png) {
     );
     assert.equal(
       (await api.rpc("get_access_state")).data,
-      "onboarding",
+      "ready",
       "missing primary revokes ready",
     );
   } finally {

@@ -147,6 +147,8 @@ test("global block serializes joined Hangouts, social writes and message sends",
     update private.hangout_feature_gate set enabled=true;
     update private.hangout_chat_feature_gate set enabled=true;
     update private.notification_feature_gate set enabled=true;
+    update private.pilot_availability set enabled=true;
+    update private.pilot_capabilities set enabled=true where key in ('onboarding','people','friendship','dm','hangouts','hangout_chat','notifications');
     commit;`);
   try {
     // A join wins first: the later nonhost block finds the newly joined peer.
@@ -414,6 +416,8 @@ test("global block serializes joined Hangouts, social writes and message sends",
       assert.equal(blocked(u.e,u.f),beforeRollback,`${isolation} must not write a block`);
     }
   } finally {
+    sql(`update private.pilot_capabilities set enabled=false where key in ('onboarding','people','friendship','dm','hangouts','hangout_chat','notifications');
+      update private.pilot_availability set enabled=false;`);
     sql(`update private.notification_feature_gate set enabled=false;
       update private.hangout_chat_feature_gate set enabled=false;
       update private.hangout_feature_gate set enabled=false;

@@ -361,8 +361,8 @@ export function HangoutEditor({ token, existing, returnHref }: Props) {
           </label>
         </div>
         <p className="help">
-          Campus visibility only. Restricted audiences and eligibility are
-          unavailable in this local increment.
+          Campus visibility only at launch. Friends-only, invite-only, and
+          custom eligibility modes are not part of the UNC MVP.
         </p>
       </div>
       <div className="hangout-editor-actions">

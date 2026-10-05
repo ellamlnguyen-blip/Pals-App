@@ -65,6 +65,8 @@ test("observed social-lock waits recheck cohost membership, authority and lifecy
       graduation_year=2028,bio='Local',primary_photo_path=user_id::text||'/primary.png'
       where user_id::text like '54010000-%';
     update private.hangout_feature_gate set enabled=true;
+    update private.pilot_availability set enabled=true;
+    update private.pilot_capabilities set enabled=true where key in ('onboarding','hangouts');
     insert into public.hangouts(id,university_id,host_id,title,starts_at,
       public_place,public_latitude,public_longitude)
       select ('54010000-0000-4000-8001-'||lpad(n::text,12,'0'))::uuid,
@@ -191,6 +193,8 @@ test("observed social-lock waits recheck cohost membership, authority and lifecy
       and high_id=greatest('${uid(1)}','${uid(3)}')::uuid`), "1");
     sql(`begin; ${auth(1)} select public.set_safety_block('${uid(3)}',false); commit;`);
   } finally {
+    sql(`update private.pilot_capabilities set enabled=false where key in ('onboarding','hangouts');
+      update private.pilot_availability set enabled=false;`);
     // Moderator disable evidence is immutable. The caller must reset this
     // disposable local database after the suite to clear its fixtures.
     sql(`update private.safety_feature_gate set enabled=false;

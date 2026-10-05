@@ -74,7 +74,7 @@ export default async function CalendarPage({
       <section className="calendar-page" aria-labelledby="calendar-title">
         <div className="calendar-heading">
           <div>
-            <p className="badge">Saved Hangouts · local only</p>
+            <p className="badge">Saved Hangouts</p>
             <h1 id="calendar-title">Make time for a Hangout</h1>
             <p>See what’s happening, or find the plans you’ve joined.</p>
           </div>

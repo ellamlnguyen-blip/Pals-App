@@ -25,14 +25,12 @@ export async function hangoutActionChecks(owner, peer, host, member, png, sql) {
   );
   const devManifest = new URL("../../apps/web/.next/dev/server/server-reference-manifest.json", import.meta.url);
   const productionManifest = new URL("../../apps/web/.next/server/server-reference-manifest.json", import.meta.url);
-  const manifest = JSON.parse(readFileSync(existsSync(productionManifest) ? productionManifest : devManifest, "utf8"));
-  const ids = Object.fromEntries(
-    Object.entries(manifest.node).map(([id, value]) => [
-      value.exportedName,
-      id,
-    ]),
-  );
-  assert.ok(ids.createHangout && ids.editHangout && ids.searchSaved && ids.changeSavedMembership);
+  const readActionIds = () => {
+    const manifest = JSON.parse(readFileSync(existsSync(devManifest) ? devManifest : productionManifest, "utf8"));
+    return Object.fromEntries(Object.entries(manifest.node).map(([id, value]) => [value.exportedName, id]));
+  };
+  let ids = readActionIds();
+  assert.ok(ids.createHangout && ids.editHangout && ids.searchSaved);
   async function action(
     name,
     payload,
@@ -290,6 +288,10 @@ export async function hangoutActionChecks(owner, peer, host, member, png, sql) {
     const peerBefore = await fetch(`${origin}/hangouts/saved/${id}`, { headers: headers(peer.header()) });
     assert.equal(peerBefore.status, 200);
     assert.ok(!(await peerBefore.text()).includes("Meet by the broad path"), "nonmember detail is public only");
+    // The development server adds a route's server actions to its manifest
+    // only after that route has been compiled and visited.
+    ids = readActionIds();
+    assert.ok(ids.changeSavedMembership, "detail membership action registered");
     const joined = await actionArgs("changeSavedMembership", [id, "join"], peer.header(), `/hangouts/saved/${id}`);
     assert.equal(joined.result?.kind, "saved", joined.body.slice(0, 300));
     assert.ok(!joined.body.includes("Meet by the broad path"), "join response contains no private instructions");

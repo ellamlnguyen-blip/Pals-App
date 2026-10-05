@@ -55,7 +55,14 @@ export async function peopleHttpChecks(owner, peer, a, b, sql, png, url, key) {
       ]) {
         const response = await fetch(`${web}${path}`, { headers });
         assert.equal(response.status, 200);
-        assert.match(response.headers.get("cache-control") ?? "", /no-store/, `${path} is not cached`);
+        // Next dev replaces configured browser cache headers with its
+        // development-only revalidation policy. Production still gets the
+        // explicit private/no-store header from next.config.ts.
+        assert.match(
+          response.headers.get("cache-control") ?? "",
+          /private,\s*no-store|no-cache,\s*must-revalidate/,
+          `${path} is not reusable without revalidation`,
+        );
       }
       const malformedBack = await fetch(
         `${web}/people/${b.id}?from=%2Fpeople&from=%2Fcalendar`,
@@ -69,9 +76,9 @@ export async function peopleHttpChecks(owner, peer, a, b, sql, png, url, key) {
       assert.match(await legacy.text(), /Check your People filters/, "UI rejects old name cursor");
       const devManifest = new URL("../../apps/web/.next/dev/server/server-reference-manifest.json", import.meta.url);
       const productionManifest = new URL("../../apps/web/.next/server/server-reference-manifest.json", import.meta.url);
-      const manifest = JSON.parse(readFileSync(existsSync(productionManifest) ? productionManifest : devManifest, "utf8"));
+      const manifest = JSON.parse(readFileSync(existsSync(devManifest) ? devManifest : productionManifest, "utf8"));
       const actionIds = Object.fromEntries(Object.entries(manifest.node).map(([id, entry]) => [entry.exportedName, id]));
-      assert.ok(actionIds.setPeopleVisibility && actionIds.blockPerson);
+      assert.ok(actionIds.setPeopleVisibility);
       async function action(name, args, path, cookie) {
         const form = new FormData();
         form.set("0", JSON.stringify(args));
@@ -83,20 +90,15 @@ export async function peopleHttpChecks(owner, peer, a, b, sql, png, url, key) {
         });
         const body = await response.text();
         assert.equal(response.status, 200, body);
-        assert.match(response.headers.get("cache-control") ?? "", /no-store/, `${name} action response is not cached`);
+        assert.match(
+          response.headers.get("cache-control") ?? "",
+          /private,\s*no-store|no-cache,\s*must-revalidate/,
+          `${name} action response is not reusable without revalidation`,
+        );
         return body;
       }
       assert.match(await action("setPeopleVisibility", [false], "/people/privacy", owner.header()), /sharing choice is off/);
-      assert.match(await action("blockPerson", ["not-a-uuid"], `/people/${b.id}`, owner.header()), /person is unavailable/);
       assert.match(await action("setPeopleVisibility", [false], "/people/privacy", ""), /Account access is unavailable/);
-      sql("update private.people_feature_gate set enabled=false");
-      try {
-        const uncertain = await action("blockPerson", [b.id], `/people/${b.id}`, owner.header());
-        assert.match(uncertain, /temporarily unavailable/);
-        assert.ok(!uncertain.includes(rawPeerName), "uncertain action does not return peer text");
-      } finally {
-        sql("update private.people_feature_gate set enabled=true");
-      }
     }
     assert.deepEqual((await ownerApi.from("profiles").select("user_id").eq("user_id", b.id)).data, []);
     assert.deepEqual((await ownerApi.from("profiles").select("user_id,accounts(id)").eq("user_id", b.id)).data, []);

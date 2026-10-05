@@ -103,7 +103,10 @@ test("moderation RPCs use live role/gate checks and allowlisted audited projecti
       update private.dm_feature_gate set enabled=true;
       update private.notification_feature_gate set enabled=true;
       update private.safety_feature_gate set enabled=true;
-      update private.hangout_feature_gate set enabled=true;`);
+      update private.hangout_feature_gate set enabled=true;
+      update private.pilot_availability set enabled=true;
+      update private.pilot_capabilities set enabled=true
+        where key in ('onboarding','hangouts','people','friendship','dm','notifications');`);
     denied(await rpc("get_moderation_report", reporter.token,
       { p_report_id: report }));
     denied(await rpc("list_moderation_reports", reporter.token));
@@ -267,6 +270,9 @@ test("moderation RPCs use live role/gate checks and allowlisted audited projecti
       update private.notification_feature_gate set enabled=false;
       update private.safety_feature_gate set enabled=false;
       update private.hangout_feature_gate set enabled=false;
+      update private.pilot_capabilities set enabled=false
+        where key in ('onboarding','hangouts','people','friendship','dm','notifications');
+      update private.pilot_availability set enabled=false;
       -- Moderation evidence is append-only. The final disposable database
       -- reset clears all test users, reports, sanctions and audit entries.`);
   }

@@ -2,6 +2,9 @@ begin;
 create extension if not exists pgtap with schema extensions;
 set search_path = public, extensions;
 select no_plan();
+-- Historical fixture runs under the open-UNC release switches, locally only.
+update private.pilot_availability set enabled=true where singleton;
+update private.pilot_capabilities set enabled=true where key in ('onboarding','hangouts','hangout_chat','people');
 
 select is((select enabled from private.large_hangout_feature_gate), false,
   'safeguard starts disabled');
@@ -177,8 +180,8 @@ update public.university_memberships set university_id='52000000-0000-4000-8002-
 set local role authenticated;
 select set_config('request.jwt.claims',
   '{"sub":"52000000-0000-4000-8000-000000000030","role":"authenticated"}',true);
-select is(jsonb_array_length(pg_temp.saved()->'pins'),0,
-  'ready different-campus viewer sees no UNC Hangouts');
+select throws_ok($$select pg_temp.saved()$$,'42501','Saved Hangouts unavailable',
+  'non-UNC campus viewer cannot use saved discovery');
 select throws_ok($$select * from public.get_hangout_large_state('52000000-0000-4000-8001-000000000002')$$,
   '42501',null,'different-campus nonhost has no size reader');
 reset role;
@@ -219,8 +222,8 @@ select set_config('request.jwt.claims',
   '{"sub":"52000000-0000-4000-8000-000000000001","role":"authenticated"}',true);
 select is((select is_large from public.get_hangout_large_state(pg_temp.hid(2))),true,
   'host count includes a nonready joined member');
-select is(pg_temp.saved()->'pins'->1->>'id',pg_temp.hid(2)::text,
-  'nonready joined member no longer makes the viewer-relative class large');
+select is(pg_temp.saved()->'pins'->1->>'id',pg_temp.hid(3)::text,
+  'photo-free joined member remains in viewer-relative size class');
 reset role;
 update public.profiles set primary_photo_path=pg_temp.uid(25)::text||'/primary.png'
   where user_id=pg_temp.uid(25);

@@ -39,7 +39,9 @@ test("Hangout chat send serializes against committed revocation and holds readin
     update public.profiles set real_name='Chat race',major='Science',graduation_year=2028,
       bio='Local fixture',primary_photo_path=user_id::text||'/primary.png' where user_id in ('${actor}','${peer}');
     update private.hangout_feature_gate set enabled=true;
-    update private.hangout_chat_feature_gate set enabled=true;`);
+    update private.hangout_chat_feature_gate set enabled=true;
+    update private.pilot_availability set enabled=true;
+    update private.pilot_capabilities set enabled=true where key in ('onboarding','hangouts','hangout_chat');`);
   try {
     hangout = sql(`begin; ${claims(actor)} select public.create_hangout(
       '51310000-0000-4000-8000-000000000099','Chat race',now()+interval '1 hour','Area',35,-79); commit;`).split("\n").at(-1);
@@ -213,6 +215,8 @@ test("Hangout chat send serializes against committed revocation and holds readin
       assert.throws(() => sql(`begin isolation level ${isolation}; ${claims(peer)} select * from public.send_hangout_message('${hangout}','51310000-0000-4000-8001-000000000006','Race'); rollback;`), /Hangout chat unavailable|Safety operation unavailable/);
     }
   } finally {
+    sql(`update private.pilot_capabilities set enabled=false where key in ('onboarding','hangouts','hangout_chat');
+      update private.pilot_availability set enabled=false;`);
     sql(`update private.hangout_chat_feature_gate set enabled=false;
       update private.hangout_feature_gate set enabled=false;
       set chat.allow_fixture_cleanup='true';
