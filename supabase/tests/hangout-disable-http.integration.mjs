@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
 import { createRequire } from "node:module";
 import test from "node:test";
+import { verifiedTotpToken } from "./helpers/local-totp.mjs";
 
 const status = JSON.parse(execFileSync(process.env.SUPABASE_CLI ?? "supabase",
   ["status", "--output", "json"], { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }));
@@ -96,6 +97,8 @@ test("real Auth and PostgREST enforce disabled Hangout source boundaries", {
       update private.pilot_availability set enabled=true;
       update private.pilot_capabilities set enabled=true
         where key in ('onboarding','hangouts','hangout_chat');`);
+    denied(await rpc("list_moderation_reports", operator.token));
+    operator.token = await verifiedTotpToken(request, operator.token);
     const made = await rpc("create_hangout", host.token, {
       p_request_id: crypto.randomUUID(), p_title: "B2 local fixture",
       p_starts_at: new Date(Date.now() + 3_600_000).toISOString(),
