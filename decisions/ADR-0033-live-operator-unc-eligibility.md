@@ -10,7 +10,7 @@ TASK-027H's shared moderation guard requires AAL2, a live owned session and veri
 
 ## Decision proposed
 
-Tighten only the shared `private.moderation_actor()` guard in a committed migration after TASK-027J. A valid privileged caller must also satisfy current live confirmed UNC Auth email, matching verified membership, active UNC campus and exact allowlisted email domain at the point of action. Keep the existing AAL2/session/factor, account/role/gate, report conflict and audit checks. Use a reviewed lock order and fresh recheck after waits against concurrent Auth email, membership and campus changes. Never trust a stale JWT email claim, revoke role implicitly, or broaden student/source access.
+Tighten only the shared `private.moderation_actor()` guard in a committed migration after TASK-027J. A valid privileged caller must also satisfy current live confirmed UNC Auth email, matching verified membership, active UNC campus and exact allowlisted email domain at the point of action. After existing gate/account/role locks, lock the actor's `auth.users` row, then membership row capturing campus ID, then that campus row, all FOR SHARE; follow with the existing TOTP factor then session lock order. In a separate READ COMMITTED statement after waits, recheck non-null confirmation and verification, matching current email, valid single-@ shape, exact active `unc-chapel-hill` campus and its allowed domain. Keep the existing AAL2/session/factor, account/role/gate, report conflict and audit checks. Never trust a stale JWT email claim, revoke role implicitly, or broaden student/source access.
 
 This is a denial-only addition to the five moderation RPCs. It does not add student approval, student MFA, service-role proxying or operator recovery bypass.
 
@@ -20,4 +20,4 @@ Actual-role SQL and genuine Auth HTTP tests must prove the five RPCs reject unco
 
 ## Acceptance
 
-AGENTS.md requires explicit acceptance for this authorization change. Current user instructions already require live email/campus enforcement, but implementation and hosted rollout still need this reviewed decision.
+AGENTS.md requires explicit acceptance for this authorization change. A read-only independent design review found the lock order above suitable for acceptance, subject to actual race tests and hosted Auth validation. Current user instructions already require live email/campus enforcement, but implementation and hosted rollout still need this reviewed decision.

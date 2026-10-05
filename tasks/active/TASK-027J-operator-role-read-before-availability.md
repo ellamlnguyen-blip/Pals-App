@@ -4,7 +4,7 @@ Status: Ready only after ADR-0032 acceptance
 Parent: TASK-027
 Date: 2026-10-05
 
-Implement the exact bounded policy in ADR-0032 from the reviewed combined TASK-027G/H source. Use one committed migration after `20261005000400`. Do not modify prior applied migrations, widen other RLS policies, enable gates, or use a service-role proxy.
+Implement the exact bounded policy and caller-bound UNC helper in ADR-0032 from the reviewed combined TASK-027G/H source. Use one committed migration after `20261005000400`. Do not modify the shared `has_verified_membership()`, prior applied migrations or other RLS policies; do not enable gates or use a service-role proxy.
 
 ## Acceptance criteria
 

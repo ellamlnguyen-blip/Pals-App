@@ -10,7 +10,7 @@ The current `roles_owner_read` policy on `public.platform_roles` depends on `pri
 
 ## Decision proposed
 
-In one committed migration, replace only `roles_owner_read` with an authenticated caller-own-row policy using `user_id = auth.uid()` and the existing live `private.has_verified_membership()` helper. That helper requires an active account, current confirmed Auth email equal to the verified membership email, an active campus and exact allowed email domain. It does not depend on launch availability. Keep the table's no-client-write grants, all other RLS policies, moderation source gate, AAL2/live session/factor guard, and report/audit RPCs unchanged.
+In one committed migration, add a narrowly scoped, caller-bound SECURITY DEFINER helper for live UNC operator eligibility and replace only `roles_owner_read` with an authenticated caller-own-row policy using `user_id = auth.uid()` and that helper. The helper requires an active account, current confirmed Auth email equal to the verified membership email, active campus with exact `unc-chapel-hill` slug, and exact allowed email domain. It does not depend on launch availability. The existing `private.has_verified_membership()` is insufficient because it does not require the UNC slug; do not change that shared helper. A direct membership subquery in the RLS policy would be blocked by the current availability-gated membership policy. Keep the table's no-client-write grants, all other RLS policies, moderation source gate, AAL2/live session/factor guard, and report/audit RPCs unchanged.
 
 This lets an eligible operator read only their own role label before availability opens, so the admin UI can require that role before TOTP setup. It gives no report, profile, other role, source, policy or application access. Revocation, suspension, campus or email loss must immediately remove the row from the caller's read result. A role row alone never authorizes moderation.
 
@@ -20,4 +20,4 @@ Prove under actual `anon` and `authenticated` roles that an active confirmed all
 
 ## Acceptance
 
-This permission change requires explicit acceptance under AGENTS.md's ADR policy. The proposed status grants no migration or hosted write authorization by itself. Production remains out of scope.
+This permission change requires explicit acceptance under AGENTS.md's ADR policy. A read-only independent design review required the exact UNC slug correction above; no further design blocker was found. The proposed status grants no migration or hosted write authorization by itself. Production remains out of scope.
