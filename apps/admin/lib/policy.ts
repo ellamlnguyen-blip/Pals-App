@@ -29,12 +29,21 @@ export const ELLA_POLICY_OWNER_ID = "8ebd74bb-2a72-4689-9580-72268106d91b";
 export function policyOperatorAllowed(
   userId: string | undefined,
   accountStatus: string | undefined,
-  role: string | undefined,
   aal: string | null | undefined,
   verifiedTotp: boolean,
 ) {
   return userId === ELLA_POLICY_OWNER_ID && accountStatus === "active" &&
-    role === "admin" && aal === "aal2" && verifiedTotp;
+    aal === "aal2" && verifiedTotp;
+}
+
+export function policyRpcStatus(error: { code?: string } | null, validReceipt: boolean) {
+  if (error?.code === "42501") return 403;
+  return error || !validReceipt ? 503 : 200;
+}
+
+export function policyAuthStatus(error: { status?: number } | null, userId: string | undefined) {
+  if (error) return [400, 401, 403].includes(error.status ?? 0) ? 403 : 503;
+  return userId === ELLA_POLICY_OWNER_ID ? 200 : 403;
 }
 
 export function policyTarget(key: string, enabled: boolean) {
