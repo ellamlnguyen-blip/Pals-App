@@ -163,7 +163,7 @@ export async function profileChecks(owner, peer, a, sql, png) {
       }
     }
   }
-  // Privileged physical metadata loss still revokes readiness; no client delete bypass.
+  // Privileged physical metadata loss does not revoke campus access; no client delete bypass.
   profile = await read();
   const original = profile.primary_photo_path;
   try {
@@ -173,7 +173,7 @@ export async function profileChecks(owner, peer, a, sql, png) {
     assert.equal(
       (await api.rpc("get_access_state")).data,
       "ready",
-      "missing primary revokes ready",
+      "missing primary does not revoke confirmed UNC access",
     );
   } finally {
     sql(

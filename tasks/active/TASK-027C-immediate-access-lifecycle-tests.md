@@ -1,0 +1,11 @@
+# TASK-027C — Immediate-access lifecycle test reconciliation
+
+Status: In progress
+Date: 2026-10-05
+Parent: TASK-027
+
+Reconcile existing Auth/Storage/HTTP lifecycle expectations with accepted ADR-0030: an active confirmed exact-UNC-domain account remains ready without roster, completed profile or primary photo. Local Storage runtime was repaired by preserved official CLI stop/start to v1.77.5; first upload now succeeds, then test:auth fails obsolete `incomplete peer cannot read` expectation in hangout-http-checks.mjs. Update only stale access expectations/comments and add meaningful positive/negative checks where needed. Preserve real Storage ownership, peer-folder denial, blocks, unconfirmed/non-UNC/suspended/banned/current-email and RLS denials. Do not mask actual authorization errors. No app/migration/provider-schema changes or hosted writes. Run test:auth and relevant Auth/web lifecycle sequentially after coordinating shared stack with TASK-027B; record exact outcomes. Write handoff, commit/push branch and verify SHA; parent remains incomplete pending staging E2E and main integration.
+
+## Reviewed scope amendment — local race barrier coordination
+
+Actual Auth/web execution exposed a test barrier deadlock: holding the chat table while synchronously suspending an account blocked the in-flight source read and collided with cleanup. Reconcile that local test harness by pausing a real, fully consumed read_hangout_messages HTTP response after its database transaction ends, using the existing local-loopback-only preload and private temporary marker files. Commit and assert suspension before releasing the captured response; retain the in-flight final streamed-HTML denial of private instructions/source IDs. Bound all waits and guarantee release/cleanup. Preserve existing transport-fault semantics. This is test-only coordination, not app/RLS/provider behavior. Do not replace the race with sequential fetches or claim lost coverage passed. Add focused helper checks and rerun the real Auth/web suite. No hosted actions.
