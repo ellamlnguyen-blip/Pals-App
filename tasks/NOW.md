@@ -1,5 +1,13 @@
 # NOW
 
+## 2026-10-05 — TASK-027 launch continuation and sole moderator decision
+
+TASK-027 is active and incomplete on `agent/TASK-027-open-unc-mvp`, latest verified published baseline `f89bf3031edf036c02b728bdad60e192533624b1`. The current user expressly chose immediate access for active accounts with confirmed exact-allowlisted UNC email, with no roster/profile/photo prerequisite, and authorized staging launch activation. Ella Nguyen (`ella_nguyen@unc.edu`) is the sole launch moderator; the backup moderator requirement is removed by current explicit instruction. This does not remove MFA/recovery, least privilege, immutable moderation audit, report handling, RLS, blocks, suspensions or bans.
+
+Staging target: `ffabdrgsmtfylrehwmfo`. Prior receipts report applied 28-migration chain, passing 1,678 SQL assertions twice, passing builds/unit checks, green Preview health and delivered UNC confirmation email. These are recorded prior results, not newly rerun proofs. Staging availability and capability gates were last verified off, with zero managers/operator roles. Remaining work: reviewed auditable first-manager/moderator provisioning, supported Supabase Storage upload fix, staging access/denial and full feature-flow smoke, Ella's operator MFA/recovery verification, reviewed main integration, then separately verified production release/cutover. No production change or launch-ready claim is made.
+
+The temporary checkout lost Git metadata; the task branch was recovered unchanged from origin into `/private/tmp/pals-task027-recovered`. Documentation staffing update and read-only control-path/Storage assessments are scoped subparts of TASK-027. The staging bootstrap design must record actual administrative session provenance and user approval; it must never pretend a shared database session is an authenticated Ella session. Source guards remain authoritative.
+
 ## TASK-025 health readiness correction — 2026-09-29
 
 Fresh independent read-only review CLEAR on `agent/TASK-025-health-readiness` commit `56c510791edbfb227327b1f0cd9bdc746fa3d3e4`, task-pushed and exact remote verified. The secret-free `/api/health` probe returns HTTP 503/`not_ready` for missing or mismatched hosted configuration and HTTP 200/`ok` only for validated configuration; the proxy exempts only this public path. Web typecheck/build, focused target tests, formatting and local HTTP 503/503/200 probes passed. Green means configuration shape only, not hosted callback/SMTP/provider connectivity or pilot release approval. HTTPS staging deployment, exact Supabase callback/site settings and migration history, custom SMTP/controlled UNC mailbox, named moderators, approved pilot supply and smoke checks remain open. TASK-021 exhaustive modeling stays paused.

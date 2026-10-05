@@ -1,5 +1,13 @@
 # Backlog
 
+## 2026-10-05 — TASK-027 launch continuation and sole moderator decision
+
+TASK-027 is active and incomplete on `agent/TASK-027-open-unc-mvp`, latest verified published baseline `f89bf3031edf036c02b728bdad60e192533624b1`. The current user expressly chose immediate access for active accounts with confirmed exact-allowlisted UNC email, with no roster/profile/photo prerequisite, and authorized staging launch activation. Ella Nguyen (`ella_nguyen@unc.edu`) is the sole launch moderator; the backup moderator requirement is removed by current explicit instruction. This does not remove MFA/recovery, least privilege, immutable moderation audit, report handling, RLS, blocks, suspensions or bans.
+
+Staging target: `ffabdrgsmtfylrehwmfo`. Prior receipts report applied 28-migration chain, passing 1,678 SQL assertions twice, passing builds/unit checks, green Preview health and delivered UNC confirmation email. These are recorded prior results, not newly rerun proofs. Staging availability and capability gates were last verified off, with zero managers/operator roles. Remaining work: reviewed auditable first-manager/moderator provisioning, supported Supabase Storage upload fix, staging access/denial and full feature-flow smoke, Ella's operator MFA/recovery verification, reviewed main integration, then separately verified production release/cutover. No production change or launch-ready claim is made.
+
+The temporary checkout lost Git metadata; the task branch was recovered unchanged from origin into `/private/tmp/pals-task027-recovered`. Documentation staffing update and read-only control-path/Storage assessments are scoped subparts of TASK-027. The staging bootstrap design must record actual administrative session provenance and user approval; it must never pretend a shared database session is an authenticated Ella session. Source guards remain authoritative.
+
 ## TASK-025 next hosted release gates — 2026-09-29
 
 Reviewed health correction `56c510791edbfb227327b1f0cd9bdc746fa3d3e4` is task-pushed/remote verified; canonical integration is pending exact remote verification at this receipt. Next: establish access to the correct Pals Vercel staging project, which is not visible through the current connection; then configure exact HTTPS origin/Supabase callback and confirm hosted migration history without production fallback, custom SMTP with controlled UNC mailbox, named moderator coverage, approved pilot participants and smoke/rollback. Do not enable hosted gates or invite students before these checks. Paused TASK-021 has a clean local, unreviewed and unpushed c2a0 checkpoint `82d4fa19498ebc01151c1e088bb328abd9244a18`; it grants no accepted runtime or permission credit.
