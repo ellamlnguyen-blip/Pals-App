@@ -9,6 +9,7 @@ import {
   denied,
   restoreDefaults,
 } from "./helpers/pilot-admission-authority.mjs";
+import { verifiedTotpToken } from "./helpers/local-totp.mjs";
 
 test(
   "real Auth manager authority, neutral denials, old JWT revocation and immutable provenance",
@@ -64,6 +65,8 @@ test(
       denied(platform);
       assert.equal(ordinary.body.message, "Pilot management unavailable");
       assert.equal(platform.body.message, ordinary.body.message);
+      denied(await rpc("set_pilot_account_admission", manager.token, body));
+      manager.token = await verifiedTotpToken(request, manager.token);
       const admitted = ok(
         await rpc("set_pilot_account_admission", manager.token, body),
       );
