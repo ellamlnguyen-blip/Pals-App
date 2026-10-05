@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-05 — TASK-027 publication and launch-security decisions
+
+Published and verified reviewed TASK-027I/K/O branches and integration `6fd3240` after direct user authorization. Recorded acceptance of narrow prelaunch own-role read, manager MFA in the database and staged emergency availability-off; rejected repeated UNC eligibility checks on each privileged action. The J implementation is underway; hosted rollout and launch remain pending.
+
 ## 2026-10-05 — TASK-027 local operator security integration
 
 Integrated reviewed staging bootstrap, moderator live-TOTP guard, HTTPS operator MFA console and two legacy moderation HTTP fixture updates into the local launch branch. Local genuine Auth operator flow and focused tests passed. Identified and bounded further launch fixes for preactivation own-role read, current UNC eligibility, manager MFA, policy controls, emergency shutdown and genuine-Auth moderation race testing, which now passes 1/1 after TASK-027O and independent review. The branch is not published or deployed; user acceptance and direct publication authorization are pending, and no hosted gates or domain were changed.

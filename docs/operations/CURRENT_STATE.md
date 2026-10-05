@@ -1,5 +1,9 @@
 # Current State
 
+## 2026-10-05 — Published source and accepted launch decisions
+
+User-authorized publication of reviewed TASK-027I/K/O branches and parent integration `6fd3240` to the canonical private GitHub remote was verified. G/H were already published. ADR-0032, ADR-0034 in MFA-only scope, and ADR-0035 staging emergency off are Accepted; ADR-0033 per-action operator UNC rechecking is Rejected by the user, and TASK-027M is cancelled. TASK-027J implementation is underway in an isolated checkout; N/P and caller-session policy UI remain. The accepted designs do not enable student access. Staging and production availability/capabilities remain closed, with no new hosted migration, grant or domain change in this continuation.
+
 ## 2026-10-05 — TASK-027 operator launch continuation
 
 The local TASK-027 parent branch now includes independently reviewed first-admin/bootstrap preparation, live-session TOTP moderation guard, HTTPS operator MFA console and genuine-TOTP moderation HTTP fixture updates. No new branch push, hosted migration, operator grant, gate change or domain change has followed this local integration. Disposable Auth/UI enrollment, AAL1-to-AAL2 challenge, route denial and focused HTTP checks passed; TASK-027O corrected the old moderation concurrency fixture with genuine Auth TOTP; the focused race passes 1/1, fresh security review is clear and local cleanup/reset returned all checked gates and fixture counts to zero. Preactivation own-role reading and live UNC/MFA checks for moderator/manager RPCs are proposed in ADR-0032/0033/0034; emergency availability-off is proposed in ADR-0035. These require user acceptance before implementation. Auto approval review rejected publishing private code to the canonical GitHub remote absent direct user authorization; a direct authorization request is pending. Staging availability/capabilities remain off and the public UNC release is not ready.
