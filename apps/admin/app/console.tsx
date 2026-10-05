@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import PolicyPanel from "./policy-panel";
 import {
   deniedView,
   duplicateCandidates,
@@ -70,7 +71,7 @@ async function call(path: string, payload?: object) {
   return response.json();
 }
 
-export default function Console({ configured }: { configured: boolean }) {
+export default function Console({ configured, mode = "moderation" }: { configured: boolean; mode?: "moderation" | "policy" }) {
   const [session, setSession] = useState<SessionState>(
     configured ? "loading" : "out",
   );
@@ -98,6 +99,7 @@ export default function Console({ configured }: { configured: boolean }) {
   const [duplicateId, setDuplicateId] = useState("");
   const [busy, setBusy] = useState(false);
   const [mobileDetail, setMobileDetail] = useState(false);
+  const [policyEpoch, setPolicyEpoch] = useState(0);
   const generation = useRef(0);
   const sessionGeneration = useRef(0);
   const mutationGeneration = useRef(0);
@@ -127,6 +129,7 @@ export default function Console({ configured }: { configured: boolean }) {
   const applySession = useCallback(
     (reply: SessionReply) => {
       clearSensitive();
+      setPolicyEpoch((value) => value + 1);
       setQueue([]);
       setHistory([]);
       setUncertain(null);
@@ -143,6 +146,7 @@ export default function Console({ configured }: { configured: boolean }) {
   const authorityDenied = useCallback(() => {
     const view = deniedView();
     clearSensitive();
+    setPolicyEpoch((value) => value + 1);
     clearMfa();
     setQueue(view.queue);
     setHistory(view.history);
@@ -224,7 +228,7 @@ export default function Console({ configured }: { configured: boolean }) {
     };
   }, [session, role, applySession, authorityDenied]);
   useEffect(() => {
-    if (session !== "ready") return;
+    if (session !== "ready" || mode !== "moderation") return;
     let active = true;
     queueMicrotask(() => {
       if (active) void loadQueue(initialCursor);
@@ -232,7 +236,7 @@ export default function Console({ configured }: { configured: boolean }) {
     return () => {
       active = false;
     };
-  }, [session, loadQueue]);
+  }, [session, mode, loadQueue]);
 
   async function openDetail(id: string, preserveMessage = false) {
     lastFocus.current = document.activeElement as HTMLElement;
@@ -520,9 +524,14 @@ export default function Console({ configured }: { configured: boolean }) {
       </a>
       <header className="masthead">
         <span className="wordmark">
-          pals<span className="wordmark-sub"> / moderation</span>
+          pals<span className="wordmark-sub"> / {mode === "policy" ? "launch" : "moderation"}</span>
         </span>
         <span className="campus">UNC Chapel Hill · private workspace</span>
+        {session === "ready" && (
+          <a className="workspace-link" href={mode === "policy" ? "/" : "/policy"}>
+            {mode === "policy" ? "Reports" : "Launch policy"}
+          </a>
+        )}
         {!["loading", "out"].includes(session) && (
           <button className="text-button" onClick={signOut}>
             Sign out
@@ -546,10 +555,9 @@ export default function Console({ configured }: { configured: boolean }) {
         ) : session === "out" ? (
           <section className="setup sign-in">
             <p className="eyebrow">Private workspace</p>
-            <h1>Sign in to review reports</h1>
+            <h1>{mode === "policy" ? "Sign in to manage launch policy" : "Sign in to review reports"}</h1>
             <p>
-              Authorized campus operators only. Earlier unconfirmed actions may
-              have completed; open a fresh report before acting.
+              {mode === "policy" ? "Authorized launch owner only. Reconcile any earlier unconfirmed policy request before making another change." : "Authorized campus operators only. Earlier unconfirmed actions may have completed; open a fresh report before acting."}
             </p>
             <form onSubmit={signIn}>
               <label>
@@ -578,7 +586,7 @@ export default function Console({ configured }: { configured: boolean }) {
         ) : session === "denied" ? (
           <section className="state" role="alert">
             <p className="eyebrow">Access unavailable</p>
-            <h1>Moderation is locked</h1>
+            <h1>{mode === "policy" ? "Launch policy is locked" : "Moderation is locked"}</h1>
             <p>
               Your account, role or authenticator could not be confirmed. Sign
               out and contact the launch owner if this persists.
@@ -639,7 +647,7 @@ export default function Console({ configured }: { configured: boolean }) {
             <h1>Enter your authenticator code</h1>
             <p>
               Your operator access needs a verified authenticator session before
-              reports can be opened.
+              {mode === "policy" ? " launch policy can change." : " reports can be opened."}
             </p>
             <form onSubmit={verifyMfa}>
               <label>
@@ -662,14 +670,16 @@ export default function Console({ configured }: { configured: boolean }) {
         ) : (
           <>
             <div className="heading">
-              <p className="eyebrow">Safety operations</p>
-              <h1>Reports</h1>
+              <p className="eyebrow">{mode === "policy" ? "Launch operations" : "Safety operations"}</p>
+              <h1>{mode === "policy" ? "Launch policy" : "Reports"}</h1>
               <p>
-                Review each allegation against the current case and target
-                state.
+                {mode === "policy" ? "Make one audited gate change at a time." : "Review each allegation against the current case and target state."}
               </p>
             </div>
-            {denied ? (
+            {mode === "policy" ? (
+              role === "admin" ? <PolicyPanel key={policyEpoch} onDenied={authorityDenied} /> :
+                <section className="state" role="alert"><h2>Policy unavailable</h2><p>This workspace requires launch owner authority.</p></section>
+            ) : denied ? (
               <section className="state" role="alert">
                 <h2>Moderation unavailable</h2>
                 <p>This workspace cannot load reports right now.</p>
