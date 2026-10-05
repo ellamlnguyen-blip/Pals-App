@@ -37,7 +37,10 @@ test("real Auth and PostgREST Hangout notices follow committed source rights", a
       update public.profiles set real_name='Notice HTTP',major='Science',graduation_year=2028,bio='Local fixture',primary_photo_path=user_id::text||'/primary.png' where user_id in (${ids});
       update private.hangout_feature_gate set enabled=true;
       update private.hangout_chat_feature_gate set enabled=true;
-      update private.notification_feature_gate set enabled=true;`);
+      update private.notification_feature_gate set enabled=true;
+      update private.pilot_availability set enabled=true;
+      update private.pilot_capabilities set enabled=true
+        where key in ('onboarding','hangouts','hangout_chat','notifications');`);
     const start = new Date(Date.now() + 3600000).toISOString();
     hangout = expect(await rpc("create_hangout", host.token, { p_request_id: crypto.randomUUID(), p_title: "Tacos", p_starts_at: start, p_public_place: "Area", p_public_latitude: 35, p_public_longitude: -79 }));
     assert.deepEqual(expect(await rpc("list_notifications", outsider.token)), []);
@@ -53,7 +56,13 @@ test("real Auth and PostgREST Hangout notices follow committed source rights", a
     assert.equal(table.status, 404);
     assert.equal(expect(await rpc("edit_hangout", host.token, { p_hangout_id: hangout, p_expected_revision: 1, p_title: "Tacos", p_starts_at: start, p_public_place: "Area", p_public_latitude: 35, p_public_longitude: -79, p_private_instructions: "Secret room" })), 2);
     assert.equal(expect(await rpc("edit_hangout", host.token, { p_hangout_id: hangout, p_expected_revision: 2, p_title: " Tacos ", p_starts_at: start, p_public_place: "Area", p_public_latitude: 35, p_public_longitude: -79, p_private_instructions: " Secret room " })), 3);
-    assert.equal((await rpc("edit_hangout", host.token, { p_hangout_id: hangout, p_expected_revision: 2, p_title: "Wrong", p_starts_at: start, p_public_place: "Area", p_public_latitude: 35, p_public_longitude: -79 })).body.code, "40001");
+    const beforeStale = db(`select revision || ':' || title from public.hangouts where id='${hangout}'`);
+    const staleStarted = Date.now();
+    const staleEdit = await rpc("edit_hangout", host.token, { p_hangout_id: hangout, p_expected_revision: 2, p_title: "Wrong", p_starts_at: start, p_public_place: "Area", p_public_latitude: 35, p_public_longitude: -79 });
+    assert.equal(staleEdit.status, 409, JSON.stringify(staleEdit.body));
+    assert.equal(staleEdit.body.code, "PT409");
+    assert.ok(Date.now() - staleStarted < 10_000, "stale HTTP edit returns without a retry loop");
+    assert.equal(db(`select revision || ':' || title from public.hangouts where id='${hangout}'`), beforeStale, "stale HTTP edit leaves revision and title unchanged");
     let peerItems = expect(await rpc("list_notifications", peer.token));
     assert.deepEqual(codes(peerItems), ["hangout_edited"]);
     assert.equal(JSON.stringify(peerItems).includes("Secret room"), false);
@@ -90,6 +99,9 @@ test("real Auth and PostgREST Hangout notices follow committed source rights", a
     db(`update private.notification_feature_gate set enabled=false;
       update private.hangout_chat_feature_gate set enabled=false;
       update private.hangout_feature_gate set enabled=false;
+      update private.pilot_capabilities set enabled=false
+        where key in ('onboarding','hangouts','hangout_chat','notifications');
+      update private.pilot_availability set enabled=false;
       delete from private.notification_items where recipient_id in (${ids}) or actor_id in (${ids});
       delete from private.notification_preferences where recipient_id in (${ids});
       set chat.allow_fixture_cleanup='true';

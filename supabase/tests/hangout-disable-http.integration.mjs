@@ -92,7 +92,10 @@ test("real Auth and PostgREST enforce disabled Hangout source boundaries", {
       update private.hangout_feature_gate set enabled=true;
       update private.hangout_chat_feature_gate set enabled=true;
       update private.safety_feature_gate set enabled=true;
-      update private.moderation_feature_gate set enabled=true;`);
+      update private.moderation_feature_gate set enabled=true;
+      update private.pilot_availability set enabled=true;
+      update private.pilot_capabilities set enabled=true
+        where key in ('onboarding','hangouts','hangout_chat');`);
     const made = await rpc("create_hangout", host.token, {
       p_request_id: crypto.randomUUID(), p_title: "B2 local fixture",
       p_starts_at: new Date(Date.now() + 3_600_000).toISOString(),
@@ -266,6 +269,9 @@ test("real Auth and PostgREST enforce disabled Hangout source boundaries", {
       update private.hangout_chat_feature_gate set enabled=false;
       update private.hangout_feature_gate set enabled=false;
       update private.safety_feature_gate set enabled=false;
+      update private.pilot_capabilities set enabled=false
+        where key in ('onboarding','hangouts','hangout_chat');
+      update private.pilot_availability set enabled=false;
       -- Append-only moderation evidence and fixture users are removed by
       -- the final disposable database reset.`);
   }

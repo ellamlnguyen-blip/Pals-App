@@ -15,6 +15,12 @@ export default async function ProfilePage() {
       <div className="profile-heading">
         <Link href="/hangouts">← Back to Hangouts</Link>
         <h1>Your profile</h1>
+        {!profile.is_complete && (
+          <p>
+            Your confirmed UNC email gives you access now. Add your profile
+            details and a photo whenever you are ready.
+          </p>
+        )}
         <p>
           {localPeopleAvailable()
             ? "Your photos and extra details stay private. You may choose to share selected text in People."
@@ -25,18 +31,22 @@ export default async function ProfilePage() {
             <div className="profile-people-preview">
               <h2>Your People text preview</h2>
               <p>
-                Only eligible students can see this after you turn sharing on.
+                Only eligible students can see this after you turn sharing on
+                and your real name, graduation year, major, and bio are usable.
+                Opting in alone does not make an incomplete profile visible.
                 Future edits to these fields are shared while your choice is on
-                and your account is ready.
+                and your account remains eligible.
               </p>
               <dl>
                 <dt>Card and detail</dt>
-                <dd>Real name: {profile.real_name}</dd>
+                <dd>Real name: {profile.real_name || "Not added"}</dd>
                 <dd>Campus: University of North Carolina at Chapel Hill</dd>
-                <dd>Graduation year: {profile.graduation_year}</dd>
-                <dd>Major: {profile.major}</dd>
+                <dd>
+                  Graduation year: {profile.graduation_year ?? "Not added"}
+                </dd>
+                <dd>Major: {profile.major || "Not added"}</dd>
                 <dt>Detail only</dt>
-                <dd>Bio: {profile.bio}</dd>
+                <dd>Bio: {profile.bio || "Not added"}</dd>
                 <dd>
                   Interests: {profile.interests?.join(", ") || "Not added"}
                 </dd>

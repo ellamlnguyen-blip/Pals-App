@@ -98,13 +98,19 @@ test("moderation read and revocation observe both committed lock orders", {
         ('${hangoutReport}','${reporter}','hangout','${hangout}','harassment',
          'current_hangout','${hangout}',clock_timestamp()-interval '1 day');
       insert into storage.objects(bucket_id,name,owner_id)
-        values ('profile-photos','${actor}/primary.png','${actor}');
+        values ('profile-photos','${actor}/a11a.png','${actor}'),
+          ('profile-photos','${target}/b22b.png','${target}');
       update public.profiles set real_name='Moderation race',major='Science',
-        graduation_year=2028,bio='Fixture',primary_photo_path='${actor}/primary.png'
+        graduation_year=2028,bio='Fixture',primary_photo_path='${actor}/a11a.png'
         where user_id='${actor}';
+      update public.profiles set real_name='Hangout host',major='Science',
+        graduation_year=2028,bio='Fixture',primary_photo_path='${target}/b22b.png'
+        where user_id='${target}';
       update private.moderation_feature_gate set enabled=true;
       update private.safety_feature_gate set enabled=true;
-      update private.hangout_feature_gate set enabled=true;`);
+      update private.hangout_feature_gate set enabled=true;
+    update private.pilot_availability set enabled=true;
+    update private.pilot_capabilities set enabled=true where key in ('onboarding','hangouts','people');`);
     assert.throws(() => sql(`begin isolation level repeatable read; ${claims}
       ${detail} rollback;`), /Moderation unavailable/);
     await race("gate_first", "update private.moderation_feature_gate set enabled=false;",
@@ -203,9 +209,16 @@ test("moderation read and revocation observe both committed lock orders", {
         'harassment',null);`, false);
     sql(`insert into public.hangout_participants(hangout_id,account_id,state)
       values ('${hangout}','${actor}','joined')`);
+    const hangoutReportTimestamp = sql(`select submitted_at from private.safety_reports
+      where id='${hangoutReport}'`);
+    const focusedModerationPage = `${claims} select * from public.list_moderation_reports(
+      '${hangoutReportTimestamp}'::timestamptz,
+      'ffffffff-ffff-ffff-ffff-ffffffffffff'::uuid,24);`;
     await race("block_first", `${claims} select public.set_safety_block('${target}',true);`,
-      `${claims} select * from public.list_moderation_reports();`, false);
+      focusedModerationPage, false);
   } finally {
+    sql(`update private.pilot_capabilities set enabled=false where key in ('onboarding','hangouts','people');
+      update private.pilot_availability set enabled=false;`);
     sql(`update private.moderation_feature_gate set enabled=false;
       update private.safety_feature_gate set enabled=false;
       update private.hangout_feature_gate set enabled=false;

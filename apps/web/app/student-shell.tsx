@@ -123,7 +123,7 @@ export function StudentNav({
             key={key}
             type="button"
             onClick={() => onUnavailable(label)}
-            aria-label={`${label}, coming later`}
+            aria-label={`${label}, unavailable in this staging configuration`}
           >
             {label}
           </button>

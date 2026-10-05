@@ -49,6 +49,8 @@ def setup():
               graduation_year=2028,bio='Local fixture',primary_photo_path=%s where user_id=%s""",
                       (str(ident) + "/primary.png", ident))
         c.execute("insert into public.platform_roles(user_id,role) values(%s,'moderator')", (MODERATOR,))
+        c.execute("update private.pilot_availability set enabled=true")
+        c.execute("update private.pilot_capabilities set enabled=true where key='hangouts'")
         c.execute("update private.hangout_feature_gate set enabled=true")
         c.execute("update private.attendance_feature_gate set enabled=true")
         c.execute("update private.moderation_feature_gate set enabled=true")
@@ -304,6 +306,8 @@ def cleanup():
         c.execute("update private.attendance_feature_gate set enabled=false")
         c.execute("update private.hangout_feature_gate set enabled=false")
         c.execute("update private.moderation_feature_gate set enabled=false")
+        c.execute("update private.pilot_capabilities set enabled=false where key='hangouts'")
+        c.execute("update private.pilot_availability set enabled=false")
         # Moderation evidence is intentionally immutable. The caller must run
         # a disposable local database reset to remove this suite's fixtures.
         if REPORTS:

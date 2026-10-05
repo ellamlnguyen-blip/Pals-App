@@ -20,7 +20,7 @@ export default async function OwnedHangoutPage({
     <Frame signedIn navigation>
       <div className="hangout-page-heading">
         <Link href="/hangouts">← Hangouts</Link>
-        <p className="badge">Your saved Hangout · local only</p>
+        <p className="badge">Your saved Hangout</p>
         <h1>{record.title}</h1>
         <p>
           {record.status === "published"

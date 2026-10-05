@@ -1,10 +1,10 @@
 /** Caller-owned profile only; never a peer visibility contract. */
 export type OwnerProfile = {
-  real_name: string;
-  graduation_year: number;
-  major: string;
-  bio: string;
-  primary_photo_path: string;
+  real_name: string | null;
+  graduation_year: number | null;
+  major: string | null;
+  bio: string | null;
+  primary_photo_path: string | null;
   additional_photo_paths: string[];
   interests: string[];
   down_to_do: string[];
