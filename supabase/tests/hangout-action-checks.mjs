@@ -165,6 +165,8 @@ export async function hangoutActionChecks(owner, peer, host, member, png, sql) {
       0,
       "blank private instructions clear",
     );
+    const savedBeforeStale = sql(`select revision || ':' || title from public.hangouts where id='${id}'`).trim();
+    const staleStarted = Date.now();
     const staleEdit = await action(
       "editHangout",
       { id, revision: 1, input },
@@ -172,6 +174,8 @@ export async function hangoutActionChecks(owner, peer, host, member, png, sql) {
       `/hangouts/owned/${id}?edit=1`,
     );
     assert.equal(staleEdit.result?.kind, "conflict", JSON.stringify(staleEdit.result));
+    assert.ok(Date.now() - staleStarted < 10_000, "stale action returns promptly without a transaction retry loop");
+    assert.equal(sql(`select revision || ':' || title from public.hangouts where id='${id}'`).trim(), savedBeforeStale, "stale action leaves revision and content unchanged");
     assert.equal(
       (
         await action(

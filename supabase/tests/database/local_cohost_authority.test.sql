@@ -73,7 +73,7 @@ select is(public.promote_hangout_cohost(pg_temp.hid(),
   '54000000-0000-4000-8000-000000000002',1),2::bigint,'host promotes joined target');
 select throws_ok($$select public.promote_hangout_cohost(pg_temp.hid(),
   '54000000-0000-4000-8000-000000000003',1)$$,
-  '40001',null,'stale promotion rejected');
+  'PT409',null,'stale promotion rejected');
 select is((select count(*) from public.list_hangout_cohosts(pg_temp.hid())),
   1::bigint,'host sees retained assignment');
 select is((select role_label from public.list_hangout_roster_roles(pg_temp.hid())

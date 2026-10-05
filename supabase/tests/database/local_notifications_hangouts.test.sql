@@ -42,7 +42,7 @@ select is((select count(*) from public.list_notifications() where event_code='ha
 select is(public.edit_hangout(pg_temp.hid(),2,'Tacos',pg_temp.st(),'Area',35,-79,p_private_instructions=>'  Secret room  '),3::bigint,'private null to value');
 select is(public.edit_hangout(pg_temp.hid(),3,'Tacos',pg_temp.st(),'Area',35,-79,p_private_instructions=>'Secret room'),4::bigint,'private normalized no-op');
 select is(public.edit_hangout(pg_temp.hid(),4,'Tacos',pg_temp.st(),'Area',35,-79),5::bigint,'private value to null');
-select throws_ok($$select public.edit_hangout(pg_temp.hid(),4,'Wrong',pg_temp.st(),'Area',35,-79)$$,'40001',null,'stale edit denied');
+select throws_ok($$select public.edit_hangout(pg_temp.hid(),4,'Wrong',pg_temp.st(),'Area',35,-79)$$,'PT409',null,'stale edit denied');
 select throws_ok($$select public.edit_hangout(pg_temp.hid(),5,'Failed',pg_temp.st(),'Area',35,-79,p_private_instructions=>'FORCE_ROLLBACK')$$,'P0001',null,'private write failure aborts edit');
 select is((select title from public.hangouts where id=pg_temp.hid()),'Tacos','failed edit rolls public row back');
 reset role;
