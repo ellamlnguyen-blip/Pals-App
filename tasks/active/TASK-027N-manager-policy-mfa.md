@@ -1,6 +1,6 @@
 # TASK-027N — Protect caller policy management with live MFA
 
-Status: Reviewed guard integrated locally; TASK-027Q/R fixture follow-ups block full-suite completion and hosted rollout
+Status: Reviewed guard integrated locally; TASK-027Q restored full database suite (29/29), while TASK-027R legacy concurrency remains a release blocker
 Parent: TASK-027
 Date: 2026-10-05
 

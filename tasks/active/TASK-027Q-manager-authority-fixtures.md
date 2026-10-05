@@ -1,6 +1,6 @@
 # TASK-027Q — Reconcile legacy manager authority fixtures with MFA
 
-Status: Ready after reviewed TASK-027N local integration
+Status: Complete locally; independently reviewed and integrated into TASK-027 parent, unpublished
 Parent: TASK-027
 Date: 2026-10-05
 
