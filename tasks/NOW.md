@@ -1,5 +1,9 @@
 # NOW
 
+## 2026-10-05 — Current launch continuation receipt
+
+Ella solely owns launch moderation; no backup role is required. Parent5021 Preview is Ready; reviewed D002 was applied alone to exact Pals Staging and all 29 migration versions match. Gates remain closed with zero managers/operator roles. Additional local feature HTTP10/10 and reconciled concurrency5/5 pass. C follow-up task SHA bd7c815 is remote verified and awaits final review/integration. B transport correction1560/final8c20 is remote verified with clean5/5 runner tests; renewed review pending. The absent staging audit001 prevents controls. Proposed ADR29/31 acceptance, exact operator role, MFA/recovery and policy/shutdown implementation, enabled staging smoke, canonical main app integration and usepals.com cutover remain. Browser continuation requires the Mac to be unlocked; latest Preview health is not yet freshly verified. TASK-027 is incomplete.
+
 ## 2026-10-05 — Additional lifecycle expectation reconciliation
 
 Ten current feature HTTP tests pass. Further friendship/DM/block/report/account concurrency is 4/5: global-block concurrency waits for a profile-row lock and photo-removal join denial retired by ADR-0030. The source now permits that join as intended. TASK-027C's published amendment replaces only this obsolete expectation with positive no-photo access and an actual eligibility-revocation lock wait; preserve all other races. No full concurrency pass is claimed yet.
