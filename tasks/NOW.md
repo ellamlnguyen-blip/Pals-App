@@ -1,5 +1,9 @@
 # NOW
 
+## 2026-10-05 — Attendance completion receipt
+
+F55e2296 pushed/remote verified and fresh review clear; all 18 attendance race orders plus three schedule checks and attendance fixture-token HTTP pass, with all local gates restored false. Reviewed F is integrated into parent360d8e8, pushed/remote verified; canonical main app integration waits for parent staging acceptance. B8c20 transport review clear/5units; Cbd7c815 race review clear/5suites. Ella solely owns moderation. Proposed ADR29/31 acceptance and exact operator role, Mac unlock for signed-in browser smoke, MFA/recovery and policy/shutdown controls remain outstanding. Staging gates stay closed; production cutover and invitations are not ready.
+
 ## 2026-10-05 — Current launch continuation receipt
 
 Ella solely owns launch moderation; no backup role is required. Parent5021 Preview is Ready; reviewed D002 was applied alone to exact Pals Staging and all 29 migration versions match. Gates remain closed with zero managers/operator roles. Additional local feature HTTP10/10 and reconciled concurrency5/5 pass. C follow-up task SHA bd7c815 is remote verified and awaits final review/integration. B transport correction1560/final8c20 is remote verified with clean5/5 runner tests; renewed review pending. The absent staging audit001 prevents controls. Proposed ADR29/31 acceptance, exact operator role, MFA/recovery and policy/shutdown implementation, enabled staging smoke, canonical main app integration and usepals.com cutover remain. Browser continuation requires the Mac to be unlocked; latest Preview health is not yet freshly verified. TASK-027 is incomplete.

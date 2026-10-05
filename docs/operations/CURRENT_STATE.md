@@ -1,5 +1,11 @@
 # Current State
 
+## 2026-10-05 — Attendance verification completed locally
+
+TASK-027F `55e2296ce16f14c8b0a66c173d26b88d6cbb7c98` passed fresh independent read-only review. The four fixture lines enable/restore current local availability and Hangouts capability; no authorization or assertion changed. Full attendance concurrency passes all 18 race orders, both frozen-schedule orders and parent-lock opening boundary. Attendance PostgREST owner/foreign/gate/projection/raw-table/embed/isolation checks pass; these use locally signed fixture tokens, not genuine Auth sessions. Post-run availability, all capabilities and Hangout/attendance/moderation gates are false. Retained immutable fixtures require a disposable reset before reuse.
+
+Reviewed F is merged into task-pushed/remote-verified parent `360d8e8db0b32c9fb98fc03e087eddb47cd367a9`. The app source remains the earlier reviewed/passing C/D source; F changes only tests/documentation. Latest Preview readiness/health still requires verification. Main app integration, proposed operator-design acceptance/role choice, MFA/recovery, caller-session policy controls/shutdown, enabled staging smoke and public cutover remain incomplete. No backup operator is required.
+
 ## 2026-10-05 — Staging migration and additional feature verification
 
 The reviewed parent branch `5021f65d03b992171b2f6dd2a6fd8ca4d95127cc` had a Ready Vercel Preview. Reviewed C follow-up is merged into parent `3a47dd8e14c38da93e7aa72538b1ea33e601d45d`, task-pushed/remote verified; its Vercel Preview is Ready at `https://pals-km51k4kd0-pals8.vercel.app`, deployment `9vfBx4na5obZfKfxwD3hzEP1imkB`. This adds only tests/documentation to the same reviewed app source. Reviewed D002 Hangout revision migration was applied alone to Pals Staging after an exact-target dry run. All 29 local/remote migration versions match; a read-only query confirms PT409. Availability is false, all 13 capabilities are false, and there are zero managers/operator roles. No hosted launch-control operation occurred. External analytics and large safeguards remain off.

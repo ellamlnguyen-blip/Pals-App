@@ -1,6 +1,6 @@
 # TASK-027F — Current-policy attendance lifecycle test fixture
 
-Status: Ready for bounded implementation
+Status: Verified and reviewed preparation; parent branch integrated, canonical main app integration pending
 Date: 2026-10-05
 Parent: TASK-027
 
@@ -9,3 +9,7 @@ The existing local attendance HTTP test passes. The attendance concurrency test 
 Use an isolated task branch/worktree from latest published main; merge the reviewed parent baseline `5021f65d03b992171b2f6dd2a6fd8ca4d95127cc` for the actual 29-migration source lane. Modify only `supabase/tests/attendance-concurrency.integration.py`, its handoff and this contract status where appropriate. Preserve cleanup of local policy gates and disclose immutable fixtures requiring a reset. No hosted operations, provider DDL, secrets or forged positive Auth claims. The existing attendance HTTP script uses local fixture-signed JWTs, so do not claim genuine Auth/session coverage from it.
 
 The shared disposable local stack is released to this task. Align its ignored nonsecret Storage-version metadata to v1.77.5 from the recovered parent before any official local reset/start; verify actual runtime metadata. Run a clean local reset because earlier attendance/account-enforcement runs retain immutable fixtures. Run the entire attendance concurrency script, attendance HTTP script sequentially, plus any directly affected test checks. Record exact outcomes/limits; write handoff, commit/push and verify remote SHA. Stop for independent review and coordinator integration. TASK-027 remains incomplete pending accepted hosted operator controls and staging smoke.
+
+## Reviewed outcome
+
+Task SHA `55e2296ce16f14c8b0a66c173d26b88d6cbb7c98` is pushed and remote verified. A fresh reviewer clears the four fixture lines and handoff: no source/schema/assertion/race change. Actual clean reset reproduced the old leave RPC denial; current guard requires availability and Hangouts capability. Fixture setup enables both and cleanup closes both. Full 18 race orders, two frozen-schedule orders and parent-lock opening case pass; attendance PostgREST checks pass with locally signed fixture tokens, not genuine Auth sessions. Readback verifies availability and all 13 capabilities plus Hangout/attendance/moderation gates off. Immutable local evidence remains until reset. Reviewed work is merged into remote-verified parent `360d8e8db0b32c9fb98fc03e087eddb47cd367a9`; canonical main app integration is pending parent staging acceptance. No hosted operation occurred.
