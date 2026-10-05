@@ -59,7 +59,9 @@ test('preflight pins audit and current staging migrations', () => {
   const sql = buildPreflightSql();
   assert.match(sql,/version='20261005000100'/);
   assert.match(sql,/version='20261005000200'/);
-  assert.match(sql,/max\(version\).*'20261005000200'/);
+  assert.match(sql,/version='20261005000300'/);
+  assert.match(sql,/version='20261005000400'/);
+  assert.match(sql,/max\(version\).*'20261005000400'/);
   assert.match(sql,/to_regclass\('private.staging_control_audit'\)/);
 });
 

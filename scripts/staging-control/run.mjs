@@ -120,8 +120,10 @@ export function buildPreflightSql() {
       or current_setting('role',true) not in ('none','postgres')
       or not exists(select 1 from supabase_migrations.schema_migrations where version='20261005000100')
       or not exists(select 1 from supabase_migrations.schema_migrations where version='20261005000200')
+      or not exists(select 1 from supabase_migrations.schema_migrations where version='20261005000300')
+      or not exists(select 1 from supabase_migrations.schema_migrations where version='20261005000400')
       or not exists(select 1 from supabase_migrations.schema_migrations where version='20261004000100')
-      or (select max(version) from supabase_migrations.schema_migrations)<>'20261005000200'
+      or (select max(version) from supabase_migrations.schema_migrations)<>'20261005000400'
       or to_regclass('private.staging_control_audit') is null then
       raise exception 'Wrong staging database or migration state' using errcode='42501';
     end if;
