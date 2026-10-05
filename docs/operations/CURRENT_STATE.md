@@ -1,5 +1,19 @@
 # Current State
 
+## 2026-10-05 — verified launch continuation milestone
+
+Ella is the sole launch moderation owner; no backup role is required. The task checkout was recovered from its published branch after temporary Git metadata disappeared. The existing dirty app checkout was preserved.
+
+Docker/local Supabase restarted with supported Storage v1.77.5; the real Auth/Storage suite now passes 1/1, resolving the prior 42P10 upload failure. Auth/web still fails: stale policy assertions were reconciled, and a test-created chat-table barrier deadlock is being replaced while retaining in-flight revocation/private-HTML denial coverage. Do not count Auth/web as passed yet.
+
+TASK-027B administrative setup preparation passed independent review at 9c7c030c79277492cb8b33f464bc4f9e564d57e0; final published handoff branch090532662ac640bcc902e66b9a2c6557136961f1. Revised ADR-0029 remains Proposed. Hosted moderator HTTPS/MFA design ADR-0031 is Proposed and explicit user role/acceptance input is pending. No hosted role or access switch was changed.
+
+Read-only live checks: Preview health all six true; exact staging site and /auth/callback URL match the Task-027 Preview; custom SMTP is enabled via Resend; TOTP provider is enabled. Ella is confirmed, has no platform role/manager row and no verified TOTP factor/AAL2 session. Earlier successful controlled UNC email delivery is a prior receipt, not a fresh sign-in result.
+
+Vercel's existing Git integration automatically builds pushed branches and main, including status-only main commits. Those automatic builds are recorded as deployments by Vercel; no usepals.com cutover or production database/role/gate change was performed. CLI device login is stalled with Allow Access disabled in both browsers, but the correctly authenticated Pals dashboard is accessible.
+
+TASK-027 remains incomplete. Remaining work: accepted administrative setup, genuine-session feature policy controls and emergency shutdown, hosted MFA console/operator enrollment, current Auth/web and database/build checks, full staged positive/negative feature smoke, then reviewed main app integration and verified public cutover.
+
 ## 2026-10-05 — TASK-027 launch continuation and sole moderator decision
 
 TASK-027 is active and incomplete on `agent/TASK-027-open-unc-mvp`, latest verified published baseline `f89bf3031edf036c02b728bdad60e192533624b1`. The current user expressly chose immediate access for active accounts with confirmed exact-allowlisted UNC email, with no roster/profile/photo prerequisite, and authorized staging launch activation. Ella Nguyen (`ella_nguyen@unc.edu`) is the sole launch moderator; the backup moderator requirement is removed by current explicit instruction. This does not remove MFA/recovery, least privilege, immutable moderation audit, report handling, RLS, blocks, suspensions or bans.
