@@ -1,6 +1,6 @@
 # TASK-027N — Protect caller policy management with live MFA
 
-Status: Ready after TASK-027J; ADR-0034 accepted in MFA-only scope
+Status: Reviewed guard integrated locally; TASK-027Q/R fixture follow-ups block full-suite completion and hosted rollout
 Parent: TASK-027
 Date: 2026-10-05
 
