@@ -23,7 +23,7 @@ begin
  select role into old_role from public.platform_roles where user_id=target for update;
  if not exists(select 1 from auth.users u join public.accounts a on a.id=u.id where a.id=target) then
   raise exception 'Expected Ella account missing' using errcode='42501'; end if;
- if op='grant_moderator' and not exists(
+ if op in ('grant_moderator','grant_admin') and not exists(
   select 1 from auth.users u join public.accounts a on a.id=u.id
   join public.university_memberships m on m.user_id=a.id
   join public.universities c on c.id=m.university_id
@@ -46,6 +46,14 @@ begin
    or exists(select 1 from public.platform_roles where user_id<>target) then
    raise exception 'Sole moderator precondition failed' using errcode='42501'; end if;
   insert into public.platform_roles(user_id,role) values(target,'moderator');
+ elsif op='grant_admin' then
+  if desired<>'admin' or expected<>'moderator'
+   or exists(select 1 from public.platform_roles where user_id<>target) then
+   raise exception 'Sole admin precondition failed' using errcode='42501'; end if;
+  update public.platform_roles set role='admin' where user_id=target and role='moderator';
+ elsif op='revoke_admin' then
+  if desired<>'moderator' or expected<>'admin' then raise exception 'Admin revocation precondition failed' using errcode='42501'; end if;
+  update public.platform_roles set role='moderator' where user_id=target and role='admin';
  elsif op='revoke_moderator' then
   if desired is not null or expected<>'moderator' then raise exception 'Moderator revocation precondition failed' using errcode='42501'; end if;
   delete from public.platform_roles where user_id=target and role='moderator';

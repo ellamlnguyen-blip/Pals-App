@@ -25,6 +25,10 @@ const grant = op('grant_moderator',2);
 const gate = op('source_gate',3,{PALS_CONTROL_GATE:'hangouts',PALS_CONTROL_EXPECTED_ENABLED:'false',PALS_CONTROL_NEW_ENABLED:'true'});
 const revokeRole = op('revoke_moderator',4);
 const revokeManager = op('revoke_manager',5,{PALS_CONTROL_EXPECTED_REVISION:'1'});
+const grantAdmin = op('grant_admin',8);
+const revokeAdmin = op('revoke_admin',9);
+const changedAdminRetry = op('grant_admin',8,{PALS_CONTROL_REASON:'Changed reason'});
+const staleAdminGrant = op('grant_admin',10);
 const failedRetry = op('first_manager',1,{PALS_CONTROL_EXPECTED_REVISION:'0',PALS_CONTROL_REASON:'Changed reason'});
 const wrongRevision = op('revoke_manager',6,{PALS_CONTROL_EXPECTED_REVISION:'0'});
 const wrongGate = op('source_gate',7,{PALS_CONTROL_GATE:'hangouts',PALS_CONTROL_EXPECTED_ENABLED:'false',PALS_CONTROL_NEW_ENABLED:'true'});
@@ -34,6 +38,7 @@ const blocks = [
   check("exists(select 1 from public.university_memberships where user_id='8ebd74bb-2a72-4689-9580-72268106d91b' and verified_at is not null)",'membership sync'),
   check("not has_table_privilege('anon','private.staging_control_audit','SELECT,INSERT,UPDATE,DELETE') and not has_table_privilege('authenticated','private.staging_control_audit','SELECT,INSERT,UPDATE,DELETE') and not has_table_privilege('service_role','private.staging_control_audit','SELECT,INSERT,UPDATE,DELETE')",'client audit grants'),
   check("(select relrowsecurity from pg_class where oid='private.staging_control_audit'::regclass)",'audit RLS'),
+  check("not exists(select 1 from public.platform_roles where user_id='8ebd74bb-2a72-4689-9580-72268106d91b')",'ordinary audit replay grants no role'),
   "update auth.users set email_confirmed_at=null where id='8ebd74bb-2a72-4689-9580-72268106d91b';",
   mustFail(first,'unconfirmed Ella cannot be provisioned'),
   "update auth.users set email_confirmed_at=now() where id='8ebd74bb-2a72-4689-9580-72268106d91b';",
@@ -46,15 +51,23 @@ const blocks = [
   mustFail(grant,'changed Auth email'),
   "update auth.users set email='ella_nguyen@unc.edu' where id='8ebd74bb-2a72-4689-9580-72268106d91b';",
   grant,
+  grantAdmin,
+  grantAdmin,
+  check("(select role from public.platform_roles where user_id='8ebd74bb-2a72-4689-9580-72268106d91b')='admin' and (select count(*) from private.staging_control_audit where operation='grant_admin')=1",'admin upgrade and exact retry'),
+  mustFail(changedAdminRetry,'changed admin retry'),
+  mustFail(staleAdminGrant,'admin stale role state'),
   gate,
   gate,
   mustFail(wrongGate,'gate stale state'),
-  check("(select count(*) from private.staging_control_audit)=3 and (select enabled from private.hangout_feature_gate where singleton)",'role and gate atomicity'),
+  check("(select count(*) from private.staging_control_audit)=4 and (select enabled from private.hangout_feature_gate where singleton)",'role and gate atomicity'),
   "update auth.users set email='compromised@example.test' where id='8ebd74bb-2a72-4689-9580-72268106d91b';",
   "update public.accounts set status='suspended' where id='8ebd74bb-2a72-4689-9580-72268106d91b';",
+  revokeAdmin,
+  revokeAdmin,
+  check("(select role from public.platform_roles where user_id='8ebd74bb-2a72-4689-9580-72268106d91b')='moderator' and (select count(*) from private.staging_control_audit where operation='revoke_admin')=1",'admin rollback after identity loss'),
   revokeRole,
   revokeManager,
-  check("(select count(*) from private.staging_control_audit)=5 and (select count(*) from private.pilot_manager_audit where account_id='8ebd74bb-2a72-4689-9580-72268106d91b')=2 and (select state from private.pilot_admission_managers where account_id='8ebd74bb-2a72-4689-9580-72268106d91b')='revoked' and not exists(select 1 from public.platform_roles where user_id='8ebd74bb-2a72-4689-9580-72268106d91b')",'rollback retains both manager audits after identity loss'),
+  check("(select count(*) from private.staging_control_audit)=7 and (select count(*) from private.pilot_manager_audit where account_id='8ebd74bb-2a72-4689-9580-72268106d91b')=2 and (select state from private.pilot_admission_managers where account_id='8ebd74bb-2a72-4689-9580-72268106d91b')='revoked' and not exists(select 1 from public.platform_roles where user_id='8ebd74bb-2a72-4689-9580-72268106d91b')",'rollback retains both manager audits after identity loss'),
   "set local role authenticated;",
   check("not has_table_privilege(current_user,'private.staging_control_audit','SELECT,INSERT,UPDATE,DELETE')",'actual authenticated role denied'),
   "reset role;",

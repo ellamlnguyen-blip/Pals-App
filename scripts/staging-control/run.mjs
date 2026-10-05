@@ -22,7 +22,7 @@ const GATES = Object.freeze({
   safety: 'private.safety_feature_gate',
   moderation: 'private.moderation_feature_gate',
 });
-const operations = new Set(['first_manager','revoke_manager','grant_moderator','revoke_moderator','source_gate']);
+const operations = new Set(['first_manager','revoke_manager','grant_moderator','revoke_moderator','grant_admin','revoke_admin','source_gate']);
 const literal = (value) => `'${String(value).replaceAll("'", "''")}'`;
 const required = (env, name, max = 200) => {
   const value = env[name];
@@ -94,10 +94,16 @@ export function buildOperation(env = process.env) {
     expected.new_value = replacements.NEW_ENABLED === 'true';
   } else {
     file = 'moderator.sql';
-    replacements.NEW_ROLE = operation === 'grant_moderator' ? literal('moderator') : 'null';
-    replacements.EXPECTED_ROLE = operation === 'grant_moderator' ? 'null' : literal('moderator');
-    expected.previous_value = operation === 'grant_moderator' ? null : 'moderator';
-    expected.new_value = operation === 'grant_moderator' ? 'moderator' : null;
+    const roleTransition = {
+      grant_moderator: [null, 'moderator'],
+      revoke_moderator: ['moderator', null],
+      grant_admin: ['moderator', 'admin'],
+      revoke_admin: ['admin', 'moderator'],
+    }[operation];
+    replacements.NEW_ROLE = roleTransition[1] === null ? 'null' : literal(roleTransition[1]);
+    replacements.EXPECTED_ROLE = roleTransition[0] === null ? 'null' : literal(roleTransition[0]);
+    expected.previous_value = roleTransition[0];
+    expected.new_value = roleTransition[1];
   }
   const template = readFileSync(join(dirname(fileURLToPath(import.meta.url)), file), 'utf8');
   const sql = template.replace(/{{([A-Z_]+)}}/g, (_, key) => {

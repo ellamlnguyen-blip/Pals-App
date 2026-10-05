@@ -39,6 +39,22 @@ test('escapes reviewed text and binds exact target in prepared SQL', () => {
   assert.doesNotMatch(sql,/{{/);
 });
 
+test('admin operations are fixed Ella role transitions with distinct audit actions', () => {
+  for (const [operation, previous, next] of [
+    ['grant_admin','moderator','admin'],
+    ['revoke_admin','admin','moderator'],
+  ]) {
+    const prepared = buildOperation({...good,PALS_CONTROL_OPERATION:operation});
+    assert.equal(prepared.expected.subject_id,good.PALS_CONTROL_SUBJECT_ID);
+    assert.equal(prepared.expected.previous_value,previous);
+    assert.equal(prepared.expected.new_value,next);
+    assert.match(prepared.sql,/8ebd74bb-2a72-4689-9580-72268106d91b/);
+    assert.match(prepared.sql,/ella_nguyen@unc.edu/);
+    assert.match(prepared.sql,new RegExp(`op constant text := '${operation}'`));
+  }
+  assert.throws(() => buildOperation({...good,PALS_CONTROL_OPERATION:'grant_role'}));
+});
+
 test('preflight pins audit and current staging migrations', () => {
   const sql = buildPreflightSql();
   assert.match(sql,/version='20261005000100'/);
