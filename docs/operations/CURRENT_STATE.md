@@ -1,5 +1,11 @@
 # Current State
 
+## 2026-10-05 — Explicit sole-operator authority and browser continuation
+
+The user explicitly selected both admin and moderator authority for Ella. Role choice is resolved, including bans/reinstatement; there is no backup prerequisite. No hosted role grant has been performed. Existing B preparation grants moderator only, so admin grant/revoke support needs bounded implementation and independent review before provisioning. ADR-0029 setup-method acceptance and ADR-0031 MFA-design acceptance remain pending; the user requested a plain-language explanation and both questions were restated.
+
+The user unlocked the Mac. Signed-in Safari read the exact final Preview `https://pals-5pqye8v6b-pals8.vercel.app/api/health`: status ok and all six checks true. Stable staging session continuation verification has resumed; this health result does not close enabled app/moderation smoke. Existing staging gates remain closed. No production database/access or domain cutover occurred.
+
 ## 2026-10-05 — Attendance verification completed locally
 
 TASK-027F `55e2296ce16f14c8b0a66c173d26b88d6cbb7c98` passed fresh independent read-only review. The four fixture lines enable/restore current local availability and Hangouts capability; no authorization or assertion changed. Full attendance concurrency passes all 18 race orders, both frozen-schedule orders and parent-lock opening boundary. Attendance PostgREST owner/foreign/gate/projection/raw-table/embed/isolation checks pass; these use locally signed fixture tokens, not genuine Auth sessions. Post-run availability, all capabilities and Hangout/attendance/moderation gates are false. Retained immutable fixtures require a disposable reset before reuse.
