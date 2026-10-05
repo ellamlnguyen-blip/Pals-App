@@ -20,7 +20,7 @@ These are local or disposable-environment results; they are not a hosted pilot c
 1. **HTTPS staging frontend:** deploy `apps/web` as a production build and record its immutable build SHA.
 2. **Supabase target configuration:** apply and verify the reviewed migration chain on the authorized nonproduction project; add the exact HTTPS site URL and `/auth/callback`.
 3. **Student email:** configure custom SMTP and verify one controlled UNC mailbox. Do not disable email confirmation.
-4. **Moderator operations:** name at least one moderator and one backup, grant least privilege, verify audit visibility, and document response/retention handling.
+4. **Moderator operations:** Ella Nguyen (`ella_nguyen@unc.edu`) is the sole launch moderation owner under the explicit 2026-10-05 user decision. A backup moderator is not required. Verify least-privilege role access, MFA/recovery, report and audit visibility, response/retention handling and an incident contact.
 5. **Pilot supply and recovery:** approve a small participant list, create genuine initial Hangouts, and document rollback/cleanup and an incident contact.
 
 The app is tryable locally today with the reviewed production build. A real student pilot becomes tryable after blockers 1–3 are closed; moderator and supply checks must be closed before inviting students.

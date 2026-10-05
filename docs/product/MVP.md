@@ -1,5 +1,9 @@
 # MVP Scope
 
+## 2026-10-05 launch staffing amendment
+
+The current explicit user decision makes Ella Nguyen (`ella_nguyen@unc.edu`) the sole launch moderation owner. No backup moderator role or independent backup coverage is required for the initial launch. Least privilege, MFA/recovery, report response/retention handling, incident contact, immutable audit, conflict checks, RLS, blocks, suspensions and bans remain required. This staffing decision grants no hosted role or gate by itself.
+
 ## Current phase — invite-only UNC pilot before public MVP
 
 [Accepted ADR-0026](../../decisions/ADR-0026-invite-only-pilot-scope.md) introduces a small nominated verified-UNC cohort before public campus launch. “Invite-only” means pilot admission; retained Hangouts are campus-visible within admitted students, not invite-only Hangout visibility. Tester list and enforceable admission mechanism remain separately reviewed/unselected; a hidden link is not enforcement.
