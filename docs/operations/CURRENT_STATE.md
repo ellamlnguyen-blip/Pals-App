@@ -1,5 +1,9 @@
 # Current State
 
+## 2026-10-05 — TASK-027 operator launch continuation
+
+The local TASK-027 parent branch now includes independently reviewed first-admin/bootstrap preparation, live-session TOTP moderation guard, HTTPS operator MFA console and genuine-TOTP moderation HTTP fixture updates. No new branch push, hosted migration, operator grant, gate change or domain change has followed this local integration. Disposable Auth/UI enrollment, AAL1-to-AAL2 challenge, route denial and focused HTTP checks passed; one old moderation concurrency fixture remains failing and is tracked as TASK-027O. Preactivation own-role reading and live UNC/MFA checks for moderator/manager RPCs are proposed in ADR-0032/0033/0034; emergency availability-off is proposed in ADR-0035. These require user acceptance before implementation. Auto approval review rejected publishing private code to the canonical GitHub remote absent direct user authorization; a direct authorization request is pending. Staging availability/capabilities remain off and the public UNC release is not ready.
+
 ## 2026-10-05 — Operator verification and domain inventory
 
 H reports a fresh clean local migration run with 27 pgTAP files/1,691 assertions, schema lint, genuine Auth TOTP access for all five moderation RPCs, live revocation denials, actual Auth factor removal, a session downgrade during a lock wait, and ordinary confirmed UNC AAL1 access without a profile/manual approval requirement. These are author-reported pending final pushed handoff and independent review. Prior broad HTTP results predate the MFA guard: the legacy moderation HTTP positive fixture remains AAL1 and fails, while the isolated Hangout-disable HTTP runner cannot resolve its borrowed SSR dependency. Do not treat those as current passing suites. G awaits H's local stack release for combined admin upgrade/rollback verification.

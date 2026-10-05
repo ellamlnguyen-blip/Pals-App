@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-05 — TASK-027 local operator security integration
+
+Integrated reviewed staging bootstrap, moderator live-TOTP guard, HTTPS operator MFA console and two legacy moderation HTTP fixture updates into the local launch branch. Local genuine Auth operator flow and focused tests passed. Identified and bounded further launch fixes for preactivation own-role read, current UNC eligibility, manager MFA, policy controls, emergency shutdown and genuine-Auth moderation race testing. The branch is not published or deployed; user acceptance and direct publication authorization are pending, and no hosted gates or domain were changed.
+
 ## 2026-10-05 — Sole moderation ownership and local launch verification
 
 Ella Nguyen is the sole launch moderation owner; the backup role/coverage requirement is removed. Accepted confirmed-UNC immediate access remains independent of roster/profile/photo, with RLS, current-email/account enforcement, blocks, reporting and consent intact. Reviewed stale Hangout revision handling uses a non-retrying PT409 business conflict. Local Storage reset/runtime version alignment restores real upload verification without a provider schema patch. Final clean database checks pass twice (1,678 assertions each), Auth/Storage1/1, Auth/web4/4, 49 unit tests without skips and both builds pass. Hosted moderator designs/roles/MFA/recovery, enabled staging smoke, parent main integration and public cutover remain incomplete.

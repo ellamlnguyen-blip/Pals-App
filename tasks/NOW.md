@@ -1,5 +1,9 @@
 # NOW
 
+## 2026-10-05 — TASK-027 local operator integration and pending decisions
+
+Reviewed G administrative bootstrap, H database MFA guard, I HTTPS operator console and K genuine-TOTP moderation HTTP fixtures are integrated locally on `agent/TASK-027-open-unc-mvp`; none has been published or applied to hosted staging. I's local genuine Auth sign-in, TOTP enrollment/challenge and AAL2 console flow passed, with local availability returned to closed. K's two HTTP suites pass; the separate legacy moderation race fails under the new live-MFA guard and is assigned to TASK-027O. TASK-027J/M/N/L/P remain proposed or dependent on ADR-0032/0033/0034/0035 acceptance. Preactivation own-role read, live UNC eligibility for moderation, MFA on management RPCs, policy controls and emergency shutdown are launch blockers. Staging and production gates remain closed. Automatic approval review rejected private branch publication without direct user authorization for the exact GitHub destination; that authorization is pending. No full staging smoke or public launch claim is made.
+
 ## Accepted operator setup and automatic student use
 
 The user explicitly accepted ADR29 staging setup and ADR31 operator MFA, selecting both admin and moderator authority for sole owner Ella. Ordinary confirmed UNC students require no manual approval/MFA; normal Hangout/social operations are automatic under existing source authorization. Publish G fixed-admin bootstrap, H MFA guard and I admin HTTPS/MFA contracts before fresh task-specific Sol-medium dispatch. H owns the shared local stack initially; G/I static preparation can proceed independently. No hosted grant/gate action has occurred. Parent remains incomplete pending exact review, operator enrollment/recovery, policy/shutdown controls and staged smoke.
