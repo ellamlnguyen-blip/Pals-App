@@ -67,7 +67,7 @@ export function buildOperation(env = process.env) {
     REASON: literal(reason), AUTHORIZATION_REF: literal(authorization), CREDENTIAL_REF: literal(credential),
     OPERATION: literal(operation),
   };
-  const expected = { operation, request, subject_id: operation === 'source_gate' ? null : SUBJECT,
+  const expected = { operation, request_id: request, subject_id: operation === 'source_gate' ? null : SUBJECT,
     gate_key: null, reason, authorization_ref: authorization, credential_ref: credential };
   let file;
   if (operation === 'first_manager' || operation === 'revoke_manager') {
