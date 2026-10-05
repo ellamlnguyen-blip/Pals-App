@@ -50,7 +50,7 @@ export async function friendshipActionChecks(owner, peer, a, b, png, sql) {
     assert.equal(idOnly.status, 200);
     const idOnlyHtml = await idOnly.text();
     assert.match(idOnlyHtml, new RegExp(b.id));
-    assert.doesNotMatch(idOnlyHtml, /Local friend peer/);
+    assert.match(idOnlyHtml, /Local friend peer/, "removing the viewer's photo does not hide an opted-in peer");
     assert.match(await action("changeFriendship", [b.id, generation, "unfriend"], owner.header(), "/people/friends"), /Current relationship status is shown/);
     assert.equal((await owner.auth.from("profiles").update({ primary_photo_path: ownerPhoto }).eq("user_id", a.id)).error, null);
     assert.deepEqual((await owner.auth.rpc("get_friendship", { p_peer_id: b.id })).data, []);

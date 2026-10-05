@@ -160,12 +160,7 @@ test("real confirmation, SSR callback, RLS and private photo ownership", async (
         headers: { Cookie: owner.header() },
         redirect: "manual",
       });
-      assert.equal(hangouts.status, 307);
-      assert.equal(
-        new URL(hangouts.headers.get("location")).pathname,
-        "/hangouts/saved",
-        "confirmed UNC user enters real Hangout discovery before profile completion",
-      );
+      await assertGate(hangouts, "/hangouts/saved");
       const discovery = await fetch(
         "http://127.0.0.1:3000/hangouts/saved",
         {
@@ -209,6 +204,19 @@ test("real confirmation, SSR callback, RLS and private photo ownership", async (
       );
     }
     assert.equal((await owner.auth.rpc("get_access_state")).data, "ready");
+    const initialProfile = await owner.auth
+      .from("profiles")
+      .select("real_name,primary_photo_path")
+      .eq("user_id", a.id)
+      .single();
+    assert.equal(initialProfile.error, null);
+    assert.equal(initialProfile.data.real_name, null);
+    assert.equal(initialProfile.data.primary_photo_path, null);
+    assert.equal(
+      sql(`select count(*) from private.pilot_account_admission where account_id='${a.id}'`).trim(),
+      "0",
+      "confirmed UNC access requires no pilot roster row",
+    );
     assert.equal(
       (await owner.auth.from("platform_roles").select()).data.length,
       0,
@@ -302,10 +310,13 @@ test("real confirmation, SSR callback, RLS and private photo ownership", async (
         headers: { Cookie: owner.header() },
         redirect: "manual",
       });
-      assert.equal(mapResponse.status, 200);
-      const mapHtml = await mapResponse.text();
-      assert.ok(mapHtml.includes("Hangouts around UNC"));
-      assert.ok(mapHtml.includes("These are development examples"));
+      await assertGate(mapResponse, "/hangouts/saved");
+      const savedResponse = await fetch(
+        "http://127.0.0.1:3000/hangouts/saved",
+        { headers: { Cookie: owner.header() } },
+      );
+      assert.equal(savedResponse.status, 200);
+      assert.ok((await savedResponse.text()).includes("Plans around UNC"));
       assert.equal(
         (
           await fetch("http://127.0.0.1:3000/profile/photo", {
@@ -315,7 +326,7 @@ test("real confirmation, SSR callback, RLS and private photo ownership", async (
         200,
       );
     }
-    await hangoutHttpChecks(owner, peer, a, b, sql, png, url, key);
+    await hangoutHttpChecks(owner, peer, a, b, sql, url, key);
     await peopleHttpChecks(owner, peer, a, b, sql, png, url, key);
     await friendshipActionChecks(owner, peer, a, b, png, sql);
     await hangoutActionChecks(owner, peer, a, b, png, sql);
