@@ -83,6 +83,10 @@ const blocks = [
   mustFail(staleEmergency,'emergency stale state'),
   mustFail(wrongEmergencyRevision,'emergency never re-enables or repeats with new request'),
   check("(select enabled=false and revision=2 from private.pilot_availability where singleton) and (select count(*) from private.staging_control_audit where operation='emergency_availability_off')=1",'failed emergency attempts are atomic'),
+  // Simulate a later caller-session reopen; the old shutdown UUID cannot claim success.
+  "update private.pilot_availability set enabled=true,revision=3 where singleton;",
+  mustFail(emergency,'old emergency request after availability reopened'),
+  check("(select enabled=true and revision=3 from private.pilot_availability where singleton) and (select count(*) from private.staging_control_audit where operation='emergency_availability_off')=1",'reopened availability is not reported as shut down'),
   "update auth.users set email='compromised@example.test' where id='8ebd74bb-2a72-4689-9580-72268106d91b';",
   "update public.accounts set status='suspended' where id='8ebd74bb-2a72-4689-9580-72268106d91b';",
   revokeAdmin,

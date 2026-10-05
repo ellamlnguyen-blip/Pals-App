@@ -25,6 +25,10 @@ begin
    or prior.authorization_ref is distinct from {{AUTHORIZATION_REF}}
    or prior.credential_ref is distinct from {{CREDENTIAL_REF}} then
    raise exception 'Request UUID conflict' using errcode='42501'; end if;
+  -- A historical receipt must not report a currently reopened application as off.
+  perform 1 from private.pilot_availability
+   where singleton and enabled=false and revision=prior.new_revision;
+  if not found then raise exception 'Availability state mismatch' using errcode='42501'; end if;
   return;
  end if;
  select enabled,revision into old_enabled,old_revision from private.pilot_availability where singleton;

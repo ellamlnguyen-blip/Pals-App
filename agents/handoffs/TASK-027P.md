@@ -10,6 +10,8 @@ Implementation: `8247961`.
 
 Added one fixed staging-control operation, `emergency_availability_off`. It requires an exact positive expected availability revision, request UUID, incident reason, authorization reference, reviewed clean checkout, existing CLI session, exact Pals Staging project and latest migration preflight. Its SQL takes the established availability management lock, validates an exact prior request under that lock, and otherwise changes only the existing availability singleton from true to false at the expected revision. It writes an immutable control-audit row in the same transaction with true/false values, old/new revisions, request and CLI database-session provenance. It does not write `pilot_management_audit`, enable availability, select a gate or policy key, or grant a client operation.
 
+Following the security review, exact retry additionally requires the current locked availability row to remain off at the recorded shutdown revision. An old request UUID fails after a later reopen; a new incident requires a new request and current expected revision. The README distinguishes Ella's live identity prerequisite for role/manager writes from this emergency route, which is available when her app session is unavailable.
+
 Migration `20261005000700` only adds the audit operation and its null subject/gate target shape. Replay does not change availability. All staging-control operations now require migrations `005` through `007`, with `007` latest, before any write. README records incident authorization and read-only reconciliation. Production remains outside this operation.
 
 ## Verification
@@ -17,6 +19,7 @@ Migration `20261005000700` only adds the audit operation and its null subject/ga
 - Clean disposable local reset replayed all migrations through `20261005000700`; availability remained false.
 - Clean-checkout runner tests passed 8/8: fixed project/subject, no arbitrary emergency gate or desired state, positive bounded revision, migration preflight, wrong project, missing migration, exact audit receipt and malformed receipt denial.
 - Rolled-back local SQL passed true→false revision 1→2, exact retry, one immutable emergency audit, separate management audit, cross-operation UUID conflict, changed-payload and changed-revision retry denial, stale new request denial, audit update/delete denial, and actual `anon`, `authenticated`, and `service_role` read/write denial. No SQL step partially mutated state on failure.
+- Security-review follow-up adds old-UUID-after-reopen denial. Its focused SQL rerun is pending an exclusive local stack lease.
 - After rollback, readback showed availability false, zero control audits, zero Auth users, zero platform roles, and migrations `005`–`007` present. `git diff --check` passed. No hosted write was attempted.
 
 ## Remaining gates
