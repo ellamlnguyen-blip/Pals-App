@@ -32,8 +32,15 @@ const staleAdminGrant = op('grant_admin',10);
 const failedRetry = op('first_manager',1,{PALS_CONTROL_EXPECTED_REVISION:'0',PALS_CONTROL_REASON:'Changed reason'});
 const wrongRevision = op('revoke_manager',6,{PALS_CONTROL_EXPECTED_REVISION:'0'});
 const wrongGate = op('source_gate',7,{PALS_CONTROL_GATE:'hangouts',PALS_CONTROL_EXPECTED_ENABLED:'false',PALS_CONTROL_NEW_ENABLED:'true'});
+const emergency = op('emergency_availability_off',11,{PALS_CONTROL_EXPECTED_REVISION:'1'});
+const changedEmergencyRetry = op('emergency_availability_off',11,{PALS_CONTROL_EXPECTED_REVISION:'1',PALS_CONTROL_REASON:'Changed incident reason'});
+const changedEmergencyRevision = op('emergency_availability_off',11,{PALS_CONTROL_EXPECTED_REVISION:'2'});
+const crossOperationEmergency = op('emergency_availability_off',1,{PALS_CONTROL_EXPECTED_REVISION:'1'});
+const staleEmergency = op('emergency_availability_off',12,{PALS_CONTROL_EXPECTED_REVISION:'1'});
+const wrongEmergencyRevision = op('emergency_availability_off',13,{PALS_CONTROL_EXPECTED_REVISION:'2'});
 const blocks = [
   'begin;',
+  check("(select enabled=false and revision=1 from private.pilot_availability where singleton)",'migration replay leaves availability off'),
   "insert into auth.users(id,email,email_confirmed_at) values('8ebd74bb-2a72-4689-9580-72268106d91b','ella_nguyen@unc.edu',now());",
   check("exists(select 1 from public.university_memberships where user_id='8ebd74bb-2a72-4689-9580-72268106d91b' and verified_at is not null)",'membership sync'),
   check("not has_table_privilege('anon','private.staging_control_audit','SELECT,INSERT,UPDATE,DELETE') and not has_table_privilege('authenticated','private.staging_control_audit','SELECT,INSERT,UPDATE,DELETE') and not has_table_privilege('service_role','private.staging_control_audit','SELECT,INSERT,UPDATE,DELETE')",'client audit grants'),
@@ -64,6 +71,22 @@ const blocks = [
   gate,
   mustFail(wrongGate,'gate stale state'),
   check("(select count(*) from private.staging_control_audit)=4 and (select enabled from private.hangout_feature_gate where singleton)",'role and gate atomicity'),
+  "update private.pilot_availability set enabled=true where singleton;",
+  mustFail(crossOperationEmergency,'emergency cannot reuse manager request UUID'),
+  emergency,
+  emergency,
+  check("(select enabled=false and revision=2 from private.pilot_availability where singleton) and (select count(*) from private.staging_control_audit where operation='emergency_availability_off' and subject_id is null and gate_key is null and previous_value='true'::jsonb and new_value='false'::jsonb and previous_revision=1 and new_revision=2 and executor_session_user='postgres')=1 and (select count(*) from private.pilot_management_audit)=0",'one-way emergency shutdown, separate audit and exact retry'),
+  mustFail("update private.staging_control_audit set reason='rewritten' where operation='emergency_availability_off'",'emergency audit immutable update'),
+  mustFail("delete from private.staging_control_audit where operation='emergency_availability_off'",'emergency audit immutable delete'),
+  mustFail(changedEmergencyRetry,'changed emergency retry'),
+  mustFail(changedEmergencyRevision,'changed emergency expected revision'),
+  mustFail(staleEmergency,'emergency stale state'),
+  mustFail(wrongEmergencyRevision,'emergency never re-enables or repeats with new request'),
+  check("(select enabled=false and revision=2 from private.pilot_availability where singleton) and (select count(*) from private.staging_control_audit where operation='emergency_availability_off')=1",'failed emergency attempts are atomic'),
+  // Simulate a later caller-session reopen; the old shutdown UUID cannot claim success.
+  "update private.pilot_availability set enabled=true,revision=3 where singleton;",
+  mustFail(emergency,'old emergency request after availability reopened'),
+  check("(select enabled=true and revision=3 from private.pilot_availability where singleton) and (select count(*) from private.staging_control_audit where operation='emergency_availability_off')=1",'reopened availability is not reported as shut down'),
   "update auth.users set email='compromised@example.test' where id='8ebd74bb-2a72-4689-9580-72268106d91b';",
   "update public.accounts set status='suspended' where id='8ebd74bb-2a72-4689-9580-72268106d91b';",
   revokeAdmin,
@@ -71,21 +94,24 @@ const blocks = [
   check("(select role from public.platform_roles where user_id='8ebd74bb-2a72-4689-9580-72268106d91b')='moderator' and (select count(*) from private.staging_control_audit where operation='revoke_admin')=1",'admin rollback after identity loss'),
   revokeRole,
   revokeManager,
-  check("(select count(*) from private.staging_control_audit)=7 and (select count(*) from private.pilot_manager_audit where account_id='8ebd74bb-2a72-4689-9580-72268106d91b')=2 and (select state from private.pilot_admission_managers where account_id='8ebd74bb-2a72-4689-9580-72268106d91b')='revoked' and not exists(select 1 from public.platform_roles where user_id='8ebd74bb-2a72-4689-9580-72268106d91b')",'rollback retains both manager audits after identity loss'),
+  check("(select count(*) from private.staging_control_audit)=8 and (select count(*) from private.pilot_manager_audit where account_id='8ebd74bb-2a72-4689-9580-72268106d91b')=2 and (select state from private.pilot_admission_managers where account_id='8ebd74bb-2a72-4689-9580-72268106d91b')='revoked' and not exists(select 1 from public.platform_roles where user_id='8ebd74bb-2a72-4689-9580-72268106d91b')",'rollback retains both manager audits after identity loss'),
   "set local role authenticated;",
   check("not has_table_privilege(current_user,'private.staging_control_audit','SELECT,INSERT,UPDATE,DELETE')",'actual authenticated role denied'),
   mustFail('select 1 from private.staging_control_audit','authenticated audit read denied'),
   "reset role;",
   "set local role authenticated;",
   mustFail(first,'actual authenticated role cannot run administrative SQL'),
+  mustFail(emergency,'actual authenticated role cannot run emergency SQL'),
   "reset role;",
   "set local role anon;",
   check("not has_schema_privilege(current_user,'private','USAGE')",'actual anon role denied'),
   mustFail('select 1 from private.staging_control_audit','anon audit read denied'),
+  mustFail(emergency,'actual anon role cannot run emergency SQL'),
   "reset role;",
   "set local role service_role;",
   check("not has_schema_privilege(current_user,'private','USAGE')",'actual service role denied'),
   mustFail('select 1 from private.staging_control_audit','service role audit read denied'),
+  mustFail(emergency,'actual service role cannot run emergency SQL'),
   "reset role;",
   "rollback;",
 ];
