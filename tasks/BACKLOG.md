@@ -1,5 +1,9 @@
 # Backlog
 
+## 2026-10-06 — Profile corrections requested
+
+TASK-028P1 is active for optional owner hometown (Accepted ADR-0037, directly requested) and click-image View/Edit controls, generalized to each account. Reviewed parent source remains3f7c5f6/app2e9fa95. Full rich peer disclosure still awaits explicit ADR-0036 choice; no stored private content becomes shared by this correction. Publish contract before bounded DATA/UI dispatch; main app integration stays gated by parent staging acceptance. No hosted operation or successor.
+
 ## 2026-10-06 — Reference profile UI reviewed; rich sharing decision pending
 
 Published/remote-verified task artifact `a9381aeb7a3b48da8819ba696bab560a1ef793a6` on `agent/TASK-028P-profile-remodel`. TASK-028P owner/current People-text presentation passes independent source review and actual local browser checks through `2e9fa9591b3ee802cf38d7e54729c0079e677134`: reference composition, readable editing, private photos, friendship/DM states, mobile gallery and whole-peer clearing after cross-tab sign-out. Final production build passes; local review is at localhost3029 with private test credentials. `design-qa.md` and `agents/handoffs/TASK-028P.md` record evidence and limits. ADR-0036 remains Proposed: no hometown storage or rich peer disclosure implemented. TASK-028P and parent TASK-028 remain incomplete; TASK-027 staged acceptance still gates main application integration. Publish reviewed documentation/evidence only to main; no hosted change or successor.
