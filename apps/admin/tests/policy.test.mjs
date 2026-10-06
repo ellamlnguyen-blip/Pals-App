@@ -1,19 +1,37 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { ELLA_POLICY_OWNER_ID, parsePolicyIntent, policyAuthStatus, policyOperatorAllowed, policyRpcStatus, policyTarget } from "../lib/policy.ts";
+import {
+  ELLA_POLICY_OWNER_ID,
+  parsePolicyIntent,
+  policyAuthStatus,
+  policyOperatorAllowed,
+  policyRpcStatus,
+  policyTarget,
+} from "../lib/policy.ts";
 
 const payload = {
-  key: "hangouts", enabled: true, revision: 2, reason: "Staging smoke test",
-  requestId: "00000000-0000-4000-8000-000000000001", confirmTarget: "hangouts:on",
+  key: "hangouts",
+  enabled: true,
+  revision: 2,
+  reason: "Staging smoke test",
+  requestId: "00000000-0000-4000-8000-000000000001",
+  confirmTarget: "hangouts:on",
 };
 
 test("policy key, revision, reason, UUID and exact target are required", () => {
   assert.deepEqual(parsePolicyIntent(payload), payload);
   for (const changed of [
-    { key: "analytics" }, { key: "large_hangout_safeguards" }, { key: "other" },
-    { revision: 0 }, { revision: 1.2 }, { reason: " " }, { reason: "x".repeat(2001) },
-    { requestId: "wrong" }, { confirmTarget: "hangouts:off" },
-  ]) assert.equal(parsePolicyIntent({ ...payload, ...changed }), null);
+    { key: "analytics" },
+    { key: "large_hangout_safeguards" },
+    { key: "other" },
+    { revision: 0 },
+    { revision: 1.2 },
+    { reason: " " },
+    { reason: "x".repeat(2001) },
+    { requestId: "wrong" },
+    { confirmTarget: "hangouts:off" },
+  ])
+    assert.equal(parsePolicyIntent({ ...payload, ...changed }), null);
   assert.equal(parsePolicyIntent({ ...payload, extra: "field" }), null);
 });
 
@@ -28,7 +46,10 @@ test("fixed Ella, active account and AAL2 factor pass route preflight", () => {
   const allowed = (id, status, aal, factor) =>
     policyOperatorAllowed(id, status, aal, factor);
   assert.equal(allowed(ELLA_POLICY_OWNER_ID, "active", "aal2", true), true);
-  assert.equal(allowed("00000000-0000-4000-8000-000000000002", "active", "aal2", true), false);
+  assert.equal(
+    allowed("00000000-0000-4000-8000-000000000002", "active", "aal2", true),
+    false,
+  );
   assert.equal(allowed(ELLA_POLICY_OWNER_ID, "suspended", "aal2", true), false);
   assert.equal(allowed(ELLA_POLICY_OWNER_ID, "active", "aal1", true), false);
   assert.equal(allowed(ELLA_POLICY_OWNER_ID, "active", "aal2", false), false);

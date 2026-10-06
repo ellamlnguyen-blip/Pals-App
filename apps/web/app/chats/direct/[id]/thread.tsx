@@ -35,6 +35,8 @@ export function DirectThread({ id, actor }: { id: string; actor: string }) {
   const [busy, setBusy] = useState(false);
   const [page, setPage] = useState(0);
   const [more, setMore] = useState(false);
+  const [maskedHeight, setMaskedHeight] = useState(0);
+  const threadRef = useRef<HTMLDivElement>(null);
   const ticket = useRef(0),
     cursor = useRef<number | null>(null),
     cursors = useRef<(number | null)[]>([null]);
@@ -47,22 +49,30 @@ export function DirectThread({ id, actor }: { id: string; actor: string }) {
     terminal = useRef(false);
   const api = `/api/dm/${id}`;
   const headers = useCallback(() => ({ "x-pals-dm-actor": actor }), [actor]);
-  const mask = useCallback((reason = "Checking direct chat access…") => {
-    ticket.current++;
-    masked.current = true;
-    fetching.current = false;
-    setMessages([]);
-    setStatus(null);
-    setDraft("");
-    setPending(null);
-    setPhase("loading");
-    setBusy(false);
-    setNote(reason);
-    cursor.current = null;
-    cursors.current = [null];
-    setPage(0);
-    setMore(false);
-  }, []);
+  const mask = useCallback(
+    (reason = "Checking direct chat access…", preservePage = false) => {
+      setMaskedHeight(
+        preservePage ? (threadRef.current?.offsetHeight ?? 0) : 0,
+      );
+      ticket.current++;
+      masked.current = true;
+      fetching.current = false;
+      setMessages([]);
+      setStatus(null);
+      setDraft("");
+      setPending(null);
+      setPhase("loading");
+      setBusy(false);
+      setNote(reason);
+      if (!preservePage) {
+        cursor.current = null;
+        cursors.current = [null];
+        setPage(0);
+      }
+      setMore(false);
+    },
+    [],
+  );
   const deny = useCallback((kind: "denied" | "unavailable" = "denied") => {
     ticket.current++;
     masked.current = true;
@@ -81,6 +91,7 @@ export function DirectThread({ id, actor }: { id: string; actor: string }) {
         ? "Direct chat access is unavailable."
         : "This conversation is no longer available.",
     );
+    setMaskedHeight(0);
   }, []);
   const read = useCallback(
     async (after: number | null, reveal = false) => {
@@ -128,6 +139,7 @@ export function DirectThread({ id, actor }: { id: string; actor: string }) {
         }
         if (
           reveal &&
+          !masked.current &&
           after !== null &&
           data.bodyAccess &&
           data.messages.length === 0
@@ -146,6 +158,7 @@ export function DirectThread({ id, actor }: { id: string; actor: string }) {
         setMessages(data.bodyAccess ? data.messages : []);
         setMore(data.bodyAccess && data.messages.length === 50);
         masked.current = false;
+        setMaskedHeight(0);
         if (
           data.status.state === "pending" &&
           data.status.direction === "outgoing"
@@ -201,11 +214,11 @@ export function DirectThread({ id, actor }: { id: string; actor: string }) {
     });
     const resume = () => {
       if (document.hidden || terminal.current) return;
-      mask();
+      mask("Checking direct chat access…", true);
       if (transitions.current.size)
         for (const [token, phase] of settled.current)
           void verify({ token, phase });
-      else void read(null, true);
+      else void read(cursor.current, true);
     };
     const transition = (message: AuthTransitionMessage) => {
       const decision = authTransitionDecision(transitions.current, message);
@@ -229,15 +242,11 @@ export function DirectThread({ id, actor }: { id: string; actor: string }) {
     };
     const visibility = () => {
       if (document.hidden) {
-        mask("Conversation hidden. Checking again on return.");
-        pendingRef.current = null;
-        draftRef.current = "";
+        mask("Conversation hidden. Checking again on return.", true);
       } else resume();
     };
     const pagehide = () => {
-      mask("Conversation hidden. Checking again on return.");
-      pendingRef.current = null;
-      draftRef.current = "";
+      mask("Conversation hidden. Checking again on return.", true);
     };
     resume();
     document.addEventListener("visibilitychange", visibility);
@@ -371,9 +380,16 @@ export function DirectThread({ id, actor }: { id: string; actor: string }) {
         deny("unavailable");
         return;
       }
-      mask("Checking updated conversation…");
-      if (await read(null, true))
-        setNote(action === "accept" ? "Request accepted." : "Message sent.");
+      const sentFromFullPage = action === "send" && messages.length === 50;
+      mask("Checking updated conversation…", action === "send");
+      if (await read(action === "send" ? cursor.current : null, true))
+        setNote(
+          action === "accept"
+            ? "Request accepted."
+            : sentFromFullPage
+              ? "Message sent. Load newer messages to see it."
+              : "Message sent.",
+        );
     } catch {
       if (now === ticket.current)
         setNote(
@@ -386,7 +402,12 @@ export function DirectThread({ id, actor }: { id: string; actor: string }) {
     }
   }
   return (
-    <div className="chat-thread" aria-live="polite">
+    <div
+      className="chat-thread"
+      ref={threadRef}
+      style={maskedHeight ? { minHeight: maskedHeight } : undefined}
+      aria-live="polite"
+    >
       {phase === "loading" && <p role="status">Checking direct chat access…</p>}
       {(phase === "denied" || phase === "unavailable" || phase === "error") && (
         <div className="chat-empty">

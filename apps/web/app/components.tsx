@@ -3,7 +3,7 @@ import { localHangoutsAvailable } from "../lib/hangouts";
 import { localAttendanceAvailable } from "../lib/attendance";
 import { localPeopleAvailable } from "../lib/people";
 import { localNotificationsAvailable } from "../lib/notifications";
-import { StudentHeader, StudentNav } from "./student-shell";
+import { StudentHeader } from "./student-shell";
 export function Frame({
   children,
   signedIn = false,
@@ -22,17 +22,17 @@ export function Frame({
         signedIn={signedIn}
         accountReady={navigation}
         attendanceAvailable={signedIn && localAttendanceAvailable()}
+        available={
+          navigation
+            ? {
+                calendar: localHangoutsAvailable(),
+                people: localPeopleAvailable(),
+                chats: localHangoutsAvailable(),
+                notifications: localNotificationsAvailable(),
+              }
+            : undefined
+        }
       />
-      {navigation && (
-        <StudentNav
-          available={{
-            calendar: localHangoutsAvailable(),
-            people: localPeopleAvailable(),
-            chats: localHangoutsAvailable(),
-            notifications: localNotificationsAvailable(),
-          }}
-        />
-      )}
       <main id="main" tabIndex={-1}>
         {children}
       </main>

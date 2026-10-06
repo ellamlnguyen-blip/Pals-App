@@ -49,6 +49,24 @@ export function ProfileEditor({
   const [cleanupNeeded, setCleanupNeeded] = useState(false);
   const [pending, startTransition] = useTransition();
   const [busyLabel, setBusyLabel] = useState("");
+  const seenProfileRevision = useRef(profile.revision);
+  useEffect(() => {
+    // A refreshed server profile is authoritative for photos and idle details.
+    // Leave an active draft and its original revision intact so a stale save
+    // still reports a conflict instead of replacing newer changes.
+    if (
+      editing ||
+      pending ||
+      profile.revision === seenProfileRevision.current ||
+      profile.revision < revision
+    )
+      return;
+    const latest = initialValues(profile);
+    seenProfileRevision.current = profile.revision;
+    setValues(latest);
+    setSaved(latest);
+    setRevision(profile.revision);
+  }, [editing, pending, profile, revision]);
   useEffect(() => {
     if (restoreEditFocus.current && !editing && !pending) {
       editButton.current?.focus();
@@ -139,7 +157,7 @@ export function ProfileEditor({
             ...(profile.additional_photo_paths.length < 4 ? ["new"] : []),
           ].map((slot) => (
             <PhotoCard
-              key={slot}
+              key={`${slot}:${profile.revision}`}
               slot={slot}
               hasPhoto={slot !== "primary" || !!profile.primary_photo_path}
               revision={revision}
@@ -369,6 +387,13 @@ function PhotoCard({
   run: (label: string, work: () => Promise<ProfileResult>) => void;
 }) {
   const [failed, setFailed] = useState(false);
+  const [fileError, setFileError] = useState("");
+  const [preview, setPreview] = useState<string | null>(null);
+  useEffect(() => {
+    return () => {
+      if (preview) URL.revokeObjectURL(preview);
+    };
+  }, [preview]);
   const label =
     slot === "primary"
       ? "Primary photo"
@@ -380,6 +405,11 @@ function PhotoCard({
       <h3>{label}</h3>
       <div aria-live="polite">
         {busy && <p role="status">Saving photo…</p>}
+        {fileError && (
+          <p className="form-message error" role="alert">
+            {fileError}
+          </p>
+        )}
         {feedback.error && (
           <p className="form-message error" role="alert">
             {feedback.error}
@@ -414,11 +444,37 @@ function PhotoCard({
             onError={() => setFailed(true)}
           />
         ))}
+      {preview && (
+        <div className="photo-preview">
+          <p className="help">
+            Selected photo preview. It is private and has not been saved.
+          </p>
+          <Image
+            className="owner-photo"
+            src={preview}
+            alt={`Preview for ${label.toLowerCase()}`}
+            width={240}
+            height={240}
+            unoptimized
+          />
+        </div>
+      )}
       <form
         className="photo-controls"
         onSubmit={(event) => {
           event.preventDefault();
           const form = new FormData(event.currentTarget);
+          const photo = form.get("photo");
+          if (
+            !(photo instanceof File) ||
+            photo.size === 0 ||
+            photo.size > 5 * 1024 * 1024 ||
+            !["image/jpeg", "image/png", "image/webp"].includes(photo.type)
+          ) {
+            setFileError("Choose a JPG, PNG or WebP photo under 5 MB.");
+            return;
+          }
+          setFileError("");
           form.set("revision", String(revision));
           form.set("slot", slot);
           form.set("operation", slot === "new" ? "add" : "replace");
@@ -434,6 +490,24 @@ function PhotoCard({
             accept="image/jpeg,image/png,image/webp"
             required
             disabled={disabled}
+            onChange={(event) => {
+              const file = event.currentTarget.files?.[0];
+              setFileError("");
+              if (!file) {
+                setPreview(null);
+                return;
+              }
+              if (
+                file.size === 0 ||
+                file.size > 5 * 1024 * 1024 ||
+                !["image/jpeg", "image/png", "image/webp"].includes(file.type)
+              ) {
+                setPreview(null);
+                setFileError("Choose a JPG, PNG or WebP photo under 5 MB.");
+                return;
+              }
+              setPreview(URL.createObjectURL(file));
+            }}
           />
         </label>
         <button className="text-button" disabled={disabled}>

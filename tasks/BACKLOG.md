@@ -1,5 +1,7 @@
 # Backlog
 
+TASK-028 is active in NOW: one coordinated model-parity/accepted-experience parent; avoid duplicate visual/continuity dispatch. TASK-027 release gates remain independently incomplete.
+
 - TASK-027E — active supported local Storage reset compatibility investigation; required before full real-upload/lifecycle acceptance. Never patch provider indexes to bypass runtime mismatch.
 
 - TASK-027D — actual stale Hangout web conflict retry bug; active bounded correction under TASK-027, required before full Auth/web acceptance. Retain fail-closed revision/privacy coverage. Staging MFA/bootstrap proposals remain awaiting acceptance.

@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 import { useCallback, useEffect, useRef, useState } from "react";
 import PolicyPanel from "./policy-panel";
 import {
@@ -71,7 +73,13 @@ async function call(path: string, payload?: object) {
   return response.json();
 }
 
-export default function Console({ configured, mode = "moderation" }: { configured: boolean; mode?: "moderation" | "policy" }) {
+export default function Console({
+  configured,
+  mode = "moderation",
+}: {
+  configured: boolean;
+  mode?: "moderation" | "policy";
+}) {
   const [session, setSession] = useState<SessionState>(
     configured ? "loading" : "out",
   );
@@ -524,11 +532,18 @@ export default function Console({ configured, mode = "moderation" }: { configure
       </a>
       <header className="masthead">
         <span className="wordmark">
-          pals<span className="wordmark-sub"> / {mode === "policy" ? "launch" : "moderation"}</span>
+          pals
+          <span className="wordmark-sub">
+            {" "}
+            / {mode === "policy" ? "launch" : "moderation"}
+          </span>
         </span>
         <span className="campus">UNC Chapel Hill · private workspace</span>
         {session === "ready" && (
-          <a className="workspace-link" href={mode === "policy" ? "/" : "/policy"}>
+          <a
+            className="workspace-link"
+            href={mode === "policy" ? "/" : "/policy"}
+          >
             {mode === "policy" ? "Reports" : "Launch policy"}
           </a>
         )}
@@ -555,9 +570,15 @@ export default function Console({ configured, mode = "moderation" }: { configure
         ) : session === "out" ? (
           <section className="setup sign-in">
             <p className="eyebrow">Private workspace</p>
-            <h1>{mode === "policy" ? "Sign in to manage launch policy" : "Sign in to review reports"}</h1>
+            <h1>
+              {mode === "policy"
+                ? "Sign in to manage launch policy"
+                : "Sign in to review reports"}
+            </h1>
             <p>
-              {mode === "policy" ? "Authorized launch owner only. Reconcile any earlier unconfirmed policy request before making another change." : "Authorized campus operators only. Earlier unconfirmed actions may have completed; open a fresh report before acting."}
+              {mode === "policy"
+                ? "Authorized launch owner only. Reconcile any earlier unconfirmed policy request before making another change."
+                : "Authorized campus operators only. Earlier unconfirmed actions may have completed; open a fresh report before acting."}
             </p>
             <form onSubmit={signIn}>
               <label>
@@ -586,7 +607,11 @@ export default function Console({ configured, mode = "moderation" }: { configure
         ) : session === "denied" ? (
           <section className="state" role="alert">
             <p className="eyebrow">Access unavailable</p>
-            <h1>{mode === "policy" ? "Launch policy is locked" : "Moderation is locked"}</h1>
+            <h1>
+              {mode === "policy"
+                ? "Launch policy is locked"
+                : "Moderation is locked"}
+            </h1>
             <p>
               Your account, role or authenticator could not be confirmed. Sign
               out and contact the launch owner if this persists.
@@ -606,10 +631,13 @@ export default function Console({ configured, mode = "moderation" }: { configure
               </button>
             ) : (
               <>
-                <img
+                <Image
                   className="mfa-qr"
                   src={qrCode}
                   alt="Authenticator setup QR code"
+                  width={240}
+                  height={240}
+                  unoptimized
                 />
                 {manualKey && (
                   <p className="mfa-note">
@@ -647,7 +675,9 @@ export default function Console({ configured, mode = "moderation" }: { configure
             <h1>Enter your authenticator code</h1>
             <p>
               Your operator access needs a verified authenticator session before
-              {mode === "policy" ? " launch policy can change." : " reports can be opened."}
+              {mode === "policy"
+                ? " launch policy can change."
+                : " reports can be opened."}
             </p>
             <form onSubmit={verifyMfa}>
               <label>
@@ -670,15 +700,25 @@ export default function Console({ configured, mode = "moderation" }: { configure
         ) : (
           <>
             <div className="heading">
-              <p className="eyebrow">{mode === "policy" ? "Launch operations" : "Safety operations"}</p>
+              <p className="eyebrow">
+                {mode === "policy" ? "Launch operations" : "Safety operations"}
+              </p>
               <h1>{mode === "policy" ? "Launch policy" : "Reports"}</h1>
               <p>
-                {mode === "policy" ? "Make one audited gate change at a time." : "Review each allegation against the current case and target state."}
+                {mode === "policy"
+                  ? "Make one audited gate change at a time."
+                  : "Review each allegation against the current case and target state."}
               </p>
             </div>
             {mode === "policy" ? (
-              role === "admin" ? <PolicyPanel key={policyEpoch} onDenied={authorityDenied} /> :
-                <section className="state" role="alert"><h2>Policy unavailable</h2><p>This workspace requires launch owner authority.</p></section>
+              role === "admin" ? (
+                <PolicyPanel key={policyEpoch} onDenied={authorityDenied} />
+              ) : (
+                <section className="state" role="alert">
+                  <h2>Policy unavailable</h2>
+                  <p>This workspace requires launch owner authority.</p>
+                </section>
+              )
             ) : denied ? (
               <section className="state" role="alert">
                 <h2>Moderation unavailable</h2>

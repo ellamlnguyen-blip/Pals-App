@@ -7,28 +7,38 @@ export default function Home() {
       <a className="skip-link" href="#main">
         Skip to content
       </a>
-      <StudentHeader />
+      <StudentHeader
+        available={{
+          calendar: true,
+          people: true,
+          chats: true,
+          notifications: true,
+        }}
+      />
       <main id="main" tabIndex={-1}>
         <section className="welcome-hero" aria-labelledby="page-heading">
           <div>
-            <p className="status">Meet your campus</p>
-            <h1 id="page-heading">Meet up. Make it happen.</h1>
+            <h1 id="page-heading">
+              <span>Meet up.</span>
+              <span>Make it happen.</span>
+            </h1>
             <p className="intro">
-              Make a casual plan, find a Hangout and spend more time together at
-              UNC.
+              College is too short to wait around for good things to come to
+              you. Do fun things, meet your next friends, and have the time of
+              your life for these 4 short years.
             </p>
-            <div className="actions">
-              <Link className="button" href="/signup">
-                Join Pals
-              </Link>
-              <Link href="/signin">Already here? Sign in</Link>
-            </div>
           </div>
+          <Link className="button" href="/signup">
+            Join Pals
+          </Link>
         </section>
         <p className="notice">
-          Pals is starting at UNC Chapel Hill. Confirm an email from an approved
-          UNC domain to get started.
+          Find your people at UNC Chapel Hill. Confirm your UNC email to explore
+          Hangouts, make a plan and meet up.
         </p>
+        <div className="actions">
+          <Link href="/signin">Already here? Sign in</Link>
+        </div>
       </main>
     </div>
   );

@@ -23,7 +23,8 @@ export type PolicyIntent = {
   confirmTarget: string;
 };
 
-const uuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+const uuid =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 export const ELLA_POLICY_OWNER_ID = "8ebd74bb-2a72-4689-9580-72268106d91b";
 
 export function policyOperatorAllowed(
@@ -32,16 +33,26 @@ export function policyOperatorAllowed(
   aal: string | null | undefined,
   verifiedTotp: boolean,
 ) {
-  return userId === ELLA_POLICY_OWNER_ID && accountStatus === "active" &&
-    aal === "aal2" && verifiedTotp;
+  return (
+    userId === ELLA_POLICY_OWNER_ID &&
+    accountStatus === "active" &&
+    aal === "aal2" &&
+    verifiedTotp
+  );
 }
 
-export function policyRpcStatus(error: { code?: string } | null, validReceipt: boolean) {
+export function policyRpcStatus(
+  error: { code?: string } | null,
+  validReceipt: boolean,
+) {
   if (error?.code === "42501") return 403;
   return error || !validReceipt ? 503 : 200;
 }
 
-export function policyAuthStatus(error: { status?: number } | null, userId: string | undefined) {
+export function policyAuthStatus(
+  error: { status?: number } | null,
+  userId: string | undefined,
+) {
   if (error) return [400, 401, 403].includes(error.status ?? 0) ? 403 : 503;
   return userId === ELLA_POLICY_OWNER_ID ? 200 : 403;
 }
@@ -55,7 +66,14 @@ export function parsePolicyIntent(value: unknown): PolicyIntent | null {
   const v = value as Record<string, unknown>;
   if (
     Object.keys(v).length !== 6 ||
-    !["key", "enabled", "revision", "reason", "requestId", "confirmTarget"].every((k) => k in v) ||
+    ![
+      "key",
+      "enabled",
+      "revision",
+      "reason",
+      "requestId",
+      "confirmTarget",
+    ].every((k) => k in v) ||
     !POLICY_KEYS.includes(v.key as PolicyKey) ||
     typeof v.enabled !== "boolean" ||
     typeof v.revision !== "number" ||
@@ -68,6 +86,7 @@ export function parsePolicyIntent(value: unknown): PolicyIntent | null {
     typeof v.requestId !== "string" ||
     !uuid.test(v.requestId) ||
     v.confirmTarget !== policyTarget(v.key as string, v.enabled)
-  ) return null;
+  )
+    return null;
   return v as PolicyIntent;
 }
