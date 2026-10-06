@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-05 — TASK-027 staging operator host preparation
+
+Published and integrated the reviewed caller-session policy controls; the combined admin app builds. Applied the six reviewed operator migrations to exact Pals Staging and completed audited Ella-only manager, moderator and admin provisioning while keeping student gates closed. Created a separate Vercel staging admin project with the exact staging Supabase target and MFA enrollment closed. The reviewed-branch deployment, Ella's personal TOTP setup, hosted smoke and launch checks remain.
+
 ## 2026-10-05 — TASK-027 publication and launch-security decisions
 
 Published and verified reviewed TASK-027I/K/O branches and integration `6fd3240` after direct user authorization. Recorded acceptance of narrow prelaunch own-role read, manager MFA in the database and staged emergency availability-off; rejected repeated UNC eligibility checks on each privileged action. The J implementation is underway; hosted rollout and launch remain pending.

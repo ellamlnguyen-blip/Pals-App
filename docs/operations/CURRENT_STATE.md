@@ -1,5 +1,11 @@
 # Current State
 
+## 2026-10-05 — Staging operator access preparation
+
+The reviewed TASK-027L branch was published and remote-verified at `fa09a6c3b9950ec41ed190b414766b620388a738`, then integrated in the parent branch at remote-verified `7433a65bcb7f9cf46e36f0f0978382212473497f`. The combined admin production build passed. Pals Staging `ffabdrgsmtfylrehwmfo` now contains all 35 reviewed migration versions through `20261005000700`. Independently read-back control receipts show Ella's active sole manager revision 1 and admin role with moderation authority; staging availability, capabilities and moderation source gate remain off. Ella has no verified hosted TOTP yet.
+
+The new Vercel project `pals8/pals-admin-staging` uses `apps/admin`, stable origin `https://pals-admin-staging.vercel.app`, exact staging Supabase URL/ref and publishable key, and `ADMIN_MFA_ENROLLMENT_ENABLED=false` in its Production environment. Branch tracking is `agent/TASK-027-open-unc-mvp`. Its initial import build came from the repository's old default branch and is not proof of the reviewed console. A fresh tracked-branch deployment and hosted tests are pending. No student access, production database, or usepals.com change occurred.
+
 ## 2026-10-05 — Published source and accepted launch decisions
 
 User-authorized publication of reviewed TASK-027I/K/O branches and parent integration `6fd3240` to the canonical private GitHub remote was verified. G/H were already published. ADR-0032, ADR-0034 in MFA-only scope, and ADR-0035 staging emergency off are Accepted; ADR-0033 per-action operator UNC rechecking is Rejected by the user, and TASK-027M is cancelled. TASK-027J implementation is underway in an isolated checkout; N/P and caller-session policy UI remain. The accepted designs do not enable student access. Staging and production availability/capabilities remain closed, with no new hosted migration, grant or domain change in this continuation.
