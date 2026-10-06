@@ -55,14 +55,15 @@ export async function peopleHttpChecks(owner, peer, a, b, sql, png, url, key) {
       ]) {
         const response = await fetch(`${web}${path}`, { headers });
         assert.equal(response.status, 200);
-        // Next dev replaces configured browser cache headers with its
-        // development-only revalidation policy. Production still gets the
-        // explicit private/no-store header from next.config.ts.
+        // Framework cache headers can reorder directives or include additional
+        // restrictions. Require non-storage and privacy/revalidation semantics.
+        const cacheControl = response.headers.get("cache-control") ?? "";
         assert.match(
-          response.headers.get("cache-control") ?? "",
-          /private,\s*no-store|no-cache,\s*must-revalidate/,
-          `${path} is not reusable without revalidation`,
+          cacheControl,
+          /(?:^|,)\s*no-store\s*(?:,|$)/i,
+          `${path} must not be stored`,
         );
+        assert.match(cacheControl, /(?:^|,)\s*(?:private|no-cache)\s*(?:,|$)/i);
       }
       const malformedBack = await fetch(
         `${web}/people/${b.id}?from=%2Fpeople&from=%2Fcalendar`,
@@ -90,10 +91,16 @@ export async function peopleHttpChecks(owner, peer, a, b, sql, png, url, key) {
         });
         const body = await response.text();
         assert.equal(response.status, 200, body);
+        const cacheControl = response.headers.get("cache-control") ?? "";
         assert.match(
-          response.headers.get("cache-control") ?? "",
-          /private,\s*no-store|no-cache,\s*must-revalidate/,
-          `${name} action response is not reusable without revalidation`,
+          cacheControl,
+          /(?:^|,)\s*no-store\s*(?:,|$)/i,
+          `${name} action response must not be stored`,
+        );
+        assert.match(
+          cacheControl,
+          /(?:^|,)\s*(?:private|no-cache)\s*(?:,|$)/i,
+          `${name} action response remains private or requires revalidation`,
         );
         return body;
       }

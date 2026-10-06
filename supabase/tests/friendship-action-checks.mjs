@@ -25,13 +25,18 @@ export async function friendshipActionChecks(owner, peer, a, b, png, sql) {
       const response = await fetch(`${origin}${path}`, { method: "POST", headers: { Cookie: cookie, Origin: origin, "Next-Action": ids[name] }, body: form, redirect: "manual" });
       const body = await response.text();
       assert.equal(response.status, 200, body);
-      assert.match(response.headers.get("cache-control") ?? "", /private,\s*no-store|no-cache,\s*must-revalidate/, `${name} action response`);
+      const cacheControl = response.headers.get("cache-control") ?? "";
+      assert.match(cacheControl, /(?:^|,)\s*no-store\s*(?:,|$)/i, `${name} action response must not be stored`);
+      assert.match(cacheControl, /(?:^|,)\s*(?:private|no-cache)\s*(?:,|$)/i, `${name} action response privacy`);
       return body;
     }
     const anon = await fetch(`${origin}/people/friends`, { redirect: "manual" });
     assert.ok(anon.headers.get("location")?.includes("/signin") || (await anon.text()).includes("/signin"));
     const page = await fetch(`${origin}/people/friends`, { headers: { Cookie: owner.header() } });
-    assert.equal(page.status, 200); assert.match(page.headers.get("cache-control") ?? "", /private,\s*no-store|no-cache,\s*must-revalidate/);
+    assert.equal(page.status, 200);
+    const pageCacheControl = page.headers.get("cache-control") ?? "";
+    assert.match(pageCacheControl, /(?:^|,)\s*no-store\s*(?:,|$)/i);
+    assert.match(pageCacheControl, /(?:^|,)\s*(?:private|no-cache)\s*(?:,|$)/i);
     assert.match(await page.text(), /Your friendships/);
     const invalid = await fetch(`${origin}/people/friends?after=bad`, { headers: { Cookie: owner.header() } });
     assert.match(await invalid.text(), /Invalid page/);

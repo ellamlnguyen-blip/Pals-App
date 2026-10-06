@@ -74,7 +74,7 @@ export default async function PeoplePage({
       <div className="people-heading" id="people-heading" tabIndex={-1}>
         <div>
           <p className="badge">UNC directory</p>
-          <h1>Find a familiar face</h1>
+          <h1>People</h1>
           <p>Browse students who chose to appear in People.</p>
         </div>
         <div className="people-heading-links">
