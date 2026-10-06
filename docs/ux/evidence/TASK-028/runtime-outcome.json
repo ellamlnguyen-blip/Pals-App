@@ -1,0 +1,92 @@
+{
+  "sourceHead": "60a3072058edea037e2e4760bcaf1bae44f72e8c",
+  "appSourceFreeze": "9ef3354678408f8110e87619c2b1b35cb548ea1f",
+  "isolation": {
+    "project": "pals-task028-disposable",
+    "apiPort": 55421,
+    "dbPort": 55422,
+    "mailPort": 55424,
+    "sharedProjectUntouched": true
+  },
+  "verifiedCopyInventory": {
+    "files": 97,
+    "adaptedFiles": 54,
+    "mismatches": 0,
+    "manifest": "/private/tmp/pals-task028-evidence/runtime-adaptation-manifest.json",
+    "meaning": "checksum-verified copied files; not a claim that all 97 files were executed"
+  },
+  "executed": [
+    {
+      "name": "pgTAP all 29 files",
+      "result": "1686 assertions passed twice",
+      "logs": [
+        "/private/tmp/pals-task028-runtime/pgtap.log",
+        "/private/tmp/pals-task028-runtime/pgtap2.log"
+      ]
+    },
+    {
+      "name": "Auth/web production-equivalent helper",
+      "result": "4/4 pass, zero skips",
+      "source": "9ef app source; tracked assertions at 9ef",
+      "log": "/private/tmp/pals-task028-runtime/auth-web-final9ef.log",
+      "runner": "copied Next production build/start in place of dev helper"
+    },
+    {
+      "name": "moderation HTTP",
+      "result": "1/1 pass",
+      "log": "/private/tmp/pals-task028-runtime/moderation-http-final9ef.log"
+    },
+    {
+      "name": "student feature HTTP",
+      "result": "9/9 pass",
+      "log": "/private/tmp/pals-task028-runtime/feature-http-final9ef.log"
+    },
+    {
+      "name": "initial broad race batch",
+      "result": "5/8 pass; three legacy fixture failures before compatibility corrections",
+      "log": "/private/tmp/pals-task028-runtime/feature-races-final9ef.log"
+    },
+    {
+      "name": "Hangout chat race corrected fixture",
+      "result": "1/1 pass, clean reset",
+      "source": "e5733aa test-only fixture",
+      "log": "/private/tmp/pals-task028-runtime/chat-race-final.log"
+    },
+    {
+      "name": "account enforcement race corrected fixture",
+      "result": "1/1 pass, clean reset",
+      "source": "e5733aa test-only fixture",
+      "log": "/private/tmp/pals-task028-runtime/account-race-totp.log"
+    },
+    {
+      "name": "cohost race corrected fixture",
+      "result": "1/1 pass, clean reset",
+      "source": "e5733aa test-only fixture",
+      "log": "/private/tmp/pals-task028-runtime/cohost-race-final.log"
+    },
+    {
+      "name": "attendance HTTP",
+      "result": "pass, real PostgREST with synthetic fixture JWTs",
+      "log": "/private/tmp/pals-task028-runtime/attendance-http.log"
+    },
+    {
+      "name": "attendance concurrency corrected fixture",
+      "result": "18/18 race orders and 3/3 schedule checks pass, clean reset",
+      "source": "60a3072 test-only fixture",
+      "log": "/private/tmp/pals-task028-runtime/attendance-concurrency-totp.log"
+    }
+  ],
+  "developmentRunnerLimit": "Copied webpack dev helper returned callback 500: cookies was called outside a request scope with pnpm symlinked dependencies outside copied project. Production-equivalent Next build/start passed same Auth/web assertions. A prior offline pnpm install attempt lacked @types/node@24.13.6 tarball; no later offline experiment was run.",
+  "buildLog": "/private/tmp/pals-task028-evidence/build-final9ef.log",
+  "browserFixture": "confirmed disposable UNC account, 14 future approximate-area caller-created Hangouts; mode-600 credentials kept out of report",
+  "releaseGate": "No signed-in staging positive/negative smoke or live moderation action/recovery in this local verification; TASK027 canonical integration remains gated.",
+  "cleanup": {
+    "ownedWebStopped": true,
+    "ownedSupabaseRemoved": true,
+    "ownedDataVolumesRemoved": true,
+    "disposableCredentialAndEnvFilesRemoved": true,
+    "originalSixContainersStillRunning": true,
+    "port3000Closed": true,
+    "nonsecretEvidenceRetained": true
+  }
+}

@@ -1,0 +1,757 @@
+{
+  "sourceHead": "60a3072058edea037e2e4760bcaf1bae44f72e8c",
+  "createdAt": "2026-10-06T21:26:11.803032+00:00",
+  "sourceRoot": "/private/tmp/pals-task028",
+  "copyRoot": "/private/tmp/pals-task028-runtime",
+  "verifiedFiles": 97,
+  "adaptedFiles": 54,
+  "mismatches": [],
+  "rows": [
+    {
+      "path": "supabase/tests/account-enforcement-concurrency.integration.mjs",
+      "sourceSha256": "0900d66c1a424a69f060cbcdc492c9fbb5d40301435f946f9a354c19f6bb2adc",
+      "copySha256": "e7c1e961e8e032c8824ae7e9702bf92aa3bfef81af0d04f6da2321b3757bf98b",
+      "substitutions": {
+        "supabase_db_pals-local\u2192supabase_db_pals-task028-disposable": 1,
+        "54321\u219255421": 1
+      }
+    },
+    {
+      "path": "supabase/tests/attendance-concurrency.integration.py",
+      "sourceSha256": "fbca5b3e2b0d968da7c2e63e3bb44f4a5e81e3c5281a17ed8606efe2c7c63eaf",
+      "copySha256": "27332ba4533c1b5de96faa4bce6a4c7225f15ad79706d061f6874908066fc00b",
+      "substitutions": {
+        "54321\u219255421": 1,
+        "54322\u219255422": 2
+      }
+    },
+    {
+      "path": "supabase/tests/attendance-http.integration.py",
+      "sourceSha256": "09255000c27b2827866bde07cfcf08c39fd8ff0b4a098f32294dc3c0dc043008",
+      "copySha256": "65a51a540203927ebfeef739c894b1c7ab71a76df49a36aef7b01806c844b289",
+      "substitutions": {
+        "54321\u219255421": 1,
+        "54322\u219255422": 1
+      }
+    },
+    {
+      "path": "supabase/tests/auth-storage.integration.mjs",
+      "sourceSha256": "e12624f15bdd54a9c4702b43a76cef8307323a17466ef29772cc0993f9c73e5c",
+      "copySha256": "fe1bf9c587b6cdca6d0e30f0bd376bcb3651a42964872599c82d57e01b2adfd8",
+      "substitutions": {
+        "supabase_db_pals-local\u2192supabase_db_pals-task028-disposable": 1,
+        "54321\u219255421": 1,
+        "54324\u219255424": 2
+      }
+    },
+    {
+      "path": "supabase/tests/calendar-http-checks.mjs",
+      "sourceSha256": "5a66310cf4a056b8653ec53bf07cc49ec25d74b0f50baa7330c0cc533de24b2f",
+      "copySha256": "5a66310cf4a056b8653ec53bf07cc49ec25d74b0f50baa7330c0cc533de24b2f",
+      "substitutions": {}
+    },
+    {
+      "path": "supabase/tests/chat-ui-http.integration.mjs",
+      "sourceSha256": "05d12564e74a89440226f3598021b2f8e0850d8d6179a2564d185a1ef13c3619",
+      "copySha256": "388cea465cfd2abfa95828e5ba3ae6d3e017601f950b7eece586fbe7cf4a6ca0",
+      "substitutions": {
+        "supabase_db_pals-local\u2192supabase_db_pals-task028-disposable": 1,
+        "54321\u219255421": 1
+      }
+    },
+    {
+      "path": "supabase/tests/cohost-concurrency.integration.mjs",
+      "sourceSha256": "e7fe3985408882ad25c4307a093cd2b88f6783bf3853e9ca369ebc5495f62008",
+      "copySha256": "dc6b03cbf442fda634bb7615143bd7184dc2a0eb5993663bcc598b9d6a7eaaf5",
+      "substitutions": {
+        "supabase_db_pals-local\u2192supabase_db_pals-task028-disposable": 1,
+        "54321\u219255421": 1
+      }
+    },
+    {
+      "path": "supabase/tests/cohost-http.integration.mjs",
+      "sourceSha256": "b79189a4db69336c37e323791e3e1ce68d390405b7ac437f182b904b985035f5",
+      "copySha256": "a2154fc5e571506b4f0f8f12e5d76161356d113bac5a0a029ea94372dfc73dc1",
+      "substitutions": {
+        "supabase_db_pals-local\u2192supabase_db_pals-task028-disposable": 1,
+        "54321\u219255421": 1,
+        "54322\u219255422": 1
+      }
+    },
+    {
+      "path": "supabase/tests/confirmed-unc-email-http.integration.mjs",
+      "sourceSha256": "6c94092497f9ef3a540d3c45cfe180d6e25714738822bd52a9e0e4b2551f51f5",
+      "copySha256": "544e5ea5f725fbffa52a78f5d95d26efedbdc7aa0d4ee05ffdb4bfdd0df19414",
+      "substitutions": {
+        "supabase_db_pals-local\u2192supabase_db_pals-task028-disposable": 1,
+        "54321\u219255421": 1
+      }
+    },
+    {
+      "path": "supabase/tests/dm-concurrency.integration.mjs",
+      "sourceSha256": "657b335bd0b4657b3e94ee2aa8a488620db60a00e6e2203fa4e8607f043ce822",
+      "copySha256": "1e87faeaeb0aae4aa199927d50000c19bfcd5e60420f538264c9c8769cbcead1",
+      "substitutions": {
+        "supabase_db_pals-local\u2192supabase_db_pals-task028-disposable": 1,
+        "54321\u219255421": 1
+      }
+    },
+    {
+      "path": "supabase/tests/dm-http.integration.mjs",
+      "sourceSha256": "d7136353c753fc196dbc1a6cae08be8b3b9ee408e9f9454d435fecccb8e29caa",
+      "copySha256": "380a3d962f4455a07b1e357f8ecd365eea95f043b1e2e355aff4e80ead94e606",
+      "substitutions": {
+        "supabase_db_pals-local\u2192supabase_db_pals-task028-disposable": 1,
+        "54321\u219255421": 1
+      }
+    },
+    {
+      "path": "supabase/tests/dm-revocation.integration.mjs",
+      "sourceSha256": "1a442084e6fd8784ebb3a7b3431c9cd5a8555c0548213d0c44991256294988e7",
+      "copySha256": "c1ae1783dfa743772a16686e12d32b475a551e2fc1093f2bb86f23a0f4f3f269",
+      "substitutions": {
+        "supabase_db_pals-local\u2192supabase_db_pals-task028-disposable": 1,
+        "54321\u219255421": 1
+      }
+    },
+    {
+      "path": "supabase/tests/dm-web.integration.mjs",
+      "sourceSha256": "93caf108f0e716dda328dcb93afb390842f948b8ebfe6d3bf00adc1e57ef9030",
+      "copySha256": "6ee4b8538dc28edd42efeb51d4974d018a316014d00ad5b32f07445378f0f112",
+      "substitutions": {
+        "supabase_db_pals-local\u2192supabase_db_pals-task028-disposable": 1,
+        "54321\u219255421": 1
+      }
+    },
+    {
+      "path": "supabase/tests/friendship-action-checks.mjs",
+      "sourceSha256": "061c617f6bf7fb6c1719a90cc2b7df31bc91b16958c436d41b5ff7eb9eacfc3e",
+      "copySha256": "061c617f6bf7fb6c1719a90cc2b7df31bc91b16958c436d41b5ff7eb9eacfc3e",
+      "substitutions": {}
+    },
+    {
+      "path": "supabase/tests/friendship-concurrency.integration.mjs",
+      "sourceSha256": "820701206b83b2539b5889d28a00dc3f617db87d913a2775e5242682ace7dc3d",
+      "copySha256": "c546643a43dfeb8610c4805763253730bf776a1c257444999e9397d916c3c614",
+      "substitutions": {
+        "supabase_db_pals-local\u2192supabase_db_pals-task028-disposable": 1,
+        "54321\u219255421": 1
+      }
+    },
+    {
+      "path": "supabase/tests/friendship-http.integration.mjs",
+      "sourceSha256": "8c6707cb18e84b6117d25d7879ab2a1343d2ac133430202bb5f295aee5585b45",
+      "copySha256": "91aef3c34032ec8ed1581e42fb74a8478d20a1fe977b5650d73781a7e19bd1fe",
+      "substitutions": {
+        "supabase_db_pals-local\u2192supabase_db_pals-task028-disposable": 1,
+        "54321\u219255421": 1
+      }
+    },
+    {
+      "path": "supabase/tests/global-block-concurrency.integration.mjs",
+      "sourceSha256": "c8d41b2904d8cba09d9ab3438d13446b1384ee3d941aa71493d8ee6f24ce49ca",
+      "copySha256": "0aeb80c7119df4bad2755474571193a3f2f4b876b6fbb48f07e0b7bfd43b4491",
+      "substitutions": {
+        "supabase_db_pals-local\u2192supabase_db_pals-task028-disposable": 1,
+        "54321\u219255421": 1
+      }
+    },
+    {
+      "path": "supabase/tests/global-block-http.integration.mjs",
+      "sourceSha256": "f067dc5876ad8beebde4046864de086c695c4dcb278e60c11e25841b7322f4dd",
+      "copySha256": "07a1260240fbd5e21aa0aa494ae610d6ff3496a7930338d3ce792fea47967e93",
+      "substitutions": {
+        "supabase_db_pals-local\u2192supabase_db_pals-task028-disposable": 1,
+        "54321\u219255421": 1,
+        "54322\u219255422": 1
+      }
+    },
+    {
+      "path": "supabase/tests/global-block-upgrade.integration.mjs",
+      "sourceSha256": "e686c58f4951fd017e8d9d6102199c967423c4e1381d101b1251adfed9075c24",
+      "copySha256": "dc4a69b042831c131d69a607b87c124c291c65f1bba96e74930cc1cf4a2f9253",
+      "substitutions": {
+        "supabase_db_pals-local\u2192supabase_db_pals-task028-disposable": 1,
+        "pals-local-network\u2192pals-task028-disposable-network": 1,
+        "54321\u219255421": 1,
+        "54322\u219255422": 1
+      }
+    },
+    {
+      "path": "supabase/tests/hangout-action-checks.mjs",
+      "sourceSha256": "85b65edaa8f63daf721842802d92239d004b67b88e35412d4f0456a490c912b4",
+      "copySha256": "85b65edaa8f63daf721842802d92239d004b67b88e35412d4f0456a490c912b4",
+      "substitutions": {}
+    },
+    {
+      "path": "supabase/tests/hangout-chat-concurrency.integration.mjs",
+      "sourceSha256": "fb5c346b29f56637a2c8f42febe9fa7772fde016aaf84ee81d33c54f85d0d88e",
+      "copySha256": "26e0a43d4d21c0dc2cd9e1b2811ab6bce42e488fa09ba318f667aa6451d8206e",
+      "substitutions": {
+        "supabase_db_pals-local\u2192supabase_db_pals-task028-disposable": 1,
+        "54321\u219255421": 1
+      }
+    },
+    {
+      "path": "supabase/tests/hangout-chat-http.integration.mjs",
+      "sourceSha256": "2af26bf13709eabcd54834ace0f27b67eb5c6158f2a6ced38f047d5b037f16ea",
+      "copySha256": "933306c55bc93edf22c6daeb0d457ab585b72b50d6298c16287cc395291dfafe",
+      "substitutions": {
+        "supabase_db_pals-local\u2192supabase_db_pals-task028-disposable": 1,
+        "54321\u219255421": 1
+      }
+    },
+    {
+      "path": "supabase/tests/hangout-concurrency.integration.mjs",
+      "sourceSha256": "95c8329bd05ffb1ed616a8a95d978aa9169a944da3b4fdd0f8175b5b4623cb72",
+      "copySha256": "f9eafde32d51aaf246cddc4982fee99f86ca7ec1f6d5445dc29d4d58be3b7521",
+      "substitutions": {
+        "supabase_db_pals-local\u2192supabase_db_pals-task028-disposable": 1
+      }
+    },
+    {
+      "path": "supabase/tests/hangout-disable-concurrency.integration.mjs",
+      "sourceSha256": "bfa5cc737d55530cd2d99b926974a6d74c66932f2109409ab317d51d9d61e0d8",
+      "copySha256": "8bd73f04252877b337aa4726348095e5dac62b71240d0015d02f1e3468e93f16",
+      "substitutions": {
+        "supabase_db_pals-local\u2192supabase_db_pals-task028-disposable": 1
+      }
+    },
+    {
+      "path": "supabase/tests/hangout-disable-http.integration.mjs",
+      "sourceSha256": "f507ba52dfd68f416fa56bcc9dd00c85ce49846993d2ac5a45094fce569443ff",
+      "copySha256": "38b54a46a694f89ebfcc8199461ff7eca48d3de1805e76a0cefab9795b42e981",
+      "substitutions": {
+        "supabase_db_pals-local\u2192supabase_db_pals-task028-disposable": 1,
+        "54321\u219255421": 1
+      }
+    },
+    {
+      "path": "supabase/tests/hangout-http-checks.mjs",
+      "sourceSha256": "838086da38e1aad2b71bd8a1c891a80b2d9c7532288b717cf88a80bf64d600ff",
+      "copySha256": "838086da38e1aad2b71bd8a1c891a80b2d9c7532288b717cf88a80bf64d600ff",
+      "substitutions": {}
+    },
+    {
+      "path": "supabase/tests/helpers/local-totp.mjs",
+      "sourceSha256": "02795c16cb33d10943e068d638a52d20831363b88eebf0985f44741b29dafc42",
+      "copySha256": "02795c16cb33d10943e068d638a52d20831363b88eebf0985f44741b29dafc42",
+      "substitutions": {}
+    },
+    {
+      "path": "supabase/tests/helpers/pilot-admission-authority.mjs",
+      "sourceSha256": "88311a1740ce2594e69f49993d0968d8387242ba1bcb3e74d0b1ec578ea224bd",
+      "copySha256": "90489e16b84b5916348d7c297e70ccff9a69e84c7d7f6491f985e2692c5cb279",
+      "substitutions": {
+        "supabase_db_pals-local\u2192supabase_db_pals-task028-disposable": 3,
+        "54321\u219255421": 1,
+        "54322\u219255422": 1
+      }
+    },
+    {
+      "path": "supabase/tests/helpers/pilot-admission-cohost-chat.mjs",
+      "sourceSha256": "fb7747dd9ef5a9603e967f19a062ebb4237e1732adbc123e17a3e929ffaa00d8",
+      "copySha256": "d5bc7668ddb8d91e9d0d745e52c5d42a66015fa565943fca803eac12acc91f2b",
+      "substitutions": {
+        "supabase_db_pals-local\u2192supabase_db_pals-task028-disposable": 3,
+        "pals-local-network\u2192pals-task028-disposable-network": 1,
+        "54321\u219255421": 1,
+        "54322\u219255422": 1
+      }
+    },
+    {
+      "path": "supabase/tests/helpers/pilot-admission-lifecycle.mjs",
+      "sourceSha256": "e53ea77077e6c693017f3a4971681e7483b6fd2145693bc9573b1b5d408aed56",
+      "copySha256": "82dad33f7b458faf289924ee56bf2ba36067ab3a4a7b42dcb04b80c5b0320aff",
+      "substitutions": {
+        "supabase_db_pals-local\u2192supabase_db_pals-task028-disposable": 3,
+        "pals-local-network\u2192pals-task028-disposable-network": 1,
+        "54321\u219255421": 1,
+        "54322\u219255422": 1
+      }
+    },
+    {
+      "path": "supabase/tests/helpers/pilot-admission-owner.mjs",
+      "sourceSha256": "809cd2b5047873ba85b03bf6ff29ba6d5636bd7f48955a959997f8a0a93fbf24",
+      "copySha256": "558a5e6835355883665d1f2a1383561fd1e63a64cf1ad6a80ab60e6c00409f51",
+      "substitutions": {
+        "supabase_db_pals-local\u2192supabase_db_pals-task028-disposable": 3,
+        "54321\u219255421": 1,
+        "54322\u219255422": 1
+      }
+    },
+    {
+      "path": "supabase/tests/helpers/pilot-admission-source-safety.mjs",
+      "sourceSha256": "c170bdbe4bd446747c16d51eda6c1537d9323f1badeb940059fa9c6bde171433",
+      "copySha256": "f44d89fdeb18f131c8e18afb17cd534bd2c2ee8629f16a586f0862e2ed662044",
+      "substitutions": {
+        "supabase_db_pals-local\u2192supabase_db_pals-task028-disposable": 3,
+        "pals-local-network\u2192pals-task028-disposable-network": 1,
+        "54321\u219255421": 1,
+        "54322\u219255422": 1
+      }
+    },
+    {
+      "path": "supabase/tests/helpers/pilot-cohost-chat-fixtures.mjs",
+      "sourceSha256": "75e5cdbf6fe286e59831088b200b840b55213559375eb4dd98f01648ade6690a",
+      "copySha256": "75e5cdbf6fe286e59831088b200b840b55213559375eb4dd98f01648ade6690a",
+      "substitutions": {}
+    },
+    {
+      "path": "supabase/tests/helpers/pilot-cohost-chat-matrix.mjs",
+      "sourceSha256": "838c9779b1053c41dd9cc8237411a254dd65d0c40823faa5d486b3ec20bd5e77",
+      "copySha256": "838c9779b1053c41dd9cc8237411a254dd65d0c40823faa5d486b3ec20bd5e77",
+      "substitutions": {}
+    },
+    {
+      "path": "supabase/tests/helpers/pilot-lifecycle-fixtures.mjs",
+      "sourceSha256": "f69d804289f352048cfae1ed738d5ef1de80e6605a3751046806dcd629ef8bff",
+      "copySha256": "f69d804289f352048cfae1ed738d5ef1de80e6605a3751046806dcd629ef8bff",
+      "substitutions": {}
+    },
+    {
+      "path": "supabase/tests/helpers/reset-pilot-authority-local.mjs",
+      "sourceSha256": "6a33652fee2ad2bb39a173a3203d2ba722300b65cdb965daff7b0e4517a72039",
+      "copySha256": "c75a467eea954238ca808d48263e302f1f8b2f24b5052d2419e4b80620cdbc45",
+      "substitutions": {
+        "pals-local-network\u2192pals-task028-disposable-network": 1
+      }
+    },
+    {
+      "path": "supabase/tests/helpers/verify-pilot-authority-clean.mjs",
+      "sourceSha256": "77de32892ae333586e8973b0800a85d8367a11414ec1c1072d9224bea96fd985",
+      "copySha256": "77de32892ae333586e8973b0800a85d8367a11414ec1c1072d9224bea96fd985",
+      "substitutions": {}
+    },
+    {
+      "path": "supabase/tests/helpers/verify-pilot-authority-db.mjs",
+      "sourceSha256": "f55279d42b150fadef316141a5ccd90b229d6ca1d094e76904ee47290ed135e3",
+      "copySha256": "65bb733d374be55c02fb4557c9c8381da73fb46a2ba267c0ef15fce63f2ee770",
+      "substitutions": {
+        "supabase_db_pals-local\u2192supabase_db_pals-task028-disposable": 1
+      }
+    },
+    {
+      "path": "supabase/tests/helpers/verify-pilot-cohost-chat-catalog.mjs",
+      "sourceSha256": "21875af137a554e8e0a098d38958dc5506face5d4a25a9100913debe9b8e78e5",
+      "copySha256": "21875af137a554e8e0a098d38958dc5506face5d4a25a9100913debe9b8e78e5",
+      "substitutions": {}
+    },
+    {
+      "path": "supabase/tests/helpers/verify-pilot-cohost-chat-lint.mjs",
+      "sourceSha256": "f088dccc84941ee91cd8bd4db686eadacd2e7fce94215536290a6cfaaf6df160",
+      "copySha256": "f088dccc84941ee91cd8bd4db686eadacd2e7fce94215536290a6cfaaf6df160",
+      "substitutions": {}
+    },
+    {
+      "path": "supabase/tests/helpers/verify-pilot-cohost-chat-sql.mjs",
+      "sourceSha256": "8c9533e927c2eff30e5221d5a4092bef14efb095660cd8c691196ae83bcb3669",
+      "copySha256": "8c9533e927c2eff30e5221d5a4092bef14efb095660cd8c691196ae83bcb3669",
+      "substitutions": {}
+    },
+    {
+      "path": "supabase/tests/helpers/verify-pilot-cohost-chat-upgrade.mjs",
+      "sourceSha256": "80be10738bee9ea9cd1ba73c0108687f4bfc86e04314608b56a14cdf96d28de6",
+      "copySha256": "61e66e188a93e267053ff426061dd08f0ec64baa23d8460fc7859482126460ef",
+      "substitutions": {
+        "pals-local-network\u2192pals-task028-disposable-network": 1
+      }
+    },
+    {
+      "path": "supabase/tests/helpers/verify-pilot-lifecycle-catalog.mjs",
+      "sourceSha256": "811a3c64146981269582de357ecc946ea94bdd6ceaeba11e9a3416f4a2da731b",
+      "copySha256": "811a3c64146981269582de357ecc946ea94bdd6ceaeba11e9a3416f4a2da731b",
+      "substitutions": {}
+    },
+    {
+      "path": "supabase/tests/helpers/verify-pilot-lifecycle-lint.mjs",
+      "sourceSha256": "824f1d818b9402cde2aa9c23f6d15f4786885265dc23c7e764611e016e12f09f",
+      "copySha256": "824f1d818b9402cde2aa9c23f6d15f4786885265dc23c7e764611e016e12f09f",
+      "substitutions": {}
+    },
+    {
+      "path": "supabase/tests/helpers/verify-pilot-lifecycle-local.mjs",
+      "sourceSha256": "5fccf94e59eb1775caad3e438420a1eedc670d4c180395b3537530cb75137264",
+      "copySha256": "59b41b7972e38336d4550dc7c9effcfc91b8210c2e7c819e47f56d5fd2ab811a",
+      "substitutions": {
+        "pals-local-network\u2192pals-task028-disposable-network": 1
+      }
+    },
+    {
+      "path": "supabase/tests/helpers/verify-pilot-owner-local.mjs",
+      "sourceSha256": "a8f3c50f1af91b0cc72ff5011c46b45fc49579932b9e6c68d0f8a03f480cdde4",
+      "copySha256": "161afa219df347fad6a9379a7b49f01b12559c609fe7d7c3171c6a40418704c7",
+      "substitutions": {
+        "pals-local-network\u2192pals-task028-disposable-network": 1
+      }
+    },
+    {
+      "path": "supabase/tests/helpers/verify-pilot-source-safety-local.mjs",
+      "sourceSha256": "3dac288895f33f91a3c6cd0dd6a842a403bdb6d592cea02ca50af2f2e7cabd53",
+      "copySha256": "11536b7d1c191a2a93daa3ff92e02c3d8b625b5e014003562f975b819d1beaed",
+      "substitutions": {
+        "pals-local-network\u2192pals-task028-disposable-network": 1
+      }
+    },
+    {
+      "path": "supabase/tests/large-hangout-concurrency.integration.mjs",
+      "sourceSha256": "68bcaf207c01a917e51d67f4e8863a969ec76b025d17671056bd0979c07ca767",
+      "copySha256": "a940c2d3ede7ce9930e79cc23a3868bd0d05f97eddb7872c53fad1e56aa1a05e",
+      "substitutions": {
+        "supabase_db_pals-local\u2192supabase_db_pals-task028-disposable": 1
+      }
+    },
+    {
+      "path": "supabase/tests/large-hangout-http.integration.mjs",
+      "sourceSha256": "7abe0b4febb500c8f6f93c6e4ebef7ae1a99ef5b9468a2ad31ddd2fefe70dfa5",
+      "copySha256": "91eb46dbb2a240f4fcbefe2ed0d760f6f4a95234c90a97470cbf37bb8b441cc9",
+      "substitutions": {
+        "supabase_db_pals-local\u2192supabase_db_pals-task028-disposable": 1,
+        "54321\u219255421": 1
+      }
+    },
+    {
+      "path": "supabase/tests/moderation-concurrency.integration.mjs",
+      "sourceSha256": "fc3faad27094beb6abea46b1890018acfde6185e80816e9e2117efc986681576",
+      "copySha256": "3e29532681121d8cb55e47765b95038310591f8bd3d6dffc6fd82bce9d89b6d2",
+      "substitutions": {
+        "supabase_db_pals-local\u2192supabase_db_pals-task028-disposable": 1,
+        "54321\u219255421": 1
+      }
+    },
+    {
+      "path": "supabase/tests/moderation-http.integration.mjs",
+      "sourceSha256": "8c704f6ff5cb2b1b330d1b6e23bdd17fe780c4685d6afc8a7a5710691ee2ba26",
+      "copySha256": "28c65924805767a8ab739802710b1d97cdd709a05bd391784703ebe52c1ebced",
+      "substitutions": {
+        "supabase_db_pals-local\u2192supabase_db_pals-task028-disposable": 1,
+        "54321\u219255421": 1
+      }
+    },
+    {
+      "path": "supabase/tests/moderator-mfa-http.integration.mjs",
+      "sourceSha256": "dc1aa78b57f2ae6f1e04543adbafc7f31349d5f959ec171d041fa40bde19a817",
+      "copySha256": "933b23e3f6699323c55fb694d097c543997ce522117426035d7e59d4fa1136ad",
+      "substitutions": {
+        "supabase_db_pals-local\u2192supabase_db_pals-task028-disposable": 2,
+        "54321\u219255421": 1
+      }
+    },
+    {
+      "path": "supabase/tests/notifications-concurrency.integration.mjs",
+      "sourceSha256": "d8356b571446bf706bbbbbdd230c70e94272cf21af032970c2bd810d92b8e326",
+      "copySha256": "46e1572970f7afe190bdfad75b97ca6950f10b046c4b924961ea98aac41c5a54",
+      "substitutions": {
+        "supabase_db_pals-local\u2192supabase_db_pals-task028-disposable": 1,
+        "54321\u219255421": 1
+      }
+    },
+    {
+      "path": "supabase/tests/notifications-hangouts-concurrency.integration.mjs",
+      "sourceSha256": "e44c268f8379e425d2b5ee8e82950a2a31519c5140dcf10705d1fee834775b33",
+      "copySha256": "07a946217974d358c9522c41b3ab7ed6e2586c6589d750e13539ed20257ecdc4",
+      "substitutions": {
+        "supabase_db_pals-local\u2192supabase_db_pals-task028-disposable": 1,
+        "54321\u219255421": 1
+      }
+    },
+    {
+      "path": "supabase/tests/notifications-hangouts-http.integration.mjs",
+      "sourceSha256": "b0f381a6f0219c571604460a9afc7fe1d0a772737e09279497e18f1cd76e4286",
+      "copySha256": "ae6be12aa3fea16b4d46ae078a01465db828af847d30b743f750ae5a5a3514e5",
+      "substitutions": {
+        "supabase_db_pals-local\u2192supabase_db_pals-task028-disposable": 1,
+        "54321\u219255421": 1
+      }
+    },
+    {
+      "path": "supabase/tests/notifications-http.integration.mjs",
+      "sourceSha256": "099e073a477a2e2b26e0a63cabc478333eca238a3c2e55347ee06ad2d299ffea",
+      "copySha256": "2c2a73c97da3c619067fb7d220c11c3e39cc92c215e9bedcc9ddaca715e813c0",
+      "substitutions": {
+        "supabase_db_pals-local\u2192supabase_db_pals-task028-disposable": 1,
+        "54321\u219255421": 1
+      }
+    },
+    {
+      "path": "supabase/tests/notifications-ui-http.integration.mjs",
+      "sourceSha256": "9ae0ed247b336f0b00c28c699465978139a80cb5f3f1dc099344c9f3a8a762a5",
+      "copySha256": "a9ec98b285441caad327677b19e0e33e5764de229e0cc71e17e4fb38e89edb62",
+      "substitutions": {
+        "supabase_db_pals-local\u2192supabase_db_pals-task028-disposable": 1,
+        "54321\u219255421": 1
+      }
+    },
+    {
+      "path": "supabase/tests/people-concurrency.integration.mjs",
+      "sourceSha256": "06934fd2cfba6e727e879bcbc7e8c8a814d11292fc2d6d8884d441b7b4c1c9f2",
+      "copySha256": "58544a2268f62ab21161fbb718d6f08859ba31b045e0cafdcf09c76c3a29acec",
+      "substitutions": {
+        "supabase_db_pals-local\u2192supabase_db_pals-task028-disposable": 1,
+        "54321\u219255421": 1
+      }
+    },
+    {
+      "path": "supabase/tests/people-http-checks.mjs",
+      "sourceSha256": "7b2e5cf6814d273d72d000f882921a59476af9ec8332ffd476d078b053194e9f",
+      "copySha256": "7b2e5cf6814d273d72d000f882921a59476af9ec8332ffd476d078b053194e9f",
+      "substitutions": {}
+    },
+    {
+      "path": "supabase/tests/pilot-admission-authority-concurrency.integration.mjs",
+      "sourceSha256": "5ff533ec1b2c54d4b51e2d163f08d7bd977c9da3693b0743edc7d6a6eca8645e",
+      "copySha256": "5ff533ec1b2c54d4b51e2d163f08d7bd977c9da3693b0743edc7d6a6eca8645e",
+      "substitutions": {}
+    },
+    {
+      "path": "supabase/tests/pilot-admission-authority-http.integration.mjs",
+      "sourceSha256": "36a2611b490fa466afe4148be13ffd876a2b2e4d086f9aba1512e8ce7fe9dadc",
+      "copySha256": "36a2611b490fa466afe4148be13ffd876a2b2e4d086f9aba1512e8ce7fe9dadc",
+      "substitutions": {}
+    },
+    {
+      "path": "supabase/tests/pilot-admission-authority-upgrade.integration.mjs",
+      "sourceSha256": "379e868a0f5779ecb94e30b24a9c044638f79af2b13218721d8e1e75e37b3e0c",
+      "copySha256": "379e868a0f5779ecb94e30b24a9c044638f79af2b13218721d8e1e75e37b3e0c",
+      "substitutions": {}
+    },
+    {
+      "path": "supabase/tests/pilot-admission-cohost-chat-concurrency.integration.mjs",
+      "sourceSha256": "6df42d8799ca7623d1f503c76b734f9cc9b72e01936f5bd897337760cf5f9d56",
+      "copySha256": "6df42d8799ca7623d1f503c76b734f9cc9b72e01936f5bd897337760cf5f9d56",
+      "substitutions": {}
+    },
+    {
+      "path": "supabase/tests/pilot-admission-cohost-chat-http.integration.mjs",
+      "sourceSha256": "87e8f8aa11484e245eea9c848775e20ce40ec34670e2fd14362e21979e48ed1c",
+      "copySha256": "87e8f8aa11484e245eea9c848775e20ce40ec34670e2fd14362e21979e48ed1c",
+      "substitutions": {}
+    },
+    {
+      "path": "supabase/tests/pilot-admission-lifecycle-concurrency.integration.mjs",
+      "sourceSha256": "4fb1895206f0d734d6f3a3cc640b7555a17aa1e9d0dd9dc16c64174836060d62",
+      "copySha256": "4fb1895206f0d734d6f3a3cc640b7555a17aa1e9d0dd9dc16c64174836060d62",
+      "substitutions": {}
+    },
+    {
+      "path": "supabase/tests/pilot-admission-lifecycle-http.integration.mjs",
+      "sourceSha256": "8cf136584498d4a5dedd0fad951ae3884f7f673bbac7ed49e215dcd6aa3e2403",
+      "copySha256": "8cf136584498d4a5dedd0fad951ae3884f7f673bbac7ed49e215dcd6aa3e2403",
+      "substitutions": {}
+    },
+    {
+      "path": "supabase/tests/pilot-admission-owner-concurrency.integration.mjs",
+      "sourceSha256": "551b99ed70f8f94d8430f5fb752ac1a12f111128b35838b837ebdc11cdd633dd",
+      "copySha256": "551b99ed70f8f94d8430f5fb752ac1a12f111128b35838b837ebdc11cdd633dd",
+      "substitutions": {}
+    },
+    {
+      "path": "supabase/tests/pilot-admission-owner-http.integration.mjs",
+      "sourceSha256": "1672dba018695e51b4cb1685e5d7be3f80f41ec5817e77907116af6efe22e407",
+      "copySha256": "1672dba018695e51b4cb1685e5d7be3f80f41ec5817e77907116af6efe22e407",
+      "substitutions": {}
+    },
+    {
+      "path": "supabase/tests/pilot-admission-source-safety-concurrency.integration.mjs",
+      "sourceSha256": "b9f4fce585c140296dc46de620ccef0a60545f23fdb65fdfd4479016a22b26d7",
+      "copySha256": "b9f4fce585c140296dc46de620ccef0a60545f23fdb65fdfd4479016a22b26d7",
+      "substitutions": {}
+    },
+    {
+      "path": "supabase/tests/pilot-admission-source-safety-http.integration.mjs",
+      "sourceSha256": "6d05b233653b96441730610da7a398bd46a89590e93258a28a3abab7553c4121",
+      "copySha256": "6d05b233653b96441730610da7a398bd46a89590e93258a28a3abab7553c4121",
+      "substitutions": {}
+    },
+    {
+      "path": "supabase/tests/pilot-cohost-chat-absence-retry.integration.mjs",
+      "sourceSha256": "3c385fd61dc6ec4071c31d7feb96a5f4bc311c17175c9e4faa0d70de5c9824e5",
+      "copySha256": "3c385fd61dc6ec4071c31d7feb96a5f4bc311c17175c9e4faa0d70de5c9824e5",
+      "substitutions": {}
+    },
+    {
+      "path": "supabase/tests/pilot-cohost-chat-crossings.integration.mjs",
+      "sourceSha256": "852dbcb256f8abd9824aa11c0a689a5313f5d422dbaa63fdb729da090867f838",
+      "copySha256": "852dbcb256f8abd9824aa11c0a689a5313f5d422dbaa63fdb729da090867f838",
+      "substitutions": {}
+    },
+    {
+      "path": "supabase/tests/pilot-cohost-chat-identity-races.integration.mjs",
+      "sourceSha256": "b11ca3ea251c06fdbf8fc0164c642536e99c3ca85521259a6ef976f67ac74c2c",
+      "copySha256": "b11ca3ea251c06fdbf8fc0164c642536e99c3ca85521259a6ef976f67ac74c2c",
+      "substitutions": {}
+    },
+    {
+      "path": "supabase/tests/pilot-cohost-chat-regressions.integration.mjs",
+      "sourceSha256": "ee47d4544c9ca39c2a176050b2fc1d364a2f9cffd9b2c6c2ce4e0504a46a91fa",
+      "copySha256": "ee47d4544c9ca39c2a176050b2fc1d364a2f9cffd9b2c6c2ce4e0504a46a91fa",
+      "substitutions": {}
+    },
+    {
+      "path": "supabase/tests/pilot-cohost-chat-source-state-races.integration.mjs",
+      "sourceSha256": "aca2804294b8a9ed8050d30ca1a991839593e1511be278f9705d250a834e5a12",
+      "copySha256": "aca2804294b8a9ed8050d30ca1a991839593e1511be278f9705d250a834e5a12",
+      "substitutions": {}
+    },
+    {
+      "path": "supabase/tests/pilot-lifecycle-block-membership-races.integration.mjs",
+      "sourceSha256": "e01c17c9b74558d47a1c2a855a33fb36cb31faba73d9076a00da01507a9058f7",
+      "copySha256": "e01c17c9b74558d47a1c2a855a33fb36cb31faba73d9076a00da01507a9058f7",
+      "substitutions": {}
+    },
+    {
+      "path": "supabase/tests/pilot-lifecycle-crossings.integration.mjs",
+      "sourceSha256": "2dc0e406a3a75717b08995a0e551f61f56181db3ed9b60519f2f809d5c122db3",
+      "copySha256": "2dc0e406a3a75717b08995a0e551f61f56181db3ed9b60519f2f809d5c122db3",
+      "substitutions": {}
+    },
+    {
+      "path": "supabase/tests/pilot-lifecycle-regressions.integration.mjs",
+      "sourceSha256": "562074512662702cd35a39c839a3b186b239cf1f4681d10d0ed4597ae6037270",
+      "copySha256": "562074512662702cd35a39c839a3b186b239cf1f4681d10d0ed4597ae6037270",
+      "substitutions": {}
+    },
+    {
+      "path": "supabase/tests/pilot-lifecycle-source-races.integration.mjs",
+      "sourceSha256": "3f0840bbab53827cb08421b5764bbbbc7db40abd71504fc28aaeb7de71decea8",
+      "copySha256": "3f0840bbab53827cb08421b5764bbbbc7db40abd71504fc28aaeb7de71decea8",
+      "substitutions": {}
+    },
+    {
+      "path": "supabase/tests/pilot-manager-mfa-concurrency.integration.mjs",
+      "sourceSha256": "2c952012314cc4045ff2f6106204e8716a4fa4dc20e8db8a1057a23c4fde9157",
+      "copySha256": "2c952012314cc4045ff2f6106204e8716a4fa4dc20e8db8a1057a23c4fde9157",
+      "substitutions": {}
+    },
+    {
+      "path": "supabase/tests/pilot-manager-mfa-http.integration.mjs",
+      "sourceSha256": "539d237c2957a6357aec17fb2941a7e075bf5ced30ebfe3f266d44f619706f2c",
+      "copySha256": "539d237c2957a6357aec17fb2941a7e075bf5ced30ebfe3f266d44f619706f2c",
+      "substitutions": {}
+    },
+    {
+      "path": "supabase/tests/pilot-moderation-pre-repair-diagnostic.integration.mjs",
+      "sourceSha256": "9b98315c446f4ff5b67773ca7d5f2d018de73c7297af4ff7a515063582621d00",
+      "copySha256": "9b98315c446f4ff5b67773ca7d5f2d018de73c7297af4ff7a515063582621d00",
+      "substitutions": {}
+    },
+    {
+      "path": "supabase/tests/profile-action-checks.mjs",
+      "sourceSha256": "53c6ad9dd5fdd3505f9c6a2b860824f2a1f17f812b158fbf21a12738268e0800",
+      "copySha256": "53c6ad9dd5fdd3505f9c6a2b860824f2a1f17f812b158fbf21a12738268e0800",
+      "substitutions": {}
+    },
+    {
+      "path": "supabase/tests/profile-concurrency.integration.mjs",
+      "sourceSha256": "f8e9044fcb374e71d1555dfe39ff1d734172e41dcf94d917ea6bb4e23e49ebea",
+      "copySha256": "7e6e4b857b3adf060e4868d5d1b62c52da1bb6d1d4d67ed2586744437340d54d",
+      "substitutions": {
+        "supabase_db_pals-local\u2192supabase_db_pals-task028-disposable": 1
+      }
+    },
+    {
+      "path": "supabase/tests/profile-http-checks.mjs",
+      "sourceSha256": "8361675f87db5fce03e44aad33850e3b518a657ae3de6b3fc1daf4dc82d4abff",
+      "copySha256": "8361675f87db5fce03e44aad33850e3b518a657ae3de6b3fc1daf4dc82d4abff",
+      "substitutions": {}
+    },
+    {
+      "path": "supabase/tests/safety-report-concurrency.integration.mjs",
+      "sourceSha256": "296c575cdc16f9555d199fa382236fd8a80fb770184506807c422343308cc1b6",
+      "copySha256": "a91c7758a9f7d44c33dcb43e09d6e7e9057fb1c5ab6197811c5a31d597be0b12",
+      "substitutions": {
+        "supabase_db_pals-local\u2192supabase_db_pals-task028-disposable": 1,
+        "54321\u219255421": 1
+      }
+    },
+    {
+      "path": "supabase/tests/safety-report-http.integration.mjs",
+      "sourceSha256": "7948a8570d90bcfbb6fbdf7f5f69f87a81723ad0f639259e0cd4a0a166e910c8",
+      "copySha256": "5f7948e66062da338562b45549c7bbbb92aaf8a343ecf0d81ce12c75d9213a02",
+      "substitutions": {
+        "supabase_db_pals-local\u2192supabase_db_pals-task028-disposable": 1,
+        "54321\u219255421": 1,
+        "54322\u219255422": 1
+      }
+    },
+    {
+      "path": "supabase/tests/safety-ui-http.integration.mjs",
+      "sourceSha256": "7709798340489320c3e5280761c13dcd4af275cdf1a1de42477f2722fb0ec3af",
+      "copySha256": "32e4ff5800094045acba81112ff95a0aebfc881bfa60c623333647365b39d6e7",
+      "substitutions": {
+        "supabase_db_pals-local\u2192supabase_db_pals-task028-disposable": 1,
+        "54321\u219255421": 1,
+        "54322\u219255422": 1
+      }
+    },
+    {
+      "path": "scripts/profile-fault-injection.mjs",
+      "sourceSha256": "bd5c71bbda9c08c551522d006254787ea3a712b984fc2b90e314f1d7b00c0423",
+      "copySha256": "33dc625e85e9a089d863ecf580c1337bb83866ab4c58b27925c49a8aee724927",
+      "substitutions": {
+        "54321\u219255421": 1
+      }
+    },
+    {
+      "path": "scripts/profile-fault-injection.test.mjs",
+      "sourceSha256": "3d0dc3363d2d1e10bb4e6ecc4e43a7c52abeb9b8281db43a8d47c9b5aee37ea8",
+      "copySha256": "6984da0a6ff0e67d1f5ea51c4a5329f659bc3c1b676f79910f4eefb261d76f1b",
+      "substitutions": {
+        "54321\u219255421": 2
+      }
+    },
+    {
+      "path": "scripts/staging-control/run.mjs",
+      "sourceSha256": "e572b5318e40be28aa63c846ae62654f0f35ae19d7f220d778347ce472a94df1",
+      "copySha256": "e572b5318e40be28aa63c846ae62654f0f35ae19d7f220d778347ce472a94df1",
+      "substitutions": {}
+    },
+    {
+      "path": "scripts/staging-control/run.test.mjs",
+      "sourceSha256": "414d69b9f2391b668dec64a291f980f97dab19f9ef604737ec98c621c559e213",
+      "copySha256": "414d69b9f2391b668dec64a291f980f97dab19f9ef604737ec98c621c559e213",
+      "substitutions": {}
+    },
+    {
+      "path": "scripts/staging-control/test-local.mjs",
+      "sourceSha256": "6850dca6e071512bff81216902eb1101f5e8bebbd2c6d9aed9c2b872d7e3942f",
+      "copySha256": "6850dca6e071512bff81216902eb1101f5e8bebbd2c6d9aed9c2b872d7e3942f",
+      "substitutions": {}
+    },
+    {
+      "path": "scripts/test-auth-web.mjs",
+      "sourceSha256": "3420f974710ab3e19d5c885e047c913a2b2e20567c4865821ccf359a6f25c0ee",
+      "copySha256": "c405caae7fd39504d1665e2da3f129b3ee87cda9a74e71538dfa5ca592a356bf",
+      "substitutions": {
+        "54321\u219255421": 1,
+        "pnpm dev:web\u2192copied Next production start": 1
+      }
+    },
+    {
+      "path": "packages/config/src/index.ts",
+      "sourceSha256": "1dfca83174fa559d32cf3297813a639ddae05d0266b01cecbf56ead95fe102fa",
+      "copySha256": "e6a72747da4d7593851a790db6b84aba64ed7794db4145b01b3dc443f7b7a3e3",
+      "substitutions": {
+        "54321\u219255421": 2
+      }
+    },
+    {
+      "path": "apps/web/lib/config.ts",
+      "sourceSha256": "5d4274381e6d4a38382cece6d0326a6ddd75ca63c95e1aed3088fa53b6ff54f3",
+      "copySha256": "ac4728c7e73fe1f14d58379188f5a211bd44bc67cdb2c015d394ffa0b37490b8",
+      "substitutions": {
+        "54321\u219255421": 1
+      }
+    },
+    {
+      "path": "apps/web/lib/feature-runtime.ts",
+      "sourceSha256": "f310ea913c71c0b9223b1077c614157f1f7bdf812345912450bfff072255464e",
+      "copySha256": "3a3b216e98520d0e481947b5837a108e63384d170bc06cc4e4773c9796e2f431",
+      "substitutions": {
+        "54321\u219255421": 1
+      }
+    }
+  ],
+  "appSourceParity": "All copied apps/web and packages files checksum-equal to source except three exact local-port config files; generated .next, node_modules and private .env.local excluded",
+  "runnerMode": "Copied Next production build/start on 127.0.0.1:3000; original source helper dev mode separately observed failing only in copied webpack environment"
+}
