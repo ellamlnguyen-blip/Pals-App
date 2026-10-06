@@ -316,7 +316,9 @@ test("real confirmation, SSR callback, RLS and private photo ownership", async (
         { headers: { Cookie: owner.header() } },
       );
       assert.equal(savedResponse.status, 200);
-      assert.ok((await savedResponse.text()).includes("Plans around UNC"));
+      const savedHtml = await savedResponse.text();
+      assert.ok(savedHtml.includes("Meet up."));
+      assert.ok(savedHtml.includes("Make it happen."));
       assert.equal(
         (
           await fetch("http://127.0.0.1:3000/profile/photo", {
