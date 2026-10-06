@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-05 — Staging operator verification
+
+Verified Ella's hosted admin TOTP session and launch-policy access, closed the temporary enrollment window, and enabled the staging-only moderation source gate through the reviewed audited control. The report queue now loads with no reviewable reports. Student access remains closed.
+
 ## 2026-10-05 — TASK-027 staging operator host preparation
 
 Published and integrated the reviewed caller-session policy controls; the combined admin app builds. Applied the six reviewed operator migrations to exact Pals Staging and completed audited Ella-only manager, moderator and admin provisioning while keeping student gates closed. Created a separate Vercel staging admin project with the exact staging Supabase target and MFA enrollment closed. The reviewed-branch deployment is Ready and its unauthenticated pages show private sign-in. Ella's personal TOTP setup, hosted smoke and launch checks remain.

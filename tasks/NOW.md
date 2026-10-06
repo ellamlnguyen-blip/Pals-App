@@ -1,5 +1,9 @@
 # NOW
 
+## 2026-10-05 — Staging moderation queue usable
+
+TASK-027 remains in progress. Ella's hosted admin session has verified TOTP (`mfa=ready`) and can open `/policy`. The temporary enrollment switch is off again on Ready deployment `EsvDk5oiDfXifrNwCZ52hkyvKrba`. The initially locked report queue was caused by the closed staging moderation source gate. Audited staging-only source-gate transition false→true has receipt `7e20d41b-5276-4ed0-b11f-d82d5c8bbd3f`; the signed-in browser now shows an empty review queue. Student availability and capabilities remain off. Live report handling, recovery and full staged student smoke remain.
+
 ## 2026-10-05 — Staging admin host preparation
 
 TASK-027 remains in progress. Reviewed TASK-027L is published at `fa09a6c3b9950ec41ed190b414766b620388a738` and integrated into the parent at remote-verified `7433a65bcb7f9cf46e36f0f0978382212473497f`; the combined admin app builds. Pals Staging has the six reviewed operator migrations through `20261005000700`, audited first-manager/moderator/admin grants for Ella, and availability plus all capabilities still off. A separate Vercel project `pals-admin-staging` is connected to `apps/admin`, with stable origin `https://pals-admin-staging.vercel.app`, exact staging Supabase target, and MFA enrollment closed by default. Its Production environment tracks `agent/TASK-027-open-unc-mvp`; reviewed branch `51ec7b4c5a9b52e4d535af241b51e337b9afdde3` deployed Ready and unauthenticated moderation/policy pages show private sign-in. Ella's personal MFA enrollment, operator smoke, staged student flows, and release checks remain pending. No production data/domain or student gate changed.

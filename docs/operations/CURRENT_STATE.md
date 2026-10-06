@@ -1,5 +1,11 @@
 # Current State
 
+## 2026-10-05 — Staging moderation queue unlocked
+
+Ella completed personal hosted TOTP verification: the admin session endpoint returned `signedIn=true`, `role=admin`, `mfa=ready`, and the private launch-policy page rendered. The staging admin deployment `EsvDk5oiDfXifrNwCZ52hkyvKrba` is Ready on reviewed branch commit `ec11829f03dc60bef36f781950d7512e35418cfb`; `ADMIN_MFA_ENROLLMENT_ENABLED=false` is restored after the temporary setup window. The initial “Moderation is locked” page resulted from the closed moderation source gate, not an MFA failure.
+
+The exact Pals Staging `ffabdrgsmtfylrehwmfo` control runner enabled only `private.moderation_feature_gate` from false to true. Its immutable audit receipt is `7e20d41b-5276-4ed0-b11f-d82d5c8bbd3f` (request `0db2a162-ac56-4e28-be58-500fe774e895`, authorization reference `TASK-027-user-2026-10-05-staging-activation`). Ella's signed-in browser then opened the report queue and displayed “No reviewable reports on this page.” Student availability and capabilities remain off. No production database or `usepals.com` change occurred. A live report review/action, recovery verification and full staged student flow are still pending.
+
 ## 2026-10-05 — Staging operator access preparation
 
 The reviewed TASK-027L branch was published and remote-verified at `fa09a6c3b9950ec41ed190b414766b620388a738`, then integrated in the parent branch at remote-verified `7433a65bcb7f9cf46e36f0f0978382212473497f`. The combined admin production build passed. Pals Staging `ffabdrgsmtfylrehwmfo` now contains all 35 reviewed migration versions through `20261005000700`. Independently read-back control receipts show Ella's active sole manager revision 1 and admin role with moderation authority; staging availability, capabilities and moderation source gate remain off. Ella has no verified hosted TOTP yet.
