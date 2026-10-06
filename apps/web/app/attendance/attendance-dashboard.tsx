@@ -299,7 +299,7 @@ export function AttendanceDashboard({ actor }: { actor: string }) {
   return (
     <section className="attendance-page" aria-labelledby="attendance-title">
       <div className="attendance-intro">
-        <p className="badge">Private · local only</p>
+        <p className="badge">Private</p>
         <h1 id="attendance-title">Your attendance</h1>
         <p>
           Tell us whether you attended a Hangout. Your answer is self-reported;

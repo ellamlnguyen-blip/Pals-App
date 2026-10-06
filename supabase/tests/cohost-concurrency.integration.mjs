@@ -2,16 +2,24 @@ import assert from "node:assert/strict";
 import { execFileSync, spawn } from "node:child_process";
 import { once } from "node:events";
 import test from "node:test";
+import { localTotpOperator } from "./helpers/local-totp.mjs";
 
 const args = ["exec", "-i", "supabase_db_pals-local", "psql", "-X", "-qAt",
   "-U", "postgres", "-d", "postgres", "-v", "ON_ERROR_STOP=1"];
 const sql = (query) => execFileSync("docker", args,
   { input: query, encoding: "utf8" }).trim();
 assert.equal(sql("select current_database()"), "postgres");
-const uid = (n) => `54010000-0000-4000-8000-${String(n).padStart(12, "0")}`;
+const status = JSON.parse(execFileSync(process.env.SUPABASE_CLI ?? "supabase",
+  ["status", "--output", "json"], { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }));
+assert.equal(status.API_URL, "http://127.0.0.1:54321");
+const quote = (value) => `'${value.replaceAll("'", "''")}'`;
+let operator;
+const uid = (n) => n === 4 && operator ? operator.id :
+  `54010000-0000-4000-8000-${String(n).padStart(12, "0")}`;
 const hid = (n) => `54010000-0000-4000-8001-${String(n).padStart(12, "0")}`;
 const auth = (n) => `set local role authenticated;
-  set local request.jwt.claims='{"sub":"${uid(n)}","role":"authenticated"}';`;
+  set local request.jwt.claims=${quote(JSON.stringify(n === 4 && operator ?
+    operator.claims : { sub: uid(n), role: "authenticated" }))};`;
 function session(name) {
   const child = spawn("docker", args, { stdio: ["pipe", "pipe", "pipe"] });
   let output = "";
@@ -28,15 +36,16 @@ async function until(check) {
   }
   throw new Error("Observed database lock wait timed out");
 }
-async function race(name, firstQuery, secondQuery, rejected) {
+async function race(name, firstQuery, secondQuery, rejected, waitRequired = true) {
   const first = session(`${name}_leader`);
   const second = session(`${name}_waiter`);
   try {
     first.send(`begin; ${firstQuery} select 'held';`);
     await until(() => first.output().includes("held"));
     second.send(`begin; ${secondQuery} select 'waited'; commit;`);
-    await until(() => sql(`select count(*) from pg_stat_activity
-      where application_name='${name}_waiter' and wait_event_type='Lock'`) === "1");
+    await until(() => (!waitRequired && second.output().includes("waited")) ||
+      sql(`select count(*) from pg_stat_activity
+        where application_name='${name}_waiter' and wait_event_type='Lock'`) === "1");
     first.send("commit;");
     first.child.stdin.end(); second.child.stdin.end();
     await first.done; await second.done;
@@ -54,10 +63,12 @@ async function race(name, firstQuery, secondQuery, rejected) {
 test("observed social-lock waits recheck cohost membership, authority and lifecycle", {
   concurrency: false, timeout: 120_000,
 }, async () => {
+  operator = await localTotpOperator(status, (operatorId) =>
+    sql(`update auth.users set email_confirmed_at=now() where id=${quote(operatorId)}`));
   sql(`begin;
     insert into auth.users(id,email,email_confirmed_at)
       select ('54010000-0000-4000-8000-'||lpad(n::text,12,'0'))::uuid,
-        'cohost-race-'||n||'@unc.edu',now() from generate_series(1,4) n;
+        'cohost-race-'||n||'@unc.edu',now() from generate_series(1,3) n;
     insert into storage.objects(bucket_id,name,owner_id)
       select 'profile-photos',id::text||'/primary.png',id::text
       from public.accounts where id::text like '54010000-%';
@@ -65,16 +76,18 @@ test("observed social-lock waits recheck cohost membership, authority and lifecy
       graduation_year=2028,bio='Local',primary_photo_path=user_id::text||'/primary.png'
       where user_id::text like '54010000-%';
     update private.hangout_feature_gate set enabled=true;
+    update private.pilot_availability set enabled=true;
+    update private.pilot_capabilities set enabled=true where key in ('onboarding','hangouts');
     insert into public.hangouts(id,university_id,host_id,title,starts_at,
       public_place,public_latitude,public_longitude)
       select ('54010000-0000-4000-8001-'||lpad(n::text,12,'0'))::uuid,
         '00000000-0000-4000-8000-000000000001','${uid(1)}',
         'Race '||n,now()+interval '1 hour','Area',35,-79
-      from generate_series(1,12) n;
+      from generate_series(1,13) n;
     insert into public.hangout_participants(hangout_id,account_id,state)
       select ('54010000-0000-4000-8001-'||lpad(h::text,12,'0'))::uuid,
         ('54010000-0000-4000-8000-'||lpad(n::text,12,'0'))::uuid,'joined'
-      from generate_series(1,12) h cross join generate_series(1,3) n;
+      from generate_series(1,13) h cross join generate_series(1,3) n;
     commit;`);
   try {
     await race("cohost_leave_promote",
@@ -158,19 +171,27 @@ test("observed social-lock waits recheck cohost membership, authority and lifecy
     assert.equal(sql(`select count(*) from private.hangout_disables where hangout_id='${hid(7)}'`), "1");
 
     sql(`begin; ${auth(1)} select public.promote_hangout_cohost('${hid(8)}','${uid(2)}',1); commit;`);
-    await race("cohost_actor_readiness_edit",
+    // TASK-027 permits confirmed campus participants to act without a photo.
+    await race("cohost_actor_optional_photo_edit",
       `update public.profiles set primary_photo_path=null where user_id='${uid(2)}';`,
-      `${auth(2)} select public.edit_hangout('${hid(8)}',2,'Forged',
+      `${auth(2)} select public.edit_hangout('${hid(8)}',2,'Photo optional',
         (select starts_at from public.hangouts where id='${hid(8)}'),'Area',35,-79);`,
-      /Hangout operation not permitted/);
+      null, false);
+    assert.equal(sql(`select title from public.hangouts where id='${hid(8)}'`), "Photo optional");
+    sql(`begin; ${auth(2)} select public.edit_hangout('${hid(8)}',3,'Photo still optional',
+      (select starts_at from public.hangouts where id='${hid(8)}'),'Area',35,-79); commit;`);
+    assert.equal(sql(`select title from public.hangouts where id='${hid(8)}'`), "Photo still optional");
     sql(`update public.profiles set primary_photo_path=user_id::text||'/primary.png'
       where user_id='${uid(2)}';`);
 
-    await race("cohost_target_readiness_promote",
+    await race("cohost_target_optional_photo_promote",
       `update public.profiles set primary_photo_path=null where user_id='${uid(3)}';`,
       `${auth(1)} select public.promote_hangout_cohost('${hid(9)}','${uid(3)}',1);`,
-      /Hangout operation not permitted/);
-    assert.equal(sql(`select count(*) from private.hangout_cohosts where hangout_id='${hid(9)}'`), "0");
+      null, false);
+    assert.equal(sql(`select count(*) from private.hangout_cohosts where hangout_id='${hid(9)}'`), "1");
+    sql(`begin; ${auth(1)} select public.promote_hangout_cohost('${hid(13)}','${uid(3)}',1); commit;`);
+    assert.equal(sql(`select count(*) from private.hangout_cohosts where hangout_id='${hid(13)}'
+      and account_id='${uid(3)}'`), "1", "committed photo detachment keeps promotion available");
     sql(`update public.profiles set primary_photo_path=user_id::text||'/primary.png'
       where user_id='${uid(3)}';`);
 
@@ -191,6 +212,8 @@ test("observed social-lock waits recheck cohost membership, authority and lifecy
       and high_id=greatest('${uid(1)}','${uid(3)}')::uuid`), "1");
     sql(`begin; ${auth(1)} select public.set_safety_block('${uid(3)}',false); commit;`);
   } finally {
+    sql(`update private.pilot_capabilities set enabled=false where key in ('onboarding','hangouts');
+      update private.pilot_availability set enabled=false;`);
     // Moderator disable evidence is immutable. The caller must reset this
     // disposable local database after the suite to clear its fixtures.
     sql(`update private.safety_feature_gate set enabled=false;

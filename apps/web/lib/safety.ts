@@ -1,8 +1,7 @@
 import "server-only";
-import { parseAppEnvironment } from "@pals/config";
 import { access } from "./access";
-import { authConfig } from "./config";
 import { globalConfirmationVersion } from "./safety-public";
+import { studentFeaturesAvailable } from "./feature-runtime";
 
 export const safetyId =
   /^[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}$/i;
@@ -21,11 +20,7 @@ export const safetyModes = ["user", "hangout", "hangout_host"] as const;
 export { globalConfirmationVersion };
 
 export function localSafetyAvailable() {
-  const config = authConfig();
-  return (
-    parseAppEnvironment(process.env.APP_ENV) === "local" &&
-    ["localhost", "127.0.0.1", "[::1]"].includes(new URL(config.url).hostname)
-  );
+  return studentFeaturesAvailable();
 }
 
 export async function safetyAccess(actor: string | null) {

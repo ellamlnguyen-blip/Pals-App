@@ -89,7 +89,10 @@ test("global blocks govern real Auth and PostgREST reads, writes and recovery", 
 
     db(`update private.hangout_feature_gate set enabled=true;
       update private.hangout_chat_feature_gate set enabled=true;
-      update private.notification_feature_gate set enabled=true;`);
+      update private.notification_feature_gate set enabled=true;
+      update private.pilot_availability set enabled=true;
+      update private.pilot_capabilities set enabled=true
+        where key in ('onboarding','hangouts','hangout_chat','notifications');`);
     const start = new Date(Date.now() + 3600_000).toISOString();
     const create = (title, privateText) => ({ p_request_id: crypto.randomUUID(), p_title: title,
       p_starts_at: start, p_public_place: "Campus area", p_public_latitude: 35.913,
@@ -173,6 +176,9 @@ test("global blocks govern real Auth and PostgREST reads, writes and recovery", 
       update private.notification_feature_gate set enabled=false;
       update private.hangout_chat_feature_gate set enabled=false;
       update private.hangout_feature_gate set enabled=false;
+      update private.pilot_capabilities set enabled=false
+        where key in ('onboarding','hangouts','hangout_chat','notifications');
+      update private.pilot_availability set enabled=false;
       delete from private.notification_items where recipient_id in (${ids}) or actor_id in (${ids});
       delete from private.notification_preferences where recipient_id in (${ids});
       delete from private.people_blocks where blocker_id in (${ids}) or blocked_id in (${ids});

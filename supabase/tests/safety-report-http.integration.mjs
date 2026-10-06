@@ -93,7 +93,10 @@ test("report RPC uses real caller authority, private receipt and retained source
     db(`update private.safety_feature_gate set enabled=true;
       update private.people_feature_gate set enabled=true;
       update private.hangout_feature_gate set enabled=true;
-      update private.friendship_feature_gate set enabled=true;`);
+      update private.friendship_feature_gate set enabled=true;
+      update private.pilot_availability set enabled=true;
+      update private.pilot_capabilities set enabled=true
+        where key in ('onboarding','hangouts','people','friendship');`);
     const current = receipt(await rpc(attendee.token,
       input(key1, "user", host.id, " HARASSMENT ", "  Plain allegation  ")));
     assert.deepEqual(receipt(await rpc(attendee.token,
@@ -180,6 +183,9 @@ test("report RPC uses real caller authority, private receipt and retained source
       update private.people_feature_gate set enabled=false;
       update private.hangout_feature_gate set enabled=false;
       update private.friendship_feature_gate set enabled=false;
+      update private.pilot_capabilities set enabled=false
+        where key in ('onboarding','hangouts','people','friendship');
+      update private.pilot_availability set enabled=false;
       delete from private.safety_report_requests where reporter_id in (${ids});
       delete from private.safety_reports where reporter_id in (${ids});
       delete from private.friendship_create_requests where actor_id in (${ids})

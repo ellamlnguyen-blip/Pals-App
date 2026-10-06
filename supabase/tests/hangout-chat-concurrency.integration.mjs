@@ -39,7 +39,9 @@ test("Hangout chat send serializes against committed revocation and holds readin
     update public.profiles set real_name='Chat race',major='Science',graduation_year=2028,
       bio='Local fixture',primary_photo_path=user_id::text||'/primary.png' where user_id in ('${actor}','${peer}');
     update private.hangout_feature_gate set enabled=true;
-    update private.hangout_chat_feature_gate set enabled=true;`);
+    update private.hangout_chat_feature_gate set enabled=true;
+    update private.pilot_availability set enabled=true;
+    update private.pilot_capabilities set enabled=true where key in ('onboarding','hangouts','hangout_chat');`);
   try {
     hangout = sql(`begin; ${claims(actor)} select public.create_hangout(
       '51310000-0000-4000-8000-000000000099','Chat race',now()+interval '1 hour','Area',35,-79); commit;`).split("\n").at(-1);
@@ -79,19 +81,24 @@ test("Hangout chat send serializes against committed revocation and holds readin
     }
     sql("update private.hangout_chat_feature_gate set enabled=true");
 
-    // Profile revocation committed before send's FOR SHARE lock denies it.
+    // A photo is optional for confirmed campus admission. The send succeeds
+    // after detachment whether it waits for the in-flight update or not.
     {
       const holder = session("chat_profile_holder"), waiter = session("chat_profile_waiter");
       try {
         holder.send(`begin; update public.profiles set primary_photo_path=null where user_id='${peer}'; select 'revoked';`);
         await until(() => holder.output().includes("revoked"));
-        waiter.send(send(3));
-        await waiting("chat_profile_waiter");
+        waiter.send(`${send(3)} select 'chat_after_photo_detach';`);
+        await until(() => waiter.output().includes("chat_after_photo_detach") ||
+          sql("select count(*) from pg_stat_activity where application_name='chat_profile_waiter' and wait_event_type='Lock'") === "1");
         holder.send("commit;"); holder.child.stdin.end(); waiter.child.stdin.end();
         await holder.done; await waiter.done;
-        assert.match(waiter.output(), /Hangout chat unavailable|Hangout operation not permitted/);
-        assert.equal(sql("select count(*) from private.hangout_messages"), "1");
+        assert.match(waiter.output(), /chat_after_photo_detach/);
+        assert.doesNotMatch(waiter.output(), /ERROR:/);
+        assert.equal(sql("select count(*) from private.hangout_messages"), "2");
       } finally { holder.child.kill(); waiter.child.kill(); }
+      assert.equal(sql(send(14)), "3", "a fresh send succeeds after committed photo detachment");
+      assert.equal(sql("select count(*) from private.hangout_messages"), "3");
     }
     sql(`update public.profiles set primary_photo_path=user_id::text||'/primary.png' where user_id='${peer}'`);
 
@@ -111,23 +118,26 @@ test("Hangout chat send serializes against committed revocation and holds readin
         holder.send("commit;"); holder.child.stdin.end(); waiter.child.stdin.end();
         await holder.done; await waiter.done;
         assert.match(waiter.output(), /Hangout chat unavailable|Hangout operation not permitted/, `${name} revocation wins`);
-        assert.equal(sql("select count(*) from private.hangout_messages"), "1");
+        assert.equal(sql("select count(*) from private.hangout_messages"), "3");
       } finally { holder.child.kill(); waiter.child.kill(); }
       sql(restore);
     }
 
-    // A profile/photo detachment begun after a completed send statement waits
-    // for the transaction-held profile and object evidence locks.
+    // A profile/photo detachment begun after a completed send statement does
+    // not invalidate that send; optional photo state may change independently.
     {
       const sender = session("chat_send_holds_photo"), writer = session("chat_photo_writer");
       try {
         sender.send(`begin; ${claims(peer)} select sequence from public.send_hangout_message('${hangout}','51310000-0000-4000-8001-000000000011','Race'); select 'sent';`);
         await until(() => sender.output().includes("sent"));
-        writer.send(`begin; update public.profiles set primary_photo_path=null where user_id='${peer}'; commit;`);
-        await waiting("chat_photo_writer");
+        writer.send(`begin; update public.profiles set primary_photo_path=null where user_id='${peer}'; commit; select 'photo_detached';`);
+        await until(() => writer.output().includes("photo_detached") ||
+          sql("select count(*) from pg_stat_activity where application_name='chat_photo_writer' and wait_event_type='Lock'") === "1");
         sender.send("commit;"); sender.child.stdin.end(); writer.child.stdin.end();
         await sender.done; await writer.done;
-        assert.equal(sql("select count(*) from private.hangout_messages"), "2");
+        assert.match(writer.output(), /photo_detached/);
+        assert.doesNotMatch(writer.output(), /ERROR:/);
+        assert.equal(sql("select count(*) from private.hangout_messages"), "4");
         assert.equal(sql(`select primary_photo_path is null from public.profiles where user_id='${peer}'`), "t");
       } finally { sender.child.kill(); writer.child.kill(); }
     }
@@ -158,7 +168,7 @@ test("Hangout chat send serializes against committed revocation and holds readin
         await waiting("chat_duplicate_second");
         first.send("commit;"); first.child.stdin.end(); second.child.stdin.end();
         await first.done; await second.done;
-        assert.equal(sql("select count(*) from private.hangout_messages"), "3");
+        assert.equal(sql("select count(*) from private.hangout_messages"), "5");
       } finally { first.child.kill(); second.child.kill(); }
     }
 
@@ -169,11 +179,14 @@ test("Hangout chat send serializes against committed revocation and holds readin
       try {
         sender.send(`begin; ${claims(peer)} select sequence from public.send_hangout_message('${hangout}','51310000-0000-4000-8001-000000000012','Race'); select 'sent';`);
         await until(() => sender.output().includes("sent"));
-        writer.send(`begin; update public.profiles set primary_photo_path='${peer}/replacement.png' where user_id='${peer}'; commit;`);
-        await waiting("chat_photo_replace_writer");
+        writer.send(`begin; update public.profiles set primary_photo_path='${peer}/replacement.png' where user_id='${peer}'; commit; select 'photo_replaced';`);
+        await until(() => writer.output().includes("photo_replaced") ||
+          sql("select count(*) from pg_stat_activity where application_name='chat_photo_replace_writer' and wait_event_type='Lock'") === "1");
         sender.send("commit;"); sender.child.stdin.end(); writer.child.stdin.end();
         await sender.done; await writer.done;
-        assert.equal(sql("select count(*) from private.hangout_messages"), "4");
+        assert.match(writer.output(), /photo_replaced/);
+        assert.doesNotMatch(writer.output(), /ERROR:/);
+        assert.equal(sql("select count(*) from private.hangout_messages"), "6");
         assert.equal(sql(`select primary_photo_path from public.profiles where user_id='${peer}'`), `${peer}/replacement.png`);
       } finally { sender.child.kill(); writer.child.kill(); }
     }
@@ -183,11 +196,12 @@ test("Hangout chat send serializes against committed revocation and holds readin
         sender.send(`begin; ${claims(peer)} select sequence from public.send_hangout_message('${hangout}','51310000-0000-4000-8001-000000000013','Race'); select 'sent';`);
         await until(() => sender.output().includes("sent"));
         deleter.send(`begin; set storage.allow_delete_query='true'; delete from storage.objects where bucket_id='profile-photos' and name='${peer}/replacement.png'; commit;`);
-        await waiting("chat_photo_delete_writer");
+        await until(() => /Detach a profile photo before deleting it/.test(deleter.output()) ||
+          sql("select count(*) from pg_stat_activity where application_name='chat_photo_delete_writer' and wait_event_type='Lock'") === "1");
         sender.send("commit;"); sender.child.stdin.end(); deleter.child.stdin.end();
         await sender.done; await deleter.done;
         assert.match(deleter.output(), /Detach a profile photo before deleting it/);
-        assert.equal(sql("select count(*) from private.hangout_messages"), "5");
+        assert.equal(sql("select count(*) from private.hangout_messages"), "7");
         assert.equal(sql(`select count(*) from storage.objects where bucket_id='profile-photos' and name='${peer}/replacement.png'`), "1");
       } finally { sender.child.kill(); deleter.child.kill(); }
     }
@@ -213,6 +227,8 @@ test("Hangout chat send serializes against committed revocation and holds readin
       assert.throws(() => sql(`begin isolation level ${isolation}; ${claims(peer)} select * from public.send_hangout_message('${hangout}','51310000-0000-4000-8001-000000000006','Race'); rollback;`), /Hangout chat unavailable|Safety operation unavailable/);
     }
   } finally {
+    sql(`update private.pilot_capabilities set enabled=false where key in ('onboarding','hangouts','hangout_chat');
+      update private.pilot_availability set enabled=false;`);
     sql(`update private.hangout_chat_feature_gate set enabled=false;
       update private.hangout_feature_gate set enabled=false;
       set chat.allow_fixture_cleanup='true';

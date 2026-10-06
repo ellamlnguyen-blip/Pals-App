@@ -36,7 +36,7 @@ export default async function PrivacyPage() {
           ← Back
         </Link>
         <section className="people-panel">
-          <p className="badge">People privacy · local only</p>
+          <p className="badge">People privacy</p>
           <h1>Your People visibility</h1>
           <p>
             Browsing People does not require sharing your profile. Your choice
@@ -59,12 +59,14 @@ export default async function PrivacyPage() {
                   <h2>What other eligible students would see</h2>
                   <dl>
                     <dt>Card and detail</dt>
-                    <dd>Real name: {profile.real_name}</dd>
+                    <dd>Real name: {profile.real_name || "Not added"}</dd>
                     <dd>Campus: University of North Carolina at Chapel Hill</dd>
-                    <dd>Graduation year: {profile.graduation_year}</dd>
-                    <dd>Major: {profile.major}</dd>
+                    <dd>
+                      Graduation year: {profile.graduation_year ?? "Not added"}
+                    </dd>
+                    <dd>Major: {profile.major || "Not added"}</dd>
                     <dt>Detail only</dt>
-                    <dd>Bio: {profile.bio}</dd>
+                    <dd>Bio: {profile.bio || "Not added"}</dd>
                     <dd>
                       Interests: {profile.interests?.join(", ") || "Not added"}
                     </dd>
@@ -74,9 +76,12 @@ export default async function PrivacyPage() {
                     </dd>
                   </dl>
                   <p>
-                    Future edits to these fields are also shared while your
-                    choice is on and your account is ready. Photos, email, and
-                    other profile fields stay private.
+                    Opting in does not make an incomplete profile visible.
+                    People can see your profile only after your real name,
+                    graduation year, major, and bio are usable, while your
+                    choice remains on and your account is ready. Future edits to
+                    these fields are shared under the same rule. Photos, email,
+                    and other profile fields stay private.
                   </p>
                 </div>
               )}
@@ -97,8 +102,9 @@ export default async function PrivacyPage() {
               />
               {state !== "ready" && (
                 <p className="help">
-                  You can turn sharing off now. Turning it on requires a
-                  complete, verified profile and local People access.
+                  You can turn sharing off now. Turning it on requires current
+                  account access; your profile remains hidden until your real
+                  name, graduation year, major, and bio are usable.
                 </p>
               )}
             </>

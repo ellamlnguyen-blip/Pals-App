@@ -41,9 +41,9 @@ select throws_ok($$select public.read_hangout_messages('b2100000-0000-4000-8000-
 reset role;
 update private.pilot_capabilities set enabled=true where key='hangouts';update private.pilot_account_admission set state='revoked' where account_id='b2000000-0000-4000-8000-000000000003';
 set local role authenticated;set local request.jwt.claims='{"sub":"b2000000-0000-4000-8000-000000000002","role":"authenticated","admitted":true}';
-select is((select count(*) from public.hangout_participants)::integer,3,'S3 revoked peer omitted');
+select is((select count(*) from public.hangout_participants)::integer,4,'S3 roster revocation does not hide ready peer');
 select is((select count(*) from public.list_hangout_roster_roles('b2100000-0000-4000-8000-000000000001',null,1))::integer,1,'S4 role limit1');
-select is((select author_id from public.read_hangout_messages('b2100000-0000-4000-8000-000000000001',null,1)),null::uuid,'S5 revoked author ID masked');select is((select body from public.read_hangout_messages('b2100000-0000-4000-8000-000000000001',null,1)),'Stored former body','S5 unblocked former body remains');select is((select author_label from public.read_hangout_messages('b2100000-0000-4000-8000-000000000001',null,1)),'Former participant','S5 former label');
+select is((select author_id from public.read_hangout_messages('b2100000-0000-4000-8000-000000000001',null,1)),'b2000000-0000-4000-8000-000000000003'::uuid,'S5 ready author remains identified despite roster state');select is((select body from public.read_hangout_messages('b2100000-0000-4000-8000-000000000001',null,1)),'Stored former body','S5 unblocked former body remains');select is((select author_label from public.read_hangout_messages('b2100000-0000-4000-8000-000000000001',null,1)),null::text,'S5 ready author does not get former label');
 set local role authenticated;set local request.jwt.claims='{"sub":"b2000000-0000-4000-8000-000000000001","role":"authenticated","admitted":true}';
 select is(public.get_hangout_participant_state('b2100000-0000-4000-8000-000000000001','b2000000-0000-4000-8000-000000000003'),'joined','S3 host retained known state');select is((select account_id from public.list_hangout_cohosts('b2100000-0000-4000-8000-000000000001',null,1)),'b2000000-0000-4000-8000-000000000003'::uuid,'S3 retained assignment ID');
 set local role authenticated;set local request.jwt.claims='{"sub":"b2000000-0000-4000-8000-000000000002","role":"authenticated","admitted":true}';
@@ -58,18 +58,18 @@ select throws_ok($$select public.read_hangout_messages('b2100000-0000-4000-8000-
 reset role;
 update private.pilot_account_admission set state='revoked' where account_id='b2000000-0000-4000-8000-000000000001';
 set local role authenticated;set local request.jwt.claims='{"sub":"b2000000-0000-4000-8000-000000000005","role":"authenticated"}';
-select throws_ok($$select public.submit_safety_report('b2300000-0000-4000-8000-000000000090','hangout','b2100000-0000-4000-8000-000000000001','harassment')$$,'42501','Safety report unavailable','S8 ordinary current Hangout revoked host');
+select lives_ok($$select public.submit_safety_report('b2300000-0000-4000-8000-000000000090','hangout','b2100000-0000-4000-8000-000000000001','harassment')$$,'S8 roster state leaves current Hangout reportable');
 reset role;
 
 set local role authenticated;set local request.jwt.claims='{"sub":"b2000000-0000-4000-8000-000000000002","role":"authenticated","admitted":true}';
-select is((select count(*) from public.hangouts)::integer,0,'S2 revoked host whole source');
-select is((select count(*) from public.hangout_private_locations)::integer,0,'S2 revoked host private');
-select is((select count(*) from public.hangout_participants)::integer,0,'S2 revoked host roster');
-select throws_ok($$select public.read_hangout_messages('b2100000-0000-4000-8000-000000000001')$$,'42501','Hangout chat unavailable','S2 revoked host chat');
-select is((select jsonb_array_length(public.query_saved_hangouts(-79.12,35.86,-79.0,35.96,'all','any',clock_timestamp())->'pins'))::integer,0,'S6 revoked host map');
+select is((select count(*) from public.hangouts)::integer,1,'S2 roster state does not hide live source');
+select is((select count(*) from public.hangout_private_locations)::integer,1,'S2 roster state does not hide authorized private place');
+select is((select count(*) from public.hangout_participants)::integer,3,'S2 roster state does not hide authorized participants');
+select lives_ok($$select public.read_hangout_messages('b2100000-0000-4000-8000-000000000001')$$,'S2 roster state leaves chat readable');
+select is((select jsonb_array_length(public.query_saved_hangouts(-79.12,35.86,-79.0,35.96,'all','any',clock_timestamp())->'pins'))::integer,1,'S6 roster state does not hide eligible map pin');
 select is(public.get_hangout_participant_state('b2100000-0000-4000-8000-000000000001','b2000000-0000-4000-8000-000000000002'),'joined','S7 own retained state despite host revoke');
 set local role authenticated;set local request.jwt.claims='{"sub":"b2000000-0000-4000-8000-000000000001","role":"authenticated","admitted":true}';
-select throws_ok($$select public.list_hangout_cohosts('b2100000-0000-4000-8000-000000000001')$$,'42501','Hangout operation not permitted','S3 revoked host assignments deny');
+select lives_ok($$select public.list_hangout_cohosts('b2100000-0000-4000-8000-000000000001')$$,'S3 roster state leaves assignments readable');
 reset role;
 update private.pilot_account_admission set state='active' where account_id='b2000000-0000-4000-8000-000000000001';
 set local role authenticated;set local request.jwt.claims='{"sub":"b2000000-0000-4000-8000-000000000002","role":"authenticated","admitted":true}';
@@ -82,8 +82,8 @@ reset role;
 reset role;
 delete from private.pilot_account_admission where account_id='b2000000-0000-4000-8000-000000000001';
 set local role authenticated;set local request.jwt.claims='{"sub":"b2000000-0000-4000-8000-000000000002","role":"authenticated"}';
-select is((select count(*)::integer from public.hangouts),0,'S2 host absent roster hides source');
-select is((select count(*)::integer from public.hangout_private_locations),0,'S2 host absent roster hides private');
+select is((select count(*)::integer from public.hangouts),1,'S2 absent roster does not hide live source');
+select is((select count(*)::integer from public.hangout_private_locations),1,'S2 absent roster does not hide authorized private place');
 reset role;
 insert into private.pilot_account_admission(account_id,state,revision) values('b2000000-0000-4000-8000-000000000001','active',1);
 reset role;
@@ -124,15 +124,15 @@ update public.universities set active=true where id='00000000-0000-4000-8000-000
 reset role;
 update public.profiles set bio=null where user_id='b2000000-0000-4000-8000-000000000001';
 set local role authenticated;set local request.jwt.claims='{"sub":"b2000000-0000-4000-8000-000000000002","role":"authenticated"}';
-select is((select count(*)::integer from public.hangouts),0,'S2 host incomplete profile hides source');
-select is((select count(*)::integer from public.hangout_private_locations),0,'S2 host incomplete profile hides private');
+select is((select count(*)::integer from public.hangouts),1,'S2 host incomplete profile retains source');
+select is((select count(*)::integer from public.hangout_private_locations),1,'S2 host incomplete profile retains private');
 reset role;
 update public.profiles set bio='Local' where user_id='b2000000-0000-4000-8000-000000000001';
 reset role;
 update storage.objects set owner_id='b2000000-0000-4000-8000-000000000002' where name='b2000000-0000-4000-8000-000000000001/11111111.png';
 set local role authenticated;set local request.jwt.claims='{"sub":"b2000000-0000-4000-8000-000000000002","role":"authenticated"}';
-select is((select count(*)::integer from public.hangouts),0,'S2 host nonowned primary hides source');
-select is((select count(*)::integer from public.hangout_private_locations),0,'S2 host nonowned primary hides private');
+select is((select count(*)::integer from public.hangouts),1,'S2 host nonowned primary retains source');
+select is((select count(*)::integer from public.hangout_private_locations),1,'S2 host nonowned primary retains private');
 reset role;
 update storage.objects set owner_id='b2000000-0000-4000-8000-000000000001' where name='b2000000-0000-4000-8000-000000000001/11111111.png';
 delete from private.pilot_capabilities where key='hangouts';
@@ -147,7 +147,7 @@ select is((select count(*)::integer from public.hangout_private_locations),0,'S2
 reset role;
 update private.pilot_account_admission set state='revoked' where account_id='b2000000-0000-4000-8000-000000000001';
 set local role authenticated;
-select is((select count(*)::integer from public.hangouts),0,'S2 revoked host hides cancelled source');
+select is((select count(*)::integer from public.hangouts),1,'S2 roster state does not hide retained cancelled source');
 reset role;
 update private.pilot_account_admission set state='active' where account_id='b2000000-0000-4000-8000-000000000001';
 update private.people_feature_gate set enabled=true;
@@ -170,7 +170,13 @@ select throws_ok($$select public.submit_safety_report('b2300000-0000-4000-8000-0
 select throws_ok($$select public.submit_safety_report('b2300000-0000-4000-8000-000000000002','user','b2000000-0000-4000-8000-000000000007','harassment')$$,'42501','Safety report unavailable','S8 no evidence target');
 reset role;
 insert into public.platform_roles(user_id,role) values('b2000000-0000-4000-8000-000000000006','moderator');
-set local role authenticated;set local request.jwt.claims='{"sub":"b2000000-0000-4000-8000-000000000006","role":"authenticated","admitted":true}';
+-- SQL-role fixture: live Auth rows model a verified operator session; HTTP uses real TOTP.
+insert into auth.mfa_factors(id,user_id,factor_type,status,created_at,updated_at) values
+ ('8eefc3cc-82c2-9afd-fec6-853f3386f70b','b2000000-0000-4000-8000-000000000006','totp','verified',now(),now());
+insert into auth.sessions(id,user_id,factor_id,aal) values
+ ('2d37a13d-4b6d-dcb7-3923-12d2e0ef6ddc','b2000000-0000-4000-8000-000000000006','8eefc3cc-82c2-9afd-fec6-853f3386f70b','aal2');
+
+set local role authenticated;set local request.jwt.claims='{"sub":"b2000000-0000-4000-8000-000000000006","role":"authenticated","admitted":true,"aal":"aal2","session_id":"2d37a13d-4b6d-dcb7-3923-12d2e0ef6ddc"}';
 select is((select count(*) from public.list_moderation_reports(null,null,1))::integer,1,'S9 unadmitted moderator shutdown queue');
 select lives_ok($$select public.get_moderation_report((select report_id from public.list_moderation_reports(null,null,1)))$$,'S9 report-only detail');
 select is((select count(*) from public.hangouts)::integer,0,'S9 operator no broad source');

@@ -39,6 +39,8 @@ test("People pair serialization and post-wait revocation", async () => {
     update public.profiles set real_name='Ready person',major='Science',graduation_year=2028,
       bio='Local fixture',primary_photo_path=user_id::text||'/primary.png'
       where user_id in ('${first}','${second}');
+    update private.pilot_availability set enabled=true;
+    update private.pilot_capabilities set enabled=true where key in ('onboarding','people');
     update private.people_feature_gate set enabled=true; update private.safety_feature_gate set enabled=true;
     insert into private.people_preferences(account_id,opted_in) values ('${first}',true),('${second}',true);`);
   try {
@@ -74,7 +76,9 @@ test("People pair serialization and post-wait revocation", async () => {
         select public.get_people_preference(); rollback;`), /People operation unavailable/);
     }
   } finally {
-    sql(`update private.people_feature_gate set enabled=false; update private.safety_feature_gate set enabled=false;
+    sql(`update private.pilot_availability set enabled=false;
+      update private.pilot_capabilities set enabled=false where key in ('onboarding','people');
+      update private.people_feature_gate set enabled=false; update private.safety_feature_gate set enabled=false;
       delete from private.people_blocks where blocker_id in ('${first}','${second}') or blocked_id in ('${first}','${second}');
       delete from private.people_preferences where account_id in ('${first}','${second}');
       delete from auth.users where id in ('${first}','${second}');
