@@ -5,10 +5,16 @@ endpoint. Immutable moderation evidence requires a fresh local reset afterward.
 """
 
 import concurrent.futures
+import base64
 import datetime
+import hashlib
+import hmac
 import json
 import os
+import struct
+import subprocess
 import time
+import urllib.request
 import uuid
 
 import psycopg
@@ -21,8 +27,51 @@ if "@127.0.0.1:54322/" not in DSN:
 HOST = uuid.UUID("53900000-0000-4000-8000-000000000001")
 OWNER = uuid.UUID("53900000-0000-4000-8000-000000000002")
 MODERATOR = uuid.UUID("53900000-0000-4000-8000-000000000003")
+MODERATOR_CLAIMS = None
 CAMPUS = uuid.UUID("00000000-0000-4000-8000-000000000001")
 REPORTS = {}
+
+
+def genuine_mfa_moderator():
+    cli = os.environ.get("PALS_SUPABASE_CLI", "supabase")
+    status = json.loads(subprocess.run([cli, "status", "-o", "json"],
+                                     capture_output=True, text=True, check=True).stdout)
+    assert status["API_URL"] == "http://127.0.0.1:54321", "Disposable local Auth only"
+    key = status.get("PUBLISHABLE_KEY") or status["ANON_KEY"]
+
+    def auth(path, body, token=None):
+        request = urllib.request.Request(status["API_URL"] + path,
+            data=json.dumps(body).encode(), method="POST",
+            headers={"apikey": key, "Authorization": "Bearer " + (token or key),
+                     "Content-Type": "application/json"})
+        with urllib.request.urlopen(request, timeout=10) as response:
+            assert response.status == 200, f"Local Auth {path} failed"
+            return json.load(response)
+
+    email = f"attendance-mfa-{uuid.uuid4()}@unc.edu"
+    password = f"Local-only-{uuid.uuid4()}"
+    created = auth("/auth/v1/signup", {"email": email, "password": password})
+    ident = uuid.UUID((created.get("user") or created)["id"])
+    with root() as conn:
+        conn.execute("update auth.users set email_confirmed_at=now() where id=%s", (ident,))
+    login = auth("/auth/v1/token?grant_type=password", {"email": email, "password": password})
+    aal1 = login["access_token"]
+    factor = auth("/auth/v1/factors", {"factor_type": "totp"}, aal1)
+    challenge = auth(f"/auth/v1/factors/{factor['id']}/challenge", {}, aal1)
+    secret = factor["totp"]["secret"]
+    secret_bytes = base64.b32decode(secret + "=" * ((-len(secret)) % 8), casefold=True)
+    counter = struct.pack(">Q", int(time.time() // 30))
+    digest = hmac.new(secret_bytes, counter, hashlib.sha1).digest()
+    offset = digest[-1] & 15
+    code = f"{(struct.unpack('>I', digest[offset:offset + 4])[0] & 0x7fffffff) % 1000000:06d}"
+    verified = auth(f"/auth/v1/factors/{factor['id']}/verify",
+                    {"challenge_id": challenge["id"], "code": code}, aal1)
+    token = verified["access_token"]
+    payload = token.split(".")[1]
+    claims = json.loads(base64.urlsafe_b64decode(payload + "=" * ((-len(payload)) % 4)))
+    assert claims["sub"] == str(ident) and claims["role"] == "authenticated"
+    assert claims["aal"] == "aal2" and uuid.UUID(claims["session_id"])
+    return ident, claims
 
 
 def root():
@@ -39,8 +88,10 @@ def student():
 
 
 def setup():
+    global MODERATOR, MODERATOR_CLAIMS
+    MODERATOR, MODERATOR_CLAIMS = genuine_mfa_moderator()
     with root() as c:
-        for ident in (HOST, OWNER, MODERATOR):
+        for ident in (HOST, OWNER):
             c.execute("insert into auth.users(id,email,email_confirmed_at) values(%s,%s,clock_timestamp())",
                       (ident, f"attendance-concurrency-{ident.int % 10}@unc.edu"))
             c.execute("""insert into storage.objects(bucket_id,name,owner_id)
@@ -49,6 +100,8 @@ def setup():
               graduation_year=2028,bio='Local fixture',primary_photo_path=%s where user_id=%s""",
                       (str(ident) + "/primary.png", ident))
         c.execute("insert into public.platform_roles(user_id,role) values(%s,'moderator')", (MODERATOR,))
+        c.execute("update private.pilot_availability set enabled=true")
+        c.execute("update private.pilot_capabilities set enabled=true where key='hangouts'")
         c.execute("update private.hangout_feature_gate set enabled=true")
         c.execute("update private.attendance_feature_gate set enabled=true")
         c.execute("update private.moderation_feature_gate set enabled=true")
@@ -99,7 +152,7 @@ def change(conn, kind, hangout):
     elif kind == "sanction":
         conn.execute("set local role authenticated")
         conn.execute("select set_config('request.jwt.claims',%s,true)",
-                     (json.dumps({"sub": str(MODERATOR), "role": "authenticated"}),))
+                     (json.dumps(MODERATOR_CLAIMS),))
         conn.execute("""select * from public.apply_account_moderation_action(
           %s,%s,1,'suspend','Race fixture')""", (REPORTS[hangout], uuid.uuid4()))
     elif kind == "leave":
@@ -131,7 +184,7 @@ def change(conn, kind, hangout):
     elif kind == "disable":
         conn.execute("set local role authenticated")
         conn.execute("select set_config('request.jwt.claims',%s,true)",
-                     (json.dumps({"sub": str(MODERATOR), "role": "authenticated"}),))
+                     (json.dumps(MODERATOR_CLAIMS),))
         conn.execute("select * from public.apply_hangout_moderation_action(%s,%s,1,'Race fixture')",
                      (REPORTS[hangout], uuid.uuid4()))
     else:
@@ -304,6 +357,8 @@ def cleanup():
         c.execute("update private.attendance_feature_gate set enabled=false")
         c.execute("update private.hangout_feature_gate set enabled=false")
         c.execute("update private.moderation_feature_gate set enabled=false")
+        c.execute("update private.pilot_capabilities set enabled=false where key='hangouts'")
+        c.execute("update private.pilot_availability set enabled=false")
         # Moderation evidence is intentionally immutable. The caller must run
         # a disposable local database reset to remove this suite's fixtures.
         if REPORTS:

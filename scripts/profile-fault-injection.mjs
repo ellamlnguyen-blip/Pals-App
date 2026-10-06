@@ -19,6 +19,22 @@ if (file && process.env.APP_ENV === "local") {
       url.includes(next.path)
     ) {
       fs.writeFileSync(file, JSON.stringify(queue.slice(1)), { mode: 0o600 });
+      if (next.holdAfterResponse) {
+        const response = await original(input, init);
+        // The clone consumes the real PostgREST response before the page may
+        // continue, so the test can commit a revocation without a DB lock.
+        await response.clone().arrayBuffer();
+        fs.writeFileSync(`${file}.response-reached`, "reached", {
+          mode: 0o600,
+        });
+        const deadline = Date.now() + 30_000;
+        while (!fs.existsSync(`${file}.response-release`)) {
+          if (Date.now() >= deadline)
+            throw new Error("Local response hold timed out");
+          await new Promise((resolve) => setTimeout(resolve, 25));
+        }
+        return response;
+      }
       if (next.afterCommit) {
         const response = await original(input, init);
         await response.arrayBuffer();

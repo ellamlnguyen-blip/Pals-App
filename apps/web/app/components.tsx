@@ -3,15 +3,17 @@ import { localHangoutsAvailable } from "../lib/hangouts";
 import { localAttendanceAvailable } from "../lib/attendance";
 import { localPeopleAvailable } from "../lib/people";
 import { localNotificationsAvailable } from "../lib/notifications";
-import { StudentHeader, StudentNav } from "./student-shell";
+import { StudentHeader } from "./student-shell";
 export function Frame({
   children,
   signedIn = false,
   navigation = false,
+  ownerPhotoRevision,
 }: {
   children: ReactNode;
   signedIn?: boolean;
   navigation?: boolean;
+  ownerPhotoRevision?: number | null;
 }) {
   return (
     <div className="page">
@@ -21,18 +23,19 @@ export function Frame({
       <StudentHeader
         signedIn={signedIn}
         accountReady={navigation}
+        ownerPhotoRevision={ownerPhotoRevision}
         attendanceAvailable={signedIn && localAttendanceAvailable()}
+        available={
+          navigation
+            ? {
+                calendar: localHangoutsAvailable(),
+                people: localPeopleAvailable(),
+                chats: localHangoutsAvailable(),
+                notifications: localNotificationsAvailable(),
+              }
+            : undefined
+        }
       />
-      {navigation && (
-        <StudentNav
-          available={{
-            calendar: localHangoutsAvailable(),
-            people: localPeopleAvailable(),
-            chats: localHangoutsAvailable(),
-            notifications: localNotificationsAvailable(),
-          }}
-        />
-      )}
       <main id="main" tabIndex={-1}>
         {children}
       </main>

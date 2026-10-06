@@ -10,9 +10,9 @@ export default async function PilotPending() {
     <Frame signedIn>
       <section className="welcome">
         <Intro title="Your email is confirmed.">
-          Pals is preparing its UNC pilot. Access is limited while the pilot is
-          being set up, so hangouts and other student features aren’t available
-          for this account yet.
+          Pals is not open at UNC yet. When the launch opens, an active account
+          with a confirmed email from an approved UNC domain can get started. No
+          roster or completed profile is required.
         </Intro>
       </section>
     </Frame>

@@ -2,6 +2,11 @@
 import { useEffect, useRef, useState } from "react";
 import type { Map as MapboxMap, Marker } from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import {
+  campusViewport,
+  readViewport,
+  rememberViewport,
+} from "./browse-context";
 import { UNC_CENTER, campusLocation } from "../fixtures";
 import {
   UNC_BOUNDS,
@@ -15,12 +20,14 @@ export function SavedMap({
   selected,
   onSelect,
   onBounds,
+  onSettled,
 }: {
   token: string;
   items: SavedPin[];
   selected: string | null;
   onSelect: (id: string, trigger: HTMLElement) => void;
   onBounds: (bounds: Bounds | null) => void;
+  onSettled: () => void;
 }) {
   const container = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapboxMap | null>(null);
@@ -28,6 +35,8 @@ export function SavedMap({
   const selectedRef = useRef(selected);
   const callback = useRef(onBounds);
   const choose = useRef(onSelect);
+  const settled = useRef(onSettled);
+  const located = useRef(false);
   const [state, setState] = useState<"loading" | "ready" | "error">("loading");
   const [attempt, setAttempt] = useState(0);
   const [message, setMessage] = useState(
@@ -36,27 +45,33 @@ export function SavedMap({
   useEffect(() => {
     callback.current = onBounds;
     choose.current = onSelect;
-  }, [onBounds, onSelect]);
+    settled.current = onSettled;
+  }, [onBounds, onSelect, onSettled]);
   useEffect(() => {
     if (!token.startsWith("pk.") || !container.current) {
       setState("error");
+      settled.current();
       return;
     }
     const activeMarkers = markers.current;
     let disposed = false;
     let map: MapboxMap | undefined;
     const deadline = window.setTimeout(() => {
-      if (!disposed) setState("error");
+      if (!disposed) {
+        setState("error");
+        settled.current();
+      }
     }, 20000);
     async function initialize() {
       const mapbox = (await import("mapbox-gl")).default;
       if (disposed || !container.current) return;
+      const previous = readViewport();
       map = new mapbox.Map({
         container: container.current,
         accessToken: token,
         style: "mapbox://styles/mapbox/light-v11",
-        center: UNC_CENTER,
-        zoom: 14,
+        center: previous ? [previous.longitude, previous.latitude] : UNC_CENTER,
+        zoom: previous?.zoom ?? 14,
         minZoom: 10,
         maxZoom: 19,
         attributionControl: true,
@@ -84,6 +99,21 @@ export function SavedMap({
           east: Math.min(UNC_BOUNDS.east, b.getEast()),
           north: Math.min(UNC_BOUNDS.north, b.getNorth()),
         };
+        // Remember only a coarse, campus-bounded manually explored camera.
+        // Locate-me orientation is excluded from return memory.
+        if (!located.current) {
+          const center = map.getCenter();
+          rememberViewport(
+            campusViewport(
+              {
+                longitude: center.lng,
+                latitude: center.lat,
+                zoom: map.getZoom(),
+              },
+              UNC_BOUNDS,
+            ),
+          );
+        }
         callback.current(
           bounds.west < bounds.east && bounds.south < bounds.north
             ? bounds
@@ -95,17 +125,25 @@ export function SavedMap({
         window.clearTimeout(deadline);
         setState("ready");
         moved();
+        settled.current();
+      });
+      map.on("dragstart", () => {
+        located.current = false;
       });
       map.on("moveend", moved);
       map.on("error", () => {
         if (!disposed) {
           window.clearTimeout(deadline);
           setState("error");
+          settled.current();
         }
       });
     }
     void initialize().catch(() => {
-      if (!disposed) setState("error");
+      if (!disposed) {
+        setState("error");
+        settled.current();
+      }
     });
     return () => {
       disposed = true;
@@ -172,6 +210,8 @@ export function SavedMap({
           position.coords.longitude,
           position.coords.latitude,
         );
+        located.current = true;
+        rememberViewport(null);
         map.jumpTo({ center: center ?? UNC_CENTER, zoom: 15 });
         setMessage(
           center
@@ -190,9 +230,10 @@ export function SavedMap({
         <button
           className="quiet-button"
           disabled={!ready}
-          onClick={() =>
-            mapRef.current?.jumpTo({ center: UNC_CENTER, zoom: 14 })
-          }
+          onClick={() => {
+            located.current = false;
+            mapRef.current?.jumpTo({ center: UNC_CENTER, zoom: 14 });
+          }}
         >
           Back to UNC
         </button>

@@ -48,7 +48,7 @@ export default async function SavedDetailPage({
       <Frame signedIn navigation>
         <div className="saved-detail">
           <Link href="/hangouts/saved">← Saved Hangouts</Link>
-          <p className="badge">Saved Hangout · local only</p>
+          <p className="badge">Saved Hangout</p>
           <h1>
             {result.kind === "missing"
               ? "Hangout not found"
@@ -74,7 +74,7 @@ export default async function SavedDetailPage({
       <HostDetailBoundary key={`${id}:${record.revision}`}>
         <div className="saved-detail">
           <Link href="/hangouts/saved">← Saved Hangouts</Link>
-          <p className="badge">Saved Hangout · local only</p>
+          <p className="badge">Saved Hangout</p>
           <h1>{record.title}</h1>
           <SafetyActions
             actor={result.userId}
