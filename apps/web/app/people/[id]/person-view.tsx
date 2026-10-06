@@ -37,18 +37,28 @@ export function PersonView({
   }, []);
   if (cleared)
     return (
-      <section className="people-panel" role="status">
-        <h1 ref={clearedHeading} tabIndex={-1}>
-          Checking People access
-        </h1>
-        <p>{message || "Checking the latest People access…"}</p>
-        <div className="people-dialog-actions">
-          {/* A full navigation fetches the latest outbound block list. */}
-          {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
-          <a href="/people/privacy">Check outbound blocked IDs</a>
-          <a href={back}>Return to People</a>
-        </div>
-      </section>
+      <article className="people-profile">
+        <ProfileTopbar
+          back={back}
+          backLabel="Back to People"
+          available={available}
+          attendanceAvailable={attendanceAvailable}
+        >
+          <p>Check your current People access from the menu.</p>
+        </ProfileTopbar>
+        <section className="people-panel" role="status">
+          <h1 ref={clearedHeading} tabIndex={-1}>
+            Checking People access
+          </h1>
+          <p>{message || "Checking the latest People access…"}</p>
+          <div className="people-dialog-actions">
+            {/* A full navigation fetches the latest outbound block list. */}
+            {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
+            <a href="/people/privacy">Check outbound blocked IDs</a>
+            <a href={back}>Return to People</a>
+          </div>
+        </section>
+      </article>
     );
   return (
     <article className="people-profile">

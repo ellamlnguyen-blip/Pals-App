@@ -13,7 +13,6 @@ export function ProfileOptions({ children }: { children: ReactNode }) {
     function closeOnOutside(event: MouseEvent) {
       if (!container.current?.contains(event.target as Node)) {
         setOpen(false);
-        requestAnimationFrame(() => trigger.current?.focus());
       }
     }
     function closeOnEscape(event: KeyboardEvent) {

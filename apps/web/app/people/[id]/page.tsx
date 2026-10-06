@@ -43,7 +43,7 @@ export default async function PersonPage({
   const detail = (result.data?.[0] ?? null) as PeopleDetail | null;
   const friendship = detail ? await readFriendship(id) : null;
   return (
-    <Frame signedIn navigation profileChrome>
+    <Frame signedIn navigation profileChrome={!!detail && !result.error}>
       <div className="people-detail">
         {result.error ? (
           <section className="people-panel">
