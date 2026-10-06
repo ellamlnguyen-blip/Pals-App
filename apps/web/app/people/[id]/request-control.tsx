@@ -110,7 +110,9 @@ export function RequestControl({
       className="people-preview dm-request"
       aria-labelledby="request-heading"
     >
-      <h2 id="request-heading">Say hello</h2>
+      <h2 id="request-heading" tabIndex={-1}>
+        Say hello
+      </h2>
       <p>
         One first message goes to their Requests. You cannot keep chatting
         unless they accept or reply. They can ignore it.

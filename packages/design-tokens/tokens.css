@@ -9,6 +9,10 @@
   --pals-muted: #4a6377;
   --pals-accent: #245b80;
   --pals-accent-soft: #eff8ff;
+  /* Profile actions and blue text meet AA on white and the profile soft surface. */
+  --pals-profile-action: #276da9;
+  --pals-profile-text-blue: #326b9d;
+  --pals-profile-soft: #eaf5fc;
   --pals-line: #d4e6f4;
   --pals-focus: #174e79;
   --pals-font-display: "Baloo 2", "Nunito Variable", ui-rounded, sans-serif;

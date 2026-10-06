@@ -7,23 +7,28 @@ import { FriendControl } from "../friend-control";
 import type { FriendshipResult } from "../friend-actions";
 import { AnalyticsView } from "../../analytics-view";
 import { ProfileSummary } from "../../profile/profile-summary";
+import { ProfileTopbar } from "../../profile/profile-topbar";
+import type { StudentDestinations } from "../../student-shell";
 
 export function PersonView({
   detail,
   back,
   friendship,
   actor,
+  available,
+  attendanceAvailable,
 }: {
   detail: PeopleDetail;
   back: string;
   friendship: FriendshipResult;
   actor: string;
+  available: StudentDestinations;
+  attendanceAvailable: boolean;
 }) {
   const profileHeading = useRef<HTMLHeadingElement>(null),
     clearedHeading = useRef<HTMLHeadingElement>(null);
   const [cleared, setCleared] = useState(false),
     [message, setMessage] = useState("");
-  const [optionsOpen, setOptionsOpen] = useState(false);
   useEffect(() => {
     if (cleared) clearedHeading.current?.focus();
   }, [cleared]);
@@ -48,53 +53,58 @@ export function PersonView({
   return (
     <article className="people-profile">
       <AnalyticsView event="people_profile_viewed" />
-      <nav className="profile-topbar" aria-label="Profile controls">
-        <a href={back} aria-label="Back to People">
-          ← <span>Back</span>
-        </a>
-        <span className="profile-topbar-title">Pals</span>
-        <button
-          type="button"
-          aria-expanded={optionsOpen}
-          aria-controls="peer-profile-options"
-          onClick={() => setOptionsOpen(!optionsOpen)}
-          aria-label="Profile options"
-        >
-          •••
-        </button>
-      </nav>
-      {optionsOpen && (
-        <div className="profile-options" id="peer-profile-options">
-          <p>
-            Only text this person chose to share appears here. Photos and
-            conversation prompts are private.
-          </p>
-          <SafetyActions
-            actor={actor}
-            target={{ mode: "user", id: detail.account_id }}
-            allowBlock
-            onBlockConfirmed={() => {
-              setMessage("Block confirmed. Check your outbound IDs in Safety.");
-              setCleared(true);
-            }}
-          />
-        </div>
-      )}
-      <div
-        className="peer-photo-placeholder"
-        aria-label="Profile photos are private"
+      <ProfileTopbar
+        back={back}
+        backLabel="Back to People"
+        available={available}
+        attendanceAvailable={attendanceAvailable}
       >
-        <span aria-hidden="true">✦</span>
-        <p>Get to know each other through a Hangout</p>
-      </div>
+        <p>
+          Only text this person chose to share appears here. Photos and
+          conversation prompts are private.
+        </p>
+        <SafetyActions
+          actor={actor}
+          target={{ mode: "user", id: detail.account_id }}
+          allowBlock
+          onBlockConfirmed={() => {
+            setMessage("Block confirmed. Check your outbound IDs in Safety.");
+            setCleared(true);
+          }}
+        />
+      </ProfileTopbar>
       <ProfileSummary
         name={detail.real_name}
         bio={detail.bio}
         campus={detail.campus_name}
         major={detail.major}
         graduationYear={detail.graduation_year}
+        verified
         headingRef={profileHeading}
       />
+      <div className="profile-peer-actions">
+        <FriendControl
+          peerId={detail.account_id}
+          initial={friendship}
+          canRequest
+          canBlock={false}
+          peerLabel={detail.real_name}
+          onClear={() => setCleared(true)}
+        />
+        <a
+          href="#request-heading"
+          className="profile-outline-button"
+          onClick={(event) => {
+            event.preventDefault();
+            const field = document.getElementById("dm-request-body");
+            if (field instanceof HTMLTextAreaElement && !field.disabled)
+              field.focus();
+            else document.getElementById("request-heading")?.focus();
+          }}
+        >
+          Say hi
+        </a>
+      </div>
       <div className="people-detail-body profile-peer-interests">
         <section>
           <h2>Interests</h2>
@@ -120,20 +130,6 @@ export function PersonView({
             <p>Not added</p>
           )}
         </section>
-      </div>
-      <h2 className="profile-connect-heading">Make a plan together</h2>
-      <div className="profile-peer-actions">
-        <FriendControl
-          peerId={detail.account_id}
-          initial={friendship}
-          canRequest
-          canBlock={false}
-          peerLabel={detail.real_name}
-          onClear={() => setCleared(true)}
-        />
-        <a href="#request-heading" className="profile-outline-button">
-          Say hi
-        </a>
       </div>
       <RequestControl peerId={detail.account_id} actor={actor} />
     </article>

@@ -4,38 +4,41 @@ import { localAttendanceAvailable } from "../lib/attendance";
 import { localPeopleAvailable } from "../lib/people";
 import { localNotificationsAvailable } from "../lib/notifications";
 import { StudentHeader } from "./student-shell";
+export function frameAvailableDestinations() {
+  return {
+    calendar: localHangoutsAvailable(),
+    people: localPeopleAvailable(),
+    chats: localHangoutsAvailable(),
+    notifications: localNotificationsAvailable(),
+  };
+}
 export function Frame({
   children,
   signedIn = false,
   navigation = false,
   ownerPhotoRevision,
+  profileChrome = false,
 }: {
   children: ReactNode;
   signedIn?: boolean;
   navigation?: boolean;
   ownerPhotoRevision?: number | null;
+  profileChrome?: boolean;
 }) {
   return (
-    <div className="page">
+    <div className={profileChrome ? "page profile-frame" : "page"}>
       <a className="skip-link" href="#main">
         Skip to content
       </a>
-      <StudentHeader
-        signedIn={signedIn}
-        accountReady={navigation}
-        ownerPhotoRevision={ownerPhotoRevision}
-        attendanceAvailable={signedIn && localAttendanceAvailable()}
-        available={
-          navigation
-            ? {
-                calendar: localHangoutsAvailable(),
-                people: localPeopleAvailable(),
-                chats: localHangoutsAvailable(),
-                notifications: localNotificationsAvailable(),
-              }
-            : undefined
-        }
-      />
+      {!profileChrome && (
+        <StudentHeader
+          signedIn={signedIn}
+          accountReady={navigation}
+          ownerPhotoRevision={ownerPhotoRevision}
+          attendanceAvailable={signedIn && localAttendanceAvailable()}
+          available={navigation ? frameAvailableDestinations() : undefined}
+        />
+      )}
       <main id="main" tabIndex={-1}>
         {children}
       </main>

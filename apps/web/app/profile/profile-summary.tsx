@@ -1,4 +1,5 @@
 import type { ReactNode, Ref } from "react";
+import { SealCheckIcon } from "@phosphor-icons/react/dist/csr/SealCheck";
 
 export function ProfileSummary({
   name,
@@ -27,7 +28,8 @@ export function ProfileSummary({
         </h1>
         {verified && (
           <span className="profile-verified">
-            <span aria-hidden="true">✓</span> UNC email verified
+            <SealCheckIcon size={25} weight="fill" aria-hidden="true" /> UNC
+            email verified
           </span>
         )}
       </div>

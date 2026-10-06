@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Frame } from "../../components";
+import { Frame, frameAvailableDestinations } from "../../components";
+import { localAttendanceAvailable } from "../../../lib/attendance";
 import { requireAccess } from "../../../lib/access";
 import {
   peopleId,
@@ -42,7 +43,7 @@ export default async function PersonPage({
   const detail = (result.data?.[0] ?? null) as PeopleDetail | null;
   const friendship = detail ? await readFriendship(id) : null;
   return (
-    <Frame signedIn navigation>
+    <Frame signedIn navigation profileChrome>
       <div className="people-detail">
         {result.error ? (
           <section className="people-panel">
@@ -66,6 +67,8 @@ export default async function PersonPage({
             back={back}
             friendship={friendship!}
             actor={user!.id}
+            available={frameAvailableDestinations()}
+            attendanceAvailable={localAttendanceAvailable()}
           />
         )}
       </div>

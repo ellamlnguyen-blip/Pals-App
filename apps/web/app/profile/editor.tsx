@@ -1,6 +1,9 @@
 "use client";
 import Image from "next/image";
 import Link from "next/link";
+import { CameraIcon } from "@phosphor-icons/react/dist/csr/Camera";
+import { ProfileTopbar } from "./profile-topbar";
+import type { StudentDestinations } from "../student-shell";
 import { ProfileSummary } from "./profile-summary";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
@@ -35,10 +38,14 @@ export function ProfileEditor({
   profile,
   email,
   peopleAvailable,
+  available,
+  attendanceAvailable,
 }: {
   profile: OwnerProfile;
   email: string;
   peopleAvailable: boolean;
+  available: StudentDestinations;
+  attendanceAvailable: boolean;
 }) {
   const router = useRouter();
   const photoStatus = useRef<HTMLDivElement>(null);
@@ -46,6 +53,7 @@ export function ProfileEditor({
   const editButton = useRef<HTMLButtonElement>(null);
   const editPanel = useRef<HTMLDivElement>(null);
   const photoPanel = useRef<HTMLDetailsElement>(null);
+  const photoSummary = useRef<HTMLElement>(null);
   const restoreEditFocus = useRef(false);
   const [values, setValues] = useState(() => initialValues(profile));
   const [saved, setSaved] = useState(values);
@@ -80,20 +88,34 @@ export function ProfileEditor({
     }
   }, [editing, pending]);
   const [photoSlot, setPhotoSlot] = useState<string | null>(null);
-  const [optionsOpen, setOptionsOpen] = useState(false);
+  useEffect(() => {
+    if (!editing) return;
+    editPanel.current?.scrollIntoView({
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        ? "auto"
+        : "smooth",
+      block: "start",
+    });
+    editPanel.current
+      ?.querySelector<HTMLInputElement>("#real_name")
+      ?.focus({ preventScroll: true });
+  }, [editing]);
   function openPhotos() {
     if (photoPanel.current) {
       photoPanel.current.open = true;
-      photoPanel.current.scrollIntoView({ behavior: "smooth", block: "start" });
+      photoPanel.current.scrollIntoView({
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+          ? "auto"
+          : "smooth",
+        block: "start",
+      });
+      photoSummary.current?.focus({ preventScroll: true });
     }
   }
   function openEditor() {
     setFeedback({});
     setPhotoSlot(null);
     setEditing(true);
-    requestAnimationFrame(() =>
-      editPanel.current?.scrollIntoView({ behavior: "smooth", block: "start" }),
-    );
   }
   function run(
     label: string,
@@ -153,46 +175,33 @@ export function ProfileEditor({
   }
   return (
     <div className="profile-page" aria-busy={pending}>
-      <nav className="profile-topbar" aria-label="Profile controls">
-        <Link href="/hangouts" aria-label="Back to Hangouts">
-          ← <span>Back</span>
-        </Link>
-        <span className="profile-topbar-title">My profile</span>
-        <button
-          type="button"
-          aria-expanded={optionsOpen}
-          aria-controls="profile-options"
-          onClick={() => setOptionsOpen(!optionsOpen)}
-          aria-label="Profile options"
-        >
-          •••
-        </button>
-      </nav>
-      {optionsOpen && (
-        <div id="profile-options" className="profile-options">
-          <p>
-            Your confirmed address on an approved UNC domain is Pals’ campus
-            access signal. Pals has not separately checked enrollment or
-            identity.
-          </p>
-          <p>
-            {peopleAvailable
-              ? "Only your selected text can appear in People after you opt in and meet its requirements. Photos, prompts, email and other details are private to you."
-              : "Only you can see these profile details and photos right now."}
-          </p>
-          {peopleAvailable && (
-            <>
-              <Link href="/people/privacy">
-                Preview and manage People sharing
-              </Link>
-              <Link href="/people/friends">Your friendships</Link>
-            </>
-          )}
-          <p className="help">
-            Your university and verified email are read-only: {email}
-          </p>
-        </div>
-      )}
+      <ProfileTopbar
+        back="/hangouts"
+        backLabel="Back to Hangouts"
+        available={available}
+        attendanceAvailable={attendanceAvailable}
+      >
+        <p>
+          Your confirmed address on an approved UNC domain is Pals’ campus
+          access signal. Pals has not separately checked enrollment or identity.
+        </p>
+        <p>
+          {peopleAvailable
+            ? "Only your selected text can appear in People after you opt in and meet its requirements. Photos, prompts, email and other details are private to you."
+            : "Only you can see these profile details and photos right now."}
+        </p>
+        {peopleAvailable && (
+          <>
+            <Link href="/people/privacy">
+              Preview and manage People sharing
+            </Link>
+            <Link href="/people/friends">Your friendships</Link>
+          </>
+        )}
+        <p className="help">
+          Your university and verified email are read-only: {email}
+        </p>
+      </ProfileTopbar>
       <div className="profile-hero">
         {profile.primary_photo_path ? (
           <OwnerDisplayPhoto
@@ -203,6 +212,7 @@ export function ProfileEditor({
           />
         ) : (
           <div className="profile-hero-empty">
+            <CameraIcon size={42} weight="duotone" aria-hidden="true" />
             <span>No photo yet</span>
             <button type="button" onClick={openPhotos}>
               Add your main photo
@@ -242,6 +252,11 @@ export function ProfileEditor({
           </>
         }
       />
+      {feedback.success && photoSlot === null && !editing && (
+        <p className="form-message profile-saved-status" role="status">
+          {feedback.success}
+        </p>
+      )}
       <section
         className="profile-gallery-section"
         aria-labelledby="profile-gallery-heading"
@@ -330,7 +345,7 @@ export function ProfileEditor({
         </section>
       )}
       <details className="profile-photo-panel" ref={photoPanel}>
-        <summary>Photo controls</summary>
+        <summary ref={photoSummary}>Photo controls</summary>
         <aside className="profile-sidebar">
           <div className="profile-identity">
             <p className="badge">UNC email verified</p>
@@ -397,14 +412,7 @@ export function ProfileEditor({
           </div>
         </aside>
       </details>
-      <div
-        className="profile-details"
-        ref={editPanel}
-        hidden={
-          !editing &&
-          !(photoSlot === null && (feedback.error || feedback.success))
-        }
-      >
+      <div className="profile-details" ref={editPanel} hidden={!editing}>
         <div className="profile-toolbar">
           <h2>A little about you</h2>
         </div>
