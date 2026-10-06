@@ -1,5 +1,9 @@
 # NOW
 
+## 2026-10-06 — Reference profile UI reviewed; rich sharing decision pending
+
+Published/remote-verified task artifact `a9381aeb7a3b48da8819ba696bab560a1ef793a6` on `agent/TASK-028P-profile-remodel`. TASK-028P owner/current People-text presentation passes independent source review and actual local browser checks through `2e9fa9591b3ee802cf38d7e54729c0079e677134`: reference composition, readable editing, private photos, friendship/DM states, mobile gallery and whole-peer clearing after cross-tab sign-out. Final production build passes; local review is at localhost3029 with private test credentials. `design-qa.md` and `agents/handoffs/TASK-028P.md` record evidence and limits. ADR-0036 remains Proposed: no hometown storage or rich peer disclosure implemented. TASK-028P and parent TASK-028 remain incomplete; TASK-027 staged acceptance still gates main application integration. Publish reviewed documentation/evidence only to main; no hosted change or successor.
+
 ## 2026-10-06 — TASK-028P profile reference remodel
 
 User requested the supplied profile design for all users. Bounded contract `tasks/active/TASK-028P-profile-remodel.md` is in progress; owner and existing authorized-text visual work may proceed. ADR-0036 proposes separate opt-in rich peer photos/prompts/hometown and remains unaccepted. Parent TASK-028 and TASK-027 staging/main source gates remain incomplete. Existing detached disposable preview is retained; no hosted changes or successor.

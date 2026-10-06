@@ -1,6 +1,6 @@
 # TASK-028P — Reference-led profile remodel
 
-Status: In progress; owner/authorized-text presentation may proceed, expanded peer presentation awaits ADR-0036 acceptance.
+Status: Incomplete; authorized owner/current-text UI reviewed and locally verified through `2e9fa95`. Expanded peer presentation awaits explicit ADR-0036 acceptance and implementation; parent staging/main source integration remains gated. See `agents/handoffs/TASK-028P.md`.
 Date: 2026-10-06
 Parent: TASK-028 (incomplete; its staging/dependency/main app integration gates remain).
 Branch: `agent/TASK-028P-profile-remodel`
