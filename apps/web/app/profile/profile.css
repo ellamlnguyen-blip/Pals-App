@@ -192,7 +192,7 @@
   border-radius: 999px;
   color: var(--pals-profile-text-blue);
   background: #eaf5fc;
-  font: 800 clamp(13px, 2.55vw, 20px)/1.2 var(--pals-font-display);
+  font: 800 clamp(13px, 2.55vw, 20px)/1.2 var(--pals-font);
 }
 .profile-verified svg {
   flex: 0 0 auto;
@@ -237,7 +237,7 @@
   min-width: 0;
   min-height: 60px;
   border-radius: 19px;
-  font: 800 clamp(17px, 3.05vw, 24px)/1.2 var(--pals-font-display);
+  font: 800 clamp(17px, 3.05vw, 24px)/1.2 var(--pals-font);
 }
 .profile-main-actions .button {
   background: var(--pals-profile-action);
@@ -296,7 +296,7 @@
 .profile-prompt h3 {
   margin: 0 0 2px;
   color: var(--pals-profile-text-blue);
-  font: 800 clamp(17px, 2.8vw, 22px)/1.25 var(--pals-font-display);
+  font: 800 clamp(17px, 2.8vw, 22px)/1.25 var(--pals-font);
 }
 .profile-prompt p {
   margin: 0;
@@ -480,6 +480,12 @@
   min-height: 60px;
   border-radius: 19px;
   font-size: 21px;
+}
+.profile-page .profile-main-actions > *,
+.people-profile .profile-peer-actions .friend-actions .button,
+.people-profile .profile-peer-actions > .profile-outline-button {
+  font-family: var(--pals-font);
+  font-weight: 800;
 }
 .people-profile .dm-request {
   margin-top: 22px;
