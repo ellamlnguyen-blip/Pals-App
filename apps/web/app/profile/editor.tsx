@@ -56,6 +56,7 @@ export function ProfileEditor({
   const photoSummary = useRef<HTMLElement>(null);
   const photoDialog = useRef<HTMLDialogElement>(null);
   const viewPhotoButton = useRef<HTMLButtonElement>(null);
+  const closePhotoButton = useRef<HTMLButtonElement>(null);
   const photoTrigger = useRef<HTMLButtonElement | null>(null);
   const skipPhotoFocusRestore = useRef(false);
   const [selectedPhoto, setSelectedPhoto] = useState<{
@@ -65,8 +66,9 @@ export function ProfileEditor({
   const [viewingPhoto, setViewingPhoto] = useState(false);
   const [viewPhotoFailed, setViewPhotoFailed] = useState(false);
   useEffect(() => {
-    if (selectedPhoto && !viewingPhoto && photoDialog.current?.open)
-      viewPhotoButton.current?.focus();
+    if (!selectedPhoto || !photoDialog.current?.open) return;
+    if (viewingPhoto) closePhotoButton.current?.focus();
+    else viewPhotoButton.current?.focus();
   }, [selectedPhoto, viewingPhoto]);
   const restoreEditFocus = useRef(false);
   const [values, setValues] = useState(() => initialValues(profile));
@@ -274,6 +276,7 @@ export function ProfileEditor({
             <div className="profile-photo-dialog-header">
               <h2>{selectedPhoto.label}</h2>
               <button
+                ref={closePhotoButton}
                 className="profile-photo-dialog-close"
                 type="button"
                 aria-label="Close photo"
