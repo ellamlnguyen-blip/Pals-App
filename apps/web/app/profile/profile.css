@@ -123,6 +123,85 @@
   height: 100%;
   object-fit: cover;
 }
+.profile-photo-trigger {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  cursor: zoom-in;
+}
+.profile-photo-trigger:focus-visible {
+  outline: 3px solid var(--pals-profile-action);
+  outline-offset: -3px;
+}
+.profile-photo-dialog {
+  width: min(92vw, 900px);
+  max-height: 90dvh;
+  padding: 0;
+  border: 1px solid #cfe2f4;
+  border-radius: 20px;
+  box-shadow: var(--pals-overlay-shadow);
+  color: #102b53;
+  background: #fff;
+}
+.profile-photo-dialog::backdrop {
+  background: rgb(8 37 80 / 72%);
+}
+.profile-photo-dialog-content {
+  padding: clamp(16px, 3vw, 28px);
+}
+.profile-photo-dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 14px;
+}
+.profile-photo-dialog-header h2 {
+  margin: 0;
+  font: 800 clamp(20px, 4vw, 28px)/1.2 var(--pals-font-display);
+}
+.profile-photo-dialog-close,
+.profile-photo-dialog-actions button {
+  min-height: 44px;
+  padding: 9px 16px;
+  border: 2px solid var(--pals-profile-action);
+  border-radius: 12px;
+  color: var(--pals-profile-action);
+  background: #fff;
+  font: 800 16px/1.2 var(--pals-font);
+  cursor: pointer;
+}
+.profile-photo-dialog-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.profile-photo-dialog-actions button:first-child {
+  background: var(--pals-profile-action);
+  color: #fff;
+}
+.profile-photo-dialog-actions button:disabled {
+  opacity: .5;
+  cursor: not-allowed;
+}
+.profile-photo-large {
+  display: grid;
+  place-items: center;
+  min-height: 120px;
+}
+.profile-photo-large img {
+  display: block;
+  max-width: 100%;
+  max-height: calc(90dvh - 120px);
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  border-radius: 12px;
+}
 .profile-photo-error {
   display: flex;
   flex-direction: column;
@@ -277,6 +356,11 @@
   border-radius: 20px;
   object-fit: cover;
   background: #eaf5fc;
+}
+.profile-gallery .profile-photo-trigger {
+  aspect-ratio: 1.31;
+  border-radius: 20px;
+  overflow: hidden;
 }
 .profile-gallery-empty {
   grid-column: 1 / -1;

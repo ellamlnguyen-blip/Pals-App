@@ -54,6 +54,20 @@ export function ProfileEditor({
   const editPanel = useRef<HTMLDivElement>(null);
   const photoPanel = useRef<HTMLDetailsElement>(null);
   const photoSummary = useRef<HTMLElement>(null);
+  const photoDialog = useRef<HTMLDialogElement>(null);
+  const viewPhotoButton = useRef<HTMLButtonElement>(null);
+  const photoTrigger = useRef<HTMLButtonElement | null>(null);
+  const skipPhotoFocusRestore = useRef(false);
+  const [selectedPhoto, setSelectedPhoto] = useState<{
+    slot: string;
+    label: string;
+  } | null>(null);
+  const [viewingPhoto, setViewingPhoto] = useState(false);
+  const [viewPhotoFailed, setViewPhotoFailed] = useState(false);
+  useEffect(() => {
+    if (selectedPhoto && !viewingPhoto && photoDialog.current?.open)
+      viewPhotoButton.current?.focus();
+  }, [selectedPhoto, viewingPhoto]);
   const restoreEditFocus = useRef(false);
   const [values, setValues] = useState(() => initialValues(profile));
   const [saved, setSaved] = useState(values);
@@ -111,6 +125,27 @@ export function ProfileEditor({
       });
       photoSummary.current?.focus({ preventScroll: true });
     }
+  }
+  function selectPhoto(slot: string, label: string, trigger: HTMLButtonElement) {
+    photoTrigger.current = trigger;
+    setSelectedPhoto({ slot, label });
+    setViewingPhoto(false);
+    setViewPhotoFailed(false);
+    photoDialog.current?.showModal();
+  }
+  function editSelectedPhoto() {
+    const slot = selectedPhoto?.slot;
+    if (!slot) return;
+    skipPhotoFocusRestore.current = true;
+    photoDialog.current?.close();
+    openPhotos();
+    requestAnimationFrame(() => {
+      const input = document.getElementById(`photo-${slot}`);
+      if (input instanceof HTMLInputElement) {
+        input.scrollIntoView({ block: "center" });
+        input.focus({ preventScroll: true });
+      }
+    });
   }
   function openEditor() {
     setFeedback({});
@@ -209,6 +244,7 @@ export function ProfileEditor({
             slot="primary"
             revision={profile.revision}
             alt="Your primary profile photo"
+            onSelect={selectPhoto}
           />
         ) : (
           <div className="profile-hero-empty">
@@ -220,6 +256,60 @@ export function ProfileEditor({
           </div>
         )}
       </div>
+      <dialog
+        ref={photoDialog}
+        className="profile-photo-dialog"
+        aria-label={selectedPhoto ? `${selectedPhoto.label} options` : "Photo options"}
+        onClose={() => {
+          setViewingPhoto(false);
+          if (!skipPhotoFocusRestore.current) photoTrigger.current?.focus();
+          skipPhotoFocusRestore.current = false;
+        }}
+        onClick={(event) => {
+          if (event.target === photoDialog.current) photoDialog.current?.close();
+        }}
+      >
+        {selectedPhoto && (
+          <div className="profile-photo-dialog-content">
+            <div className="profile-photo-dialog-header">
+              <h2>{selectedPhoto.label}</h2>
+              <button
+                className="profile-photo-dialog-close"
+                type="button"
+                aria-label="Close photo"
+                onClick={() => photoDialog.current?.close()}
+              >
+                Close
+              </button>
+            </div>
+            {viewingPhoto ? (
+              <div className="profile-photo-large">
+                {viewPhotoFailed ? (
+                  <p role="alert">Photo couldn’t load. Close and reload your profile to try again.</p>
+                ) : (
+                  <Image
+                    src={`/profile/photo?slot=${selectedPhoto.slot}&v=${profile.revision}`}
+                    alt={selectedPhoto.label}
+                    width={1200}
+                    height={1200}
+                    unoptimized
+                    onError={() => setViewPhotoFailed(true)}
+                  />
+                )}
+              </div>
+            ) : (
+              <div className="profile-photo-dialog-actions">
+                <button ref={viewPhotoButton} type="button" onClick={() => setViewingPhoto(true)}>
+                  View photo
+                </button>
+                <button type="button" disabled={pending || editing} onClick={editSelectedPhoto}>
+                  Edit photo
+                </button>
+              </div>
+            )}
+          </div>
+        )}
+      </dialog>
       <ProfileSummary
         name={profile.real_name || "Your name"}
         bio={
@@ -269,6 +359,7 @@ export function ProfileEditor({
               slot={String(index)}
               revision={profile.revision}
               alt={`Your extra photo ${index + 1}`}
+              onSelect={selectPhoto}
             />
           ))}
           {profile.additional_photo_paths.length === 0 && (
@@ -574,10 +665,12 @@ function OwnerDisplayPhoto({
   slot,
   revision,
   alt,
+  onSelect,
 }: {
   slot: string;
   revision: number;
   alt: string;
+  onSelect: (slot: string, label: string, trigger: HTMLButtonElement) => void;
 }) {
   const [failed, setFailed] = useState(false);
   if (failed)
@@ -588,14 +681,21 @@ function OwnerDisplayPhoto({
       </div>
     );
   return (
-    <Image
-      src={`/profile/photo?slot=${slot}&v=${revision}`}
-      alt={alt}
-      width={slot === "primary" ? 760 : 360}
-      height={slot === "primary" ? 376 : 280}
-      unoptimized
-      onError={() => setFailed(true)}
-    />
+    <button
+      className="profile-photo-trigger"
+      type="button"
+      aria-label={`Options for ${alt.toLowerCase()}`}
+      onClick={(event) => onSelect(slot, alt, event.currentTarget)}
+    >
+      <Image
+        src={`/profile/photo?slot=${slot}&v=${revision}`}
+        alt={alt}
+        width={slot === "primary" ? 760 : 360}
+        height={slot === "primary" ? 376 : 280}
+        unoptimized
+        onError={() => setFailed(true)}
+      />
+    </button>
   );
 }
 function PhotoCard({
