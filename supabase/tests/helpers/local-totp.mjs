@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { createHmac } from "node:crypto";
+import { createHmac, randomUUID } from "node:crypto";
 
 function totp(secret) {
   const alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ234567";
@@ -35,4 +35,34 @@ export async function verifiedTotpToken(request, aal1Token) {
   const token = verified.body.access_token;
   assert.equal(JSON.parse(Buffer.from(token.split(".")[1], "base64url")).aal, "aal2");
   return token;
+}
+
+export async function localTotpOperator(status, confirm) {
+  const key = status.PUBLISHABLE_KEY ?? status.ANON_KEY;
+  async function request(path, token, body) {
+    const response = await fetch(`${status.API_URL}${path}`, {
+      method: body ? "POST" : "GET",
+      headers: { apikey: key, authorization: `Bearer ${token ?? key}`,
+        ...(body ? { "content-type": "application/json" } : {}) },
+      ...(body ? { body: JSON.stringify(body) } : {}),
+    });
+    const raw = await response.text();
+    return { status: response.status, body: raw ? JSON.parse(raw) : null };
+  }
+  const email = `concurrency-operator-${randomUUID()}@unc.edu`;
+  const password = `Local-only-${randomUUID()}`;
+  const created = await request("/auth/v1/signup", null, { email, password });
+  assert.equal(created.status, 200, JSON.stringify(created.body));
+  const id = created.body.user?.id ?? created.body.id;
+  assert.match(id, /^[0-9a-f-]{36}$/i);
+  confirm(id);
+  const login = await request("/auth/v1/token?grant_type=password", null,
+    { email, password });
+  assert.equal(login.status, 200, JSON.stringify(login.body));
+  const token = await verifiedTotpToken(request, login.body.access_token);
+  const claims = JSON.parse(Buffer.from(token.split(".")[1], "base64url"));
+  assert.equal(claims.sub, id);
+  assert.equal(claims.role, "authenticated");
+  assert.match(claims.session_id, /^[0-9a-f-]{36}$/i);
+  return { id, claims };
 }

@@ -2,12 +2,17 @@ import assert from "node:assert/strict";
 import { execFileSync, spawn } from "node:child_process";
 import { once } from "node:events";
 import test from "node:test";
+import { localTotpOperator } from "./helpers/local-totp.mjs";
 
 // Disposable local overlapping SQL sessions. Final database reset removes
 // immutable sanction and audit fixtures.
 const args = ["exec", "-i", "supabase_db_pals-local", "psql", "-X", "-qAt",
   "-U", "postgres", "-d", "postgres", "-v", "ON_ERROR_STOP=1"];
 const sql = (input) => execFileSync("docker", args, { input, encoding: "utf8" }).trim();
+const status = JSON.parse(execFileSync(process.env.SUPABASE_CLI ?? "supabase",
+  ["status", "--output", "json"], { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }));
+assert.equal(status.API_URL, "http://127.0.0.1:54321");
+const quote = (value) => `'${value.replaceAll("'", "''")}'`;
 const id = {
   operator: "53200000-0000-4000-8000-000000000001",
   reporter: "53200000-0000-4000-8000-000000000002",
@@ -28,8 +33,10 @@ const id = {
   report7: "53200000-0000-4000-8002-000000000007",
   report8: "53200000-0000-4000-8002-000000000008",
 };
+let operatorClaims;
 const claim = (user) => `set local role authenticated;
-  set local request.jwt.claims='{"sub":"${user}","role":"authenticated"}';`;
+  set local request.jwt.claims=${quote(JSON.stringify(user === id.operator ? operatorClaims :
+    { sub: user, role: "authenticated" }))};`;
 const sanction = (report, request, revision = 1) => `${claim(id.operator)}
   select * from public.apply_account_moderation_action('${report}',
     '${request}',${revision},'suspend','Local decision');`;
@@ -80,8 +87,11 @@ async function race(label, leaderSql, waiterSql, waiterFails) {
 test("sanctions serialize with live role, target status and direct profile writes", {
   concurrency: false, timeout: 120_000,
 }, async () => {
+  const operator = await localTotpOperator(status, (operatorId) =>
+    sql(`update auth.users set email_confirmed_at=now() where id=${quote(operatorId)}`));
+  id.operator = operator.id;
+  operatorClaims = operator.claims;
   sql(`insert into auth.users(id,email,email_confirmed_at) values
-    ('${id.operator}','b1-race-operator@unc.edu',now()),
     ('${id.reporter}','b1-race-reporter@unc.edu',now()),
     ('${id.first}','b1-race-first@unc.edu',now()),
     ('${id.second}','b1-race-second@unc.edu',now()),
