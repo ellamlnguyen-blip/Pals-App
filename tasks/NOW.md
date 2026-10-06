@@ -1,5 +1,9 @@
 # NOW
 
+## 2026-10-05 — Full MVP staging activated
+
+The user authorized full MVP testing access. Pals Staging availability and all 11 included MVP capabilities are enabled at revision 2; all nine reviewed source gates (including safety/moderation) are enabled. Independent readback confirms 12 genuine Ella-session policy audit receipts and eight administrative source-gate receipts. Use the stable Task 27 Preview URL, not the older `pals-app-eta.vercel.app` build. Immediate rollback: reviewed emergency availability-off at expected revision 2. Analytics and deferred large-Hangout safeguards remain off. TASK-027 remains incomplete pending signed-in student feature smoke, recovery/operational checks and reviewed main integration. Production/domain unchanged.
+
 ## 2026-10-05 — Staging moderation queue usable
 
 TASK-027 remains in progress. Ella's hosted admin session has verified TOTP (`mfa=ready`) and can open `/policy`. The temporary enrollment switch is off again on Ready deployment `EsvDk5oiDfXifrNwCZ52hkyvKrba`. The initially locked report queue was caused by the closed staging moderation source gate. Audited staging-only source-gate transition false→true has receipt `7e20d41b-5276-4ed0-b11f-d82d5c8bbd3f`; the signed-in browser now shows an empty review queue. Student availability and capabilities remain off. Live report handling, recovery and full staged student smoke remain.

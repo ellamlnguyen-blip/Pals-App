@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-05 — Full MVP staging testing access
+
+Enabled all 11 MVP capabilities through Ella's authenticated MFA manager session, enabled their reviewed source gates including reporting/blocking, and turned staging availability on last. Independent readback confirms immutable receipts and availability revision 2. The current Task 27 Preview is open for confirmed active UNC accounts. Analytics and deferred large-event automation remain off. Student functionality still requires the enabled browser smoke; production and domains are unchanged.
+
 ## 2026-10-05 — Staging operator verification
 
 Verified Ella's hosted admin TOTP session and launch-policy access, closed the temporary enrollment window, and enabled the staging-only moderation source gate through the reviewed audited control. The report queue now loads with no reviewable reports. Student access remains closed.

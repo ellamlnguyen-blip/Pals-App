@@ -1,5 +1,11 @@
 # Current State
 
+## 2026-10-05 — Full MVP staging access activated for user testing
+
+The user explicitly requested activation after the confirmed-email/pilot-preparation screen. On exact Pals Staging `ffabdrgsmtfylrehwmfo`, Ella's genuine admin AAL2 manager session recorded 11 MVP capability changes and availability last. All are enabled at revision 2: onboarding, Hangouts, Hangout chat, Calendar, People, friendship, DMs, notifications, attendance, optional profile and extra photos. The reviewed staging control runner recorded eight source-gate changes; Hangouts/chat/People/friendship/DM/notifications/attendance/safety source gates are now enabled, with moderation already enabled. Independent database readback confirms all 12 policy receipts and eight source receipts.
+
+Availability audit `6c8b6c42-3cf2-4356-9bd6-9c863338fd29`, request `06e71406-1a56-44b2-a619-62972a33c373`, changes false→true at revision 2. The immediate rollback is the reviewed emergency availability-off control with expected revision 2. The test site is `https://pals-app-git-agent-task-027-open-unc-mvp-pals8.vercel.app/`; `pals-app-eta.vercel.app` still serves the older public build and `usepals.com` still returns deployment 404. Analytics and deferred large-Hangout safeguards remain off under the accepted MVP boundary. No production database, domain, migration or security-rule change occurred. Signed-in student feature smoke remains pending; enabled gates alone do not certify full functionality.
+
 ## 2026-10-05 — Staging moderation queue unlocked
 
 Ella completed personal hosted TOTP verification: the admin session endpoint returned `signedIn=true`, `role=admin`, `mfa=ready`, and the private launch-policy page rendered. The staging admin deployment `EsvDk5oiDfXifrNwCZ52hkyvKrba` is Ready on reviewed branch commit `ec11829f03dc60bef36f781950d7512e35418cfb`; `ADMIN_MFA_ENROLLMENT_ENABLED=false` is restored after the temporary setup window. The initial “Moderation is locked” page resulted from the closed moderation source gate, not an MFA failure.
