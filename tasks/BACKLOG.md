@@ -1,5 +1,7 @@
 # Backlog
 
+TASK-028 remains incomplete in NOW: reviewed local model/continuity source is published at `60a3072`, with consolidated evidence/handoff. Avoid duplicate visual/continuity dispatch. TASK-027 staged acceptance still blocks main app integration; authenticated model and live-map comparison limits remain explicit.
+
 - TASK-027E — active supported local Storage reset compatibility investigation; required before full real-upload/lifecycle acceptance. Never patch provider indexes to bypass runtime mismatch.
 
 - TASK-027D — actual stale Hangout web conflict retry bug; active bounded correction under TASK-027, required before full Auth/web acceptance. Retain fail-closed revision/privacy coverage. Staging MFA/bootstrap proposals remain awaiting acceptance.
