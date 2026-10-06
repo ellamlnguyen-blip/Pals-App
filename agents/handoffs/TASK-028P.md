@@ -20,6 +20,6 @@ Focused ESLint, web TypeScript, format/diff checks and final isolated production
 
 ## Publication and remaining gates
 
-Implementation/evidence publication SHA and documentation-only main receipt are recorded in `TASK-028P-PUBLICATION.md` after exact remote verification. Unfinished app source remains on the task branch. No hosted migration, production/domain change, safety weakening, public owner-photo URL or automatic expansion of People consent occurred.
+Implementation/evidence `a9381aeb7a3b48da8819ba696bab560a1ef793a6` and documentation-only main integration `5495f83deeadfd18fc0cf25e968d3ace7243827f` are pushed and exact remote-verified. Full receipt: `TASK-028P-PUBLICATION.md`. Unfinished app source remains on the task branch. No hosted migration, production/domain change, safety weakening, public owner-photo URL or automatic expansion of People consent occurred.
 
 Remaining: user's explicit ADR-0036 choice; if accepted, fresh bounded reviewed rich consent/projection/gateway/migration/race work; parent staged student/moderation/recovery acceptance; reviewed canonical app integration and remote verification. Current approval is required by AGENTS.md: “major ADRs need explicit acceptance.” Full requested rich-peer completion is not claimed.
