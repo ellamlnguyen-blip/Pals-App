@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-06 — Reviewed model and experience refinement on TASK-028
+
+Published exact model assets/self-hosted fonts, measured header/hero and responsive shell, accessible contrast/controls, private photo preview and avatar refresh, discovery filter/scroll return, and mounted authorized chat draft/page continuity. Fresh review and local checks pass; corresponding screenshots and limitations are recorded in the consolidated TASK-028 handoff. Code remains on `agent/TASK-028-model-experience` at reviewed `60a3072` because TASK-027 staged acceptance still gates main app integration. Main publication is documentation only. No hosted migration, gate, production or domain change; no released-parity claim.
+
 ## 2026-10-05 — Full MVP staging testing access
 
 Enabled all 11 MVP capabilities through Ella's authenticated MFA manager session, enabled their reviewed source gates including reporting/blocking, and turned staging availability on last. Independent readback confirms immutable receipts and availability revision 2. The current Task 27 Preview is open for confirmed active UNC accounts. Analytics and deferred large-event automation remain off. Student functionality still requires the enabled browser smoke; production and domains are unchanged.
