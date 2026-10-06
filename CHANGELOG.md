@@ -2,7 +2,7 @@
 
 ## 2026-10-05 — TASK-027 staging operator host preparation
 
-Published and integrated the reviewed caller-session policy controls; the combined admin app builds. Applied the six reviewed operator migrations to exact Pals Staging and completed audited Ella-only manager, moderator and admin provisioning while keeping student gates closed. Created a separate Vercel staging admin project with the exact staging Supabase target and MFA enrollment closed. The reviewed-branch deployment, Ella's personal TOTP setup, hosted smoke and launch checks remain.
+Published and integrated the reviewed caller-session policy controls; the combined admin app builds. Applied the six reviewed operator migrations to exact Pals Staging and completed audited Ella-only manager, moderator and admin provisioning while keeping student gates closed. Created a separate Vercel staging admin project with the exact staging Supabase target and MFA enrollment closed. The reviewed-branch deployment is Ready and its unauthenticated pages show private sign-in. Ella's personal TOTP setup, hosted smoke and launch checks remain.
 
 ## 2026-10-05 — TASK-027 publication and launch-security decisions
 
