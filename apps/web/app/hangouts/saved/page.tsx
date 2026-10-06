@@ -17,7 +17,7 @@ export default async function SavedHangoutsPage() {
         <Link href="/hangouts">← Hangouts</Link>
         <div className="saved-heading">
           <div>
-            <p className="badge">Saved Hangouts · local only</p>
+            <p className="badge">UNC Hangouts</p>
             <h1>Plans around UNC</h1>
             <p>
               Explore approximate campus places. Pick a saved Hangout to see the

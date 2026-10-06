@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
+import PolicyPanel from "./policy-panel";
 import {
   deniedView,
   duplicateCandidates,
@@ -48,6 +49,14 @@ const label: Record<string, string> = {
 };
 const uuid =
   /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
+type SessionState =
+  "loading" | "out" | "enroll" | "challenge" | "ready" | "denied";
+type SessionReply = {
+  signedIn: boolean;
+  role: "admin" | "moderator" | null;
+  mfa: "ready" | "challenge" | "enroll" | "denied";
+  factorId?: string | null;
+};
 
 async function call(path: string, payload?: object) {
   const response = await fetch(path, {
@@ -62,13 +71,18 @@ async function call(path: string, payload?: object) {
   return response.json();
 }
 
-export default function Console({ configured }: { configured: boolean }) {
-  const [session, setSession] = useState<"loading" | "out" | "in">(
+export default function Console({ configured, mode = "moderation" }: { configured: boolean; mode?: "moderation" | "policy" }) {
+  const [session, setSession] = useState<SessionState>(
     configured ? "loading" : "out",
   );
   const [role, setRole] = useState<"admin" | "moderator" | null>(null);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [factorId, setFactorId] = useState<string | null>(null);
+  const [challengeId, setChallengeId] = useState<string | null>(null);
+  const [qrCode, setQrCode] = useState<string | null>(null);
+  const [manualKey, setManualKey] = useState<string | null>(null);
+  const [code, setCode] = useState("");
   const [queue, setQueue] = useState<QueueItem[]>([]);
   const [cursor, setCursor] = useState<Cursor>(initialCursor);
   const [history, setHistory] = useState<Cursor[]>([]);
@@ -85,6 +99,7 @@ export default function Console({ configured }: { configured: boolean }) {
   const [duplicateId, setDuplicateId] = useState("");
   const [busy, setBusy] = useState(false);
   const [mobileDetail, setMobileDetail] = useState(false);
+  const [policyEpoch, setPolicyEpoch] = useState(0);
   const generation = useRef(0);
   const sessionGeneration = useRef(0);
   const mutationGeneration = useRef(0);
@@ -104,18 +119,45 @@ export default function Console({ configured }: { configured: boolean }) {
     setMobileDetail(false);
     dialog.current?.close();
   }, []);
+  const clearMfa = useCallback(() => {
+    setFactorId(null);
+    setChallengeId(null);
+    setQrCode(null);
+    setManualKey(null);
+    setCode("");
+  }, []);
+  const applySession = useCallback(
+    (reply: SessionReply) => {
+      clearSensitive();
+      setPolicyEpoch((value) => value + 1);
+      setQueue([]);
+      setHistory([]);
+      setUncertain(null);
+      setRole(reply.role ?? null);
+      setFactorId(reply.factorId ?? null);
+      setChallengeId(null);
+      setQrCode(null);
+      setManualKey(null);
+      setCode("");
+      setSession(reply.signedIn ? reply.mfa : "out");
+    },
+    [clearSensitive],
+  );
   const authorityDenied = useCallback(() => {
     const view = deniedView();
     clearSensitive();
+    setPolicyEpoch((value) => value + 1);
+    clearMfa();
     setQueue(view.queue);
     setHistory(view.history);
     setUncertain(view.uncertain);
     setRole(null);
+    setSession("denied");
     setDenied(view.denied);
     setLoading(false);
     setDetailLoading(false);
     setMessage("Moderation unavailable.");
-  }, [clearSensitive]);
+  }, [clearSensitive, clearMfa]);
   const loadQueue = useCallback(
     async (c: Cursor, preserveMessage = false) => {
       const g = ++generation.current;
@@ -142,13 +184,12 @@ export default function Console({ configured }: { configured: boolean }) {
     let active = true;
     const capturedSession = sessionGeneration.current;
     call("/api/session")
-      .then((r) => {
+      .then((r: SessionReply) => {
         if (
           active &&
           sessionReplyBelongsTo(capturedSession, sessionGeneration.current)
         ) {
-          setRole(r.role ?? null);
-          setSession(r.signedIn ? "in" : "out");
+          applySession(r);
         }
       })
       .catch(() => {
@@ -156,14 +197,38 @@ export default function Console({ configured }: { configured: boolean }) {
           active &&
           sessionReplyBelongsTo(capturedSession, sessionGeneration.current)
         )
-          setSession("out");
+          setSession("denied");
       });
     return () => {
       active = false;
     };
-  }, [configured]);
+  }, [configured, applySession]);
   useEffect(() => {
-    if (session !== "in") return;
+    if (!["ready", "challenge", "enroll"].includes(session)) return;
+    let active = true;
+    const check = async () => {
+      if (!active) return;
+      const captured = sessionGeneration.current;
+      try {
+        const reply = (await call("/api/session")) as SessionReply;
+        if (!active || captured !== sessionGeneration.current) return;
+        if (!reply.signedIn || reply.mfa !== session || reply.role !== role)
+          applySession(reply);
+      } catch {
+        if (active && captured === sessionGeneration.current) authorityDenied();
+      }
+    };
+    const onFocus = () => void check();
+    window.addEventListener("focus", onFocus);
+    const timer = window.setInterval(check, 30000);
+    return () => {
+      active = false;
+      window.removeEventListener("focus", onFocus);
+      window.clearInterval(timer);
+    };
+  }, [session, role, applySession, authorityDenied]);
+  useEffect(() => {
+    if (session !== "ready" || mode !== "moderation") return;
     let active = true;
     queueMicrotask(() => {
       if (active) void loadQueue(initialCursor);
@@ -171,7 +236,7 @@ export default function Console({ configured }: { configured: boolean }) {
     return () => {
       active = false;
     };
-  }, [session, loadQueue]);
+  }, [session, mode, loadQueue]);
 
   async function openDetail(id: string, preserveMessage = false) {
     lastFocus.current = document.activeElement as HTMLElement;
@@ -226,16 +291,15 @@ export default function Console({ configured }: { configured: boolean }) {
     setBusy(true);
     try {
       await call("/api/session", { op: "in", email, password });
-      const current = await call("/api/session");
+      const current = (await call("/api/session")) as SessionReply;
       if (!sessionReplyBelongsTo(capturedSession, sessionGeneration.current))
         return;
-      setRole(current.role ?? null);
       setPassword("");
-      setSession("in");
+      applySession(current);
     } catch {
       if (sessionReplyBelongsTo(capturedSession, sessionGeneration.current))
         setMessage(
-          "Sign-in unavailable. Check your credentials and local setup.",
+          "Sign-in unavailable. Check your credentials and try again.",
         );
     } finally {
       if (sessionReplyBelongsTo(capturedSession, sessionGeneration.current))
@@ -247,6 +311,7 @@ export default function Console({ configured }: { configured: boolean }) {
     mutationGeneration.current++;
     generation.current++;
     clearSensitive();
+    clearMfa();
     setQueue([]);
     setHistory([]);
     setUncertain(null);
@@ -256,6 +321,65 @@ export default function Console({ configured }: { configured: boolean }) {
       await call("/api/session", { op: "out" });
     } catch {
       setMessage("Sign-out could not be confirmed. Close this tab.");
+    }
+  }
+  async function enroll() {
+    const captured = ++sessionGeneration.current;
+    setBusy(true);
+    setMessage("");
+    try {
+      const result = await call("/api/mfa", { op: "enroll" });
+      if (captured !== sessionGeneration.current) return;
+      setFactorId(result.factorId);
+      setQrCode(result.qrCode);
+      setManualKey(result.manualKey);
+    } catch {
+      if (captured === sessionGeneration.current)
+        setMessage(
+          "Authenticator setup is unavailable. Sign out and try again.",
+        );
+    } finally {
+      if (captured === sessionGeneration.current) setBusy(false);
+    }
+  }
+  async function verifyMfa(e: React.FormEvent) {
+    e.preventDefault();
+    if (!factorId) return;
+    const captured = ++sessionGeneration.current;
+    setBusy(true);
+    setMessage("");
+    try {
+      const challenge =
+        challengeId ??
+        ((
+          await call("/api/mfa", {
+            op: "challenge",
+            factorId,
+          })
+        ).challengeId as string);
+      if (captured !== sessionGeneration.current) return;
+      setChallengeId(challenge);
+      await call("/api/mfa", {
+        op: "verify",
+        factorId,
+        challengeId: challenge,
+        code,
+      });
+      const reply = (await call("/api/session")) as SessionReply;
+      if (captured !== sessionGeneration.current) return;
+      applySession(reply);
+      if (reply.mfa !== "ready")
+        setMessage("Verification was not confirmed. Try again.");
+    } catch {
+      if (captured === sessionGeneration.current) {
+        setChallengeId(null);
+        setCode("");
+        setMessage(
+          "The code could not be verified. Check your authenticator and try again.",
+        );
+      }
+    } finally {
+      if (captured === sessionGeneration.current) setBusy(false);
     }
   }
   function prepare(kind: string) {
@@ -400,10 +524,15 @@ export default function Console({ configured }: { configured: boolean }) {
       </a>
       <header className="masthead">
         <span className="wordmark">
-          pals<span className="wordmark-sub"> / moderation</span>
+          pals<span className="wordmark-sub"> / {mode === "policy" ? "launch" : "moderation"}</span>
         </span>
-        <span className="campus">UNC Chapel Hill · local workspace</span>
-        {session === "in" && (
+        <span className="campus">UNC Chapel Hill · private workspace</span>
+        {session === "ready" && (
+          <a className="workspace-link" href={mode === "policy" ? "/" : "/policy"}>
+            {mode === "policy" ? "Reports" : "Launch policy"}
+          </a>
+        )}
+        {!["loading", "out"].includes(session) && (
           <button className="text-button" onClick={signOut}>
             Sign out
           </button>
@@ -412,11 +541,11 @@ export default function Console({ configured }: { configured: boolean }) {
       <main id="main" tabIndex={-1}>
         {!configured ? (
           <section className="setup">
-            <p className="eyebrow">Local setup</p>
-            <h1>Connect the local workspace</h1>
+            <p className="eyebrow">Workspace setup</p>
+            <h1>Connect the moderation workspace</h1>
             <p>
-              Configure a local Supabase publishable key to use moderation. No
-              operator access is available in this state.
+              Configure the approved Supabase target and publishable key.
+              Operator access is unavailable until setup is complete.
             </p>
           </section>
         ) : session === "loading" ? (
@@ -426,10 +555,9 @@ export default function Console({ configured }: { configured: boolean }) {
         ) : session === "out" ? (
           <section className="setup sign-in">
             <p className="eyebrow">Private workspace</p>
-            <h1>Sign in to review reports</h1>
+            <h1>{mode === "policy" ? "Sign in to manage launch policy" : "Sign in to review reports"}</h1>
             <p>
-              Authorized campus operators only. Earlier unconfirmed actions may
-              have completed; open a fresh report before acting.
+              {mode === "policy" ? "Authorized launch owner only. Reconcile any earlier unconfirmed policy request before making another change." : "Authorized campus operators only. Earlier unconfirmed actions may have completed; open a fresh report before acting."}
             </p>
             <form onSubmit={signIn}>
               <label>
@@ -455,17 +583,103 @@ export default function Console({ configured }: { configured: boolean }) {
               <button disabled={busy}>Sign in</button>
             </form>
           </section>
+        ) : session === "denied" ? (
+          <section className="state" role="alert">
+            <p className="eyebrow">Access unavailable</p>
+            <h1>{mode === "policy" ? "Launch policy is locked" : "Moderation is locked"}</h1>
+            <p>
+              Your account, role or authenticator could not be confirmed. Sign
+              out and contact the launch owner if this persists.
+            </p>
+          </section>
+        ) : session === "enroll" ? (
+          <section className="setup mfa-setup">
+            <p className="eyebrow">Secure your session</p>
+            <h1>Set up an authenticator</h1>
+            <p>
+              Use your personal authenticator app to scan this code. Keep the
+              authenticator and its recovery method under your control.
+            </p>
+            {!qrCode ? (
+              <button disabled={busy} onClick={() => void enroll()}>
+                Start authenticator setup
+              </button>
+            ) : (
+              <>
+                <img
+                  className="mfa-qr"
+                  src={qrCode}
+                  alt="Authenticator setup QR code"
+                />
+                {manualKey && (
+                  <p className="mfa-note">
+                    On the same phone? Enter this setup key manually in your
+                    authenticator: <code className="mfa-key">{manualKey}</code>
+                  </p>
+                )}
+                <p className="mfa-note">
+                  Finish setup by entering the current six-digit code. This
+                  setup image disappears when you leave this page.
+                </p>
+                <form onSubmit={verifyMfa}>
+                  <label>
+                    Authenticator code
+                    <input
+                      inputMode="numeric"
+                      autoComplete="one-time-code"
+                      pattern="[0-9]{6}"
+                      maxLength={6}
+                      required
+                      value={code}
+                      onChange={(e) => setCode(e.target.value)}
+                    />
+                  </label>
+                  <button disabled={busy || code.length !== 6}>
+                    Verify and continue
+                  </button>
+                </form>
+              </>
+            )}
+          </section>
+        ) : session === "challenge" ? (
+          <section className="setup mfa-setup">
+            <p className="eyebrow">Secure your session</p>
+            <h1>Enter your authenticator code</h1>
+            <p>
+              Your operator access needs a verified authenticator session before
+              {mode === "policy" ? " launch policy can change." : " reports can be opened."}
+            </p>
+            <form onSubmit={verifyMfa}>
+              <label>
+                Six-digit code
+                <input
+                  inputMode="numeric"
+                  autoComplete="one-time-code"
+                  pattern="[0-9]{6}"
+                  maxLength={6}
+                  required
+                  value={code}
+                  onChange={(e) => setCode(e.target.value)}
+                />
+              </label>
+              <button disabled={busy || code.length !== 6}>
+                Verify and continue
+              </button>
+            </form>
+          </section>
         ) : (
           <>
             <div className="heading">
-              <p className="eyebrow">Safety operations</p>
-              <h1>Reports</h1>
+              <p className="eyebrow">{mode === "policy" ? "Launch operations" : "Safety operations"}</p>
+              <h1>{mode === "policy" ? "Launch policy" : "Reports"}</h1>
               <p>
-                Review each allegation against the current case and target
-                state.
+                {mode === "policy" ? "Make one audited gate change at a time." : "Review each allegation against the current case and target state."}
               </p>
             </div>
-            {denied ? (
+            {mode === "policy" ? (
+              role === "admin" ? <PolicyPanel key={policyEpoch} onDenied={authorityDenied} /> :
+                <section className="state" role="alert"><h2>Policy unavailable</h2><p>This workspace requires launch owner authority.</p></section>
+            ) : denied ? (
               <section className="state" role="alert">
                 <h2>Moderation unavailable</h2>
                 <p>This workspace cannot load reports right now.</p>

@@ -2,6 +2,9 @@ begin;
 create extension if not exists pgtap with schema extensions;
 set search_path=public,extensions;
 select no_plan();
+-- Historical fixture runs under the open-UNC release switches, locally only.
+update private.pilot_availability set enabled=true where singleton;
+update private.pilot_capabilities set enabled=true where key in ('onboarding','hangouts','hangout_chat','people');
 
 insert into auth.users(id,email,email_confirmed_at)
 select ('53200000-0000-4000-8000-'||lpad(n::text,12,'0'))::uuid,
@@ -18,6 +21,18 @@ insert into public.platform_roles(user_id,role) values
 update private.hangout_feature_gate set enabled=true;
 update private.hangout_chat_feature_gate set enabled=true;
 update private.safety_feature_gate set enabled=true;
+
+
+-- SQL-role fixture: live Auth rows model a verified operator session; HTTP uses real TOTP.
+insert into auth.mfa_factors(id,user_id,factor_type,status,created_at,updated_at) values
+ ('b1b60a1c-fb3d-61df-8faf-5dd16ffbaa05','53200000-0000-4000-8000-000000000005','totp','verified',now(),now());
+insert into auth.sessions(id,user_id,factor_id,aal) values
+ ('6d516eaf-3a0a-4af6-0b69-699cadd90f03','53200000-0000-4000-8000-000000000005','b1b60a1c-fb3d-61df-8faf-5dd16ffbaa05','aal2');
+-- SQL-role fixture: live Auth rows model a verified operator session; HTTP uses real TOTP.
+insert into auth.mfa_factors(id,user_id,factor_type,status,created_at,updated_at) values
+ ('637bc31d-7739-f232-350d-e8b074c61ed1','53200000-0000-4000-8000-000000000001','totp','verified',now(),now());
+insert into auth.sessions(id,user_id,factor_id,aal) values
+ ('cb959863-237f-c787-53f3-0620734ca81c','53200000-0000-4000-8000-000000000001','637bc31d-7739-f232-350d-e8b074c61ed1','aal2');
 set local role authenticated;
 select set_config('request.jwt.claims',
  '{"sub":"53200000-0000-4000-8000-000000000002","role":"authenticated"}',true);
@@ -77,7 +92,7 @@ select throws_ok($$select * from public.apply_hangout_moderation_action(
 reset role;
 set local role authenticated;
 select set_config('request.jwt.claims',
- '{"sub":"53200000-0000-4000-8000-000000000001","role":"authenticated"}',true);
+ '{"sub":"53200000-0000-4000-8000-000000000001","role":"authenticated","aal":"aal2","session_id":"cb959863-237f-c787-53f3-0620734ca81c"}',true);
 select throws_ok($$select * from public.apply_hangout_moderation_action(
  '53200000-0000-4000-8002-000000000001',
  '53200000-0000-4000-8003-000000000011',1,'Reason')$$,
@@ -100,7 +115,7 @@ select throws_ok($$select * from public.apply_hangout_moderation_action(
  '53200000-0000-4000-8003-000000000011',1,'Reason')$$,
  '42501',null,'reporter cannot act');
 select set_config('request.jwt.claims',
- '{"sub":"53200000-0000-4000-8000-000000000001","role":"authenticated"}',true);
+ '{"sub":"53200000-0000-4000-8000-000000000001","role":"authenticated","aal":"aal2","session_id":"cb959863-237f-c787-53f3-0620734ca81c"}',true);
 select is((select target_disabled from public.get_moderation_report(
  '53200000-0000-4000-8002-000000000001')),false,
  'detail projects live enabled state');
@@ -120,7 +135,7 @@ select is((select count(*) from public.list_notifications()
  where target_id=current_setting('b2.h1')::uuid),1::bigint,
  'chat notification has destination before disable');
 select set_config('request.jwt.claims',
- '{"sub":"53200000-0000-4000-8000-000000000001","role":"authenticated"}',true);
+ '{"sub":"53200000-0000-4000-8000-000000000001","role":"authenticated","aal":"aal2","session_id":"cb959863-237f-c787-53f3-0620734ca81c"}',true);
 select is((select revision from public.transition_moderation_case(
  '53200000-0000-4000-8002-000000000001',
  '53200000-0000-4000-8003-000000000010',0,'start_review')),1::bigint,
@@ -265,7 +280,7 @@ select is((select state from public.hangout_participants
  'disabled Hangout host remains joined after attendee block');
 set local role authenticated;
 select set_config('request.jwt.claims',
- '{"sub":"53200000-0000-4000-8000-000000000001","role":"authenticated"}',true);
+ '{"sub":"53200000-0000-4000-8000-000000000001","role":"authenticated","aal":"aal2","session_id":"cb959863-237f-c787-53f3-0620734ca81c"}',true);
 select is((select revision from public.apply_hangout_moderation_action(
  '53200000-0000-4000-8002-000000000002',
  '53200000-0000-4000-8003-000000000021',1,'Cancelled source')),2::bigint,
@@ -299,7 +314,7 @@ select is((select count(*) from public.submit_safety_report(
  'harassment',null)),1::bigint,
  'disabled cancelled attendee can file retained private report');
 select set_config('request.jwt.claims',
- '{"sub":"53200000-0000-4000-8000-000000000001","role":"authenticated"}',true);
+ '{"sub":"53200000-0000-4000-8000-000000000001","role":"authenticated","aal":"aal2","session_id":"cb959863-237f-c787-53f3-0620734ca81c"}',true);
 select is((select revision from public.transition_moderation_case(
  '53200000-0000-4000-8002-000000000001',
  '53200000-0000-4000-8003-000000000012',2,'reopen','Further review')),3::bigint,

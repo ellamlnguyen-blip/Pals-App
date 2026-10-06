@@ -224,12 +224,12 @@ export function HangoutsShell({
         <h2 id="shell-title">
           {shell === "Create Hangout"
             ? "Your next Hangout starts here"
-            : `${shell} is coming later`}
+            : `${shell} is unavailable in this staging configuration`}
         </h2>
         <p id="shell-description">
           {shell === "Create Hangout"
             ? "Soon, a title, a rough time and a place will be enough to get people together. Creation isn't available in this map preview."
-            : `This map preview focuses on Hangouts. ${shell} isn't available yet.`}
+            : `The ${shell} feature is included in the UNC MVP but isn't enabled in this staging configuration.`}
         </p>
         {shell === "Create Hangout" && (
           <p className="fixture-notice">Nothing has been saved or published.</p>

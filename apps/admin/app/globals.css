@@ -10,6 +10,7 @@ body {
 }
 button,
 input,
+select,
 textarea {
   font: inherit;
 }
@@ -306,12 +307,40 @@ p {
   max-width: 45ch;
 }
 .sign-in form,
+.mfa-setup form,
 label {
   display: grid;
   gap: 0.4rem;
 }
 .sign-in form {
   gap: 1rem;
+}
+.mfa-setup form {
+  gap: 1rem;
+  margin-top: 1.25rem;
+}
+.mfa-setup form button {
+  justify-self: start;
+}
+.mfa-qr {
+  display: block;
+  width: min(100%, 14rem);
+  aspect-ratio: 1;
+  margin: 1rem 0;
+  padding: 0.5rem;
+  background: white;
+  border: 1px solid var(--pals-line);
+  border-radius: 0.6rem;
+}
+.mfa-note {
+  font-size: 0.9rem;
+}
+.mfa-key {
+  display: block;
+  overflow-wrap: anywhere;
+  padding: 0.5rem 0;
+  color: var(--pals-ink);
+  user-select: all;
 }
 .sign-in form button {
   justify-self: start;
@@ -332,6 +361,26 @@ textarea {
 textarea {
   resize: vertical;
 }
+.workspace-link {
+  color: var(--pals-accent);
+  font-weight: 800;
+  white-space: nowrap;
+}
+.policy-panel {
+  max-width: 42rem;
+  border: 1px solid var(--pals-line);
+  background: var(--pals-surface-raised);
+  border-radius: 1rem;
+  box-shadow: var(--pals-panel-shadow);
+  padding: 1.5rem;
+}
+.policy-panel form { display: grid; gap: 1rem; }
+.policy-panel form > button { justify-self: start; }
+.policy-confirm { display: flex; align-items: start; gap: 0.7rem; }
+.policy-confirm input { width: 1.2rem; height: 1.2rem; flex: none; margin: 0.15rem 0 0; }
+.policy-confirm span { font-weight: 500; overflow-wrap: anywhere; }
+.policy-receipt { margin-top: 1rem; padding: 1rem; background: var(--pals-accent-soft); border-radius: 0.7rem; overflow-wrap: anywhere; }
+.policy-receipt p { margin: 0.3rem 0 0; }
 .message {
   max-width: 48rem;
   padding: 1rem;

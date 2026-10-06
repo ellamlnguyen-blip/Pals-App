@@ -12,20 +12,20 @@ import {
 
 function initialValues(profile: OwnerProfile) {
   const values: Record<string, string> = {
-    real_name: profile.real_name,
-    major: profile.major,
-    bio: profile.bio,
-    graduation_year: String(profile.graduation_year),
-    interests: profile.interests.join("\n"),
-    down_to_do: profile.down_to_do.join("\n"),
+    real_name: profile.real_name ?? "",
+    major: profile.major ?? "",
+    bio: profile.bio ?? "",
+    graduation_year: profile.graduation_year?.toString() ?? "",
+    interests: (profile.interests ?? []).join("\n"),
+    down_to_do: (profile.down_to_do ?? []).join("\n"),
     favorite_music: profile.favorite_music ?? "",
     favorite_foods: profile.favorite_foods ?? "",
     weird_fact: profile.weird_fact ?? "",
     instagram: profile.instagram ?? "",
   };
   for (let i = 0; i < 3; i++) {
-    values[`question_${i}`] = profile.prompts[i]?.question ?? "";
-    values[`answer_${i}`] = profile.prompts[i]?.answer ?? "";
+    values[`question_${i}`] = profile.prompts?.[i]?.question ?? "";
+    values[`answer_${i}`] = profile.prompts?.[i]?.answer ?? "";
   }
   return values;
 }
@@ -141,6 +141,7 @@ export function ProfileEditor({
             <PhotoCard
               key={slot}
               slot={slot}
+              hasPhoto={slot !== "primary" || !!profile.primary_photo_path}
               revision={revision}
               disabled={pending || editing}
               feedback={photoSlot === slot ? feedback : {}}
@@ -352,6 +353,7 @@ export function ProfileEditor({
 }
 function PhotoCard({
   slot,
+  hasPhoto,
   revision,
   disabled,
   feedback,
@@ -359,6 +361,7 @@ function PhotoCard({
   run,
 }: {
   slot: string;
+  hasPhoto: boolean;
   revision: number;
   disabled: boolean;
   feedback: ProfileResult;
@@ -393,7 +396,11 @@ function PhotoCard({
           </button>
         )}
       </div>
+      {slot !== "new" && !hasPhoto && (
+        <p className="help">No photo added yet.</p>
+      )}
       {slot !== "new" &&
+        hasPhoto &&
         (failed ? (
           <p className="help">Photo couldn’t load. Reload to try again.</p>
         ) : (

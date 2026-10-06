@@ -1,5 +1,25 @@
 # Changelog
 
+## 2026-10-05 — Full MVP staging testing access
+
+Enabled all 11 MVP capabilities through Ella's authenticated MFA manager session, enabled their reviewed source gates including reporting/blocking, and turned staging availability on last. Independent readback confirms immutable receipts and availability revision 2. The current Task 27 Preview is open for confirmed active UNC accounts. Analytics and deferred large-event automation remain off. Student functionality still requires the enabled browser smoke; production and domains are unchanged.
+
+## 2026-10-05 — Staging operator verification
+
+Verified Ella's hosted admin TOTP session and launch-policy access, closed the temporary enrollment window, and enabled the staging-only moderation source gate through the reviewed audited control. The report queue now loads with no reviewable reports. Student access remains closed.
+
+## 2026-10-05 — TASK-027 staging operator host preparation
+
+Published and integrated the reviewed caller-session policy controls; the combined admin app builds. Applied the six reviewed operator migrations to exact Pals Staging and completed audited Ella-only manager, moderator and admin provisioning while keeping student gates closed. Created a separate Vercel staging admin project with the exact staging Supabase target and MFA enrollment closed. The reviewed-branch deployment is Ready and its unauthenticated pages show private sign-in. Ella's personal TOTP setup, hosted smoke and launch checks remain.
+
+## 2026-10-05 — TASK-027 publication and launch-security decisions
+
+Published and verified reviewed TASK-027I/K/O branches and integration `6fd3240` after direct user authorization. Recorded acceptance of narrow prelaunch own-role read, manager MFA in the database and staged emergency availability-off; rejected repeated UNC eligibility checks on each privileged action. The J implementation is underway; hosted rollout and launch remain pending.
+
+## 2026-10-05 — TASK-027 local operator security integration
+
+Integrated reviewed staging bootstrap, moderator live-TOTP guard, HTTPS operator MFA console and two legacy moderation HTTP fixture updates into the local launch branch. Local genuine Auth operator flow and focused tests passed. Identified and bounded further launch fixes for preactivation own-role read, current UNC eligibility, manager MFA, policy controls, emergency shutdown and genuine-Auth moderation race testing, which now passes 1/1 after TASK-027O and independent review. The branch is not published or deployed; user acceptance and direct publication authorization are pending, and no hosted gates or domain were changed.
+
 ## 2026-10-05 — Sole moderation ownership and local launch verification
 
 Ella Nguyen is the sole launch moderation owner; the backup role/coverage requirement is removed. Accepted confirmed-UNC immediate access remains independent of roster/profile/photo, with RLS, current-email/account enforcement, blocks, reporting and consent intact. Reviewed stale Hangout revision handling uses a non-retrying PT409 business conflict. Local Storage reset/runtime version alignment restores real upload verification without a provider schema patch. Final clean database checks pass twice (1,678 assertions each), Auth/Storage1/1, Auth/web4/4, 49 unit tests without skips and both builds pass. Hosted moderator designs/roles/MFA/recovery, enabled staging smoke, parent main integration and public cutover remain incomplete.

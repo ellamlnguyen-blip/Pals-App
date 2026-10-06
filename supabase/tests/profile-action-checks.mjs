@@ -16,7 +16,7 @@ export async function actionChecks(owner, a, png) {
   async function action(name, values = {}, cookie = owner.header()) {
     const devManifest = new URL("../../apps/web/.next/dev/server/server-reference-manifest.json", import.meta.url);
     const productionManifest = new URL("../../apps/web/.next/server/server-reference-manifest.json", import.meta.url);
-    const manifest = JSON.parse(readFileSync(existsSync(productionManifest) ? productionManifest : devManifest, "utf8"));
+    const manifest = JSON.parse(readFileSync(existsSync(devManifest) ? devManifest : productionManifest, "utf8"));
     const id = Object.entries(manifest.node).find(
       ([, entry]) => entry.exportedName === name,
     )?.[0];

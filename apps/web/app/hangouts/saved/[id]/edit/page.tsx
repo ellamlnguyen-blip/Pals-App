@@ -39,7 +39,7 @@ export default async function SavedEditPage({
     <Frame signedIn navigation>
       <div className="hangout-page-heading">
         <Link href={`/hangouts/saved/${id}`}>← Hangout</Link>
-        <p className="badge">Manage Hangout · local only</p>
+        <p className="badge">Manage Hangout</p>
         <h1>Edit {record.title}</h1>
         <p>
           Changes to public details and private instructions affect everyone

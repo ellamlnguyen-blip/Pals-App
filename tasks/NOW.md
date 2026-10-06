@@ -3,6 +3,25 @@
 ## 2026-10-06 — TASK-028 model parity and seamless experience
 
 Active parent `tasks/active/TASK-028-model-experience.md` owns the requested coordinated visual/functional refinement. Baseline main74e7fa0 and TASK-02730c6812 verified from origin. Shared staged checkout preserved; isolated worktree. Reference capture and dependency reconciliation precede implementation. TASK-027 remains incomplete; no production/domain change or unrelated successor.
+## 2026-10-05 — Full MVP staging activated
+
+The user authorized full MVP testing access. Pals Staging availability and all 11 included MVP capabilities are enabled at revision 2; all nine reviewed source gates (including safety/moderation) are enabled. Independent readback confirms 12 genuine Ella-session policy audit receipts and eight administrative source-gate receipts. Use the stable Task 27 Preview URL, not the older `pals-app-eta.vercel.app` build. Immediate rollback: reviewed emergency availability-off at expected revision 2. Analytics and deferred large-Hangout safeguards remain off. TASK-027 remains incomplete pending signed-in student feature smoke, recovery/operational checks and reviewed main integration. Production/domain unchanged.
+
+## 2026-10-05 — Staging moderation queue usable
+
+TASK-027 remains in progress. Ella's hosted admin session has verified TOTP (`mfa=ready`) and can open `/policy`. The temporary enrollment switch is off again on Ready deployment `EsvDk5oiDfXifrNwCZ52hkyvKrba`. The initially locked report queue was caused by the closed staging moderation source gate. Audited staging-only source-gate transition false→true has receipt `7e20d41b-5276-4ed0-b11f-d82d5c8bbd3f`; the signed-in browser now shows an empty review queue. Student availability and capabilities remain off. Live report handling, recovery and full staged student smoke remain.
+
+## 2026-10-05 — Staging admin host preparation
+
+TASK-027 remains in progress. Reviewed TASK-027L is published at `fa09a6c3b9950ec41ed190b414766b620388a738` and integrated into the parent at remote-verified `7433a65bcb7f9cf46e36f0f0978382212473497f`; the combined admin app builds. Pals Staging has the six reviewed operator migrations through `20261005000700`, audited first-manager/moderator/admin grants for Ella, and availability plus all capabilities still off. A separate Vercel project `pals-admin-staging` is connected to `apps/admin`, with stable origin `https://pals-admin-staging.vercel.app`, exact staging Supabase target, and MFA enrollment closed by default. Its Production environment tracks `agent/TASK-027-open-unc-mvp`; reviewed branch `51ec7b4c5a9b52e4d535af241b51e337b9afdde3` deployed Ready and unauthenticated moderation/policy pages show private sign-in. Ella's personal MFA enrollment, operator smoke, staged student flows, and release checks remain pending. No production data/domain or student gate changed.
+
+## 2026-10-05 — User decisions and published Task 27 source
+
+The user authorized publication to `https://github.com/ellamlnguyen-blip/Pals-App.git`. Reviewed I/K/O task branches and parent integration `6fd3240` were pushed and exact remote heads verified; G/H were already published. The user accepted ADR-0032 own-role read, accepted ADR-0034 database-enforced manager MFA without per-action UNC rechecks, accepted ADR-0035 staging emergency availability-off, and rejected ADR-0033 per-action UNC eligibility checks. TASK-027M is cancelled; J is dispatched, N follows reviewed J, and P follows the reviewed migration lane. Independent read-only review clears the narrowed N design. Hosted staging/production gates remain closed; no new migration, role grant, domain or policy write occurred. Full staged smoke and public launch remain incomplete.
+
+## 2026-10-05 — TASK-027 local operator integration and pending decisions
+
+Reviewed G administrative bootstrap, H database MFA guard, I HTTPS operator console and K genuine-TOTP moderation HTTP fixtures are integrated locally on `agent/TASK-027-open-unc-mvp`; none has been published or applied to hosted staging. I's local genuine Auth sign-in, TOTP enrollment/challenge and AAL2 console flow passed, with local availability returned to closed. K's two HTTP suites pass. TASK-027O replaced the failing legacy moderation race setup with genuine Auth TOTP for both operators; its focused race suite passes 1/1, fresh security review is clear, and the disposable stack reset clean. TASK-027J/M/N/L/P remain proposed or dependent on ADR-0032/0033/0034/0035 acceptance. Preactivation own-role read, live UNC eligibility for moderation, MFA on management RPCs, policy controls and emergency shutdown are launch blockers. Staging and production gates remain closed. Automatic approval review rejected private branch publication without direct user authorization for the exact GitHub destination; that authorization is pending. No full staging smoke or public launch claim is made.
 
 ## Accepted operator setup and automatic student use
 
