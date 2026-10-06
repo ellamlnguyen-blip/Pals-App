@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-06 — Reference profile UI reviewed; rich sharing decision pending
+
+Published/remote-verified task artifact `a9381aeb7a3b48da8819ba696bab560a1ef793a6` on `agent/TASK-028P-profile-remodel`. TASK-028P owner/current People-text presentation passes independent source review and actual local browser checks through `2e9fa9591b3ee802cf38d7e54729c0079e677134`: reference composition, readable editing, private photos, friendship/DM states, mobile gallery and whole-peer clearing after cross-tab sign-out. Final production build passes; local review is at localhost3029 with private test credentials. `design-qa.md` and `agents/handoffs/TASK-028P.md` record evidence and limits. ADR-0036 remains Proposed: no hometown storage or rich peer disclosure implemented. TASK-028P and parent TASK-028 remain incomplete; TASK-027 staged acceptance still gates main application integration. Publish reviewed documentation/evidence only to main; no hosted change or successor.
+
 ## 2026-10-06 — Reviewed model and experience refinement on TASK-028
 
 Published exact model assets/self-hosted fonts, measured header/hero and responsive shell, accessible contrast/controls, private photo preview and avatar refresh, discovery filter/scroll return, and mounted authorized chat draft/page continuity. Fresh review and local checks pass; corresponding screenshots and limitations are recorded in the consolidated TASK-028 handoff. Code remains on `agent/TASK-028-model-experience` at reviewed `60a3072` because TASK-027 staged acceptance still gates main app integration. Main publication is documentation only. No hosted migration, gate, production or domain change; no released-parity claim.
