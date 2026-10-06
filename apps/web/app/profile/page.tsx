@@ -11,7 +11,11 @@ export const dynamic = "force-dynamic";
 export default async function ProfilePage() {
   const { user, profile } = await ownerProfile();
   return (
-    <Frame signedIn navigation>
+    <Frame
+      signedIn
+      navigation
+      ownerPhotoRevision={profile.primary_photo_path ? profile.revision : null}
+    >
       <div className="profile-heading">
         <Link href="/hangouts">← Back to Hangouts</Link>
         <h1>Your profile</h1>

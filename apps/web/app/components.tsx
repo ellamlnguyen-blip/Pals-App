@@ -8,10 +8,12 @@ export function Frame({
   children,
   signedIn = false,
   navigation = false,
+  ownerPhotoRevision,
 }: {
   children: ReactNode;
   signedIn?: boolean;
   navigation?: boolean;
+  ownerPhotoRevision?: number | null;
 }) {
   return (
     <div className="page">
@@ -21,6 +23,7 @@ export function Frame({
       <StudentHeader
         signedIn={signedIn}
         accountReady={navigation}
+        ownerPhotoRevision={ownerPhotoRevision}
         attendanceAvailable={signedIn && localAttendanceAvailable()}
         available={
           navigation

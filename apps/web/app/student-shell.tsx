@@ -39,16 +39,17 @@ export function StudentHeader({
   signedIn = false,
   name,
   accountReady = false,
+  ownerPhotoRevision,
   attendanceAvailable = false,
   available,
 }: {
   signedIn?: boolean;
   name?: string | null;
   accountReady?: boolean;
+  ownerPhotoRevision?: number | null;
   attendanceAvailable?: boolean;
   available?: StudentDestinations;
 }) {
-  const [photoFailed, setPhotoFailed] = useState(false);
   const menu = useRef<HTMLDetailsElement>(null);
   const pathname = usePathname();
   useEffect(() => {
@@ -88,20 +89,12 @@ export function StudentHeader({
         {signedIn ? (
           <details className="account-menu" ref={menu}>
             <summary aria-label="Your account">
-              {accountReady && !photoFailed ? (
-                <Image
-                  src="/profile/photo"
-                  alt=""
-                  width={40}
-                  height={40}
-                  unoptimized
-                  onError={() => setPhotoFailed(true)}
-                />
-              ) : (
-                <span className="account-initial" aria-hidden="true">
-                  {name?.charAt(0).toUpperCase() || "P"}
-                </span>
-              )}
+              <OwnerAvatar
+                key={ownerPhotoRevision ?? "unknown"}
+                accountReady={accountReady}
+                name={name}
+                photoRevision={ownerPhotoRevision}
+              />
             </summary>
             <div className="account-panel">
               <strong>{name ?? "Your account"}</strong>
@@ -122,6 +115,38 @@ export function StudentHeader({
         )}
       </div>
     </header>
+  );
+}
+
+function OwnerAvatar({
+  accountReady,
+  name,
+  photoRevision,
+}: {
+  accountReady: boolean;
+  name?: string | null;
+  photoRevision?: number | null;
+}) {
+  const [photoFailed, setPhotoFailed] = useState(false);
+  // null means the owner profile has no photo. An omitted revision preserves
+  // the existing best-effort avatar on routes that have not read that profile.
+  return accountReady && photoRevision !== null && !photoFailed ? (
+    <Image
+      src={
+        photoRevision === undefined
+          ? "/profile/photo"
+          : `/profile/photo?v=${photoRevision}`
+      }
+      alt=""
+      width={40}
+      height={40}
+      unoptimized
+      onError={() => setPhotoFailed(true)}
+    />
+  ) : (
+    <span className="account-initial" aria-hidden="true">
+      {name?.charAt(0).toUpperCase() || "P"}
+    </span>
   );
 }
 
