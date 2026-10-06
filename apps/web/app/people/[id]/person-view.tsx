@@ -166,7 +166,13 @@ export function PersonView({
         actor={actor}
         state={dmState}
         onSent={() => setDmState("pending")}
-        onUnavailable={() => setDmState("unknown")}
+        onUnavailable={() => {
+          setDmState("unknown");
+          setMessage(
+            "People access changed. Return to People to check current availability.",
+          );
+          setCleared(true);
+        }}
       />
     </article>
   );
