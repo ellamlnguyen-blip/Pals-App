@@ -4,6 +4,7 @@ export type OwnerProfile = {
   graduation_year: number | null;
   major: string | null;
   bio: string | null;
+  hometown: string | null;
   primary_photo_path: string | null;
   additional_photo_paths: string[];
   interests: string[];
