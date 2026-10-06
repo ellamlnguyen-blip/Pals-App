@@ -1,0 +1,9 @@
+# Profile comparison evidence
+
+`profile-reference.png` is the user-supplied October 6, 2026 screenshot (793 × 1983), copied without editing. `profile-before-1280.png` is the earlier real owner profile. `profile-comparison-793.png` is the actual normalized after capture at the same 793 × 1983 dimensions, compared with the reference together in the same image input. `profile-after-{320,390,793,1280}.png` retain responsive full-page captures; `profile-top-390.png` is a compact review image. These final layout captures use `61b2d7d`; final `2e9fa95` changes access-loss clearing only. `profile-top-793.png`, empty/stale and peer captures preserve intermediate iteration evidence, not a separate final-layout claim.
+
+`peer-auth-cleared.png` is the actual final `2e9fa95` cross-tab sign-out result: peer text, friendship and DM actions clear; recovery/navigation remain. See project-root `design-qa.md` for checked interactions, measured geometry and limits. Authorized owner/current-text UI passes locally; expanded rich peer profiles remain blocked by Proposed ADR-0036.
+
+Built-in image generation produced five fictional-adult fixture images (one primary, four extras). All were visually inspected and uploaded only to a dedicated owner in disposable `pals-task028-disposable`. Raw owner photo paths, credentials and local fixture manifests are not committed. Images are not defaults or depictions of real Pals users.
+
+Three dedicated accounts used real local Supabase signup, Mailpit confirmation and password sign-in. Maya has private reference-like photos/prompts; Jordan exercises accepted friendship/chat; Reese exercises pending requests and opt-out denial. Existing People text consent is enabled for these fixtures. The earlier user account and its Hangouts were preserved. No hosted data, schema, gates or credentials changed.

@@ -1,5 +1,9 @@
 # Current State
 
+## 2026-10-06 — Reference profile UI reviewed; rich sharing decision pending
+
+TASK-028P owner/current People-text presentation passes independent source review and actual local browser checks through `2e9fa9591b3ee802cf38d7e54729c0079e677134`: reference composition, readable editing, private photos, friendship/DM states, mobile gallery and whole-peer clearing after cross-tab sign-out. Final production build passes; local review is at localhost3029 with private test credentials. `design-qa.md` and `agents/handoffs/TASK-028P.md` record evidence and limits. ADR-0036 remains Proposed: no hometown storage or rich peer disclosure implemented. TASK-028P and parent TASK-028 remain incomplete; TASK-027 staged acceptance still gates main application integration. Publish reviewed documentation/evidence only to main; no hosted change or successor.
+
 ## 2026-10-06 — Reviewed model/experience refinement, integration gated
 
 TASK-028 reviewed source `60a3072058edea037e2e4760bcaf1bae44f72e8c` is pushed and remote-verified on `agent/TASK-028-model-experience`, based on canonical main `74e7fa0` plus the reviewed/published TASK-027 dependency `30c6812`. Exact model logo/fonts and measured header/hero/map-list geometry are implemented with accessible contrast/navigation, optional profile/photo preview and recovery, stable discovery return and safer chat continuity. Public usepals.com currently resolves to the live www model; older dated 404 observations are historical.
