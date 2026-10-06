@@ -1,5 +1,9 @@
 # NOW
 
+## 2026-10-06 — TASK-028P profile reference remodel
+
+User requested the supplied profile design for all users. Bounded contract `tasks/active/TASK-028P-profile-remodel.md` is in progress; owner and existing authorized-text visual work may proceed. ADR-0036 proposes separate opt-in rich peer photos/prompts/hometown and remains unaccepted. Parent TASK-028 and TASK-027 staging/main source gates remain incomplete. Existing detached disposable preview is retained; no hosted changes or successor.
+
 ## 2026-10-06 — TASK-028 model parity and seamless experience
 
 Parent `tasks/active/TASK-028-model-experience.md` remains incomplete. Reviewed local source `60a3072058edea037e2e4760bcaf1bae44f72e8c` is pushed/remote-verified: exact model assets/fonts and measured shell/hero geometry, accessible responsive navigation, profile/photo recovery, discovery-return context and stable chat checks. Screenshot pairs, current local tests/browser outcomes and limits are recorded in `agents/handoffs/TASK-028.md`. TASK-027's signed-in staging smoke/moderation/recovery acceptance still blocks main app integration; no hosted/production/domain change occurred. Main receives documentation only until that gate closes. Shared staged/untracked checkout preserved; no successor.

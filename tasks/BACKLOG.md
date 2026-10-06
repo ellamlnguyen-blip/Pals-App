@@ -1,5 +1,9 @@
 # Backlog
 
+## 2026-10-06 — TASK-028P rich peer dependency
+
+Implement expanded peer photos/prompts/hometown only after explicit ADR-0036 acceptance, reviewed security contract and migrations/tests. Independently authorized owner/allowed-text profile remodeling proceeds under TASK-028P. No automatic expansion of existing People consent.
+
 TASK-028 remains incomplete in NOW: reviewed local model/continuity source is published at `60a3072`, with consolidated evidence/handoff. Avoid duplicate visual/continuity dispatch. TASK-027 staged acceptance still blocks main app integration; authenticated model and live-map comparison limits remain explicit.
 
 - TASK-027E — active supported local Storage reset compatibility investigation; required before full real-upload/lifecycle acceptance. Never patch provider indexes to bypass runtime mismatch.
