@@ -1,5 +1,9 @@
 # NOW
 
+## 2026-10-06 — TASK-028 model parity and seamless experience
+
+Active parent `tasks/active/TASK-028-model-experience.md` owns the requested coordinated visual/functional refinement. Baseline main74e7fa0 and TASK-02730c6812 verified from origin. Shared staged checkout preserved; isolated worktree. Reference capture and dependency reconciliation precede implementation. TASK-027 remains incomplete; no production/domain change or unrelated successor.
+
 ## Accepted operator setup and automatic student use
 
 The user explicitly accepted ADR29 staging setup and ADR31 operator MFA, selecting both admin and moderator authority for sole owner Ella. Ordinary confirmed UNC students require no manual approval/MFA; normal Hangout/social operations are automatic under existing source authorization. Publish G fixed-admin bootstrap, H MFA guard and I admin HTTPS/MFA contracts before fresh task-specific Sol-medium dispatch. H owns the shared local stack initially; G/I static preparation can proceed independently. No hosted grant/gate action has occurred. Parent remains incomplete pending exact review, operator enrollment/recovery, policy/shutdown controls and staged smoke.
