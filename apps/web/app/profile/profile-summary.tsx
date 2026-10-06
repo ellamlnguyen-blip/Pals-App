@@ -1,8 +1,10 @@
 import type { ReactNode, Ref } from "react";
 import { SealCheckIcon } from "@phosphor-icons/react/dist/csr/SealCheck";
+import { MapPinIcon } from "@phosphor-icons/react/dist/csr/MapPin";
 
 export function ProfileSummary({
   name,
+  hometown,
   bio,
   campus,
   major,
@@ -12,6 +14,7 @@ export function ProfileSummary({
   actions,
 }: {
   name: string;
+  hometown?: string | null;
   bio: string;
   campus: string;
   major: string;
@@ -33,6 +36,12 @@ export function ProfileSummary({
           </span>
         )}
       </div>
+      {hometown && (
+        <p className="profile-hometown">
+          <MapPinIcon size={22} weight="fill" aria-hidden="true" />
+          <span>From {hometown}</span>
+        </p>
+      )}
       <p className="profile-bio">{bio}</p>
       <dl className="profile-facts">
         <div>

@@ -19,6 +19,7 @@ function initialValues(profile: OwnerProfile) {
   const values: Record<string, string> = {
     real_name: profile.real_name ?? "",
     major: profile.major ?? "",
+    hometown: profile.hometown ?? "",
     bio: profile.bio ?? "",
     graduation_year: profile.graduation_year?.toString() ?? "",
     interests: (profile.interests ?? []).join("\n"),
@@ -128,7 +129,11 @@ export function ProfileEditor({
       photoSummary.current?.focus({ preventScroll: true });
     }
   }
-  function selectPhoto(slot: string, label: string, trigger: HTMLButtonElement) {
+  function selectPhoto(
+    slot: string,
+    label: string,
+    trigger: HTMLButtonElement,
+  ) {
     photoTrigger.current = trigger;
     setSelectedPhoto({ slot, label });
     setViewingPhoto(false);
@@ -261,14 +266,17 @@ export function ProfileEditor({
       <dialog
         ref={photoDialog}
         className="profile-photo-dialog"
-        aria-label={selectedPhoto ? `${selectedPhoto.label} options` : "Photo options"}
+        aria-label={
+          selectedPhoto ? `${selectedPhoto.label} options` : "Photo options"
+        }
         onClose={() => {
           setViewingPhoto(false);
           if (!skipPhotoFocusRestore.current) photoTrigger.current?.focus();
           skipPhotoFocusRestore.current = false;
         }}
         onClick={(event) => {
-          if (event.target === photoDialog.current) photoDialog.current?.close();
+          if (event.target === photoDialog.current)
+            photoDialog.current?.close();
         }}
       >
         {selectedPhoto && (
@@ -288,7 +296,10 @@ export function ProfileEditor({
             {viewingPhoto ? (
               <div className="profile-photo-large">
                 {viewPhotoFailed ? (
-                  <p role="alert">Photo couldn’t load. Close and reload your profile to try again.</p>
+                  <p role="alert">
+                    Photo couldn’t load. Close and reload your profile to try
+                    again.
+                  </p>
                 ) : (
                   <Image
                     src={`/profile/photo?slot=${selectedPhoto.slot}&v=${profile.revision}`}
@@ -302,10 +313,18 @@ export function ProfileEditor({
               </div>
             ) : (
               <div className="profile-photo-dialog-actions">
-                <button ref={viewPhotoButton} type="button" onClick={() => setViewingPhoto(true)}>
+                <button
+                  ref={viewPhotoButton}
+                  type="button"
+                  onClick={() => setViewingPhoto(true)}
+                >
                   View photo
                 </button>
-                <button type="button" disabled={pending || editing} onClick={editSelectedPhoto}>
+                <button
+                  type="button"
+                  disabled={pending || editing}
+                  onClick={editSelectedPhoto}
+                >
                   Edit photo
                 </button>
               </div>
@@ -315,6 +334,7 @@ export function ProfileEditor({
       </dialog>
       <ProfileSummary
         name={profile.real_name || "Your name"}
+        hometown={profile.hometown}
         bio={
           profile.bio ||
           "Add a few words about yourself so future hangouts feel easier to start."
@@ -583,6 +603,21 @@ export function ProfileEditor({
                 />
               </label>
               {field("major", "Major", 200, true)}
+              <label htmlFor="hometown">
+                Hometown{" "}
+                <span className="help">Optional · up to 100 characters</span>
+                <input
+                  id="hometown"
+                  name="hometown"
+                  value={values.hometown ?? ""}
+                  disabled={!editing || pending}
+                  onChange={(event) => {
+                    const next = event.target.value;
+                    if ([...next].length <= 100)
+                      setValues({ ...values, hometown: next });
+                  }}
+                />
+              </label>
               {field("bio", "Bio", 2000, true, true)}
             </div>
           </fieldset>

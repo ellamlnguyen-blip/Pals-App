@@ -185,7 +185,7 @@
   color: #fff;
 }
 .profile-photo-dialog-actions button:disabled {
-  opacity: .5;
+  opacity: 0.5;
   cursor: not-allowed;
 }
 .profile-photo-large {
@@ -279,6 +279,24 @@
 }
 .profile-saved-status {
   margin: 0 0 20px;
+}
+.profile-hometown {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  min-width: 0;
+  margin: 12px 2px 0;
+  color: var(--pals-profile-text-blue);
+  font: 700 clamp(16px, 3vw, 22px)/1.35 var(--pals-font);
+}
+.profile-hometown svg {
+  flex: 0 0 auto;
+  margin-top: 2px;
+  color: var(--pals-profile-action);
+}
+.profile-hometown span {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 .profile-bio {
   margin: 10px 2px 17px;
