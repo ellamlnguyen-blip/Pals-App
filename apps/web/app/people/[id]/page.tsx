@@ -11,6 +11,7 @@ import { readFriendship } from "../friend-actions";
 import { PersonView } from "./person-view";
 import "../../hangouts/map.css";
 import "../people.css";
+import "../../profile/profile.css";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -43,9 +44,9 @@ export default async function PersonPage({
   return (
     <Frame signedIn navigation>
       <div className="people-detail">
-        <a href={back}>← Back to People</a>
         {result.error ? (
           <section className="people-panel">
+            <a href={back}>← Back to People</a>
             <h1>People unavailable</h1>
             <p role="alert">
               Your access or connection may have changed. Try again from People.
@@ -54,6 +55,7 @@ export default async function PersonPage({
           </section>
         ) : !detail ? (
           <section className="people-panel">
+            <a href={back}>← Back to People</a>
             <h1>Person unavailable</h1>
             <p>This profile is not available in People.</p>
             <Link href="/people">Return to People</Link>

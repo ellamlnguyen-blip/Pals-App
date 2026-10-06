@@ -1,5 +1,7 @@
 "use client";
 import Image from "next/image";
+import Link from "next/link";
+import { ProfileSummary } from "./profile-summary";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import type { OwnerProfile } from "@pals/types";
@@ -32,14 +34,18 @@ function initialValues(profile: OwnerProfile) {
 export function ProfileEditor({
   profile,
   email,
+  peopleAvailable,
 }: {
   profile: OwnerProfile;
   email: string;
+  peopleAvailable: boolean;
 }) {
   const router = useRouter();
   const photoStatus = useRef<HTMLDivElement>(null);
   const detailStatus = useRef<HTMLDivElement>(null);
   const editButton = useRef<HTMLButtonElement>(null);
+  const editPanel = useRef<HTMLDivElement>(null);
+  const photoPanel = useRef<HTMLDetailsElement>(null);
   const restoreEditFocus = useRef(false);
   const [values, setValues] = useState(() => initialValues(profile));
   const [saved, setSaved] = useState(values);
@@ -74,6 +80,21 @@ export function ProfileEditor({
     }
   }, [editing, pending]);
   const [photoSlot, setPhotoSlot] = useState<string | null>(null);
+  const [optionsOpen, setOptionsOpen] = useState(false);
+  function openPhotos() {
+    if (photoPanel.current) {
+      photoPanel.current.open = true;
+      photoPanel.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }
+  function openEditor() {
+    setFeedback({});
+    setPhotoSlot(null);
+    setEditing(true);
+    requestAnimationFrame(() =>
+      editPanel.current?.scrollIntoView({ behavior: "smooth", block: "start" }),
+    );
+  }
   function run(
     label: string,
     work: () => Promise<ProfileResult>,
@@ -131,89 +152,261 @@ export function ProfileEditor({
     );
   }
   return (
-    <div className="profile-layout" aria-busy={pending}>
-      <aside className="profile-sidebar">
-        <div className="profile-identity">
-          <p className="badge">UNC email verified</p>
-          <p>University of North Carolina at Chapel Hill</p>
-          <p className="help">{email}</p>
+    <div className="profile-page" aria-busy={pending}>
+      <nav className="profile-topbar" aria-label="Profile controls">
+        <Link href="/hangouts" aria-label="Back to Hangouts">
+          ← <span>Back</span>
+        </Link>
+        <span className="profile-topbar-title">My profile</span>
+        <button
+          type="button"
+          aria-expanded={optionsOpen}
+          aria-controls="profile-options"
+          onClick={() => setOptionsOpen(!optionsOpen)}
+          aria-label="Profile options"
+        >
+          •••
+        </button>
+      </nav>
+      {optionsOpen && (
+        <div id="profile-options" className="profile-options">
+          <p>
+            Your confirmed address on an approved UNC domain is Pals’ campus
+            access signal. Pals has not separately checked enrollment or
+            identity.
+          </p>
+          <p>
+            {peopleAvailable
+              ? "Only your selected text can appear in People after you opt in and meet its requirements. Photos, prompts, email and other details are private to you."
+              : "Only you can see these profile details and photos right now."}
+          </p>
+          {peopleAvailable && (
+            <>
+              <Link href="/people/privacy">
+                Preview and manage People sharing
+              </Link>
+              <Link href="/people/friends">Your friendships</Link>
+            </>
+          )}
           <p className="help">
-            Your university and verified email are read-only.
+            Your university and verified email are read-only: {email}
           </p>
         </div>
-        <div className="profile-photos">
-          <h2>Your photos</h2>
-          <div ref={photoStatus} tabIndex={-1} aria-live="polite">
-            {photoSlot !== null && feedback.success && (
-              <p className="form-message">{feedback.success}</p>
-            )}
+      )}
+      <div className="profile-hero">
+        {profile.primary_photo_path ? (
+          <OwnerDisplayPhoto
+            key={`primary:${profile.revision}`}
+            slot="primary"
+            revision={profile.revision}
+            alt="Your primary profile photo"
+          />
+        ) : (
+          <div className="profile-hero-empty">
+            <span>No photo yet</span>
+            <button type="button" onClick={openPhotos}>
+              Add your main photo
+            </button>
           </div>
-          <p className="help">
-            Private to you. JPG, PNG or WebP, under 5 MB each.
-          </p>
-          {[
-            "primary",
-            ...profile.additional_photo_paths.map((_, i) => String(i)),
-            ...(profile.additional_photo_paths.length < 4 ? ["new"] : []),
-          ].map((slot) => (
-            <PhotoCard
-              key={`${slot}:${profile.revision}`}
-              slot={slot}
-              hasPhoto={slot !== "primary" || !!profile.primary_photo_path}
-              revision={revision}
-              disabled={pending || editing}
-              feedback={photoSlot === slot ? feedback : {}}
-              busy={pending && photoSlot === slot}
-              run={(label, work) => {
-                setPhotoSlot(slot);
-                run(label, work);
-              }}
-            />
-          ))}
-          <p className="help">
-            Up to four extra photos. Photos save separately from your details.
-            Original photo metadata is kept private with the image.
-          </p>
-          {cleanupNeeded && (
-            <p className="form-message">
-              Unused uploads may still be stored privately. Retry cleanup when
-              your connection is back.
-            </p>
-          )}
-          <button
-            className="text-button"
-            disabled={pending || editing}
-            onClick={() => {
-              setPhotoSlot("cleanup");
-              run("Checking unused photos…", cleanupPhotos);
-            }}
-          >
-            {pending && photoSlot === "cleanup"
-              ? "Checking unused photos…"
-              : "Clean up unused uploads"}
-          </button>
-          {photoSlot === "cleanup" && (
-            <p role="status">{feedback.error ?? feedback.success}</p>
-          )}
-        </div>
-      </aside>
-      <div className="profile-details">
-        <div className="profile-toolbar">
-          <h2>A little about you</h2>
-          {!editing && (
+        )}
+      </div>
+      <ProfileSummary
+        name={profile.real_name || "Your name"}
+        bio={
+          profile.bio ||
+          "Add a few words about yourself so future hangouts feel easier to start."
+        }
+        campus="UNC–Chapel Hill"
+        major={profile.major || "Add your major"}
+        graduationYear={profile.graduation_year}
+        verified
+        actions={
+          <>
             <button
               ref={editButton}
               className="button"
+              type="button"
               disabled={pending}
-              onClick={() => {
-                setFeedback({});
-                setPhotoSlot(null);
-                setEditing(true);
-              }}
+              onClick={openEditor}
             >
               Edit details
             </button>
+            <button
+              className="profile-outline-button"
+              type="button"
+              disabled={pending}
+              onClick={openPhotos}
+            >
+              Manage photos
+            </button>
+          </>
+        }
+      />
+      <section
+        className="profile-gallery-section"
+        aria-labelledby="profile-gallery-heading"
+      >
+        <h2 id="profile-gallery-heading">A little more me</h2>
+        <div className="profile-gallery">
+          {profile.additional_photo_paths.map((_, index) => (
+            <OwnerDisplayPhoto
+              key={`${index}:${profile.revision}`}
+              slot={String(index)}
+              revision={profile.revision}
+              alt={`Your extra photo ${index + 1}`}
+            />
+          ))}
+          {profile.additional_photo_paths.length === 0 && (
+            <button
+              className="profile-gallery-empty"
+              type="button"
+              onClick={openPhotos}
+            >
+              Add a few photos of yourself and your favorite moments
+            </button>
           )}
+        </div>
+      </section>
+      <section
+        className="profile-prompts"
+        aria-labelledby="profile-prompts-heading"
+      >
+        <h2 id="profile-prompts-heading">Let’s start a conversation</h2>
+        {profile.prompts.length ? (
+          profile.prompts.map((prompt, index) => (
+            <div className="profile-prompt" key={index}>
+              <h3>{prompt.question}</h3>
+              <p>{prompt.answer}</p>
+            </div>
+          ))
+        ) : (
+          <button
+            type="button"
+            className="profile-prompt profile-prompt-empty"
+            onClick={openEditor}
+          >
+            Add a question and answer to make saying hi easier.
+          </button>
+        )}
+      </section>
+      {(profile.interests.length > 0 ||
+        profile.down_to_do.length > 0 ||
+        profile.favorite_music ||
+        profile.favorite_foods ||
+        profile.weird_fact ||
+        profile.instagram) && (
+        <section className="profile-more" aria-label="More about you">
+          <h2>More about you</h2>
+          {profile.interests.length > 0 && (
+            <p>
+              <strong>Interests</strong> {profile.interests.join(" · ")}
+            </p>
+          )}
+          {profile.down_to_do.length > 0 && (
+            <p>
+              <strong>Down to do</strong> {profile.down_to_do.join(" · ")}
+            </p>
+          )}
+          {profile.favorite_music && (
+            <p>
+              <strong>Favorite music</strong> {profile.favorite_music}
+            </p>
+          )}
+          {profile.favorite_foods && (
+            <p>
+              <strong>Favorite foods</strong> {profile.favorite_foods}
+            </p>
+          )}
+          {profile.weird_fact && (
+            <p>
+              <strong>A weird fact</strong> {profile.weird_fact}
+            </p>
+          )}
+          {profile.instagram && (
+            <p>
+              <strong>Instagram</strong> @{profile.instagram}
+            </p>
+          )}
+        </section>
+      )}
+      <details className="profile-photo-panel" ref={photoPanel}>
+        <summary>Photo controls</summary>
+        <aside className="profile-sidebar">
+          <div className="profile-identity">
+            <p className="badge">UNC email verified</p>
+            <p>University of North Carolina at Chapel Hill</p>
+            <p className="help">{email}</p>
+            <p className="help">
+              Your university and verified email are read-only.
+            </p>
+          </div>
+          <div className="profile-photos">
+            <h2>Your photos</h2>
+            <div ref={photoStatus} tabIndex={-1} aria-live="polite">
+              {photoSlot !== null && feedback.success && (
+                <p className="form-message">{feedback.success}</p>
+              )}
+            </div>
+            <p className="help">
+              Private to you. JPG, PNG or WebP, under 5 MB each.
+            </p>
+            {[
+              "primary",
+              ...profile.additional_photo_paths.map((_, i) => String(i)),
+              ...(profile.additional_photo_paths.length < 4 ? ["new"] : []),
+            ].map((slot) => (
+              <PhotoCard
+                key={`${slot}:${profile.revision}`}
+                slot={slot}
+                hasPhoto={slot !== "primary" || !!profile.primary_photo_path}
+                revision={revision}
+                disabled={pending || editing}
+                feedback={photoSlot === slot ? feedback : {}}
+                busy={pending && photoSlot === slot}
+                run={(label, work) => {
+                  setPhotoSlot(slot);
+                  run(label, work);
+                }}
+              />
+            ))}
+            <p className="help">
+              Up to four extra photos. Photos save separately from your details.
+              Original photo metadata is kept private with the image.
+            </p>
+            {cleanupNeeded && (
+              <p className="form-message">
+                Unused uploads may still be stored privately. Retry cleanup when
+                your connection is back.
+              </p>
+            )}
+            <button
+              className="text-button"
+              disabled={pending || editing}
+              onClick={() => {
+                setPhotoSlot("cleanup");
+                run("Checking unused photos…", cleanupPhotos);
+              }}
+            >
+              {pending && photoSlot === "cleanup"
+                ? "Checking unused photos…"
+                : "Clean up unused uploads"}
+            </button>
+            {photoSlot === "cleanup" && (
+              <p role="status">{feedback.error ?? feedback.success}</p>
+            )}
+          </div>
+        </aside>
+      </details>
+      <div
+        className="profile-details"
+        ref={editPanel}
+        hidden={
+          !editing &&
+          !(photoSlot === null && (feedback.error || feedback.success))
+        }
+      >
+        <div className="profile-toolbar">
+          <h2>A little about you</h2>
         </div>
         <div
           ref={detailStatus}
@@ -367,6 +560,34 @@ export function ProfileEditor({
         </form>
       </div>
     </div>
+  );
+}
+function OwnerDisplayPhoto({
+  slot,
+  revision,
+  alt,
+}: {
+  slot: string;
+  revision: number;
+  alt: string;
+}) {
+  const [failed, setFailed] = useState(false);
+  if (failed)
+    return (
+      <div className="profile-photo-error" role="status">
+        <span>{alt} could not load.</span>
+        <a href="/profile">Reload profile</a>
+      </div>
+    );
+  return (
+    <Image
+      src={`/profile/photo?slot=${slot}&v=${revision}`}
+      alt={alt}
+      width={slot === "primary" ? 760 : 360}
+      height={slot === "primary" ? 376 : 280}
+      unoptimized
+      onError={() => setFailed(true)}
+    />
   );
 }
 function PhotoCard({
