@@ -1,8 +1,9 @@
 "use client";
+import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import type { PeopleDetail } from "../../../lib/people";
 import { SafetyActions } from "../../safety/safety-client";
-import { RequestControl } from "./request-control";
+import { RequestControl, type PeerDmState } from "./request-control";
 import { FriendControl } from "../friend-control";
 import type { FriendshipResult } from "../friend-actions";
 import { AnalyticsView } from "../../analytics-view";
@@ -14,6 +15,7 @@ export function PersonView({
   detail,
   back,
   friendship,
+  initialDmState,
   actor,
   available,
   attendanceAvailable,
@@ -21,6 +23,7 @@ export function PersonView({
   detail: PeopleDetail;
   back: string;
   friendship: FriendshipResult;
+  initialDmState: PeerDmState;
   actor: string;
   available: StudentDestinations;
   attendanceAvailable: boolean;
@@ -29,6 +32,7 @@ export function PersonView({
     clearedHeading = useRef<HTMLHeadingElement>(null);
   const [cleared, setCleared] = useState(false),
     [message, setMessage] = useState("");
+  const [dmState, setDmState] = useState<PeerDmState>(initialDmState);
   useEffect(() => {
     if (cleared) clearedHeading.current?.focus();
   }, [cleared]);
@@ -101,19 +105,35 @@ export function PersonView({
           peerLabel={detail.real_name}
           onClear={() => setCleared(true)}
         />
-        <a
-          href="#request-heading"
-          className="profile-outline-button"
-          onClick={(event) => {
-            event.preventDefault();
-            const field = document.getElementById("dm-request-body");
-            if (field instanceof HTMLTextAreaElement && !field.disabled)
-              field.focus();
-            else document.getElementById("request-heading")?.focus();
-          }}
-        >
-          Say hi
-        </a>
+        {dmState === "accepted" || dmState === "pending" ? (
+          <Link
+            href={`/chats/direct/${detail.account_id}`}
+            className="profile-outline-button"
+          >
+            {dmState === "accepted" ? "Open chat" : "Check request"}
+          </Link>
+        ) : dmState === "unknown" ? (
+          <a
+            href={`/people/${detail.account_id}`}
+            className="profile-outline-button"
+          >
+            Check chat status
+          </a>
+        ) : (
+          <a
+            href="#request-heading"
+            className="profile-outline-button"
+            onClick={(event) => {
+              event.preventDefault();
+              const field = document.getElementById("dm-request-body");
+              if (field instanceof HTMLTextAreaElement && !field.disabled)
+                field.focus();
+              else document.getElementById("request-heading")?.focus();
+            }}
+          >
+            Say hi
+          </a>
+        )}
       </div>
       <div className="people-detail-body profile-peer-interests">
         <section>
@@ -141,7 +161,13 @@ export function PersonView({
           )}
         </section>
       </div>
-      <RequestControl peerId={detail.account_id} actor={actor} />
+      <RequestControl
+        peerId={detail.account_id}
+        actor={actor}
+        state={dmState}
+        onSent={() => setDmState("pending")}
+        onUnavailable={() => setDmState("unknown")}
+      />
     </article>
   );
 }

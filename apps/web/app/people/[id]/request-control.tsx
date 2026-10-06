@@ -8,12 +8,19 @@ import {
   AUTH_TRANSITION_EVENT,
 } from "../../auth-transition";
 type Pending = { key: string; body: string };
+export type PeerDmState = "accepted" | "pending" | "none" | "unknown";
 export function RequestControl({
   peerId,
   actor,
+  state,
+  onSent,
+  onUnavailable,
 }: {
   peerId: string;
   actor: string;
+  state: PeerDmState;
+  onSent: () => void;
+  onUnavailable: () => void;
 }) {
   const [draft, setDraft] = useState(""),
     [pending, setPending] = useState<Pending | null>(null),
@@ -23,14 +30,20 @@ export function RequestControl({
     [masked, setMasked] = useState(false);
   const current = useRef<Pending | null>(null),
     ticket = useRef(0);
+  const unavailable = useRef(onUnavailable);
+  useEffect(() => {
+    unavailable.current = onUnavailable;
+  }, [onUnavailable]);
   const hide = useCallback(() => {
     ticket.current++;
     setDraft("");
     setPending(null);
+    setSent(false);
     current.current = null;
     setMasked(true);
     setBusy(false);
     setNote("People access changed. Reload this profile to start a request.");
+    unavailable.current();
   }, []);
   useEffect(() => {
     const visibility = () => {
@@ -82,6 +95,7 @@ export function RequestControl({
         setPending(null);
         setDraft("");
         setSent(true);
+        onSent();
         setNote("Request sent. They can accept, reply or ignore it.");
       } else if (data.kind === "denied") {
         hide();
@@ -105,6 +119,14 @@ export function RequestControl({
       if (now === ticket.current) setBusy(false);
     }
   }
+  const viewState =
+    masked || state === "unknown"
+      ? "unknown"
+      : state === "accepted"
+        ? "accepted"
+        : sent
+          ? "pending"
+          : state;
   return (
     <section
       className="people-preview dm-request"
@@ -114,11 +136,20 @@ export function RequestControl({
         Say hello
       </h2>
       <p>
-        One first message goes to their Requests. You cannot keep chatting
-        unless they accept or reply. They can ignore it.
+        {viewState === "accepted"
+          ? "Your conversation is ready. Current access is checked when you open it."
+          : viewState === "pending"
+            ? "A first-message request is active. Open it to see its current status and available actions."
+            : viewState === "unknown"
+              ? "We couldn’t confirm the current request status. Reload before starting a new message."
+              : "One first message goes to their Requests. You cannot keep chatting unless they accept or reply. They can ignore it."}
       </p>
-      {sent ? (
-        <Link href={`/chats/direct/${peerId}`}>See request status</Link>
+      {viewState === "accepted" || viewState === "pending" ? (
+        <Link href={`/chats/direct/${peerId}`}>
+          {viewState === "accepted" ? "Open chat" : "Check request"}
+        </Link>
+      ) : viewState === "unknown" ? (
+        <a href={`/people/${peerId}`}>Reload to check status</a>
       ) : masked ? (
         <p>Reload this profile to check current People access.</p>
       ) : (
