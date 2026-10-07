@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-06 — Rich consent source reviewed, local tests progressing
+
+TASK-028P2 DATA cafd6cb passed independent source review dc68d75. Only reviewed migration20261006000200 was applied to named disposable local55422 with history; the rich gate remains default off and existing fixtures/gates were preserved. SQL55 rollback assertions pass; real Auth and committed-order races remain pending. Photo design review requires full second authorization/object-identity check after bounded download. Owner privacy UI may follow reviewed DATA; peer UI follows reviewed PHOTO. No hosted operation or canonical app integration.
+
 ## 2026-10-06 — Rich profile sharing approved
 
 The user explicitly accepted ADR-0036 default-off opt-in rich sharing for verified same-campus UNC users. TASK-028P2 is active for reviewed consent/detail, secure photo gateway and per-user rich UI with privacy/revocation QA. Existing content stays private until its owner opts in. Reviewed P1 source fdd831b/app954b396 remains the baseline. Canonical app integration still awaits TASK-027 staged acceptance; no hosted change or successor. Contract published before fresh bounded dispatch.
