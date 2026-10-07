@@ -1,5 +1,13 @@
 # Backlog
 
+## 2026-10-06 — Opt-in rich profiles reviewed and verified locally
+
+Latest verified pushed task tip: `20cdd69cc45398334dbd37aeaee29bd980d1a514` (documentation reconciliation after final reviewed artifact2701d7a; application source remains e27db7a).
+
+TASK-028P2 source/handoff `2701d7a85a2771776fce3898a62ca1824c0702be` is pushed and exact remote-verified on `agent/TASK-028P2-rich-profiles`. Accepted ADR-0036 is implemented on the task branch: default-off CAS consent, People-off atomic clear, per-user rich detail, cookie-authorized sanitized peer photos and responsive View-only peer UI; owner images retain View/Edit. Final app `e27db7a` / source review `535434e` / final evidence review `2701d7a` passes63 units without skips, workspace lint/typecheck, production webpack build, DATA SQL55/PHOTO SQL11, real Auth/Storage HTTP and seven committed lock races. Actual browser consent/revocation, five-photo views/focus, two distinct hometowns, populated/empty/text-only users, real chat, safety entry and320/390/793/1280 pass. Local preview `http://localhost:3032/profile` is signed into fictional Maya; private test sign-ins remain outside Git.
+
+Only reviewed local migrations002/003 were persisted to named disposable55422 without reset. The HTTP harness restored richgatefalse/prefs0 before browser QA; only the disposable rich gate and fictional Maya/Jordan's explicit UI opt-ins now remain on for review, with unrelated gates unchanged. Cookie expiry timing, hidden-tab provider behavior and CPU-abort timing were not separately chaos-tested. Main receives documentation/evidence only; canonical application integration and parent TASK-028P/TASK-028 remain incomplete behind TASK-027 staged acceptance. No hosted credential/migration/gate/deployment/domain change or successor. Earlier pending-ADR/photo-candidate entries below are historical and superseded by this receipt.
+
 ## 2026-10-06 — Rich profile sharing approved
 
 The user explicitly accepted ADR-0036 default-off opt-in rich sharing for verified same-campus UNC users. TASK-028P2 is active for reviewed consent/detail, secure photo gateway and per-user rich UI with privacy/revocation QA. Existing content stays private until its owner opts in. Reviewed P1 source fdd831b/app954b396 remains the baseline. Canonical app integration still awaits TASK-027 staged acceptance; no hosted change or successor. Contract published before fresh bounded dispatch.
