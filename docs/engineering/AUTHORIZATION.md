@@ -151,7 +151,7 @@ Accepted ADR-0027 and completed `TASK-021A1b1-owner-admission.md` require denied
 
 ## Optional owner hometown — ADR-0037
 
-The new nullable hometown column adds only an authenticated column UPDATE grant under existing active-owner profile RLS and revision rules. Raw peer profile reads/writes remain denied. Hometown is private until a separately accepted and implemented rich-sharing policy authorizes a narrow projection; Proposed ADR-0036 creates no grant.
+The new nullable hometown column adds only an authenticated column UPDATE grant under existing active-owner profile RLS and revision rules. Raw peer profile reads/writes remain denied. The raw hometown column remains owner-only. Under separately Accepted ADR-0036 and reviewed disposable-local TASK-028P2, its optional value is disclosed only by the consented rich-detail RPC and its full live authorization predicate; raw peer grants remain absent.
 
 ## Opt-in rich peer profiles — ADR-0036 / TASK-028P2
 

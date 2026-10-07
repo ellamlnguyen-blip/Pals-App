@@ -122,7 +122,7 @@ This stage intentionally does not consume admission/capabilities in existing stu
 
 ## Optional owner hometown — ADR-0037
 
-`public.profiles.hometown` is nullable self-declared city/region text, trimmed and bounded to100 PostgreSQL Unicode characters. Blank owner form input writes null. Existing owner-only SELECT/UPDATE RLS, active-owner guards and revision compare-and-swap remain authoritative. There is no inferred/default value, new access prerequisite or peer projection. Migration20261006000100.
+`public.profiles.hometown` is nullable self-declared city/region text, trimmed and bounded to100 PostgreSQL Unicode characters. Blank owner form input writes null. Existing owner-only SELECT/UPDATE RLS, active-owner guards and revision compare-and-swap remain authoritative. There is no inferred/default value or new access prerequisite, and the raw column remains owner-only. Separately Accepted ADR-0036 / disposable-local TASK-028P2 permits only its optional value through the consented rich-detail RPC; it adds no raw peer grant. Owner column migration20261006000100.
 
 ## Rich profile consent and projection — ADR-0036 / TASK-028P2
 
