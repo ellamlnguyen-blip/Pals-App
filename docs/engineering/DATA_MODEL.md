@@ -119,3 +119,7 @@ Migration `20260927000100_private_pilot_admission_authority.sql` adds empty priv
 Private availability singleton and thirteen fixed capabilities start false at revision 1. The roster/managers have no inferred or seeded members. Immutable management audit records actual authenticated actor, allowed operation, target/key, old/new state/value and revisions, normalized reason, request UUID and server time. Caller-scoped cross-operation request ledger binds exact canonical JSONB payload to original minimal receipt/revision. Exact retry adds no audit; a new authorized same-state request adds one no-op audit/receipt without revision advance. Separate immutable manager fixture audit records actual SQL session user, original role setting and backend provenance. No private table is client-readable/writable.
 
 This stage intentionally does not consume admission/capabilities in existing student authorization. A1b/c and subsequent app reconciliation are mandatory before any deployable or pilot-ready claim.
+
+## Optional owner hometown — ADR-0037
+
+`public.profiles.hometown` is nullable self-declared city/region text, trimmed and bounded to100 PostgreSQL Unicode characters. Blank owner form input writes null. Existing owner-only SELECT/UPDATE RLS, active-owner guards and revision compare-and-swap remain authoritative. There is no inferred/default value, new access prerequisite or peer projection. Migration20261006000100.

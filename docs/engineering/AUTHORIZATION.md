@@ -148,3 +148,7 @@ A fixture-only private trusted manager writer requires actual postgres session a
 ## Current pilot restricted status boundary — 2026-09-29
 
 Accepted ADR-0027 and completed `TASK-021A1b1-owner-admission.md` require denied callers to retain the caller-only status RPC, not raw owner/reference rows. Migration `20260927000200_pilot_owner_admission.sql` accounts_owner_read requires caller-bound admitted-onboarding eligibility including active account status; its get_access_state checks restriction first. Historical TASK-002 and ADR-0019 own-status text describes the earlier foundation. No raw restricted status permission is restored. See `agents/handoffs/TASK-021A1b3c-RESTRICTED-STATUS-RECONCILIATION.md` for the frozen historical HTTP assertion exception and static-only evidence limits.
+
+## Optional owner hometown — ADR-0037
+
+The new nullable hometown column adds only an authenticated column UPDATE grant under existing active-owner profile RLS and revision rules. Raw peer profile reads/writes remain denied. Hometown is private until a separately accepted and implemented rich-sharing policy authorizes a narrow projection; Proposed ADR-0036 creates no grant.
