@@ -1,0 +1,26 @@
+{
+  "source": "e27db7a3808a266d452878581e9d0c5a73f9b4cf",
+  "trackedFiles": 1064,
+  "mismatches": [],
+  "runtimeOnlyAdaptations": [
+    [
+      "packages/config/src/index.ts",
+      "54321",
+      "55421",
+      2
+    ],
+    [
+      "apps/web/lib/config.ts",
+      "http://127.0.0.1:3000",
+      "http://localhost:3032",
+      2
+    ],
+    [
+      "apps/web/lib/feature-runtime.ts",
+      "http://127.0.0.1:54321",
+      "http://127.0.0.1:55421",
+      1
+    ]
+  ],
+  "privateEnvironment": "server-only0600; not recorded"
+}
