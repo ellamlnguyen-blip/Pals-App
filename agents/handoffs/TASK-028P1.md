@@ -22,6 +22,6 @@ Final954 same-input original-resolution screenshot comparison passes the authori
 
 ## Publication and remaining gates
 
-Exact task branch and documentation-only main remote SHAs are recorded in TASK-028P1-PUBLICATION.md after verification. Main gets reviewed contract/status/evidence only; code/migration stays on the task branch until parent staging acceptance. No hosted migration, service credential, new peer projection, public/signed photo URL, privacy weakening, production/domain change or release claim.
+Reviewed task artifact `ac66edc1865fcc17124596ce59137a7286348920` and documentation-only main integration `8590bf10a35fc2d3a017c728bd5f5d428d7340f3` are pushed and exact remote-verified. Receipt: TASK-028P1-PUBLICATION.md. Main gets reviewed contract/status/evidence only; code/migration stays on the task branch until parent staging acceptance. No hosted migration, service credential, new peer projection, public/signed photo URL, privacy weakening, production/domain change or release claim.
 
 Remaining user decision: ADR-0036 default-off opt-in rich peer policy; AGENTS.md requires “major ADRs need explicit acceptance.” Other students' rich hometown/photos/prompts are not enabled. If accepted, implement the separately reviewed bounded consent/detail/gateway contracts with security/race/HTTP tests. Parent staged student/moderation/recovery acceptance, canonical application integration and remote verification remain incomplete. The current corrections do not silently accept the Proposed policy.
