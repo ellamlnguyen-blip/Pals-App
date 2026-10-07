@@ -74,6 +74,27 @@ test("private Storage URL uses the exact authorized subject path and rejects tra
     assert.equal(privatePeerPhotoUrl(origin, subject, unsafe), null, unsafe);
 });
 
+test("self photo resolves to a neutral miss without a Storage fetch", async () => {
+  let downloaded = false;
+  const output = await readRichPeerPhoto(
+    "subject",
+    "subject",
+    "primary",
+    7,
+    new AbortController().signal,
+    {
+      resolve: async () => null,
+      download: async () => {
+        downloaded = true;
+        return new Uint8Array([1]);
+      },
+      sanitize: async (bytes) => bytes,
+    },
+  );
+  assert.equal(output, null);
+  assert.equal(downloaded, false);
+});
+
 test("gateway discards a downloaded image when path is reused, revision changes, or access is revoked", async () => {
   for (const changed of [
     null,

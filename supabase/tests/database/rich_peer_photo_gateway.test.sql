@@ -51,6 +51,11 @@ select is((select object_path from public.resolve_rich_peer_photo_for_gateway(
   current_setting('pals.photo_test_revision')::bigint)),
   '79000000-0000-4000-8000-000000000002/photo.png','authorized exact path');
 select is((select count(*) from public.resolve_rich_peer_photo_for_gateway(
+  '79000000-0000-4000-8000-000000000002',
+  '79000000-0000-4000-8000-000000000002','primary',
+  current_setting('pals.photo_test_revision')::bigint)),
+  0::bigint,'self photo returns neutral miss');
+select is((select count(*) from public.resolve_rich_peer_photo_for_gateway(
   '79000000-0000-4000-8000-000000000003',
   '79000000-0000-4000-8000-000000000002','primary',
   current_setting('pals.photo_test_revision')::bigint)),

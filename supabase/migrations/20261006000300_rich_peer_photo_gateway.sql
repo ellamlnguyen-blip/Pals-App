@@ -9,11 +9,12 @@ language plpgsql volatile security definer set search_path = '' as $$
 begin
   perform private.people_require_read_committed();
   if current_setting('role', true) is distinct from 'service_role'
-    or actor_id is null or subject_id is null or actor_id=subject_id
+    or actor_id is null or subject_id is null
     or slot is null or slot not in ('primary','0','1','2','3')
     or expected_revision is null or expected_revision <= 0 then
     raise exception 'Photo unavailable' using errcode='42501';
   end if;
+  if actor_id=subject_id then return; end if;
 
   -- Authorization, selected slot, profile revision and Storage object are
   -- projected by this one READ COMMITTED statement snapshot. A second call

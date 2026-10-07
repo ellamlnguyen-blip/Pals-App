@@ -75,6 +75,7 @@ export async function GET(
         error,
       } = await client.auth.getUser();
       if (error || !user) return reply(404);
+      if (user.id === id) return reply(404);
       const bytes = await readRichPeerPhoto(
         user.id,
         id,
