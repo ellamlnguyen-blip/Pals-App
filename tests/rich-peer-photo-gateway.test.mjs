@@ -7,6 +7,7 @@ import {
 } from "../apps/web/lib/rich-peer-photo-core.ts";
 import { sanitizePeerPhoto } from "../apps/web/lib/rich-peer-photo-image.ts";
 import { privatePeerPhotoUrl } from "../apps/web/lib/rich-peer-photo-path.ts";
+import { PhotoAdmission } from "../apps/web/lib/rich-peer-photo-admission.ts";
 
 const require = createRequire(
   new URL("../apps/web/package.json", import.meta.url),
@@ -93,6 +94,51 @@ test("self photo resolves to a neutral miss without a Storage fetch", async () =
   );
   assert.equal(output, null);
   assert.equal(downloaded, false);
+});
+
+test("five simultaneous photos complete with at most two active operations", async () => {
+  const admission = new PhotoAdmission(2, 16);
+  let active = 0;
+  let peak = 0;
+  const results = await Promise.all(
+    Array.from({ length: 5 }, (_, index) =>
+      admission.run(new AbortController().signal, async () => {
+        active++;
+        peak = Math.max(peak, active);
+        await new Promise((resolve) => setTimeout(resolve, 10));
+        active--;
+        return index;
+      }),
+    ),
+  );
+  assert.deepEqual(results, [0, 1, 2, 3, 4]);
+  assert.equal(peak, 2);
+  assert.equal(active, 0);
+});
+
+test("admission bounds pending work and removes aborted waiters", async () => {
+  const admission = new PhotoAdmission(1, 1);
+  let release;
+  const first = admission.run(
+    new AbortController().signal,
+    () =>
+      new Promise((resolve) => {
+        release = resolve;
+      }),
+  );
+  const waiting = new AbortController();
+  const second = admission.run(waiting.signal, async () => 2);
+  await assert.rejects(
+    admission.run(new AbortController().signal, async () => 3),
+  );
+  waiting.abort();
+  await assert.rejects(second);
+  release(1);
+  assert.equal(await first, 1);
+  assert.equal(
+    await admission.run(new AbortController().signal, async () => 4),
+    4,
+  );
 });
 
 test("gateway discards a downloaded image when path is reused, revision changes, or access is revoked", async () => {

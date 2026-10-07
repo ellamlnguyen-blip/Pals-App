@@ -1,11 +1,12 @@
 import { supabase } from "../../../../lib/supabase";
-import { localPeopleAvailable } from "../../../../lib/people";
+import { localPeopleAvailable, peopleId } from "../../../../lib/people";
 import {
   resolvePeerPhoto,
   downloadPeerPhoto,
 } from "../../../../lib/rich-peer-photo-service";
 import { sanitizePeerPhoto } from "../../../../lib/rich-peer-photo-image";
 import { readRichPeerPhoto } from "../../../../lib/rich-peer-photo-core";
+import { PhotoAdmission } from "../../../../lib/rich-peer-photo-admission";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -19,8 +20,7 @@ const headers = {
   "X-Content-Type-Options": "nosniff",
   "Content-Security-Policy": "default-src 'none'",
 };
-const personId = /^[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}$/i;
-let activeDecodes = 0;
+const admission = new PhotoAdmission(2, 16);
 
 function reply(status: number, bytes?: Uint8Array) {
   return new Response(bytes ? Buffer.from(bytes) : null, {
@@ -30,7 +30,7 @@ function reply(status: number, bytes?: Uint8Array) {
 }
 
 function parameters(request: Request, subject: string) {
-  if (!personId.test(subject)) return null;
+  if (!peopleId.test(subject)) return null;
   const query = new URL(request.url).searchParams;
   if (
     query.size !== 2 ||
@@ -61,14 +61,12 @@ export async function GET(
     const parsed = parameters(request, rawId);
     if (!parsed) return reply(400);
     if (!localPeopleAvailable()) return reply(404);
-    if (activeDecodes >= 2) return reply(503);
-    activeDecodes++;
-    try {
-      const id = rawId.toLowerCase();
-      const signal = AbortSignal.any([
-        request.signal,
-        AbortSignal.timeout(12_000),
-      ]);
+    const id = rawId.toLowerCase();
+    const signal = AbortSignal.any([
+      request.signal,
+      AbortSignal.timeout(12_000),
+    ]);
+    return await admission.run(signal, async () => {
       const client = await supabase(signal);
       const {
         data: { user },
@@ -89,9 +87,7 @@ export async function GET(
         },
       );
       return bytes ? reply(200, bytes) : reply(404);
-    } finally {
-      activeDecodes--;
-    }
+    });
   } catch {
     return reply(503);
   }
