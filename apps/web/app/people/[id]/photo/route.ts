@@ -7,6 +7,7 @@ import {
 import { sanitizePeerPhoto } from "../../../../lib/rich-peer-photo-image";
 import { readRichPeerPhoto } from "../../../../lib/rich-peer-photo-core";
 import { PhotoAdmission } from "../../../../lib/rich-peer-photo-admission";
+import { richPeerPhotoHeaders } from "../../../../lib/rich-peer-photo-headers";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -14,18 +15,14 @@ export const revalidate = 0;
 export const fetchCache = "force-no-store";
 export const maxDuration = 15;
 
-const headers = {
-  "Cache-Control": "private, no-store, max-age=0",
-  Pragma: "no-cache",
-  "X-Content-Type-Options": "nosniff",
-  "Content-Security-Policy": "default-src 'none'",
-};
 const admission = new PhotoAdmission(2, 16);
 
 function reply(status: number, bytes?: Uint8Array) {
   return new Response(bytes ? Buffer.from(bytes) : null, {
     status,
-    headers: bytes ? { ...headers, "Content-Type": "image/webp" } : headers,
+    headers: bytes
+      ? { ...richPeerPhotoHeaders, "Content-Type": "image/webp" }
+      : richPeerPhotoHeaders,
   });
 }
 

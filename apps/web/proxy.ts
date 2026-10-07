@@ -1,8 +1,21 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
 import { authConfig } from "./lib/config";
+import {
+  isRichPeerPhotoPath,
+  richPeerPhotoHeaders,
+} from "./lib/rich-peer-photo-headers";
 
 export async function proxy(request: NextRequest) {
+  if (isRichPeerPhotoPath(request.nextUrl.pathname)) {
+    // The route performs the sole cookie-backed getUser under its request deadline.
+    const response = NextResponse.next();
+    for (const [name, value] of Object.entries(richPeerPhotoHeaders))
+      response.headers.set(name, value);
+    response.headers.delete("ETag");
+    response.headers.delete("Last-Modified");
+    return response;
+  }
   // Allow the setup screen when no credentials exist; protected routes still fail closed.
   if (!process.env.SUPABASE_PUBLISHABLE_KEY) return NextResponse.next();
   const config = authConfig();

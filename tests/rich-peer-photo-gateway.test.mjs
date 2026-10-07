@@ -8,6 +8,10 @@ import {
 import { sanitizePeerPhoto } from "../apps/web/lib/rich-peer-photo-image.ts";
 import { privatePeerPhotoUrl } from "../apps/web/lib/rich-peer-photo-path.ts";
 import { PhotoAdmission } from "../apps/web/lib/rich-peer-photo-admission.ts";
+import {
+  isRichPeerPhotoPath,
+  richPeerPhotoHeaders,
+} from "../apps/web/lib/rich-peer-photo-headers.ts";
 
 const require = createRequire(
   new URL("../apps/web/package.json", import.meta.url),
@@ -73,6 +77,26 @@ test("private Storage URL uses the exact authorized subject path and rejects tra
     `${subject}/other.svg`,
   ])
     assert.equal(privatePeerPhotoUrl(origin, subject, unsafe), null, unsafe);
+});
+
+test("only peer photo route paths, including malformed IDs, receive full privacy headers", () => {
+  const id = "79000000-0000-4000-8000-000000000002";
+  assert.equal(isRichPeerPhotoPath(`/people/${id}/photo`), true);
+  assert.equal(isRichPeerPhotoPath(`/people/${id}/photo/`), true);
+  assert.equal(isRichPeerPhotoPath("/people/invalid/photo"), true);
+  assert.equal(isRichPeerPhotoPath(`/people/${id}/`), false);
+  assert.equal(isRichPeerPhotoPath(`/people/${id}/photo/extra`), false);
+  assert.equal(isRichPeerPhotoPath("/people//photo"), false);
+  assert.equal(
+    richPeerPhotoHeaders["Cache-Control"],
+    "private, no-store, max-age=0",
+  );
+  assert.equal(richPeerPhotoHeaders.Pragma, "no-cache");
+  assert.equal(richPeerPhotoHeaders["X-Content-Type-Options"], "nosniff");
+  assert.equal(
+    richPeerPhotoHeaders["Content-Security-Policy"],
+    "default-src 'none'",
+  );
 });
 
 test("self photo resolves to a neutral miss without a Storage fetch", async () => {
