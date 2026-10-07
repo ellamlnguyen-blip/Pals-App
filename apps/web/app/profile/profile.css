@@ -286,13 +286,15 @@
   gap: 8px;
   min-width: 0;
   margin: 12px 2px 0;
-  color: var(--pals-profile-text-blue);
-  font: 700 clamp(16px, 3vw, 22px)/1.35 var(--pals-font);
+  color: #102b53;
+  font: 400 clamp(16px, 3.3vw, 26px)/1.35 var(--pals-font);
 }
 .profile-hometown svg {
   flex: 0 0 auto;
-  margin-top: 2px;
-  color: var(--pals-profile-action);
+  width: clamp(22px, 3.8vw, 30px);
+  height: clamp(22px, 3.8vw, 30px);
+  margin-top: 1px;
+  color: #102b53;
 }
 .profile-hometown span {
   min-width: 0;

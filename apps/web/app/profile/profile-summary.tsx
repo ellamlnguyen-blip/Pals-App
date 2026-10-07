@@ -38,7 +38,7 @@ export function ProfileSummary({
       </div>
       {hometown && (
         <p className="profile-hometown">
-          <MapPinIcon size={22} weight="fill" aria-hidden="true" />
+          <MapPinIcon size={30} weight="regular" aria-hidden="true" />
           <span>From {hometown}</span>
         </p>
       )}

@@ -7,6 +7,7 @@ Status: UI source complete for independent review; parent task remains active. B
 - Saved primary and extra owner photos open an accessible native dialog with View photo and Edit photo. View displays the existing private owner photo URL at a larger contained size. Close, Escape and backdrop dismissal return focus to the originating image. Entering View focuses Close; Edit opens and focuses the matching existing slot's file input. The existing photo upload/remove forms, revision value, validation and server action remain unchanged. Photo errors retain their reload affordance.
 - The owner editor now loads the optional `hometown` value into the same draft/save/cancel and revision flow as other text. The input enforces 100 Unicode code points without the browser's UTF-16 `maxLength` mismatch. Empty text clears through reviewed DATA normalization. The shared summary renders a Phosphor map pin and `From {hometown}` between the name and bio only when a hometown exists. The peer caller has no hometown source field under current authorization, so no new peer disclosure was added.
 - All content comes from each account's saved `OwnerProfile`; no fixture identity or inferred location was added.
+- Rendered reference QA corrected the hometown row to normal-weight navy body text (26px near 793px, 16px on phones) with a proportionate outline Phosphor pin. The row stays between the title and bio and wraps long values.
 
 ## Evidence
 
