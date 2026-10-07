@@ -2,6 +2,7 @@ import "server-only";
 import { createServerClient } from "@supabase/ssr";
 import { NextRequest, NextResponse } from "next/server";
 import { authConfig } from "./config";
+import { cookiePolicy, originMatches } from "./security";
 
 export function privateResponse(body: object, status = 200) {
   return NextResponse.json(body, {
@@ -15,14 +16,9 @@ export function privateResponse(body: object, status = 200) {
 }
 
 export function requestClient(request: NextRequest, response: NextResponse) {
-  const { url, key } = authConfig();
+  const { url, key, secure } = authConfig();
   return createServerClient(url, key, {
-    cookieOptions: {
-      httpOnly: true,
-      secure: false,
-      sameSite: "lax",
-      path: "/",
-    },
+    cookieOptions: cookiePolicy(secure),
     cookies: {
       getAll: () => request.cookies.getAll(),
       setAll(values) {
@@ -33,4 +29,18 @@ export function requestClient(request: NextRequest, response: NextResponse) {
       },
     },
   });
+}
+
+export function exactOrigin(request: NextRequest) {
+  try {
+    const { origin, secure } = authConfig();
+    return originMatches(
+      request.headers.get("origin"),
+      origin,
+      request.nextUrl.protocol,
+      secure,
+    );
+  } catch {
+    return false;
+  }
 }

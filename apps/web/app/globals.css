@@ -5,13 +5,14 @@ body {
   margin: 0;
   background: var(--pals-canvas);
   color: var(--pals-ink);
-  font-family: var(--pals-font);
+  font-family: var(--pals-font-display);
   line-height: 1.6;
+  font-weight: 700;
 }
 .page {
   max-width: var(--pals-content-width);
   margin: 0 auto;
-  padding: 0 var(--pals-space-8);
+  padding: 0 34px;
   min-height: 100dvh;
 }
 header {
@@ -55,8 +56,8 @@ button,
   border: 0;
   min-height: 48px;
   padding: 0.75rem 1.5rem;
-  border-radius: 999px;
-  font-weight: 800;
+  border-radius: 16px;
+  font-weight: 700;
   background: var(--pals-brand);
   color: var(--pals-ink);
   text-decoration: none;
@@ -243,11 +244,12 @@ section {
   color: var(--pals-accent);
 }
 h1 {
+  font-family: var(--pals-font-display);
   max-width: 15ch;
   font-size: clamp(2.5rem, 5vw, 4rem);
   line-height: 1.1;
-  font-weight: 900;
-  letter-spacing: -0.04em;
+  font-weight: 800;
+  letter-spacing: -0.035em;
   margin: 0;
   text-wrap: balance;
 }
@@ -302,18 +304,55 @@ h1 {
 
 /* Shared student shell. Route styles can adopt these surfaces without changing data flow. */
 .student-header {
-  max-width: var(--pals-content-width);
-  margin: 0 auto;
+  min-height: 88px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 90px minmax(0, 1fr);
+  position: relative;
+  gap: 16px;
 }
-.student-header .campus {
-  margin-right: auto;
+.student-header > .brand-link {
+  grid-column: 2;
+  grid-row: 1;
+  min-width: 90px;
+  min-height: 70px;
+}
+.student-header > .brand-link img {
+  width: 90px;
+  height: 70px;
+  object-fit: contain;
+}
+.header-account {
+  grid-column: 3;
+  grid-row: 1;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 16px;
+}
+.header-campus {
+  grid-column: 1;
+  grid-row: 1;
+  color: var(--pals-muted);
+  font-size: 14px;
+}
+.student-header .primary-nav {
+  grid-column: 1;
+  grid-row: 1;
+  border: 0;
+  margin: 0;
+  padding: 0;
+  gap: 4px;
+  overflow: visible;
 }
 .header-signin {
   min-height: 44px;
   display: inline-flex;
   align-items: center;
-  font-weight: 800;
+  font-weight: 700;
   text-decoration: none;
+  background: var(--pals-surface);
+  padding: 10px 18px;
+  border-radius: 16px;
 }
 .header-safety {
   display: inline-flex;
@@ -390,10 +429,10 @@ h1 {
   min-height: 44px;
   padding: 0.55rem 0.9rem;
   border: 0;
-  border-radius: 999px;
+  border-radius: 12px;
   background: transparent;
-  color: var(--pals-muted);
-  font-size: 0.95rem;
+  color: var(--pals-accent);
+  font-size: 1rem;
   font-weight: 800;
   white-space: nowrap;
   text-decoration: none;
@@ -434,32 +473,55 @@ h1 {
   border-radius: 0 var(--pals-input-radius) var(--pals-input-radius) 0;
 }
 .welcome-hero {
-  min-height: 24rem;
+  min-height: 265px;
   display: flex;
-  align-items: center;
-  padding: var(--pals-space-12);
-  background: var(--pals-surface-feature);
-  border-radius: var(--pals-radius);
-  margin-top: 0.5rem;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 32px;
+  padding: 33px 40px;
+  /* Slightly darker behind white large type for accessible contrast. */
+  background: linear-gradient(
+    105deg,
+    #5c8fb9 0%,
+    #6498c3 65%,
+    var(--pals-brand)
+  );
+  border-radius: var(--pals-radius-feature);
+  margin: 0 0 24px;
 }
 .welcome-hero h1 {
-  max-width: 13ch;
-  color: var(--pals-ink);
+  max-width: 660px;
+  font-size: clamp(48px, 6.3vw, 86px);
+  line-height: 0.8;
+  letter-spacing: -0.055em;
+  color: white;
+  transform: rotate(-1.5deg);
 }
-.welcome-hero .status,
+.welcome-hero h1 span {
+  display: block;
+}
 .welcome-hero .intro {
   color: var(--pals-ink);
-}
-.welcome-hero .intro {
-  max-width: 43ch;
+  max-width: 690px;
+  font-size: 15px;
+  line-height: 1.45;
+  margin-top: 17px;
 }
 .welcome-hero .button {
+  flex: 0 0 auto;
+  margin-right: 62px;
   background: var(--pals-surface-raised);
-  color: var(--pals-ink);
+  color: var(--pals-accent);
+  white-space: nowrap;
+  min-height: 55px;
+  padding: 12px 22px;
 }
-.welcome-hero .actions > a:not(.button) {
-  color: var(--pals-ink);
-  font-weight: 800;
+h2,
+h3,
+.button,
+.primary-nav,
+.header-signin {
+  font-family: var(--pals-font-display);
 }
 .notice {
   max-width: 75ch;
@@ -496,7 +558,7 @@ h1 {
   }
   .welcome-hero {
     min-height: 0;
-    padding: 2rem 1.5rem;
+    padding: 28px 22px;
   }
   .welcome-hero h1 {
     font-size: clamp(2.2rem, 10vw, 3.3rem);
@@ -505,5 +567,58 @@ h1 {
 @media (max-width: 399px) {
   .student-header .campus {
     display: none;
+  }
+}
+
+@media (max-width: 1100px) {
+  .student-header {
+    grid-template-columns: 1fr 90px 1fr;
+    padding-top: 8px;
+  }
+  .student-header .primary-nav {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    overflow-x: auto;
+    padding: 0 0 8px;
+    justify-content: center;
+  }
+  .welcome-hero .button {
+    margin-right: 0;
+  }
+}
+@media (max-width: 720px) {
+  .student-header {
+    gap: 4px 12px;
+  }
+  .header-account {
+    gap: 10px;
+  }
+  .header-safety {
+    display: none;
+  }
+  .student-header .primary-nav {
+    justify-content: flex-start;
+  }
+  .student-header .primary-nav a,
+  .student-header .primary-nav button,
+  .student-header .primary-nav .nav-unavailable {
+    padding: 10px 12px;
+  }
+  .welcome-hero {
+    display: block;
+    min-height: 280px;
+  }
+  .welcome-hero {
+    background: #6498c3;
+  }
+  .welcome-hero h1 {
+    font-size: 53px;
+    max-width: 300px;
+  }
+  .welcome-hero .intro {
+    margin-top: 20px;
+  }
+  .welcome-hero .button {
+    margin-top: 18px;
   }
 }

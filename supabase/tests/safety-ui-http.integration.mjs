@@ -89,6 +89,8 @@ test("built safety API binds the cookie actor, rejects stale writes and keeps re
         primary_photo_path=user_id::text||'/primary.png' where user_id in (${ids});
       insert into private.people_preferences(account_id,opted_in)
         select id,true from public.accounts where id in (${ids});
+      update private.pilot_availability set enabled=true;
+      update private.pilot_capabilities set enabled=true where key in ('onboarding','hangouts','people');
       update private.people_feature_gate set enabled=true;`);
     assert.equal((await a.client.rpc("get_access_state")).data, "ready");
     assert.equal((await b.client.rpc("get_access_state")).data, "ready");
@@ -213,6 +215,8 @@ test("built safety API binds the cookie actor, rejects stale writes and keeps re
   } finally {
     const ids = users.map(user => quote(user.id)).join(",") || "null";
     db(`update private.safety_feature_gate set enabled=false;
+      update private.pilot_availability set enabled=false;
+      update private.pilot_capabilities set enabled=false where key in ('onboarding','hangouts','people');
       update private.people_feature_gate set enabled=false;
       update private.hangout_feature_gate set enabled=false;
       delete from private.safety_report_requests where reporter_id in (${ids});

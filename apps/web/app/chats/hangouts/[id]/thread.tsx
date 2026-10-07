@@ -29,6 +29,8 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
   const [status, setStatus] = useState("");
   const [more, setMore] = useState(false);
   const [pageIndex, setPageIndex] = useState(0);
+  const [maskedHeight, setMaskedHeight] = useState(0);
+  const threadRef = useRef<HTMLDivElement>(null);
   const generation = useRef(0);
   const busy = useRef(false);
   const latest = useRef(0);
@@ -43,30 +45,38 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
   const terminalDenial = useRef(false);
   const api = `/api/chat/${id}`;
 
-  const mask = useCallback((reason: "hidden" | "auth" = "hidden") => {
-    generation.current++;
-    visible.current = false;
-    busy.current = false;
-    latest.current = 0;
-    pageAfter.current = null;
-    pageCursors.current = [null];
-    setPageIndex(0);
-    setMessages([]);
-    setMore(false);
-    setState("loading");
-    setDraft("");
-    setPending(null);
-    if (reason === "auth") {
-      draftRef.current = "";
-      pendingRef.current = null;
-    }
-    setSending(false);
-    setStatus(
-      reason === "auth"
-        ? "Account changed. Checking chat access again."
-        : "Checking chat access again.",
-    );
-  }, []);
+  const mask = useCallback(
+    (reason: "hidden" | "auth" = "hidden", preservePage = false) => {
+      setMaskedHeight(
+        preservePage ? (threadRef.current?.offsetHeight ?? 0) : 0,
+      );
+      generation.current++;
+      visible.current = false;
+      busy.current = false;
+      latest.current = 0;
+      if (!preservePage) {
+        pageAfter.current = null;
+        pageCursors.current = [null];
+        setPageIndex(0);
+      }
+      setMessages([]);
+      setMore(false);
+      setState("loading");
+      setDraft("");
+      setPending(null);
+      if (reason === "auth") {
+        draftRef.current = "";
+        pendingRef.current = null;
+      }
+      setSending(false);
+      setStatus(
+        reason === "auth"
+          ? "Account changed. Checking chat access again."
+          : "Checking chat access again.",
+      );
+    },
+    [],
+  );
   const deny = useCallback(() => {
     terminalDenial.current = true;
     authPending.current.clear();
@@ -87,6 +97,7 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
     setSending(false);
     setState("denied");
     setStatus("Chat access is unavailable.");
+    setMaskedHeight(0);
   }, []);
   const read = useCallback(
     async (after: number | null, reveal = false) => {
@@ -116,7 +127,12 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
           setStatus("Could not check chat. Try again.");
           return false;
         }
-        if (reveal && after !== null && data.messages.length === 0) {
+        if (
+          reveal &&
+          visible.current &&
+          after !== null &&
+          data.messages.length === 0
+        ) {
           setMore(false);
           setStatus("You're caught up.");
           return false;
@@ -129,6 +145,7 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
           latest.current = data.messages.at(-1)?.sequence ?? 0;
           visible.current = true;
           setState("ready");
+          setMaskedHeight(0);
           setStatus(data.messages.length ? "Chat ready." : "No messages yet.");
         } else {
           setMessages(data.messages);
@@ -204,11 +221,11 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
         deny();
         return;
       }
-      mask();
+      mask("hidden", true);
       if (authPending.current.size) verifySettled();
-      else void read(null, true);
+      else void read(pageAfter.current, true);
     };
-    const hide = () => mask();
+    const hide = () => mask("hidden", true);
     const reauthorize = () => {
       if (terminalDenial.current) return;
       mask("auth");
@@ -332,6 +349,7 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
         return;
       }
       if (result.kind === "ok") {
+        const sentFromFullPage = messages.length === 50;
         if (firstRequestConfirmed(retry, result.kind))
           void analytics.capture("hangout_chat_message_sent");
         pendingRef.current = null;
@@ -341,8 +359,12 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
           setDraft("");
         }
         sent = true;
-        await read(pageAfter.current);
-        setStatus("Message sent.");
+        if (await read(pageAfter.current))
+          setStatus(
+            sentFromFullPage
+              ? "Message sent. Load newer messages to see it."
+              : "Message sent.",
+          );
       } else if (result.kind === "conflict")
         setStatus(
           "This retry no longer matches the original message. Reload chat before sending again.",
@@ -368,7 +390,11 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
     }
   }
   return (
-    <div className="chat-thread">
+    <div
+      className="chat-thread"
+      ref={threadRef}
+      style={maskedHeight ? { minHeight: maskedHeight } : undefined}
+    >
       {state === "loading" && <p role="status">Checking chat access…</p>}
       {state === "denied" && (
         <div className="chat-empty">
@@ -484,7 +510,8 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
             <p id="chat-disclosure" className="help">
               Future eligible joiners can read chat history. Confirmed blocks
               can end shared Hangout attendance and hide messages from blocked
-              peers. Creating a new block is temporarily unavailable.
+              peers. Open a person’s profile or Safety to review and confirm a
+              block.
             </p>
             {pending && (
               <p className="help">

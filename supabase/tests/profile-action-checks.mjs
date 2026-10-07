@@ -16,7 +16,7 @@ export async function actionChecks(owner, a, png) {
   async function action(name, values = {}, cookie = owner.header()) {
     const devManifest = new URL("../../apps/web/.next/dev/server/server-reference-manifest.json", import.meta.url);
     const productionManifest = new URL("../../apps/web/.next/server/server-reference-manifest.json", import.meta.url);
-    const manifest = JSON.parse(readFileSync(existsSync(productionManifest) ? productionManifest : devManifest, "utf8"));
+    const manifest = JSON.parse(readFileSync(existsSync(devManifest) ? devManifest : productionManifest, "utf8"));
     const id = Object.entries(manifest.node).find(
       ([, entry]) => entry.exportedName === name,
     )?.[0];
@@ -50,18 +50,45 @@ export async function actionChecks(owner, a, png) {
     bio: "Action roundtrip",
     interests: "Walking\nMusic",
     instagram: "@local.action",
+    hometown: "  Chapel Hill, NC  ",
   };
   let saved = await action("saveProfile", details);
   assert.equal(saved.result?.success, "Profile saved.");
   assert.deepEqual((await read()).interests, ["Walking", "Music"]);
   assert.equal((await read()).instagram, "local.action");
+  assert.equal((await read()).hometown, "Chapel Hill, NC");
   const stale = await action("saveProfile", {
     ...details,
     bio: "Stale overwrite",
   });
   assert.match(stale.result.error, /another window/);
   assert.equal((await read()).bio, "Action roundtrip");
+  assert.equal((await read()).hometown, "Chapel Hill, NC");
   profile = await read();
+  const cleared = await action("saveProfile", {
+    ...details,
+    revision: String(profile.revision),
+    hometown: " \u00a0 ",
+  });
+  assert.equal(cleared.result?.success, "Profile saved.");
+  assert.equal((await read()).hometown, null);
+  profile = await read();
+  const unicode = await action("saveProfile", {
+    ...details,
+    revision: String(profile.revision),
+    hometown: "🌎".repeat(100),
+  });
+  assert.equal(unicode.result?.success, "Profile saved.");
+  assert.equal((await read()).hometown, "🌎".repeat(100));
+  profile = await read();
+  const tooLong = await action("saveProfile", {
+    ...details,
+    revision: String(profile.revision),
+    hometown: "🌎".repeat(101),
+  });
+  assert.ok(tooLong.result?.error);
+  assert.equal((await read()).revision, profile.revision);
+  assert.equal((await read()).hometown, "🌎".repeat(100));
   const bad = await action("saveProfile", {
     ...details,
     revision: String(profile.revision),

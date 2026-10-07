@@ -285,7 +285,7 @@ export function NotificationsInbox({ actor }: { actor: string }) {
     <div className="notifications-page">
       <AnalyticsView event="notifications_viewed" ready={phase === "ready"} />
       <div className="notifications-heading">
-        <p className="badge">Your updates · local only</p>
+        <p className="badge">Your updates</p>
         <h1>Notifications</h1>
         <p>Keep up with plans and conversations around campus.</p>
       </div>

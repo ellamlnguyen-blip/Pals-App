@@ -48,7 +48,11 @@ test("real Auth/PostgREST chat calls enforce membership, retries and private sto
     const request = { p_request_id: crypto.randomUUID(), p_title: "Chat", p_starts_at: new Date(Date.now() + 3600000).toISOString(),
       p_public_place: "Campus area", p_public_latitude: 35.913, p_public_longitude: -79.055 };
     assert.equal((await rpc("read_hangout_messages", host.token, { p_hangout_id: crypto.randomUUID() })).body.code, "42501");
-    sql("update private.hangout_feature_gate set enabled=true; update private.hangout_chat_feature_gate set enabled=true;");
+    sql(`update private.hangout_feature_gate set enabled=true;
+      update private.hangout_chat_feature_gate set enabled=true;
+      update private.pilot_availability set enabled=true;
+      update private.pilot_capabilities set enabled=true
+        where key in ('onboarding','hangouts','hangout_chat');`);
     const made = await rpc("create_hangout", host.token, request);
     assert.equal(made.status, 200, JSON.stringify(made.body));
     hangout = made.body;
@@ -76,6 +80,9 @@ test("real Auth/PostgREST chat calls enforce membership, retries and private sto
   } finally {
     sql(`update private.hangout_chat_feature_gate set enabled=false;
       update private.hangout_feature_gate set enabled=false;
+      update private.pilot_capabilities set enabled=false
+        where key in ('onboarding','hangouts','hangout_chat');
+      update private.pilot_availability set enabled=false;
       set chat.allow_fixture_cleanup='true';
       delete from private.hangout_message_requests where hangout_id='${hangout ?? "00000000-0000-0000-0000-000000000000"}';
       delete from private.hangout_messages where conversation_id in

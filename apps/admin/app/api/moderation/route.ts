@@ -1,5 +1,9 @@
 import { NextRequest } from "next/server";
-import { privateResponse, requestClient } from "../../../lib/server";
+import {
+  exactOrigin,
+  privateResponse,
+  requestClient,
+} from "../../../lib/server";
 
 const uuid = (v: unknown): v is string =>
   typeof v === "string" &&
@@ -20,8 +24,7 @@ const validRevision = (v: unknown): v is number =>
 const denial = () => privateResponse({ error: "Moderation unavailable." }, 403);
 
 export async function POST(request: NextRequest) {
-  if (request.headers.get("origin") !== "http://127.0.0.1:3001")
-    return denial();
+  if (!exactOrigin(request)) return denial();
   if (!process.env.SUPABASE_PUBLISHABLE_KEY) return denial();
   let input: Record<string, unknown>;
   try {
@@ -36,6 +39,29 @@ export async function POST(request: NextRequest) {
     const client = requestClient(request, response);
     const { data: user, error: authError } = await client.auth.getUser();
     if (authError || !user.user) return denial();
+    const [account, ownRole, assurance, factors] = await Promise.all([
+      client
+        .from("accounts")
+        .select("status")
+        .eq("id", user.user.id)
+        .maybeSingle(),
+      client
+        .from("platform_roles")
+        .select("role")
+        .eq("user_id", user.user.id)
+        .maybeSingle(),
+      client.auth.mfa.getAuthenticatorAssuranceLevel(),
+      client.auth.mfa.listFactors(),
+    ]);
+    if (
+      account.data?.status !== "active" ||
+      !["admin", "moderator"].includes(ownRole.data?.role ?? "") ||
+      assurance.error ||
+      assurance.data?.currentLevel !== "aal2" ||
+      factors.error ||
+      !factors.data?.totp.some((factor) => factor.status === "verified")
+    )
+      return denial();
     let result;
     if (
       input.op === "list" &&

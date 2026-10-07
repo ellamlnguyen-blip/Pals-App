@@ -48,7 +48,9 @@ test("notification gate and mute orders serialize with source events", async () 
       bio='Local fixture',primary_photo_path=user_id::text||'/primary.png' where user_id in ('${a}','${b}');
     insert into private.people_preferences(account_id,opted_in) values('${a}',true),('${b}',true);
     update private.people_feature_gate set enabled=true;
-    update private.dm_feature_gate set enabled=true;`);
+    update private.dm_feature_gate set enabled=true;
+    update private.pilot_availability set enabled=true;
+    update private.pilot_capabilities set enabled=true where key in ('onboarding','people','dm','notifications');`);
   let generation;
   try {
     generation = sql(`begin; ${claims(a)} select public.create_dm_request('${b}',
@@ -74,6 +76,8 @@ test("notification gate and mute orders serialize with source events", async () 
     assert.equal(count(),2,"event holding shared gate row may commit first");
     assert.equal(sql("select enabled from private.notification_feature_gate"),"f");
   } finally {
+    sql(`update private.pilot_capabilities set enabled=false where key in ('onboarding','people','dm','notifications');
+      update private.pilot_availability set enabled=false;`);
     sql(`update private.notification_feature_gate set enabled=false;
       update private.dm_feature_gate set enabled=false;
       update private.people_feature_gate set enabled=false;
