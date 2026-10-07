@@ -4,6 +4,16 @@
 
 The current explicit user decision makes Ella Nguyen (`ella_nguyen@unc.edu`) the sole launch moderation owner. No backup moderator role or independent backup coverage is required for the initial launch. Least privilege, MFA/recovery, report response/retention handling, incident contact, immutable audit, conflict checks, RLS, blocks, suspensions and bans remain required. This staffing decision grants no hosted role or gate by itself.
 
+## TASK-027H privileged session boundary
+
+The five moderation queue, detail, case, account sanction and Hangout disable RPCs share `private.moderation_actor`. The guard requires the caller's signed Auth JWT to claim AAL2 and a session ID, then rechecks a live session owned by `auth.uid()` at AAL2 with an unexpired `not_after` and a current verified TOTP factor owned by that same user. It locks the operator gate, account, role, factor and session before the final check, so committed role/status/session/factor revocations deny cached AAL2 tokens. Ordinary confirmed UNC student access does not require MFA or manual approval. Local Auth enables TOTP enrollment/verification for operator testing; no enrollment or challenge is added to ordinary student flows.
+
+Under Accepted ADR-0034, both caller-bound pilot management RPCs also require an AAL2 JWT backed by a live owned AAL2 Auth session and verified owned TOTP factor. Their shared `private.pilot_require_manager` guard checks these after existing management/account/manager locks and locks the factor before the session. Current manager/account authority, CAS, immutable audit and retry semantics remain in force. This does not add per-action UNC eligibility checks or student MFA. If the operator loses a valid factor while availability is on, routine caller-session shutdown is unavailable; the separately reviewed ADR-0035 emergency path is required before launch.
+
+## TASK-027J prelaunch own-role visibility
+
+Under Accepted ADR-0032, an active caller with a current confirmed allowlisted email and verified membership at active `unc-chapel-hill` can read only their own `platform_roles` row while launch availability and onboarding remain closed. The caller-bound private helper reads live Auth, account and campus evidence without opening general membership or source reads. Client role writes remain denied. This narrow read lets the admin console establish Ella's operator role before her personal TOTP enrollment; it does not grant report access or change the moderation AAL2/gate checks above.
+
 ## Current pilot phase — 2026-09-27
 
 [Accepted ADR-0026](../../decisions/ADR-0026-invite-only-pilot-scope.md) introduces a nominated verified-UNC pilot before the later public MVP. Product timing changes only: existing required identity/profile/primary photo, Hangout map/list/create/join/leave/chat/host management and all block/report/removal/report-only moderation/audit/enforcement/private-location/RLS protections remain. Calendar/People discovery/friendship/DM/notifications/co-host UI/attendance surveys/optional rich profile/extra photos/analytics are deferred from pilot exposure. Existing backend role, teardown and evidence-retention rules below remain preserved.
@@ -138,3 +148,7 @@ A fixture-only private trusted manager writer requires actual postgres session a
 ## Current pilot restricted status boundary — 2026-09-29
 
 Accepted ADR-0027 and completed `TASK-021A1b1-owner-admission.md` require denied callers to retain the caller-only status RPC, not raw owner/reference rows. Migration `20260927000200_pilot_owner_admission.sql` accounts_owner_read requires caller-bound admitted-onboarding eligibility including active account status; its get_access_state checks restriction first. Historical TASK-002 and ADR-0019 own-status text describes the earlier foundation. No raw restricted status permission is restored. See `agents/handoffs/TASK-021A1b3c-RESTRICTED-STATUS-RECONCILIATION.md` for the frozen historical HTTP assertion exception and static-only evidence limits.
+
+## Optional owner hometown — ADR-0037
+
+The new nullable hometown column adds only an authenticated column UPDATE grant under existing active-owner profile RLS and revision rules. Raw peer profile reads/writes remain denied. Hometown is private until a separately accepted and implemented rich-sharing policy authorizes a narrow projection; Proposed ADR-0036 creates no grant.

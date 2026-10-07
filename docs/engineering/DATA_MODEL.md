@@ -4,6 +4,10 @@
 
 [Accepted ADR-0025](../../decisions/ADR-0025-initial-mvp-scope.md) narrows the initial UNC release only. Restricted visibility/invitation/eligibility concepts below are future scope and stay disabled initially; no schema change follows. Retain existing owner profile/photos, friendship, DM, notification, private attendance and safety records with current privacy. No peer photo relation, comfort-answer aggregate or repeat-outcome endpoint is introduced.
 
+## Access policy amendment — 2026-10-04
+
+Under accepted ADR-0030, a confirmed Auth email on the current exact UNC allowlist is the complete first-launch app-access signal for an active account. There is no separate roster/current-enrollment check or complete-profile/primary-photo access requirement. The membership row is server-synchronized from live Auth email/confirmation; clients cannot write it. Empty or incomplete profile fields remain owner-controlled and must not become peer-visible without explicit People opt-in. RLS, blocks, reporting, privacy, consent, suspension, and ban controls continue to apply.
+
 ## University
 id, name, slug, allowed email domains, active state, geographic center/bounds. Initial active campus: UNC Chapel Hill.
 
@@ -115,3 +119,7 @@ Migration `20260927000100_private_pilot_admission_authority.sql` adds empty priv
 Private availability singleton and thirteen fixed capabilities start false at revision 1. The roster/managers have no inferred or seeded members. Immutable management audit records actual authenticated actor, allowed operation, target/key, old/new state/value and revisions, normalized reason, request UUID and server time. Caller-scoped cross-operation request ledger binds exact canonical JSONB payload to original minimal receipt/revision. Exact retry adds no audit; a new authorized same-state request adds one no-op audit/receipt without revision advance. Separate immutable manager fixture audit records actual SQL session user, original role setting and backend provenance. No private table is client-readable/writable.
 
 This stage intentionally does not consume admission/capabilities in existing student authorization. A1b/c and subsequent app reconciliation are mandatory before any deployable or pilot-ready claim.
+
+## Optional owner hometown — ADR-0037
+
+`public.profiles.hometown` is nullable self-declared city/region text, trimmed and bounded to100 PostgreSQL Unicode characters. Blank owner form input writes null. Existing owner-only SELECT/UPDATE RLS, active-owner guards and revision compare-and-swap remain authoritative. There is no inferred/default value, new access prerequisite or peer projection. Migration20261006000100.

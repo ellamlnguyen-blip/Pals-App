@@ -1,6 +1,6 @@
 # TASK-028P1 — Hometown and direct photo controls
 
-Status: Active; parent TASK-028P remains incomplete. Date: 2026-10-06.
+Status: Reviewed and verified locally; incomplete pending parent-gated canonical application integration. Parent TASK-028P rich peer decision/implementation remains incomplete. See `agents/handoffs/TASK-028P1.md`. Date: 2026-10-06.
 Branch: `agent/TASK-028P1-profile-corrections`.
 Fresh canonical baseline: `7d33d98dd2c078963e1ce30a4deb7f31cb8fc2b6`; reviewed parent source branch `3f7c5f6eecbef7f1e77be642eb7f8ac2749e30a0`, app freeze2e9fa95. Start from freshly fetched main including this contract, merge reviewed parent only on the task branch. Canonical app integration remains gated by TASK-027 staging acceptance.
 

@@ -59,3 +59,7 @@ Posts, likes, comments, followers, public friend counts, public ratings, polls, 
 
 ## Launch Model and authorization boundary
 The current phase is the admitted pilot above, followed by the later public UNC release, with genuine initial Hangouts created by real students before broad promotion. Scope acceptance does not authorize hosted operations, live seeding/promotion or launch. TASK-021 remains incomplete until its policies, exact release/target authorization, deployed UNC identity, privacy/safety/recovery and actual rehearsal evidence are accepted. No DNS/cutover follows automatically.
+
+## Optional hometown and direct photo editing — 2026-10-06
+
+Accepted ADR-0037 adds each owner's optional self-declared hometown with a pin beneath their name, before bio. Every saved owner photo opens View photo / Edit photo; View uses the existing private route, and Edit focuses that slot's replacement control. All content comes from that account; sample Maya photos/text are disposable fixtures only. Existing People text boundaries remain; rich peer sharing is still Proposed ADR-0036.
