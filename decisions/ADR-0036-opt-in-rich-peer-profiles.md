@@ -1,14 +1,14 @@
 # ADR-0036 — Explicitly opt-in rich peer profiles
 
-Status: Proposed
+Status: Accepted
 Date: 2026-10-06
 Related: TASK-028P; ADR-0011, ADR-0013, ADR-0016, ADR-0025, ADR-0030.
 
 ## Context
 
-The user requests all Pals profile pages to follow a supplied design with photos, hometown, bio, academic details, friendship/message actions, a four-photo gallery and three conversation prompts. Current People consent exposes only a bounded text allowlist. Existing profile photos and prompt answers are owner-private. Hometown is not stored. The request establishes the intended product experience; this decision makes the new disclosure and delivery rules explicit before implementation.
+The user requests all Pals profile pages to follow a supplied design with photos, hometown, bio, academic details, friendship/message actions, a four-photo gallery and three conversation prompts. Current People consent exposes only a bounded text allowlist. Existing profile photos and prompt answers are owner-private. Owner-only hometown is now stored under Accepted ADR-0037. The request establishes the intended product experience; this decision makes the new disclosure and delivery rules explicit before implementation.
 
-## Proposed decision
+## Decision
 
 1. Preserve existing People text opt-in and eligibility. Rich presentation adds a distinct, plainly worded owner choice: **Share my photos, hometown and conversation prompts with people who have confirmed approved UNC email addresses at my campus.** Default off for every account, including existing People opt-ins. Show an accurate preview before the owner turns it on, explaining that future edits to these fields and replacements in the selected photo slots are also shared while this choice remains on. An active owner can turn rich sharing off even when People or rich gates are disabled, source eligibility is lost, or profile fields/photos are incomplete. Turning People sharing off clears rich consent; later People re-opt-in does not restore it without a fresh rich opt-in. Turning rich sharing off preserves owner editing while denying future rich peer reads.
 2. Viewers and subjects must have active accounts, live confirmed Auth email on the exact approved UNC domain allowlist, current membership in the same active campus, People opt-in, enabled capability/source gates and no either-direction block. Under ADR-0030, missing or incomplete profile fields/photos never deny app or source access; missing rich content simply renders empty. Existing People text projection continues to require its current text publishability rules and consent; this is not a new complete-profile/photo access requirement. Friendship grants no extra access. No anonymous, cross-campus or search-engine access. Keep incomplete-profile app access unchanged.
@@ -25,4 +25,4 @@ The owner can see and edit the complete reference layout now. Peers receive the 
 
 ## Acceptance
 
-Awaiting the user's explicit decision. Publication as Proposed is not acceptance.
+Accepted 2026-10-06 by the user's explicit ‘yes’ to: ‘Approve default-off opt-in sharing for verified UNC students at the same campus?’ Acceptance authorizes only the bounded disposable-local implementation described above; hosted operations and canonical application integration retain their existing gates.

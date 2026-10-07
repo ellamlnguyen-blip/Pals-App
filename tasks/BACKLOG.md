@@ -1,5 +1,9 @@
 # Backlog
 
+## 2026-10-06 — Rich profile sharing approved
+
+The user explicitly accepted ADR-0036 default-off opt-in rich sharing for verified same-campus UNC users. TASK-028P2 is active for reviewed consent/detail, secure photo gateway and per-user rich UI with privacy/revocation QA. Existing content stays private until its owner opts in. Reviewed P1 source fdd831b/app954b396 remains the baseline. Canonical app integration still awaits TASK-027 staged acceptance; no hosted change or successor. Contract published before fresh bounded dispatch.
+
 ## 2026-10-06 — Hometown and direct image controls verified locally
 
 TASK-028P1 final app954b396 / independent review97884f5 passes owner hometown/pin and click-photo View/Edit checks generalized to each account. SQL23/23, root units6/6, real server-action checks, final production build and actual responsive/browser flows pass; same-input reference comparison is in design-qa.md. The reviewed hometown migration is applied only to named disposable local55422 with history recorded; fixtures/gates preserved. Preview localhost3030, private credentials file in the handoff. Source stays on `agent/TASK-028P1-profile-corrections`; Task artifact `ac66edc1865fcc17124596ce59137a7286348920` is pushed and exact remote-verified; documentation-only main publication follows in the receipt. Canonical app integration still awaits TASK-027 acceptance. Expanded peer sharing remains unapproved Proposed ADR-0036; no rich peer content/grant/hosted change or successor.
