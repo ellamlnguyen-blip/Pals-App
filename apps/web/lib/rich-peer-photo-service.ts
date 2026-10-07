@@ -2,6 +2,7 @@ import "server-only";
 import { createClient } from "@supabase/supabase-js";
 import { authConfig } from "./config";
 import { readBoundedPhotoStream } from "./rich-peer-photo-core";
+import { privatePeerPhotoUrl } from "./rich-peer-photo-path";
 
 export type ResolvedPeerPhoto = {
   object_id: string;
@@ -54,21 +55,20 @@ export async function resolvePeerPhoto(
     typeof item.object_id !== "string" ||
     typeof item.object_path !== "string" ||
     item.photo_revision !== revision ||
-    !item.object_path.startsWith(`${subjectId}/`)
+    !privatePeerPhotoUrl(url, subjectId, item.object_path)
   )
-    throw new Error("Photo resolution unavailable");
+    return null;
   return item as ResolvedPeerPhoto;
 }
 
 export async function downloadPeerPhoto(
+  subjectId: string,
   path: string,
   signal: AbortSignal,
 ): Promise<Uint8Array | null> {
   const { url, key } = serviceSettings();
-  const objectUrl = `${url}/storage/v1/object/authenticated/profile-photos/${path
-    .split("/")
-    .map(encodeURIComponent)
-    .join("/")}`;
+  const objectUrl = privatePeerPhotoUrl(url, subjectId, path);
+  if (!objectUrl) return null;
   const response = await fetch(objectUrl, {
     method: "GET",
     headers: { apikey: key, Authorization: `Bearer ${key}` },

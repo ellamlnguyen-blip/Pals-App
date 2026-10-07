@@ -6,6 +6,7 @@ import {
   readRichPeerPhoto,
 } from "../apps/web/lib/rich-peer-photo-core.ts";
 import { sanitizePeerPhoto } from "../apps/web/lib/rich-peer-photo-image.ts";
+import { privatePeerPhotoUrl } from "../apps/web/lib/rich-peer-photo-path.ts";
 
 const require = createRequire(
   new URL("../apps/web/package.json", import.meta.url),
@@ -35,7 +36,8 @@ test("gateway returns only the initially authorized exact object after a second 
         calls++;
         return binding();
       },
-      download: async (path) => {
+      download: async (subject, path) => {
+        assert.equal(subject, "subject");
         assert.equal(path, "subject/a.png");
         return bytes;
       },
@@ -47,6 +49,29 @@ test("gateway returns only the initially authorized exact object after a second 
   );
   assert.deepEqual(output, new Uint8Array([4]));
   assert.equal(calls, 2);
+});
+
+test("private Storage URL uses the exact authorized subject path and rejects traversal before fetch", () => {
+  const origin = "http://127.0.0.1:55421";
+  const subject = "79000000-0000-4000-8000-000000000002";
+  const valid = `${subject}/album/aa-bb_1.webp`;
+  assert.equal(
+    privatePeerPhotoUrl(origin, subject, valid),
+    `${origin}/storage/v1/object/authenticated/profile-photos/${valid}`,
+  );
+  for (const unsafe of [
+    `${subject}/../other/photo.png`,
+    `${subject}/./photo.png`,
+    `${subject}/%2e%2e/photo.png`,
+    `${subject}/%252e%252e/photo.png`,
+    `${subject}/album\\..\\other.png`,
+    `${subject}//photo.png`,
+    `${subject}/photo.png?download=1`,
+    `${subject}/photo.png#fragment`,
+    `79000000-0000-4000-8000-000000000003/photo.png`,
+    `${subject}/other.svg`,
+  ])
+    assert.equal(privatePeerPhotoUrl(origin, subject, unsafe), null, unsafe);
 });
 
 test("gateway discards a downloaded image when path is reused, revision changes, or access is revoked", async () => {

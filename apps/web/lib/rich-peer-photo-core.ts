@@ -12,7 +12,11 @@ export type PhotoDependencies = {
     revision: number,
     signal: AbortSignal,
   ) => Promise<PhotoBinding | null>;
-  download: (path: string, signal: AbortSignal) => Promise<Uint8Array | null>;
+  download: (
+    subject: string,
+    path: string,
+    signal: AbortSignal,
+  ) => Promise<Uint8Array | null>;
   sanitize: (bytes: Uint8Array, signal: AbortSignal) => Promise<Uint8Array>;
 };
 
@@ -59,7 +63,11 @@ export async function readRichPeerPhoto(
     signal,
   );
   if (!initial) return null;
-  const downloaded = await dependencies.download(initial.object_path, signal);
+  const downloaded = await dependencies.download(
+    subject,
+    initial.object_path,
+    signal,
+  );
   if (!downloaded) return null;
   const safeBytes = await dependencies.sanitize(downloaded, signal);
   if (signal.aborted) throw new Error("Photo operation unavailable");
