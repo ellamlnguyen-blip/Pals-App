@@ -1,0 +1,142 @@
+[
+  {
+    "actions": [],
+    "client": 320,
+    "gallery": [
+      {
+        "h": 107.25,
+        "loaded": true,
+        "w": 140.5
+      },
+      {
+        "h": 107.25,
+        "loaded": true,
+        "w": 140.5
+      },
+      {
+        "h": 107.25,
+        "loaded": true,
+        "w": 140.5
+      },
+      {
+        "h": 107.25,
+        "loaded": true,
+        "w": 140.5
+      }
+    ],
+    "hero": {
+      "h": 142.5703125,
+      "w": 288,
+      "x": 16,
+      "y": 81
+    },
+    "hometown": "From Raleigh, NC",
+    "scroll": 320,
+    "width": 320
+  },
+  {
+    "actions": [],
+    "client": 390,
+    "gallery": [
+      {
+        "h": 133.96875,
+        "loaded": true,
+        "w": 175.5
+      },
+      {
+        "h": 133.96875,
+        "loaded": true,
+        "w": 175.5
+      },
+      {
+        "h": 133.96875,
+        "loaded": true,
+        "w": 175.5
+      },
+      {
+        "h": 133.96875,
+        "loaded": true,
+        "w": 175.5
+      }
+    ],
+    "hero": {
+      "h": 177.2265625,
+      "w": 358,
+      "x": 16,
+      "y": 81
+    },
+    "hometown": "From Raleigh, NC",
+    "scroll": 390,
+    "width": 390
+  },
+  {
+    "actions": [],
+    "client": 793,
+    "gallery": [
+      {
+        "h": 272.1328125,
+        "loaded": true,
+        "w": 356.5
+      },
+      {
+        "h": 272.1328125,
+        "loaded": true,
+        "w": 356.5
+      },
+      {
+        "h": 272.1328125,
+        "loaded": true,
+        "w": 356.5
+      },
+      {
+        "h": 272.1328125,
+        "loaded": true,
+        "w": 356.5
+      }
+    ],
+    "hero": {
+      "h": 358.90625,
+      "w": 725,
+      "x": 34,
+      "y": 81
+    },
+    "hometown": "From Raleigh, NC",
+    "scroll": 793,
+    "width": 793
+  },
+  {
+    "actions": [],
+    "client": 1280,
+    "gallery": [
+      {
+        "h": 285.4921875,
+        "loaded": true,
+        "w": 374
+      },
+      {
+        "h": 285.4921875,
+        "loaded": true,
+        "w": 374
+      },
+      {
+        "h": 285.4921875,
+        "loaded": true,
+        "w": 374
+      },
+      {
+        "h": 285.4921875,
+        "loaded": true,
+        "w": 374
+      }
+    ],
+    "hero": {
+      "h": 376.234375,
+      "w": 760,
+      "x": 260,
+      "y": 81
+    },
+    "hometown": "From Raleigh, NC",
+    "scroll": 1280,
+    "width": 1280
+  }
+]

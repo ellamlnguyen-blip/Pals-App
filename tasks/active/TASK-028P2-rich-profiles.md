@@ -1,6 +1,6 @@
 # TASK-028P2 — Opt-in rich peer profiles
 
-Status: Active; accepted disposable-local scope only. Date: 2026-10-06.
+Status: Reviewed and verified disposable-local result; task source/handoff2701d7a pushed and remote-verified. Canonical application integration/parent completion remain incomplete behind TASK-027 staged acceptance. Date: 2026-10-06.
 Branch: `agent/TASK-028P2-rich-profiles`.
 Parent: TASK-028P / TASK-028. Canonical application integration remains gated by TASK-027 staged acceptance. No successor chat from this substage.
 
@@ -25,3 +25,11 @@ Coordinator owns contracts/shared records, local runtime/environment, actual bro
 ## Acceptance
 
 Implement and independently review default-off/CAS/atomic-clear/privacy matrix, both relevant race orders and account/social/evidence lock graph; real Auth detail/gateway tests, hostile image/metadata bounds and revocation; existing critical tests/lint/typecheck/build. Apply only independently reviewed migrations to exact named disposable local stack without reset/history drift. Opt local fictional fixtures in through real UI; never auto-share old content. Actual browser owner preview/opt-in/off, peer View-only images, populated/empty peer states, hometown per user, friendship/DM/safety and revoked images at320/390/793/1280. Root compares rendered reference, records evidence and honest limits. Task branch committed/pushed/remote verified; docs/evidence/status only integrated into main and remote verified. Parent remains incomplete while canonical app integration/staged acceptance are gated. No hosted migration/gate/credential/production/domain action.
+
+## Local acceptance receipt
+
+TASK-028P2 source/handoff `2701d7a85a2771776fce3898a62ca1824c0702be` is pushed and exact remote-verified on `agent/TASK-028P2-rich-profiles`. Accepted ADR-0036 is implemented on the task branch: default-off CAS consent, People-off atomic clear, per-user rich detail, cookie-authorized sanitized peer photos and responsive View-only peer UI; owner images retain View/Edit. Final app `e27db7a` / source review `535434e` / final evidence review `2701d7a` passes63 units without skips, workspace lint/typecheck, production webpack build, DATA SQL55/PHOTO SQL11, real Auth/Storage HTTP and seven committed lock races. Actual browser consent/revocation, five-photo views/focus, two distinct hometowns, populated/empty/text-only users, real chat, safety entry and320/390/793/1280 pass. Local preview `http://localhost:3032/profile` is signed into fictional Maya; private test sign-ins remain outside Git.
+
+Only reviewed local migrations002/003 were persisted to named disposable55422 without reset. The HTTP harness restored richgatefalse/prefs0 before browser QA; only the disposable rich gate and fictional Maya/Jordan's explicit UI opt-ins now remain on for review, with unrelated gates unchanged. Cookie expiry timing, hidden-tab provider behavior and CPU-abort timing were not separately chaos-tested. Main receives documentation/evidence only; canonical application integration and parent TASK-028P/TASK-028 remain incomplete behind TASK-027 staged acceptance. No hosted credential/migration/gate/deployment/domain change or successor. Earlier pending-ADR/photo-candidate entries below are historical and superseded by this receipt.
+
+Latest verified task tip: `20cdd69cc45398334dbd37aeaee29bd980d1a514`; final reviewed app remains e27db7a.
