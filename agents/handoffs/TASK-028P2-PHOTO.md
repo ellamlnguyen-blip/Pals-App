@@ -1,0 +1,26 @@
+# TASK-028P2 lane C — peer photo gateway candidate
+
+Date: 2026-10-06. Branch: `agent/TASK-028P2-rich-profiles`. This is a candidate for independent source/security review. Migration `20261006000300` has **not** been persisted; rich sharing remains default off in the disposable local database. No hosted credential, gate, migration or deployment was touched.
+
+## Result
+
+The new `resolve_rich_peer_photo_for_gateway` RPC is executable only by `service_role` and checks the original SQL role. Its one statement snapshot joins current live Auth email, active same-campus membership, account status, pilot/capability/People/rich gates, both People preferences, subject rich consent, text publishability, bilateral blocks, exact selected slot, positive expected profile revision and matching private Storage owner/path/object UUID. It returns the exact path, object UUID and revision only to the server.
+
+`GET /people/{id}/photo` obtains the actor solely through the request-cookie user client's `auth.getUser()`. The user client remains publishable/anon only. A separate `server-only` helper validates a local service-role JWT from `SUPABASE_SERVICE_ROLE_KEY`, calls the resolver, and streams the exact private Storage path with a 5 MiB cap before buffering. No service client is exported to components. The route sanitizes the image and repeats the full resolver under a fresh snapshot. It returns bytes only when object UUID, path and revision match the first result; deletion/reuse, replacement or revocation during fetch discards them. The request deadline covers Auth, both resolver calls and Storage; Sharp has an additional five-second processing timeout. Two concurrent route operations per process are admitted.
+
+The decoder accepts bounded JPEG/PNG/WebP containers, rejects APNG/WebP animation markers and multi-frame metadata, enforces a 20-million-pixel input limit, auto-orients, resizes within 2048 × 2048, re-encodes one WebP frame and strips source metadata. It rejects trailing container bytes and caps output at 5 MiB. Known container/polyglot tests are included; no parser can prove absence of every arbitrary embedded byte sequence inside an otherwise valid image, so re-encoding remains the output safety boundary. Success and explicit method/error responses use private no-store, no-cache, nosniff and restrictive CSP headers with no validators or raw paths.
+
+## Evidence
+
+- Direct web TypeScript check, focused ESLint and Prettier pass. Six Node gateway/decoder tests pass, covering the two-check identity and revocation rule, bounded stream cancellation, metadata removal, orientation, dimensions, static PNG/WebP, animation marker rejection, malformed/trailing bytes and pixel/input limits.
+- On the exact named disposable database `supabase_db_pals-task028-disposable` mapped to port 55422, migration 003 plus focused SQL tests passed **inside one outer rollback transaction**: 10 TAP assertions for grants, original-role check, authorized object/path, unopted viewer, stale revision, absent slot and block revocation. `to_regprocedure(...) is null` was confirmed after rollback. No test fixture or gate persisted.
+- Root's separate real Auth/Storage proof confirmed a fresh upload, rejection of existing-name upsert with unchanged downloaded SHA-256, and successful delete/reuse of a name. This is why the gateway compares a fresh object UUID/path/revision after download rather than relying on a path's permanent uniqueness.
+- Sharp version `0.35.4` is pinned as a direct web dependency; it was already present indirectly in the lockfile. Current primary references reviewed: [Sharp constructor/input limits](https://sharp.pixelplumbing.com/api-constructor/), [Sharp output timeout and metadata behavior](https://sharp.pixelplumbing.com/api-output/), [Supabase private Storage downloads](https://supabase.com/docs/guides/storage/serving/downloads), and the [npm Sharp versions listing](https://www.npmjs.com/package/sharp?activeTab=versions). The npm listing showed a newer `0.35.5` release; `0.35.4` is maintained and already installed in this workspace. The direct dependency and lock importer were updated without changing transitive versions.
+
+## Remaining gates for coordinator
+
+1. Independent code/security review of migration 003, route, service credential handling, decoder and tests. Do not persist migration or activate the rich gate before that review.
+2. After approval, apply 003 only to the exact disposable local stack and run actual cookie-authenticated HTTP tests for all slots, malformed/copy/denial/revocation/method/cache responses and no path/secret leaks. Run an injected real Auth/Storage barrier through the production two-check core for detach/delete/name-reuse and revocation during download. Verify direct authenticated/anon RPC denial and service-only success through PostgREST.
+3. Root provisions the exact local service key into a private runtime environment without printing or committing it. Confirm the web bundle contains no service key or helper import. Run final build/browser privacy checks with the gate restored off afterward.
+
+The implementation worker could not use a new agent context because the dispatch tool reported its agent-thread limit. The independent reviewer must therefore inspect this candidate without relying on this worker's prior design clearance.

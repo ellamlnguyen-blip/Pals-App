@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-06 — Consent runtime passed; photo candidate under correction
+
+TASK-028P2 DATA096e51c passed real Auth positive/negative checks, SQL55 and seven observed lock races; rich gate restored false, rich consent rows/synthetic users zero. Owner privacy f4727cc/ef0d265 passed independent review ac6867a; isolated production browser preview confirms default-off, five selected photos, mobile no-overflow and gate-off write recovery. PHOTO1350b6c passed six units and rollback SQL10 but independent review72c343d blocks local003 persistence until canonical file-path validation and regression coverage pass. Source/candidate/review stays on the task branch; no hosted or main app change. Tool refused fresh PHOTO dispatch at its thread limit; relevant design worker implemented it and a different code reviewer is reviewing independently.
+
 ## 2026-10-06 — Rich consent source reviewed, local tests progressing
 
 TASK-028P2 DATA cafd6cb passed independent source review dc68d75. Only reviewed migration20261006000200 was applied to named disposable local55422 with history; the rich gate remains default off and existing fixtures/gates were preserved. SQL55 rollback assertions pass; real Auth and committed-order races remain pending. Photo design review requires full second authorization/object-identity check after bounded download. Owner privacy UI may follow reviewed DATA; peer UI follows reviewed PHOTO. No hosted operation or canonical app integration.
