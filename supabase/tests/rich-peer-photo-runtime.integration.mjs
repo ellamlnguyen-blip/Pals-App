@@ -130,10 +130,12 @@ test("real cookie photo gateway and two-check Storage races", { timeout: 180000 
   assert.equal(original.rich, null, "dedicated subject begins rich private");
   assert.equal(original.blocks, 0, "no prior fixture block");
   assert.equal(original.status, "active");
+  assert.ok(original.confirmed && original.membership, "dedicated subject has confirmed campus evidence");
   const owner = student();
   const viewer = student();
   const admin = service();
   const createdPaths = [];
+  let otherCampus = null;
   let staged = false;
   let ownerCookie = "";
   let viewerCookie = "";
@@ -186,6 +188,7 @@ test("real cookie photo gateway and two-check Storage races", { timeout: 180000 
     for (const response of parallelPhotos) await check(response, 200);
     await check(await request(photoUrl("primary", revision), ""), 404, createdPaths[0]);
     await check(await request(photoUrl("primary", revision), ownerCookie), 404, createdPaths[0]);
+    await check(await request(photoUrl("primary", revision, crypto.randomUUID()), viewerCookie), 404);
     await check(await request(photoUrl("primary", revision), viewerCookie, "GET", { "x-actor-id": action.userId }), 200);
     for (const bad of [
       `${runtime}/people/${action.userId}/photo?slot=primary&revision=0`,
@@ -220,6 +223,16 @@ test("real cookie photo gateway and two-check Storage races", { timeout: 180000 
     sql(`update auth.users set email_confirmed_at=null where id='${action.userId}'`);
     try { await check(await request(photoUrl("primary", revision), viewerCookie), 404); }
     finally { sql(`update auth.users set email_confirmed_at='${original.confirmed}' where id='${action.userId}'`); }
+    otherCampus = crypto.randomUUID();
+    sql(`insert into public.universities(id,slug,name,active,allowed_email_domains)
+      values('${otherCampus}','photo-gateway-fixture-${otherCampus}','Temporary Photo Campus',true,array['unc.edu']);
+      update public.university_memberships set university_id='${otherCampus}' where user_id='${action.userId}'`);
+    try { await check(await request(photoUrl("primary", revision), viewerCookie), 404); }
+    finally {
+      sql(`update public.university_memberships set university_id='${original.membership}' where user_id='${action.userId}';
+        delete from public.universities where id='${otherCampus}'`);
+      otherCampus = null;
+    }
     const currentPref = success(await owner.rpc("get_my_rich_profile_preference"), "rich current")[0];
     success(await owner.rpc("set_my_rich_profile_preference", { p_opted_in: false, p_expected_revision: currentPref.revision }), "rich opt-out");
     await check(await request(photoUrl("primary", revision), viewerCookie), 404);
@@ -235,6 +248,15 @@ test("real cookie photo gateway and two-check Storage races", { timeout: 180000 
     await check(await request(photoUrl("primary", revision), viewerCookie), 404);
     revision = await updateProfile(owner, { bio: old.bio ?? "Local photo test" });
     await check(await request(photoUrl("primary", revision), viewerCookie), 200);
+
+    // The slot index must still be selected at the current revision.
+    const beforeRemoval = revision;
+    revision = await updateProfile(owner, { additional_photo_paths: createdPaths.slice(1, 4) });
+    await check(await request(photoUrl("3", revision), viewerCookie), 404);
+    await check(await request(photoUrl("primary", revision), viewerCookie), 200);
+    revision = await updateProfile(owner, { additional_photo_paths: createdPaths.slice(1) });
+    await check(await request(photoUrl("3", beforeRemoval), viewerCookie), 404);
+    await check(await request(photoUrl("3", revision), viewerCookie), 200);
 
     // Production two-check core with real resolver/Storage. Pauses are in the
     // test adapter, never in the route or its service helper.
@@ -299,6 +321,15 @@ test("real cookie photo gateway and two-check Storage races", { timeout: 180000 
       for (const path of createdPaths)
         success(await owner.storage.from("profile-photos").remove([path]), "cleanup test photo");
     } finally {
+      let campusRestoreError;
+      if (otherCampus) {
+        try {
+          sql(`update public.university_memberships set university_id='${original.membership}' where user_id='${action.userId}';
+            delete from public.universities where id='${otherCampus}'`);
+        } catch (error) {
+          campusRestoreError = error;
+        }
+      }
       const restorePeople = original.people
         ? `insert into private.people_preferences(account_id,opted_in) values('${action.userId}',${original.people.opted_in}) on conflict(account_id) do update set opted_in=excluded.opted_in;`
         : `delete from private.people_preferences where account_id='${action.userId}';`;
@@ -318,6 +349,7 @@ test("real cookie photo gateway and two-check Storage races", { timeout: 180000 
         update public.accounts set status='${original.status}' where id='${action.userId}';
         update auth.users set email_confirmed_at='${original.confirmed}' where id='${action.userId}';
         commit;`);
+      if (campusRestoreError) throw campusRestoreError;
     }
   }
   const after = JSON.parse(sql(`select json_build_object(
