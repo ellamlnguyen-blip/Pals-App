@@ -229,13 +229,13 @@ export function ProfileEditor({
         </p>
         <p>
           {peopleAvailable
-            ? "Only your selected text can appear in People after you opt in and meet its requirements. Photos, prompts, email and other details are private to you."
+            ? "Your selected text can appear in People after you opt in and meet its requirements. Photos, hometown and prompts are shared only if you separately turn on rich sharing; your email address and other private fields are not shown."
             : "Only you can see these profile details and photos right now."}
         </p>
         {peopleAvailable && (
           <>
             <Link href="/people/privacy">
-              Preview and manage People sharing
+              Preview and manage People and rich sharing
             </Link>
             <Link href="/people/friends">Your friendships</Link>
           </>
