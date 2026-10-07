@@ -187,6 +187,7 @@ test("real cookie photo gateway and two-check Storage races", { timeout: 180000 
     );
     for (const response of parallelPhotos) await check(response, 200);
     await check(await request(photoUrl("primary", revision), ""), 404, createdPaths[0]);
+    await check(await request(photoUrl("primary", revision), "", "GET", { "x-actor-id": jordan.userId }), 404, createdPaths[0]);
     await check(await request(photoUrl("primary", revision), ownerCookie), 404, createdPaths[0]);
     await check(await request(photoUrl("primary", revision, crypto.randomUUID()), viewerCookie), 404);
     await check(await request(photoUrl("primary", revision), viewerCookie, "GET", { "x-actor-id": action.userId }), 200);
