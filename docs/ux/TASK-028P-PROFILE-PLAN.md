@@ -19,3 +19,11 @@ Peer: current authorized People text and existing friendship/DM request controls
 ## Verification
 
 Capture before and after at source width 793, desktop1280 and mobile390/320. Inspect empty owner, populated owner, editing, invalid/photo selection, cancel/save, photo changes/reload and stale save. Inspect authorized peer and unavailable/denied states plus genuine friend/DM actions when the fixture permits. Review the provided image together with actual rendered captures, evaluate typography/layout/colors/images/copy and record differences/iterations in project-root design-qa.md. An owner-only pass does not claim full rich-peer completion. Keep the detached current preview live until the new isolated build is ready.
+
+## TASK-028P1 requested corrections
+
+Continue the same reference language (variance3, motion2, density4). Place a Phosphor map pin and optional “From {hometown}” directly after name/verification and before bio. Each owner edits their own optional city/region; absence creates no fabricated Raleigh/default value. Keep wrapping safe at320px and matching Nunito body sizing at793.
+
+Saved primary/four extras become keyboard-accessible photo triggers without adding a permanent overlay to the image. Click opens a small modal offering View photo and Edit photo. View displays the existing private image at a contained large size; Escape, Close and backdrop dismiss and return focus to the trigger. Edit dismisses and focuses the matching slot's existing replacement input; no searching through an unrelated control list. Preserve selected-file preview, revisions, optional onboarding and primary-removal guard. Owner edit choices never appear for peers. Expanded peer rich content remains conditional on ADR-0036.
+
+Browser QA will cover all five triggers, primary and extra viewing, focus/keyboard/backdrop, correct-slot edit/replacement/reload, hometown save/clear/boundary/stale-draft, a second owner with different data, and peer absence of edit controls. Keep source comparison and320/390/793/1280 geometry evidence.

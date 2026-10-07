@@ -1,5 +1,9 @@
 # Current State
 
+## 2026-10-06 — Hometown and direct image controls verified locally
+
+TASK-028P1 final app954b396 / independent review97884f5 passes owner hometown/pin and click-photo View/Edit checks generalized to each account. SQL23/23, root units6/6, real server-action checks, final production build and actual responsive/browser flows pass; same-input reference comparison is in design-qa.md. The reviewed hometown migration is applied only to named disposable local55422 with history recorded; fixtures/gates preserved. Preview localhost3030, private credentials file in the handoff. Source stays on `agent/TASK-028P1-profile-corrections`; Task artifact `ac66edc1865fcc17124596ce59137a7286348920` is pushed and exact remote-verified; documentation-only main publication follows in the receipt. Canonical app integration still awaits TASK-027 acceptance. Expanded peer sharing remains unapproved Proposed ADR-0036; no rich peer content/grant/hosted change or successor.
+
 ## 2026-10-06 — Reference profile UI reviewed; rich sharing decision pending
 
 Published/remote-verified task artifact `a9381aeb7a3b48da8819ba696bab560a1ef793a6` on `agent/TASK-028P-profile-remodel`. TASK-028P owner/current People-text presentation passes independent source review and actual local browser checks through `2e9fa9591b3ee802cf38d7e54729c0079e677134`: reference composition, readable editing, private photos, friendship/DM states, mobile gallery and whole-peer clearing after cross-tab sign-out. Final production build passes; local review is at localhost3029 with private test credentials. `design-qa.md` and `agents/handoffs/TASK-028P.md` record evidence and limits. ADR-0036 remains Proposed: no hometown storage or rich peer disclosure implemented. TASK-028P and parent TASK-028 remain incomplete; TASK-027 staged acceptance still gates main application integration. Publish reviewed documentation/evidence only to main; no hosted change or successor.

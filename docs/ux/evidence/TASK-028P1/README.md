@@ -1,0 +1,7 @@
+# TASK-028P1 browser evidence
+
+`profile-comparison-793.png` is the final954b396 actual profile clipped to the supplied reference's793×1983 dimensions using793×3000 viewport so width is not changed by scrollbar reflow. It was viewed with the original source in the same image input. It contains the new self-declared hometown/pin; owner Edit/Manage actions intentionally differ from the peer reference. Other differences are accessible blues, font metrics/wrapping and fictional fixture image composition.
+
+`profile-after-320.png`, `profile-after-390.png`, `profile-top-390.png` and `profile-after-1280.png` are final954b396 responsive evidence. `peer-text-390.png` is final existing authorized peer text with real Friends/Open chat and no owner Edit controls; it does not claim expanded photos/hometown/prompts. `photo-view-primary.png`, `photo-choices-390.png`, `second-owner-390.png` preserve224e06f actual interaction/second-account evidence before the styling-only hometown correction. View/Edit behavior and data contracts are unchanged in954.
+
+Maya/Jordan/Reese are dedicated fictional local accounts; a fourth dedicated real-Auth account ran server-action checks. All sample values belong only to those accounts. No default personal content, credentials, raw Storage path or environment file is committed. See project-root design-qa.md and coordinator handoff for passes and remaining gates. No hosted/production release is claimed.

@@ -1,5 +1,9 @@
 # NOW
 
+## 2026-10-06 — Hometown and direct image controls verified locally
+
+TASK-028P1 final app954b396 / independent review97884f5 passes owner hometown/pin and click-photo View/Edit checks generalized to each account. SQL23/23, root units6/6, real server-action checks, final production build and actual responsive/browser flows pass; same-input reference comparison is in design-qa.md. The reviewed hometown migration is applied only to named disposable local55422 with history recorded; fixtures/gates preserved. Preview localhost3030, private credentials file in the handoff. Source stays on `agent/TASK-028P1-profile-corrections`; Task artifact `ac66edc1865fcc17124596ce59137a7286348920` is pushed and exact remote-verified; documentation-only main publication follows in the receipt. Canonical app integration still awaits TASK-027 acceptance. Expanded peer sharing remains unapproved Proposed ADR-0036; no rich peer content/grant/hosted change or successor.
+
 ## 2026-10-06 — Profile corrections requested
 
 TASK-028P1 is active for optional owner hometown (Accepted ADR-0037, directly requested) and click-image View/Edit controls, generalized to each account. Reviewed parent source remains3f7c5f6/app2e9fa95. Full rich peer disclosure still awaits explicit ADR-0036 choice; no stored private content becomes shared by this correction. Publish contract before bounded DATA/UI dispatch; main app integration stays gated by parent staging acceptance. No hosted operation or successor.
