@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { RichPeopleDetail } from "@pals/types";
 import { Frame, frameAvailableDestinations } from "../../components";
 import { localAttendanceAvailable } from "../../../lib/attendance";
 import { requireAccess } from "../../../lib/access";
@@ -14,6 +15,7 @@ import type { PeerDmState } from "./request-control";
 import "../../hangouts/map.css";
 import "../people.css";
 import "../../profile/profile.css";
+import "./peer-profile.css";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -38,10 +40,19 @@ export default async function PersonPage({
     typeof query.focus === "string" && query.focus === id
       ? `${baseBack}${baseBack.includes("?") ? "&" : "?"}focus=${id}`
       : baseBack;
-  const result = peopleId.test(id)
-    ? await client.rpc("get_people_detail", { p_account_id: id })
+  const richResult = peopleId.test(id)
+    ? await client.rpc("get_rich_people_detail", { p_account_id: id })
     : { data: [], error: null };
-  const detail = (result.data?.[0] ?? null) as PeopleDetail | null;
+  const richDetail = (richResult.data?.[0] ?? null) as RichPeopleDetail | null;
+  // An absent rich row is a normal default-off outcome. An RPC error is not:
+  // do not silently turn an authorization failure into a text-only profile.
+  const textResult =
+    !richResult.error && !richDetail && peopleId.test(id)
+      ? await client.rpc("get_people_detail", { p_account_id: id })
+      : { data: [], error: null };
+  const detail =
+    richDetail ?? ((textResult.data?.[0] ?? null) as PeopleDetail | null);
+  const error = richResult.error || textResult.error;
   const [friendship, dmStatus] = detail
     ? await Promise.all([
         readFriendship(id),
@@ -57,14 +68,15 @@ export default async function PersonPage({
         ? "unknown"
         : "none";
   return (
-    <Frame signedIn navigation profileChrome={!!detail && !result.error}>
+    <Frame signedIn navigation profileChrome={!!detail && !error}>
       <div className="people-detail">
-        {result.error ? (
+        {error ? (
           <section className="people-panel">
             <a href={back}>← Back to People</a>
-            <h1>People unavailable</h1>
+            <h1>Profile unavailable</h1>
             <p role="alert">
-              Your access or connection may have changed. Try again from People.
+              We couldn’t confirm this profile’s current sharing. Return to
+              People and try again.
             </p>
             <Link href="/people">Return to People</Link>
           </section>
@@ -79,6 +91,7 @@ export default async function PersonPage({
           <PersonView
             key={`${id}:${dmState}`}
             detail={detail}
+            richDetail={richDetail}
             back={back}
             friendship={friendship!}
             initialDmState={dmState}
