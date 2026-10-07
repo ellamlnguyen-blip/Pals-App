@@ -123,3 +123,9 @@ This stage intentionally does not consume admission/capabilities in existing stu
 ## Optional owner hometown — ADR-0037
 
 `public.profiles.hometown` is nullable self-declared city/region text, trimmed and bounded to100 PostgreSQL Unicode characters. Blank owner form input writes null. Existing owner-only SELECT/UPDATE RLS, active-owner guards and revision compare-and-swap remain authoritative. There is no inferred/default value, new access prerequisite or peer projection. Migration20261006000100.
+
+## Rich profile consent and projection — ADR-0036 / TASK-028P2
+
+Migration20261006000200 adds private `rich_profile_feature_gate` (disabled) and sparse `rich_profile_preferences(account_id, opted_in, revision)` (missing row means false/revision0), with RLS and no client table grants. There is no consent backfill. Caller-bound get/set RPCs manage the independent consent CAS; replacing the People writer makes its opt-out clear rich consent/revision in the same transaction. The separate rich detail returns a strict allowlist under live same-campus authorization. Accepted ADR-0037 hometown remains an owner-only raw column; its optional value is shared only through this separately authorized rich projection.
+
+Migration20261006000300 adds only the service-role-only exact-object resolver; it adds no raw peer profile or Storage client grant and no public/signed image URL. The gateway reauthorizes after download and compares object UUID, path and profile revision. Canonical path validation and bounded metadata-free re-encoding protect the privileged fetch. Default-off consent/source gates and existing content/revision constraints remain. Both migrations are reviewed disposable-local work; hosted application is separate.
