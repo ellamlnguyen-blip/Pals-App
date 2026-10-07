@@ -1,10 +1,10 @@
 # TASK-028P design QA
 
-Overall result: **blocked for expanded rich peer profiles by pending ADR-0036 acceptance**. The authorized owner / existing People text UI **passes** independent source review and local rendered/interaction checks through final source `2e9fa95`. Full requested rich-peer completion remains blocked, not passed.
+Overall result: **reviewed disposable-local owner and opt-in rich peer profiles pass** through final application source `e27db7a`, independent review `535434e`, and the P2 browser evidence below. ADR-0036 is Accepted following the user’s explicit yes. Parent TASK-028P/TASK-028 and canonical application integration remain incomplete behind TASK-027 staged acceptance; this is a local test result, not a hosted release.
 
 ## Scope and source
 
-User-supplied reference: `docs/ux/evidence/TASK-028P/profile-reference.png` (793 × 1983). The authorized implementation covers the owner profile and current People text allowlist. Owner hometown is now Accepted ADR-0037 and implemented by TASK-028P1 below. Peer hometown/photos/prompts remain conditional on Proposed ADR-0036. Owner Edit details / Manage photos replace the reference's peer actions. Existing extra-photo removal is supported; primary photos can be added/replaced, not removed under the accepted contract. Existing extra owner fields are retained below the reference sections.
+User-supplied reference: `docs/ux/evidence/TASK-028P/profile-reference.png` (793 × 1983). Current implementation covers owner profiles, the existing People text allowlist, optional owner hometown under Accepted ADR-0037, and separately opted-in peer hometown/photos/prompts under Accepted ADR-0036. Owner Edit details / Manage photos replace the reference’s peer actions; actual friendship and DM states appear on peer profiles. Existing extra-photo removal is supported; primary photos can be added/replaced, not removed under the accepted contract. Remaining owner fields stay private below the reference sections. Earlier P/P1 sections below are historical stage receipts; the final P2 section and current headline govern current scope.
 
 Before: `docs/ux/evidence/TASK-028P/profile-before-1280.png`. Three dedicated fictional local accounts were confirmed through real Supabase Auth and Mailpit. Maya has five generated owner-private photos and three prompts; Jordan has an accepted friendship and chat with Maya; Reese has a pending message request. No generated content is a default for real users. The user's earlier account and Hangouts were not edited.
 
