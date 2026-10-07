@@ -182,8 +182,9 @@ export function OnboardingForm({
         />
       </label>
       <p className="help" id="photo-help">
-        Choose a clear photo of yourself. JPG, PNG or WebP, up to 5 MB. For now,
-        your photo is visible only to you.
+        Choose a clear photo of yourself. JPG, PNG or WebP, up to 5 MB. Your
+        original upload stays private. Sharing the selected photo with eligible
+        students later requires separate People and rich sharing choices.
       </p>
       <Feedback state={state} />
       <button className="button" disabled={pending}>

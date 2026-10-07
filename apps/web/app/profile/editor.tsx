@@ -477,7 +477,15 @@ export function ProfileEditor({
               )}
             </div>
             <p className="help">
-              Private to you. JPG, PNG or WebP, under 5 MB each.
+              Original uploads stay private. Selected photos can appear to
+              eligible students only while your People and rich sharing choices
+              are on. JPG, PNG or WebP, under 5 MB each.
+              {peopleAvailable && (
+                <>
+                  {" "}
+                  <Link href="/people/privacy">Manage profile sharing</Link>.
+                </>
+              )}
             </p>
             {[
               "primary",
