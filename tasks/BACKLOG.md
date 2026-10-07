@@ -2,6 +2,8 @@
 
 ## 2026-10-06 — Opt-in rich profiles reviewed and verified locally
 
+Documentation-only main integration `bcc35688e5a92a66e9de96e7dd180e4134d1de66` is pushed and exact remote-verified; see `agents/handoffs/TASK-028P2-PUBLICATION.md`. Canonical application integration stays gated.
+
 Latest verified pushed task tip: `20cdd69cc45398334dbd37aeaee29bd980d1a514` (documentation reconciliation after final reviewed artifact2701d7a; application source remains e27db7a).
 
 TASK-028P2 source/handoff `2701d7a85a2771776fce3898a62ca1824c0702be` is pushed and exact remote-verified on `agent/TASK-028P2-rich-profiles`. Accepted ADR-0036 is implemented on the task branch: default-off CAS consent, People-off atomic clear, per-user rich detail, cookie-authorized sanitized peer photos and responsive View-only peer UI; owner images retain View/Edit. Final app `e27db7a` / source review `535434e` / final evidence review `2701d7a` passes63 units without skips, workspace lint/typecheck, production webpack build, DATA SQL55/PHOTO SQL11, real Auth/Storage HTTP and seven committed lock races. Actual browser consent/revocation, five-photo views/focus, two distinct hometowns, populated/empty/text-only users, real chat, safety entry and320/390/793/1280 pass. Local preview `http://localhost:3032/profile` is signed into fictional Maya; private test sign-ins remain outside Git.

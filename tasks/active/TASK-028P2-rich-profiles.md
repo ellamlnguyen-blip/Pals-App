@@ -33,3 +33,5 @@ TASK-028P2 source/handoff `2701d7a85a2771776fce3898a62ca1824c0702be` is pushed a
 Only reviewed local migrations002/003 were persisted to named disposable55422 without reset. The HTTP harness restored richgatefalse/prefs0 before browser QA; only the disposable rich gate and fictional Maya/Jordan's explicit UI opt-ins now remain on for review, with unrelated gates unchanged. Cookie expiry timing, hidden-tab provider behavior and CPU-abort timing were not separately chaos-tested. Main receives documentation/evidence only; canonical application integration and parent TASK-028P/TASK-028 remain incomplete behind TASK-027 staged acceptance. No hosted credential/migration/gate/deployment/domain change or successor. Earlier pending-ADR/photo-candidate entries below are historical and superseded by this receipt.
 
 Latest verified task tip: `20cdd69cc45398334dbd37aeaee29bd980d1a514`; final reviewed app remains e27db7a.
+
+Documentation-only main milestone `bcc35688e5a92a66e9de96e7dd180e4134d1de66` is pushed and remote-verified; receipt `agents/handoffs/TASK-028P2-PUBLICATION.md`. Parent/application gates remain incomplete.
