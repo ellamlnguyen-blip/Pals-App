@@ -1,5 +1,7 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { access, accessPath } from "../../lib/access";
+import { localPeopleAvailable } from "../../lib/people";
 import { Frame, Intro } from "../components";
 
 export default async function PilotPending() {
@@ -14,6 +16,11 @@ export default async function PilotPending() {
           with a confirmed email from an approved UNC domain can get started. No
           roster or completed profile is required.
         </Intro>
+        {localPeopleAvailable() && (
+          <p>
+            <Link href="/people/privacy">Manage profile sharing</Link>
+          </p>
+        )}
       </section>
     </Frame>
   );

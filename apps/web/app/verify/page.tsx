@@ -53,7 +53,7 @@ export default async function Verify({
           </p>
           {localPeopleAvailable() && (
             <p>
-              <Link href="/people/privacy">Manage People sharing</Link>
+              <Link href="/people/privacy">Manage profile sharing</Link>
             </p>
           )}
           <p>

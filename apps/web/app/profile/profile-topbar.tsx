@@ -36,6 +36,9 @@ export function ProfileTopbar({
         <div className="profile-menu-links">
           <StudentNav available={available} />
           <Link href="/profile">Your profile</Link>
+          {available.people && (
+            <Link href="/people/privacy">Profile sharing</Link>
+          )}
           <Link href="/safety">Safety</Link>
           <Link href="/account/analytics">Analytics choice</Link>
           {attendanceAvailable && (
