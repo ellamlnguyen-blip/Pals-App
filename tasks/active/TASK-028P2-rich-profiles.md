@@ -1,6 +1,6 @@
 # TASK-028P2 — Opt-in rich peer profiles
 
-Status: Reviewed and verified disposable-local result; task source/handoff2701d7a pushed and remote-verified. Canonical application integration/parent completion remain incomplete behind TASK-027 staged acceptance. Date: 2026-10-06.
+Status: User-accepted reviewed disposable-local result (2026-10-11); task source/handoff2701d7a pushed and remote-verified. Canonical application integration/parent completion remain incomplete behind TASK-027 staged acceptance. Date: 2026-10-06.
 Branch: `agent/TASK-028P2-rich-profiles`.
 Parent: TASK-028P / TASK-028. Canonical application integration remains gated by TASK-027 staged acceptance. No successor chat from this substage.
 
@@ -35,3 +35,7 @@ Only reviewed local migrations002/003 were persisted to named disposable55422 wi
 Latest verified task tip: `20cdd69cc45398334dbd37aeaee29bd980d1a514`; final reviewed app remains e27db7a.
 
 Documentation-only main milestone `bcc35688e5a92a66e9de96e7dd180e4134d1de66` is pushed and remote-verified; receipt `agents/handoffs/TASK-028P2-PUBLICATION.md`. Parent/application gates remain incomplete.
+
+## User acceptance and publication recovery — 2026-10-11
+
+The user accepted the delivered profile experience. Current remote main41df5c2 and task20cdd69 are freshly verified. This documentation-only recovery publishes the acceptance without changing the staged-release/application integration boundary. Prior localhost3032/runtime assertions are October6 historical observations; the preview did not connect on October11. See `agents/handoffs/TASK-028P2-USER-ACCEPTANCE.md`. Parent remains incomplete; no successor.
