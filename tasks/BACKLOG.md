@@ -1,5 +1,11 @@
 # Backlog
 
+## 2026-10-11 — User accepts the reviewed profile experience
+
+The user accepted the delivered local profile experience (“i accep”) and then requested repair of the stalled repository publication. Current remote reads verify canonical main `41df5c26c6ca418f6cb934fa6a90906c1ee372a4` and profile task branch `20cdd69cc45398334dbd37aeaee29bd980d1a514`. An isolated shallow checkout recovered current records after the older shared checkout's full fetch timed out; shared staged/untracked work was preserved. Acceptance covers per-user hometown/pin, owner image View/Edit, peer View-only photos and individual opt-in rich profiles. See `agents/handoffs/TASK-028P2-USER-ACCEPTANCE.md`.
+
+This accepts the reviewed local experience, not outstanding TASK-027 staged student/moderation/recovery checks. Parent TASK-028/TASK-028P and canonical application integration remain incomplete; no successor is dispatched. No app, schema, hosted gate, deployment or domain change occurred. October 6 test evidence is historical: on October 11 the earlier temporary runtime directories were absent and `http://localhost:3032/profile` did not connect. This record does not claim a current running preview or freshly rerun application tests.
+
 ## 2026-10-06 — Opt-in rich profiles reviewed and verified locally
 
 Documentation-only main integration `bcc35688e5a92a66e9de96e7dd180e4134d1de66` is pushed and exact remote-verified; see `agents/handoffs/TASK-028P2-PUBLICATION.md`. Canonical application integration stays gated.
