@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-12 — Hosted test release requested
+
+The user explicitly selected a hosted test release. Bounded continuation `tasks/active/TASK-028R-hosted-test-release.md` targets only Pals Staging `ffabdrgsmtfylrehwmfo` and `pals8/pals-app` profile Preview. Ready deployment6nK7ngvNH matches reviewed task20cdd69, but authenticated health reports missing hosted configuration. Exact migration/configuration/security preparation and staged sign-in checks precede availability. Main application/TASK-027 parent release gates remain; no public/domain change or duplicate successor.
+
 ## 2026-10-11 — User accepts the reviewed profile experience
 
 The user accepted the delivered local profile experience (“i accep”) and then requested repair of the stalled repository publication. Current remote reads verify canonical main `41df5c26c6ca418f6cb934fa6a90906c1ee372a4` and profile task branch `20cdd69cc45398334dbd37aeaee29bd980d1a514`. An isolated shallow checkout recovered current records after the older shared checkout's full fetch timed out; shared staged/untracked work was preserved. Acceptance covers per-user hometown/pin, owner image View/Edit, peer View-only photos and individual opt-in rich profiles. See `agents/handoffs/TASK-028P2-USER-ACCEPTANCE.md`.
