@@ -1,5 +1,9 @@
 # Current State
 
+## 2026-10-12 — Hosted profile preview configured; controls and map verification continue
+
+Exact reviewed P2 source20cdd69 is Ready on Preview dpl_F6rDoZBu3eQBsUMiL2hKr4dLidwS, alias `https://pals-app-git-agent-task-028p2-rich-profiles-pals8.vercel.app`. Only three reviewed profile migrations were applied to Pals Staging ffabdrgsmtfylrehwmfo; readback38 versions, owner RLS/private grants, richgatefalse/prefs0, existing policies/counts preserved. Six branch-only configs plus server-only legacy photo Secret are provisioned; one exact Auth callback added while old callback/SMTP/confirmation/MFA stay unchanged. Authenticated health has six true checks and user signed in successfully. Map tiles deny neworigin403 while oldorigin200; exact Mapbox allowlist correction is in progress. TASK-028R1 bounds the old control runner's38-lane/rich allowlist update before rich activation or shutdown use. No production/domain change; parent release gates remain.
+
 ## 2026-10-12 — Hosted test release requested
 
 The user explicitly selected a hosted test release. Bounded continuation `tasks/active/TASK-028R-hosted-test-release.md` targets only Pals Staging `ffabdrgsmtfylrehwmfo` and `pals8/pals-app` profile Preview. Ready deployment6nK7ngvNH matches reviewed task20cdd69, but authenticated health reports missing hosted configuration. Exact migration/configuration/security preparation and staged sign-in checks precede availability. Main application/TASK-027 parent release gates remain; no public/domain change or duplicate successor.
