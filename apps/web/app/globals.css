@@ -317,9 +317,8 @@ h1 {
   min-height: 70px;
 }
 .student-header > .brand-link img {
-  width: 90px;
-  height: 70px;
-  object-fit: contain;
+  width: 76px;
+  height: auto;
 }
 .header-account {
   grid-column: 3;
@@ -346,6 +345,18 @@ h1 {
   min-width: 0;
   justify-content: center;
   flex-wrap: nowrap;
+  font-family: var(--pals-font);
+}
+.student-header .primary-nav a,
+.student-header .primary-nav button,
+.student-header .primary-nav .nav-unavailable {
+  color: var(--pals-profile-action);
+  font-weight: 600;
+}
+.student-header .primary-nav [aria-current="page"],
+.student-header .primary-nav [aria-current="page"]:hover {
+  color: var(--pals-profile-action);
+  background: var(--pals-profile-soft);
 }
 .header-signin {
   min-height: 44px;
@@ -604,8 +615,8 @@ h3,
     min-height: 64px;
   }
   .student-header > .brand-link img {
-    width: 64px;
-    height: 56px;
+    width: 58px;
+    height: auto;
   }
   .header-account {
     gap: 10px;

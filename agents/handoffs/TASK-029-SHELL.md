@@ -5,8 +5,9 @@ Branch: `agent/TASK-029-reference-screens` from canonical `bd9737d`, with review
 ## Outcome
 
 - `Frame` renders the existing student header on profile chrome screens. The existing account menu, Safety, sign out, photo fallback and destination availability gates remain in place.
-- Header layout puts the existing blue logo at left, five destinations in a desktop row, and account controls at right. The active destination uses an accessible dark blue pill. At smaller widths, destinations wrap visibly within the header, with no horizontal navigation strip.
+- Header layout puts the existing blue logo at left, five destinations in a desktop row, and account controls at right. The active destination uses a pale blue pill with blue text. At smaller widths, destinations wrap visibly within the header, with no horizontal navigation strip.
 - `safeReturn` accepts only validated People filter/focus URLs or the exact local `/hangouts/saved/{UUID}` path with optional UUID `focus`. It rejects duplicate, unknown or malformed parameters, external URLs, encoded path separators, fragments and nested routes. Invalid values fall back to `/people`.
+- After rendered review, header navigation uses Nunito 600 with readable brand blue text and a pale active pill. The logo keeps its intrinsic aspect ratio at desktop and phone sizes.
 
 ## Evidence
 
