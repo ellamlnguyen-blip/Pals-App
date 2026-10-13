@@ -277,15 +277,17 @@ export function ProfileEditor({
             </button>
           </div>
         )}
-        <button
-          className="profile-portrait-edit"
-          type="button"
-          aria-label="Edit main photo"
-          disabled={pending || editing}
-          onClick={() => focusPhotoInput("primary")}
-        >
-          <PencilSimpleIcon size={22} weight="bold" aria-hidden="true" />
-        </button>
+        {profile.primary_photo_path && (
+          <button
+            className="profile-portrait-edit"
+            type="button"
+            aria-label="Edit main photo"
+            disabled={pending || editing}
+            onClick={() => focusPhotoInput("primary")}
+          >
+            <PencilSimpleIcon size={22} weight="bold" aria-hidden="true" />
+          </button>
+        )}
       </div>
       <dialog
         ref={photoDialog}

@@ -28,6 +28,7 @@ Status: Profile subtask implemented on `agent/TASK-029-reference-screens`; coord
 - Profile friendship presentation now hides verbose known-empty status visually while retaining its live screen-reader status. Pending and accepted states show their actual state beside the actions; unknown/error states remain visible. The existing transitions and messages are unchanged. `Add Pal` and new-message actions use Phosphor icons.
 - Facts display `Class: 2028` without repetition and normalize only the known UNC Chapel Hill school spellings. No academic year is inferred.
 - The owner portrait pencil and empty portrait Add button focus the existing primary file input through the same helper used by dialog Edit photo. The existing upload validation/save path remains intact.
+- At the 320 px empty-profile review, the portrait pencil was hidden until a saved main photo exists; the empty state's Add photo action remains the single entry and still focuses the primary file input.
 - Direct installed web TypeScript check, focused ESLint, Prettier, and `git diff --check` passed. Coordinator owns final rendered retest and build.
 
 ## Coordinator review and remaining gates
