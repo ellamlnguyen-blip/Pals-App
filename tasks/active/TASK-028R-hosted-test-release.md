@@ -1,6 +1,6 @@
 # TASK-028R — Hosted test release of accepted profiles
 
-Status: In progress — preparation; hosted configuration and signed-in acceptance pending.
+Status: Hosted owner test available; full feature/multiuser staging acceptance remains incomplete.
 Date: 2026-10-12 (America/New_York).
 Parent: TASK-028 / TASK-028P; release dependency TASK-027 stays incomplete.
 Baseline: remote-verified canonical main `3cef3d6519833d3c18bf9a3ad4dc4d59fbeb73b7`.
@@ -24,3 +24,7 @@ User requests “lets make the hosted release available” and explicitly select
 Coordinator owns shared records, exact hosted operations/runtime and user browser interaction. Fresh GPT-6 Sol medium task agents own meaningful source/preparation tasks with exclusive scope; fresh read-only reviewer checks target/migration/security plan. Tool does not expose speed and cannot verify Standard. No source change is planned until an observed defect needs its bounded contract.
 
 Done for this substage means exact accepted hosted Preview is reachable and functional to the user, required scope checks pass or are explicitly bounded with actual evidence, independent review/handoff and shared records are pushed/main remote-verified. A merely Ready build or URL is not completion. Genuine hosted sign-in/access or secret blockers leave this substage incomplete, while independent preparation continues.
+
+## Hosted availability receipt
+
+See `agents/handoffs/TASK-028R.md`: exact reviewed P2 Preview, migrations/config/callback, genuine user sign-in, working map, reviewed audited source gate and no automatic consent. Only one verified staging user exists; hosted owner save/photos/consent, peer/multiuser and parent moderation/recovery acceptance remain unverified. Do not mark full release or parent complete.

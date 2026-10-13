@@ -1,6 +1,6 @@
 # TASK-028R1 — Staging controls for the reviewed profile migration lane
 
-Status: Source/security review and rollback-only staging runtime passed; canonical publication and authorized operation pending.
+Status: Complete for bounded staging control correction — reviewed source/runtime, handoff and remote-verified main70a75c7 integration; parent hosted/full release remains incomplete.
 Date: 2026-10-12.
 Parent: TASK-028R hosted test release; no separate successor.
 Baseline: canonical main f7e82224c7e0bbf9f81eb20805123eba6f1a4163, plus this contract.

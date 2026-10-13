@@ -1,6 +1,6 @@
 # TASK-028R1 handoff — staging profile control correction
 
-Status: implementation prepared on `agent/TASK-028R1-staging-profile-controls`; independent security review, task publication, main integration and hosted execution remain with the coordinator. This does not complete TASK-028R or TASK-027.
+Status: complete for the bounded staging control correction; exact reviewed task source and canonical integration are remotely verified. This does not complete TASK-028R or TASK-027. The author preparation entries below are historical; final coordinator receipts supersede their pending review/publication statements.
 
 Baseline: canonical main `618cca693a833220a65d5f35fb6cb5d408692a3a`. The `scripts/staging-control/` directory was copied only from reviewed P2 commit `20cdd69cc45398334dbd37aeaee29bd980d1a514` and narrowed to this contract. No application, migration, environment or secret files were copied or changed.
 
@@ -16,4 +16,6 @@ User authorizer: Ella Nguyen's current explicit hosted-test instruction; executo
 
 Actual exact-target PostgreSQL runtime check passed on ffabdrgsmtfylrehwmfo in one transaction ending ROLLBACK: rich on/off expected-state controls, unchanged-state exact retries, changed UUID payload and stale-state denials, both reversal/replay denials, atomic audit-count checks and no consent writes. No synthetic Auth/account/role fixture or availability/capability write occurred. A separate readback confirms richgatefalse, prefs0, rollback test audit rows0, existing availabilitytrue. The original synthetic local generator was not executed hosted; this focused real-schema test supplies the new rich-control runtime evidence only. Emergency shutdown was not performed during ordinary QA.
 
-Reviewed source plus bounded decisions/status is prepared for canonical integration, without P2 application or migration files. Final main publication verification and persistent authorized rich activation remain coordinator steps; full parent release/peer checks remain incomplete.
+Reviewed source plus bounded decisions/status was canonically integrated without P2 application or migration files. Final remote publication and audited rich activation are recorded below; full parent release/peer checks remain incomplete.
+
+Final publication: task afea7f47b546ffda36a9fbcf6dceb5868f35d96c, integration f61642cb0f80130da8cb7a464b7f7d21d8e51b72 and canonical main70a75c72100ae430dad8f2a72795c090b251813b each exact remote-verified after push. Scoped control task complete; no successor from this substage. Root audited activation request d254f97b-5727-4eb0-812f-131bb325812d / receipt b216761d-5d9c-494b-b508-65605ca352eb enables only rich_profiles; independent readback true/prefs0. Parent hosted multiuser/public gates remain incomplete.
