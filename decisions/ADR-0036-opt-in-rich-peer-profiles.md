@@ -26,3 +26,7 @@ The owner can see and edit the complete reference layout now. Peers receive the 
 ## Acceptance
 
 Accepted 2026-10-06 by the user's explicit ‘yes’ to: ‘Approve default-off opt-in sharing for verified UNC students at the same campus?’ Acceptance authorizes only the bounded disposable-local implementation described above; hosted operations and canonical application integration retain their existing gates.
+
+## Hosted test execution authorization — 2026-10-12
+
+The user subsequently requested making the hosted release available and selected a hosted test release. TASK-028R/R1 bounds execution on existing Pals Staging ffabdrgsmtfylrehwmfo and the exact rich-profile Vercel Preview. This new instruction authorizes deployment/configuration of the already accepted implementation after exact-target, migration and security checks; it does not retroactively expand the earlier disposable-local acceptance. The ADR-0029 amendment adds only the rich source gate to the existing audited staging operation. Default-off consent, owner-only originals, fresh caller/peer authorization, opt-out/revocation and no automatic sharing remain authoritative. Production, public domain cutover and parent release completion are excluded.
