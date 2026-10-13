@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-12 — User inspection package delivered
+
+The requested review snapshot is assembled under `tmp/review-2026-10-12/`: readable overview,588 verbatim tracked Markdown record sections with provenance, complete inventories, exact tracked-source archives/extracted folders (canonical029c405:993files/26migrations; hosted20cdd69:1081files/38migrations), manifest and SHA256 checksums. Every archived blob matches the pinned Git tree and every extracted file matches its archive. Fresh read-only Solmedium accuracy review cleared the guide; historical/local versus current hosted evidence and open staging gates remain explicit. The guide is tracked at `docs/operations/APP_REVIEW_2026-10-12.md`. No runtime feature checks, provider changes, app/schema integration or successor were performed by this documentation substage.
+
 ## 2026-10-12 — Hosted profile test available; map fixed
 
 P2 source20cdd69 is Ready and reachable at `https://pals-app-git-agent-task-028p2-rich-profiles-pals8.vercel.app` on staging-only deploymentF6rDoZBu3. Real user sign-in, owner profile,6-check health and live UNC map are observed. The map's403 was a missing exact URL restriction; old/neworigins now200 and unrelatedorigin403. Only reviewed profile migrations001/002/003, P2 branch configuration/server Secret and one Auth callback were applied. Reviewed TASK028R1 controls are remote-integrated on main70a75c7; audited rich source gate is nowtrue, preferences0 (no automatic sharing). Handoff `agents/handoffs/TASK-028R.md` records target, hashes, review, grants, actual privacy/rollback evidence and limits.
