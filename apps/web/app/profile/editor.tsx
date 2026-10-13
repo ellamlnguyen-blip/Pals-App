@@ -2,6 +2,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { CameraIcon } from "@phosphor-icons/react/dist/csr/Camera";
+import { PencilSimpleIcon } from "@phosphor-icons/react/dist/csr/PencilSimple";
 import { ProfileTopbar } from "./profile-topbar";
 import type { StudentDestinations } from "../student-shell";
 import { ProfileSummary } from "./profile-summary";
@@ -222,6 +223,17 @@ export function ProfileEditor({
         backLabel="Back to Hangouts"
         available={available}
         attendanceAvailable={attendanceAvailable}
+        action={
+          <button
+            ref={editButton}
+            className="profile-top-edit"
+            type="button"
+            disabled={pending}
+            onClick={openEditor}
+          >
+            Edit profile
+          </button>
+        }
       >
         <p>
           Your confirmed address on an approved UNC domain is Pals’ campus
@@ -262,6 +274,15 @@ export function ProfileEditor({
             </button>
           </div>
         )}
+        <button
+          className="profile-portrait-edit"
+          type="button"
+          aria-label="Edit main photo"
+          disabled={pending}
+          onClick={openPhotos}
+        >
+          <PencilSimpleIcon size={22} weight="bold" aria-hidden="true" />
+        </button>
       </div>
       <dialog
         ref={photoDialog}
@@ -340,30 +361,9 @@ export function ProfileEditor({
           "Add a few words about yourself so future hangouts feel easier to start."
         }
         campus="UNC–Chapel Hill"
-        major={profile.major || "Add your major"}
+        major={profile.major || ""}
         graduationYear={profile.graduation_year}
         verified
-        actions={
-          <>
-            <button
-              ref={editButton}
-              className="button"
-              type="button"
-              disabled={pending}
-              onClick={openEditor}
-            >
-              Edit details
-            </button>
-            <button
-              className="profile-outline-button"
-              type="button"
-              disabled={pending}
-              onClick={openPhotos}
-            >
-              Manage photos
-            </button>
-          </>
-        }
       />
       {feedback.success && photoSlot === null && !editing && (
         <p className="form-message profile-saved-status" role="status">
@@ -374,7 +374,12 @@ export function ProfileEditor({
         className="profile-gallery-section"
         aria-labelledby="profile-gallery-heading"
       >
-        <h2 id="profile-gallery-heading">A little more me</h2>
+        <div className="profile-gallery-heading">
+          <h2 id="profile-gallery-heading">Photos</h2>
+          <button type="button" onClick={openPhotos}>
+            Edit photos <span>(Optional)</span>
+          </button>
+        </div>
         <div className="profile-gallery">
           {profile.additional_photo_paths.map((_, index) => (
             <OwnerDisplayPhoto
@@ -396,15 +401,27 @@ export function ProfileEditor({
           )}
         </div>
       </section>
+      {profile.interests.length > 0 && (
+        <section
+          className="profile-interests"
+          aria-labelledby="profile-interests-heading"
+        >
+          <h2 id="profile-interests-heading">Interests</h2>
+          <ul>
+            {profile.interests.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </section>
+      )}
       <section
         className="profile-prompts"
         aria-labelledby="profile-prompts-heading"
       >
-        <h2 id="profile-prompts-heading">Let’s start a conversation</h2>
         {profile.prompts.length ? (
           profile.prompts.map((prompt, index) => (
             <div className="profile-prompt" key={index}>
-              <h3>{prompt.question}</h3>
+              <h2>{prompt.question}</h2>
               <p>{prompt.answer}</p>
             </div>
           ))
@@ -418,19 +435,13 @@ export function ProfileEditor({
           </button>
         )}
       </section>
-      {(profile.interests.length > 0 ||
-        profile.down_to_do.length > 0 ||
+      {(profile.down_to_do.length > 0 ||
         profile.favorite_music ||
         profile.favorite_foods ||
         profile.weird_fact ||
         profile.instagram) && (
         <section className="profile-more" aria-label="More about you">
           <h2>More about you</h2>
-          {profile.interests.length > 0 && (
-            <p>
-              <strong>Interests</strong> {profile.interests.join(" · ")}
-            </p>
-          )}
           {profile.down_to_do.length > 0 && (
             <p>
               <strong>Down to do</strong> {profile.down_to_do.join(" · ")}
@@ -741,6 +752,11 @@ function OwnerDisplayPhoto({
         unoptimized
         onError={() => setFailed(true)}
       />
+      {slot !== "primary" && (
+        <span className="profile-gallery-edit-icon" aria-hidden="true">
+          <PencilSimpleIcon size={20} weight="bold" />
+        </span>
+      )}
     </button>
   );
 }

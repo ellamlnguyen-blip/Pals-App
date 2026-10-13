@@ -37,6 +37,7 @@ export function FriendControl({
   peerLabel,
   onClear,
   actor,
+  requestLabel = "Add friend",
 }: {
   peerId: string;
   initial: FriendshipResult;
@@ -45,6 +46,7 @@ export function FriendControl({
   peerLabel: string;
   onClear?: () => void;
   actor?: string;
+  requestLabel?: string;
 }) {
   const [result, setResult] = useState(initial);
   const [busy, setBusy] = useState(false);
@@ -147,7 +149,7 @@ export function FriendControl({
               disabled={disabled}
               onClick={() => run("create")}
             >
-              {requestKey ? "Retry request with same key" : "Add friend"}
+              {requestKey ? "Retry request with same key" : requestLabel}
             </button>
           )}
           {row?.state === "pending" && row.direction === "incoming" && (

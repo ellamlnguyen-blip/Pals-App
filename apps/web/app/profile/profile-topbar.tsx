@@ -4,7 +4,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { ArrowLeftIcon } from "@phosphor-icons/react/dist/csr/ArrowLeft";
 import { ProfileOptions } from "./options-menu";
-import { StudentNav, type StudentDestinations } from "../student-shell";
+import type { StudentDestinations } from "../student-shell";
 import { SignOutForm } from "../auth-change-signal";
 
 export function ProfileTopbar({
@@ -13,28 +13,24 @@ export function ProfileTopbar({
   children,
   available,
   attendanceAvailable,
+  action,
 }: {
   back: string;
   backLabel: string;
   children: ReactNode;
   available: StudentDestinations;
   attendanceAvailable: boolean;
+  action?: ReactNode;
 }) {
   return (
     <nav className="profile-topbar" aria-label="Profile controls">
-      <a href={back} aria-label={backLabel}>
+      <a className="profile-back" href={back} aria-label={backLabel}>
         <ArrowLeftIcon size={25} weight="bold" aria-hidden="true" />
+        <span>{backLabel.replace(/^Back to /, "")}</span>
       </a>
-      <Link
-        className="profile-topbar-brand"
-        href="/hangouts"
-        aria-label="Pals home"
-      >
-        Pals
-      </Link>
+      <div className="profile-topbar-action">{action}</div>
       <ProfileOptions>
         <div className="profile-menu-links">
-          <StudentNav available={available} />
           <Link href="/profile">Your profile</Link>
           {available.people && (
             <Link href="/people/privacy">Profile sharing</Link>

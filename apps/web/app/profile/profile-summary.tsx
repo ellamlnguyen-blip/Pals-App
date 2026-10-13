@@ -1,5 +1,8 @@
-import type { ReactNode, Ref } from "react";
+import type { Ref } from "react";
 import { SealCheckIcon } from "@phosphor-icons/react/dist/csr/SealCheck";
+import { GraduationCapIcon } from "@phosphor-icons/react/dist/csr/GraduationCap";
+import { BookOpenIcon } from "@phosphor-icons/react/dist/csr/BookOpen";
+import { CalendarBlankIcon } from "@phosphor-icons/react/dist/csr/CalendarBlank";
 import { MapPinIcon } from "@phosphor-icons/react/dist/csr/MapPin";
 
 export function ProfileSummary({
@@ -11,7 +14,6 @@ export function ProfileSummary({
   graduationYear,
   verified,
   headingRef,
-  actions,
 }: {
   name: string;
   hometown?: string | null;
@@ -21,47 +23,49 @@ export function ProfileSummary({
   graduationYear: number | null;
   verified?: boolean;
   headingRef?: Ref<HTMLHeadingElement>;
-  actions?: ReactNode;
 }) {
   return (
-    <>
+    <div className="profile-summary">
       <div className="profile-title-row">
         <h1 ref={headingRef} tabIndex={headingRef ? -1 : undefined}>
           {name}
         </h1>
         {verified && (
           <span className="profile-verified">
-            <SealCheckIcon size={25} weight="fill" aria-hidden="true" /> UNC
-            email verified
+            <SealCheckIcon size={27} weight="fill" aria-hidden="true" />
+            <span className="visually-hidden">UNC email verified</span>
           </span>
         )}
       </div>
-      {hometown && (
-        <p className="profile-hometown">
-          <MapPinIcon size={30} weight="regular" aria-hidden="true" />
-          <span>From {hometown}</span>
-        </p>
-      )}
-      <p className="profile-bio">{bio}</p>
       <dl className="profile-facts">
         <div>
-          <dt>University</dt>
+          <GraduationCapIcon aria-hidden="true" />
+          <dt>School:</dt>
           <dd>{campus}</dd>
         </div>
-        <div>
-          <dt>Major</dt>
-          <dd>{major}</dd>
-        </div>
-        <div>
-          <dt>Graduation</dt>
-          <dd>
-            {graduationYear
-              ? `Class of ${graduationYear}`
-              : "Add your class year"}
-          </dd>
-        </div>
+        {major && (
+          <div>
+            <BookOpenIcon aria-hidden="true" />
+            <dt>Major:</dt>
+            <dd>{major}</dd>
+          </div>
+        )}
+        {graduationYear && (
+          <div>
+            <CalendarBlankIcon aria-hidden="true" />
+            <dt>Class:</dt>
+            <dd>Class of {graduationYear}</dd>
+          </div>
+        )}
+        {hometown && (
+          <div>
+            <MapPinIcon aria-hidden="true" />
+            <dt>Hometown:</dt>
+            <dd>{hometown}</dd>
+          </div>
+        )}
       </dl>
-      {actions && <div className="profile-main-actions">{actions}</div>}
-    </>
+      {bio && <p className="profile-bio">{bio}</p>}
+    </div>
   );
 }

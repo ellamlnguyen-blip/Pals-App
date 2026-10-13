@@ -17,6 +17,7 @@ import { ProfileSummary } from "../../profile/profile-summary";
 import { ProfileTopbar } from "../../profile/profile-topbar";
 import type { StudentDestinations } from "../../student-shell";
 import { PeerPhoto, peerPhotoUrl } from "./peer-photo";
+import { UserCircleIcon } from "@phosphor-icons/react/dist/csr/UserCircle";
 
 export function PersonView({
   detail,
@@ -102,6 +103,10 @@ export function PersonView({
     photoDialog.current?.showModal();
   }
   const primary = richDetail?.photo_slots.includes("primary") ?? false;
+  const backLabel =
+    back.startsWith("/hangouts/") || back === "/hangouts"
+      ? "Back to Hangouts"
+      : "Back to People";
   const extras =
     richDetail?.photo_slots.filter((slot) => slot !== "primary") ?? [];
   if (cleared)
@@ -109,7 +114,7 @@ export function PersonView({
       <article className="people-profile">
         <ProfileTopbar
           back={back}
-          backLabel="Back to People"
+          backLabel={backLabel}
           available={available}
           attendanceAvailable={attendanceAvailable}
         >
@@ -135,7 +140,7 @@ export function PersonView({
       <AnalyticsView event="people_profile_viewed" />
       <ProfileTopbar
         back={back}
-        backLabel="Back to People"
+        backLabel={backLabel}
         available={available}
         attendanceAvailable={attendanceAvailable}
       >
@@ -153,8 +158,8 @@ export function PersonView({
           }}
         />
       </ProfileTopbar>
-      {primary && richDetail && (
-        <div className="profile-hero">
+      <div className="profile-hero">
+        {primary && richDetail ? (
           <PeerPhoto
             subjectId={detail.account_id}
             slot="primary"
@@ -167,8 +172,15 @@ export function PersonView({
               )
             }
           />
-        </div>
-      )}
+        ) : (
+          <span
+            className="profile-portrait-fallback"
+            aria-label="No shared profile photo"
+          >
+            <UserCircleIcon size={96} weight="thin" aria-hidden="true" />
+          </span>
+        )}
+      </div>
       <dialog
         ref={photoDialog}
         className="profile-photo-dialog"
@@ -247,6 +259,7 @@ export function PersonView({
           initial={friendship}
           canRequest
           canBlock={false}
+          requestLabel="Add Pal"
           peerLabel={detail.real_name}
           onClear={() =>
             clear("People access changed. Reload to check this profile.")
@@ -278,7 +291,7 @@ export function PersonView({
               else document.getElementById("request-heading")?.focus();
             }}
           >
-            Say hi
+            Message
           </a>
         )}
       </div>
@@ -287,7 +300,9 @@ export function PersonView({
           className="profile-gallery-section"
           aria-labelledby="peer-gallery-heading"
         >
-          <h2 id="peer-gallery-heading">A little more me</h2>
+          <h2 id="peer-gallery-heading" className="visually-hidden">
+            Photos
+          </h2>
           <div className="profile-gallery">
             {extras.map((slot) => (
               <PeerPhoto
@@ -307,24 +322,10 @@ export function PersonView({
           </div>
         </section>
       )}
-      {richDetail && richDetail.prompts.length > 0 && (
-        <section
-          className="profile-prompts"
-          aria-labelledby="peer-prompts-heading"
-        >
-          <h2 id="peer-prompts-heading">Let’s start a conversation</h2>
-          {richDetail.prompts.slice(0, 3).map((prompt, index) => (
-            <div className="profile-prompt" key={index}>
-              <h3>{prompt.question}</h3>
-              <p>{prompt.answer}</p>
-            </div>
-          ))}
-        </section>
-      )}
       {(detail.interests.length > 0 || detail.down_to_do.length > 0) && (
         <div className="people-detail-body profile-peer-interests">
           {detail.interests.length > 0 && (
-            <section>
+            <section className="profile-interests">
               <h2>Interests</h2>
               <ul>
                 {detail.interests.map((item) => (
@@ -334,7 +335,7 @@ export function PersonView({
             </section>
           )}
           {detail.down_to_do.length > 0 && (
-            <section>
+            <section className="profile-other-interests">
               <h2>Down to do</h2>
               <ul>
                 {detail.down_to_do.map((item) => (
@@ -344,6 +345,22 @@ export function PersonView({
             </section>
           )}
         </div>
+      )}
+      {richDetail && richDetail.prompts.length > 0 && (
+        <section
+          className="profile-prompts"
+          aria-labelledby="peer-prompts-heading"
+        >
+          <h2 id="peer-prompts-heading" className="visually-hidden">
+            Conversation prompts
+          </h2>
+          {richDetail.prompts.slice(0, 3).map((prompt, index) => (
+            <div className="profile-prompt" key={index}>
+              <h3>{prompt.question}</h3>
+              <p>{prompt.answer}</p>
+            </div>
+          ))}
+        </section>
       )}
       <RequestControl
         peerId={detail.account_id}
