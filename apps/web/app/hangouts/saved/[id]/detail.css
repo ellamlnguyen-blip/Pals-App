@@ -60,13 +60,13 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem 1.5rem;
-  margin: 0 0 0.75rem;
+  margin: 0 0 1rem;
 }
 .pals-detail-person {
   display: inline-flex;
   align-items: center;
-  gap: 0.55rem;
-  min-width: 7.5rem;
+  gap: 0.7rem;
+  min-width: 9rem;
   color: var(--pals-ink);
   text-decoration: none;
 }
@@ -81,8 +81,8 @@
 .pals-detail-role-preview .pals-detail-person .pals-detail-avatar {
   flex: 0 0 auto;
   margin: 0;
-  width: 3.15rem;
-  height: 3.15rem;
+  width: 5.5rem;
+  height: 5.5rem;
 }
 .pals-detail-person strong,
 .pals-detail-person small {
@@ -91,11 +91,22 @@
 }
 .pals-detail-person strong {
   color: var(--pals-ink);
-  font-weight: 900;
+  font-size: 1.25rem;
+  font-family: var(--pals-font);
+  font-weight: 800;
 }
 .pals-detail-person small {
   color: var(--pals-accent);
+  font-size: 1rem;
+  font-family: var(--pals-font);
+  font-weight: 600;
+}
+.pals-detail-attending-heading {
+  margin: 0 0 0.4rem;
+  font-family: var(--pals-font);
+  font-size: 1.15rem;
   font-weight: 800;
+  color: var(--pals-ink);
 }
 .pals-detail-attending-disclosure {
   border-bottom: 1px solid var(--pals-line);
@@ -119,18 +130,13 @@
   outline-offset: 4px;
   border-radius: 8px;
 }
-.pals-detail-attending-title {
-  font-size: 1.12rem;
-  font-weight: 900;
-  white-space: nowrap;
-}
-.pals-detail-attending-title > span {
+.pals-detail-attending-chevron {
   display: inline-block;
   font-size: 1.5rem;
   vertical-align: -0.08em;
   transition: transform 0.2s ease;
 }
-.pals-detail-attending-disclosure[open] .pals-detail-attending-title > span {
+.pals-detail-attending-disclosure[open] .pals-detail-attending-chevron {
   transform: rotate(90deg);
 }
 .pals-detail-attending-preview {
@@ -145,6 +151,8 @@
 }
 .pals-detail-person-compact .pals-detail-avatar {
   margin-left: 0;
+  width: 3.75rem;
+  height: 3.75rem;
 }
 .pals-detail-avatar {
   width: 2.75rem;
@@ -247,6 +255,14 @@
 .pals-detail .saved-action .button {
   width: 100%;
 }
+.pals-detail-chat .button {
+  min-height: 4rem;
+  background: #2e70b4;
+  color: #fff;
+  font-family: var(--pals-font-display);
+  font-size: 1.25rem;
+  font-weight: 800;
+}
 .pals-detail .saved-action {
   margin: 0 0 1.5rem;
 }
@@ -257,6 +273,16 @@
   color: #fff;
   font-family: var(--pals-font-display);
   font-weight: 800;
+}
+.pals-detail .saved-action .button.saved-leave-button {
+  min-height: 3rem;
+  width: auto;
+  background: transparent;
+  border: 1px solid var(--pals-accent);
+  color: var(--pals-accent);
+  font-family: var(--pals-font);
+  font-size: 1rem;
+  font-weight: 750;
 }
 .pals-detail .saved-private,
 .pals-detail .saved-host-joining {
@@ -361,8 +387,19 @@
   .pals-detail.saved-detail h1 {
     font-size: clamp(2.35rem, 11vw, 3.1rem);
   }
-  .pals-detail-attending-title {
-    width: 100%;
+  .pals-detail-role-preview .pals-detail-person .pals-detail-avatar {
+    width: 3.75rem;
+    height: 3.75rem;
+  }
+  .pals-detail-person strong {
+    font-size: 1.05rem;
+  }
+  .pals-detail-person small {
+    font-size: 0.9rem;
+  }
+  .pals-detail-person-compact .pals-detail-avatar {
+    width: 2.75rem;
+    height: 2.75rem;
   }
   .pals-detail-map-frame {
     height: 310px;

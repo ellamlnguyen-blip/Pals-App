@@ -212,6 +212,7 @@ export function ManagementControls({
                 ))}
             </div>
           )}
+          <h2 className="pals-detail-attending-heading">Pals attending</h2>
           {visibleAttendees.length > 0 && (
             <div
               className="pals-detail-attending-preview"
@@ -232,13 +233,16 @@ export function ManagementControls({
           )}
           <details className="pals-detail-attending-disclosure">
             <summary>
-              <span className="pals-detail-attending-title">
-                Pals attending <span aria-hidden="true">›</span>
-              </span>
               <span className="pals-detail-attending-count">
                 {visibleAttendees.length
                   ? `${visibleAttendees.length} attendee${visibleAttendees.length === 1 ? "" : "s"} shown${rosterMore ? "; more may be available" : ""}`
                   : "No attendees visible"}
+              </span>
+              <span
+                className="pals-detail-attending-chevron"
+                aria-hidden="true"
+              >
+                ›
               </span>
             </summary>
             <div className="pals-detail-management-panel">
