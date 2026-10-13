@@ -28,3 +28,7 @@ Done for this substage means exact accepted hosted Preview is reachable and func
 ## Hosted availability receipt
 
 See `agents/handoffs/TASK-028R.md`: exact reviewed P2 Preview, migrations/config/callback, genuine user sign-in, working map, reviewed audited source gate and no automatic consent. Only one verified staging user exists; hosted owner save/photos/consent, peer/multiuser and parent moderation/recovery acceptance remain unverified. Do not mark full release or parent complete.
+
+## User review package — 2026-10-12
+
+User requests a full Markdown overview of build history and app code for inspection. This is a bounded documentation/export substage of the existing parent, not a new product implementation or release acceptance. Coordinator prepares an evidence-backed overview, a consolidated tracked Markdown record with provenance, and separate exact tracked-source snapshots of canonical main and the hosted P2 branch. Include file/route inventories, setup/check commands, actual validation limits and remaining gates. Exclude untracked runtime credentials, provider secrets, build/dependency output and the shared checkout's unrelated staged work. Verify file/archive manifests and hashes, review accuracy, publish the guide/handoff on a documentation branch and remote-verify canonical integration. No app/schema/provider mutation and no successor from this documentation substage.
