@@ -68,6 +68,16 @@ const staleRichGate = op("source_gate", 15, {
   PALS_CONTROL_EXPECTED_ENABLED: "false",
   PALS_CONTROL_NEW_ENABLED: "true",
 });
+const richGateOff = op("source_gate", 16, {
+  PALS_CONTROL_GATE: "rich_profiles",
+  PALS_CONTROL_EXPECTED_ENABLED: "true",
+  PALS_CONTROL_NEW_ENABLED: "false",
+});
+const richGateBackOn = op("source_gate", 17, {
+  PALS_CONTROL_GATE: "rich_profiles",
+  PALS_CONTROL_EXPECTED_ENABLED: "false",
+  PALS_CONTROL_NEW_ENABLED: "true",
+});
 const emergency = op("emergency_availability_off", 11, {
   PALS_CONTROL_EXPECTED_REVISION: "1",
 });
@@ -148,6 +158,20 @@ const blocks = [
     "(select count(*) from private.staging_control_audit)=5 and (select enabled from private.hangout_feature_gate where singleton) and (select enabled from private.rich_profile_feature_gate where singleton) and (select count(*) from private.staging_control_audit where gate_key='rich_profiles' and previous_value='false'::jsonb and new_value='true'::jsonb and executor_session_user='postgres')=1",
     "role and source gate atomicity",
   ),
+  richGateOff,
+  richGateOff,
+  mustFail(richGate, "old on receipt after off reversal"),
+  check(
+    "(select enabled=false from private.rich_profile_feature_gate where singleton) and (select count(*) from private.staging_control_audit where gate_key='rich_profiles')=2",
+    "off reversal and current exact retry",
+  ),
+  richGateBackOn,
+  richGateBackOn,
+  mustFail(richGateOff, "old off receipt after on reversal"),
+  check(
+    "(select enabled=true from private.rich_profile_feature_gate where singleton) and (select count(*) from private.staging_control_audit where gate_key='rich_profiles')=3 and (select count(*) from private.staging_control_audit)=7",
+    "on reversal and current exact retry",
+  ),
   "update private.pilot_availability set enabled=true where singleton;",
   mustFail(
     crossOperationEmergency,
@@ -196,7 +220,7 @@ const blocks = [
   revokeRole,
   revokeManager,
   check(
-    "(select count(*) from private.staging_control_audit)=9 and (select count(*) from private.pilot_manager_audit where account_id='8ebd74bb-2a72-4689-9580-72268106d91b')=2 and (select state from private.pilot_admission_managers where account_id='8ebd74bb-2a72-4689-9580-72268106d91b')='revoked' and not exists(select 1 from public.platform_roles where user_id='8ebd74bb-2a72-4689-9580-72268106d91b')",
+    "(select count(*) from private.staging_control_audit)=11 and (select count(*) from private.pilot_manager_audit where account_id='8ebd74bb-2a72-4689-9580-72268106d91b')=2 and (select state from private.pilot_admission_managers where account_id='8ebd74bb-2a72-4689-9580-72268106d91b')='revoked' and not exists(select 1 from public.platform_roles where user_id='8ebd74bb-2a72-4689-9580-72268106d91b')",
     "rollback retains both manager audits after identity loss",
   ),
   "set local role authenticated;",

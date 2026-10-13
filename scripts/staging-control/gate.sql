@@ -22,6 +22,9 @@ begin
    or prior.new_value is distinct from to_jsonb(desired) or prior.reason is distinct from {{REASON}}
    or prior.authorization_ref is distinct from {{AUTHORIZATION_REF}} or prior.credential_ref is distinct from {{CREDENTIAL_REF}} then
    raise exception 'Request UUID conflict' using errcode='42501'; end if;
+  -- A historical receipt cannot report success after a later reversal.
+  if old_enabled is distinct from desired then
+   raise exception 'Source gate state mismatch' using errcode='42501'; end if;
   return;
  end if;
  if old_enabled<>expected or old_enabled=desired then raise exception 'Source gate state mismatch' using errcode='42501'; end if;

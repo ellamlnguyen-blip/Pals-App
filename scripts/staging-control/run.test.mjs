@@ -111,6 +111,7 @@ test("rich source gate binds only its reviewed private table and exact state", (
   assert.match(prepared.sql, /update private\.rich_profile_feature_gate set enabled=desired where singleton/);
   assert.match(prepared.sql, /old_enabled<>expected or old_enabled=desired/);
   assert.match(prepared.sql, /Request UUID conflict/);
+  assert.match(prepared.sql, /if found then[\s\S]*if old_enabled is distinct from desired then[\s\S]*raise exception 'Source gate state mismatch'[\s\S]*return;[\s\S]*end if;/);
   for (const gate of ["analytics", "large_hangout_safeguards", "rich_profiles;drop table"])
     assert.throws(() => buildOperation({ ...good, PALS_CONTROL_OPERATION: "source_gate", PALS_CONTROL_GATE: gate, PALS_CONTROL_EXPECTED_ENABLED: "false", PALS_CONTROL_NEW_ENABLED: "true" }));
 });
