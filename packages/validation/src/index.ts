@@ -50,6 +50,10 @@ export function photoExtension(
 /** Accepted ADR-0011. Database constraints independently defend direct writes. */
 export function optionalProfileFields(form: FormData) {
   const text = (name: string) => String(form.get(name) ?? "").trim();
+  const hometown = text("hometown") || null;
+  if (hometown && [...hometown].length > 100) return null;
+  // An older open editor must not clear a hometown it never loaded.
+  const hometownField = form.has("hometown") ? { hometown } : {};
   const list = (name: string) =>
     text(name)
       .split(/\r?\n/)
@@ -92,6 +96,7 @@ export function optionalProfileFields(form: FormData) {
     prompts.push({ question, answer });
   }
   return {
+    ...hometownField,
     interests,
     down_to_do,
     favorite_music,

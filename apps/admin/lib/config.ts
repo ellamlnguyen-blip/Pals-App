@@ -1,9 +1,10 @@
 import "server-only";
 import { parseAppEnvironment, validateSupabaseTarget } from "@pals/config";
+import { adminOrigin, enrollmentWindow } from "./security";
 
 export function authConfig() {
   const environment = parseAppEnvironment(process.env.APP_ENV);
-  if (environment !== "local") throw new Error("Admin is local only.");
+  const origin = adminOrigin(environment, process.env.APP_ORIGIN);
   const url = validateSupabaseTarget(
     environment,
     process.env.SUPABASE_URL ?? "http://127.0.0.1:54321",
@@ -23,8 +24,15 @@ export function authConfig() {
       throw new Error("Only an anon key is permitted.");
     }
   }
-  const origin = process.env.APP_ORIGIN ?? "http://127.0.0.1:3001";
-  if (origin !== "http://127.0.0.1:3001")
-    throw new Error("Admin origin must be local port 3001.");
-  return { url, key };
+  return { url, key, origin, secure: environment !== "local" };
+}
+
+/** Temporary, exact-subject setup window; closed unless explicitly set. */
+export function mayEnrollOperator(userId: string) {
+  return enrollmentWindow(
+    process.env.ADMIN_MFA_ENROLLMENT_ENABLED,
+    process.env.ADMIN_MFA_ENROLLMENT_SUBJECT,
+    process.env.ADMIN_MFA_ENROLLMENT_EXPIRES_AT,
+    userId,
+  );
 }

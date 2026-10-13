@@ -1,7 +1,6 @@
 import "server-only";
 import { notFound } from "next/navigation";
-import { parseAppEnvironment } from "@pals/config";
-import { authConfig } from "./config";
+import { studentFeaturesAvailable } from "./feature-runtime";
 
 export type PeopleCard = {
   account_id: string;
@@ -19,11 +18,7 @@ export const peopleId =
   /^[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}$/i;
 
 export function localPeopleAvailable() {
-  const config = authConfig();
-  return (
-    parseAppEnvironment(process.env.APP_ENV) === "local" &&
-    ["localhost", "127.0.0.1", "[::1]"].includes(new URL(config.url).hostname)
-  );
+  return studentFeaturesAvailable();
 }
 export function requireLocalPeople() {
   if (!localPeopleAvailable()) notFound();
@@ -75,20 +70,34 @@ export function safeReturn(value: string | string[] | undefined) {
     !value ||
     Array.isArray(value) ||
     value.length > 650 ||
-    !value.startsWith("/people") ||
+    !value.startsWith("/") ||
     value.startsWith("//") ||
     value.includes("#")
   )
     return "/people";
   try {
     const url = new URL(value, "http://127.0.0.1");
-    if (
-      url.origin !== "http://127.0.0.1" ||
-      url.pathname !== "/people" ||
-      !readSelection(Object.fromEntries(url.searchParams))
-    )
+    const rawPath = value.split("?", 1)[0];
+    if (url.origin !== "http://127.0.0.1" || url.pathname !== rawPath)
       return "/people";
-    return `${url.pathname}${url.search}`;
+    const keys = [...url.searchParams.keys()];
+    if (new Set(keys).size !== keys.length) return "/people";
+    const focus = url.searchParams.get("focus");
+    if (focus !== null && !peopleId.test(focus)) return "/people";
+    if (url.pathname === "/people") {
+      const params = Object.fromEntries(url.searchParams);
+      delete params.focus;
+      if (!readSelection(params)) return "/people";
+      return `${url.pathname}${url.search}`;
+    }
+    if (
+      /^\/hangouts\/saved\/[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}$/i.test(
+        url.pathname,
+      ) &&
+      keys.every((key) => key === "focus")
+    )
+      return `${url.pathname}${url.search}`;
+    return "/people";
   } catch {
     return "/people";
   }
