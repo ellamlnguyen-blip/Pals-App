@@ -1,5 +1,11 @@
 # Backlog
 
+## 2026-10-12 — Hosted profile test available; map fixed
+
+P2 source20cdd69 is Ready and reachable at `https://pals-app-git-agent-task-028p2-rich-profiles-pals8.vercel.app` on staging-only deploymentF6rDoZBu3. Real user sign-in, owner profile,6-check health and live UNC map are observed. The map's403 was a missing exact URL restriction; old/neworigins now200 and unrelatedorigin403. Only reviewed profile migrations001/002/003, P2 branch configuration/server Secret and one Auth callback were applied. Reviewed TASK028R1 controls are remote-integrated on main70a75c7; audited rich source gate is nowtrue, preferences0 (no automatic sharing). Handoff `agents/handoffs/TASK-028R.md` records target, hashes, review, grants, actual privacy/rollback evidence and limits.
+
+Hosted owner testing is available. Full owner save/consent/peer/multiuser feature acceptance, live moderation/recovery and TASK027 release checks remain incomplete; only one genuine verified staging user exists. No public usepals.com/Production/domain change or successor. Prior local test evidence is historical. Task-created CLI protection bypass was revoked; no protection was disabled.
+
 ## 2026-10-12 — Hosted profile preview configured; controls and map verification continue
 
 Exact reviewed P2 source20cdd69 is Ready on Preview dpl_F6rDoZBu3eQBsUMiL2hKr4dLidwS, alias `https://pals-app-git-agent-task-028p2-rich-profiles-pals8.vercel.app`. Only three reviewed profile migrations were applied to Pals Staging ffabdrgsmtfylrehwmfo; readback38 versions, owner RLS/private grants, richgatefalse/prefs0, existing policies/counts preserved. Six branch-only configs plus server-only legacy photo Secret are provisioned; one exact Auth callback added while old callback/SMTP/confirmation/MFA stay unchanged. Authenticated health has six true checks and user signed in successfully. Map tiles deny neworigin403 while oldorigin200; exact Mapbox allowlist correction is in progress. TASK-028R1 bounds the old control runner's38-lane/rich allowlist update before rich activation or shutdown use. No production/domain change; parent release gates remain.
