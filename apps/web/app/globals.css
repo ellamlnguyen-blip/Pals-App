@@ -304,14 +304,14 @@ h1 {
 
 /* Shared student shell. Route styles can adopt these surfaces without changing data flow. */
 .student-header {
-  min-height: 88px;
+  min-height: 80px;
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 90px minmax(0, 1fr);
+  grid-template-columns: 90px minmax(0, 1fr) auto;
   position: relative;
-  gap: 16px;
+  gap: 20px;
 }
 .student-header > .brand-link {
-  grid-column: 2;
+  grid-column: 1;
   grid-row: 1;
   min-width: 90px;
   min-height: 70px;
@@ -330,19 +330,22 @@ h1 {
   gap: 16px;
 }
 .header-campus {
-  grid-column: 1;
+  grid-column: 2;
   grid-row: 1;
   color: var(--pals-muted);
   font-size: 14px;
 }
 .student-header .primary-nav {
-  grid-column: 1;
+  grid-column: 2;
   grid-row: 1;
   border: 0;
   margin: 0;
   padding: 0;
-  gap: 4px;
+  gap: 2px;
   overflow: visible;
+  min-width: 0;
+  justify-content: center;
+  flex-wrap: nowrap;
 }
 .header-signin {
   min-height: 44px;
@@ -438,13 +441,17 @@ h1 {
   text-decoration: none;
 }
 .primary-nav [aria-current="page"] {
-  color: var(--pals-accent);
-  background: var(--pals-accent-soft);
+  color: var(--pals-button-ink);
+  background: var(--pals-accent);
 }
 .primary-nav a:hover,
 .primary-nav button:hover {
   background: var(--pals-surface);
   color: var(--pals-accent);
+}
+.primary-nav [aria-current="page"]:hover {
+  color: var(--pals-button-ink);
+  background: var(--pals-accent);
 }
 .primary-nav .nav-unavailable {
   opacity: 0.65;
@@ -572,15 +579,16 @@ h3,
 
 @media (max-width: 1100px) {
   .student-header {
-    grid-template-columns: 1fr 90px 1fr;
+    grid-template-columns: 90px minmax(0, 1fr) auto;
     padding-top: 8px;
   }
   .student-header .primary-nav {
     grid-column: 1 / -1;
     grid-row: 2;
-    overflow-x: auto;
+    margin-right: 0;
     padding: 0 0 8px;
     justify-content: center;
+    flex-wrap: wrap;
   }
   .welcome-hero .button {
     margin-right: 0;
@@ -588,7 +596,16 @@ h3,
 }
 @media (max-width: 720px) {
   .student-header {
+    grid-template-columns: 64px minmax(0, 1fr) auto;
     gap: 4px 12px;
+  }
+  .student-header > .brand-link {
+    min-width: 64px;
+    min-height: 64px;
+  }
+  .student-header > .brand-link img {
+    width: 64px;
+    height: 56px;
   }
   .header-account {
     gap: 10px;
@@ -597,12 +614,12 @@ h3,
     display: none;
   }
   .student-header .primary-nav {
-    justify-content: flex-start;
+    justify-content: center;
   }
   .student-header .primary-nav a,
   .student-header .primary-nav button,
   .student-header .primary-nav .nav-unavailable {
-    padding: 10px 12px;
+    padding: 8px 10px;
   }
   .welcome-hero {
     display: block;

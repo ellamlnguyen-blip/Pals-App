@@ -30,15 +30,13 @@ export function Frame({
       <a className="skip-link" href="#main">
         Skip to content
       </a>
-      {!profileChrome && (
-        <StudentHeader
-          signedIn={signedIn}
-          accountReady={navigation}
-          ownerPhotoRevision={ownerPhotoRevision}
-          attendanceAvailable={signedIn && localAttendanceAvailable()}
-          available={navigation ? frameAvailableDestinations() : undefined}
-        />
-      )}
+      <StudentHeader
+        signedIn={signedIn}
+        accountReady={navigation}
+        ownerPhotoRevision={ownerPhotoRevision}
+        attendanceAvailable={signedIn && localAttendanceAvailable()}
+        available={navigation ? frameAvailableDestinations() : undefined}
+      />
       <main id="main" tabIndex={-1}>
         {children}
       </main>
