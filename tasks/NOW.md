@@ -1,5 +1,9 @@
 # NOW
 
+## 2026-10-12 — User inspection package delivered
+
+The requested review snapshot is assembled under `tmp/review-2026-10-12/`: readable overview,588 verbatim tracked Markdown record sections with provenance, complete inventories, exact tracked-source archives/extracted folders (canonical029c405:993files/26migrations; hosted20cdd69:1081files/38migrations), manifest and SHA256 checksums. Every archived blob matches the pinned Git tree and every extracted file matches its archive. Fresh read-only Solmedium accuracy review cleared the guide; historical/local versus current hosted evidence and open staging gates remain explicit. The guide is tracked at `docs/operations/APP_REVIEW_2026-10-12.md`. No runtime feature checks, provider changes, app/schema integration or successor were performed by this documentation substage.
+
 ## 2026-10-12 — User review package in progress
 
 Under TASK-028R, prepare a full Markdown overview/history and exact canonical/hosted code exports for the user to inspect. Documentation/export only; existing staged acceptance and public-release gates remain incomplete. Branch `agent/TASK-028R-review-package`; see the bounded review-package section in the parent contract.
