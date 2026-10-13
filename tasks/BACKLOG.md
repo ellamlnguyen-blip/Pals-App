@@ -1,5 +1,9 @@
 # Backlog
 
+## 2026-10-13 — Requested reference screens
+
+TASK-029 plans the supplied Hangout detail and owner/peer profile layouts with familiar avatar/photo/edit/friend/message navigation. Contract: `tasks/active/TASK-029-reference-screens.md`. Canonical baseline9a7464a; exact reviewed P2 dependency20cdd69 remains outside main behind TASK-027 staged acceptance. Review/publish this bounded contract before fresh implementation. Preserve dirty shared checkout, consent/RLS/location boundaries and canonical staging controls; no hosted/provider/data operation.
+
 ## 2026-10-12 — Hosted profile test available; map fixed
 
 P2 source20cdd69 is Ready and reachable at `https://pals-app-git-agent-task-028p2-rich-profiles-pals8.vercel.app` on staging-only deploymentF6rDoZBu3. Real user sign-in, owner profile,6-check health and live UNC map are observed. The map's403 was a missing exact URL restriction; old/neworigins now200 and unrelatedorigin403. Only reviewed profile migrations001/002/003, P2 branch configuration/server Secret and one Auth callback were applied. Reviewed TASK028R1 controls are remote-integrated on main70a75c7; audited rich source gate is nowtrue, preferences0 (no automatic sharing). Handoff `agents/handoffs/TASK-028R.md` records target, hashes, review, grants, actual privacy/rollback evidence and limits.
