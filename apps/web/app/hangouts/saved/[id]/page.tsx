@@ -122,7 +122,6 @@ export default async function SavedDetailPage({
           </div>
           <div className="pals-detail-grid">
             <div className="pals-detail-plan">
-              <p className="pals-detail-eyebrow">UNC Hangout</p>
               <h1>{record.title}</h1>
               <p className="saved-detail-state">
                 {cancelled
@@ -275,9 +274,18 @@ export default async function SavedDetailPage({
   );
 }
 function format(value: string) {
-  return new Date(value).toLocaleString("en-US", {
-    timeZone: "America/New_York",
-    dateStyle: "full",
-    timeStyle: "short",
-  });
+  const date = new Date(value);
+  const options = { timeZone: "America/New_York" };
+  const day = new Intl.DateTimeFormat("en-US", {
+    ...options,
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+  }).format(date);
+  const time = new Intl.DateTimeFormat("en-US", {
+    ...options,
+    hour: "numeric",
+    minute: "2-digit",
+  }).format(date);
+  return `${day} · ${time}`;
 }

@@ -21,7 +21,10 @@ export async function readRosterIdentities(
 ): Promise<RosterIdentities> {
   if (!localPeopleAvailable()) return {};
   const selected = new Set([
-    ...roster.slice(0, 6).map((row) => row.account_id),
+    ...roster
+      .filter((row) => row.role_label === "participant")
+      .slice(0, 6)
+      .map((row) => row.account_id),
     ...roster
       .slice(0, 24)
       .filter((row) => row.role_label !== "participant")

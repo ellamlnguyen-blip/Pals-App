@@ -57,12 +57,7 @@ export function ParticipantIdentity({
     </span>
   );
   const content = compact ? (
-    <>
-      {avatar}
-      <span className="visually-hidden">
-        {name} · {label}
-      </span>
-    </>
+    avatar
   ) : (
     <>
       {avatar}

@@ -45,6 +45,9 @@ export function ManagementControls({
   const { deny, hidePrivate, managementPaused, pauseManagement } =
     useDetailAccess();
   const [roster, setRoster] = useState(initialRoster);
+  const visibleAttendees = roster.filter(
+    (row) => row.role_label === "participant",
+  );
   const [rosterMore, setRosterMore] = useState(initialRosterMore);
   const [assignments, setAssignments] = useState(initialAssignments);
   const [assignmentsMore, setAssignmentsMore] = useState(
@@ -209,12 +212,12 @@ export function ManagementControls({
                 ))}
             </div>
           )}
-          {roster.length > 0 && (
+          {visibleAttendees.length > 0 && (
             <div
               className="pals-detail-attending-preview"
               aria-label="Visible attendee profiles"
             >
-              {roster.slice(0, 6).map((row) => (
+              {visibleAttendees.slice(0, 6).map((row) => (
                 <ParticipantIdentity
                   key={row.account_id}
                   accountId={row.account_id}
@@ -233,9 +236,9 @@ export function ManagementControls({
                 Pals attending <span aria-hidden="true">›</span>
               </span>
               <span className="pals-detail-attending-count">
-                {roster.length
-                  ? `${roster.length} shown${rosterMore ? "; more may be available" : ""}`
-                  : "No one visible"}
+                {visibleAttendees.length
+                  ? `${visibleAttendees.length} attendee${visibleAttendees.length === 1 ? "" : "s"} shown${rosterMore ? "; more may be available" : ""}`
+                  : "No attendees visible"}
               </span>
             </summary>
             <div className="pals-detail-management-panel">

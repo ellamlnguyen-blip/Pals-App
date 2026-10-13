@@ -1,13 +1,15 @@
 .pals-detail.saved-detail {
   max-width: 1440px;
-  padding: 1.7rem 0 4rem;
+  padding: 0.4rem 0 4rem;
+  font-family: var(--pals-font);
+  font-weight: 500;
 }
 .pals-detail-top {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   gap: 1rem;
-  margin-bottom: clamp(1.5rem, 3vw, 3rem);
+  margin-bottom: 1.45rem;
 }
 .pals-detail-top > a {
   display: inline-flex;
@@ -35,24 +37,30 @@
 }
 .pals-detail.saved-detail h1 {
   margin: 0;
-  color: var(--pals-ink);
+  color: #2e70b4;
+  font-family: var(--pals-font-display);
+  font-weight: 800;
   font-size: clamp(2.7rem, 5vw, 4.3rem);
   line-height: 1.03;
   letter-spacing: -0.025em;
   overflow-wrap: anywhere;
 }
 .pals-detail .saved-detail-state {
-  margin: 1rem 0 1.4rem;
+  margin: 0.65rem 0 1rem;
   font-size: 0.85rem;
 }
-.pals-detail-attending {
-  margin: 0 0 1.55rem;
+.pals-detail section.pals-detail-attending {
+  margin: 0 0 1.25rem;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
 }
 .pals-detail-role-preview {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem 1.5rem;
-  margin: 0.15rem 0 1.25rem;
+  margin: 0 0 0.75rem;
 }
 .pals-detail-person {
   display: inline-flex;
@@ -91,7 +99,7 @@
 }
 .pals-detail-attending-disclosure {
   border-bottom: 1px solid var(--pals-line);
-  padding-bottom: 1.45rem;
+  padding-bottom: 0.65rem;
 }
 .pals-detail-attending-disclosure > summary {
   cursor: pointer;
@@ -128,7 +136,7 @@
 .pals-detail-attending-preview {
   display: inline-flex;
   padding-left: 0.4rem;
-  margin: 0 0 0.65rem;
+  margin: 0 0 0.25rem;
   flex-wrap: wrap;
 }
 .pals-detail-person-compact {
@@ -185,6 +193,11 @@
   background: var(--pals-surface);
   border: 1px solid var(--pals-line);
 }
+.pals-detail-management-panel > section {
+  padding: 0;
+  background: transparent;
+  border-radius: 0;
+}
 .pals-detail-management-panel .saved-management:last-child,
 .pals-detail-management-panel .saved-management-roster:last-child {
   margin-bottom: 0;
@@ -204,8 +217,10 @@
 }
 .pals-detail-time strong {
   display: block;
-  font-size: clamp(1.25rem, 2.1vw, 1.7rem);
+  font-size: clamp(1.2rem, 2vw, 1.6rem);
   line-height: 1.25;
+  font-family: var(--pals-font);
+  font-weight: 800;
 }
 .pals-detail-time span:not(.pals-detail-icon),
 .pals-detail-time small {
@@ -218,10 +233,15 @@
   overflow-wrap: anywhere;
   font-size: clamp(1.05rem, 1.7vw, 1.3rem);
   line-height: 1.6;
-  margin: 1rem 0 1.65rem;
+  margin: 0.6rem 0 1.2rem;
+  font-family: var(--pals-font);
+  font-weight: 500;
 }
-.pals-detail-chat {
+.pals-detail section.pals-detail-chat {
   margin-bottom: 0.7rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
 }
 .pals-detail-chat .button,
 .pals-detail .saved-action .button {
@@ -233,6 +253,10 @@
 .pals-detail .saved-action .button {
   min-height: 4rem;
   font-size: 1.25rem;
+  background: #2e70b4;
+  color: #fff;
+  font-family: var(--pals-font-display);
+  font-weight: 800;
 }
 .pals-detail .saved-private,
 .pals-detail .saved-host-joining {
@@ -256,6 +280,8 @@
   line-height: 1.2;
   margin: 0;
   overflow-wrap: anywhere;
+  font-family: var(--pals-font);
+  font-weight: 800;
 }
 .pals-detail-place-heading p {
   margin: 0.25rem 0 0;
