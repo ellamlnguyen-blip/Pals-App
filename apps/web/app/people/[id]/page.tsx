@@ -11,6 +11,7 @@ import {
 } from "../../../lib/people";
 import { readFriendship } from "../friend-actions";
 import { PersonView } from "./person-view";
+import { profileReturn } from "./profile-return";
 import type { PeerDmState } from "./request-control";
 import "../../hangouts/map.css";
 import "../people.css";
@@ -36,10 +37,7 @@ export default async function PersonPage({
   const { id } = await params;
   const query = await searchParams;
   const baseBack = safeReturn(query.from);
-  const back =
-    typeof query.focus === "string" && query.focus === id
-      ? `${baseBack}${baseBack.includes("?") ? "&" : "?"}focus=${id}`
-      : baseBack;
+  const back = profileReturn(baseBack, query.focus, id);
   const richResult = peopleId.test(id)
     ? await client.rpc("get_rich_people_detail", { p_account_id: id })
     : { data: [], error: null };

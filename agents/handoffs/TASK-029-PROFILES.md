@@ -17,6 +17,12 @@ Status: Profile subtask implemented on `agent/TASK-029-reference-screens`; coord
 - `git diff --check`: passed.
 - Source check: no auth, RPC, storage gateway, schema, or DM request flow changed. Peer rich fields are still guarded by `richDetail`; the existing page/auth transition clearing and photo-error clearing remain.
 
+## Reviewer corrections
+
+- Restored a visually hidden heading so the owner prompts section's `aria-labelledby` resolves to a real element.
+- The peer profile now replaces an existing People `focus` value with `URLSearchParams.set` when returning to the current peer. This preserves validated People filters, produces one focus parameter, and leaves saved Hangout return paths unchanged.
+- Focused return regression test: `node --test tests/people-profile-return.test.mjs` passed (2 tests). Direct local `tsc --noEmit -p apps/web/tsconfig.json`, focused ESLint, Prettier and `git diff --check` passed. The pnpm wrapper attempted a workspace reinstall and declined without a TTY, so direct installed binaries were used for these follow-up checks.
+
 ## Coordinator review and remaining gates
 
 - Render owner and peer at 320, 390, tablet, and 1280 px with real authorized local fixtures; inspect portrait cropping, gallery ratio, long names, button placement, and keyboard/focus behavior. The worker did not start a fixture runtime or claim screenshot QA.

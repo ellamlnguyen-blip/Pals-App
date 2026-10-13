@@ -418,6 +418,9 @@ export function ProfileEditor({
         className="profile-prompts"
         aria-labelledby="profile-prompts-heading"
       >
+        <h2 id="profile-prompts-heading" className="visually-hidden">
+          Conversation prompts
+        </h2>
         {profile.prompts.length ? (
           profile.prompts.map((prompt, index) => (
             <div className="profile-prompt" key={index}>
