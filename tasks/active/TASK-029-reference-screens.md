@@ -1,6 +1,6 @@
 # TASK-029 — Reference Hangout detail and profile screens
 
-Status: Contract reviewed; implementation follows remote-verified canonical publication.
+Status: Reviewed local candidate; hosted map/acceptance and canonical application integration remain incomplete.
 Date: 2026-10-13 (America/New_York).
 Branch: `agent/TASK-029-reference-screens`.
 Canonical baseline: `9a7464a6cf98c043425962d2e8ccf0e7960b5f7b`.
@@ -48,3 +48,9 @@ Phone profile: primary destinations stay reachable; portrait shrinks; action row
 Hangout: desktop plan/people/joining on left and public location/map on right; phone stacks plan/primary action before map. Preserve semantic time, joining closed/cancelled/removed/unknown states. After confirmed joining, chat is an obvious next step; uncertain writes require current-state recovery. Attendee browsing presents only authorized profiles and keeps a safe path back to the plan. Map accuracy is explicitly approximate and does not show live people.
 
 Reference images are local user attachments under `/Users/ellanguyen/Desktop/pals app/`; do not commit these personal reference files. Current `https://usepals.com/` was inspected on 2026-10-13: white canvas, blue logo/display type, rounded campus-map composition. Its older navigation is not product authority.
+
+## 2026-10-13 reviewed local outcome
+
+Reviewed application source `210a8ee8f30d6401603bed186f22d76a5f1e31ad` includes the requested screens, safe host/attendee profile navigation and familiar owner/peer photo/friend/message interactions. Fresh source review cleared the exact tip after fixing duplicate return focus, accessible prompt labeling and the empty portrait edit affordance. Final source build, TypeScript and 67/67 unit tests pass; workspace lint and scoped formatting pass. Rendered 320/390/820/1280 layouts have no horizontal overflow. Actual disposable-local owner detail/photo saves, View/Escape/focus, peer View-only, Message request, pending friendship, Join/chat/leave and photo/People revocation checks are recorded in `docs/ux/TASK-029-REFERENCE-QA.md` and `agents/handoffs/TASK-029.md`.
+
+Local QA uses fictional accounts/synthetic images and one named isolated backend. A one-line untracked IPv6 route-availability adapter permits that backend without altering the existing local stack or delivered guards. Local Mapbox token is absent: map fallback/external public-coordinate link were checked, but successful tiles/pin/zoom on the new detail map remain unverified. No new hosted migration/config/gate/provider/domain/release operation occurred. TASK-027 staged student/moderation/recovery acceptance still gates main application integration; source stays on the task branch. No product successor from this incomplete task.
