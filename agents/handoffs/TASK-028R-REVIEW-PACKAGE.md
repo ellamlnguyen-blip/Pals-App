@@ -21,3 +21,7 @@ Fresh read-only reviewer review_package_accuracy, GPT-6 Sol medium, checked actu
 ## Outcome and limits
 
 User can inspect the full build record and exact hosted application code, compare canonical main, and follow the guide's code entry map, source-pinned setup/check commands and release limits. Older README/setup/architecture status paragraphs are explicitly identified as stale historical descriptions. Only documentation/status records enter canonical publication. No gated P2 application/migration source, credentials, provider settings or public release change. No new product successor is triggered by this documentation substage. Reviewed task/main publication receipt follows exact remote verification.
+
+## Verified publication receipt
+
+Reviewed guide/status/handoff task commit `1ad9188c60573e5f25f239bdb2c2656921825a1d` and six-path canonical documentation integration `265e29997f81fbf204eac553c17501d6e118bfcd` were pushed and independently verified with `git ls-remote`. Only documentation changed. The requested inspection deliverable is complete within this scope; the existing parent release gates remain incomplete. Source exports intentionally stay pinned to the earlier declared canonical baseline and unchanged hosted commit, so their manifests/checksums do not drift with this documentation publication.
