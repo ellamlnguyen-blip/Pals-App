@@ -152,249 +152,270 @@ export function ManagementControls({
   return (
     <section className="pals-detail-attending" aria-label="Pals attending">
       {!sensitiveHidden ? (
-        <details className="pals-detail-attending-disclosure">
-          <summary>
-            <span className="pals-detail-attending-title">
-              Pals attending <span aria-hidden="true">›</span>
-            </span>
-            {roster.length ? (
-              <span
-                className="pals-detail-attending-preview"
-                aria-hidden="true"
-              >
-                {roster.slice(0, 6).map((row) => (
-                  <span
-                    key={row.account_id}
-                    className={`pals-detail-avatar pals-detail-avatar-${row.role_label}`}
-                  >
-                    {row.account_id === actorId
-                      ? "You"
-                      : row.role_label === "participant"
-                        ? "Pal"
-                        : row.role_label === "cohost"
-                          ? "Co"
-                          : "Host"}
-                  </span>
+        <>
+          {roster.some(
+            (row) => row.role_label === "host" || row.role_label === "cohost",
+          ) && (
+            <div
+              className="pals-detail-role-preview"
+              aria-label="Hangout hosts"
+            >
+              {roster
+                .filter(
+                  (row) =>
+                    row.role_label === "host" || row.role_label === "cohost",
+                )
+                .map((row) => (
+                  <div className="pals-detail-role-person" key={row.account_id}>
+                    <span
+                      className={`pals-detail-avatar pals-detail-avatar-${row.role_label}`}
+                      aria-hidden="true"
+                    >
+                      {row.account_id === actorId
+                        ? "You"
+                        : row.role_label === "host"
+                          ? "Host"
+                          : "Co"}
+                    </span>
+                    <span>
+                      <strong>
+                        {row.account_id === actorId ? "You" : "Pal"}
+                      </strong>
+                      <small>
+                        {row.role_label === "host" ? "Host" : "Co-host"}
+                      </small>
+                    </span>
+                  </div>
                 ))}
+            </div>
+          )}
+          <details className="pals-detail-attending-disclosure">
+            <summary>
+              <span className="pals-detail-attending-title">
+                Pals attending <span aria-hidden="true">›</span>
               </span>
-            ) : null}
-            <span className="pals-detail-attending-count">
-              {roster.length
-                ? `${roster.length} shown${rosterMore ? "; more available" : ""}`
-                : "No one visible"}
-            </span>
-          </summary>
-          <div className="pals-detail-management-panel">
-            {roster.some(
-              (row) => row.role_label === "host" || row.role_label === "cohost",
-            ) && (
-              <p className="pals-detail-roles">
-                {roster
-                  .filter(
-                    (row) =>
-                      row.role_label === "host" || row.role_label === "cohost",
-                  )
-                  .map((row) => (
-                    <span key={row.account_id}>
-                      {row.account_id === actorId ? "You" : "Pal"} ·{" "}
-                      {row.role_label === "host" ? "Host" : "Co-host"}
+              {roster.length ? (
+                <span
+                  className="pals-detail-attending-preview"
+                  aria-hidden="true"
+                >
+                  {roster.slice(0, 6).map((row) => (
+                    <span
+                      key={row.account_id}
+                      className={`pals-detail-avatar pals-detail-avatar-${row.role_label}`}
+                    >
+                      {row.account_id === actorId
+                        ? "You"
+                        : row.role_label === "participant"
+                          ? "Pal"
+                          : row.role_label === "cohost"
+                            ? "Co"
+                            : "Host"}
                     </span>
                   ))}
-              </p>
-            )}
-            {role && (
-              <section
-                className="saved-management"
-                aria-labelledby="manage-title"
-              >
-                <h2 id="manage-title">Manage this Hangout</h2>
-                <p className="help">
-                  {locked
-                    ? "Management is paused until you reload and review this Hangout."
-                    : role === "host"
-                      ? "You can edit, assign co-hosts, remove attendees, or cancel."
-                      : "You can edit, control joining, remove ordinary attendees, or step down."}
-                </p>
-                <div className="saved-management-actions">
-                  {!locked && (
-                    <Link
-                      className="button"
-                      href={
-                        role === "host"
-                          ? `/hangouts/owned/${id}?edit=1`
-                          : `/hangouts/saved/${id}/edit`
-                      }
-                    >
-                      Edit details
-                    </Link>
-                  )}
-                  {role === "host" ? (
-                    <button
-                      className="quiet-button"
-                      disabled={pending || locked}
-                      onClick={() => act("cancel")}
-                    >
-                      Cancel Hangout
-                    </button>
-                  ) : (
-                    <button
-                      className="quiet-button"
-                      disabled={pending || locked}
-                      onClick={() => act("step_down")}
-                    >
-                      Step down
-                    </button>
-                  )}
-                </div>
-                {message && (
-                  <p
-                    ref={resultRef}
-                    tabIndex={-1}
-                    role="status"
-                    className="saved-action-note"
-                  >
-                    {message}{" "}
-                    {locked && (
-                      <button
-                        className="text-button"
-                        onClick={() => window.location.reload()}
+                </span>
+              ) : null}
+              <span className="pals-detail-attending-count">
+                {roster.length
+                  ? `${roster.length} shown${rosterMore ? "; more available" : ""}`
+                  : "No one visible"}
+              </span>
+            </summary>
+            <div className="pals-detail-management-panel">
+              {role && (
+                <section
+                  className="saved-management"
+                  aria-labelledby="manage-title"
+                >
+                  <h2 id="manage-title">Manage this Hangout</h2>
+                  <p className="help">
+                    {locked
+                      ? "Management is paused until you reload and review this Hangout."
+                      : role === "host"
+                        ? "You can edit, assign co-hosts, remove attendees, or cancel."
+                        : "You can edit, control joining, remove ordinary attendees, or step down."}
+                  </p>
+                  <div className="saved-management-actions">
+                    {!locked && (
+                      <Link
+                        className="button"
+                        href={
+                          role === "host"
+                            ? `/hangouts/owned/${id}?edit=1`
+                            : `/hangouts/saved/${id}/edit`
+                        }
                       >
-                        Reload and review
+                        Edit details
+                      </Link>
+                    )}
+                    {role === "host" ? (
+                      <button
+                        className="quiet-button"
+                        disabled={pending || locked}
+                        onClick={() => act("cancel")}
+                      >
+                        Cancel Hangout
+                      </button>
+                    ) : (
+                      <button
+                        className="quiet-button"
+                        disabled={pending || locked}
+                        onClick={() => act("step_down")}
+                      >
+                        Step down
                       </button>
                     )}
-                  </p>
-                )}
-              </section>
-            )}
-            {!sensitiveHidden ? (
-              <section
-                className="saved-management-roster"
-                aria-labelledby="roster-title"
-              >
-                <h2 id="roster-title">Who&apos;s joining</h2>
-                {roster.length ? (
-                  <ul className="saved-roster">
-                    {roster.map((row) => (
-                      <li key={row.account_id}>
-                        <strong>
-                          {row.account_id === actorId
-                            ? "You"
-                            : row.role_label === "cohost"
-                              ? "Co-host"
-                              : row.role_label === "host"
-                                ? "Host"
-                                : "Participant"}
-                        </strong>
-                        <span className="saved-id">{row.account_id}</span>
-                        {role === "host" &&
-                          row.role_label === "participant" && (
-                            <button
-                              className="text-button"
-                              disabled={pending || locked}
-                              onClick={() => act("promote", row.account_id)}
-                            >
-                              Make co-host
-                            </button>
-                          )}
-                        {role &&
-                          row.role_label === "participant" &&
-                          row.account_id !== actorId && (
-                            <button
-                              className="text-button"
-                              disabled={pending || locked}
-                              onClick={() => act("remove", row.account_id)}
-                            >
-                              Remove participant
-                            </button>
-                          )}
-                        {role === "host" && row.role_label === "cohost" && (
-                          <>
-                            <button
-                              className="text-button"
-                              disabled={pending || locked}
-                              onClick={() => act("demote", row.account_id)}
-                            >
-                              Remove co-host role
-                            </button>
-                            <button
-                              className="text-button"
-                              disabled={pending || locked}
-                              onClick={() => act("remove", row.account_id)}
-                            >
-                              Remove from Hangout
-                            </button>
-                          </>
-                        )}
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p>No current ready participants are visible.</p>
-                )}
-                {rosterMore && (
-                  <button
-                    className="quiet-button"
-                    disabled={pending || locked}
-                    onClick={() => loadMore("roster")}
-                  >
-                    {loading === "roster" ? "Loading…" : "Show more people"}
-                  </button>
-                )}
-                <p className="help">
-                  Only account IDs for currently ready joined members are shown.
-                  Names and photos are unavailable in this local flow.
-                </p>
-              </section>
-            ) : (
-              <p className="saved-action-note">
-                People are hidden until you reload and review this Hangout.
-              </p>
-            )}
-            {role === "host" && !sensitiveHidden && (
-              <section
-                className="saved-management"
-                aria-labelledby="assignment-title"
-              >
-                <h2 id="assignment-title">Co-host assignments</h2>
-                <p className="help">
-                  This host-only list includes retained assignments for people
-                  who are currently not ready. Removing an assignment revokes
-                  powers if their access returns; it does not remove them from
-                  the Hangout.
-                </p>
-                {assignments.length ? (
-                  <ul className="saved-roster">
-                    {assignments.map((accountId) => (
-                      <li key={accountId}>
-                        <span className="saved-id">{accountId}</span>
+                  </div>
+                  {message && (
+                    <p
+                      ref={resultRef}
+                      tabIndex={-1}
+                      role="status"
+                      className="saved-action-note"
+                    >
+                      {message}{" "}
+                      {locked && (
                         <button
                           className="text-button"
-                          disabled={pending || locked}
-                          onClick={() => act("demote", accountId)}
+                          onClick={() => window.location.reload()}
                         >
-                          Remove co-host role
+                          Reload and review
                         </button>
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p>No co-host assignments.</p>
-                )}
-                {assignmentsMore && (
-                  <button
-                    className="quiet-button"
-                    disabled={pending || locked}
-                    onClick={() => loadMore("assignments")}
-                  >
-                    {loading === "assignments"
-                      ? "Loading…"
-                      : "Show more assignments"}
-                  </button>
-                )}
-              </section>
-            )}
-          </div>
-        </details>
+                      )}
+                    </p>
+                  )}
+                </section>
+              )}
+              {!sensitiveHidden ? (
+                <section
+                  className="saved-management-roster"
+                  aria-labelledby="roster-title"
+                >
+                  <h2 id="roster-title">Who&apos;s joining</h2>
+                  {roster.length ? (
+                    <ul className="saved-roster">
+                      {roster.map((row) => (
+                        <li key={row.account_id}>
+                          <strong>
+                            {row.account_id === actorId
+                              ? "You"
+                              : row.role_label === "cohost"
+                                ? "Co-host"
+                                : row.role_label === "host"
+                                  ? "Host"
+                                  : "Participant"}
+                          </strong>
+                          <span className="saved-id">{row.account_id}</span>
+                          {role === "host" &&
+                            row.role_label === "participant" && (
+                              <button
+                                className="text-button"
+                                disabled={pending || locked}
+                                onClick={() => act("promote", row.account_id)}
+                              >
+                                Make co-host
+                              </button>
+                            )}
+                          {role &&
+                            row.role_label === "participant" &&
+                            row.account_id !== actorId && (
+                              <button
+                                className="text-button"
+                                disabled={pending || locked}
+                                onClick={() => act("remove", row.account_id)}
+                              >
+                                Remove participant
+                              </button>
+                            )}
+                          {role === "host" && row.role_label === "cohost" && (
+                            <>
+                              <button
+                                className="text-button"
+                                disabled={pending || locked}
+                                onClick={() => act("demote", row.account_id)}
+                              >
+                                Remove co-host role
+                              </button>
+                              <button
+                                className="text-button"
+                                disabled={pending || locked}
+                                onClick={() => act("remove", row.account_id)}
+                              >
+                                Remove from Hangout
+                              </button>
+                            </>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>No current ready participants are visible.</p>
+                  )}
+                  {rosterMore && (
+                    <button
+                      className="quiet-button"
+                      disabled={pending || locked}
+                      onClick={() => loadMore("roster")}
+                    >
+                      {loading === "roster" ? "Loading…" : "Show more people"}
+                    </button>
+                  )}
+                  <p className="help">
+                    Only account IDs for currently ready joined members are
+                    shown. Names and photos are unavailable in this local flow.
+                  </p>
+                </section>
+              ) : (
+                <p className="saved-action-note">
+                  People are hidden until you reload and review this Hangout.
+                </p>
+              )}
+              {role === "host" && !sensitiveHidden && (
+                <section
+                  className="saved-management"
+                  aria-labelledby="assignment-title"
+                >
+                  <h2 id="assignment-title">Co-host assignments</h2>
+                  <p className="help">
+                    This host-only list includes retained assignments for people
+                    who are currently not ready. Removing an assignment revokes
+                    powers if their access returns; it does not remove them from
+                    the Hangout.
+                  </p>
+                  {assignments.length ? (
+                    <ul className="saved-roster">
+                      {assignments.map((accountId) => (
+                        <li key={accountId}>
+                          <span className="saved-id">{accountId}</span>
+                          <button
+                            className="text-button"
+                            disabled={pending || locked}
+                            onClick={() => act("demote", accountId)}
+                          >
+                            Remove co-host role
+                          </button>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <p>No co-host assignments.</p>
+                  )}
+                  {assignmentsMore && (
+                    <button
+                      className="quiet-button"
+                      disabled={pending || locked}
+                      onClick={() => loadMore("assignments")}
+                    >
+                      {loading === "assignments"
+                        ? "Loading…"
+                        : "Show more assignments"}
+                    </button>
+                  )}
+                </section>
+              )}
+            </div>
+          </details>
+        </>
       ) : (
         <p className="saved-action-note">
           People are hidden until you reload and review this Hangout.

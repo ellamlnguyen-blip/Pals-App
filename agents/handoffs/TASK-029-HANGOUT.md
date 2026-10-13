@@ -6,7 +6,7 @@ Status: implementation candidate on `agent/TASK-029-reference-screens`; coordina
 
 - Rebuilt the saved Hangout detail as an airy two-column plan/place layout. The title, current state, attendee preview, campus time, description, Join or chat action and private instructions read down the left column; the public approximate-area map sits on the right. At tablet/phone widths, the plan and action precede the map.
 - Added a dedicated Mapbox detail map using only `public_latitude` and `public_longitude` from the authorized public Hangout row. When the public token or map is unavailable, a clear static fallback and external OpenStreetMap link remain. The external URL uses those same public coordinates and labels the area approximate.
-- Kept roster IDs and management actions inside the “Pals attending” disclosure. Its visible preview uses neutral role circles from the currently authorized first roster page, never invented names/photos or a total attendee count. The disclosure retains paging, host/co-host controls, cancellation/uncertain response recovery and source-loss clearing.
+- Kept roster IDs and management actions inside the “Pals attending” disclosure. A visible host/co-host row and attendee preview use neutral role circles from the currently authorized first roster page, never invented names/photos or a total attendee count. The disclosure retains paging, host/co-host controls, cancellation/uncertain response recovery and source-loss clearing.
 - Retained `HostDetailBoundary`, `PrivateDetail`, current detail re-read after chat access, existing membership outcomes, chat source check and Safety action.
 
 ## Verification
