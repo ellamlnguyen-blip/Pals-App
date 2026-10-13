@@ -1,0 +1,290 @@
+.pals-detail.saved-detail {
+  max-width: 1440px;
+  padding: 1.7rem 0 4rem;
+}
+.pals-detail-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: clamp(1.5rem, 3vw, 3rem);
+}
+.pals-detail-top > a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  font-weight: 850;
+  text-decoration: none;
+}
+.pals-detail-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.04fr) minmax(0, 0.96fr);
+  align-items: start;
+  gap: clamp(2rem, 4vw, 4.5rem);
+}
+.pals-detail-grid > * {
+  min-width: 0;
+}
+.pals-detail-eyebrow {
+  color: var(--pals-accent);
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  margin: 0 0 0.5rem;
+}
+.pals-detail.saved-detail h1 {
+  margin: 0;
+  color: var(--pals-ink);
+  font-size: clamp(2.7rem, 5vw, 4.3rem);
+  line-height: 1.03;
+  letter-spacing: -0.025em;
+  overflow-wrap: anywhere;
+}
+.pals-detail .saved-detail-state {
+  margin: 1rem 0 1.4rem;
+  font-size: 0.85rem;
+}
+.pals-detail-attending {
+  margin: 0 0 1.55rem;
+}
+.pals-detail-attending-disclosure {
+  border-bottom: 1px solid var(--pals-line);
+  padding-bottom: 1.45rem;
+}
+.pals-detail-attending-disclosure > summary {
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.8rem;
+  min-height: 48px;
+  color: var(--pals-ink);
+}
+.pals-detail-attending-disclosure > summary::-webkit-details-marker {
+  display: none;
+}
+.pals-detail-attending-disclosure > summary:focus-visible {
+  outline: 3px solid var(--pals-focus);
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+.pals-detail-attending-title {
+  font-size: 1.12rem;
+  font-weight: 900;
+  white-space: nowrap;
+}
+.pals-detail-attending-title > span {
+  display: inline-block;
+  font-size: 1.5rem;
+  vertical-align: -0.08em;
+  transition: transform 0.2s ease;
+}
+.pals-detail-attending-disclosure[open] .pals-detail-attending-title > span {
+  transform: rotate(90deg);
+}
+.pals-detail-attending-preview {
+  display: inline-flex;
+  padding-left: 0.4rem;
+}
+.pals-detail-avatar {
+  width: 2.75rem;
+  height: 2.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: -0.45rem;
+  border: 2px solid var(--pals-canvas);
+  border-radius: 50%;
+  background: var(--pals-accent-soft);
+  color: var(--pals-accent);
+  font-size: 0.64rem;
+  font-weight: 900;
+}
+.pals-detail-avatar-host {
+  background: var(--pals-accent);
+  color: #fff;
+}
+.pals-detail-avatar-cohost {
+  background: #d5eafa;
+  color: #174f85;
+}
+.pals-detail-attending-count {
+  font-size: 0.8rem;
+  font-weight: 800;
+  color: var(--pals-muted);
+  white-space: nowrap;
+}
+.pals-detail-management-panel {
+  margin: 1.25rem 0 0;
+  padding: 1.3rem;
+  border-radius: var(--pals-radius-panel);
+  background: var(--pals-surface);
+  border: 1px solid var(--pals-line);
+}
+.pals-detail-management-panel .saved-management:last-child,
+.pals-detail-management-panel .saved-management-roster:last-child {
+  margin-bottom: 0;
+}
+.pals-detail-roles {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  margin: 0 0 1.2rem;
+  color: var(--pals-accent);
+  font-size: 0.9rem;
+  font-weight: 850;
+}
+.pals-detail-time {
+  display: flex;
+  gap: 1rem;
+  padding: 0.2rem 0 0.8rem;
+  color: var(--pals-accent);
+}
+.pals-detail-icon {
+  font-size: 2rem;
+  line-height: 1;
+  font-weight: 600;
+}
+.pals-detail-time strong {
+  display: block;
+  font-size: clamp(1.25rem, 2.1vw, 1.7rem);
+  line-height: 1.25;
+}
+.pals-detail-time span:not(.pals-detail-icon),
+.pals-detail-time small {
+  display: block;
+  color: var(--pals-muted);
+  font-size: 0.88rem;
+}
+.pals-detail-description {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-size: clamp(1.05rem, 1.7vw, 1.3rem);
+  line-height: 1.6;
+  margin: 1rem 0 1.65rem;
+}
+.pals-detail-chat {
+  margin-bottom: 0.7rem;
+}
+.pals-detail-chat .button,
+.pals-detail .saved-action .button {
+  width: 100%;
+}
+.pals-detail .saved-action {
+  margin: 0 0 1.5rem;
+}
+.pals-detail .saved-action .button {
+  min-height: 4rem;
+  font-size: 1.25rem;
+}
+.pals-detail .saved-private,
+.pals-detail .saved-host-joining {
+  margin: 1.5rem 0;
+}
+.pals-detail-place-heading {
+  display: flex;
+  gap: 0.9rem;
+  align-items: flex-start;
+  margin: 0.2rem 0 1rem;
+}
+.pals-detail-pin {
+  font-size: 2.2rem;
+  color: var(--pals-accent);
+  line-height: 1.1;
+}
+.pals-detail-place-heading h2 {
+  font-size: clamp(1.4rem, 2vw, 1.85rem);
+  line-height: 1.2;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.pals-detail-place-heading p {
+  margin: 0.25rem 0 0;
+  color: var(--pals-muted);
+}
+.pals-detail-map-frame {
+  height: clamp(350px, 42vw, 560px);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: 1px solid var(--pals-line);
+  border-radius: var(--pals-radius-panel);
+  background: var(--pals-accent-soft);
+}
+.pals-detail-map-frame .pals-detail-map-canvas {
+  position: absolute;
+  inset: 0;
+}
+.pals-detail-map-canvas[data-ready="false"] {
+  visibility: hidden;
+}
+.pals-detail-map-marker {
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
+  border: 4px solid white;
+  background: var(--pals-accent);
+  box-shadow: 0 1px 8px #24538a66;
+}
+.pals-detail-map-fallback {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  text-align: center;
+  color: var(--pals-ink);
+}
+.pals-detail-map-fallback > span {
+  font-size: 3rem;
+  line-height: 1;
+  color: var(--pals-accent);
+}
+.pals-detail-map-fallback p {
+  max-width: 30ch;
+  color: var(--pals-muted);
+}
+.pals-detail-map-link {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  font-weight: 850;
+}
+.pals-detail-map-note,
+.pals-detail-muted {
+  color: var(--pals-muted);
+  font-size: 0.86rem;
+}
+@media (max-width: 850px) {
+  .pals-detail-grid {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+  .pals-detail-map-frame {
+    height: clamp(300px, 65vw, 500px);
+  }
+}
+@media (max-width: 480px) {
+  .pals-detail.saved-detail {
+    padding-top: 0.9rem;
+  }
+  .pals-detail-top {
+    margin-bottom: 1rem;
+  }
+  .pals-detail.saved-detail h1 {
+    font-size: clamp(2.35rem, 11vw, 3.1rem);
+  }
+  .pals-detail-attending-title {
+    width: 100%;
+  }
+  .pals-detail-map-frame {
+    height: 310px;
+  }
+  .pals-detail-management-panel {
+    padding: 0.8rem;
+  }
+}
