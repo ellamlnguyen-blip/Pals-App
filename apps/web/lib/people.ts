@@ -1,7 +1,6 @@
 import "server-only";
 import { notFound } from "next/navigation";
-import { parseAppEnvironment } from "@pals/config";
-import { authConfig } from "./config";
+import { studentFeaturesAvailable } from "./feature-runtime";
 
 export type PeopleCard = {
   account_id: string;
@@ -19,11 +18,7 @@ export const peopleId =
   /^[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}$/i;
 
 export function localPeopleAvailable() {
-  const config = authConfig();
-  return (
-    parseAppEnvironment(process.env.APP_ENV) === "local" &&
-    ["localhost", "127.0.0.1", "[::1]"].includes(new URL(config.url).hostname)
-  );
+  return studentFeaturesAvailable();
 }
 export function requireLocalPeople() {
   if (!localPeopleAvailable()) notFound();

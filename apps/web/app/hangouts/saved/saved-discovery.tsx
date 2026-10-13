@@ -10,6 +10,21 @@ import {
 import { searchSaved } from "./actions";
 import { SavedMap } from "./map";
 import { AnalyticsView } from "../../analytics-view";
+import { parseBrowseContext, type BrowseContext } from "./browse-context";
+
+const browseKey = "pals-saved-browse-context";
+function readBrowseContext(): BrowseContext | null {
+  try {
+    const context = parseBrowseContext(
+      sessionStorage.getItem(browseKey),
+      Date.now(),
+    );
+    sessionStorage.removeItem(browseKey);
+    return context;
+  } catch {
+    return null;
+  }
+}
 
 export function SavedDiscovery({ token }: { token: string }) {
   const [bounds, setBounds] = useState<Bounds | null>(UNC_BOUNDS);
@@ -31,6 +46,43 @@ export function SavedDiscovery({ token }: { token: string }) {
   const trigger = useRef<HTMLElement | null>(null);
   const previewTitle = useRef<HTMLHeadingElement>(null);
   const listTitle = useRef<HTMLHeadingElement>(null);
+  const returnScroll = useRef<number | null>(null);
+  const [mapSettled, setMapSettled] = useState(false);
+  const onMapSettled = useCallback(() => setMapSettled(true), []);
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => {
+      const context = readBrowseContext();
+      if (!context) return;
+      returnScroll.current = context.scrollY;
+      setFilters({ time: context.time, joining: context.joining });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, []);
+  useEffect(() => {
+    if (!mapSettled || status !== "ok" || returnScroll.current === null) return;
+    const y = returnScroll.current;
+    returnScroll.current = null;
+    const frame = requestAnimationFrame(() => {
+      listTitle.current?.focus({ preventScroll: true });
+      window.scrollTo({ top: y, behavior: "instant" });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [status, items, mapSettled]);
+  function rememberBrowseContext() {
+    try {
+      sessionStorage.setItem(
+        browseKey,
+        JSON.stringify({
+          time: filters.time,
+          joining: filters.joining,
+          scrollY: window.scrollY,
+          savedAt: Date.now(),
+        } satisfies BrowseContext),
+      );
+    } catch {
+      // Storage can be unavailable; browsing still works.
+    }
+  }
   const current = items.find((item) => item.id === selected);
   const onBounds = useCallback((value: Bounds | null) => {
     generation.current++;
@@ -97,6 +149,7 @@ export function SavedDiscovery({ token }: { token: string }) {
           <select
             value={filters.time}
             onChange={(e) => {
+              returnScroll.current = null;
               generation.current++;
               setItems([]);
               setTruncated(false);
@@ -107,6 +160,9 @@ export function SavedDiscovery({ token }: { token: string }) {
                 ...f,
                 time: e.target.value as SavedFilter["time"],
               }));
+              try {
+                sessionStorage.removeItem(browseKey);
+              } catch {}
             }}
           >
             <option value="upcoming">Upcoming starts</option>
@@ -118,6 +174,7 @@ export function SavedDiscovery({ token }: { token: string }) {
           <select
             value={filters.joining}
             onChange={(e) => {
+              returnScroll.current = null;
               generation.current++;
               setItems([]);
               setTruncated(false);
@@ -128,6 +185,9 @@ export function SavedDiscovery({ token }: { token: string }) {
                 ...f,
                 joining: e.target.value as SavedFilter["joining"],
               }));
+              try {
+                sessionStorage.removeItem(browseKey);
+              } catch {}
             }}
           >
             <option value="any">Any joining state</option>
@@ -137,6 +197,7 @@ export function SavedDiscovery({ token }: { token: string }) {
         <button
           className="quiet-button"
           onClick={() => {
+            returnScroll.current = null;
             generation.current++;
             setItems([]);
             setTruncated(false);
@@ -156,6 +217,7 @@ export function SavedDiscovery({ token }: { token: string }) {
           selected={selected}
           onSelect={select}
           onBounds={onBounds}
+          onSettled={onMapSettled}
         />
         <aside
           className="discovery-rail"
@@ -232,7 +294,11 @@ export function SavedDiscovery({ token }: { token: string }) {
                 Approximate public area
               </p>
               <p>{current.description || "No description added."}</p>
-              <Link className="button" href={`/hangouts/saved/${current.id}`}>
+              <Link
+                className="button"
+                href={`/hangouts/saved/${current.id}`}
+                onClick={rememberBrowseContext}
+              >
                 View details
               </Link>
             </section>

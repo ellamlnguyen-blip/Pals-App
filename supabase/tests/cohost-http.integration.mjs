@@ -33,26 +33,31 @@ async function signup() {
   db(`update auth.users set email_confirmed_at=now() where id=${quote(id)}`);
   const login = ok(await request("/auth/v1/token?grant_type=password", null,
     { email, password }));
-  return { id, token: login.access_token };
+  return { id, email, token: login.access_token };
 }
 
 test("real Auth and PostgREST enforce current cohost authority and private reads", {
   concurrency: false, timeout: 120_000,
 }, async () => {
-  const users = await Promise.all([signup(), signup(), signup(), signup()]);
-  const [host, cohost, ordinary, moderator] = users;
+  const users = await Promise.all([signup(), signup(), signup(), signup(), signup()]);
+  const [host, cohost, ordinary, moderator, profileless] = users;
   let hangout;
   try {
-    const ids = users.map((u) => quote(u.id)).join(",");
     db(`insert into storage.objects(bucket_id,name,owner_id)
       select 'profile-photos',id::text||'/primary.png',id::text from public.accounts
-      where id in (${ids});
+      where id in (${[host, cohost, ordinary, moderator].map((u) => quote(u.id)).join(",")});
       update public.profiles set real_name='Cohost HTTP',major='Science',
         graduation_year=2028,bio='Local',primary_photo_path=user_id::text||'/primary.png'
-      where user_id in (${ids});
+      where user_id in (${[host, cohost, ordinary, moderator].map((u) => quote(u.id)).join(",")});
+      update public.profiles set real_name=null,major=null,graduation_year=null,bio=null,
+        primary_photo_path=null where user_id=${quote(profileless.id)};
       insert into public.platform_roles(user_id,role) values(${quote(moderator.id)},'moderator');
       update private.hangout_feature_gate set enabled=true;
-      update private.notification_feature_gate set enabled=true;`);
+      update private.notification_feature_gate set enabled=true;
+      update private.pilot_availability set enabled=true where singleton;
+      update private.pilot_capabilities set enabled=true
+        where key in ('onboarding','hangouts','notifications');
+      `);
     hangout = ok(await rpc("create_hangout", host.token, {
       p_request_id: crypto.randomUUID(), p_title: "Original",
       p_starts_at: new Date(Date.now() + 3_600_000).toISOString(),
@@ -90,13 +95,13 @@ test("real Auth and PostgREST enforce current cohost authority and private reads
     const editNotice = ok(await rpc("list_notifications", ordinary.token))
       .find((item) => item.event_code === "hangout_edited");
     assert.equal(editNotice.actor_id, cohost.id, "joined ready cohost ID is visible");
-    db(`update public.profiles set primary_photo_path=null where user_id=${quote(cohost.id)}`);
+    db(`update auth.users set email='revoked-${crypto.randomUUID()}@example.edu'
+      where id=${quote(cohost.id)};`);
     const unreadyNotice = ok(await rpc("list_notifications", ordinary.token))
       .find((item) => item.notification_id === editNotice.notification_id);
     assert.equal(unreadyNotice.actor_id, null, "readiness loss hides cohost actor ID");
     assert.equal(unreadyNotice.label, "Unavailable");
-    db(`update public.profiles set primary_photo_path=user_id::text||'/primary.png'
-      where user_id=${quote(cohost.id)}`);
+    db(`update auth.users set email=${quote(cohost.email)} where id=${quote(cohost.id)};`);
     assert.equal(ok(await rpc("list_notifications", ordinary.token))
       .find((item) => item.notification_id === editNotice.notification_id).actor_id, cohost.id);
 
@@ -125,9 +130,24 @@ test("real Auth and PostgREST enforce current cohost authority and private reads
       [], "leave revokes future private reads");
     assert.equal(ok(await rpc("remove_hangout_participant", host.token,
       { p_hangout_id: hangout, p_account_id: cohost.id, p_expected_revision: 5 })), 6);
+    assert.equal(ok(await rpc("set_hangout_joining", host.token,
+      { p_hangout_id: hangout, p_expected_revision: 6, p_joining_state: "open" })), 7);
+    ok(await rpc("join_hangout", profileless.token, { p_hangout_id: hangout }));
+    assert.equal(ok(await rpc("promote_hangout_cohost", host.token,
+      { p_hangout_id: hangout, p_account_id: profileless.id, p_expected_revision: 7 })), 8,
+      "host can promote a confirmed UNC account with an empty profile");
+    assert.deepEqual(ok(await rpc("list_hangout_cohosts", host.token,
+      { p_hangout_id: hangout })), [{ account_id: profileless.id }]);
+    assert.equal(ok(await rpc("demote_hangout_cohost", host.token,
+      { p_hangout_id: hangout, p_account_id: profileless.id, p_expected_revision: 8 })), 9);
+    assert.equal(ok(await rpc("remove_hangout_participant", host.token,
+      { p_hangout_id: hangout, p_account_id: profileless.id, p_expected_revision: 9 })), 10);
   } finally {
     db(`update private.notification_feature_gate set enabled=false;
       update private.hangout_feature_gate set enabled=false;
+      update private.pilot_capabilities set enabled=false
+        where key in ('onboarding','hangouts','notifications');
+      update private.pilot_availability set enabled=false where singleton;
       delete from private.hangout_create_requests where host_id in (${users.map((u) => quote(u.id)).join(",")});
       ${hangout ? `delete from public.hangouts where id=${quote(hangout)};` : ""}
       delete from auth.users where id in (${users.map((u) => quote(u.id)).join(",")});

@@ -169,7 +169,7 @@ export async function manageHangout(
   } catch {
     // Inspect authoritative state below; never replay the write.
   }
-  if (response?.error?.code === "40001") return stale;
+  if (response?.error?.code === "PT409") return stale;
   const live = await client.rpc("get_access_state");
   const latest = await readSavedPublic(client, id);
   const afterState = latest

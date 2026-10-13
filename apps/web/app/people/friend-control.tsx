@@ -147,9 +147,7 @@ export function FriendControl({
               disabled={disabled}
               onClick={() => run("create")}
             >
-              {requestKey
-                ? "Retry request with same key"
-                : "Send friend request"}
+              {requestKey ? "Retry request with same key" : "Add friend"}
             </button>
           )}
           {row?.state === "pending" && row.direction === "incoming" && (

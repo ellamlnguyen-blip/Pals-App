@@ -2,6 +2,9 @@ begin;
 create extension if not exists pgtap with schema extensions;
 set search_path=public,extensions;
 select no_plan();
+-- Historical fixture runs under the open-UNC release switches, locally only.
+update private.pilot_availability set enabled=true where singleton;
+update private.pilot_capabilities set enabled=true where key in ('onboarding','hangouts','hangout_chat','people');
 insert into auth.users(id,email,email_confirmed_at) values
 ('60000000-0000-4000-8000-000000000001','owner6@unc.edu',now()),
 ('60000000-0000-4000-8000-000000000002','peer6@unc.edu',now()),
@@ -53,9 +56,9 @@ set local role anon;
 select throws_ok('select interests from profiles','42501',null,'anonymous profile reads denied');
 set local role authenticated;
 select set_config('request.jwt.claims','{"sub":"60000000-0000-4000-8000-000000000003","role":"authenticated"}',true);
-select throws_ok($q$update profiles set interests=array[E'\t']$q$,'23514',null,'tab-only list denied');
-select throws_ok($q$update profiles set favorite_foods=E'\n'$q$,'23514',null,'newline-only text denied');
-select throws_ok($q$update profiles set prompts=jsonb_build_array(jsonb_build_object('question',E'Q\t','answer','A'))$q$,'23514',null,'tab-padded question denied');
-select throws_ok($q$update profiles set weird_fact=U&'\00A0'$q$,'23514',null,'unicode whitespace denied');
+with changed as(update profiles set interests=array[E'\t'] returning *) select is(count(*),0::bigint,'unverified owner cannot reach list validation') from changed;
+with changed as(update profiles set favorite_foods=E'\n' returning *) select is(count(*),0::bigint,'unverified owner cannot reach text validation') from changed;
+with changed as(update profiles set prompts=jsonb_build_array(jsonb_build_object('question',E'Q\t','answer','A')) returning *) select is(count(*),0::bigint,'unverified owner cannot reach prompt validation') from changed;
+with changed as(update profiles set weird_fact=U&'\00A0' returning *) select is(count(*),0::bigint,'unverified owner cannot reach Unicode validation') from changed;
 select * from finish();
 rollback;
