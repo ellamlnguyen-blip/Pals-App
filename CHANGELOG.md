@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-10-13 — Reference screen candidate reviewed and published
+
+TASK-029 delivers the requested Hangout detail and circular owner/peer profile screens on `agent/TASK-029-reference-screens`. Reviewed application210a8ee and candidate99f27d6a7820afee2eedc2118e99410bb06ca5d7 are published/remote verified. Fresh Sol-medium source review cleared after navigation/accessibility/empty-state corrections. Final source production build/TypeScript and67/67units (zero skips), lint and scoped formatting pass; real disposable-local320/390/820/1280 browser/owner-save/photo/friend/message/join-chat/privacy checks and synthetic screenshots are in `docs/ux/TASK-029-REFERENCE-QA.md` and `agents/handoffs/TASK-029.md`.
+
+Local QA uses a documented untracked IPv6 route-availability adapter; delivered guards/RLS and existing stacks are unchanged. The new detail-map token was absent: fallback/public-coordinate link pass, live tiles/pin/zoom remain unverified. No new hosted provider/data/gate/domain operation occurred. User visual feedback and existing TASK-027 hosted student/peer/moderation/recovery acceptance still gate app main integration. Main receives reviewed documentation/evidence only; TASK-029 remains incomplete and no product successor is dispatched.
+
 ## 2026-10-13 — Requested reference screens
 
 TASK-029 plans the supplied Hangout detail and owner/peer profile layouts with familiar avatar/photo/edit/friend/message navigation. Contract: `tasks/active/TASK-029-reference-screens.md`. Canonical baseline9a7464a; exact reviewed P2 dependency20cdd69 remains outside main behind TASK-027 staged acceptance. Review/publish this bounded contract before fresh implementation. Preserve dirty shared checkout, consent/RLS/location boundaries and canonical staging controls; no hosted/provider/data operation.
