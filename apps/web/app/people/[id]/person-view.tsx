@@ -18,6 +18,7 @@ import { ProfileTopbar } from "../../profile/profile-topbar";
 import type { StudentDestinations } from "../../student-shell";
 import { PeerPhoto, peerPhotoUrl } from "./peer-photo";
 import { UserCircleIcon } from "@phosphor-icons/react/dist/csr/UserCircle";
+import { ChatCircleIcon } from "@phosphor-icons/react/dist/csr/ChatCircle";
 
 export function PersonView({
   detail,
@@ -260,6 +261,7 @@ export function PersonView({
           canRequest
           canBlock={false}
           requestLabel="Add Pal"
+          presentation="profile"
           peerLabel={detail.real_name}
           onClear={() =>
             clear("People access changed. Reload to check this profile.")
@@ -291,6 +293,7 @@ export function PersonView({
               else document.getElementById("request-heading")?.focus();
             }}
           >
+            <ChatCircleIcon size={20} weight="bold" aria-hidden="true" />{" "}
             Message
           </a>
         )}

@@ -130,6 +130,16 @@ export function ProfileEditor({
       photoSummary.current?.focus({ preventScroll: true });
     }
   }
+  function focusPhotoInput(slot: string) {
+    openPhotos();
+    requestAnimationFrame(() => {
+      const input = document.getElementById(`photo-${slot}`);
+      if (input instanceof HTMLInputElement) {
+        input.scrollIntoView({ block: "center" });
+        input.focus({ preventScroll: true });
+      }
+    });
+  }
   function selectPhoto(
     slot: string,
     label: string,
@@ -146,14 +156,7 @@ export function ProfileEditor({
     if (!slot) return;
     skipPhotoFocusRestore.current = true;
     photoDialog.current?.close();
-    openPhotos();
-    requestAnimationFrame(() => {
-      const input = document.getElementById(`photo-${slot}`);
-      if (input instanceof HTMLInputElement) {
-        input.scrollIntoView({ block: "center" });
-        input.focus({ preventScroll: true });
-      }
-    });
+    focusPhotoInput(slot);
   }
   function openEditor() {
     setFeedback({});
@@ -269,7 +272,7 @@ export function ProfileEditor({
           <div className="profile-hero-empty">
             <CameraIcon size={42} weight="duotone" aria-hidden="true" />
             <span>No photo yet</span>
-            <button type="button" onClick={openPhotos}>
+            <button type="button" onClick={() => focusPhotoInput("primary")}>
               Add your main photo
             </button>
           </div>
@@ -278,8 +281,8 @@ export function ProfileEditor({
           className="profile-portrait-edit"
           type="button"
           aria-label="Edit main photo"
-          disabled={pending}
-          onClick={openPhotos}
+          disabled={pending || editing}
+          onClick={() => focusPhotoInput("primary")}
         >
           <PencilSimpleIcon size={22} weight="bold" aria-hidden="true" />
         </button>

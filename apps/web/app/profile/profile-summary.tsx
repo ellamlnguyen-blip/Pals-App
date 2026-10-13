@@ -24,6 +24,12 @@ export function ProfileSummary({
   verified?: boolean;
   headingRef?: Ref<HTMLHeadingElement>;
 }) {
+  const school =
+    campus === "University of North Carolina at Chapel Hill" ||
+    campus === "UNC–Chapel Hill" ||
+    campus === "UNC-Chapel Hill"
+      ? "UNC Chapel Hill"
+      : campus;
   return (
     <div className="profile-summary">
       <div className="profile-title-row">
@@ -41,7 +47,7 @@ export function ProfileSummary({
         <div>
           <GraduationCapIcon aria-hidden="true" />
           <dt>School:</dt>
-          <dd>{campus}</dd>
+          <dd>{school}</dd>
         </div>
         {major && (
           <div>
@@ -54,7 +60,7 @@ export function ProfileSummary({
           <div>
             <CalendarBlankIcon aria-hidden="true" />
             <dt>Class:</dt>
-            <dd>Class of {graduationYear}</dd>
+            <dd>{graduationYear}</dd>
           </div>
         )}
         {hometown && (
