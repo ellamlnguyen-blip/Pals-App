@@ -1,5 +1,9 @@
 # Current State
 
+## 2026-10-13 — Requested Calendar and account follow-up
+
+The user accepted TASK-029's local visual direction and requested direct avatar/profile navigation, two-sentence unlabelled bio, owner-bottom utility links, a dedicated account editor and reference Calendar with independent categories and accessible hover previews. TASK-030 contract `tasks/active/TASK-030-calendar-account.md` bounds this work; Proposed ADR-0038 records the cross-surface approach without changing auth/schema/privacy/providers. Review and publish contract before fresh implementation. Exact TASK-029 dependency99f27d6 remains on its task branch; TASK-027/TASK-028 hosted acceptance still gates app main integration. No hosted operation or automatic successor.
+
 ## 2026-10-13 — Reference screen candidate reviewed and published
 
 TASK-029 delivers the requested Hangout detail and circular owner/peer profile screens on `agent/TASK-029-reference-screens`. Reviewed application210a8ee and candidate99f27d6a7820afee2eedc2118e99410bb06ca5d7 are published/remote verified. Fresh Sol-medium source review cleared after navigation/accessibility/empty-state corrections. Final source production build/TypeScript and67/67units (zero skips), lint and scoped formatting pass; real disposable-local320/390/820/1280 browser/owner-save/photo/friend/message/join-chat/privacy checks and synthetic screenshots are in `docs/ux/TASK-029-REFERENCE-QA.md` and `agents/handoffs/TASK-029.md`.
