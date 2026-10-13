@@ -9,6 +9,12 @@ import {
   type ManagementIntent,
 } from "../management-actions";
 import { useDetailAccess } from "./host-joining-control";
+import { ParticipantIdentity } from "./participant-identity";
+import type { RosterIdentities } from "./roster-identities";
+import {
+  AUTH_TRANSITION_CHANNEL,
+  AUTH_TRANSITION_EVENT,
+} from "../../../auth-transition";
 
 type Row = {
   account_id: string;
@@ -20,6 +26,7 @@ export function ManagementControls({
   actorId,
   role,
   roster: initialRoster,
+  identities,
   rosterMore: initialRosterMore,
   assignments: initialAssignments,
   assignmentsMore: initialAssignmentsMore,
@@ -29,6 +36,7 @@ export function ManagementControls({
   actorId: string;
   role: "host" | "cohost" | null;
   roster: Row[];
+  identities: RosterIdentities;
   rosterMore: boolean;
   assignments: string[];
   assignmentsMore: boolean;
@@ -43,6 +51,8 @@ export function ManagementControls({
     initialAssignmentsMore,
   );
   const [pending, start] = useTransition();
+  const [identityHidden, setIdentityHidden] = useState(false);
+  const visibleIdentities = identityHidden ? {} : identities;
   const [localLocked, setLocked] = useState(false);
   const locked = localLocked || managementPaused;
   const [sensitiveHidden, setSensitiveHidden] = useState(false);
@@ -52,6 +62,28 @@ export function ManagementControls({
   useEffect(() => {
     if (message) resultRef.current?.focus();
   }, [message]);
+  useEffect(() => {
+    const conceal = () => setIdentityHidden(true);
+    const visibility = () => {
+      if (document.hidden) conceal();
+    };
+    window.addEventListener(AUTH_TRANSITION_EVENT, conceal);
+    window.addEventListener("pagehide", conceal);
+    document.addEventListener("visibilitychange", visibility);
+    let channel: BroadcastChannel | null = null;
+    try {
+      channel = new BroadcastChannel(AUTH_TRANSITION_CHANNEL);
+      channel.onmessage = conceal;
+    } catch {
+      /* The local event and pagehide still clear identity. */
+    }
+    return () => {
+      window.removeEventListener(AUTH_TRANSITION_EVENT, conceal);
+      window.removeEventListener("pagehide", conceal);
+      document.removeEventListener("visibilitychange", visibility);
+      channel?.close();
+    };
+  }, []);
   function loadMore(type: "roster" | "assignments") {
     setLoading(type);
     start(async () => {
@@ -166,27 +198,33 @@ export function ManagementControls({
                     row.role_label === "host" || row.role_label === "cohost",
                 )
                 .map((row) => (
-                  <div className="pals-detail-role-person" key={row.account_id}>
-                    <span
-                      className={`pals-detail-avatar pals-detail-avatar-${row.role_label}`}
-                      aria-hidden="true"
-                    >
-                      {row.account_id === actorId
-                        ? "You"
-                        : row.role_label === "host"
-                          ? "Host"
-                          : "Co"}
-                    </span>
-                    <span>
-                      <strong>
-                        {row.account_id === actorId ? "You" : "Pal"}
-                      </strong>
-                      <small>
-                        {row.role_label === "host" ? "Host" : "Co-host"}
-                      </small>
-                    </span>
-                  </div>
+                  <ParticipantIdentity
+                    key={row.account_id}
+                    accountId={row.account_id}
+                    actorId={actorId}
+                    hangoutId={id}
+                    role={row.role_label}
+                    identity={visibleIdentities[row.account_id]}
+                  />
                 ))}
+            </div>
+          )}
+          {roster.length > 0 && (
+            <div
+              className="pals-detail-attending-preview"
+              aria-label="Visible attendee profiles"
+            >
+              {roster.slice(0, 6).map((row) => (
+                <ParticipantIdentity
+                  key={row.account_id}
+                  accountId={row.account_id}
+                  actorId={actorId}
+                  hangoutId={id}
+                  role={row.role_label}
+                  identity={visibleIdentities[row.account_id]}
+                  compact
+                />
+              ))}
             </div>
           )}
           <details className="pals-detail-attending-disclosure">
@@ -194,30 +232,9 @@ export function ManagementControls({
               <span className="pals-detail-attending-title">
                 Pals attending <span aria-hidden="true">›</span>
               </span>
-              {roster.length ? (
-                <span
-                  className="pals-detail-attending-preview"
-                  aria-hidden="true"
-                >
-                  {roster.slice(0, 6).map((row) => (
-                    <span
-                      key={row.account_id}
-                      className={`pals-detail-avatar pals-detail-avatar-${row.role_label}`}
-                    >
-                      {row.account_id === actorId
-                        ? "You"
-                        : row.role_label === "participant"
-                          ? "Pal"
-                          : row.role_label === "cohost"
-                            ? "Co"
-                            : "Host"}
-                    </span>
-                  ))}
-                </span>
-              ) : null}
               <span className="pals-detail-attending-count">
                 {roster.length
-                  ? `${roster.length} shown${rosterMore ? "; more available" : ""}`
+                  ? `${roster.length} shown${rosterMore ? "; more may be available" : ""}`
                   : "No one visible"}
               </span>
             </summary>
@@ -296,15 +313,13 @@ export function ManagementControls({
                     <ul className="saved-roster">
                       {roster.map((row) => (
                         <li key={row.account_id}>
-                          <strong>
-                            {row.account_id === actorId
-                              ? "You"
-                              : row.role_label === "cohost"
-                                ? "Co-host"
-                                : row.role_label === "host"
-                                  ? "Host"
-                                  : "Participant"}
-                          </strong>
+                          <ParticipantIdentity
+                            accountId={row.account_id}
+                            actorId={actorId}
+                            hangoutId={id}
+                            role={row.role_label}
+                            identity={visibleIdentities[row.account_id]}
+                          />
                           <span className="saved-id">{row.account_id}</span>
                           {role === "host" &&
                             row.role_label === "participant" && (
@@ -361,8 +376,9 @@ export function ManagementControls({
                     </button>
                   )}
                   <p className="help">
-                    Only account IDs for currently ready joined members are
-                    shown. Names and photos are unavailable in this local flow.
+                    This list shows currently visible joined members. A name or
+                    photo appears only when that person currently shares it
+                    through People.
                   </p>
                 </section>
               ) : (

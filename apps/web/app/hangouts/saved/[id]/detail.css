@@ -54,28 +54,38 @@
   gap: 0.75rem 1.5rem;
   margin: 0.15rem 0 1.25rem;
 }
-.pals-detail-role-person {
+.pals-detail-person {
   display: inline-flex;
   align-items: center;
   gap: 0.55rem;
   min-width: 7.5rem;
+  color: var(--pals-ink);
+  text-decoration: none;
 }
-.pals-detail-role-person .pals-detail-avatar {
+.pals-detail-person[href]:hover .pals-detail-person-copy strong {
+  text-decoration: underline;
+}
+.pals-detail-person[href]:focus-visible {
+  outline: 3px solid var(--pals-focus);
+  outline-offset: 4px;
+  border-radius: 8px;
+}
+.pals-detail-role-preview .pals-detail-person .pals-detail-avatar {
   flex: 0 0 auto;
   margin: 0;
   width: 3.15rem;
   height: 3.15rem;
 }
-.pals-detail-role-person strong,
-.pals-detail-role-person small {
+.pals-detail-person strong,
+.pals-detail-person small {
   display: block;
   line-height: 1.25;
 }
-.pals-detail-role-person strong {
+.pals-detail-person strong {
   color: var(--pals-ink);
   font-weight: 900;
 }
-.pals-detail-role-person small {
+.pals-detail-person small {
   color: var(--pals-accent);
   font-weight: 800;
 }
@@ -118,6 +128,15 @@
 .pals-detail-attending-preview {
   display: inline-flex;
   padding-left: 0.4rem;
+  margin: 0 0 0.65rem;
+  flex-wrap: wrap;
+}
+.pals-detail-person-compact {
+  min-width: 0;
+  margin-left: -0.4rem;
+}
+.pals-detail-person-compact .pals-detail-avatar {
+  margin-left: 0;
 }
 .pals-detail-avatar {
   width: 2.75rem;
@@ -140,6 +159,18 @@
 .pals-detail-avatar-cohost {
   background: #d5eafa;
   color: #174f85;
+}
+.pals-detail-avatar {
+  overflow: hidden;
+}
+.pals-detail-avatar img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.saved-management-roster .pals-detail-person {
+  margin: 0.3rem 0;
 }
 .pals-detail-attending-count {
   font-size: 0.8rem;
@@ -165,7 +196,9 @@
   color: var(--pals-accent);
 }
 .pals-detail-icon {
-  font-size: 2rem;
+  width: 2rem;
+  height: 2rem;
+  flex: 0 0 auto;
   line-height: 1;
   font-weight: 600;
 }
@@ -212,7 +245,9 @@
   margin: 0.2rem 0 1rem;
 }
 .pals-detail-pin {
-  font-size: 2.2rem;
+  width: 2.2rem;
+  height: 2.2rem;
+  flex: 0 0 auto;
   color: var(--pals-accent);
   line-height: 1.1;
 }

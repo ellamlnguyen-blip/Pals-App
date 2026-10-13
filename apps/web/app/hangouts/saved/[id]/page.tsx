@@ -17,6 +17,10 @@ import {
 } from "./host-joining-control";
 import { ManagementControls } from "./management-controls";
 import { PublicPlaceMap } from "./public-place-map";
+import { CalendarBlankIcon } from "@phosphor-icons/react/dist/ssr/CalendarBlank";
+import { MapPinIcon } from "@phosphor-icons/react/dist/ssr/MapPin";
+import { readRosterIdentities } from "./roster-identities";
+import { sameVisiblePage } from "../../../../lib/saved-hangouts-types";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -26,7 +30,7 @@ export default async function SavedDetailPage({
   params: Promise<{ id: string }>;
 }) {
   requireLocalHangouts();
-  await requireAccess("ready");
+  const { client, user } = await requireAccess("ready");
   const { id } = await params;
   let result = await readSavedDetail(id);
   let chat: Awaited<ReturnType<typeof readChat>> | null = null;
@@ -43,6 +47,37 @@ export default async function SavedDetailPage({
     }
     // Chat and detail are separate sources. Recheck detail last.
     result = await readSavedDetail(id);
+  }
+  let identities = {};
+  if (result.kind === "ok" && user?.id !== result.userId)
+    result = { kind: "changed" };
+  if (
+    result.kind === "ok" &&
+    result.record.status === "published" &&
+    user?.id === result.userId
+  ) {
+    const before = result;
+    identities = await readRosterIdentities(
+      client,
+      before.roster,
+      result.userId,
+    );
+    const after = await readSavedDetail(id);
+    if (after.kind !== "ok") result = after;
+    else if (
+      after.userId !== before.userId ||
+      JSON.stringify(after.record) !== JSON.stringify(before.record) ||
+      after.ownState !== before.ownState ||
+      after.ownRole !== before.ownRole ||
+      after.rosterMore !== before.rosterMore ||
+      after.instructions !== before.instructions ||
+      after.assignmentsMore !== before.assignmentsMore ||
+      JSON.stringify(after.assignments) !==
+        JSON.stringify(before.assignments) ||
+      !sameVisiblePage(before.roster, after.roster)
+    )
+      result = { kind: "changed" };
+    else result = after;
   }
   if (result.kind !== "ok")
     return (
@@ -116,6 +151,7 @@ export default async function SavedDetailPage({
                       : null
                   }
                   roster={roster}
+                  identities={identities}
                   rosterMore={result.rosterMore}
                   assignments={result.assignments}
                   assignmentsMore={result.assignmentsMore}
@@ -126,9 +162,11 @@ export default async function SavedDetailPage({
                 </p>
               )}
               <div className="pals-detail-time">
-                <span aria-hidden="true" className="pals-detail-icon">
-                  ▣
-                </span>
+                <CalendarBlankIcon
+                  aria-hidden="true"
+                  className="pals-detail-icon"
+                  weight="regular"
+                />
                 <div>
                   <strong>{format(record.starts_at)}</strong>
                   {record.ends_at && <span>Ends {format(record.ends_at)}</span>}
@@ -198,9 +236,11 @@ export default async function SavedDetailPage({
               aria-labelledby="pals-detail-place-title"
             >
               <div className="pals-detail-place-heading">
-                <span className="pals-detail-pin" aria-hidden="true">
-                  ●
-                </span>
+                <MapPinIcon
+                  className="pals-detail-pin"
+                  aria-hidden="true"
+                  weight="fill"
+                />
                 <div>
                   <h2 id="pals-detail-place-title">{record.public_place}</h2>
                   <p>
