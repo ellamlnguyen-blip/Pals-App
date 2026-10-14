@@ -176,8 +176,12 @@ export function SavedMap({
         button.type = "button";
         button.className = "map-pin saved-pin";
         button.textContent = pinCue(item);
-        button.dataset.period = pinPeriod(item, new Date());
-        button.setAttribute("aria-label", `Preview Hangout: ${item.title}`);
+        const period = pinPeriod(item, new Date());
+        button.dataset.period = period;
+        button.setAttribute(
+          "aria-label",
+          `Preview ${period === "thisWeek" ? "this week" : period} Hangout: ${item.title}`,
+        );
         button.setAttribute(
           "aria-pressed",
           String(selectedRef.current === item.id),
