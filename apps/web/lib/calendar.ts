@@ -38,48 +38,41 @@ export async function queryCalendar(selection: unknown) {
       const embed =
         category === "attending"
           ? "hangout_participants!inner(account_id)"
-          : "hangout_participants(account_id)";
-      const matching: Row[] = [];
-      let offset = 0;
-      // Host and participant rows can be interspersed throughout discovery.
-      // Page the source until 101 rows in this category are found.
-      while (matching.length < 101) {
-        let query = client
-          .from("hangouts")
-          .select(`${fields},${embed}`)
-          .eq("visibility", "campus")
-          .eq("status", "published")
-          .lt("starts_at", end)
-          .or(`ends_at.gt.${start},and(ends_at.is.null,starts_at.gte.${start})`)
-          .order("starts_at")
-          .order("id")
-          .range(offset, offset + 100);
-        if (category === "hosting") query = query.eq("host_id", user!.id);
-        if (category === "attending")
-          query = query.eq("hangout_participants.account_id", user!.id);
-        const result = await query;
-        if (result.error) return null;
-        const page = result.data as unknown as Row[];
-        matching.push(
-          ...page.filter((row) =>
-            category === "hosting"
-              ? row.host_id === user!.id
-              : category === "attending"
-                ? row.host_id !== user!.id
-                : row.host_id !== user!.id &&
-                  !row.hangout_participants?.some(
-                    (member) => member.account_id === user!.id,
-                  ),
-          ),
-        );
-        if (page.length < 101) break;
-        offset += 101;
-      }
-      groups.push(matching.slice(0, 101));
+          : category === "all"
+            ? "own_membership:hangout_participants(account_id)"
+            : null;
+      let query = client
+        .from("hangouts")
+        .select(embed ? `${fields},${embed}` : fields)
+        .eq("visibility", "campus")
+        .eq("status", "published")
+        .lt("starts_at", end)
+        .or(`ends_at.gt.${start},and(ends_at.is.null,starts_at.gte.${start})`)
+        .order("starts_at")
+        .order("id")
+        .limit(101);
+      if (category === "hosting") query = query.eq("host_id", user!.id);
+      if (category === "attending")
+        query = query
+          .neq("host_id", user!.id)
+          .eq("hangout_participants.account_id", user!.id);
+      if (category === "all")
+        // Filter the embed to this actor, then anti-join it. account_id is
+        // selected because the roster grant is column-scoped; an empty embed
+        // requires table-wide SELECT. Anti-joined rows expose no child data.
+        // PostgREST applies both exclusions before the top-level limit.
+        query = query
+          .neq("host_id", user!.id)
+          .eq("own_membership.account_id", user!.id)
+          .is("own_membership", null);
+      const result = await query;
+      if (result.error) return null;
+      groups.push(result.data as unknown as Row[]);
     }
     // Cancelled plans are visible only through the source RLS to their existing
     // host/current participants. They never enter the discoverable category.
-    if (filters.hosting || filters.attending) {
+    for (const category of ["hosting", "attending"] as const) {
+      if (!filters[category]) continue;
       let cancelled = client
         .from("hangouts")
         .select(fields)
@@ -90,10 +83,8 @@ export async function queryCalendar(selection: unknown) {
         .order("starts_at")
         .order("id")
         .limit(101);
-      if (filters.hosting && !filters.attending)
-        cancelled = cancelled.eq("host_id", user!.id);
-      if (filters.attending && !filters.hosting)
-        cancelled = cancelled.neq("host_id", user!.id);
+      if (category === "hosting") cancelled = cancelled.eq("host_id", user!.id);
+      else cancelled = cancelled.neq("host_id", user!.id);
       const result = await cancelled;
       if (result.error) return null;
       groups.push(result.data as unknown as Row[]);
