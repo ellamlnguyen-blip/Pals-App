@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import {
   accountEmail,
+  accountCurrentPassword,
   accountName,
   accountPassword,
   accountRevision,
@@ -43,4 +44,8 @@ test("revision and password inputs reject malformed or unbounded submissions", (
   assert.equal(accountPassword("x".repeat(12)), "x".repeat(12));
   assert.equal(accountPassword("x".repeat(11)), null);
   assert.equal(accountPassword("x".repeat(129)), null);
+  assert.equal(accountCurrentPassword("x"), "x");
+  assert.equal(accountCurrentPassword(""), null);
+  assert.equal(accountCurrentPassword("x".repeat(128)), "x".repeat(128));
+  assert.equal(accountCurrentPassword("x".repeat(129)), null);
 });

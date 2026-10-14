@@ -30,6 +30,11 @@
   display: grid;
   gap: 28px;
 }
+.account-concealed {
+  margin: 0;
+  color: var(--pals-muted);
+  font-weight: 700;
+}
 .account-section {
   padding: clamp(20px, 5vw, 30px);
   border: 1px solid var(--pals-line);
@@ -94,6 +99,23 @@
   border: 1px solid var(--pals-profile-action);
   color: var(--pals-profile-action);
   background: white;
+}
+.account-reauth {
+  margin-top: 8px;
+}
+.account-reauth summary {
+  width: fit-content;
+  color: var(--pals-profile-action);
+  font-weight: 800;
+  cursor: pointer;
+}
+.account-reauth[open] {
+  display: grid;
+  gap: 10px;
+}
+.account-reauth p {
+  margin: 4px 0 0;
+  color: var(--pals-muted);
 }
 .account-feedback {
   margin: 5px 0 0;

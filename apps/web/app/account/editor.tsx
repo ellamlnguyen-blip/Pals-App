@@ -1,7 +1,12 @@
 "use client";
 
-import { useRef, useState, useTransition } from "react";
+import { useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
+import {
+  AUTH_TRANSITION_CHANNEL,
+  AUTH_TRANSITION_EVENT,
+  type AuthTransitionMessage,
+} from "../auth-transition";
 import {
   saveAccountName,
   changeAccountEmail,
@@ -46,9 +51,80 @@ export function AccountEditor({
   const [codePending, startCode] = useTransition();
   const emailForm = useRef<HTMLFormElement>(null);
   const passwordForm = useRef<HTMLFormElement>(null);
+  const content = useRef<HTMLDivElement>(null);
+  const concealedRef = useRef(false);
+  const actionEpoch = useRef(0);
+  const pendingAuth = useRef(new Set<string>());
+  const [concealed, setConcealed] = useState(false);
+
+  useEffect(() => {
+    const conceal = () => {
+      actionEpoch.current += 1;
+      concealedRef.current = true;
+      if (content.current) content.current.style.display = "none";
+      emailForm.current?.reset();
+      passwordForm.current?.reset();
+      setDraftName("");
+      setDraftEmail("");
+      setNameResult({});
+      setEmailResult({});
+      setPasswordResult({});
+      setConcealed(true);
+    };
+    const auth = (message: AuthTransitionMessage) => {
+      conceal();
+      if (message.phase === "begin") pendingAuth.current.add(message.token);
+      else if (message.phase !== "revalidate")
+        pendingAuth.current.delete(message.token);
+      if (
+        !document.hidden &&
+        !pendingAuth.current.size &&
+        message.phase !== "begin"
+      )
+        window.location.reload();
+    };
+    const localAuth = (event: Event) =>
+      auth((event as CustomEvent<AuthTransitionMessage>).detail);
+    const visibility = () => {
+      if (document.hidden) conceal();
+      else if (concealedRef.current && !pendingAuth.current.size)
+        window.location.reload();
+    };
+    const pageshow = () => {
+      if (concealedRef.current && !document.hidden && !pendingAuth.current.size)
+        window.location.reload();
+    };
+    window.addEventListener(AUTH_TRANSITION_EVENT, localAuth);
+    window.addEventListener("pagehide", conceal);
+    window.addEventListener("pageshow", pageshow);
+    document.addEventListener("visibilitychange", visibility);
+    let channel: BroadcastChannel | null = null;
+    try {
+      channel = new BroadcastChannel(AUTH_TRANSITION_CHANNEL);
+      channel.onmessage = (event: MessageEvent<AuthTransitionMessage>) =>
+        auth(event.data);
+    } catch {
+      // Local transitions and page lifecycle still conceal this editor.
+    }
+    if (document.hidden) conceal();
+    return () => {
+      actionEpoch.current += 1;
+      window.removeEventListener(AUTH_TRANSITION_EVENT, localAuth);
+      window.removeEventListener("pagehide", conceal);
+      window.removeEventListener("pageshow", pageshow);
+      document.removeEventListener("visibilitychange", visibility);
+      channel?.close();
+    };
+  }, []);
+
+  function mayApply(epoch: number) {
+    return !concealedRef.current && actionEpoch.current === epoch;
+  }
 
   function submitName(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (concealedRef.current) return;
+    const epoch = actionEpoch.current;
     const form = new FormData();
     form.set("real_name", draftName);
     form.set("revision", String(nameRevision));
@@ -56,10 +132,12 @@ export function AccountEditor({
     startName(async () => {
       try {
         const result = await saveAccountName(form);
+        if (!mayApply(epoch)) return;
         setNameResult(result);
         if (result.revision !== undefined) setNameRevision(result.revision);
         if (result.success) router.refresh();
       } catch {
+        if (!mayApply(epoch)) return;
         setNameResult({
           error: "We couldn’t save your name. Your draft is still here.",
         });
@@ -69,32 +147,41 @@ export function AccountEditor({
 
   function submitEmail(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (concealedRef.current) return;
+    const epoch = actionEpoch.current;
     const form = new FormData(event.currentTarget);
+    const passwordInput =
+      event.currentTarget.elements.namedItem("current_password");
+    if (passwordInput instanceof HTMLInputElement) passwordInput.value = "";
     setEmailResult({});
     startEmail(async () => {
       try {
         const result = await changeAccountEmail(form);
+        if (!mayApply(epoch)) return;
         setEmailResult(result);
         if (result.success) {
           setDraftEmail("");
           router.refresh();
         }
       } catch {
+        if (!mayApply(epoch)) return;
         setEmailResult({
           error: "We couldn’t request that email change. Try again.",
         });
-      } finally {
-        emailForm.current?.reset();
       }
     });
   }
 
   function sendPasswordCode() {
+    if (concealedRef.current) return;
+    const epoch = actionEpoch.current;
     setPasswordResult({});
     startCode(async () => {
       try {
-        setPasswordResult(await requestPasswordCode());
+        const result = await requestPasswordCode();
+        if (mayApply(epoch)) setPasswordResult(result);
       } catch {
+        if (!mayApply(epoch)) return;
         setPasswordResult({
           error: "We couldn’t send a reauthentication code. Try again.",
         });
@@ -104,23 +191,34 @@ export function AccountEditor({
 
   function submitPassword(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (concealedRef.current) return;
+    const epoch = actionEpoch.current;
     const form = new FormData(event.currentTarget);
+    event.currentTarget.reset();
     setPasswordResult({});
     startPassword(async () => {
       try {
-        setPasswordResult(await changeAccountPassword(form));
+        const result = await changeAccountPassword(form);
+        if (mayApply(epoch)) setPasswordResult(result);
       } catch {
+        if (!mayApply(epoch)) return;
         setPasswordResult({
           error: "We couldn’t change your password. Try again.",
         });
-      } finally {
-        passwordForm.current?.reset();
       }
     });
   }
 
+  if (concealed) {
+    return (
+      <p className="account-concealed" role="status">
+        Checking current account access…
+      </p>
+    );
+  }
+
   return (
-    <div className="account-sections">
+    <div className="account-sections" ref={content}>
       <section className="account-section" aria-labelledby="account-name-title">
         <h2 id="account-name-title">Your name</h2>
         <p>Shown on your profile and Hangouts.</p>
@@ -159,8 +257,8 @@ export function AccountEditor({
         )}
         <p>
           Use an approved UNC address. Your new address needs confirmation
-          before it can be used for verified access. Your provider may also ask
-          you to confirm the current address.
+          before it can be used for verified access. Check your inboxes for
+          confirmation instructions.
         </p>
         <form ref={emailForm} onSubmit={submitEmail}>
           <label htmlFor="account-new-email">New UNC email</label>
@@ -181,6 +279,7 @@ export function AccountEditor({
             type="password"
             autoComplete="current-password"
             required
+            maxLength={128}
             disabled={emailPending}
           />
           <Feedback result={emailResult} />
@@ -195,10 +294,7 @@ export function AccountEditor({
         aria-labelledby="account-password-title"
       >
         <h2 id="account-password-title">Password</h2>
-        <p>
-          Choose at least 12 characters. Some accounts may receive a six-digit
-          reauthentication code by email.
-        </p>
+        <p>Choose at least 12 characters.</p>
         <form ref={passwordForm} onSubmit={submitPassword}>
           <label htmlFor="account-current-password">Current password</label>
           <input
@@ -207,6 +303,7 @@ export function AccountEditor({
             type="password"
             autoComplete="current-password"
             required
+            maxLength={128}
             disabled={passwordPending}
           />
           <label htmlFor="account-new-password">New password</label>
@@ -231,26 +328,30 @@ export function AccountEditor({
             required
             disabled={passwordPending}
           />
-          <label htmlFor="account-password-nonce">
-            Reauthentication code, if received
-          </label>
-          <input
-            id="account-password-nonce"
-            name="nonce"
-            inputMode="numeric"
-            pattern="[0-9]{6}"
-            maxLength={6}
-            autoComplete="one-time-code"
-            disabled={passwordPending}
-          />
-          <button
-            className="account-code-button"
-            type="button"
-            onClick={sendPasswordCode}
-            disabled={codePending || passwordPending}
-          >
-            {codePending ? "Sending…" : "Send a code"}
-          </button>
+          <details className="account-reauth">
+            <summary>Have a security code?</summary>
+            <p>
+              If asked, enter the six-digit code sent to your sign-in email.
+            </p>
+            <label htmlFor="account-password-nonce">Security code</label>
+            <input
+              id="account-password-nonce"
+              name="nonce"
+              inputMode="numeric"
+              pattern="[0-9]{6}"
+              maxLength={6}
+              autoComplete="one-time-code"
+              disabled={passwordPending}
+            />
+            <button
+              className="account-code-button"
+              type="button"
+              onClick={sendPasswordCode}
+              disabled={codePending || passwordPending}
+            >
+              {codePending ? "Sending…" : "Send a code"}
+            </button>
+          </details>
           <Feedback result={passwordResult} />
           <button disabled={passwordPending} type="submit">
             {passwordPending ? "Changing…" : "Change password"}

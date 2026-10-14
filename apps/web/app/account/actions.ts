@@ -6,6 +6,7 @@ import { authConfig } from "../../lib/config";
 import { verifyAccountPassword } from "../../lib/account-auth";
 import {
   accountEmail,
+  accountCurrentPassword,
   accountName,
   accountPassword,
   accountRevision,
@@ -50,12 +51,12 @@ export async function changeAccountEmail(
 ): Promise<AccountResult> {
   const { client, user } = await ownerProfile();
   const email = accountEmail(form.get("email"));
-  const password = form.get("current_password");
+  const password = accountCurrentPassword(form.get("current_password"));
   if (!email)
     return { error: "Enter an address on an approved UNC email domain." };
   if (email === user.email?.toLowerCase())
     return { error: "That is already your current sign-in email." };
-  if (typeof password !== "string" || !password)
+  if (!password)
     return { error: "Enter your current password to request this change." };
   if (
     !user.email ||
@@ -85,12 +86,11 @@ export async function changeAccountPassword(
   form: FormData,
 ): Promise<AccountResult> {
   const { client, user } = await ownerProfile();
-  const password = form.get("current_password");
+  const password = accountCurrentPassword(form.get("current_password"));
   const nextPassword = accountPassword(form.get("new_password"));
   const confirmation = form.get("confirm_password");
   const nonce = form.get("nonce");
-  if (typeof password !== "string" || !password)
-    return { error: "Enter your current password." };
+  if (!password) return { error: "Enter your current password." };
   if (!nextPassword)
     return { error: "Choose a new password between 12 and 128 characters." };
   if (nextPassword !== confirmation)

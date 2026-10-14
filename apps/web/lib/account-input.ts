@@ -23,3 +23,9 @@ export function accountPassword(value: FormDataEntryValue | null) {
     ? value
     : null;
 }
+
+export function accountCurrentPassword(value: FormDataEntryValue | null) {
+  return typeof value === "string" && value.length >= 1 && value.length <= 128
+    ? value
+    : null;
+}
