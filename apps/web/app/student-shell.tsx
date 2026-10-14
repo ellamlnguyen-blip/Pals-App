@@ -58,7 +58,7 @@ export function StudentHeader({
         <span className="header-campus">UNC Chapel Hill</span>
       )}
       <div className="header-account">
-        {signedIn && (
+        {signedIn && !accountReady && (
           <Link className="header-safety" href="/safety">
             Safety
           </Link>
