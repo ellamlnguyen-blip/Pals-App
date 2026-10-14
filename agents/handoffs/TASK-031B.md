@@ -31,3 +31,9 @@ Verify real map tile rendering and attribution with the local-only public token,
 Fresh Stage B source review found and the UI corrected four bounded issues before fixture QA: a failed authorized preview read now conceals the entire prior pin/list projection and reloads before redisplay; a bounds change clears pending Join and preview states while invalidating its response; legacy `joining=open` browse context now restores as visible `joining=any`; and the heading uses the existing darker profile-action blue for legible contrast. A successful 200 preview also requires the expected `kind` and ID. The Vercel React best-practices skill was read for the multi-TSX review; this pass kept direct imports, lazy Mapbox loading, generation guards and accessible controls without a broader architecture refactor.
 
 After correction: focused Node tests 5/5 pass, scoped ESLint/Prettier, web TypeScript, `git diff --check` and webpack production build pass. Real fixture/browser verification remains coordinator-owned.
+
+## Desktop visual QA correction
+
+The coordinator's real 1280×720 browser pass at the prior tip confirmed authenticated saved records and live Mapbox tiles. It also identified four reference mismatches, now corrected within the saved route: the global `section` panel background/padding is explicitly removed from the compact heading; saved-page body and controls use Nunito while headings retain Baloo; checkbox squares override global 48px input sizing and use distinct blue shades with readable checks; and the Mapbox canvas uses the existing provider's `streets-v12` style at default/reset zoom 15 while preserving a valid remembered camera. The campus label now has a clear pin icon. These changes alter no source query, grants, private data, or provider configuration.
+
+After this correction, scoped Prettier/ESLint, web TypeScript, `git diff --check`, and webpack production build pass. Phone and refreshed desktop visual QA remain coordinator-owned.

@@ -76,9 +76,9 @@ export function SavedMap({
       map = new mapbox.Map({
         container: container.current,
         accessToken: token,
-        style: "mapbox://styles/mapbox/light-v11",
+        style: "mapbox://styles/mapbox/streets-v12",
         center: previous ? [previous.longitude, previous.latitude] : UNC_CENTER,
-        zoom: previous?.zoom ?? 14,
+        zoom: previous?.zoom ?? 15,
         minZoom: 10,
         maxZoom: 19,
         attributionControl: true,
@@ -256,7 +256,7 @@ export function SavedMap({
             disabled={!ready}
             onClick={() => {
               located.current = false;
-              mapRef.current?.jumpTo({ center: UNC_CENTER, zoom: 14 });
+              mapRef.current?.jumpTo({ center: UNC_CENTER, zoom: 15 });
             }}
             aria-label="Back to UNC"
             title="Back to UNC"

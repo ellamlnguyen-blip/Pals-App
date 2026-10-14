@@ -266,6 +266,8 @@
 /* TASK-031 saved discovery: one map surface with optional list below it. */
 .saved-page {
   padding: 0 clamp(1rem, 2vw, 2rem) 3rem;
+  font-family: var(--pals-font);
+  font-weight: 600;
 }
 .saved-map-heading {
   display: flex;
@@ -273,6 +275,11 @@
   justify-content: space-between;
   gap: 1.25rem;
   margin: 1.1rem 0 1rem;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 }
 .saved-map-title {
   display: flex;
@@ -288,17 +295,18 @@
   line-height: 1;
 }
 .saved-map-title p {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
   margin: 0;
   color: var(--pals-accent);
   font-size: 1.12rem;
   font-weight: 800;
 }
-.saved-map-title p span {
+.saved-map-title p svg {
   display: inline-block;
   color: var(--pals-brand);
-  margin-right: 0.35rem;
-  font-size: 0.9rem;
-  vertical-align: 0.1em;
+  flex: 0 0 20px;
 }
 .saved-create {
   white-space: nowrap;
@@ -357,20 +365,38 @@
   flex: 0 0 28px;
   width: 28px;
   height: 28px;
+  min-width: 28px;
+  min-height: 28px;
   margin: 0;
+  padding: 0;
   border: 2px solid #8cb9df;
   border-radius: 0.42rem;
   background: #fff;
 }
 .saved-periods input:checked {
-  background: #367cb8;
-  border-color: #367cb8;
+  background: #286eae;
+  border-color: #286eae;
+}
+.saved-periods label:nth-of-type(2) input:checked {
+  background: #3d82bd;
+  border-color: #3d82bd;
+}
+.saved-periods label:nth-of-type(3) input:checked {
+  background: #71b3df;
+  border-color: #71b3df;
+}
+.saved-periods label:nth-of-type(4) input:checked {
+  background: #9bc9e9;
+  border-color: #9bc9e9;
 }
 .saved-periods input:checked::after {
   content: "✓";
   color: #fff;
   font-weight: 900;
   line-height: 1;
+}
+.saved-periods label:nth-of-type(n + 3) input:checked::after {
+  color: #103d6b;
 }
 .saved-periods input:focus-visible {
   outline: 3px solid var(--pals-focus);
@@ -674,9 +700,9 @@
     font-size: 0.78rem;
   }
   .saved-periods input {
-    width: 24px;
-    height: 24px;
-    flex-basis: 24px;
+    width: 28px;
+    height: 28px;
+    flex-basis: 28px;
   }
   .saved-map-preview {
     top: auto !important;
