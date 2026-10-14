@@ -1,6 +1,6 @@
 # TASK-031 Hangouts map reference redesign
 
-Status: Independently reviewed bounded contract; canonical publication precedes implementation.
+Status: Stage A reviewed and verified on the named disposable backend; Stage B UI is active. Parent staging/application main integration remains incomplete.
 Date: 2026-10-14 America/New_York.
 Branch: `agent/TASK-031-hangouts-map`.
 Canonical baseline: `37c899d91d3128005f89b79636fb65348cb24a2f`.
@@ -47,3 +47,7 @@ TASK-027/TASK-028 staged acceptance still gates application main integration. Ma
 3. Actual hover/focus/tap preview shows authorized people/date/place/text, View opens existing detail, eligible Join acknowledges membership and disappears for hosting/attending/closed/removed. Current consent/auth loss clears sensitive preview and aborts late responses. Private instructions do not serialize.
 4. Relevant units, lint, TypeScript, production builds, fresh review and real fictional-local browser/API privacy checks pass. Render/screenshot loading/empty/error/fallback and core interactions with synthetic content; clearly record unexercised provider/visibility paths.
 5. Commit handoffs/docs and source to isolated task branch, push and verify remote task SHA. Publish independently reviewed documentation/evidence milestone on main and verify main SHA. Keep task incomplete until parent acceptance and application integration; no hosted/release claim or duplicate successor.
+
+## Stage A local milestone
+
+Migration/sourcec11e093 plus test correction83f56b7 passed fresh source/security review. Named local55522 has reviewed version20261014000100 (39 migrations), unchanged existing fixture counts/grants. SQL23/23 and geographically isolated legacy64/64 plus actual fictional Auth/PostgREST16 masks/two-read/public-payload checks pass. See TASK-031A.md and TASK-031A-REVIEW.md for methods and limits. UI StageB is active; this does not complete the parent or authorize hosted integration.
