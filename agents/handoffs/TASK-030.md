@@ -6,7 +6,7 @@ Reviewed local candidate on `agent/TASK-030-calendar-account`; application commi
 
 The owner/peer unlabelled short bio appears below facts; new/changed saves allow two sentences while unchanged legacy text survives. Header avatar directly opens Profile. Own bottom utilities include Safety, Analytics, Attendance and a separate Account editor. Profile editing cannot rename the owner; Account controls name, confirmed/pending email and password using existing caller Auth. Calendar matches the supplied hierarchy with Day/Week/Month, independent yellow Hosting/green Attending/blue other-plan filters, no create action, accessible hover/focus/tap preview and current-authorized Join only for blue plans. Joining refreshes membership/category.
 
-Fresh GPT-6 Sol medium workers produced the profile/navigation, Account, Calendar and repair/visual handoffs. Fresh security/design review addressed privacy concealment, time layout, focus, roster truthfulness, identity ordering and bounded source queries. Coordinator checked the final midnight, bio and limited-access header fixes. Dispatch tools cannot configure or verify Standard speed.
+Fresh GPT-6 Sol medium workers produced the profile/navigation, Account, Calendar and repair/visual handoffs. Fresh security/design review addressed privacy concealment, time layout, focus, roster truthfulness, identity ordering and bounded source queries. Coordinator checked the final midnight, bio and limited-access header fixes; a separate fresh Sol-medium reviewer subsequently cleared those four narrow commits and the final documentation/screenshot hashes. Dispatch tools cannot configure or verify Standard speed.
 
 ## Verification and source boundary
 

@@ -6,6 +6,10 @@ Fresh GPT-6 Sol medium contract review cleared bounded implementation before dis
 
 The coordinator reviewed the later narrow fixes: `0b70ccc` clamps midnight 44px controls with corresponding overlap lanes; `8c85d29` stacks Account heading; `56cd797` counts closing quotes and unspaced CJK bio punctuation; `5920f1d` retains mobile Safety before readiness. Unit/actual HTTP checks cover the bio parser, and final production builds plus browser captures cover the final Account/header layout. Do not describe these later commits as separately reviewed by the earlier source reviewer.
 
+## Final narrow review
+
+A separate fresh GPT-6 Sol medium reviewer then inspected `0b70ccc`, `8c85d29`, `56cd797` and `5920f1d`, the final documentation and all 16 JPEG hashes. No actionable source or publication inconsistency remained. The reviewer confirmed midnight visual intervals/lane placement, final narrow Account/header layout, quoted/CJK bio limits and documentation-only main scope.
+
 ## Verification and decision
 
 The local candidate meets the implemented interaction checks recorded in `docs/ux/TASK-030-CALENDAR-ACCOUNT-QA.md`. Exact source and local-adapted export build successfully. All 80 units and full lint pass, with final narrow header checks and builds as recorded. Actual pointer hover, focus/tap, Join→attending, filters, owner/peer composition, Account authentication mutations and cross-tab clearing are verified on fictional local fixtures.
