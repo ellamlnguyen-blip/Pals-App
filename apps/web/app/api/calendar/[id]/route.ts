@@ -6,6 +6,7 @@ import {
   sameVisiblePage,
 } from "../../../../lib/saved-hangouts-types";
 import { readRosterIdentities } from "../../../hangouts/saved/[id]/roster-identities";
+import { sameCalendarPreviewIdentities } from "../../../../lib/calendar-preview-identities";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -43,7 +44,7 @@ export async function GET(
       finalActor.state !== "ready" ||
       accessCheck.error ||
       accessCheck.data !== "ready" ||
-      JSON.stringify(identities) !== JSON.stringify(liveIdentities) ||
+      !sameCalendarPreviewIdentities(identities, liveIdentities) ||
       after.kind !== "ok" ||
       after.userId !== actor.user.id ||
       JSON.stringify(before.record) !== JSON.stringify(after.record) ||
