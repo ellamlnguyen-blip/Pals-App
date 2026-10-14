@@ -73,13 +73,21 @@ export function visibleHours(items: TimedItem[], days: string[]) {
 export function layoutDay(items: TimedItem[], day: string, firstHour: number) {
   const ordered = items
     .filter((item) => occursOnDay(item, day))
-    .map((item) => ({
-      item,
-      ...segmentOnDay(item, day),
-      lane: 0,
-      lanes: 1,
-      cluster: 0,
-    }))
+    .map((item) => {
+      const segment = segmentOnDay(item, day);
+      // A 44px target needs 55 wall minutes at this scale. Keep late boxes
+      // within the civil day, then assign lanes from their visual intervals.
+      const start = Math.min(segment.start, 1440 - 55);
+      return {
+        item,
+        start,
+        end: Math.max(segment.end, start + 55),
+        spans: segment.spans,
+        lane: 0,
+        lanes: 1,
+        cluster: 0,
+      };
+    })
     .sort(
       (a, b) =>
         a.start - b.start ||

@@ -65,6 +65,24 @@ test("brief adjacent plans keep 44px targets without covering each other", () =>
   assert.ok(placed[0].top + placed[0].height > placed[1].top);
 });
 
+test("last-minute plans stay within the 24-hour grid and share no visual lane", () => {
+  const placed = layoutDay(
+    [event("near", "23:00", "23:05"), event("late", "23:55", "23:59")],
+    "2027-06-01",
+    8,
+  );
+  const gridHeight = (24 - 8) * CALENDAR_HOUR_PX;
+  assert.deepEqual(
+    placed.map((item) => item.width),
+    ["50%", "50%"],
+  );
+  assert.notEqual(placed[0].left, placed[1].left);
+  for (const item of placed) {
+    assert.equal(item.height, 44);
+    assert.ok(item.top + item.height <= gridHeight);
+  }
+});
+
 test("multi-day and repeated DST hour remain represented", () => {
   const overnight = {
     id: "overnight",
