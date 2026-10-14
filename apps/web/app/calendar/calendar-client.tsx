@@ -239,6 +239,8 @@ export function CalendarClient({
       document.removeEventListener("visibilitychange", visibility);
       window.removeEventListener("pageshow", restore);
       channel?.close();
+      generation.current++;
+      activeRef.current = null;
       request.current?.abort();
       if (closeTimer.current) clearTimeout(closeTimer.current);
     };
