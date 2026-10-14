@@ -15,7 +15,10 @@
   text-decoration: none;
 }
 .account-heading {
+  display: block;
+  min-height: 0;
   margin: 22px 0 30px;
+  border-bottom: 0;
 }
 .account-heading h1 {
   margin: 0;
