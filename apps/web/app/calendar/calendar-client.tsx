@@ -398,7 +398,7 @@ export function CalendarClient({
         </div>
       ) : selection.view === "month" ? (
         <div className="calendar-month-viewport">
-          <div className="calendar-month" role="grid" aria-label={label}>
+          <div className="calendar-month" role="group" aria-label={label}>
             <div className="calendar-month-head">
               {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day) => (
                 <span key={day}>{day}</span>
@@ -408,7 +408,13 @@ export function CalendarClient({
               {days.map((day) => (
                 <div
                   key={day}
-                  role="gridcell"
+                  role="group"
+                  aria-label={dayText(day, {
+                    weekday: "long",
+                    month: "long",
+                    day: "numeric",
+                    year: "numeric",
+                  })}
                   className={
                     day.slice(0, 7) !== selection.date.slice(0, 7)
                       ? "is-outside"
