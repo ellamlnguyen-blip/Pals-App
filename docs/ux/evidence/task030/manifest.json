@@ -1,0 +1,22 @@
+{
+  "applicationCommit": "5920f1d9f98511d922640f6bec2fe717f6c743dc",
+  "notes": "Synthetic fictional local fixtures only. Earlier pre/post Join captures are identified in QA; final source captures named explicitly. Widths refer to actual CSS viewport, not encoded JPEG dimensions.",
+  "sha256": {
+    "account-1280.jpg": "ca836ea8961f986dc4a198c64c1e26dce412315e270dd5ddf78e68a6444eeaed",
+    "account-320.jpg": "c8f14b8ed11d2a66b724742f356de1271a47f514cd69bea47787d461256c57cb",
+    "account-390.jpg": "f757a8a6da0da56f9b47b6cc64e530d8604021570595de0466a45ad666b1d097",
+    "calendar-attending-1280.jpg": "4eb68105548a0ea776eb5f4f90bf33e0e518046fd0de8076b2075997b33e0daa",
+    "calendar-blue-1280.jpg": "6237896b7a48f560ef94a26e9929e26162629e7309e15112e9133a162bb5c300",
+    "calendar-final-1280.jpg": "360bb2ca94fe3b751baecfabc1c1067ff2f9da05be139a9dcb698fca15bbb2b7",
+    "calendar-month-1280.jpg": "2db76861767ae164b5bd1a01eeb7191390cc9f1cae9fb1dbcc0a0d8426a7c5c4",
+    "calendar-month-390.jpg": "fca4aea7bf1aa978b29299a542c266bf346978fa46ddf2a657453915afb23eda",
+    "calendar-personal-1280.jpg": "7f4b62ac3f44d2a555aea65ae211bcd697c4c9ca39580f7f31a3e6c60c3f140e",
+    "calendar-week-320.jpg": "18ad915f735bdc0d341d2b57c05ac8fc9ae8ad74367d3babc99cd0b25dd91acf",
+    "calendar-week-390.jpg": "76b171caa6083a05c218e919723e1f6ea68cedd01bd65e42f86a1059cdbb8d3b",
+    "profile-owner-1280.jpg": "a190b897d6ecedbc45b5eef0f2f299612236c7814c8c5c60d1408c7dde93d0eb",
+    "profile-owner-320.jpg": "6b2b5619e32bb5136c92ed6306058b45a242d7378e0e38ba884ea3caaefd8870",
+    "profile-owner-390.jpg": "1632203bf21d77e93636c1decd013a3ba3c879ce96d80e80b1e67b62518cf3bd",
+    "profile-peer-320.jpg": "8535e0ca82a36c4c176c166c7fa8281ea301bee592887f4524e6826ad30d3454",
+    "unconfirmed-safety-320.jpg": "1fb06be618761339bd49b8a8eecfe5542b72312987192390275df68fd9cd0ea2"
+  }
+}

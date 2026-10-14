@@ -1,6 +1,6 @@
 # TASK-030 — Calendar and account navigation follow-up
 
-Status: Contract independently reviewed; canonical publication precedes implementation.
+Status: Reviewed local implementation candidate; task publication and documentation-only main receipt in handoff. Application main integration remains incomplete behind TASK-027/TASK-028 acceptance.
 Date: 2026-10-13 America/New_York.
 Branch: `agent/TASK-030-calendar-account`.
 Canonical baseline: `73d32ddc04e61fc94f21125fd4bae0c930708011`.
@@ -33,3 +33,7 @@ No schema, RLS/RPC/grant, provider/gate, hosted data/deployment/domain, producti
 3. Account name persists without clearing optional data; stale revision fails safely. Real disposable-local Auth email confirmation/pending state and password update/reauth errors tested through server/HTTP harness; no human credentials changed. Live account loss and wrong actor fail closed. Existing MFA/provider restrictions stay in force. Report any provider-specific confirmation path not actually exercised.
 4. Relevant units, lint, TypeScript and production build pass. Fresh review addresses privacy/auth/client stale-data risks and accessibility. Actual browser screenshots are committed only with synthetic fixture content; user reference photos stay out of Git.
 5. Publish task source/handoff and verify remote task SHA; publish reviewed documentation-only milestone to main and verify remote main SHA. Keep TASK-030 incomplete until parent staging gates and accepted app integration complete. No duplicate automatic successor.
+
+## Local milestone 2026-10-14
+
+Application `5920f1d9f98511d922640f6bec2fe717f6c743dc` delivers the requested scope. Review repairs, final production builds, 80 units, lint and real fictional-local browser/Auth/action/privacy verification are recorded in `agents/handoffs/TASK-030.md`, `TASK-030-REVIEW.md` and `docs/ux/TASK-030-CALENDAR-ACCOUNT-QA.md`. Remaining release gates and runtime-only adapters are explicit. Main publication contains documentation/evidence only; task remains incomplete.
