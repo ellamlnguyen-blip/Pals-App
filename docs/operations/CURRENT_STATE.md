@@ -1,5 +1,11 @@
 # Current State
 
+## 2026-10-14 — Calendar and account local candidate
+
+TASK-030 application `5920f1d9f98511d922640f6bec2fe717f6c743dc` implements direct avatar-to-profile navigation, owner-bottom utilities, a separate name/email/password Account editor, unlabelled two-sentence bio and reference Calendar with Day/Week/Month, independent categories, accessible previews and blue-only authorized Join. Local source review repairs, final builds/TypeScript, 80 units without skips, lint and fictional real Auth/action/privacy checks pass. Desktop/tablet/320–390px browser evidence includes actual pointer preview, Join→green, category toggles, Account confirmation/password changes and cross-tab clearing. See `agents/handoffs/TASK-030.md` and `docs/ux/TASK-030-CALENDAR-ACCOUNT-QA.md`.
+
+Preview is `http://127.0.0.1:3035/calendar`; old local 3000 links redirect there. Runtime-only adapters and synthetic fixtures are documented; delivered guards/provider/RLS and existing stacks are unchanged. TASK-030 remains incomplete behind TASK-027/TASK-028 staged student/peer/moderation/recovery acceptance and reviewed app main integration. Main receives documentation/evidence only. Hosted/provider-specific checks and TASK-029 detail-map tiles remain open; ADR-0038 stays Proposed. No hosted operation or automatic successor. Latest verified pushed task candidate: `63fe69c437e22a5b35c2aba58f702badd681479e`; application remains `5920f1d`. Documentation-only main receipt follows in the handoff.
+
 ## 2026-10-13 — Requested Calendar and account follow-up
 
 The user accepted TASK-029's local visual direction and requested direct avatar/profile navigation, two-sentence unlabelled bio, owner-bottom utility links, a dedicated account editor and reference Calendar with independent categories and accessible hover previews. TASK-030 contract `tasks/active/TASK-030-calendar-account.md` bounds this work; Proposed ADR-0038 records the cross-surface approach without changing auth/schema/privacy/providers. Review and publish contract before fresh implementation. Exact TASK-029 dependency99f27d6 remains on its task branch; TASK-027/TASK-028 hosted acceptance still gates app main integration. No hosted operation or automatic successor.
