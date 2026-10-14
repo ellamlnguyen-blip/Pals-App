@@ -14,19 +14,17 @@ export default async function SavedHangoutsPage() {
   return (
     <Frame signedIn navigation>
       <div className="saved-page">
-        <section className="welcome-hero" aria-labelledby="hangouts-heading">
-          <div>
-            <h1 id="hangouts-heading">
-              <span>Meet up.</span>
-              <span>Make it happen.</span>
-            </h1>
-            <p className="intro">
-              College is too short to wait around for good things to come to
-              you. Find a Hangout, meet your next friends, and make time for
-              each other at UNC.
+        <section
+          className="saved-map-heading"
+          aria-labelledby="hangouts-heading"
+        >
+          <div className="saved-map-title">
+            <h1 id="hangouts-heading">Hangouts</h1>
+            <p>
+              <span aria-hidden="true">●</span> UNC Chapel Hill
             </p>
           </div>
-          <Link className="button" href="/hangouts/new">
+          <Link className="button saved-create" href="/hangouts/new">
             Create Hangout
           </Link>
         </section>

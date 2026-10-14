@@ -16,10 +16,17 @@ test("browse return accepts only recent filter and position preferences", () => 
     savedAt: now - 1000,
   };
   assert.deepEqual(parseBrowseContext(JSON.stringify(context), now), context);
+  for (const mask of ["1111", "0000", "1010"])
+    assert.deepEqual(
+      parseBrowseContext(JSON.stringify({ ...context, time: mask }), now),
+      { ...context, time: mask },
+    );
   for (const value of [
     null,
     "{",
     JSON.stringify({ ...context, time: "private" }),
+    JSON.stringify({ ...context, time: "periods:1111" }),
+    JSON.stringify({ ...context, time: "11111" }),
     JSON.stringify({ ...context, joining: "joined" }),
     JSON.stringify({ ...context, scrollY: -1 }),
     JSON.stringify({ ...context, scrollY: "540" }),

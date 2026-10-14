@@ -1,4 +1,7 @@
-import type { SavedFilter } from "../../../lib/saved-hangouts-types";
+import {
+  validPeriodMask,
+  type SavedFilter,
+} from "../../../lib/saved-hangouts-types.ts";
 
 export type BrowseViewport = {
   longitude: number;
@@ -61,7 +64,9 @@ export function parseBrowseContext(
     if (!value || typeof value !== "object") return null;
     const context = value as Partial<BrowseContext>;
     if (
-      (context.time !== "upcoming" && context.time !== "all") ||
+      (context.time !== "upcoming" &&
+        context.time !== "all" &&
+        !validPeriodMask(context.time)) ||
       (context.joining !== "any" && context.joining !== "open") ||
       typeof context.scrollY !== "number" ||
       !Number.isFinite(context.scrollY) ||
