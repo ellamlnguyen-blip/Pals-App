@@ -1,6 +1,6 @@
 # TASK-031 Hangouts map reference redesign
 
-Status: Stage A reviewed and verified on the named disposable backend; Stage B UI is active. Parent staging/application main integration remains incomplete.
+Status: reviewed desktop local candidate8504b72; responsive rendering and focused lifecycle/fallback checks remain open. Parent staging/application main integration remains incomplete.
 Date: 2026-10-14 America/New_York.
 Branch: `agent/TASK-031-hangouts-map`.
 Canonical baseline: `37c899d91d3128005f89b79636fb65348cb24a2f`.
@@ -51,3 +51,7 @@ TASK-027/TASK-028 staged acceptance still gates application main integration. Ma
 ## Stage A local milestone
 
 Migration/sourcec11e093 plus test correction83f56b7 passed fresh source/security review. Named local55522 has reviewed version20261014000100 (39 migrations), unchanged existing fixture counts/grants. SQL23/23 and geographically isolated legacy64/64 plus actual fictional Auth/PostgREST16 masks/two-read/public-payload checks pass. See TASK-031A.md and TASK-031A-REVIEW.md for methods and limits. UI StageB is active; this does not complete the parent or authorize hosted integration.
+
+## Desktop local candidate milestone
+
+See `docs/ux/TASK-031-MAP-QA.md` and `agents/handoffs/TASK-031.md` for reviewed8504b72 source, desktop/API/SQL/build evidence and the explicit responsive browser limitation. This does not satisfy every acceptance criterion or complete the parent.

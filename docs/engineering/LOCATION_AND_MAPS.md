@@ -1,5 +1,10 @@
 # Location and Maps
 
+## Hangouts map amendment 2026-10-14
+
+TASK-031 local candidate uses a compact Hangouts/campus/Create row and large rounded Mapbox map with activity emoji pins, independent Today/Tomorrow/This week/Later checkboxes and an authorized public hover/focus/tap View/Join preview. The alternate list is below the map. This replaces the historical numbered-pin/persistent-rail presentation for saved discovery. Four-bit masks filter before the101-row probe with the original seven-argument RPC, projection, epoch/revalidation, grants and ranking unchanged; legacy upcoming/all remain compatible. Periods are disjoint upcoming starts in America/New_York, with Tomorrow taking precedence at the week boundary. No private instructions or GPS are stored in browse memory. Current behavior, evidence and unfinished responsive/lifecycle/staging acceptance are in `TASK-031-MAP-QA.md` (under docs/ux); historical sections below retain their original task scope.
+
+
 ## Initial-release scope amendment — 2026-09-26
 
 [Accepted ADR-0025](../../decisions/ADR-0025-initial-mvp-scope.md) narrows the initial UNC release only. Friend-attendance context and friend-aware ranking below are post-launch scope. Initial saved map retains original authorized start-time/ID order before the 101-row probe/100-result limit and fresh revalidation. Calendar remains chronological. The independent ADR-0024 safeguard gate stays off. Approximate public place and participant-only private instructions remain required; no people tracking or hidden-member ranking input.

@@ -1,0 +1,40 @@
+{
+  "applicationSha": "8504b72abf874f8d1e25160f45f51eec4458cc27",
+  "actualCssViewport": {
+    "width": 1280,
+    "height": 720
+  },
+  "syntheticData": true,
+  "files": [
+    {
+      "name": "access-loss.jpg",
+      "sha256": "3f28237f35d4862c25b8759d5b980b0e4de1100b25989d956af8045ce33fe6c7",
+      "bytes": 36293
+    },
+    {
+      "name": "desktop-all-off.jpg",
+      "sha256": "db094cae7b9169de3acf3ce9bad32690b0af1af15c85c624869bb8c71d6156b1",
+      "bytes": 136594
+    },
+    {
+      "name": "desktop-attending-preview.jpg",
+      "sha256": "2d17c27eac60214aaeef9ecf68abdec5821822cc6edbd36780073ff154569bb8",
+      "bytes": 130880
+    },
+    {
+      "name": "desktop-final-preview.jpg",
+      "sha256": "fa9d639e46cd0f5799129eaa94729d93c7ec5fe734595089f0d07d5abf35beb5",
+      "bytes": 130247
+    },
+    {
+      "name": "desktop-join-preview.jpg",
+      "sha256": "a204d10019337060c0a33fc192e71f9d17aba89fda5ead3a16eb8fb35e309587",
+      "bytes": 136177
+    },
+    {
+      "name": "desktop-map.jpg",
+      "sha256": "9585690a7d0e3b44329b0208781917fb267e97c3ca5f92b3d1b08a9a84be6249",
+      "bytes": 138921
+    }
+  ]
+}
