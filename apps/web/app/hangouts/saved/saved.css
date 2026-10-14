@@ -282,7 +282,7 @@
 }
 .saved-map-title h1 {
   margin: 0;
-  color: var(--pals-brand);
+  color: var(--pals-profile-action);
   font-family: var(--pals-font-display);
   font-size: clamp(3rem, 4vw, 3.5rem);
   line-height: 1;

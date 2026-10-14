@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import test from "node:test";
 import {
   parseBrowseContext,
+  restoredSavedFilters,
   campusViewport,
   rememberViewport,
   readViewport,
@@ -34,6 +35,18 @@ test("browse return accepts only recent filter and position preferences", () => 
     JSON.stringify({ ...context, savedAt: now - 30 * 60_000 - 1 }),
   ])
     assert.equal(parseBrowseContext(value, now), null);
+});
+
+test("restored preferences cannot apply an invisible joining restriction", () => {
+  const base = { joining: "open", scrollY: 0, savedAt: 1 };
+  assert.deepEqual(restoredSavedFilters({ ...base, time: "1010" }), {
+    time: "1010",
+    joining: "any",
+  });
+  assert.deepEqual(restoredSavedFilters({ ...base, time: "all" }), {
+    time: "1111",
+    joining: "any",
+  });
 });
 
 test("return camera is campus bounded, coarse, ephemeral and expires", () => {

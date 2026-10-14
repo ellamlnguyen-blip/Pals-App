@@ -25,3 +25,9 @@ Owned changes: saved route `page.tsx`, `saved-discovery.tsx`, `map.tsx`, `saved.
 ## Review focus and remaining gates
 
 Verify real map tile rendering and attribution with the local-only public token, marker roles/hover transition, selected preview placement and mobile 320/390/820/1280 widths. Exercise fixture authorized/denied preview and Join, all-off and mixed masks, >100 truncation, token/error fallback, Escape focus return, Auth transition concealment and stale response handling. Stage A security/SQL evidence and parent task acceptance remain coordinator-owned. TASK-027/TASK-028 staged acceptance still gates application main integration; no hosted or release action follows this stage.
+
+## Source-review correction
+
+Fresh Stage B source review found and the UI corrected four bounded issues before fixture QA: a failed authorized preview read now conceals the entire prior pin/list projection and reloads before redisplay; a bounds change clears pending Join and preview states while invalidating its response; legacy `joining=open` browse context now restores as visible `joining=any`; and the heading uses the existing darker profile-action blue for legible contrast. A successful 200 preview also requires the expected `kind` and ID. The Vercel React best-practices skill was read for the multi-TSX review; this pass kept direct imports, lazy Mapbox loading, generation guards and accessible controls without a broader architecture refactor.
+
+After correction: focused Node tests 5/5 pass, scoped ESLint/Prettier, web TypeScript, `git diff --check` and webpack production build pass. Real fixture/browser verification remains coordinator-owned.

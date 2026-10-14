@@ -14,7 +14,11 @@ import {
 import { searchSaved, changeSavedMembership } from "./actions";
 import { SavedMap } from "./map";
 import { AnalyticsView } from "../../analytics-view";
-import { parseBrowseContext, type BrowseContext } from "./browse-context";
+import {
+  parseBrowseContext,
+  restoredSavedFilters,
+  type BrowseContext,
+} from "./browse-context";
 import { pinCue } from "./pin-cue";
 import {
   AUTH_TRANSITION_CHANNEL,
@@ -186,11 +190,12 @@ export function SavedDiscovery({ token }: { token: string }) {
         return response.json() as Promise<Preview>;
       })
       .then((data) => {
+        if (data.kind !== "ok" || data.id !== id)
+          throw new Error("unavailable");
         if (
           !controller.signal.aborted &&
           seq === previewGeneration.current &&
-          activeRef.current === id &&
-          data.kind === "ok"
+          activeRef.current === id
         ) {
           setPreview(data);
           if (wantFocus.current)
@@ -202,9 +207,15 @@ export function SavedDiscovery({ token }: { token: string }) {
       })
       .catch(() => {
         if (!controller.signal.aborted && seq === previewGeneration.current) {
-          setPreviewError(true);
-          setPreview(null);
-          router.refresh();
+          // A fresh source denial can invalidate earlier pin/list rows too.
+          // Conceal the entire view before requesting it anew.
+          concealedRef.current = true;
+          generation.current++;
+          closePreview();
+          setItems([]);
+          setStatus("loading");
+          setConcealed(true);
+          window.location.reload();
         }
       });
   }
@@ -213,12 +224,7 @@ export function SavedDiscovery({ token }: { token: string }) {
       const context = readBrowseContext();
       if (!context) return;
       returnScroll.current = context.scrollY;
-      setFilters({
-        time: validPeriodMask(context.time)
-          ? context.time
-          : ("1111" as PeriodMask),
-        joining: context.joining,
-      });
+      setFilters(restoredSavedFilters(context));
     });
     return () => cancelAnimationFrame(frame);
   }, []);
@@ -238,7 +244,7 @@ export function SavedDiscovery({ token }: { token: string }) {
         browseKey,
         JSON.stringify({
           time: filters.time,
-          joining: filters.joining,
+          joining: "any",
           scrollY: window.scrollY,
           savedAt: Date.now(),
         } satisfies BrowseContext),
@@ -259,6 +265,9 @@ export function SavedDiscovery({ token }: { token: string }) {
     activeRef.current = null;
     setActive(null);
     setPreview(null);
+    setPreviewError(false);
+    setJoinMessage("");
+    setJoining(false);
   }, []);
   useEffect(() => {
     const seq = ++generation.current;

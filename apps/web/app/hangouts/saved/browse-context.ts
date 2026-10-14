@@ -1,5 +1,6 @@
 import {
   validPeriodMask,
+  type PeriodMask,
   type SavedFilter,
 } from "../../../lib/saved-hangouts-types.ts";
 
@@ -52,6 +53,15 @@ export type BrowseContext = {
   scrollY: number;
   savedAt: number;
 };
+
+// The saved map shows only time checks. A hidden legacy joining preference
+// must never silently narrow its visible results.
+export function restoredSavedFilters(context: BrowseContext): SavedFilter {
+  return {
+    time: validPeriodMask(context.time) ? context.time : ("1111" as PeriodMask),
+    joining: "any",
+  };
+}
 
 // Only navigation preferences belong here. Never cache Hangout records or IDs.
 export function parseBrowseContext(
