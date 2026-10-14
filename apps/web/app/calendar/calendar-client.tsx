@@ -392,12 +392,22 @@ export function CalendarClient({
           <p>Try another date or category.</p>
         </div>
       ) : null}
+      {!concealed && selection.view !== "day" && (
+        <p className={`calendar-pan-hint calendar-pan-hint-${selection.view}`}>
+          Scroll sideways to see all seven days.
+        </p>
+      )}
       {concealed ? (
         <div className="calendar-empty" role="status">
           Checking current Calendar access…
         </div>
       ) : selection.view === "month" ? (
-        <div className="calendar-month-viewport">
+        <div
+          className="calendar-month-viewport"
+          role="region"
+          aria-label="Calendar month scroll area"
+          tabIndex={0}
+        >
           <div className="calendar-month" role="group" aria-label={label}>
             <div className="calendar-month-head">
               {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day) => (
@@ -436,7 +446,14 @@ export function CalendarClient({
           </div>
         </div>
       ) : (
-        <div className="calendar-grid-viewport">
+        <div
+          className="calendar-grid-viewport"
+          role={selection.view === "week" ? "region" : undefined}
+          aria-label={
+            selection.view === "week" ? "Calendar week scroll area" : undefined
+          }
+          tabIndex={selection.view === "week" ? 0 : undefined}
+        >
           <div
             className={`calendar-time-grid ${selection.view === "day" ? "calendar-one-day" : ""}`}
             style={{
