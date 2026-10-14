@@ -48,6 +48,23 @@ test("simultaneous plans occupy independent lanes and sequential plans reuse spa
   assert.equal(placed[3].width, "100%");
 });
 
+test("brief adjacent plans keep 44px targets without covering each other", () => {
+  const placed = layoutDay(
+    [event("first", "18:00", "18:05"), event("second", "18:10", "18:15")],
+    "2027-06-01",
+    8,
+  );
+  assert.deepEqual(
+    placed.map((item) => item.height),
+    [44, 44],
+  );
+  assert.deepEqual(
+    placed.map((item) => item.width),
+    ["50%", "50%"],
+  );
+  assert.ok(placed[0].top + placed[0].height > placed[1].top);
+});
+
 test("multi-day and repeated DST hour remain represented", () => {
   const overnight = {
     id: "overnight",

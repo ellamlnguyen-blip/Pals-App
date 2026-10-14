@@ -51,7 +51,7 @@ export function segmentOnDay(item: TimedItem, day: string) {
       : Math.min(start + 60, 1440);
   return {
     start,
-    end: Math.min(1440, Math.max(start + 40, end)),
+    end: Math.min(1440, Math.max(start + 55, end)),
     spans: !startsHere || (!!item.ends_at && !endsHere),
   };
 }
@@ -112,7 +112,7 @@ export function layoutDay(items: TimedItem[], day: string, firstHour: number) {
     item,
     spans,
     top: ((start - firstHour * 60) / 60) * CALENDAR_HOUR_PX,
-    height: Math.max(32, ((end - start) / 60) * CALENDAR_HOUR_PX),
+    height: Math.max(44, ((end - start) / 60) * CALENDAR_HOUR_PX),
     left: `${(lane / lanes) * 100}%`,
     width: `${100 / lanes}%`,
   }));

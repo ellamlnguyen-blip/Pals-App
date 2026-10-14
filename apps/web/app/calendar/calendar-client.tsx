@@ -19,6 +19,7 @@ import {
   occursOnDay,
   visibleHours,
 } from "../../lib/calendar-layout";
+import { calendarAuthMayReload } from "../../lib/calendar-auth";
 import {
   AUTH_TRANSITION_CHANNEL,
   AUTH_TRANSITION_EVENT,
@@ -99,7 +100,7 @@ export function CalendarClient({
   const suppressFocus = useRef(false);
   const concealedRef = useRef(false);
   const generation = useRef(0);
-  const authPending = useRef(false);
+  const authPending = useRef(new Set<string>());
   function href(next: CalendarSelection) {
     return `/calendar?${new URLSearchParams({ date: next.date, view: next.view, h: next.hosting ? "1" : "0", a: next.attending ? "1" : "0", o: next.all ? "1" : "0" })}`;
   }
@@ -199,18 +200,16 @@ export function CalendarClient({
       setConcealed(true);
     };
     const auth = (message: AuthTransitionMessage) => {
+      const mayReload = calendarAuthMayReload(authPending.current, message);
       conceal();
-      if (message.phase === "begin") authPending.current = true;
-      else {
-        authPending.current = false;
-        if (!document.hidden) window.location.reload();
-      }
+      if (mayReload && !document.hidden) window.location.reload();
     };
     const localAuth = (event: Event) =>
       auth((event as CustomEvent<AuthTransitionMessage>).detail);
     const visibility = () => {
       if (document.hidden) conceal();
-      else if (!authPending.current && concealed) window.location.reload();
+      else if (concealedRef.current && !authPending.current.size)
+        window.location.reload();
     };
     window.addEventListener("keydown", escape);
     window.addEventListener("pointerdown", outside);
@@ -227,9 +226,11 @@ export function CalendarClient({
       /* Local event and page lifecycle still conceal data. */
     }
     const restore = () => {
-      if (concealed && !authPending.current) window.location.reload();
+      if (concealedRef.current && !document.hidden && !authPending.current.size)
+        window.location.reload();
     };
     window.addEventListener("pageshow", restore);
+    if (document.hidden) conceal();
     const pendingGeneration = generation;
     const currentActive = activeRef;
     const currentRequest = request;
@@ -247,7 +248,7 @@ export function CalendarClient({
       currentRequest.current?.abort();
       if (closeTimer.current) clearTimeout(closeTimer.current);
     };
-  }, [router, pathname, concealed]);
+  }, [router, pathname]);
   const hours = visibleHours(items, days);
   const step =
     selection.view === "month" ? null : selection.view === "week" ? 7 : 1;

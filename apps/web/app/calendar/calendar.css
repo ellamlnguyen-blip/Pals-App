@@ -246,7 +246,7 @@
 .calendar-time-event {
   position: absolute;
   z-index: 1;
-  min-height: 32px;
+  min-height: 44px;
 }
 .calendar-event {
   display: block;
