@@ -19,3 +19,7 @@ Branch: `agent/TASK-030-calendar-account`. Baseline: canonical contract `9069fce
 ## Integration boundary
 
 No schema, provider, gate or peer data-read change. Account and Calendar files are owned by other TASK-030 workers. This slice is not a completed product task; coordinator still reviews, runs integrated runtime QA, publishes and verifies remotes.
+
+## Post-review bio fix
+
+Source review found that punctuation inside closing quotes and unspaced CJK stops were undercounted. The shared validator now counts English `.`, `!`, `?` followed by closing quotes/brackets and then space/end, plus `。！？` without requiring spaces. Existing URL, decimal and honorific exclusions and unchanged legacy-bio handling remain. Focused tests cover two accepted and three rejected quoted/CJK sentences; onboarding and legacy tests still pass. Scoped validation/web type checks, ESLint and Prettier passed. Coordinator owns final integrated verification and publication.

@@ -24,11 +24,15 @@ test("bio counts sentence stops while allowing an unfinished final sentence", ()
     "Dr. Pepper is great. I like example.com too.",
     "I'm from the U.S. Let's meet.",
     "I live in the U.S. and like games, e.g. soccer. Let's meet.",
+    "“Coffee is great.” “Walks are fun.”",
+    "我喜欢咖啡。一起散步。",
   ])
     assert.equal(validShortBio(value), true, value);
   for (const value of [
     "First. Second. Third.",
     "First! Second? Third",
+    "“Coffee is great.” “Walks are fun.” “Music is nice.”",
+    "我喜欢咖啡。一起散步。周末听音乐。",
     " ",
     "x".repeat(2001),
   ])

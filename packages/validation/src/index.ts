@@ -18,10 +18,15 @@ export function approvedUncEmail(value: string) {
 export function validShortBio(value: string) {
   const bio = value.trim();
   if (!bio || bio.length > 2000) return false;
-  // Count sentence-ending punctuation followed by space/end. Internal URL
-  // dots and initials stay within a sentence; common honorifics do not split.
-  const endings = [...bio.matchAll(/[.!?]+(?=\s|$)/g)].filter((match) => {
-    if (match[0] !== ".") return true;
+  // English stops may have closing quotes/brackets before a space or end.
+  // CJK stops separate sentences without spaces. URL/decimal dots and initials
+  // stay within a sentence; common honorifics do not split.
+  const endings = [
+    ...bio.matchAll(
+      /[.!?]+[”’"'」』）)\]]*(?=\s|$)|[。！？]+[”’"'」』）)\]]*/g,
+    ),
+  ].filter((match) => {
+    if (!/^\.(?!\.)[”’"'」』）)\]]*$/.test(match[0])) return true;
     const before = bio.slice(0, match.index);
     if (
       /(?:^|\s)(?:Dr|Mr|Mrs|Ms|Prof|St|Jr|Sr|vs|etc|e\.g|i\.e)$/i.test(before)
