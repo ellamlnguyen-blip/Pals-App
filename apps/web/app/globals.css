@@ -378,6 +378,18 @@ h1 {
 .account-menu {
   position: relative;
 }
+.account-avatar-link {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--pals-accent-soft);
+}
+.account-avatar-link:focus-visible {
+  outline: 3px solid var(--pals-accent);
+  outline-offset: 3px;
+}
 .account-menu summary {
   cursor: pointer;
   list-style: none;

@@ -5,14 +5,12 @@ import type { ReactNode } from "react";
 import { ArrowLeftIcon } from "@phosphor-icons/react/dist/csr/ArrowLeft";
 import { ProfileOptions } from "./options-menu";
 import type { StudentDestinations } from "../student-shell";
-import { SignOutForm } from "../auth-change-signal";
 
 export function ProfileTopbar({
   back,
   backLabel,
   children,
   available,
-  attendanceAvailable,
   action,
 }: {
   back: string;
@@ -30,18 +28,11 @@ export function ProfileTopbar({
       </a>
       <div className="profile-topbar-action">{action}</div>
       <ProfileOptions>
-        <div className="profile-menu-links">
-          <Link href="/profile">Your profile</Link>
-          {available.people && (
+        {available.people && (
+          <div className="profile-menu-links">
             <Link href="/people/privacy">Profile sharing</Link>
-          )}
-          <Link href="/safety">Safety</Link>
-          <Link href="/account/analytics">Analytics choice</Link>
-          {attendanceAvailable && (
-            <Link href="/attendance">Your attendance</Link>
-          )}
-          <SignOutForm />
-        </div>
+          </div>
+        )}
         {children}
       </ProfileOptions>
     </nav>

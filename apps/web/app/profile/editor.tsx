@@ -6,6 +6,8 @@ import { PencilSimpleIcon } from "@phosphor-icons/react/dist/csr/PencilSimple";
 import { ProfileTopbar } from "./profile-topbar";
 import type { StudentDestinations } from "../student-shell";
 import { ProfileSummary } from "./profile-summary";
+import { validShortBio } from "@pals/validation";
+import { SignOutForm } from "../auth-change-signal";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import type { OwnerProfile } from "@pals/types";
@@ -206,6 +208,7 @@ export function ProfileEditor({
       ) => setValues({ ...values, [name]: event.target.value }),
       required,
       maxLength: limit,
+      "aria-describedby": name === "bio" ? "bio-help" : undefined,
       disabled: !editing || pending,
     };
     return (
@@ -590,6 +593,16 @@ export function ProfileEditor({
           className="form-stack"
           onSubmit={(event) => {
             event.preventDefault();
+            if (
+              values.bio.trim() !== (profile.bio ?? "").trim() &&
+              !validShortBio(values.bio)
+            ) {
+              setFeedback({
+                error: "Keep your bio to two sentences and 2,000 characters.",
+              });
+              document.getElementById("bio")?.focus();
+              return;
+            }
             const form = new FormData();
             for (const [key, value] of Object.entries(values))
               form.set(key, value);
@@ -610,7 +623,10 @@ export function ProfileEditor({
           <fieldset disabled={!editing || pending}>
             <legend>Profile basics</legend>
             <div className="form-stack">
-              {field("real_name", "Your real name", 100, true)}
+              <p className="help">
+                Change your real name and login details in{" "}
+                <Link href="/account">Account</Link>.
+              </p>
               <label htmlFor="graduation_year">
                 Graduation year
                 <input
@@ -646,6 +662,18 @@ export function ProfileEditor({
                 />
               </label>
               {field("bio", "Bio", 2000, true, true)}
+              <p className="help" id="bio-help">
+                Up to two sentences and 2,000 characters. Periods in web
+                addresses and common titles such as Dr. do not count as sentence
+                breaks.
+              </p>
+              {values.bio.trim() !== (profile.bio ?? "").trim() &&
+                values.bio.trim() &&
+                !validShortBio(values.bio) && (
+                  <p className="form-message" role="status">
+                    Keep your bio to two sentences.
+                  </p>
+                )}
             </div>
           </fieldset>
           <fieldset disabled={!editing || pending}>
@@ -723,6 +751,13 @@ export function ProfileEditor({
           )}
         </form>
       </div>
+      <nav className="profile-owner-links" aria-label="Your account and safety">
+        <Link href="/safety">Safety</Link>
+        <Link href="/account/analytics">Analytics</Link>
+        {attendanceAvailable && <Link href="/attendance">Attendance</Link>}
+        <Link href="/account">Account</Link>
+        <SignOutForm />
+      </nav>
     </div>
   );
 }

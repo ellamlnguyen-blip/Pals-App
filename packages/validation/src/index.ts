@@ -14,7 +14,31 @@ export function approvedUncEmail(value: string) {
     )
   );
 }
-export function profileFields(form: FormData) {
+/** One or two prose sentences. A missing final stop still counts as one. */
+export function validShortBio(value: string) {
+  const bio = value.trim();
+  if (!bio || bio.length > 2000) return false;
+  // Count sentence-ending punctuation followed by space/end. Internal URL
+  // dots and initials stay within a sentence; common honorifics do not split.
+  const endings = [...bio.matchAll(/[.!?]+(?=\s|$)/g)].filter((match) => {
+    if (match[0] !== ".") return true;
+    const before = bio.slice(0, match.index);
+    if (
+      /(?:^|\s)(?:Dr|Mr|Mrs|Ms|Prof|St|Jr|Sr|vs|etc|e\.g|i\.e)$/i.test(before)
+    )
+      return false;
+    if (
+      /(?:^|\s)(?:[A-Za-z]\.)+[A-Za-z]$/.test(before) &&
+      /^\s+[a-z]/.test(bio.slice(match.index! + 1))
+    )
+      return false;
+    return true;
+  });
+  const last = endings.at(-1);
+  const tail = last ? bio.slice(last.index! + last[0].length).trim() : bio;
+  return endings.length + (tail ? 1 : 0) <= 2;
+}
+export function profileFields(form: FormData, unchangedBio?: string | null) {
   const real_name = String(form.get("real_name") ?? "").trim();
   const major = String(form.get("major") ?? "").trim();
   const bio = String(form.get("bio") ?? "").trim();
@@ -26,6 +50,7 @@ export function profileFields(form: FormData) {
     major.length > 200 ||
     !bio ||
     bio.length > 2000 ||
+    (bio !== unchangedBio?.trim() && !validShortBio(bio)) ||
     !Number.isInteger(graduation_year) ||
     graduation_year < 1900 ||
     graduation_year > 2200

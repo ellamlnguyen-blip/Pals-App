@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { SignOutForm } from "./auth-change-signal";
 
 export type StudentDestinations = {
@@ -40,7 +40,6 @@ export function StudentHeader({
   name,
   accountReady = false,
   ownerPhotoRevision,
-  attendanceAvailable = false,
   available,
 }: {
   signedIn?: boolean;
@@ -50,28 +49,6 @@ export function StudentHeader({
   attendanceAvailable?: boolean;
   available?: StudentDestinations;
 }) {
-  const menu = useRef<HTMLDetailsElement>(null);
-  const pathname = usePathname();
-  useEffect(() => {
-    if (menu.current) menu.current.open = false;
-  }, [pathname]);
-  useEffect(() => {
-    function dismiss(event: PointerEvent | KeyboardEvent) {
-      if (!menu.current?.open) return;
-      if (event instanceof KeyboardEvent) {
-        if (event.key !== "Escape") return;
-        menu.current.open = false;
-        menu.current.querySelector("summary")?.focus();
-      } else if (!menu.current.contains(event.target as Node))
-        menu.current.open = false;
-    }
-    document.addEventListener("pointerdown", dismiss);
-    document.addEventListener("keydown", dismiss);
-    return () => {
-      document.removeEventListener("pointerdown", dismiss);
-      document.removeEventListener("keydown", dismiss);
-    };
-  }, []);
   return (
     <header className="student-header">
       <BrandLink href={accountReady ? "/hangouts" : "/"} />
@@ -86,28 +63,20 @@ export function StudentHeader({
             Safety
           </Link>
         )}
+        {signedIn && !accountReady && <SignOutForm />}
         {signedIn ? (
-          <details className="account-menu" ref={menu}>
-            <summary aria-label="Your account">
-              <OwnerAvatar
-                key={ownerPhotoRevision ?? "unknown"}
-                accountReady={accountReady}
-                name={name}
-                photoRevision={ownerPhotoRevision}
-              />
-            </summary>
-            <div className="account-panel">
-              <strong>{name ?? "Your account"}</strong>
-              <p>UNC Chapel Hill</p>
-              {accountReady && <Link href="/profile">Your profile</Link>}
-              <Link href="/safety">Safety</Link>
-              <Link href="/account/analytics">Analytics choice</Link>
-              {attendanceAvailable && (
-                <Link href="/attendance">Your attendance</Link>
-              )}
-              <SignOutForm />
-            </div>
-          </details>
+          <Link
+            className="account-menu account-avatar-link"
+            href="/profile"
+            aria-label="Your profile"
+          >
+            <OwnerAvatar
+              key={ownerPhotoRevision ?? "unknown"}
+              accountReady={accountReady}
+              name={name}
+              photoRevision={ownerPhotoRevision}
+            />
+          </Link>
         ) : (
           <Link className="header-signin" href="/signin">
             Sign in
