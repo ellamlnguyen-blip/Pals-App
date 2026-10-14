@@ -37,3 +37,7 @@ After correction: focused Node tests 5/5 pass, scoped ESLint/Prettier, web TypeS
 The coordinator's real 1280×720 browser pass at the prior tip confirmed authenticated saved records and live Mapbox tiles. It also identified four reference mismatches, now corrected within the saved route: the global `section` panel background/padding is explicitly removed from the compact heading; saved-page body and controls use Nunito while headings retain Baloo; checkbox squares override global 48px input sizing and use distinct blue shades with readable checks; and the Mapbox canvas uses the existing provider's `streets-v12` style at default/reset zoom 15 while preserving a valid remembered camera. The campus label now has a clear pin icon. These changes alter no source query, grants, private data, or provider configuration.
 
 After this correction, scoped Prettier/ESLint, web TypeScript, `git diff --check`, and webpack production build pass. Phone and refreshed desktop visual QA remain coordinator-owned.
+
+## Coordinator desktop milestone
+
+Application8504b72 is remote verified. Final desktop/browser/API/build evidence and remaining responsive/fallback/lifecycle gates are recorded in docs/ux/TASK-031-MAP-QA.md. StageB source review61736e6 is clear; coordinator reviewed/rendered the subsequent visual-only delta. Parent remains incomplete.

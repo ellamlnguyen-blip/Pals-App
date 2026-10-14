@@ -1,6 +1,6 @@
 # TASK-031 Stage A handoff — saved Hangouts period query
 
-Status: Stage A implementation committed for coordinator review. TASK-031 parent remains incomplete. No migration was applied to any backend and no local browser claim is made.
+Status: Stage A accepted after source review and coordinator verification on named disposable DB55522. TASK-031 parent remains incomplete. At implementation handoff no migration had been applied; the later coordinator acceptance below records local application. No rendered browser claim is made for this backend stage.
 
 Branch: `agent/TASK-031-hangouts-map`; baseline `20e25bc0b07e6d9b3badb7b8dd6eb37dc2e0f0e7` (exact reviewed TASK-030 dependency on the canonical documentation baseline).
 
@@ -20,9 +20,9 @@ Migration: `supabase/migrations/20261014000100_saved_hangout_period_masks.sql` S
 - ESLint on changed web/test files: passed.
 - Prettier check on changed web/test files and `git diff --check`: passed.
 
-## Remaining gates
+## Current remaining gates
 
-Fresh security review cleared the migration/source at `c11e093`; its SQL-fixture corrections are included in the follow-up commit. The coordinator applies the cleared migration only to named disposable local API `55521` / DB `55522` after reviewing this correction. Then run the new actual-role pgTAP test and existing legacy/HTTP suites against that target, and verify grant/shape/source/ranking/epoch behavior. Stage B may import `validPeriodMask`, `savedPeriod`, `savedPeriodBounds` and `selectedSavedStart` only after Stage A review. No UI, shared queue, hosted, provider, gate or main integration work was done in this stage. The coordinator owns branch publication, remote SHA verification and shared records.
+Stage A source review and named-local database/API verification are complete as recorded below. Stage B UI review and rendered verification, branch/current-state publication and parent staged application integration remain coordinator gates. No hosted release follows this backend stage.
 
 ## Coordinator local acceptance
 

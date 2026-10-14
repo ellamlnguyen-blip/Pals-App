@@ -1,5 +1,10 @@
 # Core User Flows
 
+## Hangouts map amendment 2026-10-14
+
+TASK-031 local candidate uses a compact Hangouts/campus/Create row and large rounded Mapbox map with activity emoji pins, independent Today/Tomorrow/This week/Later checkboxes and an authorized public hover/focus/tap View/Join preview. The alternate list is below the map. This replaces the historical numbered-pin/persistent-rail presentation for saved discovery. Four-bit masks filter before the101-row probe with the original seven-argument RPC, projection, epoch/revalidation, grants and ranking unchanged; legacy upcoming/all remain compatible. Periods are disjoint upcoming starts in America/New_York, with Tomorrow taking precedence at the week boundary. No private instructions or GPS are stored in browse memory. Current behavior, evidence and unfinished responsive/lifecycle/staging acceptance are in `TASK-031-MAP-QA.md` (under docs/ux); historical sections below retain their original task scope.
+
+
 ## Calendar and account navigation amendment 2026-10-14
 
 TASK-030 local candidate: avatar → own Profile → bottom Safety/Analytics/Attendance/Account utilities. Edit profile changes academic/bio/optional fields; Account changes name or requests an email/password update through existing caller Auth. Current confirmed email and pending email remain distinct. Bio appears below facts without a visible heading; new/changed saves allow at most two sentences, preserving unchanged legacy content. Peer pages contain none of the owner's utilities.
