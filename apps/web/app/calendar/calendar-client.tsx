@@ -230,6 +230,9 @@ export function CalendarClient({
       if (concealed && !authPending.current) window.location.reload();
     };
     window.addEventListener("pageshow", restore);
+    const pendingGeneration = generation;
+    const currentActive = activeRef;
+    const currentRequest = request;
     return () => {
       window.removeEventListener("keydown", escape);
       window.removeEventListener("pointerdown", outside);
@@ -239,9 +242,9 @@ export function CalendarClient({
       document.removeEventListener("visibilitychange", visibility);
       window.removeEventListener("pageshow", restore);
       channel?.close();
-      generation.current++;
-      activeRef.current = null;
-      request.current?.abort();
+      pendingGeneration.current++;
+      currentActive.current = null;
+      currentRequest.current?.abort();
       if (closeTimer.current) clearTimeout(closeTimer.current);
     };
   }, [router, pathname, concealed]);
