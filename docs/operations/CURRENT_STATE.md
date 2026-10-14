@@ -1,5 +1,9 @@
 # Current State
 
+## 2026-10-14 — Requested Hangouts map reference redesign
+
+TASK-031 bounds the supplied large campus map, compact heading/Create action, four independent campus-time filters, emoji pins and fresh authorized View/Join preview. Contract `tasks/active/TASK-031-hangouts-map.md` starts canonical `37c899d` with exact reviewed TASK-030 `63fe69c` dependency. A narrow committed same-signature query function extension applies time predicates before the 101-row probe while preserving existing authority/epoch/ranking; fresh backend review precedes UI. ADR-0039 is Proposed. Contract review/publication precede dispatch. Existing TASK-027/TASK-028 acceptance still gates app main integration; no hosted operation or automatic successor.
+
 ## 2026-10-14 — Calendar and account local candidate
 
 TASK-030 application `5920f1d9f98511d922640f6bec2fe717f6c743dc` implements direct avatar-to-profile navigation, owner-bottom utilities, a separate name/email/password Account editor, unlabelled two-sentence bio and reference Calendar with Day/Week/Month, independent categories, accessible previews and blue-only authorized Join. Local source review repairs, final builds/TypeScript, 80 units without skips, lint and fictional real Auth/action/privacy checks pass. Desktop/tablet/320–390px browser evidence includes actual pointer preview, Join→green, category toggles, Account confirmation/password changes and cross-tab clearing. See `agents/handoffs/TASK-030.md` and `docs/ux/TASK-030-CALENDAR-ACCOUNT-QA.md`.
