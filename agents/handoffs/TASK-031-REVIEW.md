@@ -1,0 +1,7 @@
+# TASK-031 review record
+
+StageA: fresh Sol-medium source/security reviewer cleared the same-signature time predicate extension c11e093 after test-only83f56b7 correction added valid deferred host membership and live/expressive boundary coverage. Real SQL23/23, isolated legacy64/64 and actual-role HTTP16-mask evidence support the review; historical boundary expressions are not historical RPC calls.
+
+StageB: fresh Sol-medium reviewer found four concrete issues in dff8a04 and re-reviewed61736e60babd41fd51a3be82c560c5f84f35cfc4 clear. Denied preview hides the entire source before reload, bounds changes clear pending Join, legacy joining=open no longer invisibly filters, and heading contrast is readable. The coordinator inspected61736e6..8504b72 app diff: only page location SVG, scoped styling, same-provider streets-v12 and zoom15; desktop render supports those changes. No new authority/grant/schema/provider change.
+
+Local API QA by a fresh bounded Sol-medium agent covered six authorization/consent states at8504b72 and excluded private payload. Root browser verified real Join and cross-tab Auth loss. Read TASK-031-MAP-QA.md for exact gates still open, especially unsupported responsive viewport rendering. This accepts the reviewed local milestone, not full task/release completion. Documentation publication review is recorded in TASK-031-PUBLICATION.md after review and verified integration.

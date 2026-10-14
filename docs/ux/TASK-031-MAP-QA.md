@@ -1,0 +1,33 @@
+# TASK-031 Hangouts map local verification
+
+Date: 2026-10-14. Application source: `8504b72abf874f8d1e25160f45f51eec4458cc27` on `agent/TASK-031-hangouts-map`. Status: desktop local candidate reviewed; responsive rendering and parent staged acceptance remain incomplete.
+
+## Delivered experience
+
+The saved Hangouts screen now uses a compact heading and campus label, Create Hangout, a large rounded campus map, four independent time checkboxes, activity emoji pins and an authorized View/Join preview. The optional list sits below the map. Time intervals are disjoint upcoming-start intervals in America/New_York: Today until midnight, Tomorrow the next civil day, This week after tomorrow until Monday, Later after both tomorrow and the week. Tomorrow takes precedence at the Sunday boundary. All off is explicitly empty.
+
+## Environment and provenance
+
+The preview is `http://127.0.0.1:3035/hangouts/saved`, built with webpack from the pinned source. All 433 tracked app/package/schema/test files match that source except two documented, untracked runtime adapters: `apps/web/lib/feature-runtime.ts` allows the disposable IPv6 loopback proxy and `apps/web/lib/config.ts` uses the exact local callback origin. Delivered guards remain unchanged. The user supplied a public Mapbox token for this local origin; it is stored only in private temporary configuration. Style and campus vector requests returned 200; live streets-v12 tiles and attribution rendered. No hosted token restrictions, credentials, deployment, migration, gate, production or provider were changed.
+
+Only named disposable `pals-task029` API55521/DB55522 received the reviewed migration20261014000100 (38→39); its SHA256 is `0c65f8b5d72538bd63f8dcb8dfde765f80f91f8291879fac035f88e0261e7215`. Existing grants and fixtures were checked around application. Other local stacks were preserved. Synthetic Maya/Alex/Jordan accounts and generated placeholder photos were used. Six existing fictional plans were geographically spread using their normal host edit RPCs, retaining content/private instructions. Two additional upcoming plans cover Tomorrow/Later. Browser Join added Maya to the new Board games plan. No real users were contacted.
+
+## Verification
+
+- New actual-role SQL: 23/23 pass. Legacy SQL: 64/64 pass with only a private test-copy's generated points and valid viewport moved to an empty campus area; source test is unchanged and existing fixture IDs/status/revisions/membership were unchanged before/after. Historical Sunday/DST checks are SQL expressions, not historical full-RPC calls; live cutoff freshness remains enforced.
+- Real fictional Auth/PostgREST checks: all16 masks, same cutoff/bounds around fresh access checks, public ten-field projection, all-off, all-on/legacy equivalence, epoch/default chronology, invalid/stale/anonymous denial and private sentinel exclusion pass. Filtering-before-probe is covered by the committed SQL fixture test.
+- Full unit run: 85 pass, one local-listener test skipped by sandbox. The skipped test subsequently ran with network permission: 1/1 pass, zero skips. All86 tests therefore executed successfully across these two runs. Root ESLint and admin TypeScript pass; source worker web TypeScript/format/lint and final source/runtime webpack production builds pass. Turbopack cannot traverse this worktree's external dependency symlink; no source build failure is concealed.
+- Browser at actual1280×720: live map/pins, zoom and campus reset; all-off empty; Tomorrow-only and Later-only each one plan; all-on nine plans before the extra QA fixture; real pointer hover opens without taking keyboard focus; pointer transition to the preview View control keeps the card and Join visible; Enter opens and focuses the preview heading; Escape returns to the marker without reopening. Hosted Study and attended Tacos omit Join. Board games Join was acknowledged and its next preview shows You attending without Join. View opens existing detail; return retains filters/coarse camera. Direct avatar opens owner profile with bio and bottom utilities. Cross-tab sign-out clears pins/preview and reaches Sign in; restored fake login reloads the current map. The ephemeral cancelled QA pin was absent after the current source refreshed.
+- Six API scenarios: own host, eligible nonattendee, current attendee, closed joining, People opt-out and restored consent pass. Every200 response asserts the exact authorized public projection, no private instructions/sentinel/account_id, and no-store. Opt-out also revoked the synthetic Alex rich-profile preference; QA restored both through normal actor RPCs and confirmed the photo returned. Extra consent revisions remain in that fictional fixture. One ephemeral closed plan was created, then cancelled through its normal fictional host RPC. Root observed its pin absent after refresh/poll; this is not a stale-hover denial timing check.
+
+## Review and remaining gates
+
+Fresh Sol-medium StageA security review cleared c11e093/83f56b7. Fresh StageB source review found four issues and cleared the61736e6 repair: denied previews now conceal/reload the whole projection; bounds changes clear pending Join; hidden legacy joining filters normalize to any; heading contrast uses an existing readable blue. Coordinator reviewed the8504b72 visual delta and actual desktop render. No authority/provider/schema change is introduced by that delta.
+
+Responsive verification is open: viewport.set(390×844), reset/rebind, reload and a fresh tab all still reported actual1280×720. No320/390/820 render or physical-device/touch result is claimed. Phone layout has source breakpoints but needs rendered acceptance. The final token-error/missing-token fallback and BFCache/hidden transitions and concurrent denied-read timing require focused follow-up; prior fallback observations and source review are not final rendered acceptance. Location permission was not requested. Current API consent checks do not prove concurrent revocation timing.
+
+TASK-031 remains incomplete. TASK-027/TASK-028 hosted student/peer/moderation/recovery acceptance and reviewed application main integration remain required. Main receives reviewed documentation/evidence only; no automatic successor follows this milestone. ADR-0039 remains Proposed. Tools set Sol/medium for fresh agents but cannot configure or verify Standard speed.
+
+## Screenshot evidence
+
+All screenshots show synthetic local data and real Mapbox tiles. Actual CSS viewport1280×720. See `evidence/task031/manifest.json` for SHA256 checksums. Desktop map, eligible Join preview, attended preview, all-off and sign-out destination are retained.
