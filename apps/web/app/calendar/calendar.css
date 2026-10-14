@@ -185,7 +185,7 @@
   grid-column: 1;
   grid-row: 2;
   display: grid;
-  grid-template-rows: repeat(24, 48px);
+  grid-auto-rows: 48px;
   color: #1169c1;
   font-size: 0.8rem;
 }
@@ -267,6 +267,11 @@
   overflow: hidden;
   background: #fff;
 }
+.calendar-month-viewport {
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+}
 .calendar-month-head,
 .calendar-month-days {
   display: grid;
@@ -347,6 +352,8 @@
   font-size: 1.5rem;
   color: inherit;
   cursor: pointer;
+  min-width: 44px;
+  min-height: 44px;
 }
 .calendar-preview-people {
   display: flex;
@@ -388,7 +395,10 @@
   align-self: center;
   padding: 0.4rem;
   background: #e2f1fc;
-  border-radius: 50%;
+  border-radius: 8px;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
 }
 .calendar-preview-actions {
   display: flex;
@@ -413,6 +423,12 @@
   color: #a12e24;
 }
 @media (max-width: 800px) {
+  .calendar-month {
+    min-width: 840px;
+  }
+  .calendar-month .calendar-event {
+    min-height: 44px;
+  }
   .calendar-toolbar {
     grid-template-columns: 1fr auto;
   }
@@ -430,7 +446,7 @@
     min-height: 90px;
   }
   .calendar-month .calendar-event strong {
-    font-size: 0.68rem;
+    font-size: 0.8rem;
   }
 }
 @media (max-width: 520px) {
@@ -455,21 +471,6 @@
   }
   .calendar-picker {
     grid-row: 3;
-  }
-  .calendar-month-head span {
-    font-size: 0.7rem;
-  }
-  .calendar-month-days > div {
-    min-height: 70px;
-    padding: 0.1rem;
-  }
-  .calendar-month .calendar-event {
-    font-size: 0.65rem;
-    padding: 0.2rem;
-    border-left-width: 3px;
-  }
-  .calendar-month .calendar-event strong {
-    font-size: 0.62rem;
   }
   .calendar-preview {
     left: 12px !important;

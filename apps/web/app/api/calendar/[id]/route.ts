@@ -80,7 +80,9 @@ export async function GET(
         joining: after.record.joining_state,
         ownState: after.ownState,
         people,
-        morePeople: after.rosterMore,
+        // The roster reader's cap can also match the exact roster size.
+        // This signals a page boundary, not a confirmed additional person.
+        rosterPageAtLimit: after.rosterMore,
         canJoin:
           after.record.status === "published" &&
           after.record.joining_state === "open" &&

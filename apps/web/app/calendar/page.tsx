@@ -73,6 +73,7 @@ export default async function CalendarPage({
         <>
           <AnalyticsView event="calendar_viewed" />
           <CalendarClient
+            key={crypto.randomUUID()}
             selection={selection}
             days={range.days}
             items={result.items}
