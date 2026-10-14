@@ -25,12 +25,16 @@ export async function saveProfile(form: FormData): Promise<ProfileResult> {
   const { client, user, profile } = await ownerProfile();
   const revision = expected(form);
   if (profile.revision !== revision) return { error: conflict };
-  const required = profileFields(form),
+  // Account owns real-name edits. Ignore a stale or crafted profile-form name.
+  const detailsForm = new FormData();
+  for (const [key, value] of form) detailsForm.append(key, value);
+  detailsForm.set("real_name", profile.real_name ?? "");
+  const required = profileFields(detailsForm, profile.bio),
     optional = optionalProfileFields(form);
   if (!required || !optional)
     return {
       error:
-        "Check your required fields and optional limits. Lists need unique items; each prompt needs both a question and answer. Instagram must be a handle, not a link.",
+        "Check your required fields and optional limits. A changed bio can have up to two sentences and 2,000 characters. Lists need unique items; each prompt needs both a question and answer. Instagram must be a handle, not a link.",
     };
   const { data, error } = await client
     .from("profiles")

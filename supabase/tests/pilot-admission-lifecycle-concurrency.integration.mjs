@@ -276,12 +276,12 @@ test(
             if (route.id === "edit") {
               assert.throws(
                 () => sql(`begin;${call(route)}rollback;`),
-                /40001:.*Stale Hangout revision/,
+                /PT409:.*Stale Hangout revision/,
               );
               evidence.classifications.push({
                 cell: `${route.id}_${label}_${subject.slice(-1)}`,
                 classification:
-                  "authorized business 40001 Stale Hangout revision after committed edit, separate from PostgreSQL serialization abort",
+                  "authorized business PT409 Stale Hangout revision after committed edit, separate from PostgreSQL serialization abort",
               });
               const revision = sql(
                 `select revision from public.hangouts where id='${hangout}'`,

@@ -73,8 +73,8 @@ export default async function PeoplePage({
       />
       <div className="people-heading" id="people-heading" tabIndex={-1}>
         <div>
-          <p className="badge">Local UNC directory</p>
-          <h1>Find a familiar face</h1>
+          <p className="badge">UNC directory</p>
+          <h1>People</h1>
           <p>Browse students who chose to appear in People.</p>
         </div>
         <div className="people-heading-links">
@@ -86,8 +86,8 @@ export default async function PeoplePage({
         <section className="people-panel">
           <h2>People is unavailable</h2>
           <p>
-            Your access or the local People feature may have changed. You can
-            still check your visibility preference.
+            Your access or the People feature may have changed. You can still
+            check your visibility preference.
           </p>
           <Link href="/people/privacy">Manage your visibility</Link>
         </section>

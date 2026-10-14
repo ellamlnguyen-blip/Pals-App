@@ -2,7 +2,7 @@
 .saved-detail {
   max-width: 1440px;
   margin: 0 auto;
-  padding: 2rem var(--pals-space-8) 4rem;
+  padding: 0 0 4rem;
 }
 .saved-heading {
   display: flex;
@@ -155,7 +155,7 @@
 @media (max-width: 700px) {
   .saved-page,
   .saved-detail {
-    padding: 1.5rem 1rem 3rem;
+    padding: 0 0 3rem;
   }
   .saved-heading {
     display: block;

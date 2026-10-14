@@ -50,6 +50,8 @@ test("Hangout create, join, removal, cancellation and revision races", async () 
   sql(`insert into auth.users(id,email,email_confirmed_at) values ('${host}','task005-race-host@unc.edu',now()),('${peer}','task005-race-peer@unc.edu',now()),('${late}','task005-race-late@unc.edu',now());
     insert into storage.objects(bucket_id,name,owner_id) select 'profile-photos',id::text||'/primary.png',id::text from public.accounts where id in ('${host}','${peer}','${late}');
     update public.profiles set real_name='Fixture',major='Science',graduation_year=2028,bio='Local test',primary_photo_path=user_id::text||'/primary.png' where user_id in ('${host}','${peer}','${late}');
+    update private.pilot_availability set enabled=true;
+    update private.pilot_capabilities set enabled=true where key in ('onboarding','hangouts');
     update private.hangout_feature_gate set enabled=true;`);
   try {
     const start = sql("select (now()+interval '1 hour')::text;");
@@ -101,6 +103,8 @@ test("Hangout create, join, removal, cancellation and revision races", async () 
     await overlap(`${auth(host)} select public.cancel_hangout('${id}',3);`, `${auth(late)} select public.join_hangout('${id}');`, "task005_cancel_join", /Hangout operation not permitted/);
     assert.equal(sql(`select count(*) from public.hangout_participants where hangout_id='${id}' and account_id='${late}';`), "0");
   } finally {
-    sql(`update private.hangout_feature_gate set enabled=false; delete from private.hangout_create_requests where host_id in ('${host}','${peer}','${late}'); delete from public.hangouts where host_id in ('${host}','${peer}','${late}'); delete from auth.users where id in ('${host}','${peer}','${late}'); set storage.allow_delete_query='true'; delete from storage.objects where owner_id in ('${host}','${peer}','${late}');`);
+    sql(`update private.pilot_availability set enabled=false;
+      update private.pilot_capabilities set enabled=false where key in ('onboarding','hangouts');
+      update private.hangout_feature_gate set enabled=false; delete from private.hangout_create_requests where host_id in ('${host}','${peer}','${late}'); delete from public.hangouts where host_id in ('${host}','${peer}','${late}'); delete from auth.users where id in ('${host}','${peer}','${late}'); set storage.allow_delete_query='true'; delete from storage.objects where owner_id in ('${host}','${peer}','${late}');`);
   }
 });
