@@ -50,7 +50,9 @@ export function StudentHeader({
   available?: StudentDestinations;
 }) {
   return (
-    <header className="student-header">
+    <header
+      className={`student-header${signedIn && !accountReady ? " student-header--limited" : ""}`}
+    >
       <BrandLink href={accountReady ? "/hangouts" : "/"} />
       {available ? (
         <StudentNav available={available} />

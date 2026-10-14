@@ -23,3 +23,7 @@ No schema, provider, gate or peer data-read change. Account and Calendar files a
 ## Post-review bio fix
 
 Source review found that punctuation inside closing quotes and unspaced CJK stops were undercounted. The shared validator now counts English `.`, `!`, `?` followed by closing quotes/brackets and then space/end, plus `。！？` without requiring spaces. Existing URL, decimal and honorific exclusions and unchanged legacy-bio handling remain. Focused tests cover two accepted and three rejected quoted/CJK sentences; onboarding and legacy tests still pass. Scoped validation/web type checks, ESLint and Prettier passed. Coordinator owns final integrated verification and publication.
+
+## Mobile access correction
+
+The shared phone breakpoint hid the header Safety link while an account without profile readiness cannot use owner-profile utilities. A limited-access header marker now keeps Safety, Sign out and the avatar visible at phone widths, with compact spacing and the campus label hidden only in this state. Ready and signed-out header layouts remain unchanged. Scoped web type check, ESLint and Prettier passed; coordinator owns the actual 320px fictional not-ready account browser check.

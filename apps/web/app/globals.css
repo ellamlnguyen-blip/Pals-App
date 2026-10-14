@@ -636,6 +636,29 @@ h3,
   .header-safety {
     display: none;
   }
+  .student-header--limited {
+    grid-template-columns: 64px minmax(0, 1fr);
+  }
+  .student-header--limited .header-campus {
+    display: none;
+  }
+  .student-header--limited .header-account {
+    grid-column: 2;
+    gap: 4px;
+    min-width: 0;
+  }
+  .student-header--limited .header-safety {
+    display: inline-flex;
+    font-size: 14px;
+  }
+  .student-header--limited .header-account .text-button {
+    padding-inline: 2px;
+    white-space: nowrap;
+    font-size: 14px;
+  }
+  .student-header--limited .account-avatar-link {
+    flex: 0 0 44px;
+  }
   .student-header .primary-nav {
     justify-content: center;
   }
