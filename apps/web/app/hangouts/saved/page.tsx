@@ -14,20 +14,29 @@ export default async function SavedHangoutsPage() {
   return (
     <Frame signedIn navigation>
       <div className="saved-page">
-        <Link href="/hangouts">← Hangouts</Link>
-        <div className="saved-heading">
-          <div>
-            <p className="badge">Saved Hangouts · local only</p>
-            <h1>Plans around UNC</h1>
+        <section
+          className="saved-map-heading"
+          aria-labelledby="hangouts-heading"
+        >
+          <div className="saved-map-title">
+            <h1 id="hangouts-heading">Hangouts</h1>
             <p>
-              Explore approximate campus places. Pick a saved Hangout to see the
-              details.
+              <svg
+                aria-hidden="true"
+                viewBox="0 0 24 24"
+                width="20"
+                height="20"
+                fill="currentColor"
+              >
+                <path d="M12 2a8 8 0 0 0-8 8c0 5.3 8 12 8 12s8-6.7 8-12a8 8 0 0 0-8-8Zm0 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z" />
+              </svg>{" "}
+              UNC Chapel Hill
             </p>
           </div>
-          <Link className="button" href="/hangouts/new">
-            + Create Hangout
+          <Link className="button saved-create" href="/hangouts/new">
+            Create Hangout
           </Link>
-        </div>
+        </section>
         <SavedDiscovery
           token={
             process.env.NEXT_PUBLIC_MAPBOX_TOKEN?.startsWith("pk.")

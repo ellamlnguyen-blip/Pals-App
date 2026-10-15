@@ -1,26 +1,38 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import type { Map as MapboxMap, Marker } from "mapbox-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
+import {
+  campusViewport,
+  readViewport,
+  rememberViewport,
+} from "./browse-context";
 import { UNC_CENTER, campusLocation } from "../fixtures";
 import {
   UNC_BOUNDS,
   type Bounds,
   type SavedPin,
 } from "../../../lib/saved-hangouts-types";
+import { pinCue, pinPeriod } from "./pin-cue";
 
 export function SavedMap({
   token,
   items,
   selected,
   onSelect,
+  onLeave,
   onBounds,
+  onSettled,
+  children,
 }: {
   token: string;
   items: SavedPin[];
   selected: string | null;
-  onSelect: (id: string, trigger: HTMLElement) => void;
+  onSelect: (id: string, trigger: HTMLElement, moveFocus?: boolean) => void;
+  onLeave: () => void;
   onBounds: (bounds: Bounds | null) => void;
+  onSettled: () => void;
+  children?: ReactNode;
 }) {
   const container = useRef<HTMLDivElement>(null);
   const mapRef = useRef<MapboxMap | null>(null);
@@ -28,6 +40,9 @@ export function SavedMap({
   const selectedRef = useRef(selected);
   const callback = useRef(onBounds);
   const choose = useRef(onSelect);
+  const leave = useRef(onLeave);
+  const settled = useRef(onSettled);
+  const located = useRef(false);
   const [state, setState] = useState<"loading" | "ready" | "error">("loading");
   const [attempt, setAttempt] = useState(0);
   const [message, setMessage] = useState(
@@ -36,27 +51,34 @@ export function SavedMap({
   useEffect(() => {
     callback.current = onBounds;
     choose.current = onSelect;
-  }, [onBounds, onSelect]);
+    leave.current = onLeave;
+    settled.current = onSettled;
+  }, [onBounds, onSelect, onLeave, onSettled]);
   useEffect(() => {
     if (!token.startsWith("pk.") || !container.current) {
       setState("error");
+      settled.current();
       return;
     }
     const activeMarkers = markers.current;
     let disposed = false;
     let map: MapboxMap | undefined;
     const deadline = window.setTimeout(() => {
-      if (!disposed) setState("error");
+      if (!disposed) {
+        setState("error");
+        settled.current();
+      }
     }, 20000);
     async function initialize() {
       const mapbox = (await import("mapbox-gl")).default;
       if (disposed || !container.current) return;
+      const previous = readViewport();
       map = new mapbox.Map({
         container: container.current,
         accessToken: token,
-        style: "mapbox://styles/mapbox/light-v11",
-        center: UNC_CENTER,
-        zoom: 14,
+        style: "mapbox://styles/mapbox/streets-v12",
+        center: previous ? [previous.longitude, previous.latitude] : UNC_CENTER,
+        zoom: previous?.zoom ?? 15,
         minZoom: 10,
         maxZoom: 19,
         attributionControl: true,
@@ -66,7 +88,7 @@ export function SavedMap({
       mapRef.current = map;
       map.addControl(
         new mapbox.NavigationControl({ showCompass: false }),
-        "top-right",
+        "bottom-right",
       );
       map
         .getCanvas()
@@ -84,6 +106,21 @@ export function SavedMap({
           east: Math.min(UNC_BOUNDS.east, b.getEast()),
           north: Math.min(UNC_BOUNDS.north, b.getNorth()),
         };
+        // Remember only a coarse, campus-bounded manually explored camera.
+        // Locate-me orientation is excluded from return memory.
+        if (!located.current) {
+          const center = map.getCenter();
+          rememberViewport(
+            campusViewport(
+              {
+                longitude: center.lng,
+                latitude: center.lat,
+                zoom: map.getZoom(),
+              },
+              UNC_BOUNDS,
+            ),
+          );
+        }
         callback.current(
           bounds.west < bounds.east && bounds.south < bounds.north
             ? bounds
@@ -95,17 +132,25 @@ export function SavedMap({
         window.clearTimeout(deadline);
         setState("ready");
         moved();
+        settled.current();
+      });
+      map.on("dragstart", () => {
+        located.current = false;
       });
       map.on("moveend", moved);
       map.on("error", () => {
         if (!disposed) {
           window.clearTimeout(deadline);
           setState("error");
+          settled.current();
         }
       });
     }
     void initialize().catch(() => {
-      if (!disposed) setState("error");
+      if (!disposed) {
+        setState("error");
+        settled.current();
+      }
     });
     return () => {
       disposed = true;
@@ -125,21 +170,32 @@ export function SavedMap({
     activeMarkers.clear();
     void import("mapbox-gl").then(({ default: mapbox }) => {
       if (cancelled || mapRef.current !== map) return;
-      items.forEach((item, index) => {
+      items.forEach((item) => {
         if (cancelled || mapRef.current !== map) return;
         const button = document.createElement("button");
         button.type = "button";
         button.className = "map-pin saved-pin";
-        button.textContent = String(index + 1);
+        button.textContent = pinCue(item);
+        const period = pinPeriod(item, new Date());
+        button.dataset.period = period;
         button.setAttribute(
           "aria-label",
-          `Preview saved Hangout: ${item.title}`,
+          `Preview ${period === "thisWeek" ? "this week" : period} Hangout: ${item.title}`,
         );
         button.setAttribute(
           "aria-pressed",
           String(selectedRef.current === item.id),
         );
-        button.addEventListener("click", () => choose.current(item.id, button));
+        button.addEventListener("pointerenter", () =>
+          choose.current(item.id, button, false),
+        );
+        button.addEventListener("pointerleave", () => leave.current());
+        button.addEventListener("focus", () =>
+          choose.current(item.id, button, false),
+        );
+        button.addEventListener("click", () =>
+          choose.current(item.id, button, true),
+        );
         const marker = new mapbox.Marker({ element: button })
           .setLngLat([item.public_longitude, item.public_latitude])
           .addTo(map);
@@ -172,6 +228,8 @@ export function SavedMap({
           position.coords.longitude,
           position.coords.latitude,
         );
+        located.current = true;
+        rememberViewport(null);
         map.jumpTo({ center: center ?? UNC_CENTER, zoom: 15 });
         setMessage(
           center
@@ -186,22 +244,35 @@ export function SavedMap({
   const ready = state === "ready";
   return (
     <div className="map-column">
-      <div className="map-toolbar" aria-label="Map controls">
-        <button
-          className="quiet-button"
-          disabled={!ready}
-          onClick={() =>
-            mapRef.current?.jumpTo({ center: UNC_CENTER, zoom: 14 })
-          }
-        >
-          Back to UNC
-        </button>
-        <button className="quiet-button" disabled={!ready} onClick={locate}>
-          Locate me
-        </button>
-      </div>
-      <div className="map-frame" aria-label="Saved Hangout areas around UNC">
+      <div
+        className="map-frame saved-map-frame"
+        aria-label="Saved Hangout areas around UNC"
+      >
         <div className="map-canvas" ref={container} data-ready={ready} />
+        {children}
+        <div className="saved-map-tools" aria-label="Map controls">
+          <button
+            className="saved-map-tool"
+            disabled={!ready}
+            onClick={() => {
+              located.current = false;
+              mapRef.current?.jumpTo({ center: UNC_CENTER, zoom: 15 });
+            }}
+            aria-label="Back to UNC"
+            title="Back to UNC"
+          >
+            ⌂
+          </button>
+          <button
+            className="saved-map-tool"
+            disabled={!ready}
+            onClick={locate}
+            aria-label="Locate me"
+            title="Locate me"
+          >
+            ◎
+          </button>
+        </div>
         {!ready && (
           <div className="map-state" role="status">
             <span className="map-state-label">UNC Chapel Hill</span>
