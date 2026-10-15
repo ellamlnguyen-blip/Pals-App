@@ -25,6 +25,7 @@ const destinations = [
   { label: "People", href: "/people", key: "people" },
 ] as const;
 export const NOTIFICATION_ATTENTION_CHANNEL = "pals-notification-attention";
+export const NOTIFICATION_OPEN_EVENT = "pals-notification-open";
 
 export function BrandLink({ href = "/" }: { href?: string }) {
   return (
@@ -198,7 +199,12 @@ export function StudentHeader({
           </Link>
         )}
         {available?.notifications && (
-          <Link className="header-icon-link header-notification-link" href="/notifications" aria-label={unread ? "Notifications, unread updates" : "Notifications"} aria-current={pathname?.startsWith("/notifications") ? "page" : undefined}>
+          <Link className="header-icon-link header-notification-link" href="/notifications" aria-label={unread ? "Notifications, unread updates" : "Notifications"} aria-current={pathname?.startsWith("/notifications") ? "page" : undefined} onClick={(event) => {
+            if (pathname === "/notifications") {
+              event.preventDefault();
+              window.dispatchEvent(new Event(NOTIFICATION_OPEN_EVENT));
+            }
+          }}>
             <Bell size={25} weight="regular" aria-hidden="true" />
             {unread && <span className="header-unread-dot" aria-hidden="true" />}
           </Link>

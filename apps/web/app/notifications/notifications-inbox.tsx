@@ -15,7 +15,7 @@ import {
 } from "./notification-auth-state";
 import { AnalyticsView } from "../analytics-view";
 import { ArrowClockwise } from "@phosphor-icons/react";
-import { NOTIFICATION_ATTENTION_CHANNEL } from "../student-shell";
+import { NOTIFICATION_ATTENTION_CHANNEL, NOTIFICATION_OPEN_EVENT } from "../student-shell";
 type Cursor = { time: string; id: string } | null;
 type Preference = { category: string; enabled: boolean };
 const categoryCopy: Record<string, { name: string; description: string }> = {
@@ -299,6 +299,10 @@ export function NotificationsInbox({ actor }: { actor: string }) {
     const storage = (event: StorageEvent) => {
       if (event.key?.includes("auth-token")) wake();
     };
+    const open = () => {
+      if (!document.hidden && !pending.current.size && !denied.current)
+        void read(0, null);
+    };
     wake();
     window.addEventListener(AUTH_TRANSITION_EVENT, local);
     document.addEventListener("visibilitychange", visibility);
@@ -306,6 +310,7 @@ export function NotificationsInbox({ actor }: { actor: string }) {
     window.addEventListener("pageshow", wake);
     window.addEventListener("pagehide", mask);
     window.addEventListener("storage", storage);
+    window.addEventListener(NOTIFICATION_OPEN_EVENT, open);
     return () => {
       mounted = false;
       mask();
@@ -316,6 +321,7 @@ export function NotificationsInbox({ actor }: { actor: string }) {
       window.removeEventListener("pageshow", wake);
       window.removeEventListener("pagehide", mask);
       window.removeEventListener("storage", storage);
+      window.removeEventListener(NOTIFICATION_OPEN_EVENT, open);
     };
   }, [actor, deny, mask, page, read, request, resume, retry]);
   const mutation = async (body: object) => {
