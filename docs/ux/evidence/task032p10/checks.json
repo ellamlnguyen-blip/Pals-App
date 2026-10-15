@@ -1,0 +1,22 @@
+{
+  "source": "b1f922e02e0c7ce7823ce695d4edad5007ef8424",
+  "month": {
+    "cards": 0,
+    "date": "2026-11-01",
+    "events": 0,
+    "gridPresent": true,
+    "removedTextPresent": false,
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "week": {
+    "cards": 0,
+    "date": "2026-11-01",
+    "events": 0,
+    "gridPresent": true,
+    "removedTextPresent": false
+  },
+  "returnedToMonth": true
+}

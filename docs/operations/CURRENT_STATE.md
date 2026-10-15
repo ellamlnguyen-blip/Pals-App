@@ -1,5 +1,10 @@
 # Current State
 
+## 2026-10-15 — Calendar empty-view local verification
+
+TASK-032P10 removes the marked No Hangouts in this view / Try another date or category card while retaining the Calendar grid and actual no-category/loading/error/truncation guidance. Source `b1f922e02e0c7ce7823ce695d4edad5007ef8424` is reviewed, pushed and independently remote verified. Scoped lint/format/diff and runtime webpack build pass; actual1280×720 November2026 Month and empty Week checks confirm no card/text, unchanged selected date and retained grids. Evidence: docs/ux/evidence/task032p10; handoff TASK-032P10. No backend/data/permission/hosted change; parent TASK-032 remains incomplete behind existing gates, no successor.
+
+
 ## 2026-10-15 — Map controls local candidate
 
 TASK-032P9 application `50887e9f946212eb4f7974c84cef268b3d32a348` removes visible Hangouts heading, moves Create to a44px plus inside map top right, compacts period controls and gives pins rounded heads/pointed tips. Full scoped source review, lint/format/typegen/TS, runtime webpack and5/5 existing pin/period tests pass. Actual1280desktop/375narrow rendered placement and nooverflow passed; fixed outer48×56 hover geometry with child-only3px lift, preview travel/Escape, keyboard plus→place-first route and all-off/filter recovery passed. Evidence and precise limits: TASK032P9 handoff/docs/ux/evidence/task032p9. Candidate `673f812e0abde468b00f080c103362520295a3c6` pushed and independently remote verified. No backend/persistent data/permissions/hosted change. Parent TASK-032 remains incomplete behind existing device/fault/staging/sign-off/application-main gates; no successor.
