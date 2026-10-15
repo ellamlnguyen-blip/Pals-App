@@ -1,5 +1,15 @@
 # Backlog
 
+## 2026-10-14 — Chats label cleanup
+
+TASK-032P7 removes the marked small Chats badge above Your chats. Contract: `tasks/active/TASK-032P7-chats-copy.md`. Parent gates remain; no hosted action or successor.
+
+
+## 2026-10-14 — People cleanup local verification
+
+TASK-032P6 removes the four marked People badge/helper/status/heading-link items and avoids an empty pagination wrapper. Source `e01ddf58cfdcec5df4d5de56d958823728c6a0c8` is reviewed, pushed and remote verified. Scoped lint/format and runtime production build passed; rendered People confirms all four absent with friendships, search controls and two profile cards retained. Evidence: `docs/ux/evidence/task032p6/`; handoff: `agents/handoffs/TASK-032P6.md`. Visibility settings/backend/authorization and actual pagination links remain intact. Parent TASK-032 remains incomplete behind existing device/fault/staging/sign-off/application-main gates; no hosted operation or automatic successor.
+
+
 ## 2026-10-14 — People display cleanup
 
 TASK-032P6 removes four marked directory/helper/status/visibility-link items from normal People display. Contract: `tasks/active/TASK-032P6-people-copy.md`. Search, pagination links, visibility settings/backend and parent gates remain. No hosted operation or successor.
