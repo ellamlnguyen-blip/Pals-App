@@ -1,8 +1,12 @@
 # NOW
 
+## 2026-10-14 — Map feedback correction
+
+TASK-032P4 replaces selected marker scaling with a stable pin hit target and slight child-only upward lift, removes inherited hover/selection decoration and the five marked normal-page labels/helper/count/Refresh elements. Preserve actual errors/retries, discovery filters, previews and authorization. Contract: `tasks/active/TASK-032P4-map-feedback.md`. Parent TASK-032 remains incomplete; no hosted sign-off or successor.
+
 ## 2026-10-14 — Profile feedback local candidate
 
-TASK-032P3 applicatione38f44abd3ea414aa95300858e21b0d9a95d4553 applies Ella's marked corrections: removed visible gallery Move rows, More about you and duplicate Photo controls; shared owner/peer name now has an unmodified locally served official UNC school logo. Photo position lives inside existing photo options and uses unchanged backend CAS. Fresh source review, scoped lint/web TypeScript/order1test and runtime webpack build passed. Actual owner/peer/logo/edit-field/privacy/focus checks and normal local reorder→restore→refresh/freshAuth passed: revision21→23, original photo order/bytes/other fields preserved,5refs/5objects/no missing/orphans. See TASK-032P3 handoff/evidence. Source publication is prepared; parentTASK032 remains incomplete with existing device/fault/staging/user-sign-off/application-main gates. No migration/hosted operation or new successor.
+TASK-032P3 applicatione38f44abd3ea414aa95300858e21b0d9a95d4553 applies Ella's marked corrections: removed visible gallery Move rows, More about you and duplicate Photo controls; shared owner/peer name now has an unmodified locally served official UNC school logo. Photo position lives inside existing photo options and uses unchanged backend CAS. Fresh source review, scoped lint/web TypeScript/order1test and runtime webpack build passed. Actual owner/peer/logo/edit-field/privacy/focus checks and normal local reorder→restore→refresh/freshAuth passed: revision21→23, original photo order/bytes/other fields preserved,5refs/5objects/no missing/orphans. See TASK-032P3 handoff/evidence. Source candidate `058a978eed40d39983f20eb0753a33f753e4d833` is pushed and independently remote verified; parentTASK032 remains incomplete with existing device/fault/staging/user-sign-off/application-main gates. No migration/hosted operation or new successor.
 
 ## 2026-10-14 — Profile feedback correction
 
