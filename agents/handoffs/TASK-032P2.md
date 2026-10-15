@@ -23,10 +23,14 @@ Status: source implementation and focused review fixes ready for coordinator rev
 
 ## Review focus
 
-Run owner add/replace/reposition/delete/reorder through the real local Storage/CAS path, including failed and concurrent saves, another-actor denied mutation, refresh and fresh Auth session. Inspect 319×720 and desktop gallery/crop states. Check keyboard focus return and drop behavior, especially four-photo/full and zero-photo states. Verify name save, conflict draft retention, Account compatibility and unchanged school/email. The coordinator should review the exact P2 files above before staging or committing.
+Run owner add/replace/reposition/delete/reorder through the real local Storage/CAS path, including failed and concurrent saves, another-actor denied mutation, refresh and fresh Auth session. Inspect 319×720 and desktop gallery/crop states. Check keyboard focus return and drop behavior, especially four-photo/full and zero-photo states. Verify name save, conflict draft retention, Account compatibility and unchanged school/email. The coordinator reviewed the committed P2 files and final6c source; final publication remains a separate reviewed gate.
 
 ## Fresh P2 review fix
 
 - Save is blocked synchronously while a newly selected file is being checked and decoded. The latest selection token and Auth generation guard every asynchronous result, and an older selection cannot unlock the latest one. A candidate blob URL is released on failure, close, concealment, or unmount. The previous valid local crop remains available after a rejected candidate.
 - Replace starts without the stored rendition in the crop surface and requires a new validated file before Save. Add also requires a new file. Reposition and primary editing still permit an existing saved rendition. The Save handler rechecks the same gates before canvas export, and the P1 post-export Auth guard remains.
 - Fresh review follow-up: pointer/touch, wheel, keyboard crop callbacks, zoom slider and Reset are gated while a candidate file is being checked. A failed candidate therefore leaves both the prior visible crop and its pixel area unchanged. The chooser/drop remains available to supersede the pending candidate under its selection token.
+
+## Coordinator final receipt
+
+Source fixes7302311/6c9278b passed independent review; final combined source review clear and93/93units/no skips, lint/admin TypeScript/runtime webpack pass. Actual owner Replace→recrop→Move,4→0Delete→Add, desktop drag→restore→refresh, name/optional-field save and bio draft-error passed. Fresh owner Auth confirms final revision18, exact four backed-up extra bytes/order, preserved primary/text and5refs/5stored/no missing/orphans. Normal foreign Storage/profile/action denials passed; forged reorder action gave conflict, so exact permutation validator runtime branch was not isolated. P2 screenshots1280×720 are desktop evidence. QA report records remaining physical-device/drop/fault/race/cross-feature gates. Parent incomplete, no hosted operation.

@@ -1,5 +1,9 @@
 # TASK-028P rich peer profile security contract
 
+## Owner photo editing implementation amendment 2026-10-14
+
+TASK-032 local candidate adds reusable in-place owner circular/9:5 crop interactions without changing this peer authorization contract or Storage/RLS. Server Sharp independently normalizes new owner renditions: actual static JPEG/PNG/WebP framing/decode,5MiB input/20MP source, orientation/metadata stripping, square≤1024primary or9:5≤1440×800extras (≤1pixel rounding), bounded output and minimum quality dimensions. Browser exports PNG for a single server WebP encode. Existing originals are not migrated. Existing immutable owner upload→profile revision CAS→guarded post-detach cleanup applies; reorder changes only an exact owned extra-path permutation under CAS. Payload-free invalidation re-reads existing authorized/no-store projections; no new peer reader or push system. See TASK-032 QA for executed/remaining checks; hosted acceptance/sign-off is unchanged.
+
 Status: **accepted policy; bounded implementation pending**. ADR-0036 was explicitly accepted by the user on 2026-10-06. The corrected lock-order plan passed independent planning review; TASK-028P2 defines implementation lanes and requires independent service-boundary review before photo implementation. This contract covers the conditional peer lane of TASK-028P; existing owner/profile UI and current People text may proceed separately. No hosted operation or gate activation follows from this document.
 
 ## Fixed baseline and scope

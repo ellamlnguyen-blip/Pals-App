@@ -1,0 +1,63 @@
+{
+  "application": "6c9278bd992bcf6ef6a96ad0017e01800a27c817",
+  "environment": "fictional disposable pals-task029 API55521/DB55522",
+  "photoBackend": {
+    "source": "6c9278b",
+    "backend": "named disposable pals-task029",
+    "initialRevision": 15,
+    "finalRevision": 18,
+    "addedExtra": {
+      "width": 799,
+      "height": 444,
+      "webp": true,
+      "metadataStripped": true
+    },
+    "staleActionDenied": true,
+    "forgedOrderDenied": true,
+    "foreignActionDenied": true,
+    "foreignStorageUploadDenied": true,
+    "foreignRawReadDenied": true,
+    "profilesUnchangedAfterDenials": true,
+    "restoredCount": 4,
+    "restoredExactBytes": true,
+    "restoredOrder": true,
+    "textAndPrimaryPreserved": true,
+    "detachedAddRemoved": true,
+    "ownerStorageInventory": {
+      "referenced": 5,
+      "stored": 5,
+      "missing": 0,
+      "unreferenced": 0
+    },
+    "forgedOrderProof": "denied by normal action; conflict result, permutation validator not isolated",
+    "desktopReorderRestored": true,
+    "freshAuthPersistence": true
+  },
+  "runtimeComparison": {
+    "source": "6c9278bd992bcf6ef6a96ad0017e01800a27c817",
+    "compared": 439,
+    "same": 437,
+    "missing": [],
+    "different": [
+      "apps/web/lib/config.ts",
+      "apps/web/lib/feature-runtime.ts"
+    ]
+  },
+  "finalChecks": {
+    "unitPass": 93,
+    "unitFail": 0,
+    "unitSkip": 0,
+    "scopedLint": "pass",
+    "adminTypeScript": "pass",
+    "runtimeWebpackWebTypeScript": "pass",
+    "freshSourceReview": "clear"
+  },
+  "browser": {
+    "primary319x720": true,
+    "p2PhoneEvidence": false,
+    "desktopDragZoomAndCancel": true,
+    "desktopReorderRestoreRefresh": true,
+    "ordinaryCrossTabSignOutClearedEditorAndOwnerPhoto": true,
+    "physicalDeviceTested": false
+  }
+}

@@ -1,6 +1,6 @@
 # TASK-032 Stage M handoff — map preview and place-first creation
 
-Status: implementation ready for coordinator browser QA and review; not committed or published. Branch `agent/TASK-032-interaction-photos`, baseline `e280837e104182ae5bc186918da7e656d621f9e4`.
+Status: source committed at8117ad4 plus reviewed031f1cf corrections; final candidate6c9278b has coordinator local QA. Parent remains incomplete. Branch `agent/TASK-032-interaction-photos`, baseline `e280837e104182ae5bc186918da7e656d621f9e4`.
 
 ## Outcome
 
@@ -18,3 +18,7 @@ Status: implementation ready for coordinator browser QA and review; not committe
 - Targeted ESLint and `git diff --check` pass. Direct web TypeScript passed before parallel profile edits appeared. A later shared TypeScript run fails on the parallel profile editor's unresolved `react-easy-crop` module and inferred types; none of the diagnostics point to Stage M files.
 - The normal pnpm wrapper cannot run here because shared `node_modules` links resolve to another worktree and it refuses to replace them. Direct local binaries were used for the checks above.
 - Coordinator browser QA remains: slow/fast/corner pin hover, focus/Escape/Close, selected scale, 319px layout, map unavailable/manual coordinates, Continue/Back and create submission. `https://usepals.com/` was requested as visual context but its page was inaccessible to the web inspection tool.
+
+## Coordinator final receipt
+
+Final combined source review and93units/scoped lint/admin TypeScript/runtime webpack pass. Actual pointer-only preview/into-card travel, scale1.08/same base shadow, Close and same-pin Enter reopening passed. Real map-place-first Back/Continue/create persisted through normal owner action. Remaining trajectory/fallback/visibility/device gates are precisely listed in TASK-032-INTERACTION-PHOTO-QA.md; no blanket hover/mobile completion claim.

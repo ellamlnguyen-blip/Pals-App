@@ -1,5 +1,9 @@
 # Core User Flows
 
+## Interaction and photo amendment 2026-10-14
+
+TASK-032 local candidate: Create Hangout → choose broad public map place/label → Continue → existing event details → Create. Back preserves both steps; no automatic location permission. Saved pins enlarge slightly on selection and previews support forgiving pointer travel plus explicit Close/Escape/reopen. Own profile photo edit → in-place choose/drop/crop → explicit Save through owner Storage/CAS → authorized UI refresh. The same modal serves optional rectangular slots; existing photos expose View/Replace/Reposition/Delete and desktop drag or Move controls reorder up to four. Zero photos remains valid. Inline profile editing now includes name with existing Account validation; trusted school/email remain readonly. Recrop uses the stored rendition, not an archived uncropped original. Runtime evidence and remaining device/fault/staging/sign-off gates: `TASK-032-INTERACTION-PHOTO-QA.md`.
+
 ## Hangouts map amendment 2026-10-14
 
 TASK-031 local candidate uses a compact Hangouts/campus/Create row and large rounded Mapbox map with activity emoji pins, independent Today/Tomorrow/This week/Later checkboxes and an authorized public hover/focus/tap View/Join preview. The alternate list is below the map. This replaces the historical numbered-pin/persistent-rail presentation for saved discovery. Four-bit masks filter before the101-row probe with the original seven-argument RPC, projection, epoch/revalidation, grants and ranking unchanged; legacy upcoming/all remain compatible. Periods are disjoint upcoming starts in America/New_York, with Tomorrow taking precedence at the week boundary. No private instructions or GPS are stored in browse memory. Current behavior, evidence and unfinished responsive/lifecycle/staging acceptance are in `TASK-031-MAP-QA.md` (under docs/ux); historical sections below retain their original task scope.
