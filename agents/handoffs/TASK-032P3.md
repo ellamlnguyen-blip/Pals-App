@@ -1,6 +1,6 @@
 # TASK-032P3 profile feedback correction handoff
 
-Status: source candidate for review; parent TASK-032 remains incomplete. Branch `agent/TASK-032-interaction-photos`, based on `87d56faed84639ad88be144a78468310863c2a3e` before this commit.
+Status: source reviewed and disposable-local rendered/backend checks passed; parent TASK-032 remains incomplete. Application `e38f44abd3ea414aa95300858e21b0d9a95d4553`; publication recorded below when verified. Branch `agent/TASK-032-interaction-photos`, based on `87d56faed84639ad88be144a78468310863c2a3e` before this commit.
 
 ## Outcome
 
@@ -20,4 +20,14 @@ Status: source candidate for review; parent TASK-032 remains incomplete. Branch 
 - Prettier on scoped files and `git diff --check`: pass.
 - Source review: no action/backend/schema/permission change; existing owner form fields, privacy link, footer utilities and CAS reorder path remain.
 
-Rendered owner/peer, touch selector, focus and logo checks are assigned to coordinator runtime QA and have not been claimed here. No hosted or backend operation was performed. The dependency wrapper attempted to repair a cross-worktree `node_modules` symlink, so checks used installed executables directly. Review, task branch push, shared main records, parent acceptance, sign-off and deployment gates remain with the coordinator.
+At the worker handoff, rendered owner/peer, touch selector, focus and logo checks were assigned to coordinator runtime QA and were not claimed by the worker. The worker performed no hosted or backend operation; the coordinator’s later local checks are recorded below. The dependency wrapper attempted to repair a cross-worktree `node_modules` symlink, so checks used installed executables directly. Review, task branch push, shared main records, parent acceptance, sign-off and deployment gates remain with the coordinator.
+
+## Coordinator review and local QA
+
+Contractd37c305ddd3b9eeba7798b746461d71e95abe35f and canonical integration7ddb3b31f21106aa041f86ef0c375ea3b28c7f3a were pushed/remote verified before fresh implementation dispatch. Canonical documentation was merged into the task at87d56fa; conflicts used canonical records. Fresh GPT-6 Sol/medium read-only source review cleared exacte38f44a against87d56fa, including selector slot/revision/path guard, modal dismissal/focus, gallery feedback/cleanup retry, retained fields/privacy/footer, logo condition and asset hash. The dispatch tool cannot configure/verify Standard speed.
+
+Runtime webpack production build and web TypeScript passed at exacte38f44a. Scoped worker lint/TypeScript/formatting and existing order test1/1 passed; previous93-test suite is historical6c evidence, not rerun for this presentation correction. No new markup-mirroring tests.
+
+Actual owner browser: school logo loaded at correct768×601 source aspect, rendered about36×28px with object-fit contain. The Move row, More about you and Photo controls are absent; photos/prompts/interests/footer remain. Edit photos moves focus to first photo. Existing options expose the native Photo position selector, View/Replace/Reposition/Delete. Position1→2 acknowledged, dismissed the modal and focused Edit photos. The moved original photo was returned2→1, acknowledged, then refreshed. Fresh normal fictional Maya Auth on named disposable55521/55522 confirms revision21→23, exact original order/bytes and every other field unchanged except revision/timestamp,5refs/5objects/no missing/orphan. The baseline was captured at21 after user interaction; the older18 fixture order was not imposed. No uploads/deletes or other fixture changes were needed. Edit profile still contains name/major/hometown/bio/interests/down-to-do/music/food/fact/Instagram/prompts; Cancel and Profile sharing access passed. Authorized Alex peer profile showed the same school logo and no owner Edit control.
+
+Observed DOM width512×720 with no horizontal overflow during checks. Full-page captures may reflow to their own documented width; evidence/task032p3 manifest records actual dimensions. Images are synthetic-only. Physical touch/native selector/device testing is not claimed; prior parent fault/staging/sign-off gates remain. Runtime app/code/asset matches source except the same two documented local callback/IPv6 availability adapters; no backend schema/action/auth/permissions change or hosted operation.

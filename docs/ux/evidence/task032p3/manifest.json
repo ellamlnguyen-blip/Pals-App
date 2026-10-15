@@ -1,0 +1,28 @@
+{
+  "application": "e38f44abd3ea414aa95300858e21b0d9a95d4553",
+  "syntheticOnly": true,
+  "notes": "DOM512×720 during interaction checks; full-page captures may reflow, actual image dimensions recorded. School logo is locally served official asset; no personal files or secrets.",
+  "files": [
+    {
+      "file": "backend-qa.json",
+      "bytes": 353,
+      "sha256": "dc6c3f0bad6d7a3e1e6671fa84fe88c6454bf2657dafe94f6dc156d0bf19ffcd"
+    },
+    {
+      "file": "peer-school-logo.jpg",
+      "bytes": 57967,
+      "sha256": "ee4f95fa47538b84317fa5a13c7bcdbdf898b8320017db973cc3f9bb0088049d",
+      "width": 427,
+      "height": 1399,
+      "format": "jpeg"
+    },
+    {
+      "file": "profile-cleaned.jpg",
+      "bytes": 59642,
+      "sha256": "7741f73a94e017335010d581b0ef536305fb8b07ffe786fe2c20311ee1ea2694",
+      "width": 427,
+      "height": 1213,
+      "format": "jpeg"
+    }
+  ]
+}
