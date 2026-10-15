@@ -29,3 +29,9 @@ Rendered default desktop1280×720 and narrow375×812 with live local-authorized 
 Real hover: outer marker stayed48×56 at x639.594/y245 and matrix(1,0,0,1,578,131), both at rest and selected; outline/shadow none, child transform none→translateY(-3px) only. Preview retained on pointer travel into card; Escape closed. Enter on plus navigated to Make a plan / Step1of2 Public place; cancelled without creating. All periods off displayed Choose a time period; restoring all recovered pins. No records, preferences, coordinates, permissions, backend config or hosted environment were mutated. Viewport override reset. Evidence: docs/ux/evidence/task032p9.
 
 Browser recovery: original automation tab refused localhost after server restart despite a healthy HTTP200 outside sandbox. A fresh tab in the same selected browser rendered and completed all checks; retained as preview deliverable. No browser-security bypass. No physical mobile-device gesture test. Parent TASK-032 remains incomplete behind existing device/fault/staging/sign-off/application-main gates; no automatic successor. Tools do not expose Standard speed configuration/verification.
+
+Source candidate `673f812e0abde468b00f080c103362520295a3c6` (application50887e9) is pushed and independently remote verified. Canonical outcome publication is documentation/evidence only while parent gates remain.
+
+## Canonical publication receipt
+
+Documentation branch `bd6707f46e87dd481409c522fe2086d323871246` and documentation-only main integration `8d93f0ac10fa81cfcde8266ba8d720cdd280bb8d` were pushed and independently remote verified. Twelve documentation/evidence files only were integrated; application source remains on673f812 behind parent gates. This receipt does not declare TASK-032 complete or dispatch a successor.
