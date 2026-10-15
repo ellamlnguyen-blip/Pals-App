@@ -670,42 +670,25 @@ export function SavedDiscovery({ token }: { token: string }) {
           </div>
         )}
       </SavedMap>
-      <p className="saved-map-help">
-        Choose any combination of time periods. “This week” starts after
-        tomorrow and ends before next Monday in UNC time. Pins show approximate
-        Hangout areas, never people.
-      </p>
       <div className="saved-results-heading">
         <div>
           <h2 ref={listTitle} tabIndex={-1}>
             Hangouts in this area
           </h2>
-          <p role="status" aria-live="polite">
-            {concealed
-              ? "Checking current access…"
-              : status === "loading"
-                ? "Loading Hangouts…"
-                : status === "error"
-                  ? "Hangouts couldn't load. Try refreshing."
-                  : status === "denied"
-                    ? "Hangout access is unavailable. Reload after checking your account."
-                    : !bounds
-                      ? "Move the map back toward UNC to see Hangouts."
-                      : `${count} ${count === 1 ? "Hangout" : "Hangouts"} in this area.`}
-          </p>
+          {(concealed || status !== "ok" || !bounds) && (
+            <p role="status" aria-live="polite">
+              {concealed
+                ? "Checking current access…"
+                : status === "loading"
+                  ? "Loading Hangouts…"
+                  : status === "error"
+                    ? "Hangouts couldn't load. Try refreshing."
+                    : status === "denied"
+                      ? "Hangout access is unavailable. Reload after checking your account."
+                      : "Move the map back toward UNC to see Hangouts."}
+            </p>
+          )}
         </div>
-        <button
-          className="quiet-button"
-          type="button"
-          onClick={() => {
-            closePreview();
-            setStatus("loading");
-            setRefresh((value) => value + 1);
-          }}
-          disabled={concealed}
-        >
-          Refresh Hangouts
-        </button>
       </div>
       {status === "ok" && truncated && (
         <p className="saved-limit" role="status">

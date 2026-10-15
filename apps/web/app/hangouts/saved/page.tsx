@@ -20,18 +20,6 @@ export default async function SavedHangoutsPage() {
         >
           <div className="saved-map-title">
             <h1 id="hangouts-heading">Hangouts</h1>
-            <p>
-              <svg
-                aria-hidden="true"
-                viewBox="0 0 24 24"
-                width="20"
-                height="20"
-                fill="currentColor"
-              >
-                <path d="M12 2a8 8 0 0 0-8 8c0 5.3 8 12 8 12s8-6.7 8-12a8 8 0 0 0-8-8Zm0 11a3 3 0 1 1 0-6 3 3 0 0 1 0 6Z" />
-              </svg>{" "}
-              UNC Chapel Hill
-            </p>
           </div>
           <Link className="button saved-create" href="/hangouts/new">
             Create Hangout

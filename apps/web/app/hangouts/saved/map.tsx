@@ -51,9 +51,7 @@ export function SavedMap({
   const located = useRef(false);
   const [state, setState] = useState<"loading" | "ready" | "error">("loading");
   const [attempt, setAttempt] = useState(0);
-  const [message, setMessage] = useState(
-    "Location is optional. Pins are approximate Hangout areas, never people.",
-  );
+  const [message, setMessage] = useState("");
   useEffect(() => {
     callback.current = onBounds;
     choose.current = onSelect;
@@ -325,9 +323,11 @@ export function SavedMap({
           </div>
         )}
       </div>
-      <p className="map-help" role="status">
-        {message}
-      </p>
+      {message && (
+        <p className="map-help" role="status">
+          {message}
+        </p>
+      )}
     </div>
   );
 }
