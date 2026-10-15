@@ -1,5 +1,10 @@
 # NOW
 
+## 2026-10-15 — People profile cards local candidate
+
+TASK-032P11 shows circular protected primary photos (initials fallback) and requested identity details in whole-card native profile links; View profile text removed. App9ed5a7f529df567ba3edb3fa18300164f100202e and candidate1d1deb566e6599115e33d5e874d38e09a22f7a67 pushed and independently remote verified. Fresh review hidden-hydration finding fixed and confirmed; scoped checks/tests and final production webpack pass. Actual1280desktop/375narrow nooverflow, protected images loaded, whole-card fullprofile/back-focus and named disposable authorized200/no-store/anonymous+wrongrevision404 passed. Evidence/handoff TASK032P11 records exact limits. No data/schema/permission/hosted change. ParentTASK032 remains incomplete behind existing gates; no successor.
+
+
 ## 2026-10-15 — People profile cards
 
 TASK-032P11 adds circular protected peer photos (initials fallback) to whole-card profile links, retaining name/school/class/major and removing View profile text. Contract: tasks/active/TASK-032P11-people-cards.md. Existing rich-sharing consent/gateway remains authoritative. Parent gates remain; no hosted action or successor.
