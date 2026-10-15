@@ -1,8 +1,12 @@
 # NOW
 
+## 2026-10-14 — Calendar text correction
+
+TASK-032P5 renames Campus date to Date (including accessible name) and removes the sideways-scroll hint. Contract: `tasks/active/TASK-032P5-calendar-copy.md`. Display-only continuation; scroll/date/timezone/backend and parent acceptance gates stay intact. No hosted operation or successor.
+
 ## 2026-10-14 — Map feedback local candidate
 
-TASK-032P4 applicatione6564f01e12f03328517fec8ca617d5e36d64bc9 fixes marker drift by lifting only the pointer-inert pin visual3px, preserving the outer48×56Mapbox target/position and removing its inherited selected ring. It removes the five marked normal campus/helper/count/Refresh elements while preserving actual loading/errors/retries. Fresh source review, scoped lint/typegen/web TypeScript,2pin tests and runtime webpack pass. Actual512px browser measures identical outer x/y/size/Mapboxmatrix, no scale/hover outline/background/shadow; child-only y-3 and unchanged base color/shadow. Preview travel/Close/Escape/reopen and all-off/filter recovery passed. See TASK-032P4 handoff/evidence. Source publication prepared; parent TASK-032 remains incomplete behind existing physical-device/fault/staging/user-sign-off/application-main gates. No backend/schema/permission/hosted change or automatic successor.
+TASK-032P4 applicatione6564f01e12f03328517fec8ca617d5e36d64bc9 fixes marker drift by lifting only the pointer-inert pin visual3px, preserving the outer48×56Mapbox target/position and removing its inherited selected ring. It removes the five marked normal campus/helper/count/Refresh elements while preserving actual loading/errors/retries. Fresh source review, scoped lint/typegen/web TypeScript,2pin tests and runtime webpack pass. Actual512px browser measures identical outer x/y/size/Mapboxmatrix, no scale/hover outline/background/shadow; child-only y-3 and unchanged base color/shadow. Preview travel/Close/Escape/reopen and all-off/filter recovery passed. See TASK-032P4 handoff/evidence. Source candidate `28e77846ad57d26f0de8ca7aa28f85bf186c27a8` is pushed and independently remote verified; parent TASK-032 remains incomplete behind existing physical-device/fault/staging/user-sign-off/application-main gates. No backend/schema/permission/hosted change or automatic successor.
 
 ## 2026-10-14 — Map feedback correction
 
