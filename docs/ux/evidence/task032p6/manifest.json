@@ -1,0 +1,12 @@
+{
+  "source": "e01ddf58cfdcec5df4d5de56d958823728c6a0c8",
+  "screenshot": {
+    "file": "people-cleaned.jpg",
+    "format": "jpeg",
+    "bytes": 29219,
+    "sha256": "e55541441e75b0b4afa50317a947545e2832020b3bd71b1a12421087de30beaa",
+    "height": 1027,
+    "width": 266
+  },
+  "note": "Full-page screenshot may reflow at capture width; DOM checks record actual 319x720 view."
+}
