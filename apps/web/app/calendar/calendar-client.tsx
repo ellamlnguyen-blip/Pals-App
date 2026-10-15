@@ -405,17 +405,12 @@ export function CalendarClient({
           more.
         </p>
       )}
-      {!selection.hosting && !selection.attending && !selection.all ? (
+      {!selection.hosting && !selection.attending && !selection.all && (
         <div className="calendar-empty">
           <h3>No categories selected</h3>
           <p>Choose a category to see Hangouts.</p>
         </div>
-      ) : !items.length ? (
-        <div className="calendar-empty">
-          <h3>No Hangouts in this view</h3>
-          <p>Try another date or category.</p>
-        </div>
-      ) : null}
+      )}
       {concealed ? (
         <div className="calendar-empty" role="status">
           Checking current Calendar access…
