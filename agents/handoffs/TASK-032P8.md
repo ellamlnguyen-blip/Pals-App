@@ -18,3 +18,9 @@ Status: isolated candidate, pending fresh review, rendered runtime verification,
 ## Remaining gates
 
 Parent owns rerunning revised SQL test, desktop/narrow rendered behavior and fault checks, fresh security/design review, task publication and remote SHA verification. Hosted migration/application changes remain pending Ella's explicit candidate sign-off and existing release gates. No hosted operation or data reset occurred in this task branch.
+
+## Review follow-up
+
+- A notification-summary 403 now masks the bell badge without reloading the entire page, so a disabled notification gate cannot cause a healthy header to reload repeatedly. Existing auth transition handlers still conceal account chrome when the account changes.
+- If snapshot acknowledgment is unconfirmed, the visible inbox shows “Could not mark updates as seen. Refresh to retry.” The existing refresh button loads a new snapshot and retries. Both confirmed failure and a lost response trigger a fresh server summary; the client never reports a successful acknowledgment without its response.
+- Follow-up checks: scoped ESLint, TypeScript, five notification auth/destination tests, `git diff --check`, and `next build --webpack` all passed.

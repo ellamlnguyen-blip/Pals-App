@@ -43,6 +43,12 @@ const categoryOrder = [
   "host_activity",
 ];
 const idPattern = /^[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}$/i;
+function refreshAttention() {
+  window.dispatchEvent(new Event(NOTIFICATION_ATTENTION_CHANNEL));
+  const channel = new BroadcastChannel(NOTIFICATION_ATTENTION_CHANNEL);
+  channel.postMessage("refresh");
+  channel.close();
+}
 export function NotificationsInbox({ actor }: { actor: string }) {
   const [rows, setRows] = useState<NotificationRow[]>([]);
   const [preferences, setPreferences] = useState<Preference[]>([]);
@@ -50,6 +56,7 @@ export function NotificationsInbox({ actor }: { actor: string }) {
     "loading" | "ready" | "denied" | "error" | "uncertain"
   >("loading");
   const [message, setMessage] = useState("");
+  const [attentionError, setAttentionError] = useState(false);
   const [retry, setRetry] = useState(0);
   const [page, setPage] = useState(0);
   const [snapshot, setSnapshot] = useState<{ cutoff: string; revision: number } | null>(null);
@@ -65,6 +72,7 @@ export function NotificationsInbox({ actor }: { actor: string }) {
     setPreferences([]);
     setPhase("loading");
     setMessage("");
+    setAttentionError(false);
     setSnapshot(null);
   }, []);
   const deny = useCallback(() => {
@@ -182,19 +190,27 @@ export function NotificationsInbox({ actor }: { actor: string }) {
             return;
           }
           const body = await response.json();
-          if (cancelled || !current(snapshot.revision) || !response.ok || body.kind !== "ok" || body.actor !== actor) return;
+          if (cancelled || !current(snapshot.revision)) return;
+          if (!response.ok || body.kind !== "ok" || body.actor !== actor) {
+            setAttentionError(true);
+            setSnapshot(null);
+            refreshAttention();
+            return;
+          }
           setRows((items) => items.map((item) =>
             !item.read_at && Date.parse(item.created_at) <= Date.parse(snapshot.cutoff)
               ? { ...item, read_at: snapshot.cutoff }
               : item,
           ));
-          window.dispatchEvent(new Event(NOTIFICATION_ATTENTION_CHANNEL));
-          const channel = new BroadcastChannel(NOTIFICATION_ATTENTION_CHANNEL);
-          channel.postMessage("refresh");
-          channel.close();
+          setAttentionError(false);
+          refreshAttention();
           setSnapshot(null);
         } catch {
-          // The ledger and badge remain unread when acknowledgment is uncertain.
+          if (cancelled || !current(snapshot.revision)) return;
+          setAttentionError(true);
+          setSnapshot(null);
+          // A lost response may follow a committed write; recheck the server.
+          refreshAttention();
         }
       });
     });
@@ -350,6 +366,11 @@ export function NotificationsInbox({ actor }: { actor: string }) {
               </button>
             )}
           </div>
+          {phase === "ready" && attentionError && (
+            <p className="notification-attention-error" role="status">
+              Could not mark updates as seen. Refresh to retry.
+            </p>
+          )}
           {phase === "loading" && (
             <div role="status" className="notifications-state">
               <p>Checking your Notifications…</p>

@@ -44,6 +44,11 @@
   color: var(--pals-muted);
   margin: 0.3rem 0 1.25rem;
 }
+.notification-attention-error {
+  margin: 0.5rem 0 1rem;
+  color: var(--pals-muted);
+  font-size: 0.875rem;
+}
 .notifications-state {
   padding: var(--pals-space-8) 0;
   color: var(--pals-muted);

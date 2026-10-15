@@ -76,10 +76,7 @@ export function StudentHeader({
       });
       if (started !== attentionRevision.current || concealedRef.current || document.hidden) return;
       if (response.status === 403) {
-        concealedRef.current = true;
         setUnread(null);
-        setConcealed(true);
-        window.location.reload();
         return;
       }
       const body = await response.json();
