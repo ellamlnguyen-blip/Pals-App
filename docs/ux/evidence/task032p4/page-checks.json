@@ -1,0 +1,43 @@
+{
+  "application": "e6564f01e12f03328517fec8ca617d5e36d64bc9",
+  "campusLabelCount": 0,
+  "defaultLocationHelpCount": 0,
+  "height": 720,
+  "markers": [
+    {
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 56,
+      "scale": "none",
+      "shadow": "none",
+      "width": 48
+    },
+    {
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 56,
+      "scale": "none",
+      "shadow": "none",
+      "width": 48
+    },
+    {
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 56,
+      "scale": "none",
+      "shadow": "none",
+      "width": 48
+    },
+    {
+      "background": "rgba(0, 0, 0, 0)",
+      "height": 56,
+      "scale": "none",
+      "shadow": "none",
+      "width": 48
+    }
+  ],
+  "periodHelpCount": 0,
+  "scrollWidth": 512,
+  "successCountParagraphs": 0,
+  "width": 512,
+  "keyboardCloseEscapeReopen": true,
+  "allOffZeroPinsThenRecovered": true,
+  "routineRefreshAbsent": true
+}

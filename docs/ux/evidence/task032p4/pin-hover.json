@@ -1,0 +1,32 @@
+{
+  "application": "e6564f01e12f03328517fec8ca617d5e36d64bc9",
+  "rest": {
+    "background": "rgba(0, 0, 0, 0)",
+    "height": 56,
+    "outlineStyle": "none",
+    "scale": "none",
+    "shadow": "none",
+    "transform": "matrix(1, 0, 0, 1, 147, 182)",
+    "visualBackground": "rgb(113, 179, 223)",
+    "visualShadow": "rgba(18, 72, 116, 0.3) 0px 4px 10px 0px",
+    "visualTransform": "none",
+    "width": 48,
+    "x": 181,
+    "y": 418.59375
+  },
+  "hover": {
+    "background": "rgba(0, 0, 0, 0)",
+    "height": 56,
+    "outlineStyle": "none",
+    "scale": "none",
+    "shadow": "none",
+    "transform": "matrix(1, 0, 0, 1, 147, 182)",
+    "visualBackground": "rgb(113, 179, 223)",
+    "visualShadow": "rgba(18, 72, 116, 0.3) 0px 4px 10px 0px",
+    "visualTransform": "matrix(1, 0, 0, 1, 0, -3)",
+    "width": 48,
+    "x": 181,
+    "y": 418.59375
+  },
+  "cardStayedOpen": true
+}

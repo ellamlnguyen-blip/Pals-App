@@ -1,8 +1,12 @@
 # Location and Maps
 
+## Map feedback amendment 2026-10-14
+
+TASK-032P4 removes the heading campus decoration, idle location disclaimer, period explanation, success count and routine Refresh button. Explicit Locate feedback, actual map/list loading/error/denial/empty/truncation states and error retries remain. No source authorization, backend persistence, polling/provider or coordinate change. Current visual lift and evidence are in TASK-032P4 handoff; prior outer-scale records describe superseded candidates.
+
 ## Place-first creation and pin interaction amendment 2026-10-14
 
-TASK-032 candidate retains marker DOM across matching source updates, tracks pointer over trigger/card plus focus and delays dismissal for travel. Selection uses independent CSS scale1.08, preserving Mapbox positioning transform and ordinary shadow; keyboard focus stays visible. New creation uses existing PublicAreaPicker and approximate3-decimal public coordinates/UNC bounds before details. Existing edit flow and caller-bound final validation/idempotency remain unchanged. No geocoder/provider/schema/GPS or public/private location boundary change. Final local evidence and incomplete fallback/device/release gates are in `docs/ux/TASK-032-INTERACTION-PHOTO-QA.md`.
+TASK-032 candidate retains marker DOM across matching source updates, tracks pointer over trigger/card plus focus and delays dismissal for travel. P4 supersedes the earlier outer scale1.08 because it composed with Mapbox positioning and caused drift. Current selection lifts only the pointer-inert visual child3px; outer48×56target/transform stays fixed, selected outline is removed and keyboard-only focus remains visible. New creation uses existing PublicAreaPicker and approximate3-decimal public coordinates/UNC bounds before details. Existing edit flow and caller-bound final validation/idempotency remain unchanged. No geocoder/provider/schema/GPS or public/private location boundary change. Final local evidence and incomplete fallback/device/release gates are in `docs/ux/TASK-032-INTERACTION-PHOTO-QA.md`.
 
 ## Hangouts map amendment 2026-10-14
 
