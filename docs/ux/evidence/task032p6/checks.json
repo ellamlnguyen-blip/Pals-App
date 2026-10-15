@@ -1,0 +1,28 @@
+{
+  "cards": 2,
+  "filters": 3,
+  "friendships": true,
+  "paginationContainers": 0,
+  "removedTexts": [
+    {
+      "present": false,
+      "text": "UNC directory"
+    },
+    {
+      "present": false,
+      "text": "Browse students who chose to appear in People."
+    },
+    {
+      "present": false,
+      "text": "Showing this page of People"
+    },
+    {
+      "present": false,
+      "text": "Your People visibility"
+    }
+  ],
+  "viewport": {
+    "height": 720,
+    "width": 319
+  }
+}
