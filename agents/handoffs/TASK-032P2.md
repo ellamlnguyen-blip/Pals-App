@@ -1,6 +1,6 @@
 # TASK-032 Stage P2 handoff: extra photos and profile fields
 
-Status: source implementation ready for coordinator review; no P2 commit or publication. Branch `agent/TASK-032-interaction-photos`, current shared HEAD `2c86ca8bb01774ab06e139090d9fafba86a2a1e8` (the coordinator advanced shared HEAD during P2 work). P2 changes remain unstaged. Coordinator owns fixture/browser QA, review, task publication, and integration.
+Status: source implementation and focused review fixes ready for coordinator review. Initial P2 commit `08409d37b9118266ee8e3ca1acda9160d6d7ce79`; follow-up crop-state fix is committed separately on the same branch. Coordinator owns fixture/browser QA, publication, and integration.
 
 ## Outcome
 
@@ -24,3 +24,8 @@ Status: source implementation ready for coordinator review; no P2 commit or publ
 ## Review focus
 
 Run owner add/replace/reposition/delete/reorder through the real local Storage/CAS path, including failed and concurrent saves, another-actor denied mutation, refresh and fresh Auth session. Inspect 319×720 and desktop gallery/crop states. Check keyboard focus return and drop behavior, especially four-photo/full and zero-photo states. Verify name save, conflict draft retention, Account compatibility and unchanged school/email. The coordinator should review the exact P2 files above before staging or committing.
+
+## Fresh P2 review fix
+
+- Save is blocked synchronously while a newly selected file is being checked and decoded. The latest selection token and Auth generation guard every asynchronous result, and an older selection cannot unlock the latest one. A candidate blob URL is released on failure, close, concealment, or unmount. The previous valid local crop remains available after a rejected candidate.
+- Replace starts without the stored rendition in the crop surface and requires a new validated file before Save. Add also requires a new file. Reposition and primary editing still permit an existing saved rendition. The Save handler rechecks the same gates before canvas export, and the P1 post-export Auth guard remains.

@@ -165,9 +165,12 @@ export function PrimaryPhotoEditor({
   const picker = useRef<HTMLInputElement>(null);
   const chooseButton = useRef<HTMLButtonElement>(null);
   const objectUrl = useRef<string | null>(null);
+  const candidateUrls = useRef(new Set<string>());
   const busyRef = useRef(false);
   const generation = useRef(0);
   const selection = useRef(0);
+  const checkingRef = useRef(false);
+  const cropReadyRef = useRef(false);
   const wasOpen = useRef(false);
   const onCloseRef = useRef(onClose);
   const [src, setSrc] = useState<string | null>(null);
@@ -179,6 +182,8 @@ export function PrimaryPhotoEditor({
   const [baseRevision, setBaseRevision] = useState(revision);
   const [needsRefresh, setNeedsRefresh] = useState(false);
   const [invalidSource, setInvalidSource] = useState(false);
+  const [checking, setChecking] = useState(false);
+  const [hasNewFile, setHasNewFile] = useState(false);
   useEffect(() => {
     onCloseRef.current = onClose;
   }, [onClose]);
@@ -193,17 +198,25 @@ export function PrimaryPhotoEditor({
       setBaseRevision(revision);
       setNeedsRefresh(false);
       setInvalidSource(false);
-      setSrc(hasPhoto ? `/profile/photo?slot=${slot}&v=${revision}` : null);
-      if (initialFile) chooseFile(initialFile);
+      checkingRef.current = false;
+      setChecking(false);
+      setHasNewFile(false);
+      setSrc(
+        !replacing && hasPhoto
+          ? `/profile/photo?slot=${slot}&v=${revision}`
+          : null,
+      );
       setCrop({ x: 0, y: 0 });
       setZoom(1);
       setArea(null);
+      cropReadyRef.current = false;
       setError("");
+      if (initialFile) void chooseFile(initialFile);
     } else if (!open && wasOpen.current) {
       wasOpen.current = false;
       if (node.open) node.close();
     }
-  }, [open, hasPhoto, revision, slot, initialFile]);
+  }, [open, hasPhoto, revision, slot, initialFile, replacing]);
 
   useEffect(() => {
     if (!src) return;
@@ -234,14 +247,20 @@ export function PrimaryPhotoEditor({
 
   useEffect(() => {
     const currentGeneration = generation;
+    const pendingCandidates = candidateUrls.current;
     const authChannel = new BroadcastChannel(AUTH_TRANSITION_CHANNEL);
     const invalidate = () => {
       currentGeneration.current++;
       selection.current++;
+      checkingRef.current = false;
+      setChecking(false);
+      setHasNewFile(false);
       busyRef.current = false;
       setBusy(false);
       if (objectUrl.current) URL.revokeObjectURL(objectUrl.current);
       objectUrl.current = null;
+      for (const url of pendingCandidates) URL.revokeObjectURL(url);
+      pendingCandidates.clear();
       setSrc(null);
       dialog.current?.close();
       onCloseRef.current();
@@ -258,62 +277,115 @@ export function PrimaryPhotoEditor({
       authChannel.close();
       document.removeEventListener("visibilitychange", onHidden);
       currentGeneration.current++;
+      checkingRef.current = false;
       if (objectUrl.current) URL.revokeObjectURL(objectUrl.current);
+      for (const url of pendingCandidates) URL.revokeObjectURL(url);
+      pendingCandidates.clear();
     };
   }, []);
 
   async function chooseFile(file?: File) {
     if (busyRef.current || !file) return;
     const selected = ++selection.current;
-    if (!accepted.includes(file.type) || !file.size || file.size > maxBytes) {
-      setInvalidSource(true);
-      setError("Choose a still JPG, PNG or WebP under 5 MB.");
-      return;
-    }
+    const actor = generation.current;
+    let candidateUrl: string | null = null;
+    checkingRef.current = true;
+    setChecking(true);
+    setError("");
     try {
+      if (!accepted.includes(file.type) || !file.size || file.size > maxBytes)
+        throw new Error("Choose a still JPG, PNG or WebP under 5 MB.");
       const { width, height } = await sourceDimensions(file);
-      if (selected !== selection.current) return;
+      if (selected !== selection.current || actor !== generation.current)
+        return;
       if (
         !width ||
         !height ||
         width * height > 20_000_000 ||
         Math.min(width, height) < 256
-      ) {
-        setInvalidSource(true);
-        setError(
+      )
+        throw new Error(
           "Choose a photo with at least 256 pixels on its short side and no more than 20 megapixels.",
         );
+      candidateUrl = URL.createObjectURL(file);
+      candidateUrls.current.add(candidateUrl);
+      const decoded = await new Promise<{ width: number; height: number }>(
+        (resolve, reject) => {
+          const image = new Image();
+          image.onload = () =>
+            resolve({ width: image.naturalWidth, height: image.naturalHeight });
+          image.onerror = () =>
+            reject(
+              new Error(
+                "This photo could not load. Choose another JPG, PNG or WebP.",
+              ),
+            );
+          image.src = candidateUrl!;
+        },
+      );
+      if (selected !== selection.current || actor !== generation.current)
         return;
-      }
+      if (
+        decoded.width * decoded.height > 20_000_000 ||
+        Math.min(decoded.width, decoded.height) < 256
+      )
+        throw new Error(
+          "Choose a photo with at least 256 pixels on its short side and no more than 20 megapixels.",
+        );
       if (objectUrl.current) URL.revokeObjectURL(objectUrl.current);
-      objectUrl.current = URL.createObjectURL(file);
+      objectUrl.current = candidateUrl;
+      candidateUrls.current.delete(candidateUrl);
+      candidateUrl = null;
       setSrc(objectUrl.current);
+      setHasNewFile(true);
       setCrop({ x: 0, y: 0 });
       setZoom(1);
+      cropReadyRef.current = false;
       setArea(null);
-      setError("");
       setInvalidSource(false);
     } catch (cause) {
-      if (selected === selection.current) {
-        setInvalidSource(true);
+      if (selected === selection.current && actor === generation.current)
         setError(
           cause instanceof Error
             ? cause.message
             : "This photo could not be read.",
         );
+      // A rejected selection never removes a previously valid local draft.
+    } finally {
+      if (candidateUrl) {
+        URL.revokeObjectURL(candidateUrl);
+        candidateUrls.current.delete(candidateUrl);
+      }
+      if (selected === selection.current && actor === generation.current) {
+        checkingRef.current = false;
+        setChecking(false);
       }
     }
   }
   function close() {
     if (busyRef.current) return;
     selection.current++;
+    checkingRef.current = false;
+    setChecking(false);
     if (objectUrl.current) URL.revokeObjectURL(objectUrl.current);
     objectUrl.current = null;
+    for (const url of candidateUrls.current) URL.revokeObjectURL(url);
+    candidateUrls.current.clear();
     setSrc(null);
     onClose();
   }
   async function save() {
-    if (busyRef.current || !src || !area) return;
+    if (
+      busyRef.current ||
+      checkingRef.current ||
+      !src ||
+      !area ||
+      !cropReadyRef.current ||
+      invalidSource ||
+      needsRefresh ||
+      ((replacing || slot === "new") && !hasNewFile)
+    )
+      return;
     busyRef.current = true;
     setBusy(true);
     setError("");
@@ -356,6 +428,8 @@ export function PrimaryPhotoEditor({
   }
   function closeAfterSave() {
     selection.current++;
+    checkingRef.current = false;
+    setChecking(false);
     if (objectUrl.current) URL.revokeObjectURL(objectUrl.current);
     objectUrl.current = null;
     setSrc(null);
@@ -411,7 +485,10 @@ export function PrimaryPhotoEditor({
                 if (!busyRef.current) setCrop(next);
               }}
               onCropComplete={(_, pixels) => {
-                if (!busyRef.current) setArea(pixels);
+                if (!busyRef.current && !checkingRef.current) {
+                  cropReadyRef.current = true;
+                  setArea(pixels);
+                }
               }}
               onZoomChange={(next) => {
                 if (!busyRef.current) setZoom(next);
@@ -478,6 +555,11 @@ export function PrimaryPhotoEditor({
             Reset
           </button>
         </div>
+        {checking && (
+          <p className="help" role="status">
+            Checking selected photo…
+          </p>
+        )}
         {error && (
           <p className="form-message error" role="alert">
             {error}
@@ -499,7 +581,15 @@ export function PrimaryPhotoEditor({
           </button>
           <button
             type="button"
-            disabled={!src || !area || busy || needsRefresh || invalidSource}
+            disabled={
+              !src ||
+              !area ||
+              busy ||
+              checking ||
+              needsRefresh ||
+              invalidSource ||
+              ((replacing || slot === "new") && !hasNewFile)
+            }
             onClick={save}
           >
             {busy ? "Saving…" : "Save photo"}
