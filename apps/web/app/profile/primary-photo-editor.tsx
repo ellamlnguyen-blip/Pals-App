@@ -482,7 +482,7 @@ export function PrimaryPhotoEditor({
               cropShape={slot === "primary" ? "round" : "rect"}
               showGrid={false}
               onCropChange={(next) => {
-                if (!busyRef.current) setCrop(next);
+                if (!busyRef.current && !checkingRef.current) setCrop(next);
               }}
               onCropComplete={(_, pixels) => {
                 if (!busyRef.current && !checkingRef.current) {
@@ -491,10 +491,10 @@ export function PrimaryPhotoEditor({
                 }
               }}
               onZoomChange={(next) => {
-                if (!busyRef.current) setZoom(next);
+                if (!busyRef.current && !checkingRef.current) setZoom(next);
               }}
-              onTouchRequest={() => !busyRef.current}
-              onWheelRequest={() => !busyRef.current}
+              onTouchRequest={() => !busyRef.current && !checkingRef.current}
+              onWheelRequest={() => !busyRef.current && !checkingRef.current}
               onMediaLoaded={({ naturalWidth, naturalHeight }) => {
                 const invalid =
                   naturalWidth * naturalHeight > 20_000_000 ||
@@ -540,14 +540,18 @@ export function PrimaryPhotoEditor({
               max="3"
               step="0.01"
               value={zoom}
-              disabled={!src || busy}
-              onChange={(event) => setZoom(Number(event.target.value))}
+              disabled={!src || busy || checking}
+              onChange={(event) => {
+                if (!checkingRef.current && !busyRef.current)
+                  setZoom(Number(event.target.value));
+              }}
             />
           </label>
           <button
             type="button"
-            disabled={!src || busy}
+            disabled={!src || busy || checking}
             onClick={() => {
+              if (checkingRef.current || busyRef.current) return;
               setCrop({ x: 0, y: 0 });
               setZoom(1);
             }}
