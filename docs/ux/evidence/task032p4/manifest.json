@@ -1,0 +1,41 @@
+{
+  "application": "e6564f01e12f03328517fec8ca617d5e36d64bc9",
+  "syntheticOnly": true,
+  "notes": "Native512×720JPEG captures; local fictional Hangouts, no user uploads/credentials/provider token. Hover receipts are actual read-only DOM geometry/styles.",
+  "files": [
+    {
+      "file": "map-cleaned.jpg",
+      "bytes": 51780,
+      "sha256": "99cebe6a31bde271c4b65e2eb1627ce198514b9ef5752e72ce3e0cae113c393c",
+      "width": 512,
+      "height": 720,
+      "format": "jpeg"
+    },
+    {
+      "file": "page-checks.json",
+      "bytes": 910,
+      "sha256": "39fedc06807f430ea18d8c06041d2d6b82c8886565d5c12321e42f6bc101f5f5"
+    },
+    {
+      "file": "pin-hover.json",
+      "bytes": 877,
+      "sha256": "03a498dcbb9cc31623840b58c52593fdc2a878ceef486bc453f4ffda25de84d7"
+    },
+    {
+      "file": "pin-preview.jpg",
+      "bytes": 47083,
+      "sha256": "c437c0422ac650801c6e8c9fc6dd7cb327f1efa521ed86b906d8640f9617e506",
+      "width": 512,
+      "height": 720,
+      "format": "jpeg"
+    },
+    {
+      "file": "results-cleaned.jpg",
+      "bytes": 49910,
+      "sha256": "27e65d941b07d6e0ea4c2c1fd16fd17dca17275fbf33ff570f16d95f61f36175",
+      "width": 512,
+      "height": 720,
+      "format": "jpeg"
+    }
+  ]
+}

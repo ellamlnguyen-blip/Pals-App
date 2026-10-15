@@ -1,12 +1,16 @@
 # Core User Flows
 
+## Map feedback amendment 2026-10-14
+
+TASK-032P4 uses a slight upward pin lift with no hover halo or outward scaling, retaining the map preview. Hangouts heading now omits campus decoration. Normal location/period explanation, result count and routine Refresh control are removed. Filters and viewport changes still use existing authorized reads; actual errors retain retry and empty states remain useful. This display cleanup does not change approximate locations or backend/privacy behavior.
+
 ## Profile feedback amendment 2026-10-14
 
 TASK-032P3 removes the visible gallery Move rows, More about you display and duplicate Photo controls panel at Ella's request. Saved fields remain in Edit profile. Extra photo options → Photo position uses the same owner revision-CAS reorder; desktop drag remains. Edit photos focuses the actual gallery. A locally served school logo replaces the checkmark in the shared owner/peer name row for recognized UNC campuses, under the existing source condition. It identifies school affiliation and does not add an enrollment assertion. Contextual cleanup retry appears only when needed; privacy/footer utilities remain. Existing TASK-032 acceptance/sign-off/hosted gates are unchanged.
 
 ## Interaction and photo amendment 2026-10-14
 
-TASK-032 local candidate: Create Hangout → choose broad public map place/label → Continue → existing event details → Create. Back preserves both steps; no automatic location permission. Saved pins enlarge slightly on selection and previews support forgiving pointer travel plus explicit Close/Escape/reopen. Own profile photo edit → in-place choose/drop/crop → explicit Save through owner Storage/CAS → authorized UI refresh. The same modal serves optional rectangular slots; existing photos expose View/Replace/Reposition/Delete and desktop drag or the Photo position selector inside extra-photo options reorder up to four. Zero photos remains valid. Inline profile editing now includes name with existing Account validation; trusted school/email remain readonly. Recrop uses the stored rendition, not an archived uncropped original. Runtime evidence and remaining device/fault/staging/sign-off gates: `TASK-032-INTERACTION-PHOTO-QA.md`.
+TASK-032 local candidate: Create Hangout → choose broad public map place/label → Continue → existing event details → Create. Back preserves both steps; no automatic location permission. Saved pins now lift their visual child3px on hover/selection with a fixed outer target (P4 supersedes the earlier enlargement); previews retain forgiving pointer travel plus explicit Close/Escape/reopen. Own profile photo edit → in-place choose/drop/crop → explicit Save through owner Storage/CAS → authorized UI refresh. The same modal serves optional rectangular slots; existing photos expose View/Replace/Reposition/Delete and desktop drag or the Photo position selector inside extra-photo options reorder up to four. Zero photos remains valid. Inline profile editing now includes name with existing Account validation; trusted school/email remain readonly. Recrop uses the stored rendition, not an archived uncropped original. Runtime evidence and remaining device/fault/staging/sign-off gates: `TASK-032-INTERACTION-PHOTO-QA.md`.
 
 ## Hangouts map amendment 2026-10-14
 
