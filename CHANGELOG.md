@@ -1,9 +1,8 @@
 # Changelog
 
-## 2026-10-14 — Requested interaction and profile photo reliability
+## 2026-10-14 — Interaction reliability and primary photo milestone
 
-TASK-032 bounds stable hover/slight pin enlargement, map-place-first creation and a preserved-design profile photo vertical, followed by reusable four-photo management and targeted field editing. Current source dependency5677446/application8504b72; canonical76067ef. Inspected existing private Storage/CAS and picker; no cropper/reorder exists. StageM is independent; primary P1 is end-to-end before P2, each fresh Sol-medium worker/review. See tasks/active/TASK-032-interaction-photo-reliability.md and Proposed ADR-0040. Backend persistence is required; hosted changes wait for Ella's explicit finalization/sign-off and existing TASK-027/028 acceptance. No source implementation dispatched before this contract's review/publication. TASK-031 remains incomplete; no release or successor claim.
-
+TASK-032 local source7e89a14f6fd0fa6ef4b5ef7d562b5a9d6b438dac includes reviewed map fixes/place-first creation and the reviewed primary-photo vertical. Contract5985e6be/main e669d987 was published and verified before implementation. Primary crop→real Supabase Save→immediate profile/header→refresh/fresh Auth persistence passed on named disposable55521/55522; other-owner raw read/storage write/profile modification denied, fields/four extras preserved. Actual319×720 modal controls fit after a targeted fix. Source lint/TS/webpack and17 image/gateway tests pass; broader desktop/touch/failure checks and map rendered acceptance remain open. StageP2 now reuses this vertical for optional-photo management and profile-name editing. See TASK-032P1 handoff. Standing backend/user-sign-off rule is recorded in AGENTS; no hosted operation or full task completion. TASK-027/028 staged acceptance and reviewed application main integration remain.
 
 ## 2026-10-14 — Hangouts map local candidate
 
