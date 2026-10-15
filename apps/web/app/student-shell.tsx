@@ -3,7 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { Bell, EnvelopeSimple } from "@phosphor-icons/react";
 import { SignOutForm } from "./auth-change-signal";
 import {
   AUTH_TRANSITION_CHANNEL,
@@ -22,9 +23,8 @@ const destinations = [
   { label: "Hangouts", href: "/hangouts", key: "hangouts" },
   { label: "Calendar", href: "/calendar", key: "calendar" },
   { label: "People", href: "/people", key: "people" },
-  { label: "Chats", href: "/chats", key: "chats" },
-  { label: "Notifications", href: "/notifications", key: "notifications" },
 ] as const;
+export const NOTIFICATION_ATTENTION_CHANNEL = "pals-notification-attention";
 
 export function BrandLink({ href = "/" }: { href?: string }) {
   return (
@@ -46,6 +46,7 @@ export function StudentHeader({
   accountReady = false,
   ownerPhotoRevision,
   available,
+  actor,
 }: {
   signedIn?: boolean;
   name?: string | null;
@@ -53,13 +54,62 @@ export function StudentHeader({
   ownerPhotoRevision?: number | null;
   attendanceAvailable?: boolean;
   available?: StudentDestinations;
+  actor?: string;
 }) {
   const router = useRouter();
+  const pathname = usePathname();
   const [photoRefresh, setPhotoRefresh] = useState(0);
   const [concealed, setConcealed] = useState(false);
+  const [unread, setUnread] = useState<boolean | null>(null);
+  const attentionRevision = useRef(0);
   const accountRef = useRef<HTMLDivElement>(null);
   const concealedRef = useRef(false);
   const authPending = useRef(new Set<string>());
+  const refreshAttention = useCallback(async () => {
+    if (!actor || !available?.notifications || concealedRef.current || document.hidden) return;
+    const started = ++attentionRevision.current;
+    try {
+      const response = await fetch("/api/notifications?summary=1", {
+        cache: "no-store",
+        credentials: "same-origin",
+        headers: { "x-pals-notification-actor": actor },
+      });
+      if (started !== attentionRevision.current || concealedRef.current || document.hidden) return;
+      if (response.status === 403) {
+        concealedRef.current = true;
+        setUnread(null);
+        setConcealed(true);
+        window.location.reload();
+        return;
+      }
+      const body = await response.json();
+      if (response.ok && body.kind === "ok" && body.actor === actor && typeof body.unread === "boolean")
+        setUnread(body.unread);
+    } catch {
+      // Preserve the last confirmed value until a fresh owner check succeeds.
+    }
+  }, [actor, available?.notifications]);
+  useEffect(() => {
+    if (!actor || !available?.notifications) return;
+    const revisionRef = attentionRevision;
+    const initial = window.setTimeout(() => void refreshAttention(), 0);
+    const timer = window.setInterval(() => void refreshAttention(), 30000);
+    const focus = () => void refreshAttention();
+    const channel = new BroadcastChannel(NOTIFICATION_ATTENTION_CHANNEL);
+    channel.onmessage = focus;
+    window.addEventListener(NOTIFICATION_ATTENTION_CHANNEL, focus);
+    window.addEventListener("focus", focus);
+    document.addEventListener("visibilitychange", focus);
+    return () => {
+      revisionRef.current++;
+      window.clearTimeout(initial);
+      window.clearInterval(timer);
+      window.removeEventListener("focus", focus);
+      window.removeEventListener(NOTIFICATION_ATTENTION_CHANNEL, focus);
+      document.removeEventListener("visibilitychange", focus);
+      channel.close();
+    };
+  }, [actor, available?.notifications, pathname, refreshAttention]);
   useEffect(() => {
     const channel = new BroadcastChannel("pals-photo-invalidated");
     const refresh = () => {
@@ -79,6 +129,8 @@ export function StudentHeader({
   useEffect(() => {
     const conceal = () => {
       concealedRef.current = true;
+      attentionRevision.current++;
+      setUnread(null);
       if (accountRef.current) accountRef.current.style.display = "none";
       setConcealed(true);
     };
@@ -143,6 +195,17 @@ export function StudentHeader({
           </Link>
         )}
         {signedIn && !accountReady && <SignOutForm />}
+        {available?.chats && (
+          <Link className="header-icon-link" href="/chats" aria-label="Chats" aria-current={pathname?.startsWith("/chats") ? "page" : undefined}>
+            <EnvelopeSimple size={25} weight="regular" aria-hidden="true" />
+          </Link>
+        )}
+        {available?.notifications && (
+          <Link className="header-icon-link header-notification-link" href="/notifications" aria-label={unread ? "Notifications, unread updates" : "Notifications"} aria-current={pathname?.startsWith("/notifications") ? "page" : undefined}>
+            <Bell size={25} weight="regular" aria-hidden="true" />
+            {unread && <span className="header-unread-dot" aria-hidden="true" />}
+          </Link>
+        )}
         {signedIn ? (
           <Link
             className="account-menu account-avatar-link"

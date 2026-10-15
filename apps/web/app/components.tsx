@@ -4,6 +4,7 @@ import { localAttendanceAvailable } from "../lib/attendance";
 import { localPeopleAvailable } from "../lib/people";
 import { localNotificationsAvailable } from "../lib/notifications";
 import { StudentHeader } from "./student-shell";
+import { access } from "../lib/access";
 export function frameAvailableDestinations() {
   return {
     calendar: localHangoutsAvailable(),
@@ -12,7 +13,7 @@ export function frameAvailableDestinations() {
     notifications: localNotificationsAvailable(),
   };
 }
-export function Frame({
+export async function Frame({
   children,
   signedIn = false,
   navigation = false,
@@ -25,17 +26,21 @@ export function Frame({
   ownerPhotoRevision?: number | null;
   profileChrome?: boolean;
 }) {
+  // The attention request is bound to this freshly resolved server actor.
+  const actor = navigation ? (await access()).user?.id : undefined;
   return (
     <div className={profileChrome ? "page profile-frame" : "page"}>
       <a className="skip-link" href="#main">
         Skip to content
       </a>
       <StudentHeader
+        key={actor ?? "no-actor"}
         signedIn={signedIn}
         accountReady={navigation}
         ownerPhotoRevision={ownerPhotoRevision}
         attendanceAvailable={signedIn && localAttendanceAvailable()}
         available={navigation ? frameAvailableDestinations() : undefined}
+        actor={actor}
       />
       <main id="main" tabIndex={-1}>
         {children}

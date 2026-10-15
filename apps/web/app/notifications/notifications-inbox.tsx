@@ -14,6 +14,8 @@ import {
   notificationTransitionState,
 } from "./notification-auth-state";
 import { AnalyticsView } from "../analytics-view";
+import { ArrowClockwise } from "@phosphor-icons/react";
+import { NOTIFICATION_ATTENTION_CHANNEL } from "../student-shell";
 type Cursor = { time: string; id: string } | null;
 type Preference = { category: string; enabled: boolean };
 const categoryCopy: Record<string, { name: string; description: string }> = {
@@ -50,6 +52,7 @@ export function NotificationsInbox({ actor }: { actor: string }) {
   const [message, setMessage] = useState("");
   const [retry, setRetry] = useState(0);
   const [page, setPage] = useState(0);
+  const [snapshot, setSnapshot] = useState<{ cutoff: string; revision: number } | null>(null);
   const cursors = useRef<Cursor[]>([null]);
   const revision = useRef(0);
   const pending = useRef(new Set<string>());
@@ -62,6 +65,7 @@ export function NotificationsInbox({ actor }: { actor: string }) {
     setPreferences([]);
     setPhase("loading");
     setMessage("");
+    setSnapshot(null);
   }, []);
   const deny = useCallback(() => {
     denied.current = true;
@@ -126,7 +130,9 @@ export function NotificationsInbox({ actor }: { actor: string }) {
           data.kind !== "ok" ||
           data.actor !== actor ||
           !Array.isArray(data.rows) ||
-          !Array.isArray(data.preferences)
+          !Array.isArray(data.preferences) ||
+          typeof data.cutoff !== "string" ||
+          !Number.isFinite(Date.parse(data.cutoff))
         )
           throw new Error("read");
         const safeRows = data.rows.filter(
@@ -146,6 +152,7 @@ export function NotificationsInbox({ actor }: { actor: string }) {
         setRows(safeRows);
         setPreferences(data.preferences);
         setPhase("ready");
+        setSnapshot({ cutoff: data.cutoff, revision: started });
         setMessage("");
       } catch {
         if (current(started)) {
@@ -156,6 +163,47 @@ export function NotificationsInbox({ actor }: { actor: string }) {
     },
     [actor, current, deny, mask, request],
   );
+  useEffect(() => {
+    if (!snapshot || phase !== "ready") return;
+    let cancelled = false;
+    let second = 0;
+    const first = requestAnimationFrame(() => {
+      second = requestAnimationFrame(async () => {
+        if (cancelled || !current(snapshot.revision)) return;
+        try {
+          const response = await request("", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ action: "acknowledge", cutoff: snapshot.cutoff }),
+          });
+          if (cancelled || !current(snapshot.revision)) return;
+          if (response.status === 403) {
+            deny();
+            return;
+          }
+          const body = await response.json();
+          if (cancelled || !current(snapshot.revision) || !response.ok || body.kind !== "ok" || body.actor !== actor) return;
+          setRows((items) => items.map((item) =>
+            !item.read_at && Date.parse(item.created_at) <= Date.parse(snapshot.cutoff)
+              ? { ...item, read_at: snapshot.cutoff }
+              : item,
+          ));
+          window.dispatchEvent(new Event(NOTIFICATION_ATTENTION_CHANNEL));
+          const channel = new BroadcastChannel(NOTIFICATION_ATTENTION_CHANNEL);
+          channel.postMessage("refresh");
+          channel.close();
+          setSnapshot(null);
+        } catch {
+          // The ledger and badge remain unread when acknowledgment is uncertain.
+        }
+      });
+    });
+    return () => {
+      cancelled = true;
+      cancelAnimationFrame(first);
+      cancelAnimationFrame(second);
+    };
+  }, [actor, current, deny, phase, request, snapshot]);
   const resume = useCallback(() => {
     if (document.hidden || denied.current) return;
     if (pending.current.size) return;
@@ -284,24 +332,21 @@ export function NotificationsInbox({ actor }: { actor: string }) {
   return (
     <div className="notifications-page">
       <AnalyticsView event="notifications_viewed" ready={phase === "ready"} />
-      <div className="notifications-heading">
-        <p className="badge">Your updates</p>
-        <h1>Notifications</h1>
-        <p>Keep up with plans and conversations around campus.</p>
-      </div>
+      <h1 className="sr-only">Notifications</h1>
       <div className="notifications-layout">
         <section className="notifications-inbox" aria-labelledby="inbox-title">
           <div className="notifications-section-heading">
             <div>
               <h2 id="inbox-title">Inbox</h2>
-              <p>Recent updates, newest first.</p>
             </div>
             {phase === "ready" && (
               <button
-                className="quiet-button"
+                className="quiet-button notifications-refresh"
+                aria-label="Refresh notifications"
+                title="Refresh notifications"
                 onClick={() => void read(page, cursors.current[page] ?? null)}
               >
-                Refresh
+                <ArrowClockwise size={20} aria-hidden="true" />
               </button>
             )}
           </div>

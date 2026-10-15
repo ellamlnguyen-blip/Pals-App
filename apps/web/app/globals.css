@@ -328,6 +328,35 @@ h1 {
   align-items: center;
   gap: 16px;
 }
+.header-icon-link {
+  position: relative;
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  border-radius: 50%;
+  color: var(--pals-profile-action);
+  text-decoration: none;
+}
+.header-icon-link:hover,
+.header-icon-link[aria-current="page"] {
+  background: var(--pals-profile-soft);
+}
+.header-icon-link:focus-visible {
+  outline: 3px solid var(--pals-focus);
+  outline-offset: 2px;
+}
+.header-unread-dot {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #d93644;
+  box-shadow: 0 0 0 2px var(--pals-surface);
+}
 .header-campus {
   grid-column: 2;
   grid-row: 1;
