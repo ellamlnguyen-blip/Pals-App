@@ -9,3 +9,5 @@ Fresh GPT-6 Sol/medium worker owns only calendar/calendar-client.tsx,calendar.cs
 ## Follow-up: remove Calendar footer note
 
 Ella’s latest marked comment also requests removal of the visible Times are in America/New_York / multi-day-plan explanation beneath the grid. Remove only that paragraph and unused calendar-note CSS. Keep actual timezone, multi-day placement, scrolling, dates, filters, previews and backend behavior. Fresh bounded worker owns those two Calendar files and the P5 handoff amendment; coordinator reviews, builds, verifies rendered absence and publishes records. This remains a substage of incomplete TASK-032, with no hosted action or successor.
+
+Footer follow-up status: source 9380c26 pushed/remote verified; coordinator review, build and rendered absence check passed. Canonical outcome publication records this local verification; parent gates remain open.
