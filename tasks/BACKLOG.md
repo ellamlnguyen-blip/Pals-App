@@ -1,5 +1,15 @@
 # Backlog
 
+## 2026-10-14 — Notification attention and header controls
+
+TASK-032P8 implements Ella’s seven marked Notifications/header requests as one UI/API/existing-ledger vertical. Contract: `tasks/active/TASK-032P8-notification-attention.md`; ADR-0041 Proposed. Disposable-local implementation/review only; parent sign-off/staging/application-main gates remain, no hosted operation or successor.
+
+
+## 2026-10-14 — Chats label local verification
+
+TASK-032P7 removes the marked Chats badge above Your chats. Source `347375374e46d774d91733a38d91404e4269f7a3` is reviewed, pushed and remote verified. Scoped lint/format and runtime production build pass; rendered preview confirms no badge with the main title and chat sections retained. Evidence: `docs/ux/evidence/task032p7/`; handoff: `agents/handoffs/TASK-032P7.md`. No backend/data/permission/hosted change. Parent TASK-032 remains incomplete behind existing gates; no successor.
+
+
 ## 2026-10-14 — Chats label cleanup
 
 TASK-032P7 removes the marked small Chats badge above Your chats. Contract: `tasks/active/TASK-032P7-chats-copy.md`. Parent gates remain; no hosted action or successor.
