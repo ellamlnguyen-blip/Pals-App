@@ -15,7 +15,10 @@ import {
 } from "./notification-auth-state";
 import { AnalyticsView } from "../analytics-view";
 import { ArrowClockwise } from "@phosphor-icons/react";
-import { NOTIFICATION_ATTENTION_CHANNEL, NOTIFICATION_OPEN_EVENT } from "../student-shell";
+import {
+  NOTIFICATION_ATTENTION_CHANNEL,
+  NOTIFICATION_OPEN_EVENT,
+} from "../student-shell";
 type Cursor = { time: string; id: string } | null;
 type Preference = { category: string; enabled: boolean };
 const categoryCopy: Record<string, { name: string; description: string }> = {
@@ -59,7 +62,10 @@ export function NotificationsInbox({ actor }: { actor: string }) {
   const [attentionError, setAttentionError] = useState(false);
   const [retry, setRetry] = useState(0);
   const [page, setPage] = useState(0);
-  const [snapshot, setSnapshot] = useState<{ cutoff: string; revision: number } | null>(null);
+  const [snapshot, setSnapshot] = useState<{
+    cutoff: string;
+    revision: number;
+  } | null>(null);
   const cursors = useRef<Cursor[]>([null]);
   const revision = useRef(0);
   const pending = useRef(new Set<string>());
@@ -182,7 +188,10 @@ export function NotificationsInbox({ actor }: { actor: string }) {
           const response = await request("", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ action: "acknowledge", cutoff: snapshot.cutoff }),
+            body: JSON.stringify({
+              action: "acknowledge",
+              cutoff: snapshot.cutoff,
+            }),
           });
           if (cancelled || !current(snapshot.revision)) return;
           if (response.status === 403) {
@@ -197,11 +206,14 @@ export function NotificationsInbox({ actor }: { actor: string }) {
             refreshAttention();
             return;
           }
-          setRows((items) => items.map((item) =>
-            !item.read_at && Date.parse(item.created_at) <= Date.parse(snapshot.cutoff)
-              ? { ...item, read_at: snapshot.cutoff }
-              : item,
-          ));
+          setRows((items) =>
+            items.map((item) =>
+              !item.read_at &&
+              Date.parse(item.created_at) <= Date.parse(snapshot.cutoff)
+                ? { ...item, read_at: snapshot.cutoff }
+                : item,
+            ),
+          );
           setAttentionError(false);
           refreshAttention();
           setSnapshot(null);

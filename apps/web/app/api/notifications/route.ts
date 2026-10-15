@@ -18,7 +18,8 @@ export async function GET(request: NextRequest) {
   if (
     [...q.keys()].some(
       (key) =>
-        !["probe", "summary", "time", "id"].includes(key) || q.getAll(key).length !== 1,
+        !["probe", "summary", "time", "id"].includes(key) ||
+        q.getAll(key).length !== 1,
     )
   )
     return reply({ kind: "invalid" }, 400);
@@ -98,15 +99,21 @@ export async function POST(request: NextRequest) {
     input.cutoff.length <= 80 &&
     Number.isFinite(Date.parse(input.cutoff))
   ) {
-    const result = await target.client.rpc("acknowledge_notification_attention", {
-      p_cutoff: input.cutoff,
-    });
+    const result = await target.client.rpc(
+      "acknowledge_notification_attention",
+      {
+        p_cutoff: input.cutoff,
+      },
+    );
     if (result.error)
       return reply(
         { kind: errorKind(result.error.code) },
         result.error.code === "42501" ? 403 : 503,
       );
-    return reply({ kind: result.data === true ? "ok" : "error", actor: target.user.id }, result.data === true ? 200 : 503);
+    return reply(
+      { kind: result.data === true ? "ok" : "error", actor: target.user.id },
+      result.data === true ? 200 : 503,
+    );
   }
   if (
     input.action === "read" &&

@@ -168,7 +168,10 @@
   }
 }
 
-.notifications-refresh { width: 44px; padding: 0 !important; }
+.notifications-refresh {
+  width: 44px;
+  padding: 0 !important;
+}
 .notifications-inbox .quiet-button,
 .notification-pages .quiet-button {
   display: inline-flex;

@@ -67,7 +67,13 @@ export function StudentHeader({
   const concealedRef = useRef(false);
   const authPending = useRef(new Set<string>());
   const refreshAttention = useCallback(async () => {
-    if (!actor || !available?.notifications || concealedRef.current || document.hidden) return;
+    if (
+      !actor ||
+      !available?.notifications ||
+      concealedRef.current ||
+      document.hidden
+    )
+      return;
     const started = ++attentionRevision.current;
     try {
       const response = await fetch("/api/notifications?summary=1", {
@@ -75,13 +81,23 @@ export function StudentHeader({
         credentials: "same-origin",
         headers: { "x-pals-notification-actor": actor },
       });
-      if (started !== attentionRevision.current || concealedRef.current || document.hidden) return;
+      if (
+        started !== attentionRevision.current ||
+        concealedRef.current ||
+        document.hidden
+      )
+        return;
       if (response.status === 403) {
         setUnread(null);
         return;
       }
       const body = await response.json();
-      if (response.ok && body.kind === "ok" && body.actor === actor && typeof body.unread === "boolean")
+      if (
+        response.ok &&
+        body.kind === "ok" &&
+        body.actor === actor &&
+        typeof body.unread === "boolean"
+      )
         setUnread(body.unread);
     } catch {
       // Preserve the last confirmed value until a fresh owner check succeeds.
@@ -194,19 +210,43 @@ export function StudentHeader({
         )}
         {signedIn && !accountReady && <SignOutForm />}
         {available?.chats && (
-          <Link className="header-icon-link" href="/chats" aria-label="Chats" aria-current={pathname?.startsWith("/chats") ? "page" : undefined}>
+          <Link
+            className="header-icon-link"
+            href="/chats"
+            aria-label="Chats"
+            aria-current={pathname?.startsWith("/chats") ? "page" : undefined}
+          >
             <EnvelopeSimple size={25} weight="regular" aria-hidden="true" />
           </Link>
         )}
         {available?.notifications && (
-          <Link className="header-icon-link header-notification-link" href="/notifications" aria-label={unread ? "Notifications, unread updates" : "Notifications"} aria-current={pathname?.startsWith("/notifications") ? "page" : undefined} onClick={(event) => {
-            if (pathname === "/notifications") {
-              event.preventDefault();
-              window.dispatchEvent(new Event(NOTIFICATION_OPEN_EVENT));
+          <Link
+            className="header-icon-link header-notification-link"
+            href="/notifications"
+            aria-label={
+              unread ? "Notifications, unread updates" : "Notifications"
             }
-          }}>
+            aria-current={
+              pathname?.startsWith("/notifications") ? "page" : undefined
+            }
+            onClick={(event) => {
+              if (
+                pathname === "/notifications" &&
+                event.button === 0 &&
+                !event.metaKey &&
+                !event.ctrlKey &&
+                !event.shiftKey &&
+                !event.altKey
+              ) {
+                event.preventDefault();
+                window.dispatchEvent(new Event(NOTIFICATION_OPEN_EVENT));
+              }
+            }}
+          >
             <Bell size={25} weight="regular" aria-hidden="true" />
-            {unread && <span className="header-unread-dot" aria-hidden="true" />}
+            {unread && (
+              <span className="header-unread-dot" aria-hidden="true" />
+            )}
           </Link>
         )}
         {signedIn ? (
