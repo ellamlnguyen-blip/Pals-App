@@ -2,9 +2,14 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { usePathname, useRouter } from "next/navigation";
+import { useEffect, useRef, useState } from "react";
 import { SignOutForm } from "./auth-change-signal";
+import {
+  AUTH_TRANSITION_CHANNEL,
+  AUTH_TRANSITION_EVENT,
+  type AuthTransitionMessage,
+} from "./auth-transition";
 
 export type StudentDestinations = {
   calendar: boolean;
@@ -49,6 +54,78 @@ export function StudentHeader({
   attendanceAvailable?: boolean;
   available?: StudentDestinations;
 }) {
+  const router = useRouter();
+  const [photoRefresh, setPhotoRefresh] = useState(0);
+  const [concealed, setConcealed] = useState(false);
+  const accountRef = useRef<HTMLDivElement>(null);
+  const concealedRef = useRef(false);
+  const authPending = useRef(new Set<string>());
+  useEffect(() => {
+    const channel = new BroadcastChannel("pals-photo-invalidated");
+    const refresh = () => {
+      if (concealedRef.current || authPending.current.size || document.hidden)
+        return;
+      setPhotoRefresh((value) => value + 1);
+      router.refresh();
+    };
+    channel.addEventListener("message", refresh);
+    window.addEventListener("pals-photo-invalidated", refresh);
+    return () => {
+      channel.removeEventListener("message", refresh);
+      channel.close();
+      window.removeEventListener("pals-photo-invalidated", refresh);
+    };
+  }, [router]);
+  useEffect(() => {
+    const conceal = () => {
+      concealedRef.current = true;
+      if (accountRef.current) accountRef.current.style.display = "none";
+      setConcealed(true);
+    };
+    const auth = (message: AuthTransitionMessage) => {
+      conceal();
+      if (message.phase === "begin") authPending.current.add(message.token);
+      else if (message.phase !== "revalidate")
+        authPending.current.delete(message.token);
+      if (
+        !document.hidden &&
+        !authPending.current.size &&
+        message.phase !== "begin"
+      )
+        window.location.reload();
+    };
+    const localAuth = (event: Event) =>
+      auth((event as CustomEvent<AuthTransitionMessage>).detail);
+    const visibility = () => {
+      if (document.hidden) conceal();
+      else if (concealedRef.current && !authPending.current.size)
+        window.location.reload();
+    };
+    const pageshow = () => {
+      if (concealedRef.current && !document.hidden && !authPending.current.size)
+        window.location.reload();
+    };
+    window.addEventListener(AUTH_TRANSITION_EVENT, localAuth);
+    window.addEventListener("pagehide", conceal);
+    window.addEventListener("pageshow", pageshow);
+    document.addEventListener("visibilitychange", visibility);
+    let channel: BroadcastChannel | null = null;
+    try {
+      channel = new BroadcastChannel(AUTH_TRANSITION_CHANNEL);
+      channel.onmessage = (event: MessageEvent<AuthTransitionMessage>) =>
+        auth(event.data);
+    } catch {
+      /* Local transitions and lifecycle still conceal account details. */
+    }
+    if (document.hidden) conceal();
+    return () => {
+      window.removeEventListener(AUTH_TRANSITION_EVENT, localAuth);
+      window.removeEventListener("pagehide", conceal);
+      window.removeEventListener("pageshow", pageshow);
+      document.removeEventListener("visibilitychange", visibility);
+      channel?.close();
+    };
+  }, []);
   return (
     <header
       className={`student-header${signedIn && !accountReady ? " student-header--limited" : ""}`}
@@ -59,7 +136,7 @@ export function StudentHeader({
       ) : (
         <span className="header-campus">UNC Chapel Hill</span>
       )}
-      <div className="header-account">
+      <div ref={accountRef} className="header-account" hidden={concealed}>
         {signedIn && !accountReady && (
           <Link className="header-safety" href="/safety">
             Safety
@@ -73,7 +150,7 @@ export function StudentHeader({
             aria-label="Your profile"
           >
             <OwnerAvatar
-              key={ownerPhotoRevision ?? "unknown"}
+              key={`${ownerPhotoRevision ?? "unknown"}:${photoRefresh}`}
               accountReady={accountReady}
               name={name}
               photoRevision={ownerPhotoRevision}

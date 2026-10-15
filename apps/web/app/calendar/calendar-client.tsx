@@ -172,6 +172,10 @@ export function CalendarClient({
         }
       });
   }
+  const showRef = useRef(show);
+  useEffect(() => {
+    showRef.current = show;
+  });
   useEffect(() => {
     const escape = (event: KeyboardEvent) => {
       if (event.key === "Escape" && activeRef.current) close(true);
@@ -206,6 +210,15 @@ export function CalendarClient({
     };
     const localAuth = (event: Event) =>
       auth((event as CustomEvent<AuthTransitionMessage>).detail);
+    const photoInvalidated = () => {
+      if (concealedRef.current || authPending.current.size || document.hidden)
+        return;
+      const id = activeRef.current;
+      const element = triggerRef.current;
+      if (!id || !element?.isConnected) return;
+      close();
+      showRef.current(id, element);
+    };
     const visibility = () => {
       if (document.hidden) conceal();
       else if (concealedRef.current && !authPending.current.size)
@@ -215,6 +228,7 @@ export function CalendarClient({
     window.addEventListener("pointerdown", outside);
     document.addEventListener("focusin", focusOutside);
     window.addEventListener(AUTH_TRANSITION_EVENT, localAuth);
+    window.addEventListener("pals-photo-invalidated", photoInvalidated);
     window.addEventListener("pagehide", conceal);
     document.addEventListener("visibilitychange", visibility);
     let channel: BroadcastChannel | null = null;
@@ -224,6 +238,13 @@ export function CalendarClient({
         auth(event.data);
     } catch {
       /* Local event and page lifecycle still conceal data. */
+    }
+    let photoChannel: BroadcastChannel | null = null;
+    try {
+      photoChannel = new BroadcastChannel("pals-photo-invalidated");
+      photoChannel.onmessage = photoInvalidated;
+    } catch {
+      /* Local photo invalidation still refreshes the preview. */
     }
     const restore = () => {
       if (concealedRef.current && !document.hidden && !authPending.current.size)
@@ -239,10 +260,12 @@ export function CalendarClient({
       window.removeEventListener("pointerdown", outside);
       document.removeEventListener("focusin", focusOutside);
       window.removeEventListener(AUTH_TRANSITION_EVENT, localAuth);
+      window.removeEventListener("pals-photo-invalidated", photoInvalidated);
       window.removeEventListener("pagehide", conceal);
       document.removeEventListener("visibilitychange", visibility);
       window.removeEventListener("pageshow", restore);
       channel?.close();
+      photoChannel?.close();
       pendingGeneration.current++;
       currentActive.current = null;
       currentRequest.current?.abort();

@@ -8,6 +8,12 @@ import type { StudentDestinations } from "../student-shell";
 import { ProfileSummary } from "./profile-summary";
 import { validShortBio } from "@pals/validation";
 import { SignOutForm } from "../auth-change-signal";
+import {
+  AUTH_TRANSITION_CHANNEL,
+  AUTH_TRANSITION_EVENT,
+  type AuthTransitionMessage,
+} from "../auth-transition";
+import { PrimaryPhotoEditor } from "./primary-photo-editor";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import type { OwnerProfile } from "@pals/types";
@@ -52,6 +58,11 @@ export function ProfileEditor({
   attendanceAvailable: boolean;
 }) {
   const router = useRouter();
+  const content = useRef<HTMLDivElement>(null);
+  const concealedRef = useRef(false);
+  const actionEpoch = useRef(0);
+  const pendingAuth = useRef(new Set<string>());
+  const [concealed, setConcealed] = useState(false);
   const photoStatus = useRef<HTMLDivElement>(null);
   const detailStatus = useRef<HTMLDivElement>(null);
   const editButton = useRef<HTMLButtonElement>(null);
@@ -89,6 +100,7 @@ export function ProfileEditor({
     // Leave an active draft and its original revision intact so a stale save
     // still reports a conflict instead of replacing newer changes.
     if (
+      concealedRef.current ||
       editing ||
       pending ||
       profile.revision === seenProfileRevision.current ||
@@ -102,14 +114,88 @@ export function ProfileEditor({
     setRevision(profile.revision);
   }, [editing, pending, profile, revision]);
   useEffect(() => {
+    if (concealedRef.current) return;
     if (restoreEditFocus.current && !editing && !pending) {
       editButton.current?.focus();
       restoreEditFocus.current = false;
     }
   }, [editing, pending]);
   const [photoSlot, setPhotoSlot] = useState<string | null>(null);
+  const [editingPrimary, setEditingPrimary] = useState(false);
+  const [primaryRevision, setPrimaryRevision] = useState<number | null>(null);
   useEffect(() => {
-    if (!editing) return;
+    const epochRef = actionEpoch;
+    const conceal = () => {
+      epochRef.current++;
+      concealedRef.current = true;
+      if (content.current) content.current.style.display = "none";
+      photoDialog.current?.close();
+      setSelectedPhoto(null);
+      setViewingPhoto(false);
+      setEditingPrimary(false);
+      setEditing(false);
+      setPrimaryRevision(null);
+      setValues({});
+      setSaved({});
+      setFeedback({});
+      setConcealed(true);
+    };
+    const auth = (message: AuthTransitionMessage) => {
+      conceal();
+      if (message.phase === "begin") pendingAuth.current.add(message.token);
+      else if (message.phase !== "revalidate")
+        pendingAuth.current.delete(message.token);
+      if (
+        !document.hidden &&
+        !pendingAuth.current.size &&
+        message.phase !== "begin"
+      )
+        window.location.reload();
+    };
+    const localAuth = (event: Event) =>
+      auth((event as CustomEvent<AuthTransitionMessage>).detail);
+    const visibility = () => {
+      if (document.hidden) conceal();
+      else if (concealedRef.current && !pendingAuth.current.size)
+        window.location.reload();
+    };
+    const pageshow = () => {
+      if (concealedRef.current && !document.hidden && !pendingAuth.current.size)
+        window.location.reload();
+    };
+    window.addEventListener(AUTH_TRANSITION_EVENT, localAuth);
+    window.addEventListener("pagehide", conceal);
+    window.addEventListener("pageshow", pageshow);
+    document.addEventListener("visibilitychange", visibility);
+    let channel: BroadcastChannel | null = null;
+    try {
+      channel = new BroadcastChannel(AUTH_TRANSITION_CHANNEL);
+      channel.onmessage = (event: MessageEvent<AuthTransitionMessage>) =>
+        auth(event.data);
+    } catch {
+      /* Local transitions still conceal this editor. */
+    }
+    if (document.hidden) conceal();
+    return () => {
+      epochRef.current++;
+      window.removeEventListener(AUTH_TRANSITION_EVENT, localAuth);
+      window.removeEventListener("pagehide", conceal);
+      window.removeEventListener("pageshow", pageshow);
+      document.removeEventListener("visibilitychange", visibility);
+      channel?.close();
+    };
+  }, []);
+  function mayApply(epoch: number) {
+    return !concealedRef.current && actionEpoch.current === epoch;
+  }
+  const openPrimary = () => {
+    if (concealedRef.current) return;
+    setPhotoSlot("primary");
+    setFeedback({});
+    setEditingPrimary(true);
+  };
+  useEffect(() => {
+    if (!editing || concealedRef.current) return;
     editPanel.current?.scrollIntoView({
       behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
         ? "auto"
@@ -158,7 +244,8 @@ export function ProfileEditor({
     if (!slot) return;
     skipPhotoFocusRestore.current = true;
     photoDialog.current?.close();
-    focusPhotoInput(slot);
+    if (slot === "primary") openPrimary();
+    else focusPhotoInput(slot);
   }
   function openEditor() {
     setFeedback({});
@@ -170,11 +257,14 @@ export function ProfileEditor({
     work: () => Promise<ProfileResult>,
     done?: (result: ProfileResult) => void,
   ) {
+    if (concealedRef.current) return;
+    const epoch = actionEpoch.current;
     setBusyLabel(label);
     setFeedback({});
     startTransition(async () => {
       try {
         const result = await work();
+        if (!mayApply(epoch)) return;
         setFeedback(result);
         if (result.cleanupNeeded !== undefined)
           setCleanupNeeded(result.cleanupNeeded);
@@ -185,6 +275,7 @@ export function ProfileEditor({
           photoStatus.current?.focus();
         if (label === "Saving your profile…") detailStatus.current?.focus();
       } catch {
+        if (!mayApply(epoch)) return;
         setFeedback({
           error:
             "We couldn’t finish that request. Your text is still here. Retry, or reload to check account access and the latest saved profile.",
@@ -223,7 +314,12 @@ export function ProfileEditor({
     );
   }
   return (
-    <div className="profile-page" aria-busy={pending}>
+    <div
+      ref={content}
+      className="profile-page"
+      aria-busy={pending}
+      hidden={concealed}
+    >
       <ProfileTopbar
         back="/hangouts"
         backLabel="Back to Hangouts"
@@ -263,11 +359,11 @@ export function ProfileEditor({
         </p>
       </ProfileTopbar>
       <div className="profile-hero">
-        {profile.primary_photo_path ? (
+        {profile.primary_photo_path || primaryRevision !== null ? (
           <OwnerDisplayPhoto
-            key={`primary:${profile.revision}`}
+            key={`primary:${primaryRevision ?? profile.revision}`}
             slot="primary"
-            revision={profile.revision}
+            revision={primaryRevision ?? profile.revision}
             alt="Your primary profile photo"
             onSelect={selectPhoto}
           />
@@ -275,23 +371,45 @@ export function ProfileEditor({
           <div className="profile-hero-empty">
             <CameraIcon size={42} weight="duotone" aria-hidden="true" />
             <span>No photo yet</span>
-            <button type="button" onClick={() => focusPhotoInput("primary")}>
+            <button type="button" onClick={openPrimary}>
               Add your main photo
             </button>
           </div>
         )}
-        {profile.primary_photo_path && (
+        {(profile.primary_photo_path || primaryRevision !== null) && (
           <button
             className="profile-portrait-edit"
             type="button"
             aria-label="Edit main photo"
             disabled={pending || editing}
-            onClick={() => focusPhotoInput("primary")}
+            onClick={openPrimary}
           >
             <PencilSimpleIcon size={22} weight="bold" aria-hidden="true" />
           </button>
         )}
       </div>
+      <PrimaryPhotoEditor
+        open={editingPrimary}
+        revision={revision}
+        hasPhoto={!!profile.primary_photo_path || primaryRevision !== null}
+        onClose={() => setEditingPrimary(false)}
+        onNeedsRefresh={() => router.refresh()}
+        onSaved={(result) => {
+          if (concealedRef.current) return;
+          setFeedback(result);
+          if (result.revision !== undefined) {
+            setRevision(result.revision);
+            setPrimaryRevision(result.revision);
+          }
+          if (result.cleanupNeeded !== undefined)
+            setCleanupNeeded(result.cleanupNeeded);
+          router.refresh();
+          window.dispatchEvent(new Event("pals-photo-invalidated"));
+          const channel = new BroadcastChannel("pals-photo-invalidated");
+          channel.postMessage(null);
+          channel.close();
+        }}
+      />
       <dialog
         ref={photoDialog}
         className="profile-photo-dialog"
@@ -499,7 +617,7 @@ export function ProfileEditor({
               )}
             </div>
             <p className="help">
-              Original uploads stay private. Selected photos can appear to
+              Uploaded photos stay private. Selected photos can appear to
               eligible students only while your People and rich sharing choices
               are on. JPG, PNG or WebP, under 5 MB each.
               {peopleAvailable && (
@@ -510,7 +628,6 @@ export function ProfileEditor({
               )}
             </p>
             {[
-              "primary",
               ...profile.additional_photo_paths.map((_, i) => String(i)),
               ...(profile.additional_photo_paths.length < 4 ? ["new"] : []),
             ].map((slot) => (
@@ -530,7 +647,7 @@ export function ProfileEditor({
             ))}
             <p className="help">
               Up to four extra photos. Photos save separately from your details.
-              Original photo metadata is kept private with the image.
+              New photo uploads are processed to remove embedded metadata.
             </p>
             {cleanupNeeded && (
               <p className="form-message">

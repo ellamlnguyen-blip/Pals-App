@@ -132,3 +132,68 @@ export async function sanitizePeerPhoto(
     throw new Error("Invalid image");
   return output;
 }
+
+/** Validate an owner upload independently of the browser crop controls. */
+export async function normalizeOwnerPhoto(
+  input: Uint8Array,
+  shape: "primary" | "extra",
+): Promise<Uint8Array> {
+  if (!input.length || input.length > maxInput || !sourceFormat(input))
+    throw new Error("Invalid image");
+  const format = sourceFormat(input);
+  const source = sharp(input, {
+    limitInputPixels: maxPixels,
+    failOn: "warning",
+  }).timeout({ seconds: 5 });
+  const metadata = await source.metadata();
+  if (
+    metadata.format !== format ||
+    !metadata.width ||
+    !metadata.height ||
+    metadata.width * metadata.height > maxPixels ||
+    (metadata.pages ?? 1) !== 1
+  )
+    throw new Error("Invalid image");
+  const swapped = [5, 6, 7, 8].includes(metadata.orientation ?? 1);
+  const width = swapped ? metadata.height : metadata.width;
+  const height = swapped ? metadata.width : metadata.height;
+  const target =
+    shape === "primary"
+      ? {
+          width: Math.min(1024, width, height),
+          height: Math.min(1024, width, height),
+        }
+      : (() => {
+          const outputHeight = Math.min(800, height, Math.floor(width / 1.8));
+          return {
+            width: Math.floor(outputHeight * 1.8),
+            height: outputHeight,
+          };
+        })();
+  if (target.width < 128 || target.height < 128)
+    throw new Error("Invalid image");
+  const output = await source
+    .rotate()
+    .resize({
+      ...target,
+      fit: "cover",
+      position: "centre",
+    })
+    .webp({ quality: 90, effort: 4 })
+    .toBuffer();
+  const normalized = await sharp(output).metadata();
+  if (
+    !output.length ||
+    output.length > maxOutput ||
+    !normalized.width ||
+    !normalized.height ||
+    normalized.width > target.width ||
+    normalized.height > target.height ||
+    Math.abs(
+      normalized.width / normalized.height - target.width / target.height,
+    ) >
+      1 / Math.min(normalized.width, normalized.height)
+  )
+    throw new Error("Invalid image");
+  return output;
+}

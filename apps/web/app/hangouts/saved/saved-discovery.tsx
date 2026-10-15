@@ -254,6 +254,10 @@ export function SavedDiscovery({ token }: { token: string }) {
         }
       });
   }
+  const showRef = useRef(show);
+  useEffect(() => {
+    showRef.current = show;
+  });
   useEffect(() => {
     const frame = requestAnimationFrame(() => {
       const context = readBrowseContext();
@@ -370,6 +374,18 @@ export function SavedDiscovery({ token }: { token: string }) {
     };
     const localAuth = (event: Event) =>
       auth((event as CustomEvent<AuthTransitionMessage>).detail);
+    const photoInvalidated = () => {
+      if (concealedRef.current || authPending.current.size || document.hidden)
+        return;
+      const id = activeRef.current;
+      const element = trigger.current;
+      if (!id || !element?.isConnected) return;
+      const restoreFocus = !!previewRef.current?.contains(
+        document.activeElement,
+      );
+      closePreview();
+      showRef.current(id, element, restoreFocus, element.matches(":hover"));
+    };
     const visibility = () => {
       if (document.hidden) conceal();
       else if (concealedRef.current && !authPending.current.size)
@@ -381,6 +397,7 @@ export function SavedDiscovery({ token }: { token: string }) {
     };
     window.addEventListener("keydown", escape);
     window.addEventListener(AUTH_TRANSITION_EVENT, localAuth);
+    window.addEventListener("pals-photo-invalidated", photoInvalidated);
     window.addEventListener("pagehide", conceal);
     window.addEventListener("pageshow", pageshow);
     document.addEventListener("visibilitychange", visibility);
@@ -392,16 +409,25 @@ export function SavedDiscovery({ token }: { token: string }) {
     } catch {
       /* Local transition and lifecycle events still conceal. */
     }
+    let photoChannel: BroadcastChannel | null = null;
+    try {
+      photoChannel = new BroadcastChannel("pals-photo-invalidated");
+      photoChannel.onmessage = photoInvalidated;
+    } catch {
+      /* Local photo invalidation still refreshes the preview. */
+    }
     if (document.hidden) conceal();
     const currentGeneration = generation;
     const currentRequest = request;
     return () => {
       window.removeEventListener("keydown", escape);
       window.removeEventListener(AUTH_TRANSITION_EVENT, localAuth);
+      window.removeEventListener("pals-photo-invalidated", photoInvalidated);
       window.removeEventListener("pagehide", conceal);
       window.removeEventListener("pageshow", pageshow);
       document.removeEventListener("visibilitychange", visibility);
       channel?.close();
+      photoChannel?.close();
       currentGeneration.current++;
       currentRequest.current?.abort();
       if (closeTimer.current) clearTimeout(closeTimer.current);
