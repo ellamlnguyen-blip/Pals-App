@@ -42,3 +42,7 @@ Limits: no physical-device gestures, browser network-fault interception, second-
 ## Task source publication
 
 Candidate `7fcbf896deea649507e65bd51f421bb7b332e3bc` (application f2a4b4c) is pushed and independently remote verified. ProposedADR0041 remains unaccepted; canonical outcome integration contains only reviewed documentation/evidence. Backend migration stays on source branch pending accepted release/sign-off gates.
+
+## Canonical publication receipt
+
+Reviewed documentation branch `1994384b92aba48343a2b10f51594e2311669240` and documentation-only main integration `3728f0c35e4d32b5425aec15d28599a52c7159b3` were pushed and independently remote verified. Inventory contained eighteen documentation/evidence files only; no application/backend migration/tests/dependency/config source was integrated into main. Candidate7fcbf896 remains on its task branch behind parent acceptance gates. This receipt records the observed integration, does not accept ADR0041 or declare TASK-032 complete, and does not dispatch a successor.
