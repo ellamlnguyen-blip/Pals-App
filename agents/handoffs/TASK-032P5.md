@@ -21,3 +21,7 @@ Task candidate `dee77e3906d64eae0de6efa93cdbeff6fa6158e9` is pushed and independ
 ## Canonical publication receipt
 
 Reviewed documentation branch `a9b498bc24affbcca4e4d2e90949d78d7ea78a4c` and documentation-only canonical integration `3aa4418c3398b308c728f77d536cbc72aef16540` were pushed and independently remote verified. Diff inventory contained only the ten named documentation/evidence files; no application/backend code reached main. This receipt records that observed integration rather than its own future commit. Parent TASK-032 remains incomplete and no automatic successor is dispatched.
+
+## Calendar footer note follow-up
+
+Removed the visible timezone/multi-day explanation beneath the Calendar grid and its unused `.calendar-note` CSS rule. The two-file source diff contains only those nine deleted lines; date, timezone, multi-day placement, grid, filters, previews, and data behavior were not changed. Scoped ESLint and Prettier checks passed through the installed binaries, and `git diff --check` passed. The pnpm wrapper could not run because the preexisting `node_modules` symlink targets another worktree; no dependency files were changed. Coordinator owns build, rendered verification, review, publication, and parent gates. This follow-up has no backend, hosted, or persistence change. Standard speed could not be configured or verified through the task tools.

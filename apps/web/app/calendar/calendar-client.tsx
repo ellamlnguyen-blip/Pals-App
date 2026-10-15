@@ -535,10 +535,6 @@ export function CalendarClient({
           </div>
         </div>
       )}
-      <p className="calendar-note">
-        Times are in America/New_York. Multi-day plans continue across the days
-        they span; plans without an end appear on their start day.
-      </p>
       {!concealed && active && (
         <div
           ref={previewRef}

@@ -339,11 +339,6 @@
 .calendar-month .calendar-event span {
   display: none;
 }
-.calendar-note {
-  color: var(--pals-muted);
-  font-size: 0.88rem;
-  margin-top: 0.8rem;
-}
 .calendar-empty {
   padding: 1.5rem;
   background: var(--pals-surface-raised);
