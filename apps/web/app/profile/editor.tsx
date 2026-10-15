@@ -65,12 +65,11 @@ export function ProfileEditor({
   const mutationBusy = useRef(false);
   const pendingAuth = useRef(new Set<string>());
   const [concealed, setConcealed] = useState(false);
-  const photoStatus = useRef<HTMLDivElement>(null);
+  const gallery = useRef<HTMLDivElement>(null);
+  const editPhotosButton = useRef<HTMLButtonElement>(null);
   const detailStatus = useRef<HTMLDivElement>(null);
   const editButton = useRef<HTMLButtonElement>(null);
   const editPanel = useRef<HTMLDivElement>(null);
-  const photoPanel = useRef<HTMLDetailsElement>(null);
-  const photoSummary = useRef<HTMLElement>(null);
   const photoDialog = useRef<HTMLDialogElement>(null);
   const viewPhotoButton = useRef<HTMLButtonElement>(null);
   const closePhotoButton = useRef<HTMLButtonElement>(null);
@@ -238,16 +237,15 @@ export function ProfileEditor({
       ?.focus({ preventScroll: true });
   }, [editing]);
   function openPhotos() {
-    if (photoPanel.current) {
-      photoPanel.current.open = true;
-      photoPanel.current.scrollIntoView({
-        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
-          ? "auto"
-          : "smooth",
-        block: "start",
-      });
-      photoSummary.current?.focus({ preventScroll: true });
-    }
+    const firstPhoto =
+      gallery.current?.querySelector<HTMLButtonElement>("button");
+    firstPhoto?.scrollIntoView({
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+        ? "auto"
+        : "smooth",
+      block: "center",
+    });
+    firstPhoto?.focus({ preventScroll: true });
   }
   function selectPhoto(
     slot: string,
@@ -399,7 +397,7 @@ export function ProfileEditor({
         done?.(result);
         router.refresh();
         if (!result.error && label.includes("photo"))
-          photoStatus.current?.focus();
+          editPhotosButton.current?.focus();
         if (label === "Saving your profile…") detailStatus.current?.focus();
       } catch {
         if (!mayApply(epoch)) return;
@@ -621,6 +619,43 @@ export function ProfileEditor({
                 </button>
                 {selectedPhoto.slot !== "primary" && (
                   <>
+                    <label className="profile-photo-position">
+                      Photo position
+                      <select
+                        value={selectedPhoto.slot}
+                        disabled={
+                          pending ||
+                          !!cropTarget ||
+                          galleryPaths.includes("pending")
+                        }
+                        onChange={(event) => {
+                          const from = Number(selectedPhoto.slot);
+                          const to = Number(event.target.value);
+                          if (
+                            selectedPhoto.revision !== revision ||
+                            selectedPhoto.path !== galleryPaths[from]
+                          ) {
+                            setFeedback({
+                              error:
+                                "Photos changed. Reload the latest profile before reordering.",
+                            });
+                            photoDialog.current?.close();
+                            router.refresh();
+                            return;
+                          }
+                          skipPhotoFocusRestore.current = true;
+                          photoDialog.current?.close();
+                          editPhotosButton.current?.focus();
+                          movePhoto(from, to);
+                        }}
+                      >
+                        {galleryPaths.map((_, index) => (
+                          <option key={index} value={index}>
+                            Position {index + 1}
+                          </option>
+                        ))}
+                      </select>
+                    </label>
                     <button
                       type="button"
                       disabled={pending || !!cropTarget}
@@ -665,11 +700,11 @@ export function ProfileEditor({
       >
         <div className="profile-gallery-heading">
           <h2 id="profile-gallery-heading">Photos</h2>
-          <button type="button" onClick={openPhotos}>
+          <button ref={editPhotosButton} type="button" onClick={openPhotos}>
             Edit photos <span>(Optional)</span>
           </button>
         </div>
-        <div className="profile-gallery">
+        <div className="profile-gallery" ref={gallery}>
           {Array.from({ length: 4 }, (_, index) => {
             const occupied = index < galleryPaths.length;
             const addable = index === galleryPaths.length;
@@ -745,36 +780,6 @@ export function ProfileEditor({
                     Add photo {index + 1} · choose or drop
                   </button>
                 )}
-                {occupied && (
-                  <div className="profile-gallery-order">
-                    <button
-                      type="button"
-                      disabled={
-                        index === 0 ||
-                        pending ||
-                        !!cropTarget ||
-                        galleryPaths.includes("pending")
-                      }
-                      onClick={() => movePhoto(index, index - 1)}
-                      aria-label={`Move photo ${index + 1} left`}
-                    >
-                      Move left
-                    </button>
-                    <button
-                      type="button"
-                      disabled={
-                        index === galleryPaths.length - 1 ||
-                        pending ||
-                        !!cropTarget ||
-                        galleryPaths.includes("pending")
-                      }
-                      onClick={() => movePhoto(index, index + 1)}
-                      aria-label={`Move photo ${index + 1} right`}
-                    >
-                      Move right
-                    </button>
-                  </div>
-                )}
               </div>
             );
           })}
@@ -788,6 +793,24 @@ export function ProfileEditor({
           <p className="form-message" role="status">
             {feedback.success}
           </p>
+        )}
+        {cleanupNeeded && (
+          <div className="profile-cleanup-notice">
+            <p>Unused uploads may still be stored privately.</p>
+            <button
+              type="button"
+              className="text-button"
+              disabled={pending || editing}
+              onClick={() => {
+                setPhotoSlot("cleanup");
+                run("Checking unused photos…", cleanupPhotos);
+              }}
+            >
+              {pending && photoSlot === "cleanup"
+                ? "Checking unused photos…"
+                : "Retry cleanup"}
+            </button>
+          </div>
         )}
       </section>
       {profile.interests.length > 0 && (
@@ -827,97 +850,6 @@ export function ProfileEditor({
           </button>
         )}
       </section>
-      {(profile.down_to_do.length > 0 ||
-        profile.favorite_music ||
-        profile.favorite_foods ||
-        profile.weird_fact ||
-        profile.instagram) && (
-        <section className="profile-more" aria-label="More about you">
-          <h2>More about you</h2>
-          {profile.down_to_do.length > 0 && (
-            <p>
-              <strong>Down to do</strong> {profile.down_to_do.join(" · ")}
-            </p>
-          )}
-          {profile.favorite_music && (
-            <p>
-              <strong>Favorite music</strong> {profile.favorite_music}
-            </p>
-          )}
-          {profile.favorite_foods && (
-            <p>
-              <strong>Favorite foods</strong> {profile.favorite_foods}
-            </p>
-          )}
-          {profile.weird_fact && (
-            <p>
-              <strong>A weird fact</strong> {profile.weird_fact}
-            </p>
-          )}
-          {profile.instagram && (
-            <p>
-              <strong>Instagram</strong> @{profile.instagram}
-            </p>
-          )}
-        </section>
-      )}
-      <details className="profile-photo-panel" ref={photoPanel}>
-        <summary ref={photoSummary}>Photo controls</summary>
-        <aside className="profile-sidebar">
-          <div className="profile-identity">
-            <p className="badge">UNC email verified</p>
-            <p>University of North Carolina at Chapel Hill</p>
-            <p className="help">{email}</p>
-            <p className="help">
-              Your university and verified email are read-only.
-            </p>
-          </div>
-          <div className="profile-photos">
-            <h2>Your photos</h2>
-            <div ref={photoStatus} tabIndex={-1} aria-live="polite">
-              {photoSlot !== null && feedback.success && (
-                <p className="form-message">{feedback.success}</p>
-              )}
-            </div>
-            <p className="help">
-              Uploaded photos stay private. Selected photos can appear to
-              eligible students only while your People and rich sharing choices
-              are on. JPG, PNG or WebP, under 5 MB each.
-              {peopleAvailable && (
-                <>
-                  {" "}
-                  <Link href="/people/privacy">Manage profile sharing</Link>.
-                </>
-              )}
-            </p>
-            <p className="help">
-              Up to four extra photos. Photos save separately from your details.
-              New photo uploads are processed to remove embedded metadata.
-            </p>
-            {cleanupNeeded && (
-              <p className="form-message">
-                Unused uploads may still be stored privately. Retry cleanup when
-                your connection is back.
-              </p>
-            )}
-            <button
-              className="text-button"
-              disabled={pending || editing}
-              onClick={() => {
-                setPhotoSlot("cleanup");
-                run("Checking unused photos…", cleanupPhotos);
-              }}
-            >
-              {pending && photoSlot === "cleanup"
-                ? "Checking unused photos…"
-                : "Clean up unused uploads"}
-            </button>
-            {photoSlot === "cleanup" && (
-              <p role="status">{feedback.error ?? feedback.success}</p>
-            )}
-          </div>
-        </aside>
-      </details>
       <div className="profile-details" ref={editPanel} hidden={!editing}>
         <div className="profile-toolbar">
           <h2>A little about you</h2>

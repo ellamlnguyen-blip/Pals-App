@@ -1,5 +1,5 @@
 import type { Ref } from "react";
-import { SealCheckIcon } from "@phosphor-icons/react/dist/csr/SealCheck";
+import Image from "next/image";
 import { GraduationCapIcon } from "@phosphor-icons/react/dist/csr/GraduationCap";
 import { BookOpenIcon } from "@phosphor-icons/react/dist/csr/BookOpen";
 import { CalendarBlankIcon } from "@phosphor-icons/react/dist/csr/CalendarBlank";
@@ -24,23 +24,27 @@ export function ProfileSummary({
   verified?: boolean;
   headingRef?: Ref<HTMLHeadingElement>;
 }) {
-  const school =
+  const isUncChapelHill =
     campus === "University of North Carolina at Chapel Hill" ||
     campus === "UNC–Chapel Hill" ||
-    campus === "UNC-Chapel Hill"
-      ? "UNC Chapel Hill"
-      : campus;
+    campus === "UNC-Chapel Hill" ||
+    campus === "UNC Chapel Hill";
+  const school = isUncChapelHill ? "UNC Chapel Hill" : campus;
   return (
     <div className="profile-summary">
       <div className="profile-title-row">
         <h1 ref={headingRef} tabIndex={headingRef ? -1 : undefined}>
           {name}
         </h1>
-        {verified && (
-          <span className="profile-verified">
-            <SealCheckIcon size={27} weight="fill" aria-hidden="true" />
-            <span className="visually-hidden">UNC email verified</span>
-          </span>
+        {verified && isUncChapelHill && (
+          <Image
+            className="profile-school-logo"
+            src="/brand/schools/unc-chapel-hill.png"
+            alt="UNC Chapel Hill school logo"
+            width={768}
+            height={601}
+            unoptimized
+          />
         )}
       </div>
       <dl className="profile-facts">
