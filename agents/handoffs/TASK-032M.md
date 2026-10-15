@@ -4,9 +4,10 @@ Status: implementation ready for coordinator browser QA and review; not committe
 
 ## Outcome
 
-- Saved map now keeps matching Mapbox markers across item updates. Preview dismissal tracks pointer over the pin/card and focus, with a short travel grace. Explicit Close/Escape returns focus and suppresses immediate reopening; later keyboard focus can reopen after blur. Preview placement prefers a side with room and avoids clipping where space permits. Selected pin uses CSS `scale: 1.08` without replacing Mapbox's positioning transform, and keeps a visible focus outline with reduced-motion handling.
+- Saved map now keeps matching Mapbox markers across item updates. Preview dismissal tracks pointer over the pin/card and focus, with a short travel grace. Explicit Close/Escape returns focus and suppresses incidental reopening; an explicit click, tap, Enter or Space on the same pin reopens it. Preview placement prefers a side with room and avoids clipping where space permits. Selected pin uses CSS `scale: 1.08` without replacing Mapbox's positioning transform, and keeps a visible focus outline with reduced-motion handling.
 - New Hangout creation now starts with the existing approximate public map picker, broad label and manual coordinate fallback. Continue validates the place fields and rounds coordinates to three decimals, then reveals the existing details form. Back keeps both steps' entries. Existing Hangout editing still shows the original combined editor. The caller-bound create action, replay/idempotency handling and server validation remain unchanged.
 - Updated new-page copy to match the order. No provider, permission, schema, grant, hosted operation or GPS behavior changed.
+- Follow-up review correction: explicit activation reopens the pin after Close/Escape, while incidental focus/hover remains suppressed; the preview Close control now has a 44×44px target.
 
 ## Scoped files
 

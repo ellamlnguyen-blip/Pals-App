@@ -159,13 +159,18 @@ export function SavedDiscovery({ token }: { token: string }) {
     element: HTMLElement,
     moveFocus = false,
     pointerOver = false,
+    explicitActivation = false,
   ) {
     if (concealedRef.current) return;
-    if (dismissedTrigger.current === element) return;
-    if (suppressFocus.current) {
+    if (dismissedTrigger.current === element) {
+      if (!explicitActivation) return;
+      dismissedTrigger.current = null;
+    }
+    if (suppressFocus.current && !explicitActivation) {
       suppressFocus.current = false;
       return;
     }
+    suppressFocus.current = false;
     if (closeTimer.current) clearTimeout(closeTimer.current);
     closeTimer.current = null;
     if (trigger.current !== element) overPreview.current = false;

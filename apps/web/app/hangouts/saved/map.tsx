@@ -33,6 +33,7 @@ export function SavedMap({
     trigger: HTMLElement,
     moveFocus?: boolean,
     pointerOver?: boolean,
+    explicitActivation?: boolean,
   ) => void;
   onLeave: (trigger: HTMLElement) => void;
   onBounds: (bounds: Bounds | null) => void;
@@ -221,7 +222,7 @@ export function SavedMap({
           choose.current(item.id, button, false),
         );
         button.addEventListener("click", () =>
-          choose.current(item.id, button, true),
+          choose.current(item.id, button, true, false, true),
         );
         const marker = new mapbox.Marker({ element: button })
           .setLngLat([item.public_longitude, item.public_latitude])
