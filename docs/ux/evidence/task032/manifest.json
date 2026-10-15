@@ -1,0 +1,76 @@
+{
+  "date": "2026-10-14",
+  "syntheticOnly": true,
+  "notes": "Actual dimensions recorded; P2 crop/empty are desktop, not phone. 944px viewport captures clip the right of a1280px DOM. Profile full-page is1280px. Source is application stage; runtime adapters documented in QA. No user photos or credentials.",
+  "files": [
+    {
+      "file": "create-details-phone.jpg",
+      "bytes": 21832,
+      "sha256": "d85b6ccda0bac3ab521bcfb646f2c158e0d16b05f265473e5f1f47bc80ccfa24",
+      "width": 319,
+      "height": 720,
+      "format": "jpeg",
+      "source": "7e89a14f6fd0fa6ef4b5ef7d562b5a9d6b438dac"
+    },
+    {
+      "file": "extra-crop-desktop.jpg",
+      "bytes": 43344,
+      "sha256": "053a1ce79281e1caf317f6baa8b00af8b4bf054b8def9f9d49a1288ae47ba33f",
+      "width": 1280,
+      "height": 720,
+      "format": "jpeg",
+      "source": "6c9278bd992bcf6ef6a96ad0017e01800a27c817"
+    },
+    {
+      "file": "map-preview-desktop.jpg",
+      "bytes": 94103,
+      "sha256": "3ee4b6a8a62339631ae0ea92097e1efd8ade46dcd3a20ba688c663812467e614",
+      "width": 944,
+      "height": 720,
+      "format": "jpeg",
+      "source": "6c9278bd992bcf6ef6a96ad0017e01800a27c817"
+    },
+    {
+      "file": "optional-photos-empty-desktop.jpg",
+      "bytes": 48660,
+      "sha256": "c6ecbbd0dffff97e5ba57d8c4405cec5a4e9de1b6cbc676afc134f573b57c67e",
+      "width": 1280,
+      "height": 720,
+      "format": "jpeg",
+      "source": "6c9278bd992bcf6ef6a96ad0017e01800a27c817"
+    },
+    {
+      "file": "primary-crop-desktop.jpg",
+      "bytes": 43201,
+      "sha256": "94645a34da90bfca3dc721087905048c548318310ec1b6b7d4fe542148794427",
+      "width": 944,
+      "height": 720,
+      "format": "jpeg",
+      "source": "6c9278bd992bcf6ef6a96ad0017e01800a27c817"
+    },
+    {
+      "file": "primary-crop-phone.jpg",
+      "bytes": 28923,
+      "sha256": "875db9ee8fe5dcc293f2dbc48eef80cfe07b1cb5fa2b93980e9622fb0f121f95",
+      "width": 319,
+      "height": 720,
+      "format": "jpeg",
+      "source": "7e89a14f6fd0fa6ef4b5ef7d562b5a9d6b438dac"
+    },
+    {
+      "file": "profile-desktop.jpg",
+      "bytes": 122472,
+      "sha256": "eff31ad76142f6117bcb5f695ba613e2a81b51adc93b653814966e3fd074b908",
+      "width": 1280,
+      "height": 1975,
+      "format": "jpeg",
+      "source": "6c9278bd992bcf6ef6a96ad0017e01800a27c817"
+    },
+    {
+      "file": "qa-results.json",
+      "bytes": 1777,
+      "sha256": "43bf9abb72f8481246e0f8ce576586978d0117138bfb4c69a0b03a96a32b0fcd",
+      "source": "6c9278bd992bcf6ef6a96ad0017e01800a27c817"
+    }
+  ]
+}
