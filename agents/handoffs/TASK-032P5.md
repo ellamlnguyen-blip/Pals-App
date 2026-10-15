@@ -1,6 +1,6 @@
 # TASK-032P5 Calendar copy handoff
 
-Status: source reviewed and locally verified; task source published; documentation-only main publication pending; parent TASK-032 remains incomplete.
+Status: source reviewed and locally verified; task source published; documentation-only main outcome published and remote verified; parent TASK-032 remains incomplete.
 
 Changed the Calendar date selector's visible label from “Campus date” to “Date” and its accessible name from “Choose campus date” to “Choose date”. Removed the Week/Month “Scroll sideways to see all seven days.” paragraph and its now-unused hint CSS, including both media rules. The calendar scroll regions, focus styles, month minimum width, dates, filtering, and data behavior are unchanged.
 
@@ -17,3 +17,7 @@ Rendered Week → Month → Week checks passed at the actual 319×720 browser vi
 ## Source publication
 
 Task candidate `dee77e3906d64eae0de6efa93cdbeff6fa6158e9` is pushed and independently verified with origin ls-remote. The canonical outcome publication includes documentation/evidence only; application code remains on the task branch behind the parent gates.
+
+## Canonical publication receipt
+
+Reviewed documentation branch `a9b498bc24affbcca4e4d2e90949d78d7ea78a4c` and documentation-only canonical integration `3aa4418c3398b308c728f77d536cbc72aef16540` were pushed and independently remote verified. Diff inventory contained only the ten named documentation/evidence files; no application/backend code reached main. This receipt records that observed integration rather than its own future commit. Parent TASK-032 remains incomplete and no automatic successor is dispatched.
