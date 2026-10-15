@@ -1,5 +1,10 @@
 # Current State
 
+## 2026-10-15 — People profile cards local candidate
+
+TASK-032P11 shows circular protected primary photos (initials fallback) and requested identity details in whole-card native profile links; View profile text removed. App9ed5a7f529df567ba3edb3fa18300164f100202e and candidate1d1deb566e6599115e33d5e874d38e09a22f7a67 pushed and independently remote verified. Fresh review hidden-hydration finding fixed and confirmed; scoped checks/tests and final production webpack pass. Actual1280desktop/375narrow nooverflow, protected images loaded, whole-card fullprofile/back-focus and named disposable authorized200/no-store/anonymous+wrongrevision404 passed. Evidence/handoff TASK032P11 records exact limits. No data/schema/permission/hosted change. ParentTASK032 remains incomplete behind existing gates; no successor.
+
+
 ## 2026-10-15 — Calendar empty-view local verification
 
 TASK-032P10 removes the marked No Hangouts in this view / Try another date or category card while retaining the Calendar grid and actual no-category/loading/error/truncation guidance. Source `b1f922e02e0c7ce7823ce695d4edad5007ef8424` is reviewed, pushed and independently remote verified. Scoped lint/format/diff and runtime webpack build pass; actual1280×720 November2026 Month and empty Week checks confirm no card/text, unchanged selected date and retained grids. Evidence: docs/ux/evidence/task032p10; handoff TASK-032P10. No backend/data/permission/hosted change; parent TASK-032 remains incomplete behind existing gates, no successor.

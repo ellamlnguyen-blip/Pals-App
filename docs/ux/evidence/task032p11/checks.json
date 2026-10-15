@@ -1,0 +1,36 @@
+{
+  "applicationSha": "9ed5a7f529df567ba3edb3fa18300164f100202e",
+  "candidateSha": "1d1deb566e6599115e33d5e874d38e09a22f7a67",
+  "desktop": {
+    "viewport": [
+      1280,
+      720
+    ],
+    "cards": 2,
+    "photosLoaded": 2,
+    "circlePx": 72,
+    "ctaAbsent": true,
+    "noNestedControls": true,
+    "noHorizontalOverflow": true
+  },
+  "narrow": {
+    "viewport": [
+      375,
+      812
+    ],
+    "columns": 1,
+    "cardWidth": 343,
+    "circlePx": 72,
+    "noHorizontalOverflow": true
+  },
+  "cardFullNavigation": true,
+  "backFocusRestored": true,
+  "productionBuild": "passed",
+  "freshReview": "one initial hidden-tab finding fixed and confirmed",
+  "backend": "existing consent/primary photo persisted, read-only verified on named disposable",
+  "limits": [
+    "No browser forced image-failure or live revocation race run",
+    "No physical device or BFCache fault run",
+    "Parent release and sign-off gates remain"
+  ]
+}

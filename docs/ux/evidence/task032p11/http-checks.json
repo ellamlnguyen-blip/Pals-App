@@ -1,0 +1,20 @@
+{
+  "environment": "pals-task029-disposable",
+  "readsOnly": true,
+  "results": [
+    {
+      "shared": true,
+      "authorizedImage": true,
+      "noStore": true,
+      "anonymousDenied": true,
+      "wrongRevisionDenied": true
+    },
+    {
+      "shared": true,
+      "authorizedImage": true,
+      "noStore": true,
+      "anonymousDenied": true,
+      "wrongRevisionDenied": true
+    }
+  ]
+}
