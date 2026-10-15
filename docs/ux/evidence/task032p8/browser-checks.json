@@ -1,0 +1,118 @@
+{
+  "source": "f2a4b4cca1f56d22a1edd888202563d71a79b041",
+  "narrow": {
+    "actions": [
+      {
+        "height": 43.99739456176758,
+        "label": "Chats",
+        "width": 43.99739456176758,
+        "x": 151.17837524414062,
+        "y": 17.99479103088379
+      },
+      {
+        "height": 43.99739456176758,
+        "label": "Notifications",
+        "width": 43.99739456176758,
+        "x": 205.17578125,
+        "y": 17.99479103088379
+      },
+      {
+        "height": 43.99739456176758,
+        "label": "Your profile",
+        "width": 43.99739456176758,
+        "x": 259.17315673828125,
+        "y": 17.99479103088379
+      }
+    ],
+    "dotCount": 0,
+    "hiddenTitle": {
+      "class": "sr-only",
+      "height": 0.99609375,
+      "width": 0.99609375
+    },
+    "pageOverflow": false,
+    "removedCopy": [
+      {
+        "present": false,
+        "text": "Your updates"
+      },
+      {
+        "present": false,
+        "text": "Keep up with plans and conversations around campus."
+      },
+      {
+        "present": false,
+        "text": "Recent updates, newest first."
+      }
+    ],
+    "viewport": {
+      "height": 720,
+      "width": 319
+    }
+  },
+  "desktop": {
+    "actions": [
+      {
+        "bottom": 61.58202934265137,
+        "height": 43.99739456176758,
+        "label": "Chats",
+        "left": 1135.3515625,
+        "right": 1179.3489570617676,
+        "top": 17.58463478088379,
+        "width": 43.99739456176758,
+        "x": 1135.3515625,
+        "y": 17.58463478088379
+      },
+      {
+        "bottom": 61.58202934265137,
+        "height": 43.99739456176758,
+        "label": "Notifications",
+        "left": 1195.344970703125,
+        "right": 1239.3423652648926,
+        "top": 17.58463478088379,
+        "width": 43.99739456176758,
+        "x": 1195.344970703125,
+        "y": 17.58463478088379
+      },
+      {
+        "bottom": 61.58202934265137,
+        "height": 43.99739456176758,
+        "label": "Your profile",
+        "left": 1255.3385009765625,
+        "right": 1299.33589553833,
+        "top": 17.58463478088379,
+        "width": 43.99739456176758,
+        "x": 1255.3385009765625,
+        "y": 17.58463478088379
+      }
+    ],
+    "overflow": false,
+    "primary": {
+      "bottom": 61.58202934265137,
+      "height": 43.99739456176758,
+      "left": 143.9973907470703,
+      "right": 1115.3515167236328,
+      "top": 17.58463478088379,
+      "width": 971.3541259765624,
+      "x": 143.9973907470703,
+      "y": 17.58463478088379
+    },
+    "viewport": {
+      "height": 900,
+      "width": 1333
+    }
+  },
+  "initialUnreadDot": true,
+  "openedInboxClearedDot": true,
+  "refreshArrowWorks": true,
+  "laterArrivalRestoredDot": true,
+  "sameRouteBellLoadedAndAcknowledgedArrival": true,
+  "envelopeNavigation": true,
+  "bellNavigation": true,
+  "viewportOverrideReset": true,
+  "limitations": [
+    "No physical mobile device gesture test",
+    "No browser network interception fault test",
+    "Cross-tab signal inspected, not exercised in a second tab"
+  ]
+}

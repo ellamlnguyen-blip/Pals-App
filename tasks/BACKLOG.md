@@ -1,5 +1,10 @@
 # Backlog
 
+## 2026-10-15 — Notification attention local candidate
+
+TASK-032P8 application `f2a4b4cca1f56d22a1edd888202563d71a79b041` implements the marked Notifications cleanup/arrow Refresh and header envelope/bell beside avatar. Dot uses owner-only existing-ledger read state and a server snapshot acknowledgment after successful visible load; later arrivals restore it and same-page bell reloads page1. Fresh review resolved Frame-failure/reload/ack-error cases. Disposable SQL15/15, notification units5/5, scoped lint/TS/format and runtime webpack pass. Real owner API/bell→Inbox→clear→freshAuth persistence, later fixture arrival→same-page bell acknowledgment, navigation and narrow319/desktop1333 geometry passed; named fixture cleaned. See P8 handoff/review/evidence for precise fault/device/cross-tab/concurrency limits. Task candidate `7fcbf896deea649507e65bd51f421bb7b332e3bc` is pushed and independently remote verified. Parent TASK-032 remains incomplete behind existing acceptance/sign-off/staging/application-main gates; ADR0041 remains Proposed. No hosted operation or automatic successor.
+
+
 ## 2026-10-14 — Notification attention and header controls
 
 TASK-032P8 implements Ella’s seven marked Notifications/header requests as one UI/API/existing-ledger vertical. Contract: `tasks/active/TASK-032P8-notification-attention.md`; ADR-0041 Proposed. Disposable-local implementation/review only; parent sign-off/staging/application-main gates remain, no hosted operation or successor.
