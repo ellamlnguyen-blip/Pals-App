@@ -385,9 +385,9 @@ export function CalendarClient({
         </div>
         <h2>{label}</h2>
         <label className="calendar-picker">
-          Campus date{" "}
+          Date{" "}
           <input
-            aria-label="Choose campus date"
+            aria-label="Choose date"
             type="date"
             min={MIN_CALENDAR_DATE}
             max={MAX_CALENDAR_DATE}
@@ -416,11 +416,6 @@ export function CalendarClient({
           <p>Try another date or category.</p>
         </div>
       ) : null}
-      {!concealed && selection.view !== "day" && (
-        <p className={`calendar-pan-hint calendar-pan-hint-${selection.view}`}>
-          Scroll sideways to see all seven days.
-        </p>
-      )}
       {concealed ? (
         <div className="calendar-empty" role="status">
           Checking current Calendar access…
