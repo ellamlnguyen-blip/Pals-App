@@ -27,7 +27,14 @@ export async function Frame({
   profileChrome?: boolean;
 }) {
   // The attention request is bound to this freshly resolved server actor.
-  const actor = navigation ? (await access()).user?.id : undefined;
+  let actor: string | undefined;
+  if (navigation) {
+    try {
+      actor = (await access()).user?.id;
+    } catch {
+      // Keep the resolved page usable; the badge waits for a later navigation.
+    }
+  }
   return (
     <div className={profileChrome ? "page profile-frame" : "page"}>
       <a className="skip-link" href="#main">
