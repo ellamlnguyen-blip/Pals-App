@@ -94,6 +94,7 @@ export function PrimaryPhotoEditor({
 }) {
   const dialog = useRef<HTMLDialogElement>(null);
   const picker = useRef<HTMLInputElement>(null);
+  const chooseButton = useRef<HTMLButtonElement>(null);
   const objectUrl = useRef<string | null>(null);
   const busyRef = useRef(false);
   const generation = useRef(0);
@@ -118,6 +119,7 @@ export function PrimaryPhotoEditor({
     if (open && !wasOpen.current) {
       wasOpen.current = true;
       node.showModal();
+      chooseButton.current?.focus({ preventScroll: true });
       setBaseRevision(revision);
       setNeedsRefresh(false);
       setInvalidSource(false);
@@ -322,6 +324,7 @@ export function PrimaryPhotoEditor({
         <input
           ref={picker}
           className="visually-hidden"
+          tabIndex={-1}
           type="file"
           accept="image/jpeg,image/png,image/webp"
           onChange={(event) => {
@@ -331,6 +334,7 @@ export function PrimaryPhotoEditor({
         />
         <div className="profile-crop-tools">
           <button
+            ref={chooseButton}
             type="button"
             disabled={busy}
             onClick={() => picker.current?.click()}
