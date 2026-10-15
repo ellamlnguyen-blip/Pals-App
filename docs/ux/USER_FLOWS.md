@@ -1,5 +1,10 @@
 # Core User Flows
 
+## Map controls amendment 2026-10-15
+
+TASK-032P9 removes the visible Hangouts heading row and places a labeled plus link in the map top right, opening the unchanged place-first creation route. Period controls are compact and reserve plus space with narrow wrapping. Saved pins have rounded heads and pointed tips; outer48×56 Mapbox targets/coordinates remain stable and only visual children lift3px on hover. Accessible hidden h1, keyboard focus, preview/list/filter/error behavior and backend authorization stay intact.
+
+
 ## Notification attention amendment 2026-10-15
 
 Primary text links are Hangouts/Calendar/People. Envelope → Chats; bell beside avatar → Notifications Inbox, with a hidden accessible page title and arrow-only labeled Refresh. Bell dot follows owner ledger unread state via30-second/focus/route polling. Successful visible inbox load acknowledges the existing server snapshot through its cutoff; later arrivals remain unread. Clicking the active bell reloads page1 before acknowledgment. Failed/uncertain acknowledgment keeps confirmed state and shows Refresh to retry; per-item reader/preferences/source authorization remain. This local candidate does not imply Realtime delivery or hosted acceptance.
