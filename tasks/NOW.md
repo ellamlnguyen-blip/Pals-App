@@ -1,5 +1,10 @@
 # NOW
 
+## 2026-10-15 — Calendar empty-view local verification
+
+TASK-032P10 removes the marked No Hangouts in this view / Try another date or category card while retaining the Calendar grid and actual no-category/loading/error/truncation guidance. Source `b1f922e02e0c7ce7823ce695d4edad5007ef8424` is reviewed, pushed and independently remote verified. Scoped lint/format/diff and runtime webpack build pass; actual1280×720 November2026 Month and empty Week checks confirm no card/text, unchanged selected date and retained grids. Evidence: docs/ux/evidence/task032p10; handoff TASK-032P10. No backend/data/permission/hosted change; parent TASK-032 remains incomplete behind existing gates, no successor.
+
+
 ## 2026-10-15 — Calendar empty-view copy
 
 TASK-032P10 removes the marked empty-range message card while retaining the grid and actual loading/error/no-category guidance. Contract: `tasks/active/TASK-032P10-calendar-empty.md`. Parent remains incomplete; no hosted action or successor.
