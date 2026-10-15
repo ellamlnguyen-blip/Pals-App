@@ -1,5 +1,10 @@
 # Backlog
 
+## 2026-10-14 — Requested interaction and profile photo reliability
+
+TASK-032 bounds stable hover/slight pin enlargement, map-place-first creation and a preserved-design profile photo vertical, followed by reusable four-photo management and targeted field editing. Current source dependency5677446/application8504b72; canonical76067ef. Inspected existing private Storage/CAS and picker; no cropper/reorder exists. StageM is independent; primary P1 is end-to-end before P2, each fresh Sol-medium worker/review. See tasks/active/TASK-032-interaction-photo-reliability.md and Proposed ADR-0040. Backend persistence is required; hosted changes wait for Ella's explicit finalization/sign-off and existing TASK-027/028 acceptance. No source implementation dispatched before this contract's review/publication. TASK-031 remains incomplete; no release or successor claim.
+
+
 ## 2026-10-14 — Hangouts map local candidate
 
 TASK-031 application8504b72abf874f8d1e25160f45f51eec4458cc27 implements the reference map hierarchy, independent campus-time filters before the source cap, emoji pins and fresh authorized View/Join previews. StageA and repaired StageB passed independent source review. Desktop live Mapbox, real fictional Join, API consent/privacy and cross-tab sign-out checks pass; SQL23/23 and isolated legacy64/64,86 units across full+targeted runs, lint, TypeScript and webpack builds pass. See `docs/ux/TASK-031-MAP-QA.md` and `agents/handoffs/TASK-031.md`. Mobile/tablet rendering remains unverified because the browser viewport override has no effect; fallback/visibility/denied-read timing checks remain open. User-supplied public Mapbox configuration stays private/local. TASK-031 remains incomplete behind these local gates, TASK-027/TASK-028 staged acceptance and reviewed application main integration. Main receives docs/evidence only; ADR-0039 stays Proposed, no hosted operation or automatic successor. Published task candidate5677446b8283e8733af884ab1cab205fdbd9ce8d (application8504b72) and prior canonical main4b901ef are remote verified; see TASK-031-PUBLICATION.md for the documentation-only receipt.
