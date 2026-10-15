@@ -1,6 +1,6 @@
 # TASK-032P4 Map feedback correction
 
-Status: bounded continuation of incomplete TASK-032; publish contract before fresh implementation. User six browser comments2026-10-14 supersede earlier selected-scale design: hover should lift every saved Hangout pin slightly upward, with no sideways movement, enlargement, halo/highlight/background change; remove campus label beside Hangouts, default location-help paragraph, time-period explanation, successful result count and routine Refresh Hangouts button. Preserve Hangout hover/focus/tap preview and independent periods, map/list and Create flow.
+Status: locally verified source candidatee6564f0; bounded continuation of incomplete TASK-032. Contract was published before fresh implementation; coordinator handoff records executed/remaining checks. User six browser comments2026-10-14 supersede earlier selected-scale design: hover should lift every saved Hangout pin slightly upward, with no sideways movement, enlargement, halo/highlight/background change; remove campus label beside Hangouts, default location-help paragraph, time-period explanation, successful result count and routine Refresh Hangouts button. Preserve Hangout hover/focus/tap preview and independent periods, map/list and Create flow.
 
 ## Implementation contract
 
