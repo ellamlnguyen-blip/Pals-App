@@ -19,4 +19,4 @@ Physical mobile gestures/pickers, actual file drop and timed interruption/concur
 
 ## Publication
 
-Prior milestone task2c86ca8bb01774ab06e139090d9fafba86a2a1e8 and docs-only canonical maine7385507e70a05a6e409c6e9606045c3f9fe416f were independently remote verified. The final [publication receipt](TASK-032-PUBLICATION.md) records the later verified task candidate/documentation-only main SHA. No TASK-032 application code has been integrated into main.
+Prior milestone task2c86ca8bb01774ab06e139090d9fafba86a2a1e8 and docs-only canonical maine7385507e70a05a6e409c6e9606045c3f9fe416f were independently remote verified. Final task candidate5e08bbaf71ffed54e6761aaba5d73e59d0a0610d, records branch1928148da80b04e2f9e0187e17a2f82499174d90 and reviewed documentation-only main integrationd931b11c48c3782e2ff5dc78ecf33645b30cfe29 are pushed and independently remote verified; see [publication receipt](TASK-032-PUBLICATION.md). No TASK-032 application code has been integrated into main.
