@@ -1,6 +1,6 @@
 # TASK-032P5 Calendar text correction
 
-Status: bounded copy correction within incomplete TASK-032; publish contract before fresh implementation. User2026-10-14 browser comments request Date instead of Campus date and removal of Scroll sideways to see all seven days.
+Status: locally implemented, coordinator reviewed and rendered verification passed; source candidate pushed and remote verified; documentation-only main record pending. Parent TASK-032 remains incomplete. Contract was published to canonical main before implementation. User2026-10-14 browser comments request Date instead of Campus date and removal of Scroll sideways to see all seven days.
 
 Change visible label to Date and input accessible name to Choose date. Remove shared Week/Month hint paragraph and only its unused CSS/media rules; keep actual calendar scroll regions/keyboard focus/grid dimensions, Day/Week/Month navigation, date bounds/UNC timezone, categories/previews and all data/auth/backend behavior unchanged. No new tests mirroring markup for this reversible copy change; scoped lint/typecheck and coordinator rendered label/hint/scroll-region checks are sufficient.
 
