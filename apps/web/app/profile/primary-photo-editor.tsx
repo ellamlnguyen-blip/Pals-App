@@ -219,6 +219,9 @@ export function PrimaryPhotoEditor({
     const current = ++generation.current;
     try {
       const file = await squareFile(src, area);
+      // Canvas decode/export is asynchronous. An auth or lifecycle transition
+      // can invalidate this actor before any server action has begun.
+      if (generation.current !== current) return;
       const form = new FormData();
       form.set("photo", file);
       form.set("revision", String(baseRevision));
