@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-10-15 — Map controls local candidate
+
+TASK-032P9 application `50887e9f946212eb4f7974c84cef268b3d32a348` removes visible Hangouts heading, moves Create to a44px plus inside map top right, compacts period controls and gives pins rounded heads/pointed tips. Full scoped source review, lint/format/typegen/TS, runtime webpack and5/5 existing pin/period tests pass. Actual1280desktop/375narrow rendered placement and nooverflow passed; fixed outer48×56 hover geometry with child-only3px lift, preview travel/Escape, keyboard plus→place-first route and all-off/filter recovery passed. Evidence and precise limits: TASK032P9 handoff/docs/ux/evidence/task032p9. Candidate `673f812e0abde468b00f080c103362520295a3c6` pushed and independently remote verified. No backend/persistent data/permissions/hosted change. Parent TASK-032 remains incomplete behind existing device/fault/staging/sign-off/application-main gates; no successor.
+
+
 ## 2026-10-15 — Notification attention local candidate
 
 TASK-032P8 application `f2a4b4cca1f56d22a1edd888202563d71a79b041` implements the marked Notifications cleanup/arrow Refresh and header envelope/bell beside avatar. Dot uses owner-only existing-ledger read state and a server snapshot acknowledgment after successful visible load; later arrivals restore it and same-page bell reloads page1. Fresh review resolved Frame-failure/reload/ack-error cases. Disposable SQL15/15, notification units5/5, scoped lint/TS/format and runtime webpack pass. Real owner API/bell→Inbox→clear→freshAuth persistence, later fixture arrival→same-page bell acknowledgment, navigation and narrow319/desktop1333 geometry passed; named fixture cleaned. See P8 handoff/review/evidence for precise fault/device/cross-tab/concurrency limits. Task candidate `7fcbf896deea649507e65bd51f421bb7b332e3bc` is pushed and independently remote verified. Parent TASK-032 remains incomplete behind existing acceptance/sign-off/staging/application-main gates; ADR0041 remains Proposed. No hosted operation or automatic successor.
