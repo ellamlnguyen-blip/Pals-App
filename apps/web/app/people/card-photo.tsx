@@ -26,6 +26,7 @@ export function PeopleCardPhotoBoundary({
     document.addEventListener("visibilitychange", onVisibility);
     const channel = new BroadcastChannel(AUTH_TRANSITION_CHANNEL);
     channel.onmessage = conceal;
+    onVisibility();
     return () => {
       window.removeEventListener(AUTH_TRANSITION_EVENT, conceal);
       window.removeEventListener("pagehide", conceal);
