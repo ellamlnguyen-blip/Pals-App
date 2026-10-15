@@ -2,7 +2,7 @@
 
 ## 2026-10-14 — Calendar copy local candidate
 
-TASK-032P5 source `3a2dd701c0c18c56a6196818db61eb251b92efd1` changes the Calendar label to Date (accessible name Choose date) and removes the shared Week/Month scrolling hint and dead hint CSS. Coordinator reviewed the exact source diff and verified the rendered Week and Month views at an actual 319×720 viewport: Date shown, no hint, scroll regions retained, selected date 2026-10-14 and checked categories preserved. Worker scoped lint/TypeScript/format checks and coordinator runtime webpack build passed. Evidence: `docs/ux/evidence/task032p5/`; handoff: `agents/handoffs/TASK-032P5.md`. Source publication pending. Parent TASK-032 remains incomplete behind existing device/fault/staging/user-sign-off/application-main gates; no backend/schema/permission/hosted operation or automatic successor.
+TASK-032P5 source `3a2dd701c0c18c56a6196818db61eb251b92efd1` changes the Calendar label to Date (accessible name Choose date) and removes the shared Week/Month scrolling hint and dead hint CSS. Coordinator reviewed the exact source diff and verified the rendered Week and Month views at an actual 319×720 viewport: Date shown, no hint, scroll regions retained, selected date 2026-10-14 and checked categories preserved. Worker scoped lint/TypeScript/format checks and coordinator runtime webpack build passed. Evidence: `docs/ux/evidence/task032p5/`; handoff: `agents/handoffs/TASK-032P5.md`. Task candidate `dee77e3906d64eae0de6efa93cdbeff6fa6158e9` is pushed and independently remote verified. Parent TASK-032 remains incomplete behind existing device/fault/staging/user-sign-off/application-main gates; no backend/schema/permission/hosted operation or automatic successor.
 
 ## 2026-10-14 — Map feedback local candidate
 
