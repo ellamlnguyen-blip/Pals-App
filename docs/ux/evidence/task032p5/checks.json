@@ -1,0 +1,32 @@
+{
+  "source": "3a2dd701c0c18c56a6196818db61eb251b92efd1",
+  "month": {
+    "date": "2026-10-14",
+    "hints": 0,
+    "label": "Date",
+    "scrollRegion": true,
+    "view": "month"
+  },
+  "week": {
+    "categories": [
+      {
+        "checked": true
+      },
+      {
+        "checked": true
+      },
+      {
+        "checked": true
+      }
+    ],
+    "date": "2026-10-14",
+    "hints": 0,
+    "label": "Date",
+    "scrollRegion": true,
+    "view": "week",
+    "viewport": {
+      "height": 720,
+      "width": 319
+    }
+  }
+}

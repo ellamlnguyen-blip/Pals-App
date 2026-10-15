@@ -21,7 +21,7 @@ TASK-031 local candidate uses a compact Hangouts/campus/Create row and large rou
 
 TASK-030 local candidate: avatar → own Profile → bottom Safety/Analytics/Attendance/Account utilities. Edit profile changes academic/bio/optional fields; Account changes name or requests an email/password update through existing caller Auth. Current confirmed email and pending email remain distinct. Bio appears below facts without a visible heading; new/changed saves allow at most two sentences, preserving unchanged legacy content. Peer pages contain none of the owner's utilities.
 
-Calendar → Day/Week/Month → choose campus date or previous/Today/next → toggle Hosting/Attending/All hangouts independently → hover/focus/tap event → authorized public preview → View Hangout or Join an eligible blue plan → acknowledged membership shows green → existing detail/chat coordination. Calendar has no Create action. Hosting is yellow; All hangouts means other available campus plans. Existing consent, block, live access and release gates remain authoritative. This local candidate does not complete TASK-027/TASK-028 staged acceptance or application integration.
+Calendar → Day/Week/Month → choose Date (UNC time) or previous/Today/next → toggle Hosting/Attending/All hangouts independently → hover/focus/tap event → authorized public preview → View Hangout or Join an eligible blue plan → acknowledged membership shows green → existing detail/chat coordination. Calendar has no Create action. Hosting is yellow; All hangouts means other available campus plans. Existing consent, block, live access and release gates remain authoritative. This local candidate does not complete TASK-027/TASK-028 staged acceptance or application integration.
 
 ## Initial-release scope amendment — 2026-09-26
 

@@ -1,0 +1,12 @@
+{
+  "source": "3a2dd701c0c18c56a6196818db61eb251b92efd1",
+  "screenshot": {
+    "file": "calendar-date.jpg",
+    "format": "jpeg",
+    "bytes": 20622,
+    "sha256": "34837da6ad0a45146d29e704d4ed2de50f161531440eddad62cefac81db14201",
+    "height": 720,
+    "width": 319
+  },
+  "scope": "Disposable-local rendered Calendar Week and Month copy checks; no physical device or backend mutation acceptance."
+}
