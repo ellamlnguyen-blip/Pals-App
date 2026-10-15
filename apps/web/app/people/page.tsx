@@ -10,6 +10,8 @@ import {
 import "../hangouts/map.css";
 import "./people.css";
 import { FocusReturn } from "./focus-return";
+import { PeopleCardPhoto, PeopleCardPhotoBoundary } from "./card-photo";
+import { resolveCardPhotoRevisions } from "../../lib/people-card-photos";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -57,6 +59,17 @@ export default async function PeoplePage({
   });
   const cards = (data ?? []) as PeopleCard[];
   const gateOff = error?.code === "42501";
+  const photoRevisions = error
+    ? {}
+    : await resolveCardPhotoRevisions(
+        cards.map((card) => card.account_id),
+        async (subjectId) => {
+          const result = await client.rpc("get_rich_people_detail", {
+            p_account_id: subjectId,
+          });
+          return result.error ? null : result.data?.[0];
+        },
+      );
   const next =
     cards.length === 24
       ? peopleUrl({
@@ -139,24 +152,32 @@ export default async function PeoplePage({
           </form>
           {cards.length ? (
             <>
-              <ul className="people-grid">
-                {cards.map((card) => (
-                  <li key={card.account_id}>
-                    {/* Full navigation rechecks live peer access; a cached client route must not restore a hidden card. */}
-                    <a
-                      id={`person-${card.account_id}`}
-                      href={`/people/${card.account_id}?from=${encodeURIComponent(current)}&focus=${card.account_id}`}
-                    >
-                      <span className="people-card-name">{card.real_name}</span>
-                      <span>{card.campus_name}</span>
-                      <span>
-                        Class of {card.graduation_year} · {card.major}
-                      </span>
-                      <span className="people-card-cta">View profile →</span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
+              <PeopleCardPhotoBoundary>
+                <ul className="people-grid">
+                  {cards.map((card) => (
+                    <li key={card.account_id}>
+                      {/* Full navigation rechecks live peer access; a cached client route must not restore a hidden card. */}
+                      <a
+                        id={`person-${card.account_id}`}
+                        href={`/people/${card.account_id}?from=${encodeURIComponent(current)}&focus=${card.account_id}`}
+                      >
+                        <PeopleCardPhoto
+                          subjectId={card.account_id}
+                          name={card.real_name}
+                          revision={photoRevisions[card.account_id] ?? null}
+                        />
+                        <span className="people-card-name">
+                          {card.real_name}
+                        </span>
+                        <span>{card.campus_name}</span>
+                        <span>
+                          Class of {card.graduation_year} · {card.major}
+                        </span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </PeopleCardPhotoBoundary>
               {(selection.afterId || next) && (
                 <div className="people-pages">
                   {selection.afterId && <Link href="/people">Start over</Link>}
