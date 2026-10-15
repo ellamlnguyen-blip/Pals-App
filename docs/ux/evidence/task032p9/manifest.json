@@ -1,0 +1,20 @@
+{
+  "applicationSource": "50887e9f946212eb4f7974c84cef268b3d32a348",
+  "screenshots": [
+    {
+      "file": "map-desktop.jpg",
+      "bytes": 114987,
+      "sha256": "b570dffd88ba9453431eba5f8a6e951ff00621567a0f5b9e18c2518b66302e0b",
+      "height": 720,
+      "width": 1280
+    },
+    {
+      "file": "map-narrow.jpg",
+      "bytes": 39447,
+      "sha256": "dd70bfa3b45034fea4a4b88da837787edff93bf6e367030cf7862568b027888d",
+      "height": 812,
+      "width": 375
+    }
+  ],
+  "noBackendMutation": true
+}

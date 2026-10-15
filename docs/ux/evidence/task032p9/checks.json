@@ -1,0 +1,206 @@
+{
+  "source": "50887e9f946212eb4f7974c84cef268b3d32a348",
+  "before": {
+    "create": {
+      "bottom": 179.19269561767578,
+      "height": 49.59635162353515,
+      "left": 909.8697509765624,
+      "right": 1071.7707824707031,
+      "top": 129.59634399414062,
+      "width": 161.90103149414062,
+      "x": 909.8697509765624,
+      "y": 129.59634399414062
+    },
+    "map": {
+      "bottom": 713.5872344970703,
+      "height": 518.3984375,
+      "left": 56.5625,
+      "right": 1071.7708129882812,
+      "top": 195.1887969970703,
+      "width": 1015.2083129882812,
+      "x": 56.5625,
+      "y": 195.1887969970703
+    },
+    "periods": {
+      "bottom": 272.9036445617676,
+      "height": 60.05208206176758,
+      "left": 74.22525787353516,
+      "right": 549.0169143676758,
+      "top": 212.8515625,
+      "width": 474.7916564941406,
+      "x": 74.22525787353516,
+      "y": 212.8515625
+    },
+    "viewport": {
+      "height": 720,
+      "width": 1128
+    }
+  },
+  "desktop": {
+    "create": {
+      "bottom": 174,
+      "height": 44,
+      "left": 1158.40625,
+      "right": 1202.40625,
+      "top": 130,
+      "width": 44,
+      "x": 1158.40625,
+      "y": 130
+    },
+    "hiddenHeading": "sr-only",
+    "map": {
+      "bottom": 630.3984375,
+      "height": 518.3984375,
+      "left": 59.59375,
+      "right": 1220.40625,
+      "top": 112,
+      "width": 1160.8125,
+      "x": 59.59375,
+      "y": 112
+    },
+    "overflow": false,
+    "periods": {
+      "bottom": 185.59375,
+      "height": 55.59375,
+      "left": 77.59375,
+      "right": 471.8984375,
+      "top": 130,
+      "width": 394.3046875,
+      "x": 77.59375,
+      "y": 130
+    },
+    "viewport": {
+      "height": 720,
+      "width": 1280
+    }
+  },
+  "narrow": {
+    "create": {
+      "bottom": 217.3984375,
+      "height": 44,
+      "left": 293.8046875,
+      "right": 337.8046875,
+      "top": 173.3984375,
+      "width": 44,
+      "x": 293.8046875,
+      "y": 173.3984375
+    },
+    "labels": [
+      {
+        "rect": {
+          "bottom": 221.59375,
+          "height": 44,
+          "left": 41.390625,
+          "right": 158.6953125,
+          "top": 177.59375,
+          "width": 117.3046875,
+          "x": 41.390625,
+          "y": 177.59375
+        },
+        "scrollWidth": 117,
+        "text": "Today"
+      },
+      {
+        "rect": {
+          "bottom": 221.59375,
+          "height": 44,
+          "left": 162.6953125,
+          "right": 280,
+          "top": 177.59375,
+          "width": 117.3046875,
+          "x": 162.6953125,
+          "y": 177.59375
+        },
+        "scrollWidth": 117,
+        "text": "Tomorrow"
+      },
+      {
+        "rect": {
+          "bottom": 265.59375,
+          "height": 44,
+          "left": 41.390625,
+          "right": 158.6953125,
+          "top": 221.59375,
+          "width": 117.3046875,
+          "x": 41.390625,
+          "y": 221.59375
+        },
+        "scrollWidth": 117,
+        "text": "This week"
+      },
+      {
+        "rect": {
+          "bottom": 265.59375,
+          "height": 44,
+          "left": 162.6953125,
+          "right": 280,
+          "top": 221.59375,
+          "width": 117.3046875,
+          "x": 162.6953125,
+          "y": 221.59375
+        },
+        "scrollWidth": 117,
+        "text": "Later"
+      }
+    ],
+    "overflow": false,
+    "periods": {
+      "bottom": 269.7890625,
+      "height": 96.390625,
+      "left": 37.1953125,
+      "right": 285,
+      "top": 173.3984375,
+      "width": 247.8046875,
+      "x": 37.1953125,
+      "y": 173.3984375
+    },
+    "viewport": {
+      "height": 812,
+      "width": 375
+    }
+  },
+  "pinRest": {
+    "cueTransform": "none",
+    "outerOutline": "none",
+    "outerShadow": "none",
+    "outerTransform": "matrix(1, 0, 0, 1, 578, 131)",
+    "rect": {
+      "bottom": 301,
+      "height": 56,
+      "left": 639.59375,
+      "right": 687.59375,
+      "top": 245,
+      "width": 48,
+      "x": 639.59375,
+      "y": 245
+    }
+  },
+  "pinHover": {
+    "cueTransform": "matrix(1, 0, 0, 1, 0, -3)",
+    "outerOutline": "none",
+    "outerShadow": "none",
+    "outerTransform": "matrix(1, 0, 0, 1, 578, 131)",
+    "rect": {
+      "bottom": 301,
+      "height": 56,
+      "left": 639.59375,
+      "right": 687.59375,
+      "top": 245,
+      "width": 48,
+      "x": 639.59375,
+      "y": 245
+    }
+  },
+  "previewTravelRetained": true,
+  "escapeClosedPreview": true,
+  "plusKeyboardOpenedPlaceFirstCreation": true,
+  "creationCancelledWithoutSave": true,
+  "allPeriodsOffEmptyState": true,
+  "periodsRestored": true,
+  "viewportOverrideReset": true,
+  "limits": [
+    "No physical device gesture test",
+    "No create mutation needed for this display-only change"
+  ],
+  "browserRecovery": "Original automation tab refused localhost after restart; a fresh tab in the same browser rendered successfully."
+}

@@ -1,5 +1,10 @@
 # Location and Maps
 
+## Map controls amendment 2026-10-15
+
+TASK-032P9 removes the visible Hangouts heading row and places a labeled plus link in the map top right, opening the unchanged place-first creation route. Period controls are compact and reserve plus space with narrow wrapping. Saved pins have rounded heads and pointed tips; outer48×56 Mapbox targets/coordinates remain stable and only visual children lift3px on hover. Accessible hidden h1, keyboard focus, preview/list/filter/error behavior and backend authorization stay intact.
+
+
 ## Map feedback amendment 2026-10-14
 
 TASK-032P4 removes the heading campus decoration, idle location disclaimer, period explanation, success count and routine Refresh button. Explicit Locate feedback, actual map/list loading/error/denial/empty/truncation states and error retries remain. No source authorization, backend persistence, polling/provider or coordinate change. Current visual lift and evidence are in TASK-032P4 handoff; prior outer-scale records describe superseded candidates.
