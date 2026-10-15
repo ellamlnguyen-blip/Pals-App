@@ -1,5 +1,10 @@
 # Core User Flows
 
+## Notification attention amendment 2026-10-15
+
+Primary text links are Hangouts/Calendar/People. Envelope → Chats; bell beside avatar → Notifications Inbox, with a hidden accessible page title and arrow-only labeled Refresh. Bell dot follows owner ledger unread state via30-second/focus/route polling. Successful visible inbox load acknowledges the existing server snapshot through its cutoff; later arrivals remain unread. Clicking the active bell reloads page1 before acknowledgment. Failed/uncertain acknowledgment keeps confirmed state and shows Refresh to retry; per-item reader/preferences/source authorization remain. This local candidate does not imply Realtime delivery or hosted acceptance.
+
+
 ## Map feedback amendment 2026-10-14
 
 TASK-032P4 uses a slight upward pin lift with no hover halo or outward scaling, retaining the map preview. Hangouts heading now omits campus decoration. Normal location/period explanation, result count and routine Refresh control are removed. Filters and viewport changes still use existing authorized reads; actual errors retain retry and empty states remain useful. This display cleanup does not change approximate locations or backend/privacy behavior.

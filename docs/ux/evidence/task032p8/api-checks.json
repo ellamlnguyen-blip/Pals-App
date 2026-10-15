@@ -1,0 +1,10 @@
+{
+  "initialUnread": false,
+  "ownerSummary": true,
+  "noStore": true,
+  "wrongActorDenied": true,
+  "anonymousDenied": true,
+  "invalidQueryDenied": true,
+  "futureBoundaryDenied": true,
+  "invalidRequestsDidNotAcknowledge": true
+}
