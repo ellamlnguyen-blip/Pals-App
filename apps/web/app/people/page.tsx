@@ -73,13 +73,10 @@ export default async function PeoplePage({
       />
       <div className="people-heading" id="people-heading" tabIndex={-1}>
         <div>
-          <p className="badge">UNC directory</p>
           <h1>People</h1>
-          <p>Browse students who chose to appear in People.</p>
         </div>
         <div className="people-heading-links">
           <Link href="/people/friends">Your friendships</Link>
-          <Link href="/people/privacy">Your People visibility</Link>
         </div>
       </div>
       {gateOff ? (
@@ -160,15 +157,16 @@ export default async function PeoplePage({
                   </li>
                 ))}
               </ul>
-              <div className="people-pages">
-                <span>Showing this page of People</span>
-                {selection.afterId && <Link href="/people">Start over</Link>}
-                {next && (
-                  <Link className="button" prefetch={false} href={next}>
-                    Next page
-                  </Link>
-                )}
-              </div>
+              {(selection.afterId || next) && (
+                <div className="people-pages">
+                  {selection.afterId && <Link href="/people">Start over</Link>}
+                  {next && (
+                    <Link className="button" prefetch={false} href={next}>
+                      Next page
+                    </Link>
+                  )}
+                </div>
+              )}
             </>
           ) : (
             <section className="people-panel">
