@@ -21,6 +21,7 @@ import {
   saveProfile,
   changePhoto,
   cleanupPhotos,
+  reorderPhotos,
   type ProfileResult,
 } from "./actions";
 
@@ -61,6 +62,7 @@ export function ProfileEditor({
   const content = useRef<HTMLDivElement>(null);
   const concealedRef = useRef(false);
   const actionEpoch = useRef(0);
+  const mutationBusy = useRef(false);
   const pendingAuth = useRef(new Set<string>());
   const [concealed, setConcealed] = useState(false);
   const photoStatus = useRef<HTMLDivElement>(null);
@@ -77,6 +79,8 @@ export function ProfileEditor({
   const [selectedPhoto, setSelectedPhoto] = useState<{
     slot: string;
     label: string;
+    revision: number;
+    path: string | null;
   } | null>(null);
   const [viewingPhoto, setViewingPhoto] = useState(false);
   const [viewPhotoFailed, setViewPhotoFailed] = useState(false);
@@ -89,6 +93,11 @@ export function ProfileEditor({
   const [values, setValues] = useState(() => initialValues(profile));
   const [saved, setSaved] = useState(values);
   const [revision, setRevision] = useState(profile.revision);
+  const [galleryPaths, setGalleryPaths] = useState(
+    profile.additional_photo_paths,
+  );
+  const [galleryRevision, setGalleryRevision] = useState(profile.revision);
+
   const [editing, setEditing] = useState(false);
   const [feedback, setFeedback] = useState<ProfileResult>({});
   const [cleanupNeeded, setCleanupNeeded] = useState(false);
@@ -112,7 +121,20 @@ export function ProfileEditor({
     setValues(latest);
     setSaved(latest);
     setRevision(profile.revision);
+    setGalleryPaths(profile.additional_photo_paths);
+    setGalleryRevision(profile.revision);
   }, [editing, pending, profile, revision]);
+  useEffect(() => {
+    if (
+      !concealedRef.current &&
+      profile.revision >= galleryRevision &&
+      (profile.revision !== galleryRevision ||
+        galleryPaths.some((path) => path === "pending"))
+    ) {
+      setGalleryPaths(profile.additional_photo_paths);
+      setGalleryRevision(profile.revision);
+    }
+  }, [profile, galleryRevision, galleryPaths]);
   useEffect(() => {
     if (concealedRef.current) return;
     if (restoreEditFocus.current && !editing && !pending) {
@@ -121,20 +143,28 @@ export function ProfileEditor({
     }
   }, [editing, pending]);
   const [photoSlot, setPhotoSlot] = useState<string | null>(null);
-  const [editingPrimary, setEditingPrimary] = useState(false);
+  const [cropTarget, setCropTarget] = useState<{
+    slot: string;
+    revision: number;
+    file?: File;
+    replacing?: boolean;
+  } | null>(null);
+  const [dragIndex, setDragIndex] = useState<number | null>(null);
   const [primaryRevision, setPrimaryRevision] = useState<number | null>(null);
   useEffect(() => {
     const epochRef = actionEpoch;
     const conceal = () => {
       epochRef.current++;
+      mutationBusy.current = false;
       concealedRef.current = true;
       if (content.current) content.current.style.display = "none";
       photoDialog.current?.close();
       setSelectedPhoto(null);
       setViewingPhoto(false);
-      setEditingPrimary(false);
+      setCropTarget(null);
       setEditing(false);
       setPrimaryRevision(null);
+      setGalleryPaths([]);
       setValues({});
       setSaved({});
       setFeedback({});
@@ -188,12 +218,13 @@ export function ProfileEditor({
   function mayApply(epoch: number) {
     return !concealedRef.current && actionEpoch.current === epoch;
   }
-  const openPrimary = () => {
-    if (concealedRef.current) return;
-    setPhotoSlot("primary");
+  const openCrop = (slot: string, file?: File, replacing = false) => {
+    if (concealedRef.current || pending || cropTarget) return;
+    setPhotoSlot(slot);
     setFeedback({});
-    setEditingPrimary(true);
+    setCropTarget({ slot, revision, file, replacing });
   };
+  const openPrimary = () => openCrop("primary");
   useEffect(() => {
     if (!editing || concealedRef.current) return;
     editPanel.current?.scrollIntoView({
@@ -218,46 +249,142 @@ export function ProfileEditor({
       photoSummary.current?.focus({ preventScroll: true });
     }
   }
-  function focusPhotoInput(slot: string) {
-    openPhotos();
-    requestAnimationFrame(() => {
-      const input = document.getElementById(`photo-${slot}`);
-      if (input instanceof HTMLInputElement) {
-        input.scrollIntoView({ block: "center" });
-        input.focus({ preventScroll: true });
-      }
-    });
-  }
   function selectPhoto(
     slot: string,
     label: string,
     trigger: HTMLButtonElement,
   ) {
     photoTrigger.current = trigger;
-    setSelectedPhoto({ slot, label });
+    setSelectedPhoto({
+      slot,
+      label,
+      revision,
+      path:
+        slot === "primary"
+          ? profile.primary_photo_path
+          : galleryPaths[Number(slot)],
+    });
     setViewingPhoto(false);
     setViewPhotoFailed(false);
     photoDialog.current?.showModal();
   }
-  function editSelectedPhoto() {
+  function editSelectedPhoto(replacing = false) {
     const slot = selectedPhoto?.slot;
-    if (!slot) return;
+    if (
+      !slot ||
+      !selectedPhoto ||
+      selectedPhoto.revision !== revision ||
+      (slot !== "primary" && selectedPhoto.path !== galleryPaths[Number(slot)])
+    ) {
+      setFeedback({
+        error:
+          "Photos changed. Reload the latest profile before editing this photo.",
+      });
+      photoDialog.current?.close();
+      router.refresh();
+      return;
+    }
     skipPhotoFocusRestore.current = true;
     photoDialog.current?.close();
-    if (slot === "primary") openPrimary();
-    else focusPhotoInput(slot);
+    openCrop(slot, undefined, replacing);
   }
   function openEditor() {
     setFeedback({});
     setPhotoSlot(null);
     setEditing(true);
   }
+  function signalPhotoChange() {
+    window.dispatchEvent(new Event("pals-photo-invalidated"));
+    try {
+      const channel = new BroadcastChannel("pals-photo-invalidated");
+      channel.postMessage(null);
+      channel.close();
+    } catch {
+      // This tab still refreshes its authorized sources.
+    }
+  }
+  function movePhoto(from: number, to: number) {
+    if (
+      concealedRef.current ||
+      mutationBusy.current ||
+      pending ||
+      cropTarget ||
+      galleryPaths.includes("pending") ||
+      from < 0 ||
+      to < 0 ||
+      from >= galleryPaths.length ||
+      to >= galleryPaths.length ||
+      from === to
+    )
+      return;
+    const next = [...galleryPaths];
+    const [path] = next.splice(from, 1);
+    next.splice(to, 0, path);
+    const form = new FormData();
+    form.set("revision", String(revision));
+    form.set("paths", JSON.stringify(next));
+    setPhotoSlot("order");
+    run(
+      "Saving photo order…",
+      () => reorderPhotos(form),
+      (result) => {
+        if (!result.error && result.revision !== undefined) {
+          setGalleryPaths(next);
+          setGalleryRevision(result.revision);
+          signalPhotoChange();
+        }
+      },
+    );
+  }
+  function removeSelectedPhoto() {
+    const slot = selectedPhoto?.slot;
+    if (
+      !slot ||
+      slot === "primary" ||
+      pending ||
+      cropTarget ||
+      mutationBusy.current
+    )
+      return;
+    if (
+      selectedPhoto?.revision !== revision ||
+      selectedPhoto.path !== galleryPaths[Number(slot)]
+    ) {
+      setFeedback({
+        error:
+          "Photos changed. Reload the latest profile before deleting this photo.",
+      });
+      photoDialog.current?.close();
+      router.refresh();
+      return;
+    }
+    photoDialog.current?.close();
+    const form = new FormData();
+    form.set("revision", String(revision));
+    form.set("slot", slot);
+    form.set("operation", "remove");
+    setPhotoSlot(slot);
+    run(
+      "Removing photo…",
+      () => changePhoto(form),
+      (result) => {
+        if (!result.error && result.revision !== undefined) {
+          const paths = [...galleryPaths];
+          paths.splice(Number(slot), 1);
+          setGalleryPaths(paths);
+          setGalleryRevision(result.revision);
+          signalPhotoChange();
+        }
+      },
+    );
+  }
   function run(
     label: string,
     work: () => Promise<ProfileResult>,
     done?: (result: ProfileResult) => void,
   ) {
-    if (concealedRef.current) return;
+    if (concealedRef.current || mutationBusy.current) return;
+    mutationBusy.current = true;
     const epoch = actionEpoch.current;
     setBusyLabel(label);
     setFeedback({});
@@ -280,6 +407,8 @@ export function ProfileEditor({
           error:
             "We couldn’t finish that request. Your text is still here. Retry, or reload to check account access and the latest saved profile.",
         });
+      } finally {
+        mutationBusy.current = false;
       }
     });
   }
@@ -389,25 +518,37 @@ export function ProfileEditor({
         )}
       </div>
       <PrimaryPhotoEditor
-        open={editingPrimary}
-        revision={revision}
-        hasPhoto={!!profile.primary_photo_path || primaryRevision !== null}
-        onClose={() => setEditingPrimary(false)}
+        open={cropTarget !== null}
+        slot={cropTarget?.slot ?? "primary"}
+        initialFile={cropTarget?.file}
+        replacing={cropTarget?.replacing}
+        revision={cropTarget?.revision ?? revision}
+        hasPhoto={
+          cropTarget?.slot === "primary"
+            ? !!profile.primary_photo_path || primaryRevision !== null
+            : cropTarget?.slot !== "new"
+        }
+        onClose={() => setCropTarget(null)}
         onNeedsRefresh={() => router.refresh()}
         onSaved={(result) => {
           if (concealedRef.current) return;
           setFeedback(result);
           if (result.revision !== undefined) {
             setRevision(result.revision);
-            setPrimaryRevision(result.revision);
+            if (cropTarget?.slot === "primary")
+              setPrimaryRevision(result.revision);
+            else {
+              const paths = [...galleryPaths];
+              if (cropTarget?.slot === "new") paths.push("pending");
+              else if (cropTarget) paths[Number(cropTarget.slot)] = "pending";
+              setGalleryPaths(paths);
+              setGalleryRevision(result.revision);
+            }
           }
           if (result.cleanupNeeded !== undefined)
             setCleanupNeeded(result.cleanupNeeded);
           router.refresh();
-          window.dispatchEvent(new Event("pals-photo-invalidated"));
-          const channel = new BroadcastChannel("pals-photo-invalidated");
-          channel.postMessage(null);
-          channel.close();
+          signalPhotoChange();
         }}
       />
       <dialog
@@ -449,10 +590,10 @@ export function ProfileEditor({
                   </p>
                 ) : (
                   <Image
-                    src={`/profile/photo?slot=${selectedPhoto.slot}&v=${profile.revision}`}
+                    src={`/profile/photo?slot=${selectedPhoto.slot}&v=${selectedPhoto.revision}`}
                     alt={selectedPhoto.label}
                     width={1200}
-                    height={1200}
+                    height={selectedPhoto.slot === "primary" ? 1200 : 667}
                     unoptimized
                     onError={() => setViewPhotoFailed(true)}
                   />
@@ -469,18 +610,40 @@ export function ProfileEditor({
                 </button>
                 <button
                   type="button"
-                  disabled={pending || editing}
-                  onClick={editSelectedPhoto}
+                  disabled={pending || editing || !!cropTarget}
+                  onClick={() =>
+                    editSelectedPhoto(selectedPhoto.slot !== "primary")
+                  }
                 >
-                  Edit photo
+                  {selectedPhoto.slot === "primary"
+                    ? "Edit photo"
+                    : "Replace photo"}
                 </button>
+                {selectedPhoto.slot !== "primary" && (
+                  <>
+                    <button
+                      type="button"
+                      disabled={pending || !!cropTarget}
+                      onClick={() => editSelectedPhoto(false)}
+                    >
+                      Reposition photo
+                    </button>
+                    <button
+                      type="button"
+                      disabled={pending || !!cropTarget}
+                      onClick={removeSelectedPhoto}
+                    >
+                      Delete photo
+                    </button>
+                  </>
+                )}
               </div>
             )}
           </div>
         )}
       </dialog>
       <ProfileSummary
-        name={profile.real_name || "Your name"}
+        name={saved.real_name || "Your name"}
         hometown={profile.hometown}
         bio={
           profile.bio ||
@@ -507,25 +670,125 @@ export function ProfileEditor({
           </button>
         </div>
         <div className="profile-gallery">
-          {profile.additional_photo_paths.map((_, index) => (
-            <OwnerDisplayPhoto
-              key={`${index}:${profile.revision}`}
-              slot={String(index)}
-              revision={profile.revision}
-              alt={`Your extra photo ${index + 1}`}
-              onSelect={selectPhoto}
-            />
-          ))}
-          {profile.additional_photo_paths.length === 0 && (
-            <button
-              className="profile-gallery-empty"
-              type="button"
-              onClick={openPhotos}
-            >
-              Add a few photos of yourself and your favorite moments
-            </button>
-          )}
+          {Array.from({ length: 4 }, (_, index) => {
+            const occupied = index < galleryPaths.length;
+            const addable = index === galleryPaths.length;
+            if (!occupied && !addable) return null;
+            const slot = occupied ? String(index) : "new";
+            return (
+              <div
+                className="profile-gallery-item"
+                key={`${slot}:${galleryRevision}`}
+              >
+                {occupied && galleryPaths[index] === "pending" ? (
+                  <div className="profile-gallery-loading" role="status">
+                    Updating photo…
+                    <button
+                      type="button"
+                      onClick={() => window.location.reload()}
+                    >
+                      Reload profile
+                    </button>
+                  </div>
+                ) : occupied ? (
+                  <div
+                    draggable={
+                      !pending &&
+                      !cropTarget &&
+                      !galleryPaths.includes("pending")
+                    }
+                    onDragStart={(event) => {
+                      if (pending || cropTarget) {
+                        event.preventDefault();
+                        return;
+                      }
+                      setDragIndex(index);
+                      event.dataTransfer.effectAllowed = "move";
+                      event.dataTransfer.setData("text/plain", String(index));
+                    }}
+                    onDragOver={(event) => {
+                      if (dragIndex !== null && !pending && !cropTarget)
+                        event.preventDefault();
+                    }}
+                    onDrop={(event) => {
+                      event.preventDefault();
+                      if (dragIndex !== null) movePhoto(dragIndex, index);
+                      setDragIndex(null);
+                    }}
+                    onDragEnd={() => setDragIndex(null)}
+                  >
+                    <OwnerDisplayPhoto
+                      slot={slot}
+                      revision={galleryRevision}
+                      alt={`Your extra photo ${index + 1}`}
+                      onSelect={selectPhoto}
+                    />
+                  </div>
+                ) : (
+                  <button
+                    className="profile-gallery-empty"
+                    type="button"
+                    disabled={
+                      pending ||
+                      !!cropTarget ||
+                      galleryPaths.includes("pending")
+                    }
+                    onClick={() => openCrop("new")}
+                    onDragOver={(event) => event.preventDefault()}
+                    onDrop={(event) => {
+                      event.preventDefault();
+                      const file = event.dataTransfer.files[0];
+                      if (file && !galleryPaths.includes("pending"))
+                        openCrop("new", file);
+                    }}
+                  >
+                    Add photo {index + 1} · choose or drop
+                  </button>
+                )}
+                {occupied && (
+                  <div className="profile-gallery-order">
+                    <button
+                      type="button"
+                      disabled={
+                        index === 0 ||
+                        pending ||
+                        !!cropTarget ||
+                        galleryPaths.includes("pending")
+                      }
+                      onClick={() => movePhoto(index, index - 1)}
+                      aria-label={`Move photo ${index + 1} left`}
+                    >
+                      Move left
+                    </button>
+                    <button
+                      type="button"
+                      disabled={
+                        index === galleryPaths.length - 1 ||
+                        pending ||
+                        !!cropTarget ||
+                        galleryPaths.includes("pending")
+                      }
+                      onClick={() => movePhoto(index, index + 1)}
+                      aria-label={`Move photo ${index + 1} right`}
+                    >
+                      Move right
+                    </button>
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </div>
+        {photoSlot !== null && feedback.error && (
+          <p className="form-message error" role="alert">
+            {feedback.error}
+          </p>
+        )}
+        {photoSlot !== null && feedback.success && (
+          <p className="form-message" role="status">
+            {feedback.success}
+          </p>
+        )}
       </section>
       {profile.interests.length > 0 && (
         <section
@@ -627,24 +890,6 @@ export function ProfileEditor({
                 </>
               )}
             </p>
-            {[
-              ...profile.additional_photo_paths.map((_, i) => String(i)),
-              ...(profile.additional_photo_paths.length < 4 ? ["new"] : []),
-            ].map((slot) => (
-              <PhotoCard
-                key={`${slot}:${profile.revision}`}
-                slot={slot}
-                hasPhoto={slot !== "primary" || !!profile.primary_photo_path}
-                revision={revision}
-                disabled={pending || editing}
-                feedback={photoSlot === slot ? feedback : {}}
-                busy={pending && photoSlot === slot}
-                run={(label, work) => {
-                  setPhotoSlot(slot);
-                  run(label, work);
-                }}
-              />
-            ))}
             <p className="help">
               Up to four extra photos. Photos save separately from your details.
               New photo uploads are processed to remove embedded metadata.
@@ -740,9 +985,10 @@ export function ProfileEditor({
           <fieldset disabled={!editing || pending}>
             <legend>Profile basics</legend>
             <div className="form-stack">
+              {field("real_name", "Real name", 100, true)}
               <p className="help">
-                Change your real name and login details in{" "}
-                <Link href="/account">Account</Link>.
+                Your name also appears in Account. Your school and confirmed
+                email stay read-only.
               </p>
               <label htmlFor="graduation_year">
                 Graduation year
@@ -918,169 +1164,5 @@ function OwnerDisplayPhoto({
         </span>
       )}
     </button>
-  );
-}
-function PhotoCard({
-  slot,
-  hasPhoto,
-  revision,
-  disabled,
-  feedback,
-  busy,
-  run,
-}: {
-  slot: string;
-  hasPhoto: boolean;
-  revision: number;
-  disabled: boolean;
-  feedback: ProfileResult;
-  busy: boolean;
-  run: (label: string, work: () => Promise<ProfileResult>) => void;
-}) {
-  const [failed, setFailed] = useState(false);
-  const [fileError, setFileError] = useState("");
-  const [preview, setPreview] = useState<string | null>(null);
-  useEffect(() => {
-    return () => {
-      if (preview) URL.revokeObjectURL(preview);
-    };
-  }, [preview]);
-  const label =
-    slot === "primary"
-      ? "Primary photo"
-      : slot === "new"
-        ? "Add an extra photo"
-        : `Extra photo ${Number(slot) + 1}`;
-  return (
-    <div className="photo-card">
-      <h3>{label}</h3>
-      <div aria-live="polite">
-        {busy && <p role="status">Saving photo…</p>}
-        {fileError && (
-          <p className="form-message error" role="alert">
-            {fileError}
-          </p>
-        )}
-        {feedback.error && (
-          <p className="form-message error" role="alert">
-            {feedback.error}
-          </p>
-        )}
-        {feedback.success && <p role="status">{feedback.success}</p>}
-        {feedback.error && (
-          <button
-            className="text-button"
-            disabled={disabled}
-            onClick={() => window.location.reload()}
-          >
-            Reload latest profile
-          </button>
-        )}
-      </div>
-      {slot !== "new" && !hasPhoto && (
-        <p className="help">No photo added yet.</p>
-      )}
-      {slot !== "new" &&
-        hasPhoto &&
-        (failed ? (
-          <p className="help">Photo couldn’t load. Reload to try again.</p>
-        ) : (
-          <Image
-            className="owner-photo"
-            src={`/profile/photo?slot=${slot}&v=${revision}`}
-            alt={label}
-            width={240}
-            height={240}
-            unoptimized
-            onError={() => setFailed(true)}
-          />
-        ))}
-      {preview && (
-        <div className="photo-preview">
-          <p className="help">
-            Selected photo preview. It is private and has not been saved.
-          </p>
-          <Image
-            className="owner-photo"
-            src={preview}
-            alt={`Preview for ${label.toLowerCase()}`}
-            width={240}
-            height={240}
-            unoptimized
-          />
-        </div>
-      )}
-      <form
-        className="photo-controls"
-        onSubmit={(event) => {
-          event.preventDefault();
-          const form = new FormData(event.currentTarget);
-          const photo = form.get("photo");
-          if (
-            !(photo instanceof File) ||
-            photo.size === 0 ||
-            photo.size > 5 * 1024 * 1024 ||
-            !["image/jpeg", "image/png", "image/webp"].includes(photo.type)
-          ) {
-            setFileError("Choose a JPG, PNG or WebP photo under 5 MB.");
-            return;
-          }
-          setFileError("");
-          form.set("revision", String(revision));
-          form.set("slot", slot);
-          form.set("operation", slot === "new" ? "add" : "replace");
-          run("Saving photo…", () => changePhoto(form));
-        }}
-      >
-        <label htmlFor={`photo-${slot}`}>
-          {slot === "new" ? "Choose a photo" : "Choose replacement"}
-          <input
-            id={`photo-${slot}`}
-            name="photo"
-            type="file"
-            accept="image/jpeg,image/png,image/webp"
-            required
-            disabled={disabled}
-            onChange={(event) => {
-              const file = event.currentTarget.files?.[0];
-              setFileError("");
-              if (!file) {
-                setPreview(null);
-                return;
-              }
-              if (
-                file.size === 0 ||
-                file.size > 5 * 1024 * 1024 ||
-                !["image/jpeg", "image/png", "image/webp"].includes(file.type)
-              ) {
-                setPreview(null);
-                setFileError("Choose a JPG, PNG or WebP photo under 5 MB.");
-                return;
-              }
-              setPreview(URL.createObjectURL(file));
-            }}
-          />
-        </label>
-        <button className="text-button" disabled={disabled}>
-          {slot === "new" ? "Add photo" : "Replace photo"}
-        </button>
-        {slot !== "primary" && slot !== "new" && (
-          <button
-            className="text-button"
-            type="button"
-            disabled={disabled}
-            onClick={() => {
-              const form = new FormData();
-              form.set("revision", String(revision));
-              form.set("slot", slot);
-              form.set("operation", "remove");
-              run("Removing photo…", () => changePhoto(form));
-            }}
-          >
-            Remove photo {Number(slot) + 1}
-          </button>
-        )}
-      </form>
-    </div>
   );
 }

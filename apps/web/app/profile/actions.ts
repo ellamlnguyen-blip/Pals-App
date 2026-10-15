@@ -6,7 +6,9 @@ import {
   photoExtension,
 } from "@pals/validation";
 import { ownerProfile } from "../../lib/owner-profile";
+import { accountName } from "../../lib/account-input";
 import { normalizeOwnerPhoto } from "../../lib/rich-peer-photo-image";
+import { validPhotoOrder } from "../../lib/owner-photo-order";
 
 export type ProfileResult = {
   error?: string;
@@ -28,10 +30,11 @@ export async function saveProfile(form: FormData): Promise<ProfileResult> {
   const revision = expected(form);
   if (profile.revision !== revision)
     return { error: conflict, requiresRefresh: true };
-  // Account owns real-name edits. Ignore a stale or crafted profile-form name.
+  const name = accountName(form.get("real_name"));
+  if (!name) return { error: "Enter your real name, up to 100 characters." };
   const detailsForm = new FormData();
   for (const [key, value] of form) detailsForm.append(key, value);
-  detailsForm.set("real_name", profile.real_name ?? "");
+  detailsForm.set("real_name", name);
   const required = profileFields(detailsForm, profile.bio),
     optional = optionalProfileFields(form);
   if (!required || !optional)
@@ -53,6 +56,8 @@ export async function saveProfile(form: FormData): Promise<ProfileResult> {
     };
   if (!data) return { error: conflict, requiresRefresh: true };
   revalidatePath("/profile");
+  revalidatePath("/account");
+  revalidatePath("/hangouts");
   return { success: "Profile saved.", revision: data.revision };
 }
 export async function changePhoto(form: FormData): Promise<ProfileResult> {
@@ -169,6 +174,37 @@ export async function changePhoto(form: FormData): Promise<ProfileResult> {
     };
   revalidatePath("/profile");
   return { success: "Photos saved.", revision: data.revision, cleanupNeeded };
+}
+export async function reorderPhotos(form: FormData): Promise<ProfileResult> {
+  const { client, user, profile } = await ownerProfile();
+  const revision = expected(form);
+  if (profile.revision !== revision)
+    return { error: conflict, requiresRefresh: true };
+  let paths: unknown;
+  try {
+    paths = JSON.parse(String(form.get("paths") ?? ""));
+  } catch {
+    return { error: "That photo order is invalid." };
+  }
+  const existing: string[] = profile.additional_photo_paths;
+  if (!validPhotoOrder(existing, paths))
+    return { error: "That photo order is invalid or unchanged." };
+  const { data, error } = await client
+    .from("profiles")
+    .update({ additional_photo_paths: paths })
+    .eq("user_id", user.id)
+    .eq("revision", revision)
+    .select("revision")
+    .maybeSingle();
+  if (error)
+    return {
+      error:
+        "We couldn’t confirm the photo order. Reload to check before retrying.",
+      requiresRefresh: true,
+    };
+  if (!data) return { error: conflict, requiresRefresh: true };
+  revalidatePath("/profile");
+  return { success: "Photo order saved.", revision: data.revision };
 }
 export async function cleanupPhotos(): Promise<ProfileResult> {
   const { client, user, profile } = await ownerProfile();

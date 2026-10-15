@@ -17,7 +17,7 @@ const CropperControl = Cropper as unknown as ComponentType<
     Pick<CropperProps, "image" | "crop" | "zoom" | "onCropChange">
 >;
 
-function squareFile(src: string, area: Area): Promise<File> {
+function croppedFile(src: string, area: Area, primary: boolean): Promise<File> {
   return new Promise((resolve, reject) => {
     const image = new Image();
     image.onload = () => {
@@ -35,13 +35,11 @@ function squareFile(src: string, area: Area): Promise<File> {
         );
         return;
       }
-      const size = Math.min(
-        1024,
-        Math.floor(Math.min(area.width, area.height)),
-      );
+      const width = Math.min(primary ? 1024 : 1440, Math.floor(area.width));
+      const height = primary ? width : Math.round(width / 1.8);
       const canvas = document.createElement("canvas");
-      canvas.width = size;
-      canvas.height = size;
+      canvas.width = width;
+      canvas.height = height;
       const context = canvas.getContext("2d");
       if (!context)
         return reject(
@@ -55,8 +53,8 @@ function squareFile(src: string, area: Area): Promise<File> {
         area.height,
         0,
         0,
-        size,
-        size,
+        width,
+        height,
       );
       canvas.toBlob((blob) => {
         canvas.width = canvas.height = 0;
@@ -77,7 +75,75 @@ function squareFile(src: string, area: Area): Promise<File> {
   });
 }
 
+async function sourceDimensions(
+  file: File,
+): Promise<{ width: number; height: number }> {
+  const bytes = new Uint8Array(await file.arrayBuffer());
+  const view = new DataView(bytes.buffer);
+  if (
+    file.type === "image/png" &&
+    bytes.length >= 24 &&
+    bytes
+      .slice(0, 8)
+      .every(
+        (value, index) => value === [137, 80, 78, 71, 13, 10, 26, 10][index],
+      )
+  )
+    return { width: view.getUint32(16), height: view.getUint32(20) };
+  if (file.type === "image/jpeg" && bytes[0] === 0xff && bytes[1] === 0xd8) {
+    let offset = 2;
+    while (offset + 9 < bytes.length) {
+      if (bytes[offset] !== 0xff) break;
+      const marker = bytes[offset + 1];
+      const length = view.getUint16(offset + 2);
+      if (length < 2 || offset + 2 + length > bytes.length) break;
+      if (
+        [
+          0xc0, 0xc1, 0xc2, 0xc3, 0xc5, 0xc6, 0xc7, 0xc9, 0xca, 0xcb, 0xcd,
+          0xce, 0xcf,
+        ].includes(marker)
+      )
+        return {
+          width: view.getUint16(offset + 7),
+          height: view.getUint16(offset + 5),
+        };
+      offset += length + 2;
+    }
+  }
+  if (
+    file.type === "image/webp" &&
+    bytes.length >= 30 &&
+    String.fromCharCode(...bytes.slice(0, 4)) === "RIFF" &&
+    String.fromCharCode(...bytes.slice(8, 12)) === "WEBP"
+  ) {
+    const chunk = String.fromCharCode(...bytes.slice(12, 16));
+    if (chunk === "VP8X")
+      return {
+        width: 1 + bytes[24] + (bytes[25] << 8) + (bytes[26] << 16),
+        height: 1 + bytes[27] + (bytes[28] << 8) + (bytes[29] << 16),
+      };
+    if (chunk === "VP8L" && bytes[20] === 0x2f)
+      return {
+        width: 1 + (((bytes[22] & 0x3f) << 8) | bytes[21]),
+        height:
+          1 +
+          (((bytes[24] & 0x0f) << 10) | (bytes[23] << 2) | (bytes[22] >> 6)),
+      };
+    if (chunk === "VP8 " && bytes.length >= 30)
+      return {
+        width: view.getUint16(26, true) & 0x3fff,
+        height: view.getUint16(28, true) & 0x3fff,
+      };
+  }
+  throw new Error(
+    "This photo could not be read. Choose another still JPG, PNG or WebP.",
+  );
+}
+
 export function PrimaryPhotoEditor({
+  slot = "primary",
+  initialFile,
+  replacing = false,
   open,
   revision,
   hasPhoto,
@@ -85,6 +151,9 @@ export function PrimaryPhotoEditor({
   onSaved,
   onNeedsRefresh,
 }: {
+  slot?: string;
+  initialFile?: File | null;
+  replacing?: boolean;
   open: boolean;
   revision: number;
   hasPhoto: boolean;
@@ -98,6 +167,7 @@ export function PrimaryPhotoEditor({
   const objectUrl = useRef<string | null>(null);
   const busyRef = useRef(false);
   const generation = useRef(0);
+  const selection = useRef(0);
   const wasOpen = useRef(false);
   const onCloseRef = useRef(onClose);
   const [src, setSrc] = useState<string | null>(null);
@@ -123,7 +193,8 @@ export function PrimaryPhotoEditor({
       setBaseRevision(revision);
       setNeedsRefresh(false);
       setInvalidSource(false);
-      setSrc(hasPhoto ? `/profile/photo?v=${revision}` : null);
+      setSrc(hasPhoto ? `/profile/photo?slot=${slot}&v=${revision}` : null);
+      if (initialFile) chooseFile(initialFile);
       setCrop({ x: 0, y: 0 });
       setZoom(1);
       setArea(null);
@@ -132,7 +203,7 @@ export function PrimaryPhotoEditor({
       wasOpen.current = false;
       if (node.open) node.close();
     }
-  }, [open, hasPhoto, revision]);
+  }, [open, hasPhoto, revision, slot, initialFile]);
 
   useEffect(() => {
     if (!src) return;
@@ -166,6 +237,7 @@ export function PrimaryPhotoEditor({
     const authChannel = new BroadcastChannel(AUTH_TRANSITION_CHANNEL);
     const invalidate = () => {
       currentGeneration.current++;
+      selection.current++;
       busyRef.current = false;
       setBusy(false);
       if (objectUrl.current) URL.revokeObjectURL(objectUrl.current);
@@ -190,24 +262,51 @@ export function PrimaryPhotoEditor({
     };
   }, []);
 
-  function chooseFile(file?: File) {
-    if (busyRef.current) return;
-    if (!file) return;
+  async function chooseFile(file?: File) {
+    if (busyRef.current || !file) return;
+    const selected = ++selection.current;
     if (!accepted.includes(file.type) || !file.size || file.size > maxBytes) {
+      setInvalidSource(true);
       setError("Choose a still JPG, PNG or WebP under 5 MB.");
       return;
     }
-    if (objectUrl.current) URL.revokeObjectURL(objectUrl.current);
-    objectUrl.current = URL.createObjectURL(file);
-    setSrc(objectUrl.current);
-    setCrop({ x: 0, y: 0 });
-    setZoom(1);
-    setArea(null);
-    setError("");
-    setInvalidSource(false);
+    try {
+      const { width, height } = await sourceDimensions(file);
+      if (selected !== selection.current) return;
+      if (
+        !width ||
+        !height ||
+        width * height > 20_000_000 ||
+        Math.min(width, height) < 256
+      ) {
+        setInvalidSource(true);
+        setError(
+          "Choose a photo with at least 256 pixels on its short side and no more than 20 megapixels.",
+        );
+        return;
+      }
+      if (objectUrl.current) URL.revokeObjectURL(objectUrl.current);
+      objectUrl.current = URL.createObjectURL(file);
+      setSrc(objectUrl.current);
+      setCrop({ x: 0, y: 0 });
+      setZoom(1);
+      setArea(null);
+      setError("");
+      setInvalidSource(false);
+    } catch (cause) {
+      if (selected === selection.current) {
+        setInvalidSource(true);
+        setError(
+          cause instanceof Error
+            ? cause.message
+            : "This photo could not be read.",
+        );
+      }
+    }
   }
   function close() {
     if (busyRef.current) return;
+    selection.current++;
     if (objectUrl.current) URL.revokeObjectURL(objectUrl.current);
     objectUrl.current = null;
     setSrc(null);
@@ -220,15 +319,15 @@ export function PrimaryPhotoEditor({
     setError("");
     const current = ++generation.current;
     try {
-      const file = await squareFile(src, area);
+      const file = await croppedFile(src, area, slot === "primary");
       // Canvas decode/export is asynchronous. An auth or lifecycle transition
       // can invalidate this actor before any server action has begun.
       if (generation.current !== current) return;
       const form = new FormData();
       form.set("photo", file);
       form.set("revision", String(baseRevision));
-      form.set("slot", "primary");
-      form.set("operation", "replace");
+      form.set("slot", slot);
+      form.set("operation", slot === "new" ? "add" : "replace");
       const result = await changePhoto(form);
       if (generation.current !== current) return;
       if (result.error) {
@@ -256,6 +355,7 @@ export function PrimaryPhotoEditor({
     }
   }
   function closeAfterSave() {
+    selection.current++;
     if (objectUrl.current) URL.revokeObjectURL(objectUrl.current);
     objectUrl.current = null;
     setSrc(null);
@@ -265,7 +365,7 @@ export function PrimaryPhotoEditor({
     <dialog
       ref={dialog}
       className="profile-crop-dialog"
-      aria-label="Edit main photo"
+      aria-label={slot === "primary" ? "Edit main photo" : "Edit extra photo"}
       onCancel={(event) => {
         event.preventDefault();
         close();
@@ -275,8 +375,21 @@ export function PrimaryPhotoEditor({
       }}
     >
       <div className="profile-crop-content">
-        <h2>Edit main photo</h2>
-        <p>Drag to position your photo in the circle, then save it.</p>
+        <h2>
+          {slot === "primary"
+            ? "Edit main photo"
+            : slot === "new"
+              ? "Add extra photo"
+              : replacing
+                ? "Replace extra photo"
+                : "Reposition extra photo"}
+        </h2>
+        <p>
+          {replacing
+            ? "Choose a new photo, then drag to position it"
+            : "Drag to position your photo"}{" "}
+          in the {slot === "primary" ? "circle" : "rectangle"}, then save it.
+        </p>
         <div
           className="profile-crop-drop"
           onDragOver={(event) => event.preventDefault()}
@@ -291,8 +404,8 @@ export function PrimaryPhotoEditor({
               image={src}
               crop={crop}
               zoom={zoom}
-              aspect={1}
-              cropShape="round"
+              aspect={slot === "primary" ? 1 : 1.8}
+              cropShape={slot === "primary" ? "round" : "rect"}
               showGrid={false}
               onCropChange={(next) => {
                 if (!busyRef.current) setCrop(next);

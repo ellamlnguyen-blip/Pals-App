@@ -1226,3 +1226,61 @@
     padding-inline: 12px;
   }
 }
+/* Photo order controls stay adjacent to the 9:5 gallery rendition. */
+.profile-gallery-item {
+  min-width: 0;
+}
+.profile-gallery-item > div:first-child {
+  aspect-ratio: 1.8;
+  overflow: hidden;
+  border-radius: 14px;
+}
+.profile-gallery-item .profile-photo-trigger,
+.profile-gallery-item .profile-photo-trigger img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.profile-gallery-item .profile-gallery-empty {
+  grid-column: auto;
+  aspect-ratio: 1.8;
+  min-height: 100px;
+}
+.profile-gallery-order {
+  display: flex;
+  gap: 8px;
+  margin-top: 4px;
+}
+.profile-gallery-order button {
+  min-height: 44px;
+  padding: 4px 8px;
+  border: 0;
+  background: transparent;
+  color: var(--pals-profile-action);
+  text-decoration: underline;
+  cursor: pointer;
+}
+.profile-gallery-order button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+.profile-gallery-order button:focus-visible,
+.profile-gallery-empty:focus-visible {
+  outline: 3px solid #005bb5;
+  outline-offset: 2px;
+}
+@media (max-width: 380px) {
+  .profile-gallery-order {
+    flex-wrap: wrap;
+    gap: 0 6px;
+  }
+}
+.profile-gallery-loading {
+  display: grid;
+  place-items: center;
+  width: 100%;
+  aspect-ratio: 1.8;
+  border-radius: 14px;
+  background: #eaf5fc;
+  color: #245b80;
+}
