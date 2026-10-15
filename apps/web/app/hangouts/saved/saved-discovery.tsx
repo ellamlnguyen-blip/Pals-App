@@ -103,6 +103,9 @@ export function SavedDiscovery({ token }: { token: string }) {
   const previewTitle = useRef<HTMLHeadingElement>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const suppressFocus = useRef(false);
+  const dismissedTrigger = useRef<HTMLElement | null>(null);
+  const overTrigger = useRef(false);
+  const overPreview = useRef(false);
   const concealedRef = useRef(false);
   const authPending = useRef(new Set<string>());
   const listTitle = useRef<HTMLHeadingElement>(null);
@@ -111,6 +114,8 @@ export function SavedDiscovery({ token }: { token: string }) {
   const onMapSettled = useCallback(() => setMapSettled(true), []);
   function closePreview(returnFocus = false) {
     if (closeTimer.current) clearTimeout(closeTimer.current);
+    closeTimer.current = null;
+    if (returnFocus) dismissedTrigger.current = trigger.current;
     request.current?.abort();
     previewGeneration.current++;
     activeRef.current = null;
@@ -120,6 +125,8 @@ export function SavedDiscovery({ token }: { token: string }) {
     setJoinMessage("");
     setJoining(false);
     wantFocus.current = false;
+    overTrigger.current = false;
+    overPreview.current = false;
     if (returnFocus && trigger.current?.isConnected) {
       suppressFocus.current = true;
       trigger.current.focus();
@@ -131,31 +138,54 @@ export function SavedDiscovery({ token }: { token: string }) {
   function deferClose() {
     if (closeTimer.current) clearTimeout(closeTimer.current);
     closeTimer.current = setTimeout(() => {
+      closeTimer.current = null;
       if (
+        !overTrigger.current &&
+        !overPreview.current &&
         !previewRef.current?.contains(document.activeElement) &&
         !trigger.current?.contains(document.activeElement)
       )
         closePreview();
-    }, 220);
+    }, 360);
   }
-  function show(id: string, element: HTMLElement, moveFocus = false) {
+  function leaveTrigger(element: HTMLElement) {
+    if (dismissedTrigger.current === element) dismissedTrigger.current = null;
+    if (trigger.current !== element) return;
+    overTrigger.current = false;
+    deferClose();
+  }
+  function show(
+    id: string,
+    element: HTMLElement,
+    moveFocus = false,
+    pointerOver = false,
+  ) {
     if (concealedRef.current) return;
+    if (dismissedTrigger.current === element) return;
     if (suppressFocus.current) {
       suppressFocus.current = false;
       return;
     }
     if (closeTimer.current) clearTimeout(closeTimer.current);
+    closeTimer.current = null;
+    if (trigger.current !== element) overPreview.current = false;
+    overTrigger.current = pointerOver;
     trigger.current = element;
     const frame = element.closest(".saved-map-frame") as HTMLElement | null;
     const rect = element.getBoundingClientRect();
     const box = frame?.getBoundingClientRect();
     if (box) {
       const cardWidth = Math.min(374, box.width - 24);
+      const right = rect.right - box.left + 8;
+      const left = rect.left - box.left - cardWidth - 8;
+      const horizontal =
+        right + cardWidth + 12 <= box.width
+          ? right
+          : left >= 12
+            ? left
+            : Math.max(12, Math.min(right, box.width - cardWidth - 12));
       setAnchor({
-        left: Math.max(
-          12,
-          Math.min(rect.right - box.left + 12, box.width - cardWidth - 12),
-        ),
+        left: horizontal,
         top: Math.max(12, Math.min(rect.top - box.top - 24, box.height - 390)),
       });
     } else if (moveFocus) {
@@ -261,6 +291,12 @@ export function SavedDiscovery({ token }: { token: string }) {
     setTruncated(false);
     setRankingMode(null);
     request.current?.abort();
+    if (closeTimer.current) clearTimeout(closeTimer.current);
+    closeTimer.current = null;
+    trigger.current = null;
+    dismissedTrigger.current = null;
+    overTrigger.current = false;
+    overPreview.current = false;
     previewGeneration.current++;
     activeRef.current = null;
     setActive(null);
@@ -423,7 +459,7 @@ export function SavedDiscovery({ token }: { token: string }) {
         items={concealed ? [] : items}
         selected={active}
         onSelect={show}
-        onLeave={deferClose}
+        onLeave={leaveTrigger}
         onBounds={onBounds}
         onSettled={onMapSettled}
       >
@@ -449,9 +485,13 @@ export function SavedDiscovery({ token }: { token: string }) {
             tabIndex={-1}
             style={{ left: anchor.left, top: anchor.top }}
             onPointerEnter={() => {
+              overPreview.current = true;
               if (closeTimer.current) clearTimeout(closeTimer.current);
             }}
-            onPointerLeave={deferClose}
+            onPointerLeave={() => {
+              overPreview.current = false;
+              deferClose();
+            }}
             onKeyDown={(event) => {
               if (event.key === "Escape") {
                 event.stopPropagation();

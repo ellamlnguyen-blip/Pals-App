@@ -28,8 +28,13 @@ export function SavedMap({
   token: string;
   items: SavedPin[];
   selected: string | null;
-  onSelect: (id: string, trigger: HTMLElement, moveFocus?: boolean) => void;
-  onLeave: () => void;
+  onSelect: (
+    id: string,
+    trigger: HTMLElement,
+    moveFocus?: boolean,
+    pointerOver?: boolean,
+  ) => void;
+  onLeave: (trigger: HTMLElement) => void;
   onBounds: (bounds: Bounds | null) => void;
   onSettled: () => void;
   children?: ReactNode;
@@ -166,16 +171,37 @@ export function SavedMap({
     if (!map || state !== "ready") return;
     let cancelled = false;
     const activeMarkers = markers.current;
-    activeMarkers.forEach((m) => m.remove());
-    activeMarkers.clear();
     void import("mapbox-gl").then(({ default: mapbox }) => {
       if (cancelled || mapRef.current !== map) return;
+      const visible = new Set(items.map((item) => item.id));
+      for (const [id, marker] of activeMarkers) {
+        if (!visible.has(id)) {
+          marker.remove();
+          activeMarkers.delete(id);
+        }
+      }
       items.forEach((item) => {
         if (cancelled || mapRef.current !== map) return;
+        const existing = activeMarkers.get(item.id);
+        if (existing) {
+          const button = existing.getElement();
+          const period = pinPeriod(item, new Date());
+          button.querySelector(".saved-pin-cue")!.textContent = pinCue(item);
+          button.dataset.period = period;
+          button.setAttribute(
+            "aria-label",
+            `Preview ${period === "thisWeek" ? "this week" : period} Hangout: ${item.title}`,
+          );
+          existing.setLngLat([item.public_longitude, item.public_latitude]);
+          return;
+        }
         const button = document.createElement("button");
         button.type = "button";
         button.className = "map-pin saved-pin";
-        button.textContent = pinCue(item);
+        const cue = document.createElement("span");
+        cue.className = "saved-pin-cue";
+        cue.textContent = pinCue(item);
+        button.append(cue);
         const period = pinPeriod(item, new Date());
         button.dataset.period = period;
         button.setAttribute(
@@ -187,9 +213,10 @@ export function SavedMap({
           String(selectedRef.current === item.id),
         );
         button.addEventListener("pointerenter", () =>
-          choose.current(item.id, button, false),
+          choose.current(item.id, button, false, true),
         );
-        button.addEventListener("pointerleave", () => leave.current());
+        button.addEventListener("pointerleave", () => leave.current(button));
+        button.addEventListener("blur", () => leave.current(button));
         button.addEventListener("focus", () =>
           choose.current(item.id, button, false),
         );
@@ -205,8 +232,6 @@ export function SavedMap({
     });
     return () => {
       cancelled = true;
-      activeMarkers.forEach((m) => m.remove());
-      activeMarkers.clear();
     };
   }, [items, state]);
   useEffect(() => {

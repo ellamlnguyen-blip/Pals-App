@@ -452,7 +452,23 @@
   background: #9bc9e9;
 }
 .saved-map-frame .mapboxgl-marker.saved-pin[aria-pressed="true"] {
-  filter: drop-shadow(0 0 5px #083a75);
+  z-index: 4;
+  scale: 1.08;
+}
+.saved-pin-cue {
+  display: inline-block;
+}
+.saved-map-frame .mapboxgl-marker.saved-pin {
+  transition: scale 130ms ease;
+}
+.saved-map-frame .mapboxgl-marker.saved-pin:focus-visible {
+  outline: 3px solid var(--pals-focus);
+  outline-offset: 3px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .saved-map-frame .mapboxgl-marker.saved-pin {
+    transition: none;
+  }
 }
 .saved-map-preview {
   position: absolute;
