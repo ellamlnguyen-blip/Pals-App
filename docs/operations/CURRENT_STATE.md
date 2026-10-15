@@ -1,5 +1,9 @@
 # Current State
 
+## 2026-10-14 — Calendar copy local candidate
+
+TASK-032P5 source `3a2dd701c0c18c56a6196818db61eb251b92efd1` changes the Calendar label to Date (accessible name Choose date) and removes the shared Week/Month scrolling hint and dead hint CSS. Coordinator reviewed the exact source diff and verified the rendered Week and Month views at an actual 319×720 viewport: Date shown, no hint, scroll regions retained, selected date 2026-10-14 and checked categories preserved. Worker scoped lint/TypeScript/format checks and coordinator runtime webpack build passed. Evidence: `docs/ux/evidence/task032p5/`; handoff: `agents/handoffs/TASK-032P5.md`. Task candidate `dee77e3906d64eae0de6efa93cdbeff6fa6158e9` is pushed and independently remote verified. Parent TASK-032 remains incomplete behind existing device/fault/staging/user-sign-off/application-main gates; no backend/schema/permission/hosted operation or automatic successor.
+
 ## 2026-10-14 — Map feedback local candidate
 
 TASK-032P4 applicatione6564f01e12f03328517fec8ca617d5e36d64bc9 fixes marker drift by lifting only the pointer-inert pin visual3px, preserving the outer48×56Mapbox target/position and removing its inherited selected ring. It removes the five marked normal campus/helper/count/Refresh elements while preserving actual loading/errors/retries. Fresh source review, scoped lint/typegen/web TypeScript,2pin tests and runtime webpack pass. Actual512px browser measures identical outer x/y/size/Mapboxmatrix, no scale/hover outline/background/shadow; child-only y-3 and unchanged base color/shadow. Preview travel/Close/Escape/reopen and all-off/filter recovery passed. See TASK-032P4 handoff/evidence. Source candidate `28e77846ad57d26f0de8ca7aa28f85bf186c27a8` is pushed and independently remote verified; parent TASK-032 remains incomplete behind existing physical-device/fault/staging/user-sign-off/application-main gates. No backend/schema/permission/hosted change or automatic successor.
