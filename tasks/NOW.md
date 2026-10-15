@@ -1,5 +1,10 @@
 # NOW
 
+## 2026-10-14 — People display cleanup
+
+TASK-032P6 removes four marked directory/helper/status/visibility-link items from normal People display. Contract: `tasks/active/TASK-032P6-people-copy.md`. Search, pagination links, visibility settings/backend and parent gates remain. No hosted operation or successor.
+
+
 ## 2026-10-14 — Calendar footer local verification
 
 TASK-032P5 follow-up removes the marked Calendar timezone/multi-day footer paragraph and unused CSS. Source `9380c26ab6804373dde80ff07ce7d4be68a41ac0` is reviewed, pushed and independently remote verified. Scoped lint/format checks and runtime production build passed; rendered Week view confirms the note is absent with Date/categories/grid retained. Screenshot and checks: `docs/ux/evidence/task032p5/calendar-footer.jpg` and `footer-checks.json`. Actual date/timezone/event behavior and backend are unchanged. Parent TASK-032 remains incomplete behind existing device/fault/staging/sign-off/application-main gates; no hosted operation or successor.
