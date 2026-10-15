@@ -1,5 +1,10 @@
 # Changelog
 
+## 2026-10-15 — Notification attention local candidate
+
+TASK-032P8 application `f2a4b4cca1f56d22a1edd888202563d71a79b041` implements the marked Notifications cleanup/arrow Refresh and header envelope/bell beside avatar. Dot uses owner-only existing-ledger read state and a server snapshot acknowledgment after successful visible load; later arrivals restore it and same-page bell reloads page1. Fresh review resolved Frame-failure/reload/ack-error cases. Disposable SQL15/15, notification units5/5, scoped lint/TS/format and runtime webpack pass. Real owner API/bell→Inbox→clear→freshAuth persistence, later fixture arrival→same-page bell acknowledgment, navigation and narrow319/desktop1333 geometry passed; named fixture cleaned. See P8 handoff/review/evidence for precise fault/device/cross-tab/concurrency limits. Task candidate `7fcbf896deea649507e65bd51f421bb7b332e3bc` is pushed and independently remote verified. Parent TASK-032 remains incomplete behind existing acceptance/sign-off/staging/application-main gates; ADR0041 remains Proposed. No hosted operation or automatic successor.
+
+
 ## 2026-10-14 — Chats label local verification
 
 TASK-032P7 removes the marked Chats badge above Your chats. Source `347375374e46d774d91733a38d91404e4269f7a3` is reviewed, pushed and remote verified. Scoped lint/format and runtime production build pass; rendered preview confirms no badge with the main title and chat sections retained. Evidence: `docs/ux/evidence/task032p7/`; handoff: `agents/handoffs/TASK-032P7.md`. No backend/data/permission/hosted change. Parent TASK-032 remains incomplete behind existing gates; no successor.

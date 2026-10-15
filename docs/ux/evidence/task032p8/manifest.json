@@ -1,0 +1,44 @@
+{
+  "applicationSource": "f2a4b4cca1f56d22a1edd888202563d71a79b041",
+  "screenshots": [
+    {
+      "file": "bell-unread.jpg",
+      "bytes": 18676,
+      "sha256": "7ce29230664fbb155dfa52ee67528f6c5bf5ceeaa1f7ab5f61b490ba00588cc1",
+      "height": 720,
+      "width": 319,
+      "captureSource": "25ba280b30248e7622635dc24baeb185952df70b"
+    },
+    {
+      "file": "inbox-cleaned.jpg",
+      "bytes": 22826,
+      "sha256": "6bd4e5e5280c45259e5c52dec4751674694b724b29e6b1e75236c3b50a4a4ec6",
+      "height": 720,
+      "width": 319,
+      "captureSource": "25ba280b30248e7622635dc24baeb185952df70b"
+    },
+    {
+      "file": "inbox-desktop.jpg",
+      "bytes": 49254,
+      "sha256": "5ea21090ba7d1e79f69e9520f0835163250a3c482bbc98807d290a6763f3aaf1",
+      "height": 900,
+      "width": 1333,
+      "captureSource": "25ba280b30248e7622635dc24baeb185952df70b"
+    },
+    {
+      "file": "inbox-final.jpg",
+      "bytes": 22826,
+      "sha256": "6bd4e5e5280c45259e5c52dec4751674694b724b29e6b1e75236c3b50a4a4ec6",
+      "height": 720,
+      "width": 319,
+      "captureSource": "f2a4b4cca1f56d22a1edd888202563d71a79b041"
+    }
+  ],
+  "databaseTests": {
+    "pgTapPassed": 15,
+    "unitPassed": 5,
+    "database": "named disposable pals-task029 only",
+    "fixtureCleanup": true
+  },
+  "noHostedChange": true
+}
