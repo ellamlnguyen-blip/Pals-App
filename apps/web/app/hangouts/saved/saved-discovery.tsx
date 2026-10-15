@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import Image from "next/image";
+import { PlusIcon } from "@phosphor-icons/react/dist/csr/Plus";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
@@ -494,6 +495,14 @@ export function SavedDiscovery({ token }: { token: string }) {
         onBounds={onBounds}
         onSettled={onMapSettled}
       >
+        <Link
+          className="saved-create"
+          href="/hangouts/new"
+          aria-label="Create Hangout"
+          title="Create Hangout"
+        >
+          <PlusIcon size={24} weight="bold" aria-hidden="true" />
+        </Link>
         <fieldset className="saved-periods" disabled={concealed}>
           <legend className="sr-only">When are you free?</legend>
           {periods.map(({ label, bit }) => (

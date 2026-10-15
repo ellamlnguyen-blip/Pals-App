@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Frame } from "../../components";
 import { requireAccess } from "../../../lib/access";
 import { requireLocalHangouts } from "../../../lib/hangouts";
@@ -14,17 +13,7 @@ export default async function SavedHangoutsPage() {
   return (
     <Frame signedIn navigation>
       <div className="saved-page">
-        <section
-          className="saved-map-heading"
-          aria-labelledby="hangouts-heading"
-        >
-          <div className="saved-map-title">
-            <h1 id="hangouts-heading">Hangouts</h1>
-          </div>
-          <Link className="button saved-create" href="/hangouts/new">
-            Create Hangout
-          </Link>
-        </section>
+        <h1 className="sr-only">Hangouts</h1>
         <SavedDiscovery
           token={
             process.env.NEXT_PUBLIC_MAPBOX_TOKEN?.startsWith("pk.")

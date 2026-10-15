@@ -266,36 +266,24 @@
   font-family: var(--pals-font);
   font-weight: 600;
 }
-.saved-map-heading {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1.25rem;
-  margin: 1.1rem 0 1rem;
-  padding: 0;
-  border: 0;
-  border-radius: 0;
-  background: transparent;
-  box-shadow: none;
-}
-.saved-map-title {
-  display: flex;
-  align-items: center;
-}
-.saved-map-title h1 {
-  margin: 0;
-  color: var(--pals-profile-action);
-  font-family: var(--pals-font-display);
-  font-size: clamp(3rem, 4vw, 3.5rem);
-  line-height: 1;
-}
 .saved-create {
-  white-space: nowrap;
+  position: absolute;
+  z-index: 3;
+  top: 1rem;
+  right: 1rem;
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
   background: var(--pals-brand);
   color: #103d6b;
-  border-radius: 1rem;
-  font-weight: 900;
-  min-height: 48px;
+  border: 1px solid #4d92cc;
+  border-radius: 0.75rem;
+  box-shadow: var(--pals-overlay-shadow);
+}
+.saved-create:focus-visible {
+  outline: 3px solid var(--pals-focus);
+  outline-offset: 3px;
 }
 .saved-map-frame {
   width: 100%;
@@ -320,8 +308,8 @@
   align-items: center;
   flex-wrap: wrap;
   gap: 0.15rem 0.45rem;
-  max-width: min(690px, calc(100% - 2rem));
-  padding: 0.45rem 0.6rem;
+  max-width: min(620px, calc(100% - 5.75rem));
+  padding: 0.3rem 0.4rem;
   margin: 0;
   border: 1px solid #d8e5ed;
   border-radius: 1rem;
@@ -331,10 +319,11 @@
 .saved-periods label {
   display: inline-flex;
   align-items: center;
-  gap: 0.35rem;
+  gap: 0.3rem;
   min-height: 44px;
-  padding: 0 0.45rem;
+  padding: 0 0.3rem;
   color: var(--pals-accent);
+  font-size: 0.85rem;
   font-weight: 800;
   cursor: pointer;
   white-space: nowrap;
@@ -343,11 +332,11 @@
   appearance: none;
   display: inline-grid;
   place-content: center;
-  flex: 0 0 28px;
-  width: 28px;
-  height: 28px;
-  min-width: 28px;
-  min-height: 28px;
+  flex: 0 0 24px;
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  min-height: 24px;
   margin: 0;
   padding: 0;
   border: 2px solid #8cb9df;
@@ -421,18 +410,32 @@
 .saved-pin-cue {
   display: grid;
   place-items: center;
+  position: relative;
+  align-self: start;
   width: 48px;
-  height: 56px;
-  padding-bottom: 8px;
+  height: 48px;
+  padding-bottom: 3px;
   border: 2px solid #fff;
-  border-radius: 55% 55% 55% 55% / 48% 48% 58% 58%;
-  clip-path: polygon(8% 0, 92% 0, 100% 15%, 100% 65%, 50% 100%, 0 65%, 0 15%);
+  border-radius: 50%;
   background: #4c9bd8;
   box-shadow: 0 4px 10px rgb(18 72 116 / 0.3);
   font-size: 1.4rem;
   line-height: 1;
   pointer-events: none;
   transition: transform 130ms ease;
+}
+.saved-pin-cue::after {
+  content: "";
+  position: absolute;
+  z-index: 0;
+  bottom: -4px;
+  left: 15px;
+  width: 18px;
+  height: 18px;
+  transform: rotate(45deg);
+  border-right: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  background: inherit;
 }
 .saved-map-frame .saved-pin[data-period="today"] .saved-pin-cue {
   background: #286eae;
@@ -672,16 +675,9 @@
   color: var(--pals-muted);
 }
 @media (max-width: 700px) {
-  .saved-map-heading {
-    align-items: flex-start;
-    flex-wrap: wrap;
-    margin-top: 0.5rem;
-  }
-  .saved-map-title h1 {
-    font-size: 3rem;
-  }
   .saved-create {
-    min-height: 44px;
+    top: 0.65rem;
+    right: 0.65rem;
   }
   .saved-map-frame {
     height: 620px;
@@ -689,19 +685,14 @@
   .saved-periods {
     top: 0.65rem;
     left: 0.65rem;
-    max-width: calc(100% - 1.3rem);
-    gap: 0 0.3rem;
-    padding: 0.25rem;
+    max-width: calc(100% - 4.6rem);
+    gap: 0 0.25rem;
+    padding: 0.2rem;
   }
   .saved-periods label {
-    min-height: 42px;
-    padding: 0 0.3rem;
+    min-height: 44px;
+    padding: 0 0.2rem;
     font-size: 0.78rem;
-  }
-  .saved-periods input {
-    width: 28px;
-    height: 28px;
-    flex-basis: 28px;
   }
   .saved-map-preview {
     top: auto !important;
@@ -714,15 +705,11 @@
   .saved-page {
     padding-inline: 0.55rem;
   }
-  .saved-map-title h1 {
-    font-size: 2.8rem;
-  }
   .saved-periods {
     justify-content: flex-start;
   }
   .saved-periods label {
-    width: calc(50% - 0.2rem);
-    font-size: 0.82rem;
+    width: calc(50% - 0.15rem);
   }
 }
 .saved-page .sr-only {
