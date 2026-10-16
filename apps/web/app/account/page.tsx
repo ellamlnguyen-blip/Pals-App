@@ -29,6 +29,13 @@ export default async function AccountPage() {
           currentEmail={user.email ?? ""}
           pendingEmail={user.new_email ?? null}
         />
+        <section className="account-section account-notification-entry">
+          <h2>Notifications</h2>
+          <p>Choose which new Hangout activity appears in your inbox.</p>
+          <Link href="/account/notifications">
+            Manage notification settings
+          </Link>
+        </section>
       </div>
     </Frame>
   );

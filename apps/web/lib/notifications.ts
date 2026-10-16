@@ -12,6 +12,9 @@ export const categories = [
   "messages",
   "hangout_updates",
   "host_activity",
+  "campus_new_hangout",
+  "friend_created_hangout",
+  "friend_joined_hangout",
 ] as const;
 export function localNotificationsAvailable() {
   return studentFeaturesAvailable();

@@ -7,6 +7,7 @@ import {
 } from "../auth-transition";
 import {
   notificationDestination,
+  friendRequestFromNotification,
   type NotificationRow,
 } from "../../lib/notification-destination";
 import {
@@ -15,6 +16,8 @@ import {
 } from "./notification-auth-state";
 import { AnalyticsView } from "../analytics-view";
 import { ArrowClockwise } from "@phosphor-icons/react";
+import { changeFriendship } from "../people/friend-actions";
+import { CohostInvitation } from "./cohost-invitation";
 import {
   NOTIFICATION_ATTENTION_CHANNEL,
   NOTIFICATION_OPEN_EVENT,
@@ -363,6 +366,43 @@ export function NotificationsInbox({ actor }: { actor: string }) {
       }
     }
   };
+  const respondToFriend = async (
+    row: NotificationRow,
+    action: "accept" | "decline",
+  ) => {
+    const request = friendRequestFromNotification(row);
+    if (!request || phase !== "ready") return;
+    mask();
+    const started = revision.current;
+    try {
+      const result = await changeFriendship(
+        request.peerId,
+        request.generationId,
+        action,
+      );
+      if (!current(started)) return;
+      if (result.state === "unavailable") {
+        deny();
+        return;
+      }
+      if (result.state === "unknown") {
+        setPhase("uncertain");
+        setMessage(
+          "The response is uncertain. Reload to check the current request.",
+        );
+        return;
+      }
+      // A stale generation or lost response must be resolved from the server.
+      await read(page, cursors.current[page] ?? null);
+    } catch {
+      if (current(started)) {
+        setPhase("uncertain");
+        setMessage(
+          "The response is uncertain. Reload to check the current request.",
+        );
+      }
+    }
+  };
   return (
     <div className="notifications-page">
       <AnalyticsView event="notifications_viewed" ready={phase === "ready"} />
@@ -430,6 +470,14 @@ export function NotificationsInbox({ actor }: { actor: string }) {
               <ul className="notifications-list">
                 {rows.map((row) => {
                   const destination = notificationDestination(row);
+                  const friendRequest = friendRequestFromNotification(row);
+                  const cohostInvitation =
+                    row.label !== "Unavailable" &&
+                    row.event_code === "cohost_invitation" &&
+                    row.source_kind === "hangout_invitation" &&
+                    destination &&
+                    row.source_id &&
+                    row.target_id;
                   const label = destination
                     ? row.label
                     : row.label === "Unavailable"
@@ -448,9 +496,36 @@ export function NotificationsInbox({ actor }: { actor: string }) {
                           </time>
                           <span>{row.read_at ? "Read" : "Unread"}</span>
                         </div>
+                        {friendRequest && (
+                          <div className="notification-inline-actions">
+                            <button
+                              className="quiet-button"
+                              onClick={() =>
+                                void respondToFriend(row, "accept")
+                              }
+                            >
+                              Accept request
+                            </button>
+                            <button
+                              className="quiet-button"
+                              onClick={() =>
+                                void respondToFriend(row, "decline")
+                              }
+                            >
+                              Decline
+                            </button>
+                          </div>
+                        )}
+                        {cohostInvitation && (
+                          <CohostInvitation
+                            actor={actor}
+                            invitationId={row.source_id!}
+                            hangoutId={row.target_id!}
+                          />
+                        )}
                       </div>
                       <div className="notification-actions">
-                        {destination && (
+                        {destination && !cohostInvitation && (
                           <a href={destination.href}>{destination.label}</a>
                         )}
                         {!row.read_at && (

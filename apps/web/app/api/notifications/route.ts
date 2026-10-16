@@ -18,18 +18,20 @@ export async function GET(request: NextRequest) {
   if (
     [...q.keys()].some(
       (key) =>
-        !["probe", "summary", "time", "id"].includes(key) ||
+        !["probe", "summary", "preferences", "time", "id"].includes(key) ||
         q.getAll(key).length !== 1,
     )
   )
     return reply({ kind: "invalid" }, 400);
   const probe = q.get("probe"),
     summary = q.get("summary"),
+    preferencesOnly = q.get("preferences"),
     time = q.get("time"),
     id = q.get("id");
   if (
     (probe !== null && (probe !== "1" || q.size !== 1)) ||
     (summary !== null && (summary !== "1" || q.size !== 1)) ||
+    (preferencesOnly !== null && (preferencesOnly !== "1" || q.size !== 1)) ||
     (time === null) !== (id === null) ||
     (id !== null && !notificationId.test(id)) ||
     (time !== null && (time.length > 80 || !Number.isFinite(Date.parse(time))))
@@ -53,6 +55,12 @@ export async function GET(request: NextRequest) {
       { kind: errorKind(prefs.error.code) },
       prefs.error.code === "42501" ? 403 : 503,
     );
+  if (preferencesOnly)
+    return reply({
+      kind: "ok",
+      actor: target.user.id,
+      preferences: prefs.data ?? [],
+    });
   if (probe) return reply({ kind: "ok", actor: target.user.id });
   const attention = await target.client.rpc("get_notification_attention");
   if (attention.error)

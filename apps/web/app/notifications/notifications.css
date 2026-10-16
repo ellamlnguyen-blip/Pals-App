@@ -119,6 +119,45 @@
 .notification-options {
   border-top: 1px solid var(--pals-line);
 }
+.notification-inline-actions,
+.saved-management-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+}
+.notification-inline-actions .quiet-button,
+.saved-management-actions .quiet-button,
+.saved-management-actions .button {
+  min-height: 44px;
+  padding: 0.5rem 0.9rem;
+  border-radius: var(--pals-input-radius);
+  font-weight: 800;
+  cursor: pointer;
+}
+.notification-inline-actions .quiet-button,
+.saved-management-actions .quiet-button {
+  border: 1px solid var(--pals-line);
+  color: var(--pals-accent);
+  background: var(--pals-surface-raised);
+}
+.saved-management-actions .button {
+  border: 1px solid var(--pals-accent);
+  color: white;
+  background: var(--pals-accent);
+}
+.notification-inline-actions button:focus-visible,
+.saved-management-actions button:focus-visible,
+.notification-settings button:focus-visible {
+  outline: 3px solid var(--pals-focus);
+  outline-offset: 2px;
+}
+.saved-action-note p {
+  margin: 0.5rem 0;
+}
+.notification-settings .notification-options {
+  margin-top: 1rem;
+}
 .notification-option {
   display: flex;
   justify-content: space-between;
