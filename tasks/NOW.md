@@ -1,5 +1,9 @@
 # NOW
 
+## 2026-10-16 — TASK-034 reviewed local candidate; final gates open
+
+The integrated TASK-034 application candidate is pushed and independently remote verified on `agent/TASK-034-pals-chat-discovery` at `1067152498729dcd34ae2924b4cb76bac8200f98`. Chats unread/recent ordering and similarity-ranked Pals are implemented with three additive migrations applied/replayed only on the named disposable database. Focused SQL 28/28, 11/11 and 21/21, UI 6/6 and 4/4, full web build/TypeScript, authenticated browser unread/recency/ack, hidden-peer and cursor denial, desktop/narrow renders, and a two-session People opt-out race passed. Fresh reviewer confirmed the two P2 corrections. [Status handoff](../agents/handoffs/TASK-034-STATUS.md) records evidence and limits. Representative large-campus query performance, broader chat races, physical mobile, final sign-off, parent TASK-032/033 gates and application-main/hosted integration remain open. Canonical main contains records only; TASK-034 is incomplete and no successor is dispatched.
+
 ## 2026-10-15 — TASK-034 backend local milestone; UI dependencies ready
 
 ADR-0043 remains accepted for disposable-local implementation. TASK-034A's private hidden-relationship management fix is desktop-built, rendered and remote verified on its task branch at `92b1967923c5cc5e486ad7851d45e225352e4f12`. Reviewed C/D migrations were committed, applied and replayed only on `supabase_db_pals-task029-disposable`; focused pgTAP checks pass 28/28 and 21/21. Latest remotely verified C `918bd649fe4d8d9cd9d990b41ff86097313c1ceb`, D `c325f642c3381dbe0d1fc5459f92c4caa6d38889`. Published [TASK-034E](active/TASK-034E-chat-ui.md) and [TASK-034F](active/TASK-034F-pals-ranking-ui.md) as disjoint UI integrations. Two-session races, larger performance fixtures and authenticated browser end-to-end remain to verify. Parent TASK-034 and parents032/033 are incomplete; no hosted change or unfinished application-main integration is authorized.

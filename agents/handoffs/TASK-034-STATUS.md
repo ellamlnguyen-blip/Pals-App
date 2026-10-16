@@ -1,0 +1,9 @@
+# TASK-034 status receipt — 2026-10-16
+
+TASK-034 is a **reviewed local candidate, incomplete**. Source branch `agent/TASK-034-pals-chat-discovery` was pushed and independently verified at `1067152498729dcd34ae2924b4cb76bac8200f98`. Its detailed local handoff and desktop/narrow screenshots live on that branch at `agents/handoffs/TASK-034-LOCAL.md` and `docs/ux/evidence/task034-local/`.
+
+The branch delivers owner-private unread and recent ordering across currently authorized DM/Hangout chats, foreground touch/visible-message acknowledgment, Pals naming and friendship symbols, major/year filters and consent-aware similarity ranking. Fresh review found two P2 issues, both fixed and re-reviewed: first-page refresh work is now bounded, and a peer hiding People detail no longer breaks the rest of the inbox.
+
+Named disposable-only migrations `00800`, `00900`, `01000` applied and replayed. Focused SQL passed 28/28, 21/21 and 11/11; focused chat/Pals UI tests passed 6/6 and 4/4; final web webpack build and TypeScript passed. Actual authenticated browser evidence covered incoming message recency/unread, foreground ack clearing, hidden-peer generic management, forged cursor refresh, desktop/narrow rendering. A two-session opt-out waited for the active Pals browse and the next page excluded that peer; the fixture was restored. No QA message/request/notification residue remains.
+
+Remaining: representative large-campus query performance, broader chat revocation/ack races, physical mobile interactions, final candidate sign-off, TASK-032/033 dependency gates and reviewed application-main/hosted integration. This status-only record keeps unfinished code on the task branch and does not trigger a successor.

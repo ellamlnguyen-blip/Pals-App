@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-16 — TASK-034 reviewed local candidate
+
+Recorded remote-verified source candidate `1067152498729dcd34ae2924b4cb76bac8200f98` for combined-chat unread/recent attention and similarity-ranked Pals, local SQL/build/browser/race evidence, fresh review corrections and remaining final gates. No unfinished application code was merged into canonical main or hosted environment.
+
 ## 2026-10-15 — TASK-034 disposable backend milestone
 
 Published TASK-034E/F UI contracts after accepted ADR-0043 C/D migrations passed disposable-local application/replay and focused pgTAP (28/28 and 21/21). Recorded remote-verified task SHAs and the Pals hidden-relationship management fix. Parent task remains incomplete.
