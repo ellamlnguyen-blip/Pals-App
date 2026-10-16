@@ -1,11 +1,7 @@
 import Link from "next/link";
 import { Frame } from "../components";
 import { requireAccess } from "../../lib/access";
-import {
-  peopleUrl,
-  readSelection,
-  requireLocalPeople,
-} from "../../lib/people";
+import { peopleUrl, readSelection, requireLocalPeople } from "../../lib/people";
 import { parseSimilarPalsPage } from "../../lib/similar-pals-page";
 import "../hangouts/map.css";
 import "./people.css";
@@ -99,6 +95,13 @@ export default async function PeoplePage({
     : null;
   const current = peopleUrl(selection);
   const firstPage = peopleUrl({ ...selection, cursor: "" });
+  const showFilters = !gateOff && !stale && !error && !!page;
+  const currentYear = new Date().getFullYear();
+  const yearOptions = Array.from(
+    { length: 25 },
+    (_, index) => currentYear - 10 + index,
+  ).filter((year) => year >= 1900 && year <= 2200);
+  const linkedYear = selection.year ? Number(selection.year) : null;
   return (
     <Frame signedIn navigation>
       <FocusReturn
@@ -106,9 +109,46 @@ export default async function PeoplePage({
         visibleIds={cards.map((card) => card.account_id)}
       />
       <div className="people-heading" id="people-heading" tabIndex={-1}>
-        <div>
-          <h1>Discover your next Pal!</h1>
-        </div>
+        <h1>Discover your next Pal!</h1>
+        {showFilters && (
+          <form
+            className="people-filters"
+            action="/people"
+            method="get"
+            role="search"
+          >
+            <label htmlFor="people-year">
+              Graduation year
+              <select
+                id="people-year"
+                name="year"
+                defaultValue={selection.year}
+              >
+                <option value="">Any year</option>
+                {linkedYear !== null && !yearOptions.includes(linkedYear) && (
+                  <option value={linkedYear}>{linkedYear}</option>
+                )}
+                {yearOptions.map((year) => (
+                  <option key={year} value={year}>
+                    {year}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label htmlFor="people-major">
+              Major
+              <input
+                id="people-major"
+                name="major"
+                maxLength={200}
+                defaultValue={selection.major}
+                placeholder="Major"
+              />
+            </label>
+            <button className="button">Find Pals</button>
+            <Link href="/people">Clear</Link>
+          </form>
+        )}
       </div>
       {gateOff ? (
         <section className="people-panel">
@@ -133,37 +173,6 @@ export default async function PeoplePage({
         </section>
       ) : (
         <>
-          <form
-            className="people-filters"
-            action="/people"
-            method="get"
-            role="search"
-          >
-            <label htmlFor="people-year">
-              Graduation year
-              <input
-                id="people-year"
-                name="year"
-                type="number"
-                min="1900"
-                max="2200"
-                defaultValue={selection.year}
-                placeholder="Any year"
-              />
-            </label>
-            <label htmlFor="people-major">
-              Major
-              <input
-                id="people-major"
-                name="major"
-                maxLength={200}
-                defaultValue={selection.major}
-                placeholder="Exact major"
-              />
-            </label>
-            <button className="button">Find Pals</button>
-            <Link href="/people">Clear</Link>
-          </form>
           {cards.length ? (
             <>
               <PeopleCardPhotoBoundary>
@@ -212,15 +221,15 @@ export default async function PeoplePage({
                 {selection.cursor
                   ? "No more Pals on this page"
                   : selection.year || selection.major
-                  ? "No Pals match"
-                  : "No one is visible yet"}
+                    ? "No Pals match"
+                    : "No one is visible yet"}
               </h2>
               <p>
                 {selection.cursor
                   ? "The list may have changed since you started browsing."
                   : selection.year || selection.major
-                  ? "Try a different year or major."
-                  : "Students appear here only after they choose to share their Pals profile."}
+                    ? "Try a different year or major."
+                    : "Students appear here only after they choose to share their Pals profile."}
               </p>
               <Link href={selection.cursor ? firstPage : "/people"}>
                 {selection.cursor ? "Refresh Pals" : "Clear filters"}

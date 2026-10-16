@@ -1,29 +1,56 @@
 .people-heading {
   display: flex;
   justify-content: space-between;
-  align-items: end;
+  align-items: center;
   gap: 1rem;
   margin: 0 0 var(--pals-space-8);
 }
 .people-heading h1 {
   font-size: clamp(2.3rem, 4vw, 3.3rem);
+  color: var(--pals-profile-action);
+  min-width: 0;
 }
 .people-heading p:last-child {
   color: var(--pals-muted);
 }
 .people-filters {
   display: grid;
-  grid-template-columns: repeat(2, minmax(8rem, 1fr)) auto auto;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) auto auto;
   align-items: end;
-  gap: 1rem;
-  padding: var(--pals-space-6);
+  gap: 0.6rem;
+  flex: 0 1 37rem;
+  min-width: 0;
+  padding: 0.8rem;
   border: 1px solid var(--pals-line);
   border-radius: var(--pals-radius-panel);
   background: var(--pals-surface-raised);
   box-shadow: var(--pals-panel-shadow);
+  font-family: var(--pals-font);
+  font-size: 0.85rem;
 }
-.people-filters input {
+.people-filters input,
+.people-filters select {
   width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  border: 1px solid var(--pals-muted);
+  border-radius: var(--pals-input-radius);
+  background: var(--pals-surface-raised);
+  color: var(--pals-ink);
+  padding: 0.55rem 0.65rem;
+}
+.people-filters .button,
+.people-filters > a {
+  min-height: 44px;
+  white-space: nowrap;
+}
+.people-filters .button {
+  padding: 0.5rem 0.8rem;
+  border-radius: var(--pals-input-radius);
+}
+.people-filters > a {
+  display: inline-flex;
+  align-items: center;
 }
 .people-filters label,
 .unblock-control label {
@@ -229,17 +256,29 @@ dialog code {
   min-height: 44px;
   font-weight: 800;
 }
-@media (max-width: 800px) {
+@media (max-width: 950px) {
   .people-filters {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    flex-basis: 22rem;
+    flex-shrink: 0;
   }
-  .people-heading {
-    align-items: start;
+  .people-heading h1 {
+    font-size: clamp(1.9rem, 4vw, 2.5rem);
+  }
+  .people-filters .button {
+    justify-self: start;
   }
 }
 @media (max-width: 600px) {
   .people-heading {
-    display: block;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .people-heading h1 {
+    font-size: clamp(2.1rem, 8vw, 2.5rem);
+  }
+  .people-filters {
+    flex-basis: auto;
   }
   .people-heading a {
     display: inline-block;

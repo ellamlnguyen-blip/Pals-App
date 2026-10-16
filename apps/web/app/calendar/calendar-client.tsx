@@ -328,7 +328,29 @@ export function CalendarClient({
   return (
     <div className="calendar-page">
       <div className="calendar-top">
-        <h1>Calendar</h1>
+        <h1 className="sr-only">Calendar</h1>
+        <fieldset className="calendar-legend">
+          <legend className="sr-only">Show Hangouts</legend>
+          {(
+            [
+              ["hosting", "Hosting"],
+              ["attending", "Attending"],
+              ["all", "All hangouts"],
+            ] as const
+          ).map(([key, text]) => (
+            <label key={key} className={`calendar-legend-${key}`}>
+              <input
+                type="checkbox"
+                checked={selection[key]}
+                onChange={(event) =>
+                  go({ ...selection, [key]: event.target.checked })
+                }
+              />
+              <span>{text}</span>
+            </label>
+          ))}
+        </fieldset>
+        <h2>{label}</h2>
         <div className="calendar-tabs" role="group" aria-label="Calendar view">
           {(["day", "week", "month"] as const).map((view) => (
             <button
@@ -342,27 +364,6 @@ export function CalendarClient({
           ))}
         </div>
       </div>
-      <fieldset className="calendar-legend">
-        <legend className="sr-only">Show Hangouts</legend>
-        {(
-          [
-            ["hosting", "Hosting"],
-            ["attending", "Attending"],
-            ["all", "All hangouts"],
-          ] as const
-        ).map(([key, text]) => (
-          <label key={key} className={`calendar-legend-${key}`}>
-            <input
-              type="checkbox"
-              checked={selection[key]}
-              onChange={(event) =>
-                go({ ...selection, [key]: event.target.checked })
-              }
-            />
-            <span>{text}</span>
-          </label>
-        ))}
-      </fieldset>
       <div className="calendar-toolbar">
         <div className="calendar-date-actions">
           {previous >= MIN_CALENDAR_DATE && (
@@ -383,7 +384,6 @@ export function CalendarClient({
             </button>
           )}
         </div>
-        <h2>{label}</h2>
         <label className="calendar-picker">
           Date{" "}
           <input
