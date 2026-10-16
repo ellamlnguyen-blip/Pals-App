@@ -1,5 +1,9 @@
 # NOW
 
+## 2026-10-16 — TASK-037 categorized Chats correction
+
+Ella revised the TASK-036 image request: Hangouts and Messages should be separate tabs; remove the visible Chats heading and polls; clicking the Hangout title should open details. [TASK-037 contract](active/TASK-037-chat-categories-poll-retirement.md) and [ADR-0044](../decisions/ADR-0044-chat-categories-poll-retirement.md) bound the local correction and poll grant retirement. Start from canonical main `8d74848` and exact TASK-036 app source `1fac4f6`. TASK-032/033/034/035/036 final gates remain open; no hosted or application-main change is inferred.
+
 ## 2026-10-16 — TASK-036 Chats reference layout
 
 Ella supplied a Chats screen image and requested the current chat UI match its split-pane layout. [Bounded contract](active/TASK-036-chat-reference-layout.md) records the presentation-only scope, exact local source dependency `287e3fa`, responsive and authorization boundaries. Coordinator publishes this contract before fresh GPT-6 Sol medium implementation dispatch. TASK-032/033/034/035 parent gates remain open; no hosted or application-main code change is inferred.

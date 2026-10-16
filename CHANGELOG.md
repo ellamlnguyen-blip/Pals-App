@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-16 — TASK-037 chat correction contract
+
+Recorded the user's revised Hangouts/Messages tabs, heading/link behavior and poll retirement as a bounded follow-on to TASK-036, with ADR-0044 for local poll grant revocation. No application or hosted change in this documentation milestone.
+
 ## 2026-10-16 — TASK-036 reviewed local Chats layout candidate
 
 Published remote-verified task branch `1fac4f67a8cd8b57140eff60eaf8ba2c3923b7c7` with the Chats split-pane layout, Hangout thread details, compact composer, responsive phone navigation and local screenshot evidence. Production web build/TypeScript, eight focused tests and authenticated desktop/phone inspection passed. Application code remains off main while TASK-032/033/034/035 and integration gates remain open.

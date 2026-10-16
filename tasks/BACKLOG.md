@@ -1,5 +1,9 @@
 # Backlog
 
+## 2026-10-16 — TASK-037 verification and release gates
+
+Implement and review source-complete category tabs, accessible heading removal, Hangout-title details link and poll retirement. Verify mixed-source paging, old poll API/RPC denial, real desktop/phone rendering and source privacy. Publish a remote-verified task branch and local status. Parent TASK-032/033/034/035/036 gates remain before app-main/hosted integration.
+
 ## 2026-10-16 — TASK-036 verification and integration gates
 
 After bounded implementation, review the Chats index and both conversation routes at desktop/mobile, including real data, loading/denied states, send/poll controls, navigation, build/TypeScript and no overflow. Publish the task branch with a verified remote SHA and record local outcome on main. Parent TASK-032/033/034/035 signoff and application-main/hosted gates remain open.
