@@ -10,6 +10,7 @@ import {
   trusted,
   auth,
 } from "./helpers/pilot-admission-owner.mjs";
+import { verifiedTotpToken } from "./helpers/local-totp.mjs";
 
 test(
   "real Auth/PostgREST/Storage owner lifecycle and stale JWT loss",
@@ -86,6 +87,7 @@ test(
       const peer = await signup();
       const manager = await signup();
       sql(trusted(manager.id, "active", 0));
+      manager.token = await verifiedTotpToken(request, manager.token);
       assert.equal(
         ok(await rpc("get_access_state", owner.token, {})),
         "pilot_unavailable",
@@ -104,7 +106,8 @@ test(
       );
       assert.equal(
         ok(await rpc("get_access_state", owner.token, {})),
-        "onboarding",
+        "ready",
+        "confirmed UNC owner can enter before completing profile or uploading a photo",
       );
       const first = `${owner.id}/${crypto.randomUUID()}.png`,
         second = `${owner.id}/${crypto.randomUUID()}.png`;
@@ -117,7 +120,8 @@ test(
           png,
           "image/png",
         );
-      assert.equal((await upload(first)).status, 200);
+      const initialUpload = await upload(first);
+      assert.equal(initialUpload.status, 200, JSON.stringify(initialUpload.body));
       assert.equal(
         sql(
           `select count(*) from private.pilot_owner_http_guard_probe where original_role='service_role' and executor='supabase_storage_admin' and subject is null`,
@@ -188,9 +192,9 @@ test(
       );
       const waitEvidence = [];
       for (const operation of ["INSERT", "DELETE"])
-        for (const loss of ["revoke", "shutdown", "email"]) {
+        for (const loss of ["account", "shutdown", "email"]) {
           sql(
-            `begin;select private.pilot_evidence_write_lock();update private.pilot_availability set enabled=true;update private.pilot_account_admission set state='active' where account_id='${owner.id}';update auth.users set email=${quote(owner.email)},email_confirmed_at=now() where id='${owner.id}';commit`,
+            `begin;select private.pilot_evidence_write_lock();update private.pilot_availability set enabled=true;update public.accounts set status='active' where id='${owner.id}';update auth.users set email=${quote(owner.email)},email_confirmed_at=now() where id='${owner.id}';commit`,
           );
           const racePath = `${owner.id}/${crypto.randomUUID()}.png`;
           if (operation === "DELETE")
@@ -222,19 +226,9 @@ test(
               "real Storage final write reached barrier after permission check",
             );
             waitEvidence.push(JSON.parse(proof));
-            if (loss === "revoke")
-              ok(
-                await rpc("set_pilot_account_admission", manager.token, {
-                  p_account_id: owner.id,
-                  p_state: "revoked",
-                  p_expected_revision: Number(
-                    sql(
-                      `select revision from private.pilot_account_admission where account_id='${owner.id}'`,
-                    ),
-                  ),
-                  p_reason: "Real local Storage race",
-                  p_request_id: crypto.randomUUID(),
-                }),
+            if (loss === "account")
+              sql(
+                `update public.accounts set status='suspended' where id='${owner.id}'`,
               );
             if (loss === "shutdown")
               ok(
@@ -283,7 +277,7 @@ test(
           }
         }
       sql(
-        `begin;select private.pilot_evidence_write_lock();update private.pilot_availability set enabled=true;update private.pilot_account_admission set state='active' where account_id='${owner.id}';update auth.users set email=${quote(owner.email)},email_confirmed_at=now() where id='${owner.id}';commit`,
+        `begin;select private.pilot_evidence_write_lock();update private.pilot_availability set enabled=true;update public.accounts set status='active' where id='${owner.id}';update auth.users set email=${quote(owner.email)},email_confirmed_at=now() where id='${owner.id}';commit`,
       );
       const duplicatePath = `${owner.id}/${crypto.randomUUID()}.png`,
         duplicateHolder = session("http_storage_duplicate");
@@ -346,7 +340,7 @@ test(
         "drop trigger aaaa_pilot_owner_http_barrier on storage.objects;drop function private.pilot_owner_http_barrier();",
       );
       sql(
-        `begin;select private.pilot_evidence_write_lock();update private.pilot_availability set enabled=true;update private.pilot_account_admission set state='active' where account_id='${owner.id}';update auth.users set email=${quote(owner.email)},email_confirmed_at=now() where id='${owner.id}';commit`,
+        `begin;select private.pilot_evidence_write_lock();update private.pilot_availability set enabled=true;update public.accounts set status='active' where id='${owner.id}';update auth.users set email=${quote(owner.email)},email_confirmed_at=now() where id='${owner.id}';commit`,
       );
       sql(
         `create function private.pilot_owner_raw_conflict_barrier() returns trigger language plpgsql security definer set search_path='' as $$begin if current_setting('role',true)='service_role' then perform pg_advisory_xact_lock(16029,1);end if;return new;end;$$;revoke all on function private.pilot_owner_raw_conflict_barrier() from public,anon,authenticated,service_role;create trigger zzzzz_pilot_owner_raw_conflict_barrier before insert on storage.objects for each row execute function private.pilot_owner_raw_conflict_barrier();`,
@@ -434,41 +428,62 @@ test(
           : current.signedURL,
         status.API_URL,
       );
-      sql(
-        `begin;select private.pilot_evidence_write_lock();update private.pilot_account_admission set state='revoked' where account_id='${owner.id}';commit`,
+      ok(
+        await rpc("set_pilot_account_admission", manager.token, {
+          p_account_id: owner.id,
+          p_state: "revoked",
+          p_expected_revision: Number(
+            sql(
+              `select revision from private.pilot_account_admission where account_id='${owner.id}'`,
+            ),
+          ),
+          p_reason: "Local legacy admission is not student eligibility",
+          p_request_id: crypto.randomUUID(),
+        }),
       );
       assert.equal(
         ok(await rpc("get_access_state", owner.token, {})),
-        "pilot_unavailable",
+        "ready",
+        "legacy admission revocation does not close confirmed UNC access",
       );
-      denied(
-        await api(
-          `/storage/v1/object/authenticated/profile-photos/${second}`,
-          owner,
-        ),
+      assert.equal(
+        (
+          await fetch(
+            `${status.API_URL}/storage/v1/object/authenticated/profile-photos/${second}`,
+            {
+              headers: { apikey: key, authorization: `Bearer ${owner.token}` },
+            },
+          )
+        ).status,
+        200,
       );
-      denied(
-        await api(
-          `/storage/v1/object/sign/profile-photos/${second}`,
-          owner,
-          "POST",
-          { expiresIn: 3 },
-        ),
+      assert.ok(
+        ok(
+          await api(
+            `/storage/v1/object/sign/profile-photos/${second}`,
+            owner,
+            "POST",
+            { expiresIn: 3 },
+          ),
+        ).signedURL,
       );
-      denied(await upload(`${owner.id}/${crypto.randomUUID()}.png`));
-      assert.deepEqual(
+      assert.equal(
+        (await upload(`${owner.id}/${crypto.randomUUID()}.png`)).status,
+        200,
+      );
+      assert.equal(
         ok(
           await request(
             `/rest/v1/profiles?user_id=eq.${owner.id}`,
             owner.token,
           ),
-        ),
-        [],
+        ).length,
+        1,
       );
       assert.equal(
         (await fetch(bearer)).status,
         200,
-        "preissued bearer survives committed revoke within expiry",
+        "preissued bearer survives legacy admission change within expiry",
       );
       await new Promise((r) => setTimeout(r, 4200));
       assert.ok(
@@ -476,7 +491,7 @@ test(
         "preissued bearer eventually expires",
       );
       sql(
-        `begin;select private.pilot_evidence_write_lock();update private.pilot_account_admission set state='active' where account_id='${owner.id}';update private.pilot_availability set enabled=false;commit`,
+        `begin;select private.pilot_evidence_write_lock();update private.pilot_availability set enabled=false;commit`,
       );
       assert.equal(
         ok(await rpc("get_access_state", owner.token, {})),
@@ -512,8 +527,8 @@ test(
       assert.notEqual(replacement.id, owner.id);
       assert.equal(
         ok(await rpc("get_access_state", replacement.token, {})),
-        "pilot_unavailable",
-        "same email never transfers UUID admission",
+        "ready",
+        "confirmed UNC access is independent of prior account admission",
       );
     } finally {
       sql(

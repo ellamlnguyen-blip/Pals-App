@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 
-export async function hangoutHttpChecks(owner, peer, host, member, sql, png, url, key) {
+export async function hangoutHttpChecks(owner, peer, host, member, sql, url, key) {
   const api = owner.auth;
   const requestId = crypto.randomUUID();
   const start = new Date(Date.now() + 60 * 60 * 1000).toISOString();
@@ -14,7 +14,6 @@ export async function hangoutHttpChecks(owner, peer, host, member, sql, png, url
     p_private_instructions: "Room 123",
   };
   let id;
-  let peerPath;
   try {
     assert.deepEqual((await api.from("hangouts").select("id")).data, [], "default gate hides rows over HTTP");
     assert.ok((await api.rpc("create_hangout", create)).error, "default gate denies HTTP create");
@@ -44,16 +43,12 @@ export async function hangoutHttpChecks(owner, peer, host, member, sql, png, url
     assert.ok((await api.from("hangouts").select("*,hangout_private_locations(instructions)").eq("id", id)).data?.[0]?.hangout_private_locations, "host embed is allowed");
     const anon = await fetch(`${url}/rest/v1/hangouts?select=id`, { headers: { apikey: key } });
     assert.equal(anon.status, 401, "anonymous table read lacks grant");
-    assert.equal((await peer.auth.from("hangouts").select("id")).data.length, 0, "incomplete peer cannot read");
-    assert.ok((await peer.auth.rpc("join_hangout", { p_hangout_id: id })).error, "incomplete peer cannot join");
-    peerPath = `${member.id}/${crypto.randomUUID()}.png`;
-    assert.equal((await peer.auth.storage.from("profile-photos").upload(peerPath, png, { contentType: "image/png" })).error, null);
-    assert.equal((await peer.auth.from("profiles").update({ real_name: "Peer", major: "Science", graduation_year: 2028, bio: "Local", primary_photo_path: peerPath }).eq("user_id", member.id)).error, null);
-    assert.equal((await peer.auth.rpc("get_access_state")).data, "ready");
-    assert.equal((await peer.auth.from("hangouts").select("id")).data.length, 1);
-    assert.deepEqual((await peer.auth.from("hangout_private_locations").select("instructions")).data, [], "ready nonmember cannot read private");
+    assert.equal((await peer.auth.rpc("get_access_state")).data, "ready", "confirmed UNC peer needs no completed profile or photo");
+    assert.deepEqual((await peer.auth.from("profiles").select("primary_photo_path").eq("user_id", member.id).single()).data, { primary_photo_path: null });
+    assert.deepEqual((await peer.auth.from("hangouts").select("id")).data, [{ id }], "peer without profile details can discover public Hangout");
+    assert.deepEqual((await peer.auth.from("hangout_private_locations").select("instructions")).data, [], "nonmember cannot read private instructions");
     assert.equal((await peer.auth.from("hangouts").select("id,hangout_private_locations(instructions)").eq("id", id)).data?.[0]?.hangout_private_locations, null, "embed hides private");
-    assert.equal((await peer.auth.rpc("join_hangout", { p_hangout_id: id })).error, null);
+    assert.equal((await peer.auth.rpc("join_hangout", { p_hangout_id: id })).error, null, "peer without profile details can join");
     assert.equal((await peer.auth.from("hangout_private_locations").select("instructions").eq("hangout_id", id).single()).data?.instructions, "Room 123");
     sql(`update auth.users set email='changed@example.invalid' where id='${member.id}'`);
     assert.deepEqual((await peer.auth.from("hangouts").select("id")).data, [], "stale email revokes HTTP reads");
@@ -73,9 +68,5 @@ export async function hangoutHttpChecks(owner, peer, host, member, sql, png, url
     assert.ok((await api.rpc("create_hangout", { ...create, p_request_id: crypto.randomUUID() })).error, "gate denies further HTTP calls");
   } finally {
     sql(`update private.hangout_feature_gate set enabled=false; delete from private.hangout_create_requests where host_id='${host.id}'; delete from public.hangouts where host_id='${host.id}';`);
-    if (peerPath) {
-      await peer.auth.from("profiles").update({ primary_photo_path: null }).eq("user_id", member.id);
-      await peer.auth.storage.from("profile-photos").remove([peerPath]);
-    }
   }
 }
