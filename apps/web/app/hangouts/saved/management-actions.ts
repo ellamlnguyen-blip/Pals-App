@@ -112,7 +112,7 @@ export async function managementPage(
 }
 
 export type ManagementIntent =
-  "promote" | "demote" | "step_down" | "remove" | "cancel";
+  "demote" | "step_down" | "remove" | "cancel";
 export async function manageHangout(
   id: string,
   expectedRevision: number,
@@ -123,8 +123,8 @@ export async function manageHangout(
   if (
     !validId(id) ||
     !validRevision(expectedRevision) ||
-    !["promote", "demote", "step_down", "remove", "cancel"].includes(intent) ||
-    ((intent === "promote" || intent === "demote" || intent === "remove") &&
+    !["demote", "step_down", "remove", "cancel"].includes(intent) ||
+    ((intent === "demote" || intent === "remove") &&
       (!target || !validId(target)))
   )
     return uncertain;
@@ -150,7 +150,6 @@ export async function manageHangout(
     return denied;
   if (source.revision !== expectedRevision) return stale;
   const rpcName = {
-    promote: "promote_hangout_cohost",
     demote: "demote_hangout_cohost",
     step_down: "step_down_hangout_cohost",
     remove: "remove_hangout_participant",

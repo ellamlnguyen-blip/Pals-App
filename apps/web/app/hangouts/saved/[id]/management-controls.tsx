@@ -20,6 +20,8 @@ type Row = {
   account_id: string;
   role_label: "host" | "cohost" | "participant";
 };
+type Invitation = { invitation_id: string; recipient_id: string | null; state: string; created_at: string };
+type InvitationCursor = { time: string; id: string } | null;
 export function ManagementControls({
   id,
   revision,
@@ -55,18 +57,30 @@ export function ManagementControls({
   );
   const [pending, start] = useTransition();
   const [identityHidden, setIdentityHidden] = useState(false);
+  const concealedRef = useRef(false);
   const visibleIdentities = identityHidden ? {} : identities;
   const [localLocked, setLocked] = useState(false);
   const locked = localLocked || managementPaused;
   const [sensitiveHidden, setSensitiveHidden] = useState(false);
   const [message, setMessage] = useState("");
+  const [invitations, setInvitations] = useState<Invitation[]>([]);
+  const [invitationLoading, setInvitationLoading] = useState(role === "host");
+  const [invitationMore, setInvitationMore] = useState(false);
+  const [invitationPage, setInvitationPage] = useState(0);
+  const invitationCursors = useRef<InvitationCursor[]>([null]);
+  const [frozenInvite, setFrozenInvite] = useState<{ recipient: string; requestId: string; revision: number } | null>(null);
   const [loading, setLoading] = useState<"roster" | "assignments" | null>(null);
   const resultRef = useRef<HTMLParagraphElement>(null);
   useEffect(() => {
     if (message) resultRef.current?.focus();
   }, [message]);
   useEffect(() => {
-    const conceal = () => setIdentityHidden(true);
+    const conceal = () => {
+      concealedRef.current = true;
+      setIdentityHidden(true);
+      setInvitations([]);
+      setInvitationMore(false);
+    };
     const visibility = () => {
       if (document.hidden) conceal();
     };
@@ -87,6 +101,60 @@ export function ManagementControls({
       channel?.close();
     };
   }, []);
+  useEffect(() => {
+    if (role !== "host" || locked || identityHidden || concealedRef.current) return;
+    let alive = true;
+    const cursor = invitationCursors.current[invitationPage];
+    if (cursor === undefined) return;
+    setInvitationLoading(true);
+    const query = cursor ? `&time=${encodeURIComponent(cursor.time)}&id=${cursor.id}` : "";
+    fetch(`/api/cohost?hangout=${id}${query}`, { cache: "no-store", credentials: "same-origin", headers: { "x-pals-cohost-actor": actorId } })
+      .then(async (response) => {
+        const data = await response.json();
+        if (!alive || concealedRef.current) return;
+        if (!response.ok || data.kind !== "ok" || data.actor !== actorId || data.revision !== revision || !Array.isArray(data.rows) || typeof data.more !== "boolean" || data.rows.length > 24 || data.rows.some((row: Invitation) => !row || typeof row.invitation_id !== "string" || typeof row.created_at !== "string" || typeof row.state !== "string")) throw new Error("status");
+        setInvitations(data.rows);
+        setInvitationMore(data.more);
+        setInvitationLoading(false);
+      }).catch(() => { if (alive && !concealedRef.current) { setInvitations([]); setInvitationMore(false); setInvitationLoading(false); setMessage("Invitation status changed or is unavailable. Reload to review this Hangout."); pauseManagement(); setLocked(true); } });
+    return () => { alive = false; };
+  }, [role, id, actorId, revision, locked, identityHidden, pauseManagement, invitationPage]);
+  function nextInvitations() {
+    const last = invitations.at(-1);
+    if (!last || !invitationMore || invitationLoading || locked) return;
+    invitationCursors.current[invitationPage + 1] = { time: last.created_at, id: last.invitation_id };
+    setInvitationPage(invitationPage + 1);
+  }
+  function invite(recipient: string) {
+    if (locked || invitationLoading || frozenInvite) return;
+    if (!window.confirm("Invite this joined participant to co-host? They receive a request and gain management access only if they accept.")) return;
+    const intent = { recipient, requestId: crypto.randomUUID(), revision };
+    setFrozenInvite(intent);
+    setMessage("");
+    start(async () => {
+      try {
+        const response = await fetch("/api/cohost", { method: "POST", cache: "no-store", credentials: "same-origin", headers: { "content-type": "application/json", "x-pals-cohost-actor": actorId }, body: JSON.stringify({ action: "invite", hangout: id, recipient: intent.recipient, requestId: intent.requestId, revision: intent.revision }) });
+        const data = await response.json();
+        if (data.kind === "denied") { deny(); return; }
+        if (data.kind === "saved" && data.actor === actorId) { setFrozenInvite(null); pauseManagement(); setLocked(true); setMessage("Invitation sent. The Hangout is refreshing."); router.refresh(); return; }
+        setMessage(data.kind === "stale" ? "This Hangout changed. Reload and review it before inviting." : "The invitation response is uncertain. Reload and check invitation status before any retry.");
+      } catch { setMessage("The invitation response is uncertain. Reload and check invitation status before any retry."); }
+      pauseManagement(); setLocked(true);
+    });
+  }
+  function withdraw(invitation: string) {
+    if (!window.confirm("Withdraw this co-host invitation?")) return;
+    pauseManagement(); setLocked(true);
+    start(async () => {
+      try {
+        const response = await fetch("/api/cohost", { method: "POST", cache: "no-store", credentials: "same-origin", headers: { "content-type": "application/json", "x-pals-cohost-actor": actorId }, body: JSON.stringify({ action: "withdraw", invitation, revision }) });
+        const data = await response.json();
+        if (data.kind === "denied") { deny(); return; }
+        setMessage(data.kind === "saved" ? "Invitation withdrawn. The Hangout is refreshing." : "Invitation status may have changed. Reload and review it.");
+        if (data.kind === "saved") router.refresh();
+      } catch { setMessage("Invitation status is uncertain. Reload and review it."); }
+    });
+  }
   function loadMore(type: "roster" | "assignments") {
     setLoading(type);
     start(async () => {
@@ -137,8 +205,6 @@ export function ManagementControls({
   }
   function act(intent: ManagementIntent, target?: string) {
     const prompts: Record<ManagementIntent, string> = {
-      promote:
-        "Make this joined participant a co-host? They can edit public and private details, control joining, and remove ordinary attendees. They can step down or leave.",
       demote:
         "Remove this co-host assignment? They stay joined and can still read private meeting instructions while eligible. They lose management powers.",
       step_down:
@@ -256,7 +322,7 @@ export function ManagementControls({
                     {locked
                       ? "Management is paused until you reload and review this Hangout."
                       : role === "host"
-                        ? "You can edit, assign co-hosts, remove attendees, or cancel."
+                        ? "You can edit, invite co-hosts, remove attendees, or cancel."
                         : "You can edit, control joining, remove ordinary attendees, or step down."}
                   </p>
                   <div className="saved-management-actions">
@@ -332,10 +398,10 @@ export function ManagementControls({
                             row.role_label === "participant" && (
                               <button
                                 className="text-button"
-                                disabled={pending || locked}
-                                onClick={() => act("promote", row.account_id)}
+                                disabled={pending || locked || invitationLoading || invitations.some((item) => item.recipient_id === row.account_id && item.state === "pending")}
+                                onClick={() => invite(row.account_id)}
                               >
-                                Make co-host
+                                {invitations.some((item) => item.recipient_id === row.account_id && item.state === "pending") ? "Invitation pending" : "Invite co-host"}
                               </button>
                             )}
                           {role &&
@@ -392,6 +458,24 @@ export function ManagementControls({
                 <p className="saved-action-note">
                   People are hidden until you reload and review this Hangout.
                 </p>
+              )}
+              {role === "host" && !sensitiveHidden && !identityHidden && (
+                <section className="saved-management" aria-label="Co-host invitations">
+                  <h2>Co-host invitations</h2>
+                  {invitationLoading ? <p>Loading invitations…</p> : invitations.length ? (
+                    <ul className="saved-roster">{invitations.map((item) => (
+                      <li key={item.invitation_id}>
+                        <span>{item.recipient_id ? `Participant ${item.recipient_id}` : "Unavailable participant"}: {item.state}</span>
+                        {item.state === "pending" && <button className="text-button" disabled={pending || locked} onClick={() => withdraw(item.invitation_id)}>Withdraw invitation</button>}
+                      </li>
+                    ))}</ul>
+                  ) : <p>No recent co-host invitations.</p>}
+                  <div className="saved-management-actions">
+                    {invitationPage > 0 && <button className="quiet-button" disabled={invitationLoading || locked} onClick={() => setInvitationPage(0)}>Start over</button>}
+                    {invitationPage > 0 && <button className="quiet-button" disabled={invitationLoading || locked} onClick={() => setInvitationPage(invitationPage - 1)}>Previous</button>}
+                    {invitationMore && <button className="quiet-button" disabled={invitationLoading || locked} onClick={nextInvitations}>Next invitations</button>}
+                  </div>
+                </section>
               )}
               {role === "host" && !sensitiveHidden && (
                 <section
