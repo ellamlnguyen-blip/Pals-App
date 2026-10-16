@@ -185,12 +185,14 @@ export function SafetyActions({
   target,
   allowBlock = false,
   label,
+  concealTargetId = false,
   onBlockConfirmed,
 }: {
   actor: string;
   target: ReportTarget;
   allowBlock?: boolean;
   label?: string;
+  concealTargetId?: boolean;
   onBlockConfirmed?: () => void;
 }) {
   const safety = useSafety(actor);
@@ -222,6 +224,7 @@ export function SafetyActions({
         <BlockDialog
           actor={actor}
           id={target.id}
+          concealTargetId={concealTargetId}
           blocked={true}
           onClose={() => setBlock(false)}
           onConfirmed={onBlockConfirmed}
@@ -233,6 +236,7 @@ export function SafetyActions({
           key={`${safety.epoch}:${target.mode}:${target.id}`}
           actor={actor}
           target={target}
+          concealTargetId={concealTargetId}
           safety={safety}
           onClose={() => setReport(false)}
         />
@@ -245,6 +249,7 @@ type SafetyState = ReturnType<typeof useSafety>;
 function BlockDialog({
   actor,
   id,
+  concealTargetId = false,
   blocked,
   onClose,
   safety,
@@ -252,6 +257,7 @@ function BlockDialog({
 }: {
   actor: string;
   id: string;
+  concealTargetId?: boolean;
   blocked: boolean;
   onClose: () => void;
   safety: SafetyState;
@@ -391,7 +397,9 @@ function BlockDialog({
       <h2 id="safety-block-title" tabIndex={-1}>
         {blocked ? "Block this account?" : "Unblock this account?"}
       </h2>
-      <p className="safety-id">{id}</p>
+      <p className="safety-id">
+        {concealTargetId ? "Account from this conversation" : id}
+      </p>
       {blocked ? (
         <div id="safety-block-explain">
           <p>
@@ -454,11 +462,13 @@ function BlockDialog({
 function ReportForm({
   actor,
   target,
+  concealTargetId = false,
   safety,
   onClose,
 }: {
   actor: string;
   target: ReportTarget;
+  concealTargetId?: boolean;
   safety: SafetyState;
   onClose: () => void;
 }) {
@@ -543,7 +553,9 @@ function ReportForm({
           : target.mode === "hangout_host"
             ? "Host of retained Hangout"
             : "Hangout"}{" "}
-        <span className="safety-id">{target.id}</span>
+        <span className="safety-id">
+          {concealTargetId ? "from this conversation" : target.id}
+        </span>
       </p>
       {target.mode === "hangout_host" && (
         <p>The host&apos;s details are not shown here.</p>

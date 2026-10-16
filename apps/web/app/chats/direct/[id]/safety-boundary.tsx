@@ -11,11 +11,9 @@ type PeerIdentity = { name: string; photoRevision: number | null };
 export function DirectSafetyBoundary({
   id,
   actor,
-  knownPair,
 }: {
   id: string;
   actor: string;
-  knownPair: boolean;
 }) {
   const [cleared, setCleared] = useState(false);
   const [peer, setPeer] = useState<PeerIdentity | null>(null);
@@ -64,17 +62,16 @@ export function DirectSafetyBoundary({
       ) : (
         <DirectThread id={id} actor={actor} onIdentityChange={updatePeer} />
       )}
-      {knownPair && (
-        <SafetyActions
-          actor={actor}
-          target={{ mode: "user", id }}
-          allowBlock
-          onBlockConfirmed={() => {
-            setPeer(null);
-            setCleared(true);
-          }}
-        />
-      )}
+      <SafetyActions
+        actor={actor}
+        target={{ mode: "user", id }}
+        allowBlock
+        concealTargetId={!peer}
+        onBlockConfirmed={() => {
+          setPeer(null);
+          setCleared(true);
+        }}
+      />
     </>
   );
 }

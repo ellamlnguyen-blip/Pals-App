@@ -384,6 +384,19 @@ export function DirectThread({
       setBusy(false);
       return;
     }
+    const recheckAfterFailedMutation = async (
+      message: string,
+      clearRetry = false,
+    ) => {
+      if (clearRetry) {
+        pendingRef.current = null;
+        draftRef.current = "";
+      }
+      // A failed POST can follow a friendship or generation change after our
+      // preflight read. Conceal the old peer and bodies before any reread.
+      mask("Rechecking direct chat access…", true);
+      if (await read(null, true)) setNote(message);
+    };
     try {
       const response = await fetch(api, {
         method: "POST",
@@ -400,23 +413,20 @@ export function DirectThread({
       const data = (await response.json()) as { kind: string };
       if (now !== ticket.current || document.hidden) return;
       if (data.kind === "denied") {
-        // A failed mutation can mean source access changed between the read and
-        // POST. Hide the old body before any network reread can settle.
-        mask("Rechecking direct chat access…", true);
-        if (await read(null, true))
-          setNote(
-            "This action is unavailable now. Check the current conversation before trying again.",
-          );
+        await recheckAfterFailedMutation(
+          "This action is unavailable now. Check the current conversation before trying again.",
+        );
         return;
       }
       if (data.kind === "stale" || data.kind === "conflict") {
-        setNote(
-          "Conversation changed or this retry differs. Reload before another action.",
+        await recheckAfterFailedMutation(
+          "Conversation changed or this retry differs. Check the current conversation before another action.",
+          true,
         );
         return;
       }
       if (data.kind !== "ok") {
-        setNote(
+        await recheckAfterFailedMutation(
           item
             ? "Outcome uncertain. Retry the same message after a fresh check."
             : "Outcome uncertain. Reload to check before another action.",
@@ -443,7 +453,7 @@ export function DirectThread({
         );
     } catch {
       if (now === ticket.current)
-        setNote(
+        await recheckAfterFailedMutation(
           item
             ? "Outcome uncertain. Retry the same message after a fresh check."
             : "Outcome uncertain. Reload to check before another action.",

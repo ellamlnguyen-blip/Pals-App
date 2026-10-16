@@ -33,8 +33,6 @@ export default async function DirectPage({
         </section>
       </Frame>
     );
-  const status = await local.client.rpc("get_dm_status", { p_peer_id: id });
-  const knownPair = !status.error && !!status.data?.[0];
   return (
     <Frame signedIn navigation={local.state === "ready"}>
       <section className="chat-page" aria-labelledby="chats-title">
@@ -53,7 +51,6 @@ export default async function DirectPage({
               key={`${id}:${local.user?.id}`}
               id={id}
               actor={local.user!.id}
-              knownPair={knownPair}
             />
           </div>
         </div>
