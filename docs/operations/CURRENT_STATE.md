@@ -1,5 +1,9 @@
 # Current State
 
+## 2026-10-16 — TASK-039F inconclusive Block retest
+
+TASK-039F's isolated source diagnosis did not reach the Block control: browser safety/DM API requests returned 403 with a `cookies was called outside a request scope` diagnostic in its temporary runtime copy, while SSR profile and actual-role synthetic Auth projections worked. No source correction was made. Remote-verified branch `agent/TASK-039F-block-diagnosis` is `3cfd3952fa6b2ba70ba6acca860110c7a81062a5`; owned runtime was removed. TASK-039D's Block confirmation browser gate remains open, and the cause of its earlier zero-dialog click is unproven.
+
 ## 2026-10-16 — TASK-039D resumed browser evidence and Block gap
 
 Resumed TASK-039D's isolated Auth/browser run passed the core friendship-only DM and Hangout chat paths on reviewed migration source, with real 811px/375px renders and neutral stale URLs. The enabled Block action did not leave a confirmation dialog in active/stale chat or peer profile in that browser run; source cause is undetermined. TASK-039D remains incomplete. Remote-verified `agent/TASK-039D-resumed-browser` is `1ec016379fef388ad24429b6853a03ff3022b440`; all owned runtime was cleaned. TASK-039F bounds diagnosis and retest; no shared/hosted state or main application source changed.

@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-16 — TASK-039F inconclusive Block retest receipt
+
+Recorded the disposable browser's request-scope API blocker and task-owned cleanup. No speculative safety UI fix was committed; the earlier Block dialog browser gate remains open. This main update contains documentation only.
+
 ## 2026-10-16 — TASK-039D resumed QA and Block diagnosis contract
 
 Recorded the isolated migrated friendship-only DM browser results and the unresolved Block confirmation dialog failure. Bounded TASK-039F for reproduction and a minimal safety UI correction only if proven. This canonical-main publication is documentation only.

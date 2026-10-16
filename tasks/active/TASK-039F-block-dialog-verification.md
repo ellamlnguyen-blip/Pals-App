@@ -1,6 +1,6 @@
 # TASK-039F — Diagnose Block confirmation in Chats and peer profiles
 
-Status: ready for bounded disposable-local diagnosis after this contract is published on canonical main. Parent TASK-039D is incomplete: the Block button was enabled, but its confirmation dialog did not remain in the browser DOM in three cases. This may be a browser focus/context effect or a source defect; neither is assumed. Start from current canonical main plus exact reviewed TASK-039E source `ea9befb4068662956a4492ea0a607bd966afb109` and TASK-039D evidence `1ec016379fef388ad24429b6853a03ff3022b440`. Keep TASK-040 code outside this task unless needed only in a task-owned QA copy.
+Status: initial disposable-local diagnosis inconclusive; the task-owned browser could not reach a Block click because client safety/DM API routes returned 403 from a request-scope runtime error. No source fix was made. Handoff/evidence are on independently verified `agent/TASK-039F-block-diagnosis` at `3cfd3952fa6b2ba70ba6acca860110c7a81062a5`. Parent TASK-039D remains incomplete: its earlier enabled Block click left no dialog in three cases. Source cause is undetermined. Next work must first establish an isolated browser runtime whose client API request scope succeeds, then trace click, modal mount and focus/epoch behavior. Baseline was canonical main `a73adf4` plus exact reviewed TASK-039E source `ea9befb4068662956a4492ea0a607bd966afb109` merged at `2b583bad` and TASK-039D evidence `1ec016379fef388ad24429b6853a03ff3022b440`. TASK-040 code stayed outside this branch.
 
 ## Scope
 

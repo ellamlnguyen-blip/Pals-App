@@ -1,5 +1,9 @@
 # NOW
 
+## 2026-10-16 — TASK-039F diagnosis could not reach Block click
+
+The first bounded Block retest did not reach a click: its isolated browser's client safety/DM API requests denied with a request-scope cookie error, although server-rendered profile and caller-bound synthetic Auth projections worked. It made no source fix. [TASK-039F status](../agents/handoffs/TASK-039F-STATUS.md) records the independently verified handoff branch `agent/TASK-039F-block-diagnosis` at `3cfd3952fa6b2ba70ba6acca860110c7a81062a5` and complete task-owned cleanup. A valid browser runtime and click/epoch trace are still required before attributing TASK-039D's zero-dialog observation to source or harness; TASK-039D/039 and integration gates remain open.
+
 ## 2026-10-16 — TASK-039D browser gate open; TASK-039F bounded diagnosis
 
 Resumed isolated TASK-039D used the reviewed 52-version migration stack and real synthetic Auth. Friend-only DM creation/read, pending/declined denial, unfriend/refriend generation retirement, block/People opt-out API denial, stale URL masking, neutral legacy notifications, responsive thread rendering and Hangout chat regression passed. On active/stale DM and peer profile, an enabled Block button click left no confirmation dialog in the DOM. [TASK-039D status](../agents/handoffs/TASK-039D-RESUMED-STATUS.md) records its independently remote-verified branch `agent/TASK-039D-resumed-browser` at `1ec016379fef388ad24429b6853a03ff3022b440`; owned runtime was cleaned. [TASK-039F](active/TASK-039F-block-dialog-verification.md) bounds diagnosis and a minimal correction only if a source defect is proven. TASK-039D/039, TASK-040 integration and predecessor gates remain incomplete.
