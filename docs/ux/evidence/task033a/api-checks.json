@@ -1,0 +1,23 @@
+{
+  "environment": "pals-task029-disposable",
+  "noStore": true,
+  "combinedRows": 9,
+  "dmRows": 1,
+  "hangoutRows": 8,
+  "authorizedPeerName": true,
+  "wrongActorDenied": true,
+  "anonymousDenied": true,
+  "invalidCursorDenied": true,
+  "exhaustedCursorEmpty": true,
+  "sourceOrder": [
+    "hangout",
+    "hangout",
+    "hangout",
+    "hangout",
+    "hangout",
+    "hangout",
+    "hangout",
+    "hangout",
+    "dm"
+  ]
+}
