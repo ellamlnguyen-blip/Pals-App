@@ -55,7 +55,9 @@ function reset() {
 // No HTTP credentials or hosted URL: all sessions target the named disposable local container.
 test("assignment/delete serialization and stale revision compare-and-swap", async () => {
   sql(
-    `insert into auth.users(id,email,email_confirmed_at) values('${id}','task006-concurrency@unc.edu',now());`,
+    `update private.pilot_availability set enabled=true;
+     update private.pilot_capabilities set enabled=true where key='onboarding';
+     insert into auth.users(id,email,email_confirmed_at) values('${id}','task006-concurrency@unc.edu',now());`,
   );
   try {
     for (const isolation of ["read committed", "repeatable read"]) {
@@ -163,7 +165,9 @@ test("assignment/delete serialization and stale revision compare-and-swap", asyn
     );
   } finally {
     sql(
-      `update public.profiles set additional_photo_paths='{}' where user_id='${id}';set storage.allow_delete_query='true';delete from storage.objects where owner_id='${id}';delete from auth.users where id='${id}';`,
+      `update private.pilot_availability set enabled=false;
+       update private.pilot_capabilities set enabled=false where key='onboarding';
+       update public.profiles set additional_photo_paths='{}' where user_id='${id}';set storage.allow_delete_query='true';delete from storage.objects where owner_id='${id}';delete from auth.users where id='${id}';`,
     );
   }
 });

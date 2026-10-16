@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Frame } from "../../../components";
 import { dmId } from "../../../../lib/dm";
 import { DirectSafetyBoundary } from "./safety-boundary";
+import { CombinedInbox } from "../../combined-inbox";
 import "../../../hangouts/map.css";
 import "../../chat.css";
 export const dynamic = "force-dynamic";
@@ -32,20 +33,27 @@ export default async function DirectPage({
         </section>
       </Frame>
     );
-  const status = await local.client.rpc("get_dm_status", { p_peer_id: id });
-  const knownPair = !status.error && !!status.data?.[0];
   return (
     <Frame signedIn navigation={local.state === "ready"}>
-      <section className="chat-page" aria-labelledby="direct-title">
-        <Link href="/chats">← All chats</Link>
-        <p className="badge">Direct chat · local only</p>
-        <h1 id="direct-title">Direct chat</h1>
-        <DirectSafetyBoundary
-          key={`${id}:${local.user?.id}`}
-          id={id}
-          actor={local.user!.id}
-          knownPair={knownPair}
-        />
+      <section className="chat-page" aria-labelledby="chats-title">
+        <h1 id="chats-title" className="sr-only">
+          Chats
+        </h1>
+        <div className="chat-shell chat-shell-thread">
+          <aside className="chat-sidebar" aria-label="Conversations">
+            <CombinedInbox
+              actor={local.user!.id}
+              selected={{ kind: "dm", id }}
+            />
+          </aside>
+          <div className="chat-detail">
+            <DirectSafetyBoundary
+              key={`${id}:${local.user?.id}`}
+              id={id}
+              actor={local.user!.id}
+            />
+          </div>
+        </div>
       </section>
     </Frame>
   );

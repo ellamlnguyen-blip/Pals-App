@@ -2,6 +2,9 @@ begin;
 create extension if not exists pgtap with schema extensions;
 set search_path=public,extensions;
 select no_plan();
+-- Historical fixture runs under the open-UNC release switches, locally only.
+update private.pilot_availability set enabled=true where singleton;
+update private.pilot_capabilities set enabled=true where key in ('onboarding','hangouts','hangout_chat','people','dm');
 
 insert into auth.users(id,email,email_confirmed_at)
 select ('14000000-0000-4000-8000-'||lpad(n::text,12,'0'))::uuid,
@@ -158,12 +161,12 @@ update public.university_memberships set university_id='14000000-0000-4000-8000-
     '14000000-0000-4000-8000-000000000003');
 set local role authenticated;
 select set_config('request.jwt.claims','{"sub":"14000000-0000-4000-8000-000000000002","role":"authenticated"}',true);
-select is(public.get_access_state(),'ready','both transferred accounts remain ready');
+select is(public.get_access_state(),'unverified','transfer away from UNC revokes eligibility');
 select is((select count(*) from public.read_dm_messages('14000000-0000-4000-8000-000000000003',
-  (select generation_id from campus_dm))),1::bigint,'accepted body readable at new shared campus');
-select isnt(public.send_dm_message('14000000-0000-4000-8000-000000000003',
+  (select generation_id from campus_dm))),0::bigint,'non-UNC account cannot read accepted body');
+select throws_ok($$select public.send_dm_message('14000000-0000-4000-8000-000000000003',
   (select generation_id from campus_dm),'14000000-0000-4000-8000-0000000000a2',
-  'Still together'),null::uuid,'send resumes at new shared campus');
+  'Still together')$$,'42501',null,'non-UNC account cannot send');
 reset role;
 update public.university_memberships set university_id='00000000-0000-4000-8000-000000000001'
   where user_id='14000000-0000-4000-8000-000000000003';
@@ -179,17 +182,17 @@ update public.university_memberships set university_id='14000000-0000-4000-8000-
     '14000000-0000-4000-8000-000000000003');
 set local role authenticated;
 select set_config('request.jwt.claims','{"sub":"14000000-0000-4000-8000-000000000001","role":"authenticated"}',true);
-select ok(public.transition_dm('14000000-0000-4000-8000-000000000003',
-  (select generation_id from reverse_dm),'accept'),
-  'pending request accepted after both transfer to same new campus');
+select throws_ok($$select public.transition_dm('14000000-0000-4000-8000-000000000003',
+  (select generation_id from reverse_dm),'accept')$$,'42501',null,
+  'pending request cannot be accepted outside UNC');
 reset role;
 update private.people_feature_gate set enabled=false;
 set local role authenticated;
-select set_config('request.jwt.claims','{"sub":"14000000-0000-4000-8000-000000000001","role":"authenticated"}',true);
+select set_config('request.jwt.claims','{"sub":"14000000-0000-4000-8000-000000000002","role":"authenticated"}',true);
 select is((select count(*) from public.read_dm_messages('14000000-0000-4000-8000-000000000003',
-  (select generation_id from reverse_dm))),0::bigint,'People gate off removes accepted body');
+  (select generation_id from campus_dm))),0::bigint,'People gate off removes accepted body');
 select ok(public.transition_dm('14000000-0000-4000-8000-000000000003',
-  (select generation_id from reverse_dm),'close'),
+  (select generation_id from campus_dm),'close'),
   'participant can close while People gate off');
 reset role;
 update private.dm_feature_gate set enabled=false;

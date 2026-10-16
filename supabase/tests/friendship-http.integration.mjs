@@ -43,6 +43,9 @@ test("real Auth sessions reach only caller-owned friendship RPCs", async () => {
         bio='Local fixture',primary_photo_path=user_id::text||'/primary.png' where user_id in ('${a.id}','${b.id}');
       update private.people_feature_gate set enabled=true;
       update private.friendship_feature_gate set enabled=true;
+      update private.pilot_availability set enabled=true;
+      update private.pilot_capabilities set enabled=true
+        where key in ('onboarding','people','friendship');
       insert into private.people_preferences(account_id,opted_in) values ('${a.id}',true),('${b.id}',true);`);
     const anon = await call("/rest/v1/rpc/list_friendships", null);
     assert.ok([401,403].includes(anon.status));
@@ -74,6 +77,9 @@ test("real Auth sessions reach only caller-owned friendship RPCs", async () => {
   } finally {
     sql(`update private.friendship_feature_gate set enabled=false;
       update private.people_feature_gate set enabled=false;
+      update private.pilot_capabilities set enabled=false
+        where key in ('onboarding','people','friendship');
+      update private.pilot_availability set enabled=false;
       delete from auth.users where id in (${users.map((u) => `'${u.id}'`).join(",") || "null"});
       set storage.allow_delete_query='true';
       delete from storage.objects where owner_id in (${users.map((u) => `'${u.id}'`).join(",") || "null"});`);

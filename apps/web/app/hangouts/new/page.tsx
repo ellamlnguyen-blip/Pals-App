@@ -14,9 +14,9 @@ export default async function NewHangoutPage() {
         <p className="badge">Local UNC Hangout</p>
         <h1>Make a plan</h1>
         <p>
-          A title, campus time and broad area are enough. This local Hangout
-          saves for ready UNC students. Map discovery and chat use separate
-          local gates.
+          First choose a broad public place around UNC. Then add a title and
+          time for your Hangout. Exact meeting details can stay private to
+          participants.
         </p>
       </div>
       <HangoutEditor
