@@ -283,8 +283,8 @@ test(
         "edit_hangout",
         host,
         { ...edit, p_expected_revision: 0 },
-        500,
-        "40001",
+        409,
+        "PT409",
         "Stale Hangout revision",
       );
       await failure(

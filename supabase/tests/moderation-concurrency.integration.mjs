@@ -2,24 +2,53 @@ import assert from "node:assert/strict";
 import { execFileSync, spawn } from "node:child_process";
 import { once } from "node:events";
 import test from "node:test";
+import { verifiedTotpToken } from "./helpers/local-totp.mjs";
 
 // Disposable local overlapping SQL sessions; each claimed wait is observed.
+const status = JSON.parse(execFileSync(process.env.SUPABASE_CLI ?? "supabase",
+  ["status", "--output", "json"], { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }));
+assert.equal(status.API_URL, "http://127.0.0.1:54321");
+const key = status.PUBLISHABLE_KEY ?? status.ANON_KEY;
 const args = ["exec", "-i", "supabase_db_pals-local", "psql", "-X", "-qAt",
   "-U", "postgres", "-d", "postgres", "-v", "ON_ERROR_STOP=1"];
 const sql = (input) => execFileSync("docker", args, { input, encoding: "utf8" }).trim();
-const actor = "52000000-0000-4000-8000-000000000001";
-const reporter = "52000000-0000-4000-8000-000000000002";
-const target = "52000000-0000-4000-8000-000000000003";
-const second = "52000000-0000-4000-8000-000000000004";
+const quote = (value) => `'${value.replaceAll("'", "''")}'`;
+async function request(path, token, body) {
+  const response = await fetch(`${status.API_URL}${path}`, { method: body ? "POST" : "GET",
+    headers: { apikey: key, authorization: `Bearer ${token ?? key}`,
+      ...(body ? { "content-type": "application/json" } : {}) },
+    ...(body ? { body: JSON.stringify(body) } : {}) });
+  const raw = await response.text();
+  return { status: response.status, body: raw ? JSON.parse(raw) : null };
+}
+async function signup() {
+  const email = `moderation-race-${crypto.randomUUID()}@unc.edu`;
+  const password = `Local-only-${crypto.randomUUID()}`;
+  const created = await request("/auth/v1/signup", null, { email, password });
+  assert.equal(created.status, 200, JSON.stringify(created.body));
+  const id = created.body.user?.id ?? created.body.id;
+  sql(`update auth.users set email_confirmed_at=now() where id=${quote(id)}`);
+  const login = await request("/auth/v1/token?grant_type=password", null,
+    { email, password });
+  assert.equal(login.status, 200, JSON.stringify(login.body));
+  return { id, email, token: login.body.access_token };
+}
+function signedClaims(token, expectedId) {
+  const claims = JSON.parse(Buffer.from(token.split(".")[1], "base64url"));
+  assert.equal(claims.sub, expectedId);
+  assert.equal(claims.role, "authenticated");
+  assert.equal(claims.aal, "aal2");
+  assert.match(claims.session_id, /^[0-9a-f-]{36}$/i);
+  return `set local role authenticated;
+    set local request.jwt.claims=${quote(JSON.stringify(claims))};`;
+}
+let actor, reporter, target, second;
 const report = "52000000-0000-4000-8002-000000000001";
 const report2 = "52000000-0000-4000-8002-000000000002";
 const report3 = "52000000-0000-4000-8002-000000000004";
 const hangout = "52000000-0000-4000-8004-000000000001";
 const hangoutReport = "52000000-0000-4000-8002-000000000003";
-const claims = `set local role authenticated;
-  set local request.jwt.claims='{"sub":"${actor}","role":"authenticated"}';`;
-const secondClaims = `set local role authenticated;
-  set local request.jwt.claims='{"sub":"${second}","role":"authenticated"}';`;
+let claims, secondClaims;
 const detail = `select count(*) from public.get_moderation_report('${report}');`;
 const pause = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 async function until(check, diagnostic) {
@@ -69,13 +98,11 @@ async function race(label, leaderSql, waiterSql, waiterFails) {
 test("moderation read and revocation observe both committed lock orders", {
   concurrency: false, timeout: 120_000,
 }, async () => {
+  const users = [];
   try {
-    sql(`insert into auth.users(id,email,email_confirmed_at) values
-      ('${actor}','moderation-race-1@unc.edu',now()),
-      ('${reporter}','moderation-race-2@unc.edu',now()),
-      ('${target}','moderation-race-3@unc.edu',now()),
-      ('${second}','moderation-race-4@unc.edu',now());
-      insert into public.platform_roles(user_id,role) values
+    for (let i = 0; i < 4; i++) users.push(await signup());
+    [actor, reporter, target, second] = users.map((user) => user.id);
+    sql(`insert into public.platform_roles(user_id,role) values
         ('${actor}','moderator'),('${second}','admin');
       insert into private.safety_reports(id,reporter_id,target_type,target_id,category,
         provenance_kind,provenance_ref_id) values
@@ -98,13 +125,28 @@ test("moderation read and revocation observe both committed lock orders", {
         ('${hangoutReport}','${reporter}','hangout','${hangout}','harassment',
          'current_hangout','${hangout}',clock_timestamp()-interval '1 day');
       insert into storage.objects(bucket_id,name,owner_id)
-        values ('profile-photos','${actor}/primary.png','${actor}');
+        values ('profile-photos','${actor}/a11a.png','${actor}'),
+          ('profile-photos','${target}/b22b.png','${target}');
       update public.profiles set real_name='Moderation race',major='Science',
-        graduation_year=2028,bio='Fixture',primary_photo_path='${actor}/primary.png'
+        graduation_year=2028,bio='Fixture',primary_photo_path='${actor}/a11a.png'
         where user_id='${actor}';
+      update public.profiles set real_name='Hangout host',major='Science',
+        graduation_year=2028,bio='Fixture',primary_photo_path='${target}/b22b.png'
+        where user_id='${target}';
       update private.moderation_feature_gate set enabled=true;
       update private.safety_feature_gate set enabled=true;
-      update private.hangout_feature_gate set enabled=true;`);
+      update private.hangout_feature_gate set enabled=true;
+    update private.pilot_availability set enabled=true;
+    update private.pilot_capabilities set enabled=true where key in ('onboarding','hangouts','people');`);
+    users[0].token = await verifiedTotpToken(request, users[0].token);
+    users[3].token = await verifiedTotpToken(request, users[3].token);
+    for (const user of [users[0], users[3]]) {
+      const verified = await request("/auth/v1/user", user.token);
+      assert.equal(verified.status, 200, JSON.stringify(verified.body));
+      assert.equal(verified.body.id, user.id);
+    }
+    claims = signedClaims(users[0].token, actor);
+    secondClaims = signedClaims(users[3].token, second);
     assert.throws(() => sql(`begin isolation level repeatable read; ${claims}
       ${detail} rollback;`), /Moderation unavailable/);
     await race("gate_first", "update private.moderation_feature_gate set enabled=false;",
@@ -178,7 +220,7 @@ test("moderation read and revocation observe both committed lock orders", {
     sql(`insert into public.university_memberships(user_id,university_id,verified_at,
       verification_email) values ('${target}',
       (select id from public.universities where slug='unc-chapel-hill'),now(),
-      'moderation-race-3@unc.edu');`);
+      '${users[2].email}');`);
     await race("action_before_membership_delete",
       `${claims} select * from public.transition_moderation_case(
         '${report2}','52000000-0000-4000-8003-000000000009',2,'annotate',
@@ -190,7 +232,7 @@ test("moderation read and revocation observe both committed lock orders", {
     sql(`insert into public.university_memberships(user_id,university_id,verified_at,
       verification_email) values ('${target}',
       (select id from public.universities where slug='unc-chapel-hill'),now(),
-      'moderation-race-3@unc.edu');`);
+      '${users[2].email}');`);
     const currentHangoutReport = `${claims} select * from public.submit_safety_report(
       '52000000-0000-4000-8003-000000000005','hangout','${hangout}',
       'harassment',null);`;
@@ -203,10 +245,21 @@ test("moderation read and revocation observe both committed lock orders", {
         'harassment',null);`, false);
     sql(`insert into public.hangout_participants(hangout_id,account_id,state)
       values ('${hangout}','${actor}','joined')`);
+    const hangoutReportTimestamp = sql(`select submitted_at from private.safety_reports
+      where id='${hangoutReport}'`);
+    const focusedModerationPage = `${claims} select * from public.list_moderation_reports(
+      '${hangoutReportTimestamp}'::timestamptz,
+      'ffffffff-ffff-ffff-ffff-ffffffffffff'::uuid,24);`;
     await race("block_first", `${claims} select public.set_safety_block('${target}',true);`,
-      `${claims} select * from public.list_moderation_reports();`, false);
+      focusedModerationPage, false);
   } finally {
-    sql(`update private.moderation_feature_gate set enabled=false;
+    if (users.length < 4) {
+      if (users.length) sql(`delete from auth.users where id in
+        (${users.map((user) => quote(user.id)).join(",")})`);
+    } else {
+      sql(`update private.pilot_capabilities set enabled=false where key in ('onboarding','hangouts','people');
+      update private.pilot_availability set enabled=false;`);
+      sql(`update private.moderation_feature_gate set enabled=false;
       update private.safety_feature_gate set enabled=false;
       update private.hangout_feature_gate set enabled=false;
       -- Audit is append-only after TASK-017B1; the final disposable reset
@@ -220,11 +273,13 @@ test("moderation read and revocation observe both committed lock orders", {
         ('${report}','${report2}','${report3}','${hangoutReport}') or reporter_id='${actor}';
       delete from private.people_blocks where blocker_id='${actor}' and blocked_id='${target}';
       delete from public.hangouts where id='${hangout}';
-      update public.profiles set primary_photo_path=null where user_id='${actor}';
+      update public.profiles set primary_photo_path=null
+        where user_id in ('${actor}','${target}');
       set storage.allow_delete_query='true';
       delete from storage.objects where bucket_id='profile-photos'
-        and name='${actor}/primary.png';
+        and name in ('${actor}/a11a.png','${target}/b22b.png');
       delete from public.platform_roles where user_id in ('${actor}','${target}','${second}');
-      delete from auth.users where id in ('${actor}','${reporter}','${target}','${second}');`);
+      delete from auth.users where id in (${users.map((user) => quote(user.id)).join(",")});`);
+    }
   }
 });

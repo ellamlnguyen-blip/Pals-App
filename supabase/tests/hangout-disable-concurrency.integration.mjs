@@ -88,6 +88,8 @@ test("Hangout disable serializes with source writers and operator revocation", {
     update private.hangout_feature_gate set enabled=true;
     update private.hangout_chat_feature_gate set enabled=true;
     update private.moderation_feature_gate set enabled=true;
+    update private.pilot_availability set enabled=true;
+    update private.pilot_capabilities set enabled=true where key in ('onboarding','hangouts','hangout_chat');
     `);
   // Each parent and its required host participant commit in one transaction.
   for (let n = 1; n <= 13; n++) sql(`begin;
@@ -133,4 +135,6 @@ test("Hangout disable serializes with source writers and operator revocation", {
   assert.equal(sql(`select count(*) from private.hangout_disables where hangout_id='${hid(10)}'`), "1");
   assert.equal(sql(`select count(*) from private.moderation_audit where hangout_disable_id is not null and operator_id='${operator}'`), "10");
   // Immutable evidence is removed only by the caller's final disposable reset.
+  sql(`update private.pilot_capabilities set enabled=false where key in ('onboarding','hangouts','hangout_chat');
+    update private.pilot_availability set enabled=false;`);
 });
