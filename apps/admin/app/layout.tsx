@@ -5,7 +5,7 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "Pals · Moderation",
-  description: "Private local moderation workspace.",
+  description: "Private moderation workspace.",
   robots: { index: false, follow: false },
 };
 

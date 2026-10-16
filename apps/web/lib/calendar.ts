@@ -4,6 +4,7 @@ import { requireLocalHangouts } from "./hangouts";
 import {
   calendarRange,
   compareCalendar,
+  selectedCategory,
   validSelection,
 } from "./calendar-time";
 
@@ -28,31 +29,51 @@ export async function queryCalendar(selection: unknown) {
   const filters = selection;
   const { start, end } = calendarRange(filters);
   async function read() {
-    // Caller-only embed; RLS exposes joined/current-ready rows, never history.
-    const embed =
-      filters.filter === "joined"
-        ? "hangout_participants!inner(account_id)"
-        : "hangout_participants(account_id)";
-    let published = client
-      .from("hangouts")
-      .select(`${fields},${embed}`)
-      .eq("visibility", "campus")
-      .eq("status", "published")
-      .eq("hangout_participants.account_id", user!.id)
-      .lt("starts_at", end)
-      .or(`ends_at.gt.${start},and(ends_at.is.null,starts_at.gte.${start})`)
-      .order("starts_at")
-      .order("id")
-      .limit(101);
-    if (filters.filter === "hosting")
-      published = published.eq("host_id", user!.id);
-    const result = await published;
-    if (result.error) return null;
-    let cancelled: Row[] = [];
-    if (filters.filter !== "discoverable") {
-      // Cancelled roster is intentionally invisible. Public RLS itself proves
-      // caller is the host or still joined, including host's joined invariant.
+    if (!filters.hosting && !filters.attending && !filters.all) return [];
+    // Each selected source is filtered before its own 101-row probe. A global
+    // discovery limit could otherwise hide personal plans late in the range.
+    const groups: Row[][] = [];
+    for (const category of ["hosting", "attending", "all"] as const) {
+      if (!filters[category]) continue;
+      const embed =
+        category === "attending"
+          ? "hangout_participants!inner(account_id)"
+          : category === "all"
+            ? "own_membership:hangout_participants(account_id)"
+            : null;
       let query = client
+        .from("hangouts")
+        .select(embed ? `${fields},${embed}` : fields)
+        .eq("visibility", "campus")
+        .eq("status", "published")
+        .lt("starts_at", end)
+        .or(`ends_at.gt.${start},and(ends_at.is.null,starts_at.gte.${start})`)
+        .order("starts_at")
+        .order("id")
+        .limit(101);
+      if (category === "hosting") query = query.eq("host_id", user!.id);
+      if (category === "attending")
+        query = query
+          .neq("host_id", user!.id)
+          .eq("hangout_participants.account_id", user!.id);
+      if (category === "all")
+        // Filter the embed to this actor, then anti-join it. account_id is
+        // selected because the roster grant is column-scoped; an empty embed
+        // requires table-wide SELECT. Anti-joined rows expose no child data.
+        // PostgREST applies both exclusions before the top-level limit.
+        query = query
+          .neq("host_id", user!.id)
+          .eq("own_membership.account_id", user!.id)
+          .is("own_membership", null);
+      const result = await query;
+      if (result.error) return null;
+      groups.push(result.data as unknown as Row[]);
+    }
+    // Cancelled plans are visible only through the source RLS to their existing
+    // host/current participants. They never enter the discoverable category.
+    for (const category of ["hosting", "attending"] as const) {
+      if (!filters[category]) continue;
+      let cancelled = client
         .from("hangouts")
         .select(fields)
         .eq("visibility", "campus")
@@ -62,13 +83,16 @@ export async function queryCalendar(selection: unknown) {
         .order("starts_at")
         .order("id")
         .limit(101);
-      if (filters.filter === "hosting") query = query.eq("host_id", user!.id);
-      const result = await query;
+      if (category === "hosting") cancelled = cancelled.eq("host_id", user!.id);
+      else cancelled = cancelled.neq("host_id", user!.id);
+      const result = await cancelled;
       if (result.error) return null;
-      cancelled = result.data as unknown as Row[];
+      groups.push(result.data as unknown as Row[]);
     }
-    return [...(result.data as unknown as Row[]), ...cancelled]
-      .sort(compareCalendar)
+    const rows = [
+      ...new Map(groups.flat().map((row) => [row.id, row])).values(),
+    ];
+    return rows
       .map((row) => ({
         id: row.id,
         title: row.title,
@@ -76,16 +100,18 @@ export async function queryCalendar(selection: unknown) {
         ends_at: row.ends_at,
         public_place: row.public_place,
         status: row.status,
-        relationship:
-          row.host_id === user!.id
-            ? "hosting"
-            : row.status === "cancelled" ||
-                row.hangout_participants?.some(
-                  (member) => member.account_id === user!.id,
-                )
-              ? "joined"
-              : "none",
-      }));
+        relationship: (row.host_id === user!.id
+          ? "hosting"
+          : row.status === "cancelled" ||
+              row.hangout_participants?.some(
+                (member) => member.account_id === user!.id,
+              )
+            ? "joined"
+            : "none") as "hosting" | "joined" | "none",
+      }))
+      .filter((row) => selectedCategory(row, filters))
+      .sort(compareCalendar)
+      .slice(0, 101);
   }
   const initial = await read();
   if (!initial) return { kind: "error" as const, items: [], truncated: false };

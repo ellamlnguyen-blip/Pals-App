@@ -396,7 +396,7 @@ function BlockDialog({
         <div id="safety-block-explain">
           <p>
             Any friendship and direct chat with this person end. You stop
-            appearing to one another in People and lose blocked private Hangout
+            appearing to one another in Pals and lose blocked private Hangout
             access.
           </p>
           <p>
@@ -759,7 +759,7 @@ export function SafetyDashboard({ actor }: { actor: string }) {
   return (
     <div className="safety-page">
       <div className="safety-intro">
-        <p className="badge">Account safety · local only</p>
+        <p className="badge">Account safety</p>
         <h1>Safety</h1>
         <p>
           Manage privacy and send a private report. These local tools do not

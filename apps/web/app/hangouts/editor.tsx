@@ -162,7 +162,13 @@ export function HangoutEditor({ token, existing, returnHref }: Props) {
   const [values, setValues] = useState<HangoutInput>(() => initial(existing));
   const [revision, setRevision] = useState(existing?.revision ?? 0);
   const [result, setResult] = useState<HangoutResult | null>(null);
+  const [step, setStep] = useState<"place" | "details">(
+    existing ? "details" : "place",
+  );
   const [pending, startTransition] = useTransition();
+  const area = useRef<HTMLDivElement>(null);
+  const detailsTitle = useRef<HTMLInputElement>(null);
+  const placeLabel = useRef<HTMLInputElement>(null);
   const request = useRef<string | null>(null);
   const attempted = useRef<HangoutInput | null>(null);
   const feedback = useRef<HTMLDivElement>(null);
@@ -173,9 +179,46 @@ export function HangoutEditor({ token, existing, returnHref }: Props) {
       result?.kind === "conflict" ||
       result?.kind === "denied"
     : result?.kind === "uncertain";
+  function continueToDetails() {
+    if (!values.publicPlace.trim()) {
+      placeLabel.current?.focus();
+      placeLabel.current?.setCustomValidity(
+        "Enter a broad public place label.",
+      );
+      placeLabel.current?.reportValidity();
+      return;
+    }
+    const firstInvalid =
+      area.current?.querySelector<HTMLInputElement>("input:invalid");
+    if (firstInvalid) {
+      firstInvalid.reportValidity();
+      firstInvalid.focus();
+      return;
+    }
+    const latitude = Number(values.latitude),
+      longitude = Number(values.longitude);
+    if (
+      !Number.isFinite(latitude) ||
+      !Number.isFinite(longitude) ||
+      latitude < 35.85 ||
+      latitude > 35.97 ||
+      longitude < -79.13 ||
+      longitude > -78.98
+    ) {
+      placeLabel.current?.focus();
+      return;
+    }
+    setValues((old) => ({
+      ...old,
+      latitude: String(Number(latitude.toFixed(3))),
+      longitude: String(Number(longitude.toFixed(3))),
+    }));
+    setStep("details");
+    requestAnimationFrame(() => detailsTitle.current?.focus());
+  }
   function save(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (pending) return;
+    if (pending || (!existing && step !== "details")) return;
     const replay = attempted.current !== null;
     const payload = attempted.current ?? { ...values };
     if (!existing) {
@@ -225,146 +268,159 @@ export function HangoutEditor({ token, existing, returnHref }: Props) {
     });
   }
   return (
-    <form className="hangout-editor" onSubmit={save} aria-busy={pending}>
-      <div className="hangout-editor-main form-stack">
-        <label>
-          What are you planning?
-          <input
-            required
-            maxLength={120}
-            value={values.title}
-            disabled={pending || locked}
-            onChange={(e) => set("title", e.target.value)}
-            placeholder="Anyone up for tacos?"
-          />
-        </label>
-        <label>
-          Starts · America/New_York
-          <input
-            required
-            type="datetime-local"
-            value={values.startsLocal}
-            disabled={pending || locked}
-            onChange={(e) => set("startsLocal", e.target.value)}
-          />
-        </label>
-        <p className="help">
-          Enter UNC campus time. Times skipped or repeated when clocks change
-          need another choice.
-        </p>
-        <label>
-          Ends · optional
-          <input
-            type="datetime-local"
-            value={values.endsLocal}
-            disabled={pending || locked}
-            onChange={(e) => set("endsLocal", e.target.value)}
-          />
-        </label>
-        <label>
-          What should people know? · optional
-          <textarea
-            maxLength={2000}
-            rows={4}
-            value={values.description}
-            disabled={pending || locked}
-            onChange={(e) => set("description", e.target.value)}
-          />
-        </label>
-        <div className="hangout-private">
-          <h2>Meeting instructions</h2>
+    <form
+      className={`hangout-editor${existing ? "" : " hangout-editor--new"}`}
+      onSubmit={save}
+      aria-busy={pending}
+    >
+      {(existing || step === "details") && (
+        <div className="hangout-editor-main form-stack">
+          {!existing && <p className="help">Step 2 of 2 · Hangout details</p>}
+          <label>
+            What are you planning?
+            <input
+              ref={detailsTitle}
+              required
+              maxLength={120}
+              value={values.title}
+              disabled={pending || locked}
+              onChange={(e) => set("title", e.target.value)}
+              placeholder="Anyone up for tacos?"
+            />
+          </label>
+          <label>
+            Starts · America/New_York
+            <input
+              required
+              type="datetime-local"
+              value={values.startsLocal}
+              disabled={pending || locked}
+              onChange={(e) => set("startsLocal", e.target.value)}
+            />
+          </label>
           <p className="help">
-            Participant only. Share an exact meeting point here if needed. These
-            details are separate from the public area.
+            Enter UNC campus time. Times skipped or repeated when clocks change
+            need another choice.
           </p>
           <label>
-            Private instructions · optional
+            Ends · optional
+            <input
+              type="datetime-local"
+              value={values.endsLocal}
+              disabled={pending || locked}
+              onChange={(e) => set("endsLocal", e.target.value)}
+            />
+          </label>
+          <label>
+            What should people know? · optional
             <textarea
               maxLength={2000}
               rows={4}
-              value={values.privateInstructions}
+              value={values.description}
               disabled={pending || locked}
-              onChange={(e) => set("privateInstructions", e.target.value)}
-              placeholder="Meet at the front entrance…"
+              onChange={(e) => set("description", e.target.value)}
             />
           </label>
-          {existing && (
+          <div className="hangout-private">
+            <h2>Meeting instructions</h2>
             <p className="help">
-              Clear this field and save to remove previous instructions.
+              Participant only. Share an exact meeting point here if needed.
+              These details are separate from the public area.
             </p>
-          )}
+            <label>
+              Private instructions · optional
+              <textarea
+                maxLength={2000}
+                rows={4}
+                value={values.privateInstructions}
+                disabled={pending || locked}
+                onChange={(e) => set("privateInstructions", e.target.value)}
+                placeholder="Meet at the front entrance…"
+              />
+            </label>
+            {existing && (
+              <p className="help">
+                Clear this field and save to remove previous instructions.
+              </p>
+            )}
+          </div>
         </div>
-      </div>
-      <div className="hangout-editor-area form-stack">
-        <div>
-          <h2>Public area</h2>
+      )}
+      {(existing || step === "place") && (
+        <div className="hangout-editor-area form-stack" ref={area}>
+          <div>
+            {!existing && <p className="help">Step 1 of 2 · Public place</p>}
+            <h2>Public area</h2>
+            <p className="help">
+              Visible to ready UNC students. Choose an approximate campus area,
+              never a home address or the private meeting point.
+            </p>
+          </div>
+          <PublicAreaPicker
+            token={token}
+            value={values}
+            disabled={pending || locked}
+            onPick={(latitude, longitude) =>
+              setValues((old) => ({ ...old, latitude, longitude }))
+            }
+          />
+          <label>
+            Broad public place label
+            <input
+              ref={placeLabel}
+              required
+              maxLength={120}
+              value={values.publicPlace}
+              disabled={pending || locked}
+              onChange={(e) => set("publicPlace", e.target.value)}
+              onInput={(e) => e.currentTarget.setCustomValidity("")}
+              placeholder="Around Polk Place"
+            />
+          </label>
+          <label>
+            Campus area · optional
+            <input
+              maxLength={80}
+              value={values.campusZone}
+              disabled={pending || locked}
+              onChange={(e) => set("campusZone", e.target.value)}
+              placeholder="Central campus"
+            />
+          </label>
+          <div className="field-pair">
+            <label>
+              Approx. latitude
+              <input
+                required
+                type="number"
+                min="35.85"
+                max="35.97"
+                step="any"
+                value={values.latitude}
+                disabled={pending || locked}
+                onChange={(e) => set("latitude", e.target.value)}
+              />
+            </label>
+            <label>
+              Approx. longitude
+              <input
+                required
+                type="number"
+                min="-79.13"
+                max="-78.98"
+                step="any"
+                value={values.longitude}
+                disabled={pending || locked}
+                onChange={(e) => set("longitude", e.target.value)}
+              />
+            </label>
+          </div>
           <p className="help">
-            Visible to ready UNC students. Choose an approximate campus area,
-            never a home address or the private meeting point.
+            Campus visibility only at launch. Friends-only, invite-only, and
+            custom eligibility modes are not part of the UNC MVP.
           </p>
         </div>
-        <PublicAreaPicker
-          token={token}
-          value={values}
-          disabled={pending || locked}
-          onPick={(latitude, longitude) =>
-            setValues((old) => ({ ...old, latitude, longitude }))
-          }
-        />
-        <label>
-          Broad public place label
-          <input
-            required
-            maxLength={120}
-            value={values.publicPlace}
-            disabled={pending || locked}
-            onChange={(e) => set("publicPlace", e.target.value)}
-            placeholder="Around Polk Place"
-          />
-        </label>
-        <label>
-          Campus area · optional
-          <input
-            maxLength={80}
-            value={values.campusZone}
-            disabled={pending || locked}
-            onChange={(e) => set("campusZone", e.target.value)}
-            placeholder="Central campus"
-          />
-        </label>
-        <div className="field-pair">
-          <label>
-            Approx. latitude
-            <input
-              required
-              type="number"
-              min="35.85"
-              max="35.97"
-              step="any"
-              value={values.latitude}
-              disabled={pending || locked}
-              onChange={(e) => set("latitude", e.target.value)}
-            />
-          </label>
-          <label>
-            Approx. longitude
-            <input
-              required
-              type="number"
-              min="-79.13"
-              max="-78.98"
-              step="any"
-              value={values.longitude}
-              disabled={pending || locked}
-              onChange={(e) => set("longitude", e.target.value)}
-            />
-          </label>
-        </div>
-        <p className="help">
-          Campus visibility only. Restricted audiences and eligibility are
-          unavailable in this local increment.
-        </p>
-      </div>
+      )}
       <div className="hangout-editor-actions">
         <div ref={feedback} tabIndex={-1} aria-live="polite">
           {pending && <p role="status">Saving Hangout…</p>}
@@ -401,21 +457,40 @@ export function HangoutEditor({ token, existing, returnHref }: Props) {
             </p>
           )}
         </div>
-        <button
-          className="button"
-          type="submit"
-          disabled={pending || (existing && locked)}
-        >
-          {pending
-            ? "Saving…"
-            : locked
-              ? existing
-                ? "Review latest details"
-                : "Retry same creation"
-              : existing
-                ? "Save changes"
-                : "Create Hangout"}
-        </button>
+        {!existing && step === "details" && (
+          <button
+            className="quiet-button"
+            type="button"
+            disabled={pending || locked}
+            onClick={() => {
+              setStep("place");
+              requestAnimationFrame(() => placeLabel.current?.focus());
+            }}
+          >
+            ← Back to public area
+          </button>
+        )}
+        {!existing && step === "place" ? (
+          <button className="button" type="button" onClick={continueToDetails}>
+            Continue to details
+          </button>
+        ) : (
+          <button
+            className="button"
+            type="submit"
+            disabled={pending || (existing && locked)}
+          >
+            {pending
+              ? "Saving…"
+              : locked
+                ? existing
+                  ? "Review latest details"
+                  : "Retry same creation"
+                : existing
+                  ? "Save changes"
+                  : "Create Hangout"}
+          </button>
+        )}
         <Link
           className="quiet-button"
           href={

@@ -1,5 +1,13 @@
 # Pals design direction
 
+## Chats category correction 2026-10-16
+
+TASK-037 keeps the rounded split pane and phone route structure from TASK-036. The sidebar presents Hangouts and Messages tabs, and the page heading is visually hidden but accessible. The Hangout title links to its details; the separate details text action and poll controls are removed. Category rows come from the authorized combined attention source, with source cursor continuation when the requested category is sparse.
+
+## Chats reference layout amendment 2026-10-16
+
+TASK-036 uses the user-supplied Chats image as a visual reference for a rounded conversation shell: a compact combined sidebar, a prominent selected row, and a right thread pane with a Hangout detail strip and compact composer. On phones, the list and thread occupy separate routes with a back link. The existing icon header and unified conversation ordering follow later explicit user requests. Render only authorized names, avatars, messages and Hangout details; never copy the image's sample social data into the application. See `tasks/active/TASK-036-chat-reference-layout.md` and `agents/handoffs/TASK-036-UI.md` for scope and local evidence.
+
 ## Hangouts map amendment 2026-10-14
 
 TASK-031 local candidate uses a compact Hangouts/campus/Create row and large rounded Mapbox map with activity emoji pins, independent Today/Tomorrow/This week/Later checkboxes and an authorized public hover/focus/tap View/Join preview. The alternate list is below the map. This replaces the historical numbered-pin/persistent-rail presentation for saved discovery. Four-bit masks filter before the101-row probe with the original seven-argument RPC, projection, epoch/revalidation, grants and ranking unchanged; legacy upcoming/all remain compatible. Periods are disjoint upcoming starts in America/New_York, with Tomorrow taking precedence at the week boundary. No private instructions or GPS are stored in browse memory. Current behavior, evidence and unfinished responsive/lifecycle/staging acceptance are in `TASK-031-MAP-QA.md` (under docs/ux); historical sections below retain their original task scope.

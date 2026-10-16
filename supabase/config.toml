@@ -39,6 +39,11 @@ double_confirm_changes = true
 [auth.rate_limit]
 email_sent = 100
 
+# Operator-only MFA is enforced by the moderation database guard.
+[auth.mfa.totp]
+enroll_enabled = true
+verify_enabled = true
+
 [local_smtp]
 enabled = true
 port = 54324

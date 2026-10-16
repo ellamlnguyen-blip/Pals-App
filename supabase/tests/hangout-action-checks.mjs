@@ -1,6 +1,5 @@
 import assert from "node:assert/strict";
-import { spawn } from "node:child_process";
-import { readFileSync, existsSync } from "node:fs";
+import { readFileSync, writeFileSync, existsSync, rmSync } from "node:fs";
 import { calendarHttpChecks } from "./calendar-http-checks.mjs";
 
 // Real Next server actions over HTTP, with public session cookies only.
@@ -25,14 +24,12 @@ export async function hangoutActionChecks(owner, peer, host, member, png, sql) {
   );
   const devManifest = new URL("../../apps/web/.next/dev/server/server-reference-manifest.json", import.meta.url);
   const productionManifest = new URL("../../apps/web/.next/server/server-reference-manifest.json", import.meta.url);
-  const manifest = JSON.parse(readFileSync(existsSync(productionManifest) ? productionManifest : devManifest, "utf8"));
-  const ids = Object.fromEntries(
-    Object.entries(manifest.node).map(([id, value]) => [
-      value.exportedName,
-      id,
-    ]),
-  );
-  assert.ok(ids.createHangout && ids.editHangout && ids.searchSaved && ids.changeSavedMembership);
+  const readActionIds = () => {
+    const manifest = JSON.parse(readFileSync(existsSync(devManifest) ? devManifest : productionManifest, "utf8"));
+    return Object.fromEntries(Object.entries(manifest.node).map(([id, value]) => [value.exportedName, id]));
+  };
+  let ids = readActionIds();
+  assert.ok(ids.createHangout && ids.editHangout && ids.searchSaved);
   async function action(
     name,
     payload,
@@ -168,18 +165,17 @@ export async function hangoutActionChecks(owner, peer, host, member, png, sql) {
       0,
       "blank private instructions clear",
     );
-    assert.equal(
-      (
-        await action(
-          "editHangout",
-          { id, revision: 1, input },
-          owner.header(),
-          `/hangouts/owned/${id}?edit=1`,
-        )
-      ).result?.kind,
-      "conflict",
-      "stale action rejected",
+    const savedBeforeStale = sql(`select revision || ':' || title from public.hangouts where id='${id}'`).trim();
+    const staleStarted = Date.now();
+    const staleEdit = await action(
+      "editHangout",
+      { id, revision: 1, input },
+      owner.header(),
+      `/hangouts/owned/${id}?edit=1`,
     );
+    assert.equal(staleEdit.result?.kind, "conflict", JSON.stringify(staleEdit.result));
+    assert.ok(Date.now() - staleStarted < 10_000, "stale action returns promptly without a transaction retry loop");
+    assert.equal(sql(`select revision || ':' || title from public.hangouts where id='${id}'`).trim(), savedBeforeStale, "stale action leaves revision and content unchanged");
     assert.equal(
       (
         await action(
@@ -290,6 +286,10 @@ export async function hangoutActionChecks(owner, peer, host, member, png, sql) {
     const peerBefore = await fetch(`${origin}/hangouts/saved/${id}`, { headers: headers(peer.header()) });
     assert.equal(peerBefore.status, 200);
     assert.ok(!(await peerBefore.text()).includes("Meet by the broad path"), "nonmember detail is public only");
+    // The development server adds a route's server actions to its manifest
+    // only after that route has been compiled and visited.
+    ids = readActionIds();
+    assert.ok(ids.changeSavedMembership, "detail membership action registered");
     const joined = await actionArgs("changeSavedMembership", [id, "join"], peer.header(), `/hangouts/saved/${id}`);
     assert.equal(joined.result?.kind, "saved", joined.body.slice(0, 300));
     assert.ok(!joined.body.includes("Meet by the broad path"), "join response contains no private instructions");
@@ -297,34 +297,34 @@ export async function hangoutActionChecks(owner, peer, host, member, png, sql) {
     const peerJoinedBody = await peerJoined.text();
     assert.match(peerJoinedBody, /You&#x27;re joined|You’re joined|You're joined/);
     assert.ok(peerJoinedBody.includes("Meet by the broad path"), "joined member sees private instructions");
-    // Hold chat's message read after the first detail read, then revoke the
-    // caller. The final HTML must use a fresh sensitive detail check.
-    const chatLock = spawn("docker", ["exec", "-i", "supabase_db_pals-local", "psql", "-X", "-qAt", "-U", "postgres", "-d", "postgres", "-v", "ON_ERROR_STOP=1"], { stdio: ["pipe", "pipe", "pipe"] });
-    let lockOutput = "";
-    chatLock.stdout.on("data", (chunk) => { lockOutput += chunk; });
+    // Hold a completed real chat response before the page resumes. The DB
+    // transaction is finished, so suspension can commit before final HTML.
+    const faultFile = process.env.PALS_PROFILE_FAULT_FILE;
+    assert.ok(faultFile, "local web response hold is configured");
+    const reached = `${faultFile}.response-reached`;
+    const release = `${faultFile}.response-release`;
+    rmSync(reached, { force: true });
+    rmSync(release, { force: true });
+    writeFileSync(faultFile, JSON.stringify([{ method: "POST", path: "/rest/v1/rpc/read_hangout_messages", holdAfterResponse: true }]), { mode: 0o600 });
+    let delayedBody;
     try {
-      chatLock.stdin.write("begin; lock table private.hangout_messages in access exclusive mode; select 'chat_lock_held';\n");
-      const deadline = Date.now() + 15_000;
-      while (!lockOutput.includes("chat_lock_held") && Date.now() < deadline)
+      delayedBody = fetch(`${origin}/hangouts/saved/${id}`, { headers: headers(peer.header()) }).then((response) => response.text());
+      const deadline = Date.now() + 30_000;
+      while (!existsSync(reached) && Date.now() < deadline)
         await new Promise((resolve) => setTimeout(resolve, 25));
-      assert.ok(lockOutput.includes("chat_lock_held"), "chat barrier acquired");
-      const delayed = fetch(`${origin}/hangouts/saved/${id}`, { headers: headers(peer.header()) });
-      const chatDeadline = Date.now() + 15_000;
-      let waiting = false;
-      while (Date.now() < chatDeadline) {
-        waiting = Number(sql("select count(*) from pg_stat_activity where wait_event_type='Lock' and query ilike '%read_hangout_messages%';")) > 0;
-        if (waiting) break;
-        await new Promise((resolve) => setTimeout(resolve, 25));
-      }
-      assert.ok(waiting, "detail reached delayed chat read");
+      assert.ok(existsSync(reached), "real chat response reached local hold");
       sql(`update public.accounts set status='suspended' where id='${member.id}'`);
-      chatLock.stdin.write("commit;\n");
-      const delayedHtml = await (await delayed).text();
-      assert.ok(!delayedHtml.includes("Meet by the broad path"), "post-chat revocation hides private HTML");
-      assert.ok(!delayedHtml.includes(host.id), "post-chat revocation hides roster and source IDs");
+      assert.equal(sql(`select status from public.accounts where id='${member.id}'`).trim(), "suspended");
+      writeFileSync(release, "release", { mode: 0o600 });
+      const revokedHtml = await delayedBody;
+      assert.ok(!revokedHtml.includes("Meet by the broad path"), "post-chat revocation hides private HTML");
+      assert.ok(!revokedHtml.includes(host.id), "post-chat revocation hides roster and source IDs");
     } finally {
-      chatLock.stdin.end();
-      chatLock.kill();
+      writeFileSync(release, "release", { mode: 0o600 });
+      if (delayedBody) await delayedBody.catch(() => {});
+      writeFileSync(faultFile, "[]", { mode: 0o600 });
+      rmSync(reached, { force: true });
+      rmSync(release, { force: true });
       sql(`update public.accounts set status='active' where id='${member.id}'`);
     }
     const left = await actionArgs("changeSavedMembership", [id, "leave"], peer.header(), `/hangouts/saved/${id}`);
