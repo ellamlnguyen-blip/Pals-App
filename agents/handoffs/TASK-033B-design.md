@@ -1,8 +1,8 @@
 # TASK-033B design audit handoff
 
-Date: 2026-10-15  
-Status: Read-only design complete; ADR-0042 is **Proposed**, not accepted  
-Branch: `agent/TASK-033-chat-notification-records`  
+Date: 2026-10-15
+Status: Read-only design complete; ADR-0042 is **Proposed**, not accepted
+Branch: `agent/TASK-033-chat-notification-records`
 Baseline: published contract `a840c819`; canonical `main` remote `7242b28807ae4e4d1f1866006302ec3a4e686020` supplied by coordinator. No commit, push, gate, hosted operation, code or schema change in this stage.
 
 ## Existing coverage and precise gaps

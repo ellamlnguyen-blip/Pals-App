@@ -1,5 +1,10 @@
 # Current State
 
+## 2026-10-15 — Combined chat inbox local candidate
+
+TASK-033A application4df45ee827357b2a7d098554181e66374817282d and candidate61b4c421cea04bd9abe5322afdfb32ea89cb7ec8 are reviewed, pushed and independently remote verified. Unified native-source chat inbox with names/protected photos/emoji and two visible heading removals is locally verified on1280desktop/375narrow. Fresh review/privacy/paging/CSS fixes, final production build and13 tests passed. Actual named-disposable join→chat read/send→freshAuth persistence→leave denial and combined API denial/no-store checks passed; only new fixture cancelled. Evidence task033a/handoff records page-local ordering and timing/device limits. ADR0042 is Proposed and awaiting explicit acceptance; polls/friend-derived DM/co-host invitation/one-hour reminder/three optional settings persistence are not implemented. Parent033/032 incomplete; no hosted action or successor.
+
+
 ## 2026-10-15 — People profile cards local candidate
 
 TASK-032P11 shows circular protected primary photos (initials fallback) and requested identity details in whole-card native profile links; View profile text removed. App9ed5a7f529df567ba3edb3fa18300164f100202e and candidate1d1deb566e6599115e33d5e874d38e09a22f7a67 pushed and independently remote verified. Fresh review hidden-hydration finding fixed and confirmed; scoped checks/tests and final production webpack pass. Actual1280desktop/375narrow nooverflow, protected images loaded, whole-card fullprofile/back-focus and named disposable authorized200/no-store/anonymous+wrongrevision404 passed. Evidence/handoff TASK032P11 records exact limits. No data/schema/permission/hosted change. ParentTASK032 remains incomplete behind existing gates; no successor.
