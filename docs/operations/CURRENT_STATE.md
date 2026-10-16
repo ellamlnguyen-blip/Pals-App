@@ -1,5 +1,9 @@
 # Current State
 
+## 2026-10-16 — ADR-0045 accepted for local friendship-only DMs
+
+Ella explicitly accepted the complete [ADR-0045](../../decisions/ADR-0045-friendship-only-direct-messaging.md), including private closure of existing nonfriend/request-only conversations and fresh generations after refriending. TASK-039B server migration and fresh security review now precede TASK-039C web/API removal. The currently running local preview still uses the old request consent backend; acceptance alone changed no schema or hosted access. The remote-verified 039A UI dependency is `98327d14d6b35f333ed4afe64ac663427ca0bd5c`. Predecessor application-main/release gates remain open.
+
 ## 2026-10-16 — TASK-039A local presentation candidate
 
 The quiet Chats copy/date candidate and handoff are on remote-verified task branch `agent/TASK-039A-quiet-chat-ui` (`98327d14d6b35f333ed4afe64ac663427ca0bd5c`), based on TASK-038 source. Focused tests, two builds and authenticated 811px/375px Hangout/request-pending direct preview passed. App code is not on canonical main; the existing request-consent system remains. Proposed ADR-0045 is still unaccepted, and 039B schema/permission work has not started. Predecessor release/application-main gates remain open.

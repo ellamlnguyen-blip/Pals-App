@@ -1,6 +1,6 @@
 # ADR-0045 — Friendship-only direct messaging
 
-Status: Proposed — explicit acceptance required before schema or permission implementation
+Status: Accepted — Ella explicitly approved local implementation on 2026-10-16; hosted and integration gates remain
 Date: 2026-10-16
 Task: TASK-039B
 
@@ -8,7 +8,7 @@ Task: TASK-039B
 
 Ella now asks to remove Message requests and require acceptance of a friendship request before direct messaging. Accepted ADR-0016 originally required a first-message request; Accepted ADR-0042 extended access to either a current friendship or an independently accepted message request, including request-origin conversations that remain valid after unfriending. The current database, API, notifications and UI implement both paths. Removing only the cue would strand incoming requests and leave a nonfriend contact path available to direct API/RPC callers. The new instruction therefore changes accepted consent and retention behavior and requires an explicit new decision under AGENTS.
 
-## Proposed decision
+## Decision
 
 For the bounded disposable-local implementation, **a current accepted friendship is the sole direct-message consent source**. Both people must still satisfy every existing active-account, same-campus, bilateral People visibility/opt-in, DM and friendship gate, safety block and current authorization check. Friendship acceptance alone sends no message, creates no empty conversation and reads no prior DM. A first actual send between current friends creates an accepted pair/generation and its first message atomically; subsequent reads and sends require the friendship to remain current. The server derives the caller from `auth.uid()` and checks current relationship state under the established shared social/pair locks. A declined, pending, cancelled, removed or blocked friendship never grants DM access.
 
@@ -32,4 +32,4 @@ Hiding Message requests while retaining the old RPCs is rejected because it woul
 
 ## Acceptance
 
-Proposed. Ella must explicitly accept this complete local policy, including retirement of current nonfriend/request-only conversations, before TASK-039B implementation. Upon acceptance, ADR-0045 supersedes only the DM request/consent portions of ADR-0016 and ADR-0042; their Hangout, notification, safety and other accepted decisions continue unless specifically amended. Approval does not authorize hosted changes or waive predecessor release gates.
+Accepted for local implementation by Ella on 2026-10-16, including retirement of current nonfriend/request-only conversations. ADR-0045 supersedes only the DM request/consent portions of ADR-0016 and ADR-0042; their Hangout, notification, safety and other accepted decisions continue unless specifically amended. Approval does not authorize hosted changes or waive predecessor release gates.

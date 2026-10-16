@@ -1,5 +1,9 @@
 # Authorization
 
+## Accepted friendship-only DM local policy — 2026-10-16
+
+[ADR-0045](../../decisions/ADR-0045-friendship-only-direct-messaging.md) makes current accepted friendship a necessary DM authorization condition on all caller-bound reads, writes and retries. Request acceptance and independent consent cease to grant access; pending/nonfriend generations are retained privately as terminal evidence. The existing readiness, campus, bilateral People, DM gate, block, shared lock, RLS/no-client-grant and safety checks continue. TASK-039B must implement and test this via an additive disposable-local migration before TASK-039C removes request UI/routes. Older DM request rules below are historical where they conflict; acceptance alone changes no hosted permission.
+
 ## 2026-10-05 launch staffing amendment
 
 The current explicit user decision makes Ella Nguyen (`ella_nguyen@unc.edu`) the sole launch moderation owner. No backup moderator role or independent backup coverage is required for the initial launch. Least privilege, MFA/recovery, report response/retention handling, incident contact, immutable audit, conflict checks, RLS, blocks, suspensions and bans remain required. This staffing decision grants no hosted role or gate by itself.

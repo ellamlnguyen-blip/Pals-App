@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-16 — ADR-0045 accepted and TASK-039B/C bounded
+
+Recorded Ella's explicit local acceptance of friendship-only DM consent and split implementation into server migration/security review followed by request-free web/API. Product and engineering specs now mark the previous accepted-request path as historical where it conflicts. This documentation milestone changes no application schema, runtime permission or hosted state.
+
 ## 2026-10-16 — TASK-039A local UI milestone receipt
 
 Published and independently verified the task-branch quiet Chats presentation candidate at `98327d14d6b35f333ed4afe64ac663427ca0bd5c`. The branch removes repeated labels and idle copy, uses a date/time dot and an on-demand privacy disclosure, and preserves accessible labels and current request behavior. Focused tests, builds and responsive local renders passed. This main update is documentation only; app code and Proposed ADR-0045 remain unintegrated/unaccepted.

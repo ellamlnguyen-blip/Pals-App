@@ -1,5 +1,9 @@
 # MVP Scope
 
+## Accepted local DM correction — 2026-10-16
+
+Accepted [ADR-0045](../../decisions/ADR-0045-friendship-only-direct-messaging.md) makes a current accepted friendship the sole consent for direct messages in the bounded local candidate. Message requests and their independent acceptance path are retired; existing request-only/nonfriend conversations become privately terminal, and an ended friendship ends its current DM generation. Re-friending starts fresh on the first authorized send. The older request model below is historical where it conflicts with this decision. Local migration and web work remain under TASK-039B/C; this acceptance grants no hosted deployment or application-main integration.
+
 ## Accepted local extension — 2026-10-15
 
 Accepted ADR0042 adds single-choice chat polls, friend-or-accepted-request DMs, co-host invitation consent, one-hour in-app reminders and three default-off activity notification categories to bounded local scope. These supersede the historical poll exclusion and request-only/immediate-promotion behavior below for this implementation; hosted release gates remain. See [ADR0042](../../decisions/ADR-0042-chat-polls-notification-policy.md).

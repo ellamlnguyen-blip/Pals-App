@@ -1,12 +1,16 @@
 # Backlog
 
+## 2026-10-16 — TASK-039B server policy and TASK-039C web dependency
+
+ADR-0045 is explicitly accepted for local work. Implement and freshly security-review friendship-only DM server enforcement on a named disposable database before removing Message requests, request API/actions and notification destinations in 039C. Verify old RPC denial, private terminal history, friend close/refriend generations, two-account access, retries/races, RLS and responsive UI. No hosted or application-main integration before predecessor gates.
+
 ## 2026-10-16 — TASK-039A integration and TASK-039B consent gate
 
-The 039A local UI branch is remote-verified at `98327d14d6b35f333ed4afe64ac663427ca0bd5c`. Its source and handoff remain off canonical main behind predecessor integration gates. The current request UI and backend stay active until Proposed ADR-0045 is explicitly accepted and server authorization is migrated/tested. Render an accepted-direct fixture during final parent verification; the current disposable fixture supports only the pending-request state.
+The 039A local UI branch is remote-verified at `98327d14d6b35f333ed4afe64ac663427ca0bd5c`. Its source and handoff remain off canonical main behind predecessor integration gates. ADR-0045 is now accepted; the current request UI and backend stay active until 039B server authorization is migrated/tested and 039C removes the old paths. Render an accepted-direct fixture during final parent verification; the current disposable fixture supports only the pending-request state.
 
 ## 2026-10-16 — TASK-039 friendship-only DM decision and verification
 
-039A may remove only redundant Chats copy and restyle date/time while current message-request controls remain usable. Proposed ADR-0045 needs explicit acceptance before 039B can retire request RPCs, pending/nonfriend generations, notification destinations and UI. After acceptance, require disposable-local migration, two-account privacy/race/retry tests, fresh security review and responsive browser QA. Parent and earlier release/application-main gates remain open.
+039A removed only redundant Chats copy and restyled date/time while current message-request controls remained usable. ADR-0045 was Proposed at this initial milestone and later explicitly accepted as recorded above. Require disposable-local migration, two-account privacy/race/retry tests, fresh security review and responsive browser QA through 039B/C. Parent and earlier release/application-main gates remain open.
 
 ## 2026-10-16 — TASK-038 layout verification and integration gates
 
