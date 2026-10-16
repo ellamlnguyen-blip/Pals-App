@@ -1,5 +1,9 @@
 # NOW
 
+## 2026-10-16 — TASK-038 desktop student header alignment
+
+Ella asked for the Hangouts/Calendar/Pals navigation to share one header row with the logo and Chats/Notifications/profile buttons at 1088px. [Bounded contract](active/TASK-038-single-row-student-header.md) uses canonical main `90cce96` and exact reviewed local source `8aa18c5`. Presentation-only; predecessor TASK-032/033/034/035/036/037 release and application-main gates remain open. The coordinator publishes this contract before implementation dispatch.
+
 ## 2026-10-16 — TASK-037 categorized Chats correction
 
 Ella revised the TASK-036 image request: Hangouts and Messages should be separate tabs; remove the visible Chats heading and polls; clicking the Hangout title should open details. [TASK-037 contract](active/TASK-037-chat-categories-poll-retirement.md) and [ADR-0044](../decisions/ADR-0044-chat-categories-poll-retirement.md) bound the local correction and poll grant retirement. Start from canonical main `8d74848` and exact TASK-036 app source `1fac4f6`. TASK-032/033/034/035/036 final gates remain open; no hosted or application-main change is inferred.

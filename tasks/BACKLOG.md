@@ -1,5 +1,9 @@
 # Backlog
 
+## 2026-10-16 — TASK-038 layout verification and integration gates
+
+Implement the single-row student header at the reported 1088px width and verify responsive fit, account controls, focus and overflow at desktop/tablet/phone widths. Publish the reviewed local task branch and status. Predecessor release and application-main gates remain before integration.
+
 ## 2026-10-16 — TASK-037 verification and release gates
 
 Implement and review source-complete category tabs, accessible heading removal, Hangout-title details link and poll retirement. Verify mixed-source paging, old poll API/RPC denial, real desktop/phone rendering and source privacy. Publish a remote-verified task branch and local status. Parent TASK-032/033/034/035/036 gates remain before app-main/hosted integration.
