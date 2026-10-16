@@ -35,7 +35,7 @@ begin
   select * into snap from private.chat_attention_snapshots where owner_id=actor for update;
   refresh_time:=clock_timestamp();
   reuse_snapshot:=found and snap.expires_at>refresh_time
-   and snap.created_at>refresh_time-interval '1 second';
+   and snap.created_at>refresh_time-interval '100 milliseconds';
   if not reuse_snapshot then
    if snap.rate_window_started_at is not null
     and snap.rate_window_started_at>refresh_time-interval '1 minute'
