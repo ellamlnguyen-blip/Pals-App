@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-16 — TASK-039C reviewed local web/API candidate
+
+Recorded remote-verified friendship-only DM web source at `8ceca20fdcc017e9aad4ede1bb000846744824f4` and fresh follow-up review of three corrected privacy/safety display findings. Static and production-build checks passed. Two-account migrated browser and responsive checks remain open; this canonical-main update contains documentation only.
+
 ## 2026-10-16 — TASK-039B local server review receipt
 
 Recorded remote-verified server task tip `1692e91edf1b641843909f8bd18cb02924c36c52` and fresh security review. The review found no concrete DM authorization bypass and permits TASK-039C disposable-local dependency; four named verification gaps and all hosted/application-main gates remain. This canonical-main commit contains documentation only.

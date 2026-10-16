@@ -1,5 +1,9 @@
 # Backlog
 
+## 2026-10-16 — TASK-039C migrated browser verification
+
+Use a separately owned disposable local Supabase/Auth/API preview with the exact committed 039B migration and 039C web source. Verify two actual accounts across friend first-send/history, nonfriend and pending/declined denial, unfriend/refriend generation, block, opt-out, old URL and notification neutrality. Render loading, empty, error and authorized states at 811px/375px; inspect composer accessibility and overflow. Preserve or snapshot any existing local preview data before changing its database or runtime. TASK-039B's separately named schema-only SQL fixture cannot serve these HTTP/browser flows; the prior 3035 preview is currently unreachable. Clean full migration-ledger and remaining server edge cases also remain before final persistence.
+
 ## 2026-10-16 — TASK-039B remaining acceptance evidence
 
 The locally reviewed server source at `1692e91edf1b641843909f8bd18cb02924c36c52` can feed 039C. Before final accepted-environment persistence, test concurrent DM read versus unfriend, clean complete migration-stack application with ledger, old `dm_accepted` and friend-origin notification neutrality, and attention pagination at scale. Keep predecessor release/application-main gates open; do not infer hosted readiness from the isolated `pals_task039b` database.

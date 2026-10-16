@@ -1,5 +1,9 @@
 # Current State
 
+## 2026-10-16 — TASK-039C web/API source reviewed, browser gate open
+
+Remote-verified `agent/TASK-039C-friendship-dm-web` at `8ceca20fdcc017e9aad4ede1bb000846744824f4` removes message-request UI/API paths and uses current friendship for DM entry, atop accepted ADR-0045 and the reviewed 039B server migration. A fresh independent review's three concrete stale-display/report-confirmation findings were fixed and re-reviewed. TypeScript, touched-source ESLint, eight focused tests and webpack production build passed. The active 3035 preview was untouched and is currently unreachable; no migrated two-account or 811px/375px candidate browser verification is claimed. The separately named 039B SQL fixture DB has no two-account Auth/API stack. [Review receipt](../../agents/handoffs/TASK-039C-REVIEW.md) records evidence. This main update is documentation only; app/schema source remains on task branches, TASK-039 and predecessors remain incomplete, and no hosted gate changed.
+
 ## 2026-10-16 — TASK-039B local server source reviewed
 
 The additive friendship-only DM migration and tests are remote-verified on `agent/TASK-039B-friendship-dm-server` (`1692e91edf1b641843909f8bd18cb02924c36c52`). A fresh security reviewer found no concrete authorization bypass and cleared the exact source tip as a disposable-local dependency for 039C. Tests used separately named `pals_task039b`; the current 3035 preview and its data were not changed. Clean full migration-ledger, concurrent read/unfriend and broader notification/paging tests remain. This main entry is documentation only; app/schema code is unintegrated, no hosted gate changed, and predecessor gates remain.

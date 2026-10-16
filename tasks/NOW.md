@@ -1,5 +1,9 @@
 # NOW
 
+## 2026-10-16 — TASK-039C reviewed web/API source milestone
+
+The request-free Chats, People and DM web/API candidate is on `agent/TASK-039C-friendship-dm-web` at independently verified `8ceca20fdcc017e9aad4ede1bb000846744824f4`. A fresh reviewer found three privacy/safety display issues; all were corrected and re-reviewed with no remaining source blocker. TypeScript, touched-source lint, eight focused tests and the webpack production build passed. The active 3035 preview was not migrated or changed and is currently unreachable from this session, so two-account friend/nonfriend and 811px/375px rendered checks remain. [Review receipt](../agents/handoffs/TASK-039C-REVIEW.md) records the exact findings and gates. TASK-039 and predecessors remain incomplete; application code stays off main.
+
 ## 2026-10-16 — TASK-039B reviewed local server milestone
 
 Friendship-only server migration/tests/handoff are on `agent/TASK-039B-friendship-dm-server` at independently verified `1692e91edf1b641843909f8bd18cb02924c36c52`. The [fresh security review](../agents/handoffs/TASK-039B-SECURITY-REVIEW.md) found no concrete bypass and permits [039C](active/TASK-039C-friendship-dm-web.md) to depend on this exact tip for disposable-local web/API work. Isolation, legacy retirement, send/teardown and old-RPC denial tests passed. Concurrent read/unfriend, full clean migration ledger, broader legacy notifications and attention paging remain verification gaps. App code stays off main; no hosted gate changed.
