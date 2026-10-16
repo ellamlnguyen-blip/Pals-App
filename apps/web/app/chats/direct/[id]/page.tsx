@@ -38,7 +38,7 @@ export default async function DirectPage({
   return (
     <Frame signedIn navigation={local.state === "ready"}>
       <section className="chat-page" aria-labelledby="chats-title">
-        <h1 id="chats-title" className="chat-page-title">
+        <h1 id="chats-title" className="sr-only">
           Chats
         </h1>
         <div className="chat-shell chat-shell-thread">
@@ -49,20 +49,6 @@ export default async function DirectPage({
             />
           </aside>
           <div className="chat-detail">
-            <header className="chat-detail-header">
-              <Link className="chat-back" href="/chats">
-                ← All chats
-              </Link>
-              <div className="chat-detail-identity">
-                <span className="combined-avatar" aria-hidden="true">
-                  ✉
-                </span>
-                <div>
-                  <p>Messages</p>
-                  <h2 id="direct-title">Direct chat</h2>
-                </div>
-              </div>
-            </header>
             <DirectSafetyBoundary
               key={`${id}:${local.user?.id}`}
               id={id}

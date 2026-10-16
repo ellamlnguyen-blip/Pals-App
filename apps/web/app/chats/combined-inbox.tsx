@@ -50,10 +50,15 @@ function PeerAvatar({ row }: { row: Extract<CombinedRow, { kind: "dm" }> }) {
 export function CombinedInbox({
   actor,
   selected,
+  initialCategory,
 }: {
   actor: string;
   selected?: { kind: "hangout" | "dm"; id: string };
+  initialCategory?: "hangout" | "dm";
 }) {
+  const [category, setCategory] = useState<"hangout" | "dm">(
+    selected?.kind ?? initialCategory ?? "hangout",
+  );
   const [rows, setRows] = useState<CombinedRow[]>([]);
   const [phase, setPhase] = useState<"loading" | "ready" | "denied" | "error">(
     "loading",
@@ -92,9 +97,10 @@ export function CombinedInbox({
       const now = ++request.current;
       setRows([]);
       setPhase("loading");
-      const query = page ? `?cursor=${encodeURIComponent(page)}` : "";
+      const query = new URLSearchParams({ category });
+      if (page) query.set("cursor", page);
       try {
-        const response = await fetch(`/api/chats${query}`, {
+        const response = await fetch(`/api/chats?${query}`, {
           cache: "no-store",
           credentials: "same-origin",
           headers: { "x-pals-chat-actor": actor },
@@ -145,7 +151,7 @@ export function CombinedInbox({
         }
       }
     },
-    [actor, deny],
+    [actor, category, deny],
   );
   useEffect(() => {
     const resume = () => {
@@ -222,6 +228,13 @@ export function CombinedInbox({
       channel.close();
     };
   }, [actor, deny, mask, read]);
+  const switchCategory = (value: "hangout" | "dm") => {
+    if (value === category) return;
+    mask();
+    cursors.current = [null];
+    setPageIndex(0);
+    setCategory(value);
+  };
   const requestCount = rows.filter(
     (row) =>
       row.kind === "dm" &&
@@ -230,17 +243,36 @@ export function CombinedInbox({
   ).length;
   return (
     <div className="combined-inbox" aria-live="polite">
-      <div className="chat-list-heading">
-        <h2>Conversations</h2>
-        <p>Hangouts and messages</p>
+      <div
+        className="chat-category-tabs"
+        role="group"
+        aria-label="Conversation category"
+      >
+        <button
+          type="button"
+          aria-pressed={category === "hangout"}
+          onClick={() => switchCategory("hangout")}
+        >
+          Hangouts
+        </button>
+        <button
+          type="button"
+          aria-pressed={category === "dm"}
+          onClick={() => switchCategory("dm")}
+        >
+          Messages
+        </button>
       </div>
-      <p className="chat-list-switch">All conversations</p>
-      {phase === "ready" && requestCount > 0 && (
-        <p className="chat-request-cue">
-          {requestCount} message {requestCount === 1 ? "request" : "requests"}{" "}
-          on this page
-        </p>
-      )}
+      <button
+        className="chat-request-cue"
+        type="button"
+        onClick={() => switchCategory("dm")}
+      >
+        Message requests
+        {category === "dm" && phase === "ready" && requestCount > 0 && (
+          <span>{requestCount} on this page</span>
+        )}
+      </button>
       {phase === "loading" && <p role="status">Checking chats…</p>}
       {(phase === "error" || phase === "denied") && (
         <div role="alert">
@@ -347,15 +379,22 @@ export function CombinedInbox({
         ) : (
           <div className="chat-empty">
             <h2>
-              {pageIndex === 0
-                ? "No chats yet"
-                : "No available chats on this page"}
+              {pageIndex === 0 && !next
+                ? category === "hangout"
+                  ? "No Hangout chats yet"
+                  : "No messages yet"
+                : `No ${category === "hangout" ? "Hangout chats" : "messages"} on this page`}
             </h2>
             <p>
-              Join a Hangout or start a direct conversation to coordinate a
-              plan.
+              {next
+                ? "There are more conversations to check. Continue to the next page."
+                : category === "hangout"
+                  ? "Join a Hangout to coordinate a plan."
+                  : "Start a direct conversation to make a plan together."}
             </p>
-            <Link href="/hangouts/saved">Find Hangouts</Link>
+            <Link href={category === "hangout" ? "/hangouts/saved" : "/people"}>
+              {category === "hangout" ? "Find Hangouts" : "Find people"}
+            </Link>
           </div>
         ))}
       {phase === "ready" && (pageIndex > 0 || next) && (

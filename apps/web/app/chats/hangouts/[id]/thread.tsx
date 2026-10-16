@@ -5,7 +5,6 @@ import type { ChatMessage } from "../../../../lib/chat";
 import { fetchVisiblePage, nextPageCursors } from "./page-data";
 import { analytics } from "../../../../lib/analytics";
 import { firstRequestConfirmed } from "../../../../lib/analytics-evidence";
-import { ChatPolls } from "../../chat-polls";
 import { recordThreadAttention } from "../../thread-attention";
 import {
   AUTH_TRANSITION_CHANNEL,
@@ -194,7 +193,7 @@ export function Thread({
     [api, deny, mask, userId],
   );
 
-  // The displayed page has one forward cursor, so each poll reprojects at most
+  // The displayed page has one forward cursor and reprojects at most
   // 50 visible authors without silently walking the full conversation.
   const refreshProjection = useCallback(() => {
     if (terminalDenial.current || !visible.current || authPending.current.size)
@@ -583,12 +582,6 @@ export function Thread({
               </p>
             )}
           </form>
-          <ChatPolls
-            kind="hangout"
-            sourceId={id}
-            peerId={null}
-            actor={userId}
-          />
         </>
       )}
       <p className="chat-status" role="status" aria-live="polite">

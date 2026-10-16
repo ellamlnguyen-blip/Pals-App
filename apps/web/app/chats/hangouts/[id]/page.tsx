@@ -52,7 +52,7 @@ export default async function ThreadPage({
   return (
     <Frame signedIn navigation>
       <section className="chat-page" aria-labelledby="chats-title">
-        <h1 id="chats-title" className="chat-page-title">
+        <h1 id="chats-title" className="sr-only">
           Chats
         </h1>
         <div className="chat-shell chat-shell-thread">
@@ -79,7 +79,9 @@ export default async function ThreadPage({
                 </span>
                 <div>
                   <p>Hangout chat</p>
-                  <h2 id="thread-title">{record.title}</h2>
+                  <h2 id="thread-title">
+                    <Link href={`/hangouts/saved/${id}`}>{record.title}</Link>
+                  </h2>
                 </div>
               </div>
             </header>
@@ -96,7 +98,6 @@ export default async function ThreadPage({
                 <span aria-hidden="true"> · </span>
                 {record.public_place}
               </span>
-              <Link href={`/hangouts/saved/${id}`}>View Hangout details →</Link>
             </div>
             <Thread
               key={`${id}:${target.user.id}`}

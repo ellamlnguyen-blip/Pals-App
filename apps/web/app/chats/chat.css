@@ -409,21 +409,6 @@
 .chat-sidebar .combined-inbox {
   padding: var(--pals-space-6) var(--pals-space-4);
 }
-.chat-list-heading {
-  padding: 0 var(--pals-space-2);
-}
-.chat-list-heading h2 {
-  margin: 0;
-  font-family: var(--pals-font-display);
-  font-size: 1.6rem;
-  line-height: 1.05;
-  color: var(--pals-accent);
-}
-.chat-list-heading p {
-  margin: 0.25rem 0 1.25rem;
-  color: var(--pals-muted);
-  font-size: 0.9rem;
-}
 .chat-list-switch {
   margin-bottom: var(--pals-space-4);
   padding: 0.65rem 0.8rem;
@@ -433,11 +418,68 @@
   font-size: 0.85rem;
   font-weight: 800;
 }
-.chat-request-cue {
-  margin: -0.25rem 0.35rem 0.6rem;
+.chat-category-tabs {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.25rem;
+  margin: 0 0 var(--pals-space-4);
+  padding: 0.25rem;
+  border-radius: 999px;
+  background: #e9f3fb;
+}
+.chat-category-tabs button {
+  min-width: 0;
+  min-height: 44px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
   color: var(--pals-accent);
-  font-size: 0.8rem;
+  font: inherit;
+  font-size: 0.85rem;
   font-weight: 800;
+  cursor: pointer;
+}
+.chat-category-tabs button[aria-pressed="true"] {
+  background: var(--pals-surface-raised);
+  box-shadow: 0 1px 4px rgb(22 55 81 / 12%);
+}
+.chat-category-tabs button:focus-visible {
+  outline: 2px solid var(--pals-accent);
+  outline-offset: 2px;
+}
+.chat-detail-identity h2 a {
+  color: inherit;
+  text-decoration: none;
+}
+.chat-detail-identity h2 a:hover,
+.chat-detail-identity h2 a:focus-visible {
+  text-decoration: underline;
+}
+.chat-request-cue {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 44px;
+  margin: -0.25rem 0 0.6rem;
+  padding: 0.25rem 0.35rem;
+  border: 0;
+  border-bottom: 1px solid var(--pals-line);
+  background: transparent;
+  color: var(--pals-accent);
+  font: inherit;
+  font-size: 0.85rem;
+  text-align: left;
+  cursor: pointer;
+}
+.chat-request-cue span {
+  margin-left: 0.5rem;
+  font-size: 0.72rem;
+  color: var(--pals-muted);
+}
+.chat-request-cue:focus-visible {
+  outline: 2px solid var(--pals-accent);
+  outline-offset: 2px;
 }
 .combined-list {
   border: 0;

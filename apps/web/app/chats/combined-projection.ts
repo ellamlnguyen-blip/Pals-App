@@ -14,6 +14,26 @@ export type AttentionItem = {
   has_unread: boolean;
 };
 
+/** Walk complete source pages so a category never skips a mixed-page item. */
+export async function readCategoryPage(
+  cursor: string | null,
+  category: "dm" | "hangout" | null,
+  read: (cursor: string | null) => Promise<unknown>,
+  batchLimit = 8,
+) {
+  let next = cursor;
+  for (let batch = 0; batch < batchLimit; batch++) {
+    const page = parseAttentionPage(await read(next));
+    if (!page) return null;
+    next = page.next_cursor;
+    const items = category
+      ? page.items.filter((item) => item.source_kind === category)
+      : page.items;
+    if (items.length || !next || !category) return { items, next };
+  }
+  return { items: [] as AttentionItem[], next };
+}
+
 export function parseAttentionPage(raw: unknown): {
   items: AttentionItem[];
   has_more: boolean;

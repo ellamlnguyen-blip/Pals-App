@@ -8,7 +8,13 @@ import "./chat.css";
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
 export const fetchCache = "force-no-store";
-export default async function ChatsPage() {
+export default async function ChatsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ category?: string }>;
+}) {
+  const initialCategory =
+    (await searchParams).category === "dm" ? "dm" : "hangout";
   const account = localPeopleAvailable() ? await access() : null;
   if (!account?.user || account.state === "restricted")
     return (
@@ -22,12 +28,16 @@ export default async function ChatsPage() {
   return (
     <Frame signedIn navigation={account.state === "ready"}>
       <section className="chat-page" aria-labelledby="chats-title">
-        <h1 id="chats-title" className="chat-page-title">
+        <h1 id="chats-title" className="sr-only">
           Chats
         </h1>
         <div className="chat-shell">
           <aside className="chat-sidebar" aria-label="Conversations">
-            <CombinedInbox key={account.user.id} actor={account.user.id} />
+            <CombinedInbox
+              key={account.user.id}
+              actor={account.user.id}
+              initialCategory={initialCategory}
+            />
           </aside>
           <div className="chat-detail chat-detail-empty">
             <div className="chat-selection-empty">

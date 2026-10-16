@@ -5,8 +5,8 @@ import { localPeopleAvailable } from "../../../lib/people";
 import { primaryCardPhotoRevision } from "../../../lib/people-card-photos";
 import type { CombinedRow } from "../../chats/combined-types";
 import {
-  parseAttentionPage,
   projectAttentionItem,
+  readCategoryPage,
 } from "../../chats/combined-projection";
 
 export const dynamic = "force-dynamic";
@@ -24,19 +24,34 @@ export async function GET(request: NextRequest) {
   if (!target?.user || target.user.id !== actor || target.state !== "ready")
     return reply({ kind: "denied" }, 403);
   const cursor = request.nextUrl.searchParams.get("cursor");
+  const category = request.nextUrl.searchParams.get("category");
+  if (category !== null && category !== "hangout" && category !== "dm")
+    return reply({ kind: "invalid" }, 400);
   if (cursor !== null && (!cursor || cursor.length > 160))
     return reply({ kind: "invalid" }, 400);
   const client = target.client;
-  const result = await client.rpc("list_my_chat_attention", {
-    p_cursor: cursor,
-    p_limit: 24,
-  });
-  if (result.error) {
-    if (result.error.code === "42501")
+  // The source cursor belongs to the combined authorized order. Advance only
+  // across complete source pages; filtering before cursor advancement skips rows.
+  let page;
+  try {
+    page = await readCategoryPage(cursor, category, async (sourceCursor) => {
+      const result = await client.rpc("list_my_chat_attention", {
+        p_cursor: sourceCursor,
+        p_limit: 24,
+      });
+      if (result.error) throw result.error;
+      return result.data;
+    });
+  } catch (error) {
+    if (
+      error &&
+      typeof error === "object" &&
+      "code" in error &&
+      error.code === "42501"
+    )
       return reply({ kind: cursor ? "stale" : "denied" }, cursor ? 409 : 403);
     return reply({ kind: "error" }, 503);
   }
-  const page = parseAttentionPage(result.data);
   if (!page) return reply({ kind: "error" }, 503);
   const rows: CombinedRow[] = [];
   for (const item of page.items) {
@@ -109,5 +124,5 @@ export async function GET(request: NextRequest) {
   }
   if (current.user?.id !== actor || current.state !== "ready")
     return reply({ kind: "denied" }, 403);
-  return reply({ kind: "ok", rows, next: page.next_cursor });
+  return reply({ kind: "ok", rows, next: page.next });
 }

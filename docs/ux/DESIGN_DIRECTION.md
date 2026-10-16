@@ -1,5 +1,9 @@
 # Pals design direction
 
+## Chats category correction 2026-10-16
+
+TASK-037 keeps the rounded split pane and phone route structure from TASK-036. The sidebar presents Hangouts and Messages tabs, and the page heading is visually hidden but accessible. The Hangout title links to its details; the separate details text action and poll controls are removed. Category rows come from the authorized combined attention source, with source cursor continuation when the requested category is sparse.
+
 ## Chats reference layout amendment 2026-10-16
 
 TASK-036 uses the user-supplied Chats image as a visual reference for a rounded conversation shell: a compact combined sidebar, a prominent selected row, and a right thread pane with a Hangout detail strip and compact composer. On phones, the list and thread occupy separate routes with a back link. The existing icon header and unified conversation ordering follow later explicit user requests. Render only authorized names, avatars, messages and Hangout details; never copy the image's sample social data into the application. See `tasks/active/TASK-036-chat-reference-layout.md` and `agents/handoffs/TASK-036-UI.md` for scope and local evidence.

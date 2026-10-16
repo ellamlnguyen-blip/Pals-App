@@ -1,5 +1,9 @@
 # MVP Scope
 
+## Chat correction — 2026-10-16
+
+Accepted ADR-0044 retires polls from the bounded local chat candidate. Hangout and direct conversations use separate Chats tabs with source-bound paging; incoming requests remain in Messages. The old ADR-0042 poll extension below is historical. Retained private poll records remain pending retention review; hosted changes are not authorized by this correction.
+
 ## Accepted local extension — 2026-10-15
 
 Accepted ADR0042 adds single-choice chat polls, friend-or-accepted-request DMs, co-host invitation consent, one-hour in-app reminders and three default-off activity notification categories to bounded local scope. These supersede the historical poll exclusion and request-only/immediate-promotion behavior below for this implementation; hosted release gates remain. See [ADR0042](../../decisions/ADR-0042-chat-polls-notification-policy.md).

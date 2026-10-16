@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { dmAccess, dmErrorKind, dmHeaders, dmId } from "../../../../lib/dm";
+import { primaryCardPhotoRevision } from "../../../../lib/people-card-photos";
 export const dynamic = "force-dynamic";
 const reply = (body: object, status = 200) =>
   NextResponse.json(body, { status, headers: dmHeaders });
@@ -27,8 +28,40 @@ export async function GET(
   }
   const status = statusResult.data?.[0] ?? null;
   if (!status) return reply({ kind: "unavailable" }, 404);
+  // Identity travels with the same fresh, actor-scoped read as the thread.
+  // Never leave a server-rendered peer name behind during an auth transition.
+  let peer: { name: string; photoRevision: number | null } | null = null;
+  const detail = await target.client.rpc("get_people_detail", {
+    p_account_id: id,
+  });
+  const visible =
+    !detail.error && detail.data?.[0]?.account_id === id
+      ? detail.data[0]
+      : null;
+  if (typeof visible?.real_name === "string" && visible.real_name.trim()) {
+    const rich = await target.client.rpc("get_rich_people_detail", {
+      p_account_id: id,
+    });
+    const [freshStatus, freshDetail] = await Promise.all([
+      target.client.rpc("get_dm_consent_ui_state", { p_peer_id: id }),
+      target.client.rpc("get_people_detail", { p_account_id: id }),
+    ]);
+    if (
+      !freshStatus.error &&
+      freshStatus.data?.[0]?.generation_id === status.generation_id &&
+      !freshDetail.error &&
+      freshDetail.data?.[0]?.account_id === id &&
+      freshDetail.data[0].real_name === visible.real_name
+    )
+      peer = {
+        name: visible.real_name,
+        photoRevision: rich.error
+          ? null
+          : primaryCardPhotoRevision(id, rich.data?.[0]),
+      };
+  }
   if (status.state === "pending" && status.direction === "outgoing")
-    return reply({ kind: "ok", status, messages: [], bodyAccess: false });
+    return reply({ kind: "ok", status, messages: [], bodyAccess: false, peer });
   const messages = await target.client.rpc("read_dm_messages", {
     p_peer_id: id,
     p_generation_id: status.generation_id,
@@ -60,6 +93,7 @@ export async function GET(
     status,
     messages: bodyAccess ? (messages.data ?? []) : [],
     bodyAccess,
+    peer,
   });
 }
 export async function POST(

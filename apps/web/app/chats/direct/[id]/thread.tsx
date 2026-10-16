@@ -9,7 +9,6 @@ import {
   type AuthTransitionMessage,
 } from "../../../auth-transition";
 import { createDmAuthVerifier } from "../../dm-auth-verifier";
-import { ChatPolls } from "../../chat-polls";
 import { recordThreadAttention } from "../../thread-attention";
 
 type Read = {
@@ -17,13 +16,24 @@ type Read = {
   status?: DmStatus;
   messages?: DmMessage[];
   bodyAccess?: boolean;
+  peer?: { name: string; photoRevision: number | null } | null;
 };
 type Pending = {
   key: string;
   body: string;
   action: "reply" | "send" | "friend_send";
 };
-export function DirectThread({ id, actor }: { id: string; actor: string }) {
+export function DirectThread({
+  id,
+  actor,
+  onIdentityChange,
+}: {
+  id: string;
+  actor: string;
+  onIdentityChange: (
+    peer: { name: string; photoRevision: number | null } | null,
+  ) => void;
+}) {
   const [phase, setPhase] = useState<
     | "loading"
     | "ready"
@@ -69,6 +79,7 @@ export function DirectThread({ id, actor }: { id: string; actor: string }) {
       );
       ticket.current++;
       masked.current = true;
+      onIdentityChange(null);
       fetching.current = false;
       setMessages([]);
       setAttention(null);
@@ -85,29 +96,33 @@ export function DirectThread({ id, actor }: { id: string; actor: string }) {
       }
       setMore(false);
     },
-    [],
+    [onIdentityChange],
   );
-  const deny = useCallback((kind: "denied" | "unavailable" = "denied") => {
-    ticket.current++;
-    masked.current = true;
-    terminal.current = true;
-    fetching.current = false;
-    pendingRef.current = null;
-    draftRef.current = "";
-    setPending(null);
-    setDraft("");
-    setMessages([]);
-    setAttention(null);
-    setStatus(null);
-    setPhase(kind);
-    setBusy(false);
-    setNote(
-      kind === "denied"
-        ? "Direct chat access is unavailable."
-        : "This conversation is no longer available.",
-    );
-    setMaskedHeight(0);
-  }, []);
+  const deny = useCallback(
+    (kind: "denied" | "unavailable" = "denied") => {
+      ticket.current++;
+      masked.current = true;
+      onIdentityChange(null);
+      terminal.current = true;
+      fetching.current = false;
+      pendingRef.current = null;
+      draftRef.current = "";
+      setPending(null);
+      setDraft("");
+      setMessages([]);
+      setAttention(null);
+      setStatus(null);
+      setPhase(kind);
+      setBusy(false);
+      setNote(
+        kind === "denied"
+          ? "Direct chat access is unavailable."
+          : "This conversation is no longer available.",
+      );
+      setMaskedHeight(0);
+    },
+    [onIdentityChange],
+  );
   const read = useCallback(
     async (after: number | null, reveal = false, mark = true) => {
       if (
@@ -171,6 +186,17 @@ export function DirectThread({ id, actor }: { id: string; actor: string }) {
           setDraft("");
         }
         setMessages(data.bodyAccess ? data.messages : []);
+        onIdentityChange(
+          data.peer && typeof data.peer.name === "string"
+            ? {
+                name: data.peer.name,
+                photoRevision:
+                  typeof data.peer.photoRevision === "number"
+                    ? data.peer.photoRevision
+                    : null,
+              }
+            : null,
+        );
         if (mark && data.bodyAccess)
           setAttention({
             generation: data.status.generation_id,
@@ -212,7 +238,7 @@ export function DirectThread({ id, actor }: { id: string; actor: string }) {
         if (now === ticket.current) fetching.current = false;
       }
     },
-    [api, deny, headers, mask],
+    [api, deny, headers, mask, onIdentityChange],
   );
   useEffect(() => {
     const verify = createDmAuthVerifier({
@@ -720,15 +746,6 @@ export function DirectThread({ id, actor }: { id: string; actor: string }) {
                     </button>
                   )}
                 </div>
-                {status.state === "accepted" && (
-                  <ChatPolls
-                    key={status.generation_id}
-                    kind="dm"
-                    sourceId={status.generation_id}
-                    peerId={id}
-                    actor={actor}
-                  />
-                )}
               </>
             )}
           </>

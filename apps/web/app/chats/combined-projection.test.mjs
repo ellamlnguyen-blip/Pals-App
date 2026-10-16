@@ -81,3 +81,49 @@ test("invalid shape and mismatched fresh peer detail fail closed", () => {
     null,
   );
 });
+
+const source = [
+  { items: [dm], has_more: true, next_cursor: "one" },
+  { items: [dm, hangout], has_more: true, next_cursor: "two" },
+  { items: [hangout], has_more: false, next_cursor: null },
+];
+
+test("category reader crosses mixed pages without skipping the next source item", async () => {
+  const { readCategoryPage } = await import("./combined-projection.ts");
+  const calls = [];
+  const read = async (cursor) => {
+    calls.push(cursor);
+    return source[cursor === null ? 0 : cursor === "one" ? 1 : 2];
+  };
+  const first = await readCategoryPage(null, "hangout", read);
+  assert.deepEqual(calls, [null, "one"]);
+  assert.deepEqual(
+    first.items.map((item) => item.source_id),
+    [hangout.source_id],
+  );
+  assert.equal(first.next, "two");
+  const second = await readCategoryPage(first.next, "hangout", read);
+  assert.deepEqual(
+    second.items.map((item) => item.source_id),
+    [hangout.source_id],
+  );
+  assert.equal(second.next, null);
+});
+
+test("sparse category retains continuation after bounded empty batches", async () => {
+  const { readCategoryPage } = await import("./combined-projection.ts");
+  const read = async (cursor) => (cursor === null ? source[0] : source[1]);
+  const result = await readCategoryPage(null, "hangout", read, 1);
+  assert.deepEqual(result.items, []);
+  assert.equal(result.next, "one");
+  assert.equal(
+    (await readCategoryPage(result.next, "hangout", read, 1)).items.length,
+    1,
+  );
+  const empty = await readCategoryPage(null, "hangout", async () => ({
+    items: [dm],
+    has_more: false,
+    next_cursor: null,
+  }));
+  assert.deepEqual(empty, { items: [], next: null });
+});
