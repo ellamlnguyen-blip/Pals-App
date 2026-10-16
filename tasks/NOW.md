@@ -1,5 +1,10 @@
 # NOW
 
+## 2026-10-15 — DM and invitation local backend milestone
+
+Source4d524a03f92249e30bfd7991d3250e5293a2b15a is pushed/remote verified. Fresh reviews resolved old-create-retry consent and source-gate/campus revocation findings; committed00100/00200 migrations applied only named pals-task029-disposable with no reset. DM26/26 and cohost33/33 rollbackSQL pass, both isolated race harnesses pass. D2 harness corrected internal-functioncall tograntedunfriend. Poll/jobs backends underway; bounded D2U web integration now authorized from revieweddependency. Parent033/032 incomplete, no hosted action.
+
+
 ## 2026-10-15 — Poll and notification worker contracts
 
 Accepted ADR0042 implementation proceeds through TASK033C poll persistence after D2 consent review, and TASK033FG durable pg_cron reminder/activity delivery after E notification integration review. Contracts bound schema/auth/queue/rate/privacy/tests; no hosted change or parent completion.
