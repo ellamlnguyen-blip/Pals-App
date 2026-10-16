@@ -35,7 +35,7 @@ select generation_id as friend_generation from public.send_friend_dm_message(
 select 1/(case when (select count(*) from public.read_dm_messages(
  '39000000-0000-4000-8000-000000000002',:'friend_generation'))=1 then 1 else 0 end) as friend_body_count;
 select set_config('request.jwt.claims','{"sub":"39000000-0000-4000-8000-000000000003","role":"authenticated"}',true);
-select public.transition_friendship('39000000-0000-4000-8000-000000000001',:'declined_generation','decline') as decline_succeeded;
+select public.decline_friend_request('39000000-0000-4000-8000-000000000001',:'declined_generation') as decline_succeeded;
 select set_config('request.jwt.claims','{"sub":"39000000-0000-4000-8000-000000000001","role":"authenticated"}',true);
 select 1/(case when (select count(*) from public.get_dm_status('39000000-0000-4000-8000-000000000003'))=0 then 1 else 0 end) as no_nonfriend_status;
 select 1/(case when (select count(*) from public.list_dm_inbox())=1 then 1 else 0 end) as inbox_only_friend;
@@ -74,7 +74,7 @@ select generation_id as friendship_generation from private.friendships where low
  and high_id='39000000-0000-4000-8000-000000000002' \gset
 set local role authenticated;
 select set_config('request.jwt.claims','{"sub":"39000000-0000-4000-8000-000000000001","role":"authenticated"}',true);
-select public.transition_friendship('39000000-0000-4000-8000-000000000002',:'friendship_generation','unfriend') as unfriend_succeeded;
+select public.unfriend('39000000-0000-4000-8000-000000000002',:'friendship_generation') as unfriend_succeeded;
 select 1/(case when (select count(*) from public.read_dm_messages('39000000-0000-4000-8000-000000000002',:'restart_generation'))=0 then 1 else 0 end) as unfriend_history_hidden;
 select 1/(case when (select count(*) from public.list_dm_inbox())=0 then 1 else 0 end) as unfriend_inbox_hidden;
 do $$ begin
