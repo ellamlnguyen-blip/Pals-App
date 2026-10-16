@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-16 — TASK-040 reviewed local source receipt
+
+Recorded independently remote-verified owner Profile options removal at `04ac5440428413d77a08a80d5c7e396b1969e1d7`. Peer safety menu remains; static/build checks passed. Rendered responsive QA and application-main integration remain open. This main status update contains documentation only.
+
 ## 2026-10-16 — ADR-0046 accepted for disposable-local repair
 
 Recorded Ella's explicit acceptance of the duplicate migration-version reconciliation and activated TASK-039E. No source migration or database was changed by this documentation milestone; hosted/shared application and TASK-039D browser verification remain gated.

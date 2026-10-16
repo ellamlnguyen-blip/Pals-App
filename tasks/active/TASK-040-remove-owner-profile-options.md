@@ -1,6 +1,6 @@
 # TASK-040 — Remove owner Profile options menu
 
-Status: ready for bounded local presentation implementation after this contract is published on canonical main. Start a fresh task worktree from current canonical main plus exact reviewed local TASK-039C source `8ceca20fdcc017e9aad4ede1bb000846744824f4`; record the merge SHA before editing. TASK-039/ADR-0046 are independent and remain open.
+Status: local source candidate reviewed; authenticated responsive rendering and predecessor application-main gates remain open. Published task branch `agent/TASK-040-remove-profile-options` at independently verified `04ac5440428413d77a08a80d5c7e396b1969e1d7`, from canonical-main contract `fbdcf27` and exact reviewed TASK-039C source `8ceca20fdcc017e9aad4ede1bb000846744824f4` via merge `9849519`. ADR-0046 was separately accepted for disposable-local TASK-039E work; TASK-039/earlier gates remain open.
 
 ## User request and scope
 

@@ -1,5 +1,9 @@
 # NOW
 
+## 2026-10-16 — TASK-040 reviewed source; rendered gate open
+
+The owner `/profile` options trigger and popover are removed on `agent/TASK-040-remove-profile-options` at independently remote-verified `04ac5440428413d77a08a80d5c7e396b1969e1d7`. Coordinator source review confirmed the owner no longer supplies menu children while peer profile report/block controls remain. TypeScript, webpack build, focused lint and formatting passed. Authenticated 811px/375px owner and peer rendering remains open because the isolated worktree lacks a preview and shared 3035 is unreachable; [status handoff](../agents/handoffs/TASK-040-STATUS.md) records the gate. Application source stays off main pending predecessor integration.
+
 ## 2026-10-16 — ADR-0046 accepted for TASK-039E local repair
 
 Ella explicitly accepted [ADR-0046](../decisions/ADR-0046-duplicate-local-migration-version-reconciliation.md) for disposable-local implementation. [TASK-039E](active/TASK-039E-migration-version-reconciliation.md) may repair the duplicate migration version and run its clean-stack and upgrade-matrix checks on task-owned resources. This acceptance does not apply migrations to hosted/shared databases or complete TASK-039D; its browser and permission verification remains blocked until the repair passes independent review.

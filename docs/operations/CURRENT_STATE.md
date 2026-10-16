@@ -1,5 +1,9 @@
 # Current State
 
+## 2026-10-16 — TASK-040 local owner profile menu source
+
+Owner `/profile` options trigger and its explanatory popup are removed in `agent/TASK-040-remove-profile-options` at independently remote-verified `04ac5440428413d77a08a80d5c7e396b1969e1d7`. Shared `ProfileTopbar` renders its options only when content is supplied; peer profile safety actions remain. TypeScript and production build passed. Authenticated 811px/375px rendering and prior application-main gates remain open, so this source is not integrated into canonical main or visible in the shared preview.
+
 ## 2026-10-16 — TASK-040 owner profile cleanup bounded
 
 TASK-040 records Ella's request to remove the owner `/profile` options button and popover while preserving Edit profile and separate peer report/block controls. No application code or runtime has changed from this contract publication. The local source dependency is reviewed TASK-039C `8ceca20fdcc017e9aad4ede1bb000846744824f4`; earlier application-main gates remain open. ADR-0046 was subsequently accepted for disposable-local implementation.
