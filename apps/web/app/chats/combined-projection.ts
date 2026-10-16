@@ -1,64 +1,121 @@
 import type { CombinedRow } from "./combined-types.ts";
 import type { DmInboxRow } from "../../lib/dm";
+import { pinCue } from "../hangouts/saved/pin-cue.ts";
 
 const uuid = /^[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}$/i;
+export type AttentionItem = {
+  source_kind: "dm" | "hangout";
+  source_id: string;
+  peer_id: string | null;
+  direction: "incoming" | "outgoing" | null;
+  state: "pending" | "accepted" | "joined" | null;
+  label: string | null;
+  sort_time: string;
+  has_unread: boolean;
+};
 
-export function projectDmRow(
-  raw: unknown,
-  detail: unknown,
-  revision: number | null,
-): Extract<CombinedRow, { kind: "dm" }> | null {
+export function parseAttentionPage(raw: unknown): {
+  items: AttentionItem[];
+  has_more: boolean;
+  next_cursor: string | null;
+} | null {
   if (!raw || typeof raw !== "object") return null;
-  const row = raw as Record<string, unknown>;
+  const page = raw as Record<string, unknown>;
   if (
-    typeof row.peer_id !== "string" ||
-    !uuid.test(row.peer_id) ||
-    typeof row.generation_id !== "string" ||
-    !uuid.test(row.generation_id) ||
-    typeof row.created_at !== "string" ||
-    !Number.isFinite(Date.parse(row.created_at)) ||
-    (row.direction !== "incoming" && row.direction !== "outgoing") ||
-    (row.state !== "pending" && row.state !== "accepted") ||
-    (row.first_body !== null && typeof row.first_body !== "string")
+    !Array.isArray(page.items) ||
+    typeof page.has_more !== "boolean" ||
+    (page.next_cursor !== null &&
+      (typeof page.next_cursor !== "string" ||
+        page.next_cursor.length > 160)) ||
+    page.has_more !== (page.next_cursor !== null) ||
+    page.items.length > 24
   )
     return null;
-  const candidate =
+  const items: AttentionItem[] = [];
+  for (const value of page.items) {
+    if (!value || typeof value !== "object") return null;
+    const item = value as Record<string, unknown>;
+    if (
+      (item.source_kind !== "dm" && item.source_kind !== "hangout") ||
+      typeof item.source_id !== "string" ||
+      !uuid.test(item.source_id) ||
+      typeof item.sort_time !== "string" ||
+      !Number.isFinite(Date.parse(item.sort_time)) ||
+      typeof item.has_unread !== "boolean" ||
+      (item.peer_id !== null &&
+        (typeof item.peer_id !== "string" || !uuid.test(item.peer_id))) ||
+      (item.label !== null && typeof item.label !== "string") ||
+      (item.direction !== null &&
+        item.direction !== "incoming" &&
+        item.direction !== "outgoing") ||
+      (item.state !== null &&
+        item.state !== "pending" &&
+        item.state !== "accepted" &&
+        item.state !== "joined")
+    )
+      return null;
+    if (
+      (item.source_kind === "dm" &&
+        (!item.peer_id ||
+          !item.direction ||
+          (item.state !== "pending" && item.state !== "accepted"))) ||
+      (item.source_kind === "hangout" &&
+        (!item.label ||
+          item.peer_id !== null ||
+          item.direction !== null ||
+          item.state !== "joined"))
+    )
+      return null;
+    items.push(item as unknown as AttentionItem);
+  }
+  return {
+    items,
+    has_more: page.has_more,
+    next_cursor: page.next_cursor as string | null,
+  };
+}
+
+export function projectAttentionItem(
+  item: AttentionItem,
+  detail: unknown,
+  revision: number | null,
+): CombinedRow | null {
+  if (item.source_kind === "hangout") {
+    const title = item.label?.trim();
+    if (!title) return null;
+    return {
+      kind: "hangout",
+      id: item.source_id,
+      title,
+      emoji: pinCue({ title, description: null }),
+      entryTime: item.sort_time,
+      hasUnread: item.has_unread,
+    };
+  }
+  const peer =
     detail && typeof detail === "object"
       ? (detail as Record<string, unknown>)
       : null;
-  const name =
-    candidate?.account_id === row.peer_id &&
-    typeof candidate.real_name === "string" &&
-    candidate.real_name.trim()
-      ? candidate.real_name
-      : null;
+  if (
+    peer?.account_id !== item.peer_id ||
+    typeof peer.real_name !== "string" ||
+    !peer.real_name.trim()
+  )
+    return null;
   const dm: DmInboxRow = {
-    peer_id: row.peer_id,
-    generation_id: row.generation_id,
-    created_at: row.created_at,
-    direction: row.direction as DmInboxRow["direction"],
-    state: row.state as DmInboxRow["state"],
-    first_body:
-      name && row.state === "pending" && row.direction === "incoming"
-        ? row.first_body
-        : null,
+    peer_id: item.peer_id!,
+    generation_id: item.source_id,
+    created_at: item.sort_time,
+    direction: item.direction as "incoming" | "outgoing",
+    state: item.state as "pending" | "accepted",
+    first_body: null,
   };
   return {
     kind: "dm",
     dm,
-    name,
-    photoRevision: name ? revision : null,
-    entryTime: row.created_at,
+    name: peer.real_name,
+    photoRevision: revision,
+    entryTime: item.sort_time,
+    hasUnread: item.has_unread,
   };
-}
-
-/** Source creation time only. There is no authorized latest-message or joined-at projection. */
-export function sortCombinedPage(rows: CombinedRow[]): CombinedRow[] {
-  return [...rows].sort((a, b) => {
-    const byTime = Date.parse(b.entryTime) - Date.parse(a.entryTime);
-    if (byTime) return byTime;
-    const aId = a.kind === "dm" ? a.dm.generation_id : a.id;
-    const bId = b.kind === "dm" ? b.dm.generation_id : b.id;
-    return bId.localeCompare(aId);
-  });
 }

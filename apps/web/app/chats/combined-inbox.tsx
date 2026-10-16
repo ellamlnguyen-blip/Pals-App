@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import type { CombinedCursor, CombinedRow } from "./combined-types";
+import type { CombinedRow } from "./combined-types";
 import {
   AUTH_TRANSITION_CHANNEL,
   AUTH_TRANSITION_EVENT,
@@ -16,8 +16,7 @@ type InboxResponse = {
   kind: string;
   source?: string;
   rows?: CombinedRow[];
-  next?: CombinedCursor | null;
-  dmUnavailable?: boolean;
+  next?: string | null;
 };
 
 function PeerAvatar({ row }: { row: Extract<CombinedRow, { kind: "dm" }> }) {
@@ -54,12 +53,11 @@ export function CombinedInbox({ actor }: { actor: string }) {
     "loading",
   );
   const [message, setMessage] = useState("");
-  const [next, setNext] = useState<CombinedCursor | null>(null);
+  const [next, setNext] = useState<string | null>(null);
   const [pageIndex, setPageIndex] = useState(0);
-  const [dmUnavailable, setDmUnavailable] = useState(false);
-  const attemptedCursor = useRef<CombinedCursor | null>(null);
+  const attemptedCursor = useRef<string | null>(null);
   const attemptedIndex = useRef(0);
-  const cursors = useRef<(CombinedCursor | null)[]>([null]);
+  const cursors = useRef<(string | null)[]>([null]);
   const request = useRef(0);
   const pendingTransitions = useRef(new Set<string>());
   const settledTransitions = useRef(new Map<string, "settled" | "cancelled">());
@@ -68,7 +66,6 @@ export function CombinedInbox({ actor }: { actor: string }) {
     request.current++;
     setRows([]);
     setNext(null);
-    setDmUnavailable(false);
     setPhase("loading");
     setMessage("Checking chats…");
   }, []);
@@ -81,7 +78,7 @@ export function CombinedInbox({ actor }: { actor: string }) {
     setMessage("Chats are unavailable. Your access may have changed.");
   }, [mask]);
   const read = useCallback(
-    async (page: CombinedCursor | null = null, index = 0) => {
+    async (page: string | null = null, index = 0) => {
       if (document.hidden || pendingTransitions.current.size || denied.current)
         return;
       attemptedCursor.current = page;
@@ -89,9 +86,7 @@ export function CombinedInbox({ actor }: { actor: string }) {
       const now = ++request.current;
       setRows([]);
       setPhase("loading");
-      const query = page
-        ? `?cursor=${encodeURIComponent(JSON.stringify(page))}`
-        : "";
+      const query = page ? `?cursor=${encodeURIComponent(page)}` : "";
       try {
         const response = await fetch(`/api/chats${query}`, {
           cache: "no-store",
@@ -110,6 +105,13 @@ export function CombinedInbox({ actor }: { actor: string }) {
           deny();
           return;
         }
+        if (data.kind === "stale") {
+          cursors.current = [null];
+          if (page) {
+            void read(null, 0);
+            return;
+          }
+        }
         if (!response.ok || data.kind !== "ok") {
           setPhase("error");
           setMessage(
@@ -123,7 +125,6 @@ export function CombinedInbox({ actor }: { actor: string }) {
         setNext(data.next ?? null);
         setPageIndex(index);
         cursors.current = [...cursors.current.slice(0, index), page];
-        setDmUnavailable(Boolean(data.dmUnavailable));
         setPhase("ready");
         setMessage("");
       } catch {
@@ -217,11 +218,6 @@ export function CombinedInbox({ actor }: { actor: string }) {
   }, [actor, deny, mask, read]);
   return (
     <div className="combined-inbox" aria-live="polite">
-      {phase === "ready" && dmUnavailable && (
-        <p role="status">
-          Direct chats are unavailable right now. Hangout chats are still shown.
-        </p>
-      )}
       {phase === "loading" && <p role="status">Checking chats…</p>}
       {(phase === "error" || phase === "denied") && (
         <div role="alert">
@@ -254,10 +250,15 @@ export function CombinedInbox({ actor }: { actor: string }) {
                       </span>
                       <span className="combined-copy">
                         <strong>{row.title}</strong>
-                        <small>
-                          Hangout · {new Date(row.startsAt).toLocaleString()}
-                        </small>
+                        <small>Hangout</small>
                       </span>
+                      {row.hasUnread && (
+                        <span
+                          className="combined-unread"
+                          role="img"
+                          aria-label="Unread messages"
+                        />
+                      )}
                       <span className="combined-arrow" aria-hidden="true">
                         ›
                       </span>
@@ -278,21 +279,14 @@ export function CombinedInbox({ actor }: { actor: string }) {
                     <span className="combined-copy">
                       <strong>{row.name || "Person unavailable"}</strong>
                       <small>{description}</small>
-                      {dm.state === "pending" &&
-                        dm.direction === "incoming" &&
-                        dm.first_body && (
-                          <span className="combined-preview">
-                            {dm.first_body}
-                          </span>
-                        )}
-                      {dm.state === "pending" &&
-                        dm.direction === "incoming" &&
-                        dm.first_body === null && (
-                          <span className="combined-preview">
-                            Message access paused
-                          </span>
-                        )}
                     </span>
+                    {row.hasUnread && (
+                      <span
+                        className="combined-unread"
+                        role="img"
+                        aria-label="Unread messages"
+                      />
+                    )}
                     <span className="combined-arrow" aria-hidden="true">
                       ›
                     </span>

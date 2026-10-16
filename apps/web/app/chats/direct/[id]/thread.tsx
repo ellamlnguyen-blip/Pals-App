@@ -10,6 +10,7 @@ import {
 } from "../../../auth-transition";
 import { createDmAuthVerifier } from "../../dm-auth-verifier";
 import { ChatPolls } from "../../chat-polls";
+import { recordThreadAttention } from "../../thread-attention";
 
 type Read = {
   kind: string;
@@ -41,6 +42,13 @@ export function DirectThread({ id, actor }: { id: string; actor: string }) {
   const [page, setPage] = useState(0);
   const [more, setMore] = useState(false);
   const [maskedHeight, setMaskedHeight] = useState(0);
+  const [attention, setAttention] = useState<{
+    generation: string;
+    sequence: number | null;
+    ticket: number;
+    accepted: boolean;
+  } | null>(null);
+  const touched = useRef(false);
   const threadRef = useRef<HTMLDivElement>(null);
   const ticket = useRef(0),
     cursor = useRef<number | null>(null),
@@ -63,6 +71,7 @@ export function DirectThread({ id, actor }: { id: string; actor: string }) {
       masked.current = true;
       fetching.current = false;
       setMessages([]);
+      setAttention(null);
       setStatus(null);
       setDraft("");
       setPending(null);
@@ -88,6 +97,7 @@ export function DirectThread({ id, actor }: { id: string; actor: string }) {
     setPending(null);
     setDraft("");
     setMessages([]);
+    setAttention(null);
     setStatus(null);
     setPhase(kind);
     setBusy(false);
@@ -99,7 +109,7 @@ export function DirectThread({ id, actor }: { id: string; actor: string }) {
     setMaskedHeight(0);
   }, []);
   const read = useCallback(
-    async (after: number | null, reveal = false) => {
+    async (after: number | null, reveal = false, mark = true) => {
       if (
         document.hidden ||
         transitions.current.size ||
@@ -161,6 +171,14 @@ export function DirectThread({ id, actor }: { id: string; actor: string }) {
           setDraft("");
         }
         setMessages(data.bodyAccess ? data.messages : []);
+        if (mark && data.bodyAccess)
+          setAttention({
+            generation: data.status.generation_id,
+            sequence: data.messages.at(-1)?.sequence ?? null,
+            ticket: now,
+            accepted: data.status.state === "accepted",
+          });
+        else setAttention(null);
         setMore(data.bodyAccess && data.messages.length === 50);
         masked.current = false;
         setMaskedHeight(0);
@@ -219,6 +237,7 @@ export function DirectThread({ id, actor }: { id: string; actor: string }) {
     });
     const resume = () => {
       if (document.hidden || terminal.current) return;
+      touched.current = false;
       mask("Checking direct chat access…", true);
       if (transitions.current.size)
         for (const [token, phase] of settled.current)
@@ -279,6 +298,26 @@ export function DirectThread({ id, actor }: { id: string; actor: string }) {
       channel.close();
     };
   }, [api, deny, headers, mask, read]);
+  useEffect(() => {
+    if (
+      !attention ||
+      phase !== "ready" ||
+      masked.current ||
+      document.hidden ||
+      transitions.current.size ||
+      ticket.current !== attention.ticket
+    )
+      return;
+    const shouldTouch = attention.accepted && !touched.current;
+    if (shouldTouch) touched.current = true;
+    void recordThreadAttention(
+      actor,
+      "dm",
+      attention.generation,
+      attention.sequence,
+      shouldTouch,
+    );
+  }, [actor, attention, phase]);
   async function navigate(next: number | null, index: number) {
     if (busy || !(await read(next, true))) return;
     cursor.current = next;
@@ -333,7 +372,7 @@ export function DirectThread({ id, actor }: { id: string; actor: string }) {
     );
     const now = ticket.current;
     if (
-      !(await read(cursor.current)) ||
+      !(await read(cursor.current, false, false)) ||
       now !== ticket.current ||
       document.hidden
     ) {
@@ -422,7 +461,7 @@ export function DirectThread({ id, actor }: { id: string; actor: string }) {
       }
       const sentFromFullPage = action === "send" && messages.length === 50;
       mask("Checking updated conversation…", action === "send");
-      if (await read(action === "send" ? cursor.current : null, true))
+      if (await read(action === "send" ? cursor.current : null, true, false))
         setNote(
           action === "accept"
             ? "Request accepted."
