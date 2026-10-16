@@ -1,5 +1,10 @@
 # NOW
 
+## 2026-10-15 — Poll backend verified, web contracts ready
+
+TASK033C sourceee316f6 reviewed/appliednameddisposable SQL56/56+racespassed. Pollweb, cohostweb andnotificationactions/settings contracts published for dependency-ordered agents. D2Uwebunderway; FGjobsource fixing freshreview findings beforeDBapply. Parent033/032 incomplete; nohostedaction.
+
+
 ## 2026-10-15 — DM and invitation local backend milestone
 
 Source4d524a03f92249e30bfd7991d3250e5293a2b15a is pushed/remote verified. Fresh reviews resolved old-create-retry consent and source-gate/campus revocation findings; committed00100/00200 migrations applied only named pals-task029-disposable with no reset. DM26/26 and cohost33/33 rollbackSQL pass, both isolated race harnesses pass. D2 harness corrected internal-functioncall tograntedunfriend. Poll/jobs backends underway; bounded D2U web integration now authorized from revieweddependency. Parent033/032 incomplete, no hosted action.
