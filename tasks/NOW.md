@@ -1,5 +1,9 @@
 # NOW
 
+## 2026-10-15 — TASK-034 backend local milestone; UI dependencies ready
+
+ADR-0043 remains accepted for disposable-local implementation. TASK-034A's private hidden-relationship management fix is desktop-built, rendered and remote verified on its task branch at `92b1967923c5cc5e486ad7851d45e225352e4f12`. Reviewed C/D migrations were committed, applied and replayed only on `supabase_db_pals-task029-disposable`; focused pgTAP checks pass 28/28 and 21/21. Latest remotely verified C `918bd649fe4d8d9cd9d990b41ff86097313c1ceb`, D `c325f642c3381dbe0d1fc5459f92c4caa6d38889`. Published [TASK-034E](active/TASK-034E-chat-ui.md) and [TASK-034F](active/TASK-034F-pals-ranking-ui.md) as disjoint UI integrations. Two-session races, larger performance fixtures and authenticated browser end-to-end remain to verify. Parent TASK-034 and parents032/033 are incomplete; no hosted change or unfinished application-main integration is authorized.
+
 ## 2026-10-15 — TASK-034 requested
 
 New bounded follow-on: chat unread indicators/global recent use ordering, Pals naming, owner-relative friend/pending symbols, major/year-only filters and profile-similarity ranking. TASK-034A uses existing authorized data; TASK-034B audits and prepares a concrete Proposed ADR before new persistence/ranking implementation. Local source dependency c63992d; parents032/033 remain incomplete, no hosted or application-main authorization inferred. Coordinator publishes contracts before fresh GPT-6 Sol medium agent dispatch.

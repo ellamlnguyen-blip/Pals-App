@@ -1,5 +1,9 @@
 # Current State
 
+## 2026-10-15 — TASK-034 local backend candidate verified
+
+Pals presentation branch `92b1967923c5cc5e486ad7851d45e225352e4f12` preserves private controls for unavailable relationships. Accepted ADR-0043 C/D backend candidates are remotely verified at `918bd649fe4d8d9cd9d990b41ff86097313c1ceb` and `c325f642c3381dbe0d1fc5459f92c4caa6d38889`. Both migrations applied/replayed on named disposable local only; focused pgTAP passed 28/28 and 21/21 after fixture/SQL corrections. E/F UI integration contracts are published; source QA/races/performance and parent handoff remain. Canonical main contains task records only for unfinished TASK-034; app code stays on task branches. TASK-032/033 remain incomplete at existing finalization/hosted gates.
+
 ## 2026-10-15 — TASK-034 requested
 
 New bounded follow-on: chat unread indicators/global recent use ordering, Pals naming, owner-relative friend/pending symbols, major/year-only filters and profile-similarity ranking. TASK-034A uses existing authorized data; TASK-034B audits and prepares a concrete Proposed ADR before new persistence/ranking implementation. Local source dependency c63992d; parents032/033 remain incomplete, no hosted or application-main authorization inferred. Coordinator publishes contracts before fresh GPT-6 Sol medium agent dispatch.
