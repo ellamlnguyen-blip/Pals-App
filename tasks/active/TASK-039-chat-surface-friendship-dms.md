@@ -1,0 +1,19 @@
+# TASK-039 — Quiet Chats surface and friendship-only direct messages
+
+Status: active planning. Ella's 2026-10-16 browser comments ask to remove message requests and redundant chat labels, help and empty copy; use a dot between the Hangout date and time; and require an accepted friendship before direct messaging. The shared student header and current categorized Chats source are local candidates on `agent/TASK-038-header-row` at remote-verified `f04a4a39eda28718e06ac316a28af92f226e188a`. Canonical main before this contract is remote-verified `e63e8974e35d7409a5a8d53be44ff2d8bfe4f0fa`. TASK-032/033/034/035/036/037/038 application-main and release gates remain open; no hosted operation is authorized.
+
+## Split and dependency order
+
+- **039A, presentation:** implement the independently authorized visual cleanup on the exact TASK-038 local app source. Keep existing message-request controls and safety-critical states until the friendship-only policy is accepted and enforced; do not make a visual removal imply a server policy change. See [039A](TASK-039A-quiet-chat-ui.md).
+- **039B, access policy:** [ADR-0045](../../decisions/ADR-0045-friendship-only-direct-messaging.md) is Proposed. Its accepted-policy predecessor, ADR-0042, currently allows friendship **or** an independently accepted message request. Do not change DM authorization, stored pair state, endpoints, request notifications, or related UI paths until Ella explicitly accepts the new complete policy and 039B passes security review. See [039B](TASK-039B-friendship-only-dm.md).
+- After B, integrate its server-enforced policy and final request-free UI into the bounded local candidate, verify actual friend/nonfriend and retained-state transitions, then publish a task handoff and reviewed status. Keep unfinished application source on task branches while predecessor gates remain open.
+
+## User-visible result
+
+Chats retains Hangouts and Messages category tabs, authorized current ordering, unread dots, responsive split pane and title navigation. Conversation rows show name and image/emoji without the redundant “Hangout” or “Direct chat” subtitle. Thread headers show only avatar and name. The Hangout detail strip reads date **·** time **·** public place. The composer has an accessible name but no visible “Message” heading or persistent instructional paragraph. An empty thread is visually empty, without a large placeholder card or duplicate “No messages yet” line. Loading, denial, error, send outcomes and safety controls must still be perceivable when actionable.
+
+After approved policy enforcement, only current accepted friends may start, read or send a direct conversation. There is no Message requests cue, pending-request inbox, request acceptance/reply/withdraw path, or independent DM consent button in the student surface. Former request-only conversations are handled per accepted ADR-0045; no historical text is deleted or exposed through a new generation.
+
+## Verification and publication
+
+Read AGENTS, this contract, relevant product/authorization/messaging docs, design direction, shared tokens and installed design skill; attempt the live `usepals.com` reference. Review the exact app source dependency. For A, build/TypeScript and render Hangout and direct routes at 811px and phone width, including empty, loading, error and actionable states; verify accessible controls and no overflow. For B, require an accepted ADR first, committed additive migration and focused RPC/RLS/notification/retry/concurrency tests on the named disposable local environment, fresh security review, then web/API and two-account browser denial/allowance checks. Record screenshots and handoffs. Publish task branch(es), independently verify remote SHAs, and update docs-only canonical main status. No application-main or hosted integration until earlier gates close.

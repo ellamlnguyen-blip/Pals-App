@@ -1,5 +1,9 @@
 # Backlog
 
+## 2026-10-16 — TASK-039 friendship-only DM decision and verification
+
+039A may remove only redundant Chats copy and restyle date/time while current message-request controls remain usable. Proposed ADR-0045 needs explicit acceptance before 039B can retire request RPCs, pending/nonfriend generations, notification destinations and UI. After acceptance, require disposable-local migration, two-account privacy/race/retry tests, fresh security review and responsive browser QA. Parent and earlier release/application-main gates remain open.
+
 ## 2026-10-16 — TASK-038 layout verification and integration gates
 
 Implement the single-row student header at the reported 1088px width and verify responsive fit, account controls, focus and overflow at desktop/tablet/phone widths. Publish the reviewed local task branch and status. Predecessor release and application-main gates remain before integration.

@@ -1,5 +1,9 @@
 # Pals design direction
 
+## Quiet Chats correction proposal 2026-10-16
+
+TASK-039A retains the existing categorized split pane while removing repeated row/header labels and idle instructional copy. The Hangout strip uses date · time · place. An empty conversation leaves the message area open; send, denial, error and request states still provide meaningful feedback. Replace the permanent Hangout privacy paragraph with a compact on-demand disclosure; keep direct paused/opt-out guidance. The request cue and request-specific controls remain until the separately proposed friendship-only policy is accepted and enforced. Maintain accessible names on controls whose visible label disappears and preserve the current focus, safety and responsive behavior.
+
 ## Hangouts map amendment 2026-10-14
 
 TASK-031 local candidate uses a compact Hangouts/campus/Create row and large rounded Mapbox map with activity emoji pins, independent Today/Tomorrow/This week/Later checkboxes and an authorized public hover/focus/tap View/Join preview. The alternate list is below the map. This replaces the historical numbered-pin/persistent-rail presentation for saved discovery. Four-bit masks filter before the101-row probe with the original seven-argument RPC, projection, epoch/revalidation, grants and ranking unchanged; legacy upcoming/all remain compatible. Periods are disjoint upcoming starts in America/New_York, with Tomorrow taking precedence at the week boundary. No private instructions or GPS are stored in browse memory. Current behavior, evidence and unfinished responsive/lifecycle/staging acceptance are in `TASK-031-MAP-QA.md` (under docs/ux); historical sections below retain their original task scope.

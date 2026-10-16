@@ -1,5 +1,9 @@
 # Current State
 
+## 2026-10-16 — TASK-039 requested
+
+The current reviewed local Chats source still supports request-origin direct messages under Accepted ADR-0042. Ella now wants friendship-only DMs, no Message requests, and a quieter conversation UI. TASK-039 separates presentation cleanup from this material consent and retention change. ADR-0045 is Proposed and not accepted; no schema, RPC, notification, permission or hosted change follows from publishing it. The app source dependency is remote-verified TASK-038 `f04a4a39eda28718e06ac316a28af92f226e188a`; predecessor release/application-main gates remain open.
+
 ## 2026-10-16 — TASK-038 requested
 
 The shared student header currently wraps its primary navigation below the logo and account icons at the user's 1088px Chats viewport. TASK-038 records the presentation-only correction to align those elements in one row where space permits, from canonical main `90cce96` and reviewed TASK-037 local source `8aa18c5`. No implementation or hosted change is yet integrated; predecessor release and application-main gates remain open.

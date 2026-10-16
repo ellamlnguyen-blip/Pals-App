@@ -1,5 +1,9 @@
 # NOW
 
+## 2026-10-16 — TASK-039 quiet Chats and friendship-only DM request
+
+Ella requested the removal of Chats request cue, repeated conversation subtitles, composer/help/empty copy, and a dot between Hangout date and time. She also changed DM consent to accepted friendship only. [Parent contract](active/TASK-039-chat-surface-friendship-dms.md) splits independent [039A presentation](active/TASK-039A-quiet-chat-ui.md) from [039B access-policy implementation](active/TASK-039B-friendship-only-dm.md). [ADR-0045](../decisions/ADR-0045-friendship-only-direct-messaging.md) is Proposed because it supersedes Accepted ADR-0016/0042 DM consent. No backend permission or request-path implementation starts without Ella's explicit acceptance. The exact reviewed local app dependency is TASK-038 `f04a4a3`; TASK-032 through 038 release and application-main gates remain open. Publish this bounded contract and Proposed ADR before fresh 039A dispatch.
+
 ## 2026-10-16 — TASK-038 desktop student header alignment
 
 Ella asked for the Hangouts/Calendar/Pals navigation to share one header row with the logo and Chats/Notifications/profile buttons at 1088px. [Bounded contract](active/TASK-038-single-row-student-header.md) uses canonical main `90cce96` and exact reviewed local source `8aa18c5`. Presentation-only; predecessor TASK-032/033/034/035/036/037 release and application-main gates remain open. The coordinator publishes this contract before implementation dispatch.

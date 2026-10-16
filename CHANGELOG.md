@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-16 — TASK-039 chat correction contract and policy proposal
+
+Recorded the requested quiet Chats copy/date cleanup as a bounded presentation stage and proposed ADR-0045 for friendship-only DMs. The new consent rule would retire message requests and request-only historical access; it is not accepted or implemented by this documentation publication. No application or hosted change was made.
+
 ## 2026-10-16 — TASK-038 header alignment contract
 
 Recorded the requested single-row student header at the user's 1088px Chats viewport as a bounded presentation task with an exact reviewed local source dependency. No application or hosted change in this documentation milestone.
