@@ -1,5 +1,9 @@
 # Current State
 
+## 2026-10-16 — TASK-039D stopped at duplicate migration version
+
+The separately named disposable verification stack failed before Auth/API/browser startup because `20261014000100_notification_attention.sql` and `20261014000100_saved_hangout_period_masks.sql` share a Supabase ledger version. SQLSTATE `23505` was observed; the exact ADR-0045 DM migration did not run. Task-owned containers, volumes, network and temporary copy were cleaned; shared stacks and user-open 3035 were untouched. Remote-verified `agent/TASK-039D-migrated-browser` is `be91b3a7b30b82322e9b003f8d8604531a756240`. Proposed ADR-0046 and TASK-039E bound a correction, not accepted or implemented. TASK-039D/039 and predecessors remain incomplete.
+
 ## 2026-10-16 — TASK-039D browser gate bounded
 
 TASK-039D is a verification-only contract for exact reviewed TASK-039C source and TASK-039B migration on a separately owned disposable local Auth/API/browser stack. The existing 3035 preview and named shared/local stacks are excluded. No runtime or source result is implied by publishing this contract; TASK-039B/C and parent 039 remain incomplete.

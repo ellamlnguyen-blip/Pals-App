@@ -1,5 +1,9 @@
 # NOW
 
+## 2026-10-16 — TASK-039D blocked; ADR-0046 proposed
+
+The task-owned clean local stack stopped at two committed migrations sharing ledger version `20261014000100`; it never reached the friendship-only DM migration or browser checks. [TASK-039D handoff](../agents/handoffs/TASK-039D-MIGRATED-BROWSER.md) is on remote-verified `agent/TASK-039D-migrated-browser` at `be91b3a7b30b82322e9b003f8d8604531a756240`; task-owned runtime resources were cleaned and shared stacks untouched. [ADR-0046](../decisions/ADR-0046-duplicate-local-migration-version-reconciliation.md) and [TASK-039E](active/TASK-039E-migration-version-reconciliation.md) propose an auditable migration-history correction. ADR acceptance is required before source edits or database application. TASK-039D/039/earlier gates remain open.
+
 ## 2026-10-16 — TASK-039D isolated migrated browser verification contract
 
 [TASK-039D](active/TASK-039D-migrated-chat-browser-verification.md) bounds the remaining two-account and responsive Chats verification to a separately named disposable local stack using exact reviewed TASK-039C source `8ceca20fdcc017e9aad4ede1bb000846744824f4`. Existing 3035 and shared Supabase resources are excluded. Publish this contract before a fresh verification agent runs. TASK-039B/C and parent 039 stay incomplete; no hosted or application-main change is authorized.

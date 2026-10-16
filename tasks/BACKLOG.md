@@ -1,5 +1,9 @@
 # Backlog
 
+## 2026-10-16 — TASK-039E migration identity decision and verification
+
+Resolve the two `20261014000100` files only after explicit ADR-0046 acceptance. Verify clean ledger plus upgrades from Hangout-only, notification-only and both-body states; preserve data and grants. Until then TASK-039D cannot run the exact committed stack or claim browser QA.
+
 ## 2026-10-16 — TASK-039D acceptance gate
 
 Run the exact source and migration in a separately owned disposable Auth/API/browser preview, verify synthetic two-account friend and nonfriend access plus 811px/375px states, and record cleanup. A source-only build or schema-only SQL clone cannot close this gate. Parent TASK-039 and predecessor integration remain open.

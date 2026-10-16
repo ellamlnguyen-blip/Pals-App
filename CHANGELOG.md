@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-16 — TASK-039D blocker and migration repair proposal
+
+Recorded the clean local Supabase start failure from duplicate migration version `20261014000100` and task-owned cleanup. Proposed ADR-0046 and bounded TASK-039E for auditable repair of existing ledger states. This canonical-main documentation update changes no migration source, runtime or hosted state.
+
 ## 2026-10-16 — TASK-039D migrated browser contract
 
 Bound the remaining friendship-only DM two-account and responsive browser gate to a separately owned disposable local stack. This documentation change has no runtime, application or hosted effect.
