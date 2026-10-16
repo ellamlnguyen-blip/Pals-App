@@ -1,6 +1,6 @@
 # TASK-033FG handoff — durable notification jobs candidate
 
-Status: coordinator reports reviewed source `53719b3` applied to the named disposable database and scoped SQL passed 43/43. This agent corrected only the concurrency harness afterward; its named-disposable run passed, with zero synthetic Hangouts, users or `jobs033fg_*` sessions remaining. Cron execution, later integration and remote evidence remain coordinator gates. No hosted environment or gate was changed.
+Status: coordinator reports reviewed source `53719b3` applied to the named disposable database and scoped SQL passed 43/43. The corrected concurrency harness passed with zero synthetic rows or sessions remaining. A real scheduled `pg_cron` run also delivered one authorized reminder and a second run preserved deduplication. Later integration and remote evidence remain coordinator gates. No hosted environment or gate was changed.
 
 ## Bounded changes
 
@@ -15,7 +15,7 @@ Status: coordinator reports reviewed source `53719b3` applied to the named dispo
 
 1. Coordinator reports fresh security review, named-disposable application and transactional SQL 43/43 passed for the committed migration. The repaired harness source still needs coordinator review/commit.
 2. `PALS_TASK033_DB_CONTAINER=supabase_db_pals-task029-disposable node --test supabase/tests/notification-jobs-033fg-concurrency.integration.mjs` passed after the harness fix. The test uses prior disposable gates and did not change them.
-3. Verify the actual `cron.job` registration and one real minute execution in `cron.job_run_details` on the named disposable DB, including a source action and authorized inbox read. Do not infer delivery from registration alone.
+3. Real cron proof passed on `supabase_db_pals-task029-disposable`: registered active job 1 ran successfully at 2026-10-16 01:50 UTC (run 21) and 01:51 UTC (run 22). Two isolated synthetic students were created through Auth sign-up with local fixture email confirmation; the host created a Hangout starting in 45 minutes and the recipient joined through granted RPCs. Run 21 persisted one `hangout_start_reminder` row for the recipient under the current occurrence, and recipient `list_notifications` returned its authorized Hangout destination. Run 22 succeeded and the same recipient/occurrence still had exactly one row. No manual worker invocation was made. Private mode-0600 evidence: `/private/tmp/pals-task033fg-cron-evidence.json`. The initial cleanup statement hit the source create-request foreign key; a scoped second cleanup removed that reference and verified zero synthetic users, Hangouts, notification items, actions and occurrences remain.
 4. Coordinator owns source review, application, remote SHAs, shared task records, final backend sign-off and integration.
 
 ## Concurrent migration proof plan

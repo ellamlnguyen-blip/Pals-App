@@ -17,16 +17,16 @@ export default async function NotificationSettingsPage() {
   if (!account.user || ["signed_out", "restricted"].includes(account.state))
     return (
       <Frame>
-        <main className="account-page">
+        <div className="account-page">
           <h1>Settings unavailable</h1>
           <p>Sign in with an active account to manage notifications.</p>
           <Link href="/signin">Sign in</Link>
-        </main>
+        </div>
       </Frame>
     );
   return (
     <Frame signedIn navigation={account.state === "ready"} profileChrome>
-      <main className="account-page">
+      <div className="account-page">
         <Link className="account-back" href="/account">
           ← Back to account
         </Link>
@@ -35,7 +35,7 @@ export default async function NotificationSettingsPage() {
           <p>Choose the Hangout activity you want to hear about.</p>
         </header>
         <NotificationSettings key={account.user.id} actor={account.user.id} />
-      </main>
+      </div>
     </Frame>
   );
 }
