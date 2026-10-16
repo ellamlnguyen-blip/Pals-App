@@ -60,8 +60,8 @@ export default async function PersonPage({
   const dmRow = dmStatus?.data?.[0] as { state?: unknown } | undefined;
   const dmState: PeerDmState = dmStatus?.error
     ? "unknown"
-    : dmRow?.state === "accepted" || dmRow?.state === "pending"
-      ? dmRow.state
+    : dmRow?.state === "accepted"
+      ? "accepted"
       : dmRow
         ? "unknown"
         : "none";

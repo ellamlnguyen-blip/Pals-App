@@ -62,6 +62,14 @@ test("missing People detail keeps safe source metadata without label, photo or u
 test("invalid shape and mismatched fresh peer detail fail closed", () => {
   assert.equal(
     parseAttentionPage({
+      items: [{ ...dm, state: "pending" }],
+      has_more: false,
+      next_cursor: null,
+    }),
+    null,
+  );
+  assert.equal(
+    parseAttentionPage({
       items: [{ ...dm, has_unread: 1 }],
       has_more: false,
       next_cursor: null,

@@ -27,7 +27,8 @@ export async function GET(
     return reply({ kind }, kind === "denied" ? 403 : 400);
   }
   const status = statusResult.data?.[0] ?? null;
-  if (!status) return reply({ kind: "unavailable" }, 404);
+  if (!status || status.state !== "accepted")
+    return reply({ kind: "unavailable" }, 404);
   // Identity travels with the same fresh, actor-scoped read as the thread.
   // Never leave a server-rendered peer name behind during an auth transition.
   let peer: { name: string; photoRevision: number | null } | null = null;
@@ -60,8 +61,6 @@ export async function GET(
           : primaryCardPhotoRevision(id, rich.data?.[0]),
       };
   }
-  if (status.state === "pending" && status.direction === "outgoing")
-    return reply({ kind: "ok", status, messages: [], bodyAccess: false, peer });
   const messages = await target.client.rpc("read_dm_messages", {
     p_peer_id: id,
     p_generation_id: status.generation_id,
@@ -72,7 +71,7 @@ export async function GET(
     const kind = dmErrorKind(messages.error.code);
     return reply({ kind }, kind === "denied" ? 403 : 400);
   }
-  // A pending/accepted generation always has its first message on the first page.
+  // An accepted generation always has its first message on the first page.
   // On later pages, make a separate first-page authorization probe to distinguish an empty page from pause.
   let bodyAccess = (messages.data?.length ?? 0) > 0;
   if (!bodyAccess && after !== null) {
@@ -88,6 +87,18 @@ export async function GET(
     }
     bodyAccess = (probe.data?.length ?? 0) > 0;
   }
+  const finalStatus = await target.client.rpc("get_dm_consent_ui_state", {
+    p_peer_id: id,
+  });
+  if (
+    finalStatus.error ||
+    finalStatus.data?.[0]?.generation_id !== status.generation_id ||
+    finalStatus.data?.[0]?.state !== "accepted"
+  )
+    return reply({ kind: "unavailable" }, 404);
+  const current = await context(request, id);
+  if (!current || current.user?.id !== target.user?.id)
+    return reply({ kind: "denied" }, 403);
   return reply({
     kind: "ok",
     status,
@@ -123,22 +134,10 @@ export async function POST(
     return reply({ kind: "invalid" }, 400);
   const action = input.action;
   if (action === "block") return reply({ kind: "unavailable" }, 403);
-  if (
-    ![
-      "accept",
-      "reply",
-      "ignore",
-      "withdraw",
-      "close",
-      "send",
-      "friend_send",
-      "allow_dm",
-      "block",
-    ].includes(action)
-  )
+  if (!["close", "send"].includes(action))
     return reply({ kind: "invalid" }, 400);
   if (
-    ["reply", "send", "friend_send"].includes(action) &&
+    action === "send" &&
     (typeof input.key !== "string" ||
       !dmId.test(input.key) ||
       typeof input.body !== "string" ||
@@ -155,20 +154,11 @@ export async function POST(
     const kind = dmErrorKind(status.error.code);
     return reply({ kind }, kind === "denied" ? 403 : 400);
   }
-  if (status.data?.[0]?.generation_id !== input.generation)
-    return reply({ kind: "stale" }, 409);
-  const current = status.data[0];
   if (
-    action === "friend_send" &&
-    !(
-      (current.state === "pending" && current.friend_send_available) ||
-      (current.state === "accepted" &&
-        (current.friend_send_available || current.recipient_consented))
-    )
+    status.data?.[0]?.generation_id !== input.generation ||
+    status.data?.[0]?.state !== "accepted"
   )
-    return reply({ kind: "denied" }, 403);
-  if (action === "allow_dm" && !current.can_allow_dm)
-    return reply({ kind: "denied" }, 403);
+    return reply({ kind: "stale" }, 409);
   let result;
   if (action === "send")
     result = await target.client.rpc("send_dm_message", {
@@ -177,24 +167,13 @@ export async function POST(
       p_request_id: input.key,
       p_body: input.body,
     });
-  else if (action === "friend_send")
-    result = await target.client.rpc("send_friend_dm_message", {
-      p_peer_id: id,
-      p_request_id: input.key,
-      p_body: input.body,
-    });
-  else if (action === "allow_dm")
-    result = await target.client.rpc("accept_friend_dm_consent", {
-      p_peer_id: id,
-      p_generation_id: input.generation,
-    });
   else
     result = await target.client.rpc("transition_dm", {
       p_peer_id: id,
       p_generation_id: input.generation,
       p_action: action,
-      p_reply_request_id: action === "reply" ? input.key : null,
-      p_reply_body: action === "reply" ? input.body : null,
+      p_reply_request_id: null,
+      p_reply_body: null,
     });
   if (result.error) {
     const kind = dmErrorKind(result.error.code);

@@ -262,7 +262,7 @@
   }
 }
 
-/* One inbox, with the same row language for direct requests and Hangouts. */
+/* One inbox, with the same row language for direct chats and Hangouts. */
 .combined-inbox {
   padding-top: var(--pals-space-4);
 }
@@ -454,32 +454,6 @@
 .chat-detail-identity h2 a:hover,
 .chat-detail-identity h2 a:focus-visible {
   text-decoration: underline;
-}
-.chat-request-cue {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  min-height: 44px;
-  margin: -0.25rem 0 0.6rem;
-  padding: 0.25rem 0.35rem;
-  border: 0;
-  border-bottom: 1px solid var(--pals-line);
-  background: transparent;
-  color: var(--pals-accent);
-  font: inherit;
-  font-size: 0.85rem;
-  text-align: left;
-  cursor: pointer;
-}
-.chat-request-cue span {
-  margin-left: 0.5rem;
-  font-size: 0.72rem;
-  color: var(--pals-muted);
-}
-.chat-request-cue:focus-visible {
-  outline: 2px solid var(--pals-accent);
-  outline-offset: 2px;
 }
 .combined-list {
   border: 0;

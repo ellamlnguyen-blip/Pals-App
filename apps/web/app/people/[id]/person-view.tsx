@@ -288,21 +288,21 @@ export function PersonView({
             setFriends(badge === "friend");
           }}
         />
-        {dmState === "accepted" || dmState === "pending" ? (
+        {friends && dmState === "accepted" ? (
           <Link
             href={`/chats/direct/${detail.account_id}`}
             className="profile-outline-button"
           >
-            {dmState === "accepted" ? "Open chat" : "Check request"}
+            Open chat
           </Link>
-        ) : dmState === "unknown" ? (
+        ) : friends && dmState === "unknown" ? (
           <a
             href={`/people/${detail.account_id}`}
             className="profile-outline-button"
           >
             Check chat status
           </a>
-        ) : (
+        ) : friends ? (
           <a
             href="#request-heading"
             className="profile-outline-button"
@@ -317,7 +317,7 @@ export function PersonView({
             <ChatCircleIcon size={20} weight="bold" aria-hidden="true" />{" "}
             Message
           </a>
-        )}
+        ) : null}
       </div>
       {extras.length > 0 && richDetail && (
         <section
@@ -391,9 +391,7 @@ export function PersonView({
         actor={actor}
         state={dmState}
         friends={friends}
-        onSent={(mode) =>
-          setDmState(mode === "friend" ? "accepted" : "pending")
-        }
+        onSent={() => setDmState("accepted")}
         onUnavailable={() => {
           setDmState("unknown");
           clear(

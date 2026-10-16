@@ -89,7 +89,7 @@ export function CombinedInbox({
     setMessage("Chats are unavailable. Your access may have changed.");
   }, [mask]);
   const read = useCallback(
-    async (page: string | null = null, index = 0, refreshes = 0) => {
+    async function read(page: string | null = null, index = 0, refreshes = 0) {
       if (document.hidden || pendingTransitions.current.size || denied.current)
         return;
       attemptedCursor.current = page;
@@ -235,12 +235,6 @@ export function CombinedInbox({
     setPageIndex(0);
     setCategory(value);
   };
-  const requestCount = rows.filter(
-    (row) =>
-      row.kind === "dm" &&
-      row.dm.state === "pending" &&
-      row.dm.direction === "incoming",
-  ).length;
   return (
     <div className="combined-inbox" aria-live="polite">
       <div
@@ -263,16 +257,6 @@ export function CombinedInbox({
           Messages
         </button>
       </div>
-      <button
-        className="chat-request-cue"
-        type="button"
-        onClick={() => switchCategory("dm")}
-      >
-        Message requests
-        {category === "dm" && phase === "ready" && requestCount > 0 && (
-          <span>{requestCount} on this page</span>
-        )}
-      </button>
       {phase === "loading" && <p role="status">Checking chats…</p>}
       {(phase === "error" || phase === "denied") && (
         <div role="alert">

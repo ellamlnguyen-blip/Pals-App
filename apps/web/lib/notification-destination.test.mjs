@@ -95,3 +95,32 @@ test("friend action carries the exact notification generation", () => {
     null,
   );
 });
+
+test("retired direct request notifications have no destination", () => {
+  for (const event_code of ["dm_request", "dm_accepted"]) {
+    assert.equal(
+      notificationDestination(
+        row({
+          source_kind: "dm",
+          source_id: ids.source,
+          actor_id: ids.actor,
+          event_code,
+          label: "Unavailable",
+        }),
+      ),
+      null,
+    );
+    assert.equal(
+      notificationDestination(
+        row({
+          source_kind: "dm",
+          source_id: ids.source,
+          actor_id: ids.actor,
+          event_code,
+          label: "Old request",
+        }),
+      ),
+      null,
+    );
+  }
+});

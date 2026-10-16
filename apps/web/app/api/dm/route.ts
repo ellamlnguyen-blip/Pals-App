@@ -45,8 +45,7 @@ export async function POST(request: NextRequest) {
     input.body !== input.body.trim() ||
     input.body.length < 1 ||
     input.body.length > 2000 ||
-    (input.mode !== undefined &&
-      !["request", "friend"].includes(input.mode as string))
+    (input.mode !== undefined && input.mode !== "friend")
   )
     return reply({ kind: "invalid" }, 400);
   // A People detail is the only entry. Recheck it for this caller immediately before the RPC.
@@ -55,40 +54,22 @@ export async function POST(request: NextRequest) {
   });
   if (detail.error || !detail.data?.length)
     return reply({ kind: "denied" }, 403);
-  const mode = input.mode ?? "request";
-  if (mode === "request") {
-    const friendship = await target.client.rpc("get_friendship", {
-      p_peer_id: input.peer,
-    });
-    if (friendship.error) return reply({ kind: "error" }, 503);
-    if (friendship.data?.[0]?.state === "accepted") {
-      // An active request may still need an exact retry; the backend checks its
-      // key and payload. Do not create a fresh request for a newly formed pair.
-      const active = await target.client.rpc("get_dm_status", {
-        p_peer_id: input.peer,
-      });
-      if (active.error) return reply({ kind: "denied" }, 403);
-      if (!active.data?.length) return reply({ kind: "stale" }, 409);
-    }
-  }
-  const { data, error } =
-    mode === "friend"
-      ? await target.client.rpc("send_friend_dm_message", {
-          p_peer_id: input.peer,
-          p_request_id: input.key,
-          p_body: input.body,
-        })
-      : await target.client.rpc("create_dm_request", {
-          p_target_id: input.peer,
-          p_request_id: input.key,
-          p_body: input.body,
-        });
+  const friendship = await target.client.rpc("get_friendship", {
+    p_peer_id: input.peer,
+  });
+  if (friendship.error || friendship.data?.[0]?.state !== "accepted")
+    return reply({ kind: "denied" }, 403);
+  const { data, error } = await target.client.rpc("send_friend_dm_message", {
+    p_peer_id: input.peer,
+    p_request_id: input.key,
+    p_body: input.body,
+  });
   if (error) {
     const kind = dmErrorKind(error.code);
     return reply({ kind }, kind === "denied" ? 403 : 400);
   }
   return reply({
     kind: "ok",
-    generation: mode === "friend" ? data?.[0]?.generation_id : data,
+    generation: data?.[0]?.generation_id,
   });
 }

@@ -24,8 +24,6 @@ export function notificationDestination(
         uuid.test(row.target_id)
         ? { href: `/people/${row.actor_id}`, label: "View Pal" }
         : null;
-    case "dm_request":
-    case "dm_accepted":
     case "dm_message":
       return row.source_kind === "dm" &&
         row.actor_id &&

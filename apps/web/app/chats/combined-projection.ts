@@ -8,7 +8,7 @@ export type AttentionItem = {
   source_id: string;
   peer_id: string | null;
   direction: "incoming" | "outgoing" | null;
-  state: "pending" | "accepted" | "joined" | null;
+  state: "accepted" | "joined" | null;
   label: string | null;
   sort_time: string;
   has_unread: boolean;
@@ -69,16 +69,13 @@ export function parseAttentionPage(raw: unknown): {
         item.direction !== "incoming" &&
         item.direction !== "outgoing") ||
       (item.state !== null &&
-        item.state !== "pending" &&
         item.state !== "accepted" &&
         item.state !== "joined")
     )
       return null;
     if (
       (item.source_kind === "dm" &&
-        (!item.peer_id ||
-          !item.direction ||
-          (item.state !== "pending" && item.state !== "accepted"))) ||
+        (!item.peer_id || !item.direction || item.state !== "accepted")) ||
       (item.source_kind === "hangout" &&
         (!item.label ||
           item.peer_id !== null ||
@@ -126,7 +123,7 @@ export function projectAttentionItem(
     generation_id: item.source_id,
     created_at: item.sort_time,
     direction: item.direction as "incoming" | "outgoing",
-    state: item.state as "pending" | "accepted",
+    state: "accepted",
     first_body: null,
   };
   return {

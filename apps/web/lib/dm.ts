@@ -7,11 +7,7 @@ export type DmStatus = {
   peer_id: string;
   generation_id: string;
   direction: "incoming" | "outgoing";
-  state: "pending" | "accepted";
-  consent_origin?: "request" | "friend";
-  recipient_consented?: boolean;
-  friend_send_available?: boolean;
-  can_allow_dm?: boolean;
+  state: "accepted";
 };
 export type DmMessage = {
   message_id: string;

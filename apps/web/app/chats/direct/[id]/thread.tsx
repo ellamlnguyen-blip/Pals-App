@@ -21,7 +21,7 @@ type Read = {
 type Pending = {
   key: string;
   body: string;
-  action: "reply" | "send" | "friend_send";
+  action: "send";
 };
 export function DirectThread({
   id,
@@ -35,13 +35,7 @@ export function DirectThread({
   ) => void;
 }) {
   const [phase, setPhase] = useState<
-    | "loading"
-    | "ready"
-    | "paused"
-    | "waiting"
-    | "denied"
-    | "error"
-    | "unavailable"
+    "loading" | "ready" | "denied" | "error" | "unavailable"
   >("loading");
   const [status, setStatus] = useState<DmStatus | null>(null);
   const [messages, setMessages] = useState<DmMessage[]>([]);
@@ -179,12 +173,7 @@ export function DirectThread({
           return false;
         }
         setStatus(data.status);
-        if (!data.bodyAccess && data.status.direction !== "outgoing") {
-          pendingRef.current = null;
-          draftRef.current = "";
-          setPending(null);
-          setDraft("");
-        }
+
         setMessages(data.bodyAccess ? data.messages : []);
         onIdentityChange(
           data.peer && typeof data.peer.name === "string"
@@ -208,12 +197,11 @@ export function DirectThread({
         setMore(data.bodyAccess && data.messages.length === 50);
         masked.current = false;
         setMaskedHeight(0);
-        if (
-          data.status.state === "pending" &&
-          data.status.direction === "outgoing"
-        )
-          setPhase("waiting");
-        else setPhase(data.bodyAccess ? "ready" : "paused");
+        if (data.status.state !== "accepted" || !data.bodyAccess) {
+          deny("unavailable");
+          return false;
+        }
+        setPhase("ready");
         if (reveal) {
           setDraft(draftRef.current);
           setPending(pendingRef.current);
@@ -342,17 +330,7 @@ export function DirectThread({
     cursor.current = next;
     setPage(index);
   }
-  async function mutate(
-    action:
-      | "accept"
-      | "reply"
-      | "ignore"
-      | "withdraw"
-      | "close"
-      | "send"
-      | "friend_send"
-      | "allow_dm",
-  ) {
+  async function mutate(action: "close" | "send") {
     if (
       !status ||
       busy ||
@@ -363,20 +341,18 @@ export function DirectThread({
       return;
     const current = status;
     const body = pendingRef.current?.body ?? draftRef.current.trim();
-    if (
-      ["reply", "send", "friend_send"].includes(action) &&
-      (!body || body.length > 2000)
-    ) {
+    if (action === "send" && (!body || body.length > 2000)) {
       setNote("Write 1 to 2000 characters.");
       return;
     }
-    const item = ["reply", "send", "friend_send"].includes(action)
-      ? (pendingRef.current ?? {
-          key: crypto.randomUUID(),
-          body,
-          action: action as "reply" | "send" | "friend_send",
-        })
-      : null;
+    const item =
+      action === "send"
+        ? (pendingRef.current ?? {
+            key: crypto.randomUUID(),
+            body,
+            action: "send",
+          })
+        : null;
     if (item && item.action !== action) {
       setNote("Finish the original retry before another message.");
       return;
@@ -403,29 +379,8 @@ export function DirectThread({
       setBusy(false);
       return;
     }
-    if (
-      (action === "reply" || action === "send" || action === "accept") &&
-      phase !== "ready"
-    ) {
-      setNote("Message access is paused. Try again after eligibility returns.");
-      setBusy(false);
-      return;
-    }
-    if (
-      action === "friend_send" &&
-      !(
-        (status.state === "pending" && status.friend_send_available) ||
-        (status.state === "accepted" &&
-          (status.friend_send_available || status.recipient_consented) &&
-          phase === "ready")
-      )
-    ) {
-      setNote("Friendship or message access changed. Reload before acting.");
-      setBusy(false);
-      return;
-    }
-    if (action === "allow_dm" && !status.can_allow_dm) {
-      setNote("Only the original recipient can allow this direct chat.");
+    if (action === "send" && phase !== "ready") {
+      setNote("Message access changed. Reload before sending.");
       setBusy(false);
       return;
     }
@@ -474,7 +429,7 @@ export function DirectThread({
         draftRef.current = "";
         setDraft("");
       }
-      if (["ignore", "withdraw", "close"].includes(action)) {
+      if (action === "close") {
         deny("unavailable");
         return;
       }
@@ -482,13 +437,9 @@ export function DirectThread({
       mask("Checking updated conversation…", action === "send");
       if (await read(action === "send" ? cursor.current : null, true, false))
         setNote(
-          action === "accept"
-            ? "Request accepted."
-            : action === "allow_dm"
-              ? "Direct chat allowed. This consent continues if the friendship ends."
-              : sentFromFullPage
-                ? "Message sent. Load newer messages to see it."
-                : "Message sent.",
+          sentFromFullPage
+            ? "Message sent. Load newer messages to see it."
+            : "Message sent.",
         );
     } catch {
       if (now === ticket.current)
@@ -525,229 +476,89 @@ export function DirectThread({
               Try again
             </button>
           )}
-          <Link href="/chats">Back to Chats</Link>
+          <Link href="/people">Return to Pals</Link>
         </div>
       )}
-      {status &&
-        (phase === "ready" || phase === "waiting" || phase === "paused") && (
-          <>
-            {phase === "waiting" && (
-              <div className="chat-empty">
-                <h2>Waiting for their choice</h2>
-                <p>
-                  Your first message is in their Requests. They can accept or
-                  reply. If you are now Pals, your next message can open this
-                  chat.
-                </p>
-                {status.friend_send_available && (
-                  <div className="chat-composer">
-                    <label className="sr-only" htmlFor="dm-friend-draft">
-                      Message as Pals
-                    </label>
-                    <textarea
-                      id="dm-friend-draft"
-                      value={pending?.body ?? draft}
-                      disabled={busy || !!pending}
-                      maxLength={2000}
-                      onChange={(event) => {
-                        draftRef.current = event.target.value;
-                        setDraft(event.target.value);
-                      }}
-                    />
-                    <button
-                      className="button"
-                      disabled={busy}
-                      onClick={() => void mutate("friend_send")}
-                    >
-                      {pending ? "Retry same message" : "Send and open chat"}
-                    </button>
-                  </div>
-                )}
-                <button
-                  className="quiet-button"
-                  disabled={busy || !!pending}
-                  onClick={() => void mutate("withdraw")}
-                >
-                  Withdraw request
-                </button>
-              </div>
-            )}
-            {phase === "paused" && (
-              <div className="chat-empty">
-                <h2>Message access paused</h2>
-                <p>
-                  A current access condition changed. All message text,
-                  including your own, is hidden. Access can resume when its
-                  current conditions return. Ending it is permanent for this
-                  conversation.
-                </p>
-                {status.can_allow_dm && (
-                  <button
-                    className="button"
-                    disabled={busy}
-                    onClick={() => void mutate("allow_dm")}
-                  >
-                    Allow DM independently of friendship
-                  </button>
-                )}
-                <button
-                  className="quiet-button"
-                  disabled={busy || !!pending}
-                  onClick={() =>
-                    void mutate(
-                      status.state === "accepted"
-                        ? "close"
-                        : status.direction === "incoming"
-                          ? "ignore"
-                          : "withdraw",
-                    )
-                  }
-                >
-                  {status.state === "accepted"
-                    ? "Close chat"
-                    : status.direction === "incoming"
-                      ? "Ignore request"
-                      : "Withdraw request"}
-                </button>
-              </div>
-            )}
-            {phase === "ready" && (
-              <>
-                {status.can_allow_dm && (
-                  <p>
-                    <button
-                      className="quiet-button"
-                      disabled={busy}
-                      onClick={() => void mutate("allow_dm")}
-                    >
-                      Allow DM if friendship ends
-                    </button>
-                  </p>
-                )}
-                <h2>
-                  {status.state === "pending" ? "Request" : "Conversation"}
-                </h2>
-                <ol className="chat-messages">
-                  {messages.map((message) => (
-                    <li
-                      key={message.message_id}
-                      className={message.mine ? "chat-mine" : ""}
-                    >
-                      <div className="chat-meta">
-                        <strong>{message.mine ? "You" : "Peer"}</strong>
-                        <time dateTime={message.created_at}>
-                          {new Date(message.created_at).toLocaleString()}
-                        </time>
-                      </div>
-                      <p>{message.body}</p>
-                    </li>
-                  ))}
-                </ol>
-                {status.state === "accepted" && (
-                  <div className="chat-page-actions">
-                    <button
-                      className="quiet-button"
-                      disabled={page === 0 || busy}
-                      onClick={() =>
-                        void navigate(cursors.current[page - 1], page - 1)
-                      }
-                    >
-                      Previous
-                    </button>
-                    <button
-                      className="quiet-button"
-                      disabled={!more || busy}
-                      onClick={() => {
-                        const next = messages.at(-1)?.sequence;
-                        if (next) {
-                          cursors.current[page + 1] = next;
-                          void navigate(next, page + 1);
-                        }
-                      }}
-                    >
-                      Load newer
-                    </button>
-                  </div>
-                )}
-                {status.state === "pending" && (
-                  <p>
-                    Accepting or replying opens a direct chat. Ignoring ends
-                    this request.
-                  </p>
-                )}
-                <div className="chat-composer">
-                  <label className="sr-only" htmlFor="dm-draft">
-                    {status.state === "pending"
-                      ? "Reply and accept"
-                      : "Message"}
-                  </label>
-                  <textarea
-                    id="dm-draft"
-                    value={pending?.body ?? draft}
-                    disabled={busy || !!pending}
-                    maxLength={2000}
-                    onChange={(event) => {
-                      draftRef.current = event.target.value;
-                      setDraft(event.target.value);
-                    }}
-                  />
-                  <div className="chat-page-actions">
-                    {status.state === "pending" && (
-                      <button
-                        className="quiet-button"
-                        disabled={busy || !!pending}
-                        onClick={() => void mutate("accept")}
-                      >
-                        Accept without reply
-                      </button>
-                    )}
-                    <button
-                      className="button"
-                      disabled={busy}
-                      onClick={() =>
-                        void mutate(
-                          pending?.action ??
-                            (status.state === "pending" ? "reply" : "send"),
-                        )
-                      }
-                    >
-                      {pending
-                        ? "Retry same message"
-                        : status.state === "pending"
-                          ? "Reply and accept"
-                          : "Send message"}
-                    </button>
-                  </div>
+      {status && phase === "ready" && (
+        <>
+          <ol className="chat-messages">
+            {messages.map((message) => (
+              <li
+                key={message.message_id}
+                className={message.mine ? "chat-mine" : ""}
+              >
+                <div className="chat-meta">
+                  <strong>{message.mine ? "You" : "Peer"}</strong>
+                  <time dateTime={message.created_at}>
+                    {new Date(message.created_at).toLocaleString()}
+                  </time>
                 </div>
-                <div className="chat-page-actions dm-management">
-                  {status.state === "pending" ? (
-                    <button
-                      className="quiet-button"
-                      disabled={busy || !!pending}
-                      onClick={() => void mutate("ignore")}
-                    >
-                      Ignore request
-                    </button>
-                  ) : (
-                    <button
-                      className="quiet-button"
-                      disabled={busy || !!pending}
-                      onClick={() => void mutate("close")}
-                    >
-                      Close chat
-                    </button>
-                  )}
-                </div>
-              </>
-            )}
-          </>
-        )}
-      {note &&
-        (phase === "ready" || phase === "waiting" || phase === "paused") && (
-          <p className="chat-status" role="status">
-            {note}
-          </p>
-        )}
+                <p>{message.body}</p>
+              </li>
+            ))}
+          </ol>
+          <div className="chat-page-actions">
+            <button
+              className="quiet-button"
+              disabled={page === 0 || busy}
+              onClick={() => void navigate(cursors.current[page - 1], page - 1)}
+            >
+              Previous
+            </button>
+            <button
+              className="quiet-button"
+              disabled={!more || busy}
+              onClick={() => {
+                const next = messages.at(-1)?.sequence;
+                if (next) {
+                  cursors.current[page + 1] = next;
+                  void navigate(next, page + 1);
+                }
+              }}
+            >
+              Load newer
+            </button>
+          </div>
+          <div className="chat-composer">
+            <label className="sr-only" htmlFor="dm-draft">
+              Message
+            </label>
+            <textarea
+              id="dm-draft"
+              value={pending?.body ?? draft}
+              disabled={busy || !!pending}
+              maxLength={2000}
+              onChange={(event) => {
+                draftRef.current = event.target.value;
+                setDraft(event.target.value);
+              }}
+            />
+            <div className="chat-page-actions">
+              <button
+                className="button"
+                disabled={busy}
+                onClick={() => void mutate("send")}
+              >
+                {pending ? "Retry same message" : "Send message"}
+              </button>
+            </div>
+          </div>
+          <div className="chat-page-actions dm-management">
+            <button
+              className="quiet-button"
+              disabled={busy || !!pending}
+              onClick={() => void mutate("close")}
+            >
+              Close chat
+            </button>
+          </div>
+        </>
+      )}
+      {note && phase === "ready" && (
+        <p className="chat-status" role="status">
+          {note}
+        </p>
+      )}
     </div>
   );
 }
