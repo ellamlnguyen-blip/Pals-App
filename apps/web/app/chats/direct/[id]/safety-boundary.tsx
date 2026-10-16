@@ -66,7 +66,6 @@ export function DirectSafetyBoundary({
         actor={actor}
         target={{ mode: "user", id }}
         allowBlock
-        concealTargetId={!peer}
         onBlockConfirmed={() => {
           setPeer(null);
           setCleared(true);
