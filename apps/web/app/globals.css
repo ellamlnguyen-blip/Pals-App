@@ -629,7 +629,7 @@ h3,
   }
 }
 
-@media (max-width: 1100px) {
+@media (max-width: 720px) {
   .student-header {
     grid-template-columns: 90px minmax(0, 1fr) auto;
     padding-top: 8px;
