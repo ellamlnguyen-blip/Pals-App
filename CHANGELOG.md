@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-16 — TASK-040 owner profile menu contract
+
+Bound Ella's owner-only Profile options removal to a presentation task that preserves peer report/block and existing safety/visibility destinations. Documentation only; application and hosted state are unchanged.
+
 ## 2026-10-16 — TASK-039D blocker and migration repair proposal
 
 Recorded the clean local Supabase start failure from duplicate migration version `20261014000100` and task-owned cleanup. Proposed ADR-0046 and bounded TASK-039E for auditable repair of existing ledger states. This canonical-main documentation update changes no migration source, runtime or hosted state.

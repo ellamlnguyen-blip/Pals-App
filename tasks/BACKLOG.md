@@ -1,5 +1,9 @@
 # Backlog
 
+## 2026-10-16 — TASK-040 presentation and integration gates
+
+Remove only the owner profile options trigger/popup; preserve peer safety and existing privacy/notification/footer routes. Verify owner and peer screens at 811px/375px, build/TypeScript, accessible focus order and no overflow. Publish task handoff/branch; predecessor application-main gates remain before integration.
+
 ## 2026-10-16 — TASK-039E migration identity decision and verification
 
 Resolve the two `20261014000100` files only after explicit ADR-0046 acceptance. Verify clean ledger plus upgrades from Hangout-only, notification-only and both-body states; preserve data and grants. Until then TASK-039D cannot run the exact committed stack or claim browser QA.

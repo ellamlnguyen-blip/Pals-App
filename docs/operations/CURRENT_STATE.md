@@ -1,5 +1,9 @@
 # Current State
 
+## 2026-10-16 — TASK-040 owner profile cleanup bounded
+
+TASK-040 records Ella's request to remove the owner `/profile` options button and popover while preserving Edit profile and separate peer report/block controls. No application code or runtime has changed from this contract publication. The local source dependency is reviewed TASK-039C `8ceca20fdcc017e9aad4ede1bb000846744824f4`; earlier application-main gates and Proposed ADR-0046 remain open.
+
 ## 2026-10-16 — TASK-039D stopped at duplicate migration version
 
 The separately named disposable verification stack failed before Auth/API/browser startup because `20261014000100_notification_attention.sql` and `20261014000100_saved_hangout_period_masks.sql` share a Supabase ledger version. SQLSTATE `23505` was observed; the exact ADR-0045 DM migration did not run. Task-owned containers, volumes, network and temporary copy were cleaned; shared stacks and user-open 3035 were untouched. Remote-verified `agent/TASK-039D-migrated-browser` is `be91b3a7b30b82322e9b003f8d8604531a756240`. Proposed ADR-0046 and TASK-039E bound a correction, not accepted or implemented. TASK-039D/039 and predecessors remain incomplete.

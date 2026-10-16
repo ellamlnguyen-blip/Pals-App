@@ -1,5 +1,9 @@
 # NOW
 
+## 2026-10-16 — TASK-040 owner Profile options removal
+
+Ella asked to remove the `Profile options` button and its whole explanatory popover from her own `/profile` page. [TASK-040](active/TASK-040-remove-owner-profile-options.md) keeps the back/Edit controls and peer-profile report/block menu. Existing Pals visibility, Notifications, Safety and Account routes remain available through their other entry points. The exact reviewed local UI source dependency is TASK-039C `8ceca20fdcc017e9aad4ede1bb000846744824f4`. This contract changes no app code or pending ADR-0046 decision; earlier integration/release gates remain.
+
 ## 2026-10-16 — TASK-039D blocked; ADR-0046 proposed
 
 The task-owned clean local stack stopped at two committed migrations sharing ledger version `20261014000100`; it never reached the friendship-only DM migration or browser checks. [TASK-039D handoff](../agents/handoffs/TASK-039D-MIGRATED-BROWSER.md) is on remote-verified `agent/TASK-039D-migrated-browser` at `be91b3a7b30b82322e9b003f8d8604531a756240`; task-owned runtime resources were cleaned and shared stacks untouched. [ADR-0046](../decisions/ADR-0046-duplicate-local-migration-version-reconciliation.md) and [TASK-039E](active/TASK-039E-migration-version-reconciliation.md) propose an auditable migration-history correction. ADR acceptance is required before source edits or database application. TASK-039D/039/earlier gates remain open.
