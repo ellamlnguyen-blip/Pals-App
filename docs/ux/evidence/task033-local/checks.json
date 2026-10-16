@@ -1,0 +1,113 @@
+{
+  "environment": "supabase_db_pals-task029-disposable",
+  "consent": true,
+  "pollsPersisted": 1,
+  "api": [
+    {
+      "label": "valid",
+      "status": 200,
+      "cache": "private, no-store",
+      "kind": "ok"
+    },
+    {
+      "label": "wrong-actor",
+      "status": 403,
+      "cache": "private, no-store",
+      "kind": "denied"
+    },
+    {
+      "label": "signed-out",
+      "status": 403,
+      "cache": "private, no-store",
+      "kind": "denied"
+    }
+  ],
+  "preferences": [
+    {
+      "category": "campus_new_hangout",
+      "enabled": true
+    },
+    {
+      "category": "friend_created_hangout",
+      "enabled": true
+    },
+    {
+      "category": "friend_joined_hangout",
+      "enabled": true
+    },
+    {
+      "category": "hangout_updates",
+      "enabled": true
+    },
+    {
+      "category": "host_activity",
+      "enabled": true
+    },
+    {
+      "category": "messages",
+      "enabled": true
+    },
+    {
+      "category": "social_requests",
+      "enabled": true
+    }
+  ],
+  "notificationCodes": [
+    "cohost_invitation",
+    "friend_request",
+    "hangout_start_reminder",
+    "campus_new_hangout",
+    "dm_message",
+    "hangout_edited",
+    "hangout_edited",
+    "hangout_edited",
+    "hangout_edited",
+    "hangout_joined",
+    "hangout_joined"
+  ],
+  "createdAt": "2026-10-16T02:07:25.854Z",
+  "decline": {
+    "friendshipRemoved": true,
+    "friendshipSuppressed": true,
+    "cohostState": "declined",
+    "friendOnlyDmDenied": "42501"
+  },
+  "cohostAccepted": "accepted",
+  "peerNotificationCodes": [
+    "dm_message",
+    "hangout_chat_message",
+    "hangout_joined",
+    "hangout_start_reminder"
+  ],
+  "afterLeave": {
+    "pollApiStatus": 403,
+    "messageReadError": "42501"
+  },
+  "browserChecks": [
+    "friend accept/decline",
+    "cohost accept/decline",
+    "join/chat/send",
+    "poll create/peer vote/vote change/close",
+    "friend DM send/poll",
+    "unfriend mask",
+    "independent consent restore",
+    "three settings persisted/reload"
+  ],
+  "viewport": {
+    "width": 375,
+    "noHorizontalOverflow": true
+  },
+  "cleanup": {
+    "at": "2026-10-16T02:19:05.740Z",
+    "hangouts": [
+      "cancelled",
+      "cancelled",
+      "cancelled"
+    ],
+    "dmClosed": true,
+    "threePrefsRestoredDefaultOff": true,
+    "originalFourPrefsPreserved": true,
+    "syntheticPeopleHidden": true,
+    "retainedPrivateTestEvidence": true
+  }
+}

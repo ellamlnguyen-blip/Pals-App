@@ -1,5 +1,9 @@
 # Notifications
 
+## TASK-033 reviewed local candidate
+
+Current local source includes inline friend request accept/decline and co-host invitation responses, existing join/message/friend acceptance events, durable one-hour start reminders, and independent default-off campus_new_hangout/friend_created_hangout/friend_joined_hangout settings at /account/notifications. The original four preferences are preserved. A one-minute pg_cron worker performs bounded durable fan-out with current eligibility, preference and block checks; browser visits do not generate notifications. Schedule revisions distinguish A→B→A occurrences and old occurrence rows stay neutral. Activity precedence deduplicates an occurrence among opted-in categories. Direct promotion is revoked; pending co-host invitations grant no authority. Backend migrations00200/00400/00600/00700 are disposable-local verified only. See TASK-033-LOCAL handoff for evidence and release/sign-off limits.
+
 ## Accepted local extension — 2026-10-15
 
 Accepted ADR0042 authorizes local co-host invitation notifications, one-hour backend reminders and three independent default-off preferences for campus new Hangouts, friend-created Hangouts and friend joins. Delivery is source-authorized, durable and bounded; no push/email/Realtime or hosted action is inferred. See [ADR0042](../../decisions/ADR-0042-chat-polls-notification-policy.md).
