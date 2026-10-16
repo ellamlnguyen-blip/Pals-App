@@ -231,9 +231,9 @@ begin
    left join lateral (select max(m.created_at) latest_at from
     private.chat_attention_visible(c.kind,c.id,0,2147483647) m) v on s.can_read
   )
-  select coalesce(jsonb_agg(jsonb_build_object('kind',kind,'id',id)
-    order by coalesce(activity,source_created_at) desc,kind collate "C" desc,id desc),'[]'::jsonb)
-   into entries from ranked;
+  select coalesce(jsonb_agg(jsonb_build_object('kind',r.kind,'id',r.id)
+    order by coalesce(r.activity,r.source_created_at) desc,r.kind collate "C" desc,r.id desc),'[]'::jsonb)
+   into entries from ranked r;
   if jsonb_array_length(entries)>10000 then
    raise exception 'Chat attention unavailable' using errcode='42501'; end if;
   end if;

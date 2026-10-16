@@ -16,7 +16,8 @@ insert into auth.users(id,email,email_confirmed_at) values
  ('534c0000-0000-4000-8000-000000000001','attention034c-1@unc.edu',now()),
  ('534c0000-0000-4000-8000-000000000002','attention034c-2@unc.edu',now()),
  ('534c0000-0000-4000-8000-000000000003','attention034c-3@unc.edu',now());
-update public.profiles set real_name='Attention synthetic',major='Biology',graduation_year=2028
+update public.profiles set real_name='Attention synthetic',major='Biology',graduation_year=2028,
+ bio='Disposable attention test'
  where user_id::text like '534c0000-%';
 insert into private.people_preferences(account_id,opted_in) values
  ('534c0000-0000-4000-8000-000000000001',true),
