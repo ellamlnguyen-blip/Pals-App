@@ -1,5 +1,9 @@
 # Current State
 
+## 2026-10-16 — TASK-040 authenticated profile QA passed
+
+Isolated browser QA at 811px and 375px confirmed the owner `/profile` options control and popup are absent, Back/Edit remain keyboard accessible, no horizontal overflow occurs, and the peer report/block menu remains. QA branch `agent/TASK-040V-profile-render` is independently remote-verified at `c90c87449e6793a92cc370cb56a37a83b22a8bbc`; synthetic screenshots are committed there. Task-owned preview/DB were cleaned. Canonical main and user-open 3035 still do not contain the task's application source, pending predecessor integration gates.
+
 ## 2026-10-16 — TASK-039E reviewed local repair
 
 The duplicate migration-version source repair is remote-verified on `agent/TASK-039E-migration-repair` at `ea9befb4068662956a4492ea0a607bd966afb109`. Clean full migration and all three historical-ledger disposable upgrades reached 52 unique versions with preserved fixture data; source review found no blocker to isolated TASK-039D verification. Task-owned runtime was cleaned. Neither this code nor any hosted/shared migration has been applied to canonical main or the shared preview. Targets with a ledger beyond the bridge require separate later-version reconciliation and target-specific authorization.

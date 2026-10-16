@@ -1,5 +1,9 @@
 # NOW
 
+## 2026-10-16 — TASK-040 authenticated profile rendering passed
+
+The owner-menu removal passed real authenticated 811px/375px rendering on isolated `agent/TASK-040V-profile-render` at independently remote-verified `c90c87449e6793a92cc370cb56a37a83b22a8bbc`. Owner Back/Edit remain focusable with no options DOM or horizontal overflow; the peer 44px options menu still exposes report/block, and Privacy/Safety links remain reachable. Four durable synthetic screenshots and cleanup are recorded in [QA status](../agents/handoffs/TASK-040V-STATUS.md). Application source remains on reviewed TASK-040 task branches; predecessor integration gates still prevent canonical-main source merge and shared-preview visibility.
+
 ## 2026-10-16 — TASK-039E local migration repair reviewed
 
 Accepted ADR-0046's source correction is on `agent/TASK-039E-migration-repair` at independently remote-verified `ea9befb4068662956a4492ea0a607bd966afb109`. Its task-owned clean stack applied 52 unique versions; all three old-version states upgraded through the new bridge with synthetic Auth data preserved, matching function bodies and authenticated-only grants. Saved-mask actual-role checks passed 23/23 and attention/ack checks 10/10. Fresh exact-tip security/migration source review found no blocker; [review status](../agents/handoffs/TASK-039E-REVIEW.md) records its evidence limits. All task-owned containers/volumes were removed. TASK-039D may now resume only on an isolated stack using this exact reviewed source; hosted/shared application and application-main integration remain gated.

@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-16 — TASK-040 authenticated render evidence
+
+Recorded isolated owner/peer 811px and 375px browser QA and task-owned cleanup at `c90c87449e6793a92cc370cb56a37a83b22a8bbc`. The owner options menu is absent; peer safety actions remain. This main update contains documentation only; application integration remains gated.
+
 ## 2026-10-16 — TASK-039E reviewed local migration receipt
 
 Recorded the remote-verified duplicate-version repair candidate and fresh source/security review. Clean full migration and three historical upgrade paths passed on disposable task resources; application code remains off main and hosted/shared application remains gated. This canonical-main update contains documentation only.
