@@ -1,5 +1,9 @@
 # NOW
 
+## 2026-10-16 — TASK-039A local presentation milestone
+
+Quiet Chats presentation source and handoff are published on `agent/TASK-039A-quiet-chat-ui` at independently verified `98327d14d6b35f333ed4afe64ac663427ca0bd5c`. Focused tests, builds, and 811px/375px authenticated previews passed. This docs-only main receipt does not integrate app code or change the existing message-request policy; parent TASK-039 remains active and 039B awaits explicit acceptance of Proposed ADR-0045. Predecessor application-main and release gates remain open.
+
 ## 2026-10-16 — TASK-039 quiet Chats and friendship-only DM request
 
 Ella requested the removal of Chats request cue, repeated conversation subtitles, composer/help/empty copy, and a dot between Hangout date and time. She also changed DM consent to accepted friendship only. [Parent contract](active/TASK-039-chat-surface-friendship-dms.md) splits independent [039A presentation](active/TASK-039A-quiet-chat-ui.md) from [039B access-policy implementation](active/TASK-039B-friendship-only-dm.md). [ADR-0045](../decisions/ADR-0045-friendship-only-direct-messaging.md) is Proposed because it supersedes Accepted ADR-0016/0042 DM consent. No backend permission or request-path implementation starts without Ella's explicit acceptance. The exact reviewed local app dependency is TASK-038 `f04a4a3`; TASK-032 through 038 release and application-main gates remain open. Publish this bounded contract and Proposed ADR before fresh 039A dispatch.

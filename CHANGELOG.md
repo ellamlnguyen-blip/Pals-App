@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-16 — TASK-039A local UI milestone receipt
+
+Published and independently verified the task-branch quiet Chats presentation candidate at `98327d14d6b35f333ed4afe64ac663427ca0bd5c`. The branch removes repeated labels and idle copy, uses a date/time dot and an on-demand privacy disclosure, and preserves accessible labels and current request behavior. Focused tests, builds and responsive local renders passed. This main update is documentation only; app code and Proposed ADR-0045 remain unintegrated/unaccepted.
+
 ## 2026-10-16 — TASK-039 chat correction contract and policy proposal
 
 Recorded the requested quiet Chats copy/date cleanup as a bounded presentation stage and proposed ADR-0045 for friendship-only DMs. The new consent rule would retire message requests and request-only historical access; it is not accepted or implemented by this documentation publication. No application or hosted change was made.

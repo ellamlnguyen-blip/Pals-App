@@ -1,5 +1,9 @@
 # Current State
 
+## 2026-10-16 — TASK-039A local presentation candidate
+
+The quiet Chats copy/date candidate and handoff are on remote-verified task branch `agent/TASK-039A-quiet-chat-ui` (`98327d14d6b35f333ed4afe64ac663427ca0bd5c`), based on TASK-038 source. Focused tests, two builds and authenticated 811px/375px Hangout/request-pending direct preview passed. App code is not on canonical main; the existing request-consent system remains. Proposed ADR-0045 is still unaccepted, and 039B schema/permission work has not started. Predecessor release/application-main gates remain open.
+
 ## 2026-10-16 — TASK-039 requested
 
 The current reviewed local Chats source still supports request-origin direct messages under Accepted ADR-0042. Ella now wants friendship-only DMs, no Message requests, and a quieter conversation UI. TASK-039 separates presentation cleanup from this material consent and retention change. ADR-0045 is Proposed and not accepted; no schema, RPC, notification, permission or hosted change follows from publishing it. The app source dependency is remote-verified TASK-038 `f04a4a39eda28718e06ac316a28af92f226e188a`; predecessor release/application-main gates remain open.

@@ -1,6 +1,6 @@
 # TASK-039A — Remove redundant Chats copy
 
-Status: ready for bounded local implementation after this contract is published on canonical main. Start a fresh task worktree from current `origin/main`, merge only the exact reviewed TASK-038 source `f04a4a39eda28718e06ac316a28af92f226e188a`, and verify the merge. Do not edit the user's existing checkout or another task worktree.
+Status: local presentation candidate implemented and published on `agent/TASK-039A-quiet-chat-ui` at independently remote-verified `98327d14d6b35f333ed4afe64ac663427ca0bd5c`. The branch started from canonical contract `55a6326` and merged exact reviewed TASK-038 source `f04a4a39eda28718e06ac316a28af92f226e188a`. Its `agents/handoffs/TASK-039A-UI.md` and app code stay on the task branch pending predecessor application-main gates. No hosted operation occurred.
 
 ## Scope
 
@@ -11,3 +11,5 @@ The reference screenshot shows a quiet, open message pane. Preserve its existing
 ## Acceptance
 
 Focused source/formatter checks, production web build/TypeScript, authenticated Hangout and direct route renders at the reported 811px viewport and 375px phone, no horizontal overflow, accessible labels and live status, title and category navigation, request access while the old policy remains, and a handoff. Publication and integration follow AGENTS; no hosted work.
+
+Local milestone evidence: 9 focused tests and two production web builds passed compilation/TypeScript. Authenticated 811px and 375px Hangout empty and request-pending direct renders passed; the coordinator independently confirmed no horizontal overflow, no Hangout empty card or row subtitles, accessible composer name, collapsed privacy disclosure, and the date/time dot. The fixture has no accepted direct thread for rendered verification. Targeted lint still reports an existing declaration-order error in unchanged `combined-inbox.tsx` code. TASK-039B remains blocked on Proposed ADR-0045 acceptance.
