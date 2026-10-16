@@ -10,6 +10,8 @@ import {
 import "../hangouts/map.css";
 import "./people.css";
 import { FocusReturn } from "./focus-return";
+import { PeopleCardPhoto, PeopleCardPhotoBoundary } from "./card-photo";
+import { resolveCardPhotoRevisions } from "../../lib/people-card-photos";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -57,6 +59,17 @@ export default async function PeoplePage({
   });
   const cards = (data ?? []) as PeopleCard[];
   const gateOff = error?.code === "42501";
+  const photoRevisions = error
+    ? {}
+    : await resolveCardPhotoRevisions(
+        cards.map((card) => card.account_id),
+        async (subjectId) => {
+          const result = await client.rpc("get_rich_people_detail", {
+            p_account_id: subjectId,
+          });
+          return result.error ? null : result.data?.[0];
+        },
+      );
   const next =
     cards.length === 24
       ? peopleUrl({
@@ -73,21 +86,18 @@ export default async function PeoplePage({
       />
       <div className="people-heading" id="people-heading" tabIndex={-1}>
         <div>
-          <p className="badge">Local UNC directory</p>
-          <h1>Find a familiar face</h1>
-          <p>Browse students who chose to appear in People.</p>
+          <h1>People</h1>
         </div>
         <div className="people-heading-links">
           <Link href="/people/friends">Your friendships</Link>
-          <Link href="/people/privacy">Your People visibility</Link>
         </div>
       </div>
       {gateOff ? (
         <section className="people-panel">
           <h2>People is unavailable</h2>
           <p>
-            Your access or the local People feature may have changed. You can
-            still check your visibility preference.
+            Your access or the People feature may have changed. You can still
+            check your visibility preference.
           </p>
           <Link href="/people/privacy">Manage your visibility</Link>
         </section>
@@ -142,33 +152,42 @@ export default async function PeoplePage({
           </form>
           {cards.length ? (
             <>
-              <ul className="people-grid">
-                {cards.map((card) => (
-                  <li key={card.account_id}>
-                    {/* Full navigation rechecks live peer access; a cached client route must not restore a hidden card. */}
-                    <a
-                      id={`person-${card.account_id}`}
-                      href={`/people/${card.account_id}?from=${encodeURIComponent(current)}&focus=${card.account_id}`}
-                    >
-                      <span className="people-card-name">{card.real_name}</span>
-                      <span>{card.campus_name}</span>
-                      <span>
-                        Class of {card.graduation_year} · {card.major}
-                      </span>
-                      <span className="people-card-cta">View profile →</span>
-                    </a>
-                  </li>
-                ))}
-              </ul>
-              <div className="people-pages">
-                <span>Showing this page of People</span>
-                {selection.afterId && <Link href="/people">Start over</Link>}
-                {next && (
-                  <Link className="button" prefetch={false} href={next}>
-                    Next page
-                  </Link>
-                )}
-              </div>
+              <PeopleCardPhotoBoundary>
+                <ul className="people-grid">
+                  {cards.map((card) => (
+                    <li key={card.account_id}>
+                      {/* Full navigation rechecks live peer access; a cached client route must not restore a hidden card. */}
+                      <a
+                        id={`person-${card.account_id}`}
+                        href={`/people/${card.account_id}?from=${encodeURIComponent(current)}&focus=${card.account_id}`}
+                      >
+                        <PeopleCardPhoto
+                          subjectId={card.account_id}
+                          name={card.real_name}
+                          revision={photoRevisions[card.account_id] ?? null}
+                        />
+                        <span className="people-card-name">
+                          {card.real_name}
+                        </span>
+                        <span>{card.campus_name}</span>
+                        <span>
+                          Class of {card.graduation_year} · {card.major}
+                        </span>
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </PeopleCardPhotoBoundary>
+              {(selection.afterId || next) && (
+                <div className="people-pages">
+                  {selection.afterId && <Link href="/people">Start over</Link>}
+                  {next && (
+                    <Link className="button" prefetch={false} href={next}>
+                      Next page
+                    </Link>
+                  )}
+                </div>
+              )}
             </>
           ) : (
             <section className="people-panel">

@@ -7,6 +7,7 @@ import {
 } from "../auth-transition";
 import {
   notificationDestination,
+  friendRequestFromNotification,
   type NotificationRow,
 } from "../../lib/notification-destination";
 import {
@@ -14,6 +15,13 @@ import {
   notificationTransitionState,
 } from "./notification-auth-state";
 import { AnalyticsView } from "../analytics-view";
+import { ArrowClockwise } from "@phosphor-icons/react";
+import { changeFriendship } from "../people/friend-actions";
+import { CohostInvitation } from "./cohost-invitation";
+import {
+  NOTIFICATION_ATTENTION_CHANNEL,
+  NOTIFICATION_OPEN_EVENT,
+} from "../student-shell";
 type Cursor = { time: string; id: string } | null;
 type Preference = { category: string; enabled: boolean };
 const categoryCopy: Record<string, { name: string; description: string }> = {
@@ -41,6 +49,12 @@ const categoryOrder = [
   "host_activity",
 ];
 const idPattern = /^[\da-f]{8}-[\da-f]{4}-[\da-f]{4}-[\da-f]{4}-[\da-f]{12}$/i;
+function refreshAttention() {
+  window.dispatchEvent(new Event(NOTIFICATION_ATTENTION_CHANNEL));
+  const channel = new BroadcastChannel(NOTIFICATION_ATTENTION_CHANNEL);
+  channel.postMessage("refresh");
+  channel.close();
+}
 export function NotificationsInbox({ actor }: { actor: string }) {
   const [rows, setRows] = useState<NotificationRow[]>([]);
   const [preferences, setPreferences] = useState<Preference[]>([]);
@@ -48,8 +62,13 @@ export function NotificationsInbox({ actor }: { actor: string }) {
     "loading" | "ready" | "denied" | "error" | "uncertain"
   >("loading");
   const [message, setMessage] = useState("");
+  const [attentionError, setAttentionError] = useState(false);
   const [retry, setRetry] = useState(0);
   const [page, setPage] = useState(0);
+  const [snapshot, setSnapshot] = useState<{
+    cutoff: string;
+    revision: number;
+  } | null>(null);
   const cursors = useRef<Cursor[]>([null]);
   const revision = useRef(0);
   const pending = useRef(new Set<string>());
@@ -62,6 +81,8 @@ export function NotificationsInbox({ actor }: { actor: string }) {
     setPreferences([]);
     setPhase("loading");
     setMessage("");
+    setAttentionError(false);
+    setSnapshot(null);
   }, []);
   const deny = useCallback(() => {
     denied.current = true;
@@ -126,7 +147,9 @@ export function NotificationsInbox({ actor }: { actor: string }) {
           data.kind !== "ok" ||
           data.actor !== actor ||
           !Array.isArray(data.rows) ||
-          !Array.isArray(data.preferences)
+          !Array.isArray(data.preferences) ||
+          typeof data.cutoff !== "string" ||
+          !Number.isFinite(Date.parse(data.cutoff))
         )
           throw new Error("read");
         const safeRows = data.rows.filter(
@@ -146,6 +169,7 @@ export function NotificationsInbox({ actor }: { actor: string }) {
         setRows(safeRows);
         setPreferences(data.preferences);
         setPhase("ready");
+        setSnapshot({ cutoff: data.cutoff, revision: started });
         setMessage("");
       } catch {
         if (current(started)) {
@@ -156,6 +180,61 @@ export function NotificationsInbox({ actor }: { actor: string }) {
     },
     [actor, current, deny, mask, request],
   );
+  useEffect(() => {
+    if (!snapshot || phase !== "ready") return;
+    let cancelled = false;
+    let second = 0;
+    const first = requestAnimationFrame(() => {
+      second = requestAnimationFrame(async () => {
+        if (cancelled || !current(snapshot.revision)) return;
+        try {
+          const response = await request("", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              action: "acknowledge",
+              cutoff: snapshot.cutoff,
+            }),
+          });
+          if (cancelled || !current(snapshot.revision)) return;
+          if (response.status === 403) {
+            deny();
+            return;
+          }
+          const body = await response.json();
+          if (cancelled || !current(snapshot.revision)) return;
+          if (!response.ok || body.kind !== "ok" || body.actor !== actor) {
+            setAttentionError(true);
+            setSnapshot(null);
+            refreshAttention();
+            return;
+          }
+          setRows((items) =>
+            items.map((item) =>
+              !item.read_at &&
+              Date.parse(item.created_at) <= Date.parse(snapshot.cutoff)
+                ? { ...item, read_at: snapshot.cutoff }
+                : item,
+            ),
+          );
+          setAttentionError(false);
+          refreshAttention();
+          setSnapshot(null);
+        } catch {
+          if (cancelled || !current(snapshot.revision)) return;
+          setAttentionError(true);
+          setSnapshot(null);
+          // A lost response may follow a committed write; recheck the server.
+          refreshAttention();
+        }
+      });
+    });
+    return () => {
+      cancelled = true;
+      cancelAnimationFrame(first);
+      cancelAnimationFrame(second);
+    };
+  }, [actor, current, deny, phase, request, snapshot]);
   const resume = useCallback(() => {
     if (document.hidden || denied.current) return;
     if (pending.current.size) return;
@@ -235,6 +314,10 @@ export function NotificationsInbox({ actor }: { actor: string }) {
     const storage = (event: StorageEvent) => {
       if (event.key?.includes("auth-token")) wake();
     };
+    const open = () => {
+      if (!document.hidden && !pending.current.size && !denied.current)
+        void read(0, null);
+    };
     wake();
     window.addEventListener(AUTH_TRANSITION_EVENT, local);
     document.addEventListener("visibilitychange", visibility);
@@ -242,6 +325,7 @@ export function NotificationsInbox({ actor }: { actor: string }) {
     window.addEventListener("pageshow", wake);
     window.addEventListener("pagehide", mask);
     window.addEventListener("storage", storage);
+    window.addEventListener(NOTIFICATION_OPEN_EVENT, open);
     return () => {
       mounted = false;
       mask();
@@ -252,6 +336,7 @@ export function NotificationsInbox({ actor }: { actor: string }) {
       window.removeEventListener("pageshow", wake);
       window.removeEventListener("pagehide", mask);
       window.removeEventListener("storage", storage);
+      window.removeEventListener(NOTIFICATION_OPEN_EVENT, open);
     };
   }, [actor, deny, mask, page, read, request, resume, retry]);
   const mutation = async (body: object) => {
@@ -281,30 +366,71 @@ export function NotificationsInbox({ actor }: { actor: string }) {
       }
     }
   };
+  const respondToFriend = async (
+    row: NotificationRow,
+    action: "accept" | "decline",
+  ) => {
+    const request = friendRequestFromNotification(row);
+    if (!request || phase !== "ready") return;
+    mask();
+    const started = revision.current;
+    try {
+      const result = await changeFriendship(
+        request.peerId,
+        request.generationId,
+        action,
+      );
+      if (!current(started)) return;
+      if (result.state === "unavailable") {
+        deny();
+        return;
+      }
+      if (result.state === "unknown") {
+        setPhase("uncertain");
+        setMessage(
+          "The response is uncertain. Reload to check the current request.",
+        );
+        return;
+      }
+      // A stale generation or lost response must be resolved from the server.
+      await read(page, cursors.current[page] ?? null);
+    } catch {
+      if (current(started)) {
+        setPhase("uncertain");
+        setMessage(
+          "The response is uncertain. Reload to check the current request.",
+        );
+      }
+    }
+  };
   return (
     <div className="notifications-page">
       <AnalyticsView event="notifications_viewed" ready={phase === "ready"} />
-      <div className="notifications-heading">
-        <p className="badge">Your updates · local only</p>
-        <h1>Notifications</h1>
-        <p>Keep up with plans and conversations around campus.</p>
-      </div>
+      <h1 className="sr-only">Notifications</h1>
       <div className="notifications-layout">
         <section className="notifications-inbox" aria-labelledby="inbox-title">
           <div className="notifications-section-heading">
             <div>
-              <h2 id="inbox-title">Inbox</h2>
-              <p>Recent updates, newest first.</p>
+              <h2 id="inbox-title" className="sr-only">
+                Inbox
+              </h2>
             </div>
             {phase === "ready" && (
               <button
-                className="quiet-button"
+                className="quiet-button notifications-refresh"
+                aria-label="Refresh notifications"
+                title="Refresh notifications"
                 onClick={() => void read(page, cursors.current[page] ?? null)}
               >
-                Refresh
+                <ArrowClockwise size={20} aria-hidden="true" />
               </button>
             )}
           </div>
+          {phase === "ready" && attentionError && (
+            <p className="notification-attention-error" role="status">
+              Could not mark updates as seen. Refresh to retry.
+            </p>
+          )}
           {phase === "loading" && (
             <div role="status" className="notifications-state">
               <p>Checking your Notifications…</p>
@@ -344,6 +470,14 @@ export function NotificationsInbox({ actor }: { actor: string }) {
               <ul className="notifications-list">
                 {rows.map((row) => {
                   const destination = notificationDestination(row);
+                  const friendRequest = friendRequestFromNotification(row);
+                  const cohostInvitation =
+                    row.label !== "Unavailable" &&
+                    row.event_code === "cohost_invitation" &&
+                    row.source_kind === "hangout_invitation" &&
+                    destination &&
+                    row.source_id &&
+                    row.target_id;
                   const label = destination
                     ? row.label
                     : row.label === "Unavailable"
@@ -362,9 +496,36 @@ export function NotificationsInbox({ actor }: { actor: string }) {
                           </time>
                           <span>{row.read_at ? "Read" : "Unread"}</span>
                         </div>
+                        {friendRequest && (
+                          <div className="notification-inline-actions">
+                            <button
+                              className="quiet-button"
+                              onClick={() =>
+                                void respondToFriend(row, "accept")
+                              }
+                            >
+                              Accept request
+                            </button>
+                            <button
+                              className="quiet-button"
+                              onClick={() =>
+                                void respondToFriend(row, "decline")
+                              }
+                            >
+                              Decline
+                            </button>
+                          </div>
+                        )}
+                        {cohostInvitation && (
+                          <CohostInvitation
+                            actor={actor}
+                            invitationId={row.source_id!}
+                            hangoutId={row.target_id!}
+                          />
+                        )}
                       </div>
                       <div className="notification-actions">
-                        {destination && (
+                        {destination && !cohostInvitation && (
                           <a href={destination.href}>{destination.label}</a>
                         )}
                         {!row.read_at && (

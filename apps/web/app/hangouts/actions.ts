@@ -93,7 +93,7 @@ function parseInput(
   };
 }
 function failed(error: { code?: string } | null): HangoutResult {
-  if (error?.code === "40001")
+  if (error?.code === "PT409")
     return {
       kind: "conflict",
       message:
