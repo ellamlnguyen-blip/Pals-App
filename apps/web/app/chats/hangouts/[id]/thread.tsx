@@ -5,6 +5,8 @@ import type { ChatMessage } from "../../../../lib/chat";
 import { fetchVisiblePage, nextPageCursors } from "./page-data";
 import { analytics } from "../../../../lib/analytics";
 import { firstRequestConfirmed } from "../../../../lib/analytics-evidence";
+import { ChatPolls } from "../../chat-polls";
+import { recordThreadAttention } from "../../thread-attention";
 import {
   AUTH_TRANSITION_CHANNEL,
   AUTH_TRANSITION_EVENT,
@@ -18,7 +20,15 @@ type SendResult =
   | { kind: "denied" | "error" | "invalid" | "conflict" };
 type Pending = { key: string; body: string };
 
-export function Thread({ id, userId }: { id: string; userId: string }) {
+export function Thread({
+  id,
+  userId,
+  title,
+}: {
+  id: string;
+  userId: string;
+  title: string;
+}) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [state, setState] = useState<"loading" | "ready" | "denied" | "error">(
     "loading",
@@ -29,6 +39,13 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
   const [status, setStatus] = useState("");
   const [more, setMore] = useState(false);
   const [pageIndex, setPageIndex] = useState(0);
+  const [maskedHeight, setMaskedHeight] = useState(0);
+  const [attention, setAttention] = useState<{
+    sequence: number | null;
+    ticket: number;
+  } | null>(null);
+  const touched = useRef(false);
+  const threadRef = useRef<HTMLDivElement>(null);
   const generation = useRef(0);
   const busy = useRef(false);
   const latest = useRef(0);
@@ -43,30 +60,39 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
   const terminalDenial = useRef(false);
   const api = `/api/chat/${id}`;
 
-  const mask = useCallback((reason: "hidden" | "auth" = "hidden") => {
-    generation.current++;
-    visible.current = false;
-    busy.current = false;
-    latest.current = 0;
-    pageAfter.current = null;
-    pageCursors.current = [null];
-    setPageIndex(0);
-    setMessages([]);
-    setMore(false);
-    setState("loading");
-    setDraft("");
-    setPending(null);
-    if (reason === "auth") {
-      draftRef.current = "";
-      pendingRef.current = null;
-    }
-    setSending(false);
-    setStatus(
-      reason === "auth"
-        ? "Account changed. Checking chat access again."
-        : "Checking chat access again.",
-    );
-  }, []);
+  const mask = useCallback(
+    (reason: "hidden" | "auth" = "hidden", preservePage = false) => {
+      setMaskedHeight(
+        preservePage ? (threadRef.current?.offsetHeight ?? 0) : 0,
+      );
+      generation.current++;
+      visible.current = false;
+      busy.current = false;
+      latest.current = 0;
+      if (!preservePage) {
+        pageAfter.current = null;
+        pageCursors.current = [null];
+        setPageIndex(0);
+      }
+      setMessages([]);
+      setAttention(null);
+      setMore(false);
+      setState("loading");
+      setDraft("");
+      setPending(null);
+      if (reason === "auth") {
+        draftRef.current = "";
+        pendingRef.current = null;
+      }
+      setSending(false);
+      setStatus(
+        reason === "auth"
+          ? "Account changed. Checking chat access again."
+          : "Checking chat access again.",
+      );
+    },
+    [],
+  );
   const deny = useCallback(() => {
     terminalDenial.current = true;
     authPending.current.clear();
@@ -79,6 +105,7 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
     pageCursors.current = [null];
     setPageIndex(0);
     setMessages([]);
+    setAttention(null);
     setMore(false);
     setDraft("");
     draftRef.current = "";
@@ -87,9 +114,10 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
     setSending(false);
     setState("denied");
     setStatus("Chat access is unavailable.");
+    setMaskedHeight(0);
   }, []);
   const read = useCallback(
-    async (after: number | null, reveal = false) => {
+    async (after: number | null, reveal = false, mark = true) => {
       if (
         terminalDenial.current ||
         document.hidden ||
@@ -116,22 +144,38 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
           setStatus("Could not check chat. Try again.");
           return false;
         }
-        if (reveal && after !== null && data.messages.length === 0) {
+        if (
+          reveal &&
+          visible.current &&
+          after !== null &&
+          data.messages.length === 0
+        ) {
           setMore(false);
           setStatus("You're caught up.");
           return false;
         }
         if (reveal) {
           setMessages(data.messages);
+          setAttention(
+            mark
+              ? { sequence: data.messages.at(-1)?.sequence ?? null, ticket }
+              : null,
+          );
           setDraft(draftRef.current);
           setPending(pendingRef.current);
           setMore(data.messages.length === 50);
           latest.current = data.messages.at(-1)?.sequence ?? 0;
           visible.current = true;
           setState("ready");
+          setMaskedHeight(0);
           setStatus(data.messages.length ? "Chat ready." : "No messages yet.");
         } else {
           setMessages(data.messages);
+          setAttention(
+            mark
+              ? { sequence: data.messages.at(-1)?.sequence ?? null, ticket }
+              : null,
+          );
           setMore(data.messages.length === 50);
           latest.current = data.messages.at(-1)?.sequence ?? after ?? 0;
         }
@@ -200,15 +244,16 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
     };
     const resume = () => {
       if (document.hidden) return;
+      touched.current = false;
       if (terminalDenial.current) {
         deny();
         return;
       }
-      mask();
+      mask("hidden", true);
       if (authPending.current.size) verifySettled();
-      else void read(null, true);
+      else void read(pageAfter.current, true);
     };
-    const hide = () => mask();
+    const hide = () => mask("hidden", true);
     const reauthorize = () => {
       if (terminalDenial.current) return;
       mask("auth");
@@ -264,6 +309,26 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
       channel.close();
     };
   }, [api, deny, mask, read, refreshProjection, userId]);
+  useEffect(() => {
+    if (
+      !attention ||
+      state !== "ready" ||
+      !visible.current ||
+      document.hidden ||
+      authPending.current.size ||
+      generation.current !== attention.ticket
+    )
+      return;
+    const shouldTouch = !touched.current;
+    if (shouldTouch) touched.current = true;
+    void recordThreadAttention(
+      userId,
+      "hangout",
+      id,
+      attention.sequence,
+      shouldTouch,
+    );
+  }, [attention, state, userId, id]);
 
   async function showNewerPage() {
     if (!more || sending || !latest.current) return;
@@ -308,7 +373,7 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
     setSending(true);
     setStatus(retry ? "Checking before retry…" : "Checking before send…");
     const ticket = generation.current;
-    const authorized = await read(pageAfter.current);
+    const authorized = await read(pageAfter.current, false, false);
     if (!authorized || ticket !== generation.current || document.hidden) {
       setSending(false);
       return;
@@ -332,6 +397,7 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
         return;
       }
       if (result.kind === "ok") {
+        const sentFromFullPage = messages.length === 50;
         if (firstRequestConfirmed(retry, result.kind))
           void analytics.capture("hangout_chat_message_sent");
         pendingRef.current = null;
@@ -341,8 +407,12 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
           setDraft("");
         }
         sent = true;
-        await read(pageAfter.current);
-        setStatus("Message sent.");
+        if (await read(pageAfter.current, false, false))
+          setStatus(
+            sentFromFullPage
+              ? "Message sent. Load newer messages to see it."
+              : "Message sent.",
+          );
       } else if (result.kind === "conflict")
         setStatus(
           "This retry no longer matches the original message. Reload chat before sending again.",
@@ -368,7 +438,11 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
     }
   }
   return (
-    <div className="chat-thread">
+    <div
+      className="chat-thread"
+      ref={threadRef}
+      style={maskedHeight ? { minHeight: maskedHeight } : undefined}
+    >
       {state === "loading" && <p role="status">Checking chat access…</p>}
       {state === "denied" && (
         <div className="chat-empty">
@@ -405,9 +479,7 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
                     <strong>
                       {message.mine
                         ? "You"
-                        : (message.author_id ??
-                          message.author_label ??
-                          "Former participant")}
+                        : (message.author_label ?? "Participant")}
                     </strong>
                     <time dateTime={message.created_at}>
                       {new Date(message.created_at).toLocaleString("en-US", {
@@ -444,7 +516,7 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
             </div>
           )}
           <form
-            className="chat-composer"
+            className="chat-composer chat-composer-hangout"
             onSubmit={(event) => {
               event.preventDefault();
               void send();
@@ -461,30 +533,49 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
                 draftRef.current = value;
               }}
               maxLength={2000}
-              rows={4}
+              rows={1}
               aria-describedby="chat-count chat-disclosure"
-              placeholder="What should everyone know?"
+              placeholder={`Message ${title}…`}
             />
             <div className="chat-compose-row">
               <span id="chat-count">
                 {draft.trim().length} / 2000 characters
               </span>
               <button
-                className="button"
+                className={`button${!sending && !pending ? " chat-send-icon" : ""}`}
                 disabled={sending || (!draft.trim() && !pending)}
                 type="submit"
               >
-                {sending
-                  ? "Sending…"
-                  : pending
-                    ? "Retry original message"
-                    : "Send message"}
+                {sending ? (
+                  "Sending…"
+                ) : pending ? (
+                  "Retry original message"
+                ) : (
+                  <>
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path
+                        d="M3 20 21 12 3 4l3 8-3 8Z"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                        strokeLinejoin="round"
+                      />
+                      <path
+                        d="M6 12h15"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                    <span className="sr-only">Send message</span>
+                  </>
+                )}
               </button>
             </div>
             <p id="chat-disclosure" className="help">
               Future eligible joiners can read chat history. Confirmed blocks
               can end shared Hangout attendance and hide messages from blocked
-              peers. Creating a new block is temporarily unavailable.
+              peers. Open a person’s profile or Safety to review and confirm a
+              block.
             </p>
             {pending && (
               <p className="help">
@@ -492,6 +583,12 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
               </p>
             )}
           </form>
+          <ChatPolls
+            kind="hangout"
+            sourceId={id}
+            peerId={null}
+            actor={userId}
+          />
         </>
       )}
       <p className="chat-status" role="status" aria-live="polite">

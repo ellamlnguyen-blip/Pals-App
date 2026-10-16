@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Frame } from "../../../components";
 import { dmId } from "../../../../lib/dm";
 import { DirectSafetyBoundary } from "./safety-boundary";
+import { CombinedInbox } from "../../combined-inbox";
 import "../../../hangouts/map.css";
 import "../../chat.css";
 export const dynamic = "force-dynamic";
@@ -36,16 +37,40 @@ export default async function DirectPage({
   const knownPair = !status.error && !!status.data?.[0];
   return (
     <Frame signedIn navigation={local.state === "ready"}>
-      <section className="chat-page" aria-labelledby="direct-title">
-        <Link href="/chats">← All chats</Link>
-        <p className="badge">Direct chat · local only</p>
-        <h1 id="direct-title">Direct chat</h1>
-        <DirectSafetyBoundary
-          key={`${id}:${local.user?.id}`}
-          id={id}
-          actor={local.user!.id}
-          knownPair={knownPair}
-        />
+      <section className="chat-page" aria-labelledby="chats-title">
+        <h1 id="chats-title" className="chat-page-title">
+          Chats
+        </h1>
+        <div className="chat-shell chat-shell-thread">
+          <aside className="chat-sidebar" aria-label="Conversations">
+            <CombinedInbox
+              actor={local.user!.id}
+              selected={{ kind: "dm", id }}
+            />
+          </aside>
+          <div className="chat-detail">
+            <header className="chat-detail-header">
+              <Link className="chat-back" href="/chats">
+                ← All chats
+              </Link>
+              <div className="chat-detail-identity">
+                <span className="combined-avatar" aria-hidden="true">
+                  ✉
+                </span>
+                <div>
+                  <p>Messages</p>
+                  <h2 id="direct-title">Direct chat</h2>
+                </div>
+              </div>
+            </header>
+            <DirectSafetyBoundary
+              key={`${id}:${local.user?.id}`}
+              id={id}
+              actor={local.user!.id}
+              knownPair={knownPair}
+            />
+          </div>
+        </div>
       </section>
     </Frame>
   );

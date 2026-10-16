@@ -4,6 +4,8 @@ import { chatAccess, chatUuid, readChat } from "../../../../lib/chat";
 import { readSavedPublic } from "../../../../lib/saved-hangouts";
 import { Thread } from "./thread";
 import { SafetyActions } from "../../../safety/safety-client";
+import { CombinedInbox } from "../../combined-inbox";
+import { pinCue } from "../../../hangouts/saved/pin-cue";
 import "../../../hangouts/map.css";
 import "../../chat.css";
 
@@ -49,20 +51,67 @@ export default async function ThreadPage({
     );
   return (
     <Frame signedIn navigation>
-      <section className="chat-page" aria-labelledby="thread-title">
-        <Link href="/chats">← All chats</Link>
-        <p className="badge">Hangout chat · local only</p>
-        <h1 id="thread-title">{record.title}</h1>
-        <Link href={`/hangouts/saved/${id}`}>View Hangout details</Link>
-        <Thread
-          key={`${id}:${target.user.id}`}
-          id={id}
-          userId={target.user.id}
-        />
-        <SafetyActions
-          actor={target.user.id}
-          target={{ mode: "hangout", id }}
-        />
+      <section className="chat-page" aria-labelledby="chats-title">
+        <h1 id="chats-title" className="chat-page-title">
+          Chats
+        </h1>
+        <div className="chat-shell chat-shell-thread">
+          <aside className="chat-sidebar" aria-label="Conversations">
+            <CombinedInbox
+              actor={target.user.id}
+              selected={{ kind: "hangout", id }}
+            />
+          </aside>
+          <div className="chat-detail">
+            <header className="chat-detail-header">
+              <Link className="chat-back" href="/chats">
+                ← All chats
+              </Link>
+              <div className="chat-detail-identity">
+                <span
+                  className="combined-avatar combined-emoji"
+                  aria-hidden="true"
+                >
+                  {pinCue({
+                    title: record.title,
+                    description: record.description,
+                  })}
+                </span>
+                <div>
+                  <p>Hangout chat</p>
+                  <h2 id="thread-title">{record.title}</h2>
+                </div>
+              </div>
+            </header>
+            <div className="chat-hangout-strip">
+              <span>
+                <time dateTime={record.starts_at}>
+                  {new Intl.DateTimeFormat("en-US", {
+                    dateStyle: "medium",
+                    timeStyle: "short",
+                    timeZone: "America/New_York",
+                  }).format(new Date(record.starts_at))}{" "}
+                  ET
+                </time>
+                <span aria-hidden="true"> · </span>
+                {record.public_place}
+              </span>
+              <Link href={`/hangouts/saved/${id}`}>View Hangout details →</Link>
+            </div>
+            <Thread
+              key={`${id}:${target.user.id}`}
+              id={id}
+              userId={target.user.id}
+              title={record.title}
+            />
+            <div className="chat-safety-actions">
+              <SafetyActions
+                actor={target.user.id}
+                target={{ mode: "hangout", id }}
+              />
+            </div>
+          </div>
+        </div>
       </section>
     </Frame>
   );

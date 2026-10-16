@@ -1,7 +1,6 @@
 import "server-only";
 import { access } from "./access";
-import { authConfig } from "./config";
-import { parseAppEnvironment } from "@pals/config";
+import { studentFeaturesAvailable } from "./feature-runtime";
 import { peopleId } from "./people";
 export const notificationId = peopleId;
 export const notificationHeaders = {
@@ -13,13 +12,12 @@ export const categories = [
   "messages",
   "hangout_updates",
   "host_activity",
+  "campus_new_hangout",
+  "friend_created_hangout",
+  "friend_joined_hangout",
 ] as const;
 export function localNotificationsAvailable() {
-  const config = authConfig();
-  return (
-    parseAppEnvironment(process.env.APP_ENV) === "local" &&
-    ["localhost", "127.0.0.1", "[::1]"].includes(new URL(config.url).hostname)
-  );
+  return studentFeaturesAvailable();
 }
 export async function notificationAccess(actor: string | null) {
   try {

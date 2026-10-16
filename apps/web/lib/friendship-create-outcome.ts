@@ -10,7 +10,7 @@ export function emptyCreateOutcome(
       state: "unavailable" as const,
       relationship: null,
       message:
-        "This person is no longer available in People. Return to People before another action.",
+        "This person is no longer available in Pals. Return to Pals before another action.",
     };
   if (write === "uncertain")
     return {
@@ -24,7 +24,7 @@ export function emptyCreateOutcome(
     relationship: null,
     message:
       write === "denied"
-        ? "The request was unavailable. Reload current People access before another action."
+        ? "The request was unavailable. Reload current Pals access before another action."
         : "No current relationship is visible. This does not confirm why it ended. Reload before another action.",
   };
 }
