@@ -679,7 +679,9 @@
 }
 .chat-privacy summary {
   width: fit-content;
-  min-height: 32px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
   cursor: pointer;
   color: var(--pals-accent);
   font-weight: 800;

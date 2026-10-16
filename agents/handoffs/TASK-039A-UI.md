@@ -15,9 +15,9 @@ Branch: `agent/TASK-039A-quiet-chat-ui` from `origin/main` with exact TASK-038 s
 - `node --test apps/web/app/chats/chat-date.test.mjs apps/web/app/chats/combined-projection.test.mjs apps/web/app/chats/thread-attention.test.mjs`: 9 passed.
 - `next build --webpack` from `apps/web`: passed compilation, TypeScript and route generation using existing cached dependencies; no manifest/lock change.
 - Prettier on changed files and `git diff --check`: passed.
+- Named disposable preview `/private/tmp/pals-task032-runtime` rebuilt with unchanged `.env.local` and restarted at `http://127.0.0.1:3035`. Authenticated browser checks at **811×900** and **375×812** captured visual views of the empty Board games Hangout and pending Alex direct thread. Both had `documentElement.scrollWidth === innerWidth`; desktop split pane and phone back navigation worked. The Hangout header/title, `Oct 15, 2026 · 5:00 PM ET · Carolina Union` strip, empty open message area, semantic Message textarea label, collapsed/expanded privacy details and 44px summary target were verified. Direct header/row omit subtitles, and pending request withdrawal and safety controls remained visible. The fixture had no accepted direct conversation, so that state was source/build checked but not browser rendered.
 - Targeted ESLint: blocked by pre-existing `react-hooks/immutability` in `combined-inbox.tsx` at line 123, where `read` is recursively referenced before declaration. This region was not modified in TASK-039A.
 - Live `https://usepals.com/` reference could not be fetched by the available web reader; authoritative design direction and existing local tokens/components were used.
-- Authenticated rendered desktop/phone QA: pending local preview check.
 
 ## Risks and remaining gates
 
