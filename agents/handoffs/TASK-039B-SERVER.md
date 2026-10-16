@@ -28,4 +28,4 @@ Status, inbox, thread, consent-state, combined chat attention, notification list
 
 A fresh security reviewer should inspect the exact committed/pushed tip, especially the retired-state migration under locks, direct RPC grants, list/attention and notification projections, and race tests. The test database is schema-only cloned with local scheduler omitted; a full clean Supabase migration-stack test is still required before accepted-environment persistence. TASK-039C must remove old web/API request and allow controls and verify actual two-account browser flows. The predecessor TASK-032/033/034/035/036/037/038 application-main and release gates remain open. Hosted migration/gate enablement and `main` integration are not authorized by this handoff.
 
-Task branch commit SHA and independently verified remote SHA: pending publication below.
+Implementation commit and independently verified origin SHA: `936023aa69539d425f30a4be3ed88fb17a99fea9`. The documentation-only receipt commit carrying this verification follows. Canonical `main` integration/remote SHA remain pending coordinator review and predecessor gates.
