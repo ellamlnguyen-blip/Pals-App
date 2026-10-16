@@ -96,12 +96,11 @@ export function projectAttentionItem(
     detail && typeof detail === "object"
       ? (detail as Record<string, unknown>)
       : null;
-  if (
-    peer?.account_id !== item.peer_id ||
-    typeof peer.real_name !== "string" ||
-    !peer.real_name.trim()
-  )
-    return null;
+  if (peer && peer.account_id !== item.peer_id) return null;
+  const name =
+    peer && typeof peer.real_name === "string" && peer.real_name.trim()
+      ? peer.real_name
+      : null;
   const dm: DmInboxRow = {
     peer_id: item.peer_id!,
     generation_id: item.source_id,
@@ -113,9 +112,9 @@ export function projectAttentionItem(
   return {
     kind: "dm",
     dm,
-    name: peer.real_name,
-    photoRevision: revision,
+    name,
+    photoRevision: name ? revision : null,
     entryTime: item.sort_time,
-    hasUnread: item.has_unread,
+    hasUnread: name ? item.has_unread : false,
   };
 }
