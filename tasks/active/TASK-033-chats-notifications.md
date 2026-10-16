@@ -11,3 +11,5 @@ StageB: read-only design audit maps existing backend events/membership/friendshi
 Completion requires persistent backend behavior, denial/concurrency/idempotency tests, actual rendered desktop/narrow end-to-end verification, fresh review, synchronized specs/handoff/records and remote-verified accepted application integration. Partial UI candidate is not parent completion.
 
 Acceptance milestone: Ella approved ADR0042 local implementation. Stages D2(friend-DM) and E(co-host consent backend) begin in parallel with disjoint migration/test files. Poll authorization follows reviewed friend-DM integration; notification jobs follow invitation event integration. No hosted operation or parent completion.
+
+Local implementation milestone: see `agents/handoffs/TASK-033-LOCAL.md`; reviewed source d8eef34f227c5c04f6132a7744e6b9278be418fc,191 focused SQL checks, real scheduled reminder and actual browser flows. Parent remains incomplete; final source/evidence review and finalization/application integration gates apply.
