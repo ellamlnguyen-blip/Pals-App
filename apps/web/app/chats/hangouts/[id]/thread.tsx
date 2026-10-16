@@ -5,6 +5,7 @@ import type { ChatMessage } from "../../../../lib/chat";
 import { fetchVisiblePage, nextPageCursors } from "./page-data";
 import { analytics } from "../../../../lib/analytics";
 import { firstRequestConfirmed } from "../../../../lib/analytics-evidence";
+import { ChatPolls } from "../../chat-polls";
 import {
   AUTH_TRANSITION_CHANNEL,
   AUTH_TRANSITION_EVENT,
@@ -519,6 +520,12 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
               </p>
             )}
           </form>
+          <ChatPolls
+            kind="hangout"
+            sourceId={id}
+            peerId={null}
+            actor={userId}
+          />
         </>
       )}
       <p className="chat-status" role="status" aria-live="polite">

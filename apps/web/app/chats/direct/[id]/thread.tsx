@@ -9,6 +9,7 @@ import {
   type AuthTransitionMessage,
 } from "../../../auth-transition";
 import { createDmAuthVerifier } from "../../dm-auth-verifier";
+import { ChatPolls } from "../../chat-polls";
 
 type Read = {
   kind: string;
@@ -683,6 +684,15 @@ export function DirectThread({ id, actor }: { id: string; actor: string }) {
                     </button>
                   )}
                 </div>
+                {status.state === "accepted" && (
+                  <ChatPolls
+                    key={status.generation_id}
+                    kind="dm"
+                    sourceId={status.generation_id}
+                    peerId={id}
+                    actor={actor}
+                  />
+                )}
               </>
             )}
           </>
