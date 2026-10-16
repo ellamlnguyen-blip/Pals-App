@@ -1,0 +1,25 @@
+# TASK-033FG handoff — durable notification jobs candidate
+
+Status: source candidate for fresh security review. The FG migration has not been applied, committed, pushed or integrated by this agent. Named disposable DB tests and real cron execution remain coordinator gates. No hosted environment, gate or fixture was changed.
+
+## Bounded changes
+
+- `supabase/migrations/20261015000400_notification_jobs.sql` adds three independent owner preferences, default off, while preserving the four existing default-on categories and owner RPC signatures. `enabled_at` prevents an opt-in after a source action from backfilling that action.
+- Private source triggers record one constant-time action per new Hangout or real nonhost join. A monotonic per-Hangout schedule revision gives every start transition a fresh reminder identity, including A→B→A; late joins share only the current occurrence. Source writes do not enumerate recipients.
+- `private.run_notification_jobs(integer)` has a hard 100-recipient bound, persistent cursors, retained retry state and one-minute `pg_cron` schedule. It takes the Hangout source lock before the queue row, then gate and recipient locks. Due and late-join reminders each reserve up to one third of the run before activity fan-out, so a campus backlog cannot starve them at the scheduled 100 limit. The worker rechecks campus/account/source gates, published/discoverable source, current friendship and bilateral block, current join and owner preference. No client worker or raw queue grants, HTTP call, push or email was added.
+- `private.notification_items` gains source-backed activity and reminder codes. `public.list_notifications` retains D2 consent and E invitation reauthorization, adds current source checks for new codes, neutral revoked rows and destination IDs only for allowed Hangouts. Existing attention/read RPCs remain.
+- `supabase/tests/database/notification_jobs_033fg.test.sql` is transactional pgtap evidence for private grants, defaults, durable source actions, no opt-in backfill, due reminder priority under activity backlog, duplicate reminder suppression, A→B→A neutrality, host reminder, friend-created precedence, friend-joined eligibility, friendship-gate/block neutralization and fresh authorized read/mute semantics. A stale cancelled reminder followed by a valid published activity action verifies that the activity phase reads its own locked source row. A synthetic failing item insert proves an attempted reminder consumes the sole `run_notification_jobs(1)` slot and retains retry evidence without advancing activity.
+- `supabase/tests/notification-jobs-033fg-concurrency.integration.mjs` tests source cancellation, recipient mute and reschedule winning observed worker lock races, then two workers competing for the same action with one durable item. It uses only unique synthetic fixtures and checks the named disposable DB container; no gate flip. `node --check` passed.
+
+## Review and verification gates
+
+1. Fresh security review of the migration, including SQL syntax on the named database, cron role/extension availability, existing check constraint names, lock order and queue retry behavior. Apply only after review, after D2/E and poll migration ordering as coordinated.
+2. Run `supabase/tests/database/notification_jobs_033fg.test.sql` with `psql -v ON_ERROR_STOP=1` in a transaction against the named disposable DB. It ends in rollback. Run `PALS_TASK033_DB_CONTAINER=<named task029 container> node --test supabase/tests/notification-jobs-033fg-concurrency.integration.mjs` after ensuring previously accepted disposable gates are enabled.
+3. Verify the actual `cron.job` registration and one real minute execution in `cron.job_run_details` on the named disposable DB, including a source action and authorized inbox read. Do not infer delivery from registration alone.
+4. Coordinator owns source review, application, remote SHAs, shared task records, final backend sign-off and integration.
+
+## Concurrent migration proof plan
+
+The migration takes `SHARE ROW EXCLUSIVE` on `public.hangouts` immediately after `BEGIN` and holds it through existing-source backfill, trigger installation and `COMMIT`. This conflicts with concurrent insert/update `ROW EXCLUSIVE` locks. On an isolated disposable clone: (1) open session A, begin, insert a future published Hangout and hold the transaction; (2) start the FG migration in session B and confirm B waits on A's relation lock; (3) commit A and confirm B completes with schedule state and occurrence for A's row; (4) create another Hangout after B commits and confirm its trigger creates action and occurrence. Repeat with A holding a start-time update on an existing Hangout; after A commits, the backfill must capture the committed start. This proves there is no source-write interval between the snapshot and capture trigger installation. Do not replay the migration on the named database solely to test this race.
+
+This agent could not run DB checks because its sandbox cannot access the local Docker socket. No change was made to that permission or to the named DB.
