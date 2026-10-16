@@ -9,6 +9,10 @@ import {
   advanceCombinedCursor,
   parseCombinedCursor,
 } from "../../chats/combined-paging";
+import {
+  projectDmRow,
+  sortCombinedPage,
+} from "../../chats/combined-projection";
 
 export const dynamic = "force-dynamic";
 const reply = (body: object, status = 200) =>
@@ -44,7 +48,7 @@ export async function GET(request: NextRequest) {
   let hangoutQuery = client
     .from("hangout_participants")
     .select(
-      "hangout_id,hangouts!inner(id,title,description,starts_at,status,visibility)",
+      "hangout_id,hangouts!inner(id,title,description,created_at,starts_at,status,visibility)",
     )
     .eq("account_id", actor)
     .eq("hangouts.status", "published")
@@ -68,11 +72,9 @@ export async function GET(request: NextRequest) {
         const detail = await client.rpc("get_people_detail", {
           p_account_id: dm.peer_id,
         });
-        const name = detail.error
-          ? null
-          : (detail.data?.[0]?.real_name ?? null);
+        if (detail.error) return { error: true, row: null };
         let photoRevision: number | null = null;
-        if (name) {
+        if (detail.data?.[0]?.account_id === dm.peer_id) {
           const rich = await client.rpc("get_rich_people_detail", {
             p_account_id: dm.peer_id,
           });
@@ -82,10 +84,15 @@ export async function GET(request: NextRequest) {
               rich.data?.[0],
             );
         }
-        return { kind: "dm" as const, dm, name, photoRevision };
+        return {
+          error: false,
+          row: projectDmRow(dm, detail.data?.[0], photoRevision),
+        };
       }),
     );
-    rows.push(...batch);
+    if (batch.some((item) => item.error || !item.row))
+      return reply({ kind: "error", source: "direct chats" }, 503);
+    for (const item of batch) if (item.row) rows.push(item.row);
   }
   for (let offset = 0; offset < hangouts.length; offset += 4) {
     const batch = await Promise.all(
@@ -105,7 +112,15 @@ export async function GET(request: NextRequest) {
         const detail = Array.isArray(row.hangouts)
           ? row.hangouts[0]
           : row.hangouts;
-        if (!detail) return { gate: "error", row: null };
+        if (
+          !detail ||
+          typeof detail.title !== "string" ||
+          typeof detail.starts_at !== "string" ||
+          !Number.isFinite(Date.parse(detail.starts_at)) ||
+          typeof detail.created_at !== "string" ||
+          !Number.isFinite(Date.parse(detail.created_at))
+        )
+          return { gate: "error", row: null };
         return {
           gate: "ok",
           row: {
@@ -117,6 +132,7 @@ export async function GET(request: NextRequest) {
               description: detail.description,
             }),
             startsAt: detail.starts_at,
+            entryTime: detail.created_at,
           },
         };
       }),
@@ -140,5 +156,10 @@ export async function GET(request: NextRequest) {
   }
   if (current.user?.id !== actor || current.state !== "ready")
     return reply({ kind: "denied" }, 403);
-  return reply({ kind: "ok", rows, next, dmUnavailable });
+  return reply({
+    kind: "ok",
+    rows: sortCombinedPage(rows),
+    next,
+    dmUnavailable,
+  });
 }

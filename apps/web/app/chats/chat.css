@@ -344,3 +344,19 @@
     gap: var(--pals-space-3);
   }
 }
+.combined-pages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--pals-space-3);
+}
+.combined-pages .quiet-button {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  padding: var(--pals-space-2) var(--pals-space-4);
+  border: 1px solid var(--pals-line);
+  border-radius: 999px;
+  color: var(--pals-accent);
+  background: var(--pals-surface-raised);
+  font-weight: 800;
+}

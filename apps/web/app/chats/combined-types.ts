@@ -6,6 +6,7 @@ export type CombinedRow =
       dm: DmInboxRow;
       name: string | null;
       photoRevision: number | null;
+      entryTime: string;
     }
   | {
       kind: "hangout";
@@ -13,6 +14,7 @@ export type CombinedRow =
       title: string;
       emoji: string;
       startsAt: string;
+      entryTime: string;
     };
 
 export type CombinedCursor = {

@@ -55,8 +55,11 @@ export function CombinedInbox({ actor }: { actor: string }) {
   );
   const [message, setMessage] = useState("");
   const [next, setNext] = useState<CombinedCursor | null>(null);
+  const [pageIndex, setPageIndex] = useState(0);
   const [dmUnavailable, setDmUnavailable] = useState(false);
   const attemptedCursor = useRef<CombinedCursor | null>(null);
+  const attemptedIndex = useRef(0);
+  const cursors = useRef<(CombinedCursor | null)[]>([null]);
   const request = useRef(0);
   const pendingTransitions = useRef(new Set<string>());
   const settledTransitions = useRef(new Map<string, "settled" | "cancelled">());
@@ -78,10 +81,11 @@ export function CombinedInbox({ actor }: { actor: string }) {
     setMessage("Chats are unavailable. Your access may have changed.");
   }, [mask]);
   const read = useCallback(
-    async (page: CombinedCursor | null = null) => {
+    async (page: CombinedCursor | null = null, index = 0) => {
       if (document.hidden || pendingTransitions.current.size || denied.current)
         return;
       attemptedCursor.current = page;
+      attemptedIndex.current = index;
       const now = ++request.current;
       setRows([]);
       setPhase("loading");
@@ -117,6 +121,8 @@ export function CombinedInbox({ actor }: { actor: string }) {
         }
         setRows(data.rows ?? []);
         setNext(data.next ?? null);
+        setPageIndex(index);
+        cursors.current = [...cursors.current.slice(0, index), page];
         setDmUnavailable(Boolean(data.dmUnavailable));
         setPhase("ready");
         setMessage("");
@@ -138,6 +144,7 @@ export function CombinedInbox({ actor }: { actor: string }) {
     const resume = () => {
       if (document.hidden || denied.current) return;
       mask();
+      cursors.current = [null];
       if (pendingTransitions.current.size) {
         for (const [token, phase] of settledTransitions.current)
           void verify({ token, phase });
@@ -222,7 +229,9 @@ export function CombinedInbox({ actor }: { actor: string }) {
           {phase === "error" && (
             <button
               className="quiet-button"
-              onClick={() => void read(attemptedCursor.current)}
+              onClick={() =>
+                void read(attemptedCursor.current, attemptedIndex.current)
+              }
             >
               Try again
             </button>
@@ -294,7 +303,11 @@ export function CombinedInbox({ actor }: { actor: string }) {
           </ul>
         ) : (
           <div className="chat-empty">
-            <h2>No chats yet</h2>
+            <h2>
+              {pageIndex === 0
+                ? "No chats yet"
+                : "No available chats on this page"}
+            </h2>
             <p>
               Join a Hangout or start a direct conversation to coordinate a
               plan.
@@ -302,10 +315,32 @@ export function CombinedInbox({ actor }: { actor: string }) {
             <Link href="/hangouts/saved">Find Hangouts</Link>
           </div>
         ))}
-      {phase === "ready" && next && (
-        <button className="quiet-button" onClick={() => void read(next)}>
-          Load more chats
-        </button>
+      {phase === "ready" && (pageIndex > 0 || next) && (
+        <nav className="combined-pages" aria-label="Chat pages">
+          {pageIndex > 0 && (
+            <button
+              className="quiet-button"
+              onClick={() =>
+                void read(cursors.current[pageIndex - 1], pageIndex - 1)
+              }
+            >
+              Previous page
+            </button>
+          )}
+          {pageIndex > 0 && (
+            <button className="quiet-button" onClick={() => void read(null, 0)}>
+              Start over
+            </button>
+          )}
+          {next && (
+            <button
+              className="quiet-button"
+              onClick={() => void read(next, pageIndex + 1)}
+            >
+              Next page
+            </button>
+          )}
+        </nav>
       )}
     </div>
   );
