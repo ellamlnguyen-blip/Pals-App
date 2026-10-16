@@ -4,7 +4,7 @@
   padding: var(--pals-space-8) 0 var(--pals-space-16);
   min-width: 0;
 }
-.notifications-page > .sr-only {
+.notifications-page .sr-only {
   position: absolute;
   width: 1px;
   height: 1px;

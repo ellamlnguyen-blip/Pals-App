@@ -20,3 +20,7 @@ Status: bounded Stage A candidate on `agent/TASK-033-chat-notifications`; parent
 
 - Combined pages are source-keyset batches sorted within each page by source creation time, not a global recency feed. Neither source exposes latest message time; the authorized Hangout source does not expose membership time. A page can contain up to 48 visible records before gate denials. A fully denied Hangout batch may show an empty page with a further page button, preserving access concealment and cursor progress.
 - Confirm the scoped query behavior in a disposable local backend and exercise account switch, DM gate off, Hangout denial, request management and load-more UI before accepting. Parent sign-off and integration gates remain open.
+
+## Rendered QA follow-up
+
+Coordinator screenshot review found the accessible Chats `h1` and nested Notifications `Inbox` `h2` visibly rendered because `.sr-only` was not global and the Notifications selector matched only a direct child. Scoped CSS now visually hides both headings while keeping them in the accessibility tree. Prettier and scoped ESLint pass; the coordinator will rebuild and verify actual rendered desktop/narrow results after this commit.
