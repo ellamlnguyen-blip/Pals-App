@@ -19,6 +19,8 @@ import type { StudentDestinations } from "../../student-shell";
 import { PeerPhoto, peerPhotoUrl } from "./peer-photo";
 import { UserCircleIcon } from "@phosphor-icons/react/dist/csr/UserCircle";
 import { ChatCircleIcon } from "@phosphor-icons/react/dist/csr/ChatCircle";
+import { FriendshipBadge } from "../friendship-badge";
+import { friendshipBadgeForPeer } from "../friendship-badge-state";
 
 export function PersonView({
   detail,
@@ -46,7 +48,13 @@ export function PersonView({
   const [dmState, setDmState] = useState<PeerDmState>(initialDmState);
   const [friends, setFriends] = useState(
     friendship.state === "known" &&
-      friendship.relationship?.state === "accepted",
+      friendshipBadgeForPeer(detail.account_id, friendship.relationship) ===
+        "friend",
+  );
+  const [friendBadge, setFriendBadge] = useState(
+    friendship.state === "known"
+      ? friendshipBadgeForPeer(detail.account_id, friendship.relationship)
+      : null,
   );
   const [selectedPhoto, setSelectedPhoto] = useState<{
     slot: RichPeopleDetail["photo_slots"][number];
@@ -111,7 +119,7 @@ export function PersonView({
   const backLabel =
     back.startsWith("/hangouts/") || back === "/hangouts"
       ? "Back to Hangouts"
-      : "Back to People";
+      : "Back to Pals";
   const extras =
     richDetail?.photo_slots.filter((slot) => slot !== "primary") ?? [];
   if (cleared)
@@ -123,19 +131,19 @@ export function PersonView({
           available={available}
           attendanceAvailable={attendanceAvailable}
         >
-          <p>Check your current People access from the menu.</p>
+          <p>Check your current Pals access from the menu.</p>
         </ProfileTopbar>
         <section className="people-panel" role="status">
           <h1 ref={clearedHeading} tabIndex={-1}>
-            Checking People access
+            Checking Pals access
           </h1>
-          <p>{message || "Checking the latest People access…"}</p>
+          <p>{message || "Checking the latest Pals access…"}</p>
           <div className="people-dialog-actions">
             {/* A full navigation fetches the latest outbound block list. */}
             {/* eslint-disable-next-line @next/next/no-html-link-for-pages */}
             <a href="/people/privacy">Check outbound blocked IDs</a>
             <a href={`/people/${detail.account_id}`}>Reload current profile</a>
-            <a href={back}>Return to People</a>
+            <a href={back}>Return to Pals</a>
           </div>
         </section>
       </article>
@@ -257,6 +265,7 @@ export function PersonView({
         graduationYear={detail.graduation_year}
         verified={richDetail?.unc_email_verified ?? true}
         headingRef={profileHeading}
+        nameBadge={<FriendshipBadge status={friendBadge} />}
       />
       <div className="profile-peer-actions">
         <FriendControl
@@ -268,11 +277,16 @@ export function PersonView({
           presentation="profile"
           peerLabel={detail.real_name}
           onClear={() =>
-            clear("People access changed. Reload to check this profile.")
+            clear("Pals access changed. Reload to check this profile.")
           }
-          onRelationshipChange={(relationship) =>
-            setFriends(relationship?.state === "accepted")
-          }
+          onRelationshipChange={(relationship) => {
+            const badge = friendshipBadgeForPeer(
+              detail.account_id,
+              relationship,
+            );
+            setFriendBadge(badge);
+            setFriends(badge === "friend");
+          }}
         />
         {dmState === "accepted" || dmState === "pending" ? (
           <Link
@@ -383,7 +397,7 @@ export function PersonView({
         onUnavailable={() => {
           setDmState("unknown");
           clear(
-            "People access changed. Return to People to check current availability.",
+            "Pals access changed. Return to Pals to check current availability.",
           );
         }}
       />

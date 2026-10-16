@@ -70,20 +70,20 @@ export default async function PersonPage({
       <div className="people-detail">
         {error ? (
           <section className="people-panel">
-            <a href={back}>← Back to People</a>
+            <a href={back}>← Back to Pals</a>
             <h1>Profile unavailable</h1>
             <p role="alert">
-              We couldn’t confirm this profile’s current sharing. Return to
-              People and try again.
+              We couldn’t confirm this profile’s current sharing. Return to Pals
+              and try again.
             </p>
-            <Link href="/people">Return to People</Link>
+            <Link href="/people">Return to Pals</Link>
           </section>
         ) : !detail ? (
           <section className="people-panel">
-            <a href={back}>← Back to People</a>
+            <a href={back}>← Back to Pals</a>
             <h1>Person unavailable</h1>
-            <p>This profile is not available in People.</p>
-            <Link href="/people">Return to People</Link>
+            <p>This profile is not available in Pals.</p>
+            <Link href="/people">Return to Pals</Link>
           </section>
         ) : (
           <PersonView

@@ -52,10 +52,10 @@ export default async function PrivacyPage() {
           ← Back
         </Link>
         <section className="people-panel">
-          <p className="badge">People privacy</p>
-          <h1>Your People visibility</h1>
+          <p className="badge">Pals privacy</p>
+          <h1>Your Pals visibility</h1>
           <p>
-            Browsing People does not require sharing your profile. Your choice
+            Browsing Pals does not require sharing your profile. Your choice
             starts off.
           </p>
           {preferenceError ? (
@@ -92,19 +92,19 @@ export default async function PrivacyPage() {
                     </dd>
                   </dl>
                   <p>
-                    Opting in does not make an incomplete profile visible.
-                    People can see your profile only after your real name,
-                    graduation year, major, and bio are usable, while your
-                    choice remains on and your account is ready. Future edits to
-                    these fields are shared under the same rule. Photos,
-                    hometown and prompts require the separate rich choice below.
-                    Your email address and remaining fields stay private.
+                    Opting in does not make an incomplete profile visible. Pals
+                    can see your profile only after your real name, graduation
+                    year, major, and bio are usable, while your choice remains
+                    on and your account is ready. Future edits to these fields
+                    are shared under the same rule. Photos, hometown and prompts
+                    require the separate rich choice below. Your email address
+                    and remaining fields stay private.
                   </p>
                 </div>
               )}
               {availability?.error && (
                 <p role="status">
-                  People discovery is unavailable right now. Your stored choice
+                  Pals discovery is unavailable right now. Your stored choice
                   remains available to turn off.
                 </p>
               )}
@@ -135,7 +135,7 @@ export default async function PrivacyPage() {
             and conversation prompts with people who have confirmed approved UNC
             email addresses at your campus. Your actual email address is never
             shown. This choice starts off for everyone, including people already
-            sharing text in People.
+            sharing text in Pals.
           </p>
           {profileError || !profile ? (
             <p role="alert">
@@ -146,8 +146,8 @@ export default async function PrivacyPage() {
             <div className="people-preview">
               <h3>Preview of your current shared details</h3>
               <p>
-                Eligible students would see the text in the People preview
-                above, plus these details when both sharing choices are on:
+                Eligible students would see the text in the Pals preview above,
+                plus these details when both sharing choices are on:
               </p>
               <dl>
                 <dt>Hometown</dt>
@@ -216,9 +216,9 @@ export default async function PrivacyPage() {
             While rich sharing is on, future edits to these details and
             replacements in the selected photo slots are shared too. Turning it
             off stops new requests, but photos or details someone already saved
-            or captured cannot be recalled. Turning People sharing off also
-            turns this choice off. Turning People sharing on later will not
-            restore rich sharing.
+            or captured cannot be recalled. Turning Pals sharing off also turns
+            this choice off. Turning Pals sharing on later will not restore rich
+            sharing.
           </p>
           {richPreference ? (
             <RichPrivacyControls
@@ -251,7 +251,7 @@ export default async function PrivacyPage() {
               !profile ||
               availability?.error) && (
               <p className="help">
-                Turning this on needs current People access, your People sharing
+                Turning this on needs current Pals access, your Pals sharing
                 choice and a loaded preview. Turning it off stays available to
                 active accounts if those conditions later change.
               </p>

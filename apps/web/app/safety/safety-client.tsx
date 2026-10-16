@@ -396,7 +396,7 @@ function BlockDialog({
         <div id="safety-block-explain">
           <p>
             Any friendship and direct chat with this person end. You stop
-            appearing to one another in People and lose blocked private Hangout
+            appearing to one another in Pals and lose blocked private Hangout
             access.
           </p>
           <p>

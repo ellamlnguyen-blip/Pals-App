@@ -13,9 +13,7 @@
 }
 .people-filters {
   display: grid;
-  grid-template-columns:
-    minmax(10rem, 2fr) repeat(2, minmax(8rem, 1fr))
-    auto auto;
+  grid-template-columns: repeat(2, minmax(8rem, 1fr)) auto auto;
   align-items: end;
   gap: 1rem;
   padding: var(--pals-space-6);
@@ -87,9 +85,18 @@
   font-weight: 900;
 }
 .people-card-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
   font-size: 1.35rem;
   font-weight: 900;
   line-height: 1.2;
+}
+.people-friendship-badge {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  color: var(--pals-profile-action);
 }
 .people-pages {
   display: flex;
@@ -226,9 +233,6 @@ dialog code {
   .people-filters {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .people-filters label:first-child {
-    grid-column: 1/-1;
-  }
   .people-heading {
     align-items: start;
   }
@@ -245,7 +249,6 @@ dialog code {
   .people-detail-body {
     grid-template-columns: minmax(0, 1fr);
   }
-  .people-filters label:first-child,
   .people-detail-body section:first-child {
     grid-column: auto;
   }

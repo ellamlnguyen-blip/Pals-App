@@ -22,7 +22,7 @@ export function notificationDestination(
         uuid.test(row.actor_id) &&
         row.target_id &&
         uuid.test(row.target_id)
-        ? { href: "/people/friends", label: "View friendships" }
+        ? { href: `/people/${row.actor_id}`, label: "View Pal" }
         : null;
     case "dm_request":
     case "dm_accepted":

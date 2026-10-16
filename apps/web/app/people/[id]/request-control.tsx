@@ -44,7 +44,7 @@ export function RequestControl({
     current.current = null;
     setMasked(true);
     setBusy(false);
-    setNote("People access changed. Reload this profile to start a request.");
+    setNote("Pals access changed. Reload this profile to start a request.");
     unavailable.current();
   }, []);
   useEffect(() => {
@@ -174,7 +174,7 @@ export function RequestControl({
       ) : viewState === "unknown" ? (
         <a href={`/people/${peerId}`}>Reload to check status</a>
       ) : masked ? (
-        <p>Reload this profile to check current People access.</p>
+        <p>Reload this profile to check current Pals access.</p>
       ) : (
         <>
           <label htmlFor="dm-request-body">First message</label>

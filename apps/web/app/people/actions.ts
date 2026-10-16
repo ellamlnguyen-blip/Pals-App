@@ -141,8 +141,8 @@ export async function setPeopleVisibility(
     message:
       data === optedIn
         ? data
-          ? "Your sharing choice is on. People discovery still requires current access."
-          : "Your sharing choice is off; your profile is hidden from People."
+          ? "Your sharing choice is on. Pals discovery still requires current access."
+          : "Your sharing choice is off; your profile is hidden from Pals."
         : "The change did not take effect. Check your account access and try again.",
   };
 }

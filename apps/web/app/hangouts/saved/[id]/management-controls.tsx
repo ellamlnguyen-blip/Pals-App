@@ -451,12 +451,12 @@ export function ManagementControls({
                   <p className="help">
                     This list shows currently visible joined members. A name or
                     photo appears only when that person currently shares it
-                    through People.
+                    through Pals.
                   </p>
                 </section>
               ) : (
                 <p className="saved-action-note">
-                  People are hidden until you reload and review this Hangout.
+                  Pals are hidden until you reload and review this Hangout.
                 </p>
               )}
               {role === "host" && !sensitiveHidden && !identityHidden && (
@@ -525,7 +525,7 @@ export function ManagementControls({
         </>
       ) : (
         <p className="saved-action-note">
-          People are hidden until you reload and review this Hangout.
+          Pals are hidden until you reload and review this Hangout.
         </p>
       )}
     </section>

@@ -470,15 +470,15 @@ export function ProfileEditor({
         </p>
         <p>
           {peopleAvailable
-            ? "Your selected text can appear in People after you opt in and meet its requirements. Photos, hometown and prompts are shared only if you separately turn on rich sharing; your email address and other private fields are not shown."
+            ? "Your selected text can appear in Pals after you opt in and meet its requirements. Photos, hometown and prompts are shared only if you separately turn on rich sharing; your email address and other private fields are not shown."
             : "Only you can see these profile details and photos right now."}
         </p>
         {peopleAvailable && (
           <>
             <Link href="/people/privacy">
-              Preview and manage People and rich sharing
+              Preview and manage Pals and rich sharing
             </Link>
-            <Link href="/people/friends">Your friendships</Link>
+            <Link href="/notifications">Friend requests</Link>
           </>
         )}
         <p className="help">

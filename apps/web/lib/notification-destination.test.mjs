@@ -71,6 +71,10 @@ test("friend action carries the exact notification generation", () => {
     event_code: "friend_request",
     label: "Friend request",
   });
+  assert.deepEqual(notificationDestination(request), {
+    href: `/people/${ids.actor}`,
+    label: "View Pal",
+  });
   assert.deepEqual(friendRequestFromNotification(request), {
     peerId: ids.actor,
     generationId: ids.source,

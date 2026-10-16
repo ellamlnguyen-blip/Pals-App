@@ -1,4 +1,4 @@
-import type { Ref } from "react";
+import type { ReactNode, Ref } from "react";
 import Image from "next/image";
 import { GraduationCapIcon } from "@phosphor-icons/react/dist/csr/GraduationCap";
 import { BookOpenIcon } from "@phosphor-icons/react/dist/csr/BookOpen";
@@ -14,6 +14,7 @@ export function ProfileSummary({
   graduationYear,
   verified,
   headingRef,
+  nameBadge,
 }: {
   name: string;
   hometown?: string | null;
@@ -23,6 +24,7 @@ export function ProfileSummary({
   graduationYear: number | null;
   verified?: boolean;
   headingRef?: Ref<HTMLHeadingElement>;
+  nameBadge?: ReactNode;
 }) {
   const isUncChapelHill =
     campus === "University of North Carolina at Chapel Hill" ||
@@ -35,6 +37,7 @@ export function ProfileSummary({
       <div className="profile-title-row">
         <h1 ref={headingRef} tabIndex={headingRef ? -1 : undefined}>
           {name}
+          {nameBadge}
         </h1>
         {verified && isUncChapelHill && (
           <Image

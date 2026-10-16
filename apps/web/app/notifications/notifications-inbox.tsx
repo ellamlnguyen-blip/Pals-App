@@ -39,7 +39,7 @@ const categoryCopy: Record<string, { name: string; description: string }> = {
   },
   host_activity: {
     name: "Host activity",
-    description: "People joining or leaving your Hangouts",
+    description: "Students joining or leaving your Hangouts",
   },
 };
 const categoryOrder = [

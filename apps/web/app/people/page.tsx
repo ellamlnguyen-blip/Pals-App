@@ -12,6 +12,8 @@ import "./people.css";
 import { FocusReturn } from "./focus-return";
 import { PeopleCardPhoto, PeopleCardPhotoBoundary } from "./card-photo";
 import { resolveCardPhotoRevisions } from "../../lib/people-card-photos";
+import { friendshipBadgeForPeer } from "./friendship-badge-state";
+import { FriendshipBadge } from "./friendship-badge";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -41,17 +43,17 @@ export default async function PeoplePage({
           <Link href="/hangouts">Hangouts</Link>
         </nav>
         <section className="people-panel">
-          <h1>Check your People filters</h1>
+          <h1>Check your Pals filters</h1>
           <p role="alert">
-            The search, filter, or page link is invalid. Try a shorter name or
-            major and a year from 1900–2200.
+            The filter or page link is invalid. Try a shorter major and a year
+            from 1900–2200.
           </p>
           <Link href="/people">Clear filters</Link>
         </section>
       </Frame>
     );
   const { data, error } = await client.rpc("browse_people", {
-    p_search: selection.search || null,
+    p_search: null,
     p_graduation_year: selection.year ? Number(selection.year) : null,
     p_major: selection.major || null,
     p_after_id: selection.afterId || null,
@@ -59,6 +61,27 @@ export default async function PeoplePage({
   });
   const cards = (data ?? []) as PeopleCard[];
   const gateOff = error?.code === "42501";
+  const friendshipBadges = error
+    ? {}
+    : Object.fromEntries(
+        await Promise.all(
+          cards.slice(0, 24).map(async (card) => {
+            try {
+              const result = await client.rpc("get_friendship", {
+                p_peer_id: card.account_id,
+              });
+              return [
+                card.account_id,
+                result.error
+                  ? null
+                  : friendshipBadgeForPeer(card.account_id, result.data?.[0]),
+              ] as const;
+            } catch {
+              return [card.account_id, null] as const;
+            }
+          }),
+        ),
+      );
   const photoRevisions = error
     ? {}
     : await resolveCardPhotoRevisions(
@@ -86,24 +109,21 @@ export default async function PeoplePage({
       />
       <div className="people-heading" id="people-heading" tabIndex={-1}>
         <div>
-          <h1>People</h1>
-        </div>
-        <div className="people-heading-links">
-          <Link href="/people/friends">Your friendships</Link>
+          <h1>Discover your next Pal!</h1>
         </div>
       </div>
       {gateOff ? (
         <section className="people-panel">
-          <h2>People is unavailable</h2>
+          <h2>Pals is unavailable</h2>
           <p>
-            Your access or the People feature may have changed. You can still
+            Your access or the Pals feature may have changed. You can still
             check your visibility preference.
           </p>
           <Link href="/people/privacy">Manage your visibility</Link>
         </section>
       ) : error ? (
         <section className="people-panel">
-          <h2>Couldn’t load People</h2>
+          <h2>Couldn’t load Pals</h2>
           <p role="alert">Check your connection and try again.</p>
           <Link href={current}>Retry</Link>
         </section>
@@ -115,16 +135,6 @@ export default async function PeoplePage({
             method="get"
             role="search"
           >
-            <label htmlFor="people-search">
-              Name
-              <input
-                id="people-search"
-                name="search"
-                maxLength={100}
-                defaultValue={selection.search}
-                placeholder="Search a name"
-              />
-            </label>
             <label htmlFor="people-year">
               Graduation year
               <input
@@ -147,7 +157,7 @@ export default async function PeoplePage({
                 placeholder="Exact major"
               />
             </label>
-            <button className="button">Find people</button>
+            <button className="button">Find Pals</button>
             <Link href="/people">Clear</Link>
           </form>
           {cards.length ? (
@@ -168,6 +178,9 @@ export default async function PeoplePage({
                         />
                         <span className="people-card-name">
                           {card.real_name}
+                          <FriendshipBadge
+                            status={friendshipBadges[card.account_id]}
+                          />
                         </span>
                         <span>{card.campus_name}</span>
                         <span>
@@ -192,14 +205,14 @@ export default async function PeoplePage({
           ) : (
             <section className="people-panel">
               <h2>
-                {selection.search || selection.year || selection.major
-                  ? "No people match"
+                {selection.year || selection.major
+                  ? "No Pals match"
                   : "No one is visible yet"}
               </h2>
               <p>
-                {selection.search || selection.year || selection.major
-                  ? "Try a different name, year, or major."
-                  : "Students appear here only after they choose to share their People profile."}
+                {selection.year || selection.major
+                  ? "Try a different year or major."
+                  : "Students appear here only after they choose to share their Pals profile."}
               </p>
               <Link href="/people">Clear filters</Link>
             </section>

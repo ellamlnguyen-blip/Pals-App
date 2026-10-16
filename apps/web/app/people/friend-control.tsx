@@ -221,7 +221,7 @@ export function FriendControl({
         <a
           href={
             typeof window === "undefined"
-              ? "/people/friends"
+              ? `/people/${peerId}`
               : window.location.pathname
           }
         >
@@ -245,7 +245,7 @@ export function FriendControl({
         <a
           href={
             typeof window === "undefined"
-              ? "/people/friends"
+              ? `/people/${peerId}`
               : window.location.pathname
           }
         >

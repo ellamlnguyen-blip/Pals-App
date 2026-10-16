@@ -22,7 +22,7 @@ export type StudentDestinations = {
 const destinations = [
   { label: "Hangouts", href: "/hangouts", key: "hangouts" },
   { label: "Calendar", href: "/calendar", key: "calendar" },
-  { label: "People", href: "/people", key: "people" },
+  { label: "Pals", href: "/people", key: "people" },
 ] as const;
 export const NOTIFICATION_ATTENTION_CHANNEL = "pals-notification-attention";
 export const NOTIFICATION_OPEN_EVENT = "pals-notification-open";
