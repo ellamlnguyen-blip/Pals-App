@@ -18,7 +18,7 @@ export async function GET(
   const after = raw === null ? null : Number(raw);
   if (after !== null && (!Number.isSafeInteger(after) || after < 1))
     return reply({ kind: "invalid" }, 400);
-  const statusResult = await target.client.rpc("get_dm_status", {
+  const statusResult = await target.client.rpc("get_dm_consent_ui_state", {
     p_peer_id: id,
   });
   if (statusResult.error) {
@@ -97,12 +97,14 @@ export async function POST(
       "withdraw",
       "close",
       "send",
+      "friend_send",
+      "allow_dm",
       "block",
     ].includes(action)
   )
     return reply({ kind: "invalid" }, 400);
   if (
-    ["reply", "send"].includes(action) &&
+    ["reply", "send", "friend_send"].includes(action) &&
     (typeof input.key !== "string" ||
       !dmId.test(input.key) ||
       typeof input.body !== "string" ||
@@ -112,13 +114,27 @@ export async function POST(
   )
     return reply({ kind: "invalid" }, 400);
   // Reject a stale generation before any mutation. The RPC repeats this authority check under its pair lock.
-  const status = await target.client.rpc("get_dm_status", { p_peer_id: id });
+  const status = await target.client.rpc("get_dm_consent_ui_state", {
+    p_peer_id: id,
+  });
   if (status.error) {
     const kind = dmErrorKind(status.error.code);
     return reply({ kind }, kind === "denied" ? 403 : 400);
   }
   if (status.data?.[0]?.generation_id !== input.generation)
     return reply({ kind: "stale" }, 409);
+  const current = status.data[0];
+  if (
+    action === "friend_send" &&
+    !(
+      (current.state === "pending" && current.friend_send_available) ||
+      (current.state === "accepted" &&
+        (current.friend_send_available || current.recipient_consented))
+    )
+  )
+    return reply({ kind: "denied" }, 403);
+  if (action === "allow_dm" && !current.can_allow_dm)
+    return reply({ kind: "denied" }, 403);
   let result;
   if (action === "send")
     result = await target.client.rpc("send_dm_message", {
@@ -126,6 +142,17 @@ export async function POST(
       p_generation_id: input.generation,
       p_request_id: input.key,
       p_body: input.body,
+    });
+  else if (action === "friend_send")
+    result = await target.client.rpc("send_friend_dm_message", {
+      p_peer_id: id,
+      p_request_id: input.key,
+      p_body: input.body,
+    });
+  else if (action === "allow_dm")
+    result = await target.client.rpc("accept_friend_dm_consent", {
+      p_peer_id: id,
+      p_generation_id: input.generation,
     });
   else
     result = await target.client.rpc("transition_dm", {

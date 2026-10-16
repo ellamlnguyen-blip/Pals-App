@@ -38,7 +38,7 @@ export default async function DirectPage({
     <Frame signedIn navigation={local.state === "ready"}>
       <section className="chat-page" aria-labelledby="direct-title">
         <Link href="/chats">← All chats</Link>
-        <p className="badge">Direct chat · local only</p>
+        <p className="badge">Direct chat</p>
         <h1 id="direct-title">Direct chat</h1>
         <DirectSafetyBoundary
           key={`${id}:${local.user?.id}`}
