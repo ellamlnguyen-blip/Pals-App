@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   const target = await dmAccess(request.headers.get("x-pals-dm-actor"));
   if (!target) return reply({ kind: "denied" }, 403);
-  let input: { peer?: unknown; key?: unknown; body?: unknown };
+  let input: { peer?: unknown; key?: unknown; body?: unknown; mode?: unknown };
   try {
     input = await request.json();
   } catch {
@@ -44,7 +44,8 @@ export async function POST(request: NextRequest) {
     typeof input.body !== "string" ||
     input.body !== input.body.trim() ||
     input.body.length < 1 ||
-    input.body.length > 2000
+    input.body.length > 2000 ||
+    (input.mode !== undefined && input.mode !== "friend")
   )
     return reply({ kind: "invalid" }, 400);
   // A People detail is the only entry. Recheck it for this caller immediately before the RPC.
@@ -53,8 +54,13 @@ export async function POST(request: NextRequest) {
   });
   if (detail.error || !detail.data?.length)
     return reply({ kind: "denied" }, 403);
-  const { data, error } = await target.client.rpc("create_dm_request", {
-    p_target_id: input.peer,
+  const friendship = await target.client.rpc("get_friendship", {
+    p_peer_id: input.peer,
+  });
+  if (friendship.error || friendship.data?.[0]?.state !== "accepted")
+    return reply({ kind: "denied" }, 403);
+  const { data, error } = await target.client.rpc("send_friend_dm_message", {
+    p_peer_id: input.peer,
     p_request_id: input.key,
     p_body: input.body,
   });
@@ -62,5 +68,8 @@ export async function POST(request: NextRequest) {
     const kind = dmErrorKind(error.code);
     return reply({ kind }, kind === "denied" ? 403 : 400);
   }
-  return reply({ kind: "ok", generation: data });
+  return reply({
+    kind: "ok",
+    generation: data?.[0]?.generation_id,
+  });
 }

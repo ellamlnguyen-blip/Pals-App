@@ -112,7 +112,7 @@ export async function completeProfile(
   _state: FormState,
   form: FormData,
 ): Promise<FormState> {
-  const { client, user } = await requireAccess("onboarding");
+  const { client, user } = await requireAccess("ready");
   const fields = profileFields(form);
   if (!fields)
     return {

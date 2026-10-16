@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import "@fontsource-variable/nunito";
 import "@pals/design-tokens/tokens.css";
+import "./reference-fonts.css";
 import "./globals.css";
 import { AuthTransitionNotifier } from "./auth-transition-notifier";
 

@@ -2,8 +2,10 @@ import { campusLocal, resolveCampusLocal } from "./hangout-time.ts";
 
 export type CalendarSelection = {
   date: string;
-  view: "day" | "week";
-  filter: "discoverable" | "joined" | "hosting";
+  view: "day" | "week" | "month";
+  hosting: boolean;
+  attending: boolean;
+  all: boolean;
 };
 export const MIN_CALENDAR_DATE = "2000-01-03";
 export const MAX_CALENDAR_DATE = "2100-12-26";
@@ -14,6 +16,12 @@ export function addDays(date: string, days: number) {
   const value = new Date(`${date}T12:00:00Z`);
   value.setUTCDate(value.getUTCDate() + days);
   return value.toISOString().slice(0, 10);
+}
+export function addMonths(date: string, months: number) {
+  const [year, month] = date.split("-").map(Number);
+  return new Date(Date.UTC(year, month - 1 + months, 1))
+    .toISOString()
+    .slice(0, 10);
 }
 export function validSelection(value: unknown): value is CalendarSelection {
   if (!value || typeof value !== "object") return false;
@@ -26,21 +34,24 @@ export function validSelection(value: unknown): value is CalendarSelection {
     !Number.isNaN(Date.parse(`${input.date}T12:00:00Z`)) &&
     new Date(`${input.date}T12:00:00Z`).toISOString().slice(0, 10) ===
       input.date &&
-    ["day", "week"].includes(input.view) &&
-    ["discoverable", "joined", "hosting"].includes(input.filter)
+    ["day", "week", "month"].includes(input.view) &&
+    typeof input.hosting === "boolean" &&
+    typeof input.attending === "boolean" &&
+    typeof input.all === "boolean"
   );
 }
 export function calendarRange(selection: CalendarSelection) {
-  const weekday = new Date(`${selection.date}T12:00:00Z`).getUTCDay();
-  const first =
-    selection.view === "week"
-      ? addDays(selection.date, -((weekday + 6) % 7))
+  const anchor =
+    selection.view === "month"
+      ? `${selection.date.slice(0, 7)}-01`
       : selection.date;
-  const days = Array.from(
-    { length: selection.view === "week" ? 7 : 1 },
-    (_, i) => addDays(first, i),
-  );
-  const endDate = addDays(first, days.length);
+  const weekday = new Date(`${anchor}T12:00:00Z`).getUTCDay();
+  const first =
+    selection.view === "day" ? anchor : addDays(anchor, -((weekday + 6) % 7));
+  const length =
+    selection.view === "day" ? 1 : selection.view === "week" ? 7 : 42;
+  const days = Array.from({ length }, (_, i) => addDays(first, i));
+  const endDate = addDays(first, length);
   return {
     days,
     start: resolveCampusLocal(`${first}T00:00`).instant!,
@@ -67,4 +78,19 @@ export function compareCalendar(
     Date.parse(a.starts_at) - Date.parse(b.starts_at) ||
     a.id.localeCompare(b.id)
   );
+}
+export function calendarCategory(item: {
+  relationship: "hosting" | "joined" | "none";
+}) {
+  return item.relationship === "hosting"
+    ? "hosting"
+    : item.relationship === "joined"
+      ? "attending"
+      : "all";
+}
+export function selectedCategory(
+  item: { relationship: "hosting" | "joined" | "none" },
+  selection: CalendarSelection,
+) {
+  return selection[calendarCategory(item)];
 }

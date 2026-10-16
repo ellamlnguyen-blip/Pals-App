@@ -147,6 +147,8 @@ test("global block serializes joined Hangouts, social writes and message sends",
     update private.hangout_feature_gate set enabled=true;
     update private.hangout_chat_feature_gate set enabled=true;
     update private.notification_feature_gate set enabled=true;
+    update private.pilot_availability set enabled=true;
+    update private.pilot_capabilities set enabled=true where key in ('onboarding','people','friendship','dm','hangouts','hangout_chat','notifications');
     commit;`);
   try {
     // A join wins first: the later nonhost block finds the newly joined peer.
@@ -321,11 +323,19 @@ test("global block serializes joined Hangouts, social writes and message sends",
     sql("update private.safety_feature_gate set enabled=true");
     call(u.b,`select public.set_safety_block('${u.c}',false);`);
 
-    // Readiness changes also use their existing row locks. A waiting join
-    // must reevaluate completeness after the profile update commits.
-    await race("photo_then_join", `update public.profiles set primary_photo_path=null where user_id='${u.c}';`,
+    // ADR-0030 keeps an active confirmed UNC caller eligible without a photo.
+    sql(`update public.profiles set primary_photo_path=null where user_id='${u.c}'`);
+    assert.equal(call(u.c,"select public.get_access_state();"),"ready");
+    call(u.c,`select public.join_hangout('${h.join}');`);
+    assert.equal(state(h.join,u.c),"joined");
+    call(u.c,`select public.leave_hangout('${h.join}');`);
+    assert.equal(state(h.join,u.c),"left");
+
+    // A join waiting on a status write must recheck the committed suspension.
+    await race("suspension_then_join", `update public.accounts set status='suspended' where id='${u.c}';`,
       join(u.c,h.join), /Hangout operation not permitted/, null);
     assert.equal(state(h.join,u.c),"left");
+    sql(`update public.accounts set status='active' where id='${u.c}'`);
     sql(`update public.profiles set primary_photo_path=user_id::text||'/primary.png' where user_id='${u.c}'`);
 
     call(u.c,`select public.join_hangout('${h.join}');`);
@@ -394,15 +404,23 @@ test("global block serializes joined Hangouts, social writes and message sends",
     sql(`update private.people_preferences set opted_in=true where account_id='${u.j}'`);
     call(u.i,`select public.set_safety_block('${u.j}',false);`);
 
-    await race("photo_then_new_block",
-      `update public.profiles set primary_photo_path=null where user_id='${u.j}';`,
+    // A currently visible peer remains blockable without a primary photo.
+    sql(`update public.profiles set primary_photo_path=null where user_id='${u.j}'`);
+    call(u.i,`select public.set_safety_block('${u.j}',true);`);
+    assert.equal(blocked(u.i,u.j),"1");
+    call(u.i,`select public.set_safety_block('${u.j}',false);`);
+    sql(`update public.profiles set primary_photo_path=user_id::text||'/primary.png' where user_id='${u.j}'`);
+
+    // A new block waiting on target status must observe committed suspension.
+    await race("suspension_then_new_block",
+      `update public.accounts set status='suspended' where id='${u.j}';`,
       block(u.i,u.j,true),/Safety operation unavailable/,null);
     assert.equal(blocked(u.i,u.j),"0");
-    sql(`update public.profiles set primary_photo_path=user_id::text||'/primary.png' where user_id='${u.j}'`);
-    await race("new_block_then_photo",block(u.i,u.j,true),
-      `update public.profiles set primary_photo_path=null where user_id='${u.j}';`,null,null);
+    sql(`update public.accounts set status='active' where id='${u.j}'`);
+    await race("new_block_then_suspension",block(u.i,u.j,true),
+      `update public.accounts set status='suspended' where id='${u.j}';`,null,null);
     assert.equal(blocked(u.i,u.j),"1");
-    sql(`update public.profiles set primary_photo_path=user_id::text||'/primary.png' where user_id='${u.j}'`);
+    sql(`update public.accounts set status='active' where id='${u.j}'`);
     call(u.i,`select public.set_safety_block('${u.j}',false);`);
 
     const beforeRollback = blocked(u.e,u.f);
@@ -414,6 +432,8 @@ test("global block serializes joined Hangouts, social writes and message sends",
       assert.equal(blocked(u.e,u.f),beforeRollback,`${isolation} must not write a block`);
     }
   } finally {
+    sql(`update private.pilot_capabilities set enabled=false where key in ('onboarding','people','friendship','dm','hangouts','hangout_chat','notifications');
+      update private.pilot_availability set enabled=false;`);
     sql(`update private.notification_feature_gate set enabled=false;
       update private.hangout_chat_feature_gate set enabled=false;
       update private.hangout_feature_gate set enabled=false;
