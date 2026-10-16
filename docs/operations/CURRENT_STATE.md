@@ -1,5 +1,9 @@
 # Current State
 
+## 2026-10-16 — TASK-039B local server source reviewed
+
+The additive friendship-only DM migration and tests are remote-verified on `agent/TASK-039B-friendship-dm-server` (`1692e91edf1b641843909f8bd18cb02924c36c52`). A fresh security reviewer found no concrete authorization bypass and cleared the exact source tip as a disposable-local dependency for 039C. Tests used separately named `pals_task039b`; the current 3035 preview and its data were not changed. Clean full migration-ledger, concurrent read/unfriend and broader notification/paging tests remain. This main entry is documentation only; app/schema code is unintegrated, no hosted gate changed, and predecessor gates remain.
+
 ## 2026-10-16 — ADR-0045 accepted for local friendship-only DMs
 
 Ella explicitly accepted the complete [ADR-0045](../../decisions/ADR-0045-friendship-only-direct-messaging.md), including private closure of existing nonfriend/request-only conversations and fresh generations after refriending. TASK-039B server migration and fresh security review now precede TASK-039C web/API removal. The currently running local preview still uses the old request consent backend; acceptance alone changed no schema or hosted access. The remote-verified 039A UI dependency is `98327d14d6b35f333ed4afe64ac663427ca0bd5c`. Predecessor application-main/release gates remain open.

@@ -1,5 +1,9 @@
 # NOW
 
+## 2026-10-16 — TASK-039B reviewed local server milestone
+
+Friendship-only server migration/tests/handoff are on `agent/TASK-039B-friendship-dm-server` at independently verified `1692e91edf1b641843909f8bd18cb02924c36c52`. The [fresh security review](../agents/handoffs/TASK-039B-SECURITY-REVIEW.md) found no concrete bypass and permits [039C](active/TASK-039C-friendship-dm-web.md) to depend on this exact tip for disposable-local web/API work. Isolation, legacy retirement, send/teardown and old-RPC denial tests passed. Concurrent read/unfriend, full clean migration ledger, broader legacy notifications and attention paging remain verification gaps. App code stays off main; no hosted gate changed.
+
 ## 2026-10-16 — ADR-0045 accepted; TASK-039B/C ready in order
 
 Ella explicitly accepted [ADR-0045](../decisions/ADR-0045-friendship-only-direct-messaging.md) for local implementation, including private retirement of existing nonfriend/request-only DM generations. [039B](active/TASK-039B-friendship-only-dm.md) now owns additive server authorization/RPC/notification migration and fresh security review. [039C](active/TASK-039C-friendship-dm-web.md) follows reviewed server enforcement to remove request UI/API and verify two-account flows. The exact local UI dependency is remote-verified 039A `98327d14d6b35f333ed4afe64ac663427ca0bd5c`. No hosted or application-main integration is authorized by this acceptance; predecessor gates remain open.

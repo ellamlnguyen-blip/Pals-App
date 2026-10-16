@@ -1,6 +1,6 @@
 # TASK-039C — Friendship-only DM web and API
 
-Status: dependent on the fresh security review and accepted local TASK-039B migration. Start a fresh bounded worktree from then-current canonical main plus the exact reviewed 039B source. Never remove the student request UI ahead of server enforcement.
+Status: ready for bounded local web/API implementation after this reviewed milestone is published on canonical main. Start a fresh worktree from current `origin/main` plus exact freshly reviewed TASK-039B source `1692e91edf1b641843909f8bd18cb02924c36c52`. Never remove the student request UI ahead of server enforcement; use the isolated tested migration in the disposable verification environment.
 
 Remove Message requests cue/count/list behavior and request/accept/reply/withdraw/allow controls from Chats, direct thread, People entry points and web/API routes. Current accepted friendship is the sole route to a first actual send; the server remains authoritative. Inbox and page routes show only authorized current-friend DM generations. A stale direct URL, old request notification or lost friendship must clear peer identity and bodies and show a neutral unavailable state with a Pals return route. Preserve safety/report/close-chat actions and current Hangout chat behavior. Do not create sample content or alter unrelated categories.
 

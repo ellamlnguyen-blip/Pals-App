@@ -1,5 +1,9 @@
 # Backlog
 
+## 2026-10-16 — TASK-039B remaining acceptance evidence
+
+The locally reviewed server source at `1692e91edf1b641843909f8bd18cb02924c36c52` can feed 039C. Before final accepted-environment persistence, test concurrent DM read versus unfriend, clean complete migration-stack application with ledger, old `dm_accepted` and friend-origin notification neutrality, and attention pagination at scale. Keep predecessor release/application-main gates open; do not infer hosted readiness from the isolated `pals_task039b` database.
+
 ## 2026-10-16 — TASK-039B server policy and TASK-039C web dependency
 
 ADR-0045 is explicitly accepted for local work. Implement and freshly security-review friendship-only DM server enforcement on a named disposable database before removing Message requests, request API/actions and notification destinations in 039C. Verify old RPC denial, private terminal history, friend close/refriend generations, two-account access, retries/races, RLS and responsive UI. No hosted or application-main integration before predecessor gates.
