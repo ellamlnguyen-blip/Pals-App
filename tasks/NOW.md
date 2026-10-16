@@ -1,5 +1,9 @@
 # NOW
 
+## 2026-10-16 — TASK-036 Chats reference layout
+
+Ella supplied a Chats screen image and requested the current chat UI match its split-pane layout. [Bounded contract](active/TASK-036-chat-reference-layout.md) records the presentation-only scope, exact local source dependency `287e3fa`, responsive and authorization boundaries. Coordinator publishes this contract before fresh GPT-6 Sol medium implementation dispatch. TASK-032/033/034/035 parent gates remain open; no hosted or application-main code change is inferred.
+
 ## 2026-10-16 — TASK-035 compact Calendar and Pals controls
 
 Ella requested a one-row compact Calendar legend/date-range/view layout and a smaller Pals filter beside its blue heading, with a graduation-year dropdown and “Major” placeholder. [Bounded contract](active/TASK-035-calendar-pals-layout.md) starts from canonical `e15215d` and explicitly depends on reviewed local source `70537ad`; it is presentation-only. TASK-032/033/034 parent gates stay open. Coordinator publishes the contract before fresh GPT-6 Sol medium implementation dispatch; no hosted or application-main code change is inferred.

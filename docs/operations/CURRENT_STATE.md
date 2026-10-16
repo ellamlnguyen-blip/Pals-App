@@ -1,5 +1,9 @@
 # Current State
 
+## 2026-10-16 — TASK-036 requested
+
+TASK-036 is a bounded Chats presentation follow-on from Ella's supplied image. Its contract is `tasks/active/TASK-036-chat-reference-layout.md`, starting from canonical main `1f365d9` with reviewed disposable-local TASK-035 source dependency `287e3fa`. No TASK-036 code or hosted change has been integrated. TASK-032/033/034/035 remain incomplete at recorded gates.
+
 ## 2026-10-16 — TASK-035 requested
 
 TASK-035 is a new bounded presentation follow-on from Calendar and Pals browser comments. Its contract is `tasks/active/TASK-035-calendar-pals-layout.md`, starting from canonical main `e15215d` with explicit reviewed TASK-034 local source dependency `70537ad`. No TASK-035 code or hosted change has been integrated. TASK-032/033/034 remain incomplete at recorded gates.

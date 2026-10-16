@@ -1,0 +1,15 @@
+# TASK-036 — Chat reference layout
+
+Status: active, requested by Ella on 2026-10-16 from the attached Chats reference image. Canonical main baseline `1f365d92c17ac42bb2fe4a42c862c343855e0fee`; exact reviewed disposable-local application source dependency `287e3faba359dfd49c713abf1533efb06a6cb49d` on `agent/TASK-035-compact-controls`. TASK-032/033/034/035 remain incomplete at recorded signoff and release gates. No hosted change is in scope.
+
+## Requested outcome
+
+Redesign the existing Chats index and direct/Hangout conversation pages toward the supplied image: blue Chats heading, a rounded split-pane shell, left chat navigation with prominent selected row and message-request access, and a right conversation pane with an identity header, Hangout detail strip when applicable, chat bubbles and a compact bottom composer. Use actual authorized chat rows, messages and Hangout details. The image's names, faces, counts, times and message text are illustrative, never fixtures or assumed private data. Keep the current icon header and Pals naming, which reflect later explicit instructions than the image's historical navigation.
+
+At desktop widths the sidebar and conversation share one shell. The `/chats` route should show the list and a useful empty-selection state; direct and Hangout thread routes should retain their existing authorization boundaries and expose the corresponding thread in the right pane. On phones, provide a clear list-to-thread path and back navigation without horizontal overflow. The Hangouts/Messages segmented control may filter the currently loaded list only if its paging semantics stay truthful; otherwise keep a unified list while matching the visual grouping as closely as possible. Do not silently drop reachable chats or requests.
+
+## Boundaries and acceptance
+
+Presentation and navigation in `apps/web/app/chats` plus focused UI tests, evidence, handoff and documentation. Reuse current caller-bound chat endpoints, permissions, polling, unread state, message send/retry, poll and safety controls. No schema, RPC, RLS, credential, mock data, guessed peer photos, notification changes, or architecture change. Avoid new public author metadata; if the current reader exposes a label, render it but do not infer identity from UUIDs. Do not redesign the site header.
+
+Read AGENTS, this contract, design direction, tokens/components, messaging and privacy specs, and the installed `design-taste-frontend` skill; attempt live `usepals.com`. Inspect the supplied image and the actual routes before editing. Verify production web build/TypeScript, desktop and 375px rendering of index, Hangout thread and DM thread, loading/empty/error/denied states, selected item, composer/send and poll controls, keyboard/accessibility labels, and no horizontal overflow. Record any unavailable UI fixture or blocked state. A task-specific agent implements; coordinator reviews, renders, publishes remote-verified branch and docs-only main status. Keep unfinished application code on its task branch until parent gates clear.

@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-16 — TASK-036 chat layout contract
+
+Recorded the requested split-pane Chats reference layout as a bounded UI task with an exact local source dependency and retained chat authorization boundaries. No application or hosted change in this documentation milestone.
+
 ## 2026-10-16 — TASK-035 layout contract
 
 Recorded the requested Calendar and Pals compact-control follow-on with a bounded UI contract and exact local source dependency. No application or hosted change in this documentation milestone.

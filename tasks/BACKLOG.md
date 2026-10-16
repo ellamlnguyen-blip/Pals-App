@@ -1,5 +1,9 @@
 # Backlog
 
+## 2026-10-16 — TASK-036 verification and integration gates
+
+After bounded implementation, review the Chats index and both conversation routes at desktop/mobile, including real data, loading/denied states, send/poll controls, navigation, build/TypeScript and no overflow. Publish the task branch with a verified remote SHA and record local outcome on main. Parent TASK-032/033/034/035 signoff and application-main/hosted gates remain open.
+
 ## 2026-10-16 — TASK-035 verification and integration gates
 
 After bounded implementation, verify actual 1280/767/375px Calendar and Pals layouts, native year/filter behavior, build/TypeScript, accessibility and no overflow. Review source and handoff, publish the task branch with remote SHA, then record local outcome on main. Parent TASK-032/033/034 and user sign-off/application-main/hosted gates remain separate and open.
