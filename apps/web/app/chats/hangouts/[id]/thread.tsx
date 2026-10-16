@@ -6,6 +6,7 @@ import { fetchVisiblePage, nextPageCursors } from "./page-data";
 import { analytics } from "../../../../lib/analytics";
 import { firstRequestConfirmed } from "../../../../lib/analytics-evidence";
 import { ChatPolls } from "../../chat-polls";
+import { recordThreadAttention } from "../../thread-attention";
 import {
   AUTH_TRANSITION_CHANNEL,
   AUTH_TRANSITION_EVENT,
@@ -31,6 +32,11 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
   const [more, setMore] = useState(false);
   const [pageIndex, setPageIndex] = useState(0);
   const [maskedHeight, setMaskedHeight] = useState(0);
+  const [attention, setAttention] = useState<{
+    sequence: number | null;
+    ticket: number;
+  } | null>(null);
+  const touched = useRef(false);
   const threadRef = useRef<HTMLDivElement>(null);
   const generation = useRef(0);
   const busy = useRef(false);
@@ -61,6 +67,7 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
         setPageIndex(0);
       }
       setMessages([]);
+      setAttention(null);
       setMore(false);
       setState("loading");
       setDraft("");
@@ -90,6 +97,7 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
     pageCursors.current = [null];
     setPageIndex(0);
     setMessages([]);
+    setAttention(null);
     setMore(false);
     setDraft("");
     draftRef.current = "";
@@ -101,7 +109,7 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
     setMaskedHeight(0);
   }, []);
   const read = useCallback(
-    async (after: number | null, reveal = false) => {
+    async (after: number | null, reveal = false, mark = true) => {
       if (
         terminalDenial.current ||
         document.hidden ||
@@ -140,6 +148,11 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
         }
         if (reveal) {
           setMessages(data.messages);
+          setAttention(
+            mark
+              ? { sequence: data.messages.at(-1)?.sequence ?? null, ticket }
+              : null,
+          );
           setDraft(draftRef.current);
           setPending(pendingRef.current);
           setMore(data.messages.length === 50);
@@ -150,6 +163,11 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
           setStatus(data.messages.length ? "Chat ready." : "No messages yet.");
         } else {
           setMessages(data.messages);
+          setAttention(
+            mark
+              ? { sequence: data.messages.at(-1)?.sequence ?? null, ticket }
+              : null,
+          );
           setMore(data.messages.length === 50);
           latest.current = data.messages.at(-1)?.sequence ?? after ?? 0;
         }
@@ -218,6 +236,7 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
     };
     const resume = () => {
       if (document.hidden) return;
+      touched.current = false;
       if (terminalDenial.current) {
         deny();
         return;
@@ -282,6 +301,26 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
       channel.close();
     };
   }, [api, deny, mask, read, refreshProjection, userId]);
+  useEffect(() => {
+    if (
+      !attention ||
+      state !== "ready" ||
+      !visible.current ||
+      document.hidden ||
+      authPending.current.size ||
+      generation.current !== attention.ticket
+    )
+      return;
+    const shouldTouch = !touched.current;
+    if (shouldTouch) touched.current = true;
+    void recordThreadAttention(
+      userId,
+      "hangout",
+      id,
+      attention.sequence,
+      shouldTouch,
+    );
+  }, [attention, state, userId, id]);
 
   async function showNewerPage() {
     if (!more || sending || !latest.current) return;
@@ -326,7 +365,7 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
     setSending(true);
     setStatus(retry ? "Checking before retry…" : "Checking before send…");
     const ticket = generation.current;
-    const authorized = await read(pageAfter.current);
+    const authorized = await read(pageAfter.current, false, false);
     if (!authorized || ticket !== generation.current || document.hidden) {
       setSending(false);
       return;
@@ -360,7 +399,7 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
           setDraft("");
         }
         sent = true;
-        if (await read(pageAfter.current))
+        if (await read(pageAfter.current, false, false))
           setStatus(
             sentFromFullPage
               ? "Message sent. Load newer messages to see it."

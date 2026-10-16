@@ -1,5 +1,9 @@
 # Backlog
 
+## 2026-10-15 — TASK-034 dependent UI integration
+
+[TASK-034E](active/TASK-034E-chat-ui.md) and [TASK-034F](active/TASK-034F-pals-ranking-ui.md) are ready after reviewed disposable-local C/D migrations. TASK-034 still needs UI integration, complete local privacy/race/performance evidence, independent review, parent handoff and final sign-off before application-main integration. Existing TASK-032/033 hosted and integration gates remain open.
+
 ## 2026-10-15 — TASK-034 requested
 
 New bounded follow-on: chat unread indicators/global recent use ordering, Pals naming, owner-relative friend/pending symbols, major/year-only filters and profile-similarity ranking. TASK-034A uses existing authorized data; TASK-034B audits and prepares a concrete Proposed ADR before new persistence/ranking implementation. Local source dependency c63992d; parents032/033 remain incomplete, no hosted or application-main authorization inferred. Coordinator publishes contracts before fresh GPT-6 Sol medium agent dispatch.

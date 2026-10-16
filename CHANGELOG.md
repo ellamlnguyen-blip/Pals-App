@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-15 — TASK-034 disposable backend milestone
+
+Published TASK-034E/F UI contracts after accepted ADR-0043 C/D migrations passed disposable-local application/replay and focused pgTAP (28/28 and 21/21). Recorded remote-verified task SHAs and the Pals hidden-relationship management fix. Parent task remains incomplete.
+
 ## 2026-10-15 — TASK-033 reviewed local implementation
 
 Source candidate `d8eef34f227c5c04f6132a7744e6b9278be418fc` is pushed and independently remote verified. All seven additive migrations applied only to named disposable;191 focused SQL checks and four concurrency harnesses passed. Full web build/TypeScript and four helper checks passed. Actual browser consent, polls, invitation and preference flows verified; real scheduled cron delivered exactly once across two runs. Final cross-stage review, desktop/375px/source-denial QA and scoped cleanup passed. Evidence is in `docs/ux/evidence/task033-local`; local candidate is ready for finalization/sign-off. [Local handoff](agents/handoffs/TASK-033-LOCAL.md) records scope and limits. TASK-032/033 remain incomplete behind finalization/sign-off/application-main/hosted gates; no successor.

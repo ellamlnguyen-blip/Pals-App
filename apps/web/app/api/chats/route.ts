@@ -1,17 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { access } from "../../../lib/access";
-import { dmErrorKind, dmHeaders, type DmInboxRow } from "../../../lib/dm";
+import { dmHeaders } from "../../../lib/dm";
 import { localPeopleAvailable } from "../../../lib/people";
 import { primaryCardPhotoRevision } from "../../../lib/people-card-photos";
-import { pinCue } from "../../hangouts/saved/pin-cue";
 import type { CombinedRow } from "../../chats/combined-types";
 import {
-  advanceCombinedCursor,
-  parseCombinedCursor,
-} from "../../chats/combined-paging";
-import {
-  projectDmRow,
-  sortCombinedPage,
+  parseAttentionPage,
+  projectAttentionItem,
 } from "../../chats/combined-projection";
 
 export const dynamic = "force-dynamic";
@@ -28,126 +23,49 @@ export async function GET(request: NextRequest) {
   }
   if (!target?.user || target.user.id !== actor || target.state !== "ready")
     return reply({ kind: "denied" }, 403);
-  const cursor = parseCombinedCursor(
-    request.nextUrl.searchParams.get("cursor"),
-  );
-  if (!cursor) return reply({ kind: "invalid" }, 400);
+  const cursor = request.nextUrl.searchParams.get("cursor");
+  if (cursor !== null && (!cursor || cursor.length > 160))
+    return reply({ kind: "invalid" }, 400);
   const client = target.client;
-  const dmResult = cursor.dmDone
-    ? { data: [] as DmInboxRow[], error: null }
-    : await client.rpc("list_dm_inbox", {
-        p_after_created_at: cursor.dmTime,
-        p_after_generation_id: cursor.dmGeneration,
-        p_limit: 24,
-      });
-  const dmUnavailable = dmResult.error?.code === "42501";
-  if (dmResult.error && !dmUnavailable) {
-    const kind = dmErrorKind(dmResult.error.code);
-    return reply({ kind, source: "direct chats" }, 503);
+  const result = await client.rpc("list_my_chat_attention", {
+    p_cursor: cursor,
+    p_limit: 24,
+  });
+  if (result.error) {
+    if (result.error.code === "42501")
+      return reply({ kind: cursor ? "stale" : "denied" }, cursor ? 409 : 403);
+    return reply({ kind: "error" }, 503);
   }
-  let hangoutQuery = client
-    .from("hangout_participants")
-    .select(
-      "hangout_id,hangouts!inner(id,title,description,created_at,starts_at,status,visibility)",
-    )
-    .eq("account_id", actor)
-    .eq("hangouts.status", "published")
-    .eq("hangouts.visibility", "campus")
-    .order("hangout_id", { ascending: true })
-    .limit(24);
-  if (cursor.hangoutId)
-    hangoutQuery = hangoutQuery.gt("hangout_id", cursor.hangoutId);
-  const hangoutResult = cursor.hangoutDone
-    ? { data: [], error: null }
-    : await hangoutQuery;
-  if (hangoutResult.error)
-    return reply({ kind: "error", source: "Hangout chats" }, 503);
-  const dms = (dmUnavailable ? [] : (dmResult.data ?? [])) as DmInboxRow[];
-  const hangouts = hangoutResult.data ?? [];
+  const page = parseAttentionPage(result.data);
+  if (!page) return reply({ kind: "error" }, 503);
   const rows: CombinedRow[] = [];
-  // Bounded enrichment; neither detail RPC may create a new chat or expose a peer ID as a label.
-  for (let offset = 0; offset < dms.length; offset += 4) {
-    const batch = await Promise.all(
-      dms.slice(offset, offset + 4).map(async (dm) => {
-        const detail = await client.rpc("get_people_detail", {
-          p_account_id: dm.peer_id,
-        });
-        if (detail.error) return { error: true, row: null };
-        let photoRevision: number | null = null;
-        if (detail.data?.[0]?.account_id === dm.peer_id) {
-          const rich = await client.rpc("get_rich_people_detail", {
-            p_account_id: dm.peer_id,
-          });
-          if (!rich.error)
-            photoRevision = primaryCardPhotoRevision(
-              dm.peer_id,
-              rich.data?.[0],
-            );
-        }
-        return {
-          error: false,
-          row: projectDmRow(dm, detail.data?.[0], photoRevision),
-        };
-      }),
-    );
-    if (batch.some((item) => item.error || !item.row))
-      return reply({ kind: "error", source: "direct chats" }, 503);
-    for (const item of batch) if (item.row) rows.push(item.row);
+  for (const item of page.items) {
+    if (item.source_kind === "hangout") {
+      const row = projectAttentionItem(item, null, null);
+      if (!row) return reply({ kind: "error" }, 503);
+      rows.push(row);
+      continue;
+    }
+    // The attention snapshot authorizes the source. Fresh detail is required
+    // before displaying a peer label or photo, including on cursor pages.
+    const detail = await client.rpc("get_people_detail", {
+      p_account_id: item.peer_id,
+    });
+    if (detail.error) return reply({ kind: "error" }, 503);
+    const peer = detail.data?.[0];
+    if (peer?.account_id !== item.peer_id) return reply({ kind: "stale" }, 409);
+    const rich = await client.rpc("get_rich_people_detail", {
+      p_account_id: item.peer_id,
+    });
+    const revision = rich.error
+      ? null
+      : primaryCardPhotoRevision(item.peer_id!, rich.data?.[0]);
+    const row = projectAttentionItem(item, peer, revision);
+    if (!row) return reply({ kind: "error" }, 503);
+    rows.push(row);
   }
-  for (let offset = 0; offset < hangouts.length; offset += 4) {
-    const batch = await Promise.all(
-      hangouts.slice(offset, offset + 4).map(async (row) => {
-        // The existing chat RPC is the membership gate. Request one row only;
-        // message bodies are never used for inbox labels or returned here.
-        const gate = await client.rpc("read_hangout_messages", {
-          p_hangout_id: row.hangout_id,
-          p_after_sequence: null,
-          p_limit: 1,
-        });
-        if (gate.error)
-          return {
-            gate: gate.error.code === "42501" ? "denied" : "error",
-            row: null,
-          };
-        const detail = Array.isArray(row.hangouts)
-          ? row.hangouts[0]
-          : row.hangouts;
-        if (
-          !detail ||
-          typeof detail.title !== "string" ||
-          typeof detail.starts_at !== "string" ||
-          !Number.isFinite(Date.parse(detail.starts_at)) ||
-          typeof detail.created_at !== "string" ||
-          !Number.isFinite(Date.parse(detail.created_at))
-        )
-          return { gate: "error", row: null };
-        return {
-          gate: "ok",
-          row: {
-            kind: "hangout" as const,
-            id: row.hangout_id,
-            title: detail.title,
-            emoji: pinCue({
-              title: detail.title,
-              description: detail.description,
-            }),
-            startsAt: detail.starts_at,
-            entryTime: detail.created_at,
-          },
-        };
-      }),
-    );
-    if (batch.some((item) => item.gate === "error" || item.gate === "invalid"))
-      return reply({ kind: "error", source: "Hangout chats" }, 503);
-    for (const item of batch) if (item.row) rows.push(item.row);
-  }
-  // Each source advances only through rows fetched on this page, including concealed denials.
-  const next = advanceCombinedCursor(
-    { ...cursor, dmDone: cursor.dmDone || dmUnavailable },
-    dms,
-    hangouts,
-  );
-  // Distinguish an independent DM gate closure from account revocation before returning rows.
+  // A source can change between snapshot and enrichment. A fresh owner gate
+  // prevents an account transition from releasing the assembled rows.
   let current;
   try {
     current = await access();
@@ -156,10 +74,5 @@ export async function GET(request: NextRequest) {
   }
   if (current.user?.id !== actor || current.state !== "ready")
     return reply({ kind: "denied" }, 403);
-  return reply({
-    kind: "ok",
-    rows: sortCombinedPage(rows),
-    next,
-    dmUnavailable,
-  });
+  return reply({ kind: "ok", rows, next: page.next_cursor });
 }
