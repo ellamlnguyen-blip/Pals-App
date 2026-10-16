@@ -1,6 +1,6 @@
 # TASK-038 student header handoff
 
-Status: local CSS candidate built and rendered in the named disposable preview; publication and coordinator status review remain. Starting HEAD `149edc6` contains canonical main `83a0153` and reviewed TASK-037 source `8aa18c5`.
+Status: local CSS candidate built and rendered in the named disposable preview. The first task checkpoint `86675c89d0af9931c2c717aaa3f04082cc618422` was published and independently remote verified after Ella approved the exact GitHub destination. This handoff correction is included in the final task-branch publication receipt recorded by the coordinator. Starting source `149edc6` contains canonical main `83a0153` and reviewed TASK-037 source `8aa18c5`.
 
 ## Change
 
@@ -17,4 +17,4 @@ The shared student header keeps its existing three-column, single-row layout thr
 - Screenshots: `docs/ux/evidence/task038-local/header-1088.png`, `header-721.png`, `header-720.png`, and `header-375.png`. The present-page Chats icon and primary current-page CSS remain unchanged; 44px targets and `:focus-visible` rules remain intact. A ready-user visit to `/restricted` redirected to Hangouts, so a limited-account fixture was not rendered. Source inspection confirms its separate header overrides remain at max-width 720px; the layout change does not alter that state.
 - `https://usepals.com/` and a local `file://` fixture were unavailable in the agent environment; the authenticated local preview supplied rendered evidence instead.
 
-TASK-032/033/034/035/036/037 release and application-main gates remain open. The coordinator owns the task branch publication, shared status records, and main integration decision.
+TASK-032/033/034/035/036/037 release and application-main gates remain open. The coordinator owns the shared status records and main integration decision.
