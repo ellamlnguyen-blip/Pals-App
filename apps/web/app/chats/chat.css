@@ -250,3 +250,97 @@
     justify-self: start;
   }
 }
+
+/* One inbox, with the same row language for direct requests and Hangouts. */
+.combined-inbox {
+  padding-top: var(--pals-space-4);
+}
+.combined-list {
+  list-style: none;
+  margin: 0 0 var(--pals-space-6);
+  padding: 0;
+  border-top: 1px solid var(--pals-line);
+}
+.combined-list li {
+  border-bottom: 1px solid var(--pals-line);
+}
+.combined-list a {
+  display: flex;
+  align-items: center;
+  min-height: 80px;
+  gap: var(--pals-space-4);
+  padding: var(--pals-space-3) var(--pals-space-2);
+  color: var(--pals-ink);
+  text-decoration: none;
+  border-radius: var(--pals-radius);
+}
+.combined-list a:hover,
+.combined-list a:focus-visible {
+  background: var(--pals-accent-soft);
+}
+.combined-list a:focus-visible {
+  outline: 2px solid var(--pals-accent);
+  outline-offset: -2px;
+}
+.combined-avatar {
+  width: 52px;
+  height: 52px;
+  flex: 0 0 52px;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: var(--pals-accent-soft);
+  color: var(--pals-accent);
+  font-weight: 800;
+}
+.combined-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.combined-emoji {
+  font-size: 1.6rem;
+}
+.combined-copy {
+  display: grid;
+  min-width: 0;
+  gap: 0.12rem;
+  flex: 1;
+}
+.combined-copy strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.combined-copy small,
+.combined-preview {
+  color: var(--pals-muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.combined-preview {
+  font-size: 0.875rem;
+}
+.combined-arrow {
+  font-size: 1.8rem;
+  color: var(--pals-muted);
+  line-height: 1;
+}
+.combined-inbox > .quiet-button {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  padding: var(--pals-space-2) var(--pals-space-4);
+  border: 1px solid var(--pals-line);
+  border-radius: 999px;
+  color: var(--pals-accent);
+  background: var(--pals-surface-raised);
+  font-weight: 800;
+}
+@media (max-width: 600px) {
+  .combined-list a {
+    gap: var(--pals-space-3);
+  }
+}

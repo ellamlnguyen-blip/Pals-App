@@ -371,7 +371,9 @@ export function NotificationsInbox({ actor }: { actor: string }) {
         <section className="notifications-inbox" aria-labelledby="inbox-title">
           <div className="notifications-section-heading">
             <div>
-              <h2 id="inbox-title">Inbox</h2>
+              <h2 id="inbox-title" className="sr-only">
+                Inbox
+              </h2>
             </div>
             {phase === "ready" && (
               <button
