@@ -5,9 +5,18 @@ import {
   validSelection,
   overlaps,
   compareCalendar,
+  selectedCategory,
+  calendarCategory,
+  addMonths,
 } from "../apps/web/lib/calendar-time.ts";
-const select = (date, view = "day") => ({ date, view, filter: "discoverable" });
-test("Calendar validates bounded real dates and explicit filters", () => {
+const select = (date, view = "day") => ({
+  date,
+  view,
+  hosting: true,
+  attending: true,
+  all: true,
+});
+test("Calendar validates bounded real dates, views, and independent categories", () => {
   for (const date of [
     "2027-02-30",
     "2027-13-01",
@@ -17,17 +26,31 @@ test("Calendar validates bounded real dates and explicit filters", () => {
     "x",
   ])
     assert.equal(validSelection(select(date)), false);
-  assert.equal(validSelection(select("2028-02-29")), true);
+  assert.equal(validSelection(select("2028-02-29", "month")), true);
+  assert.equal(validSelection({ ...select("2027-01-01"), all: "yes" }), false);
   assert.equal(
-    validSelection({ ...select("2027-01-01"), filter: "friends" }),
+    validSelection({ ...select("2027-01-01"), view: "year" }),
     false,
   );
+  const none = {
+    ...select("2027-01-01"),
+    hosting: false,
+    attending: false,
+    all: false,
+  };
+  assert.equal(validSelection(none), true);
+  assert.equal(selectedCategory({ relationship: "hosting" }, none), false);
   assert.equal(
-    validSelection({ ...select("2027-01-01"), view: "month" }),
-    false,
+    selectedCategory({ relationship: "joined" }, { ...none, attending: true }),
+    true,
   );
+  assert.equal(
+    selectedCategory({ relationship: "none" }, { ...none, all: true }),
+    true,
+  );
+  assert.equal(calendarCategory({ relationship: "hosting" }), "hosting");
 });
-test("Campus ranges use exclusive DST-safe midnights and Monday weeks", () => {
+test("Campus ranges use exclusive DST-safe midnights, Monday weeks, and six-row months", () => {
   for (const [date, hours] of [
     ["2027-03-14", 23],
     ["2027-11-07", 25],
@@ -45,6 +68,11 @@ test("Campus ranges use exclusive DST-safe midnights and Monday weeks", () => {
     (Date.parse(spring.end) - Date.parse(spring.start)) / 3600000,
     167,
   );
+  const month = calendarRange(select("2027-03-14", "month"));
+  assert.equal(month.days.length, 42);
+  assert.equal(month.days[0], "2027-03-01");
+  assert.equal(month.days[41], "2027-04-11");
+  assert.equal(addMonths("2027-12-31", 1), "2028-01-01");
 });
 test("Overlap keeps cross-midnight plans, excludes touching boundaries and bounds unknown ends", () => {
   const { start, end } = calendarRange(select("2027-03-14"));

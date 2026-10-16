@@ -5,8 +5,8 @@ export default function PeopleLoading() {
   return (
     <Frame>
       <section className="people-panel" role="status" aria-live="polite">
-        <h1>Loading People</h1>
-        <p>Checking your latest access and People profiles…</p>
+        <h1>Loading Pals</h1>
+        <p>Checking your latest access and Pals profiles…</p>
       </section>
     </Frame>
   );

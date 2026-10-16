@@ -1,34 +1,71 @@
 import { NextRequest } from "next/server";
-import { privateResponse, requestClient } from "../../../lib/server";
+import { mayEnrollOperator } from "../../../lib/config";
+import {
+  exactOrigin,
+  privateResponse,
+  requestClient,
+} from "../../../lib/server";
+
+function withCookies(
+  response: ReturnType<typeof privateResponse>,
+  source: ReturnType<typeof privateResponse>,
+) {
+  source.cookies.getAll().forEach((cookie) => response.cookies.set(cookie));
+  return response;
+}
 
 export async function GET(request: NextRequest) {
-  const response = privateResponse({ signedIn: false });
+  const response = privateResponse({
+    signedIn: false,
+    role: null,
+    mfa: "denied",
+  });
   try {
     const client = requestClient(request, response);
-    const { data } = await client.auth.getUser();
-    let role: "admin" | "moderator" | null = null;
-    if (data.user) {
-      const [account, ownRole] = await Promise.all([
-        client
-          .from("accounts")
-          .select("status")
-          .eq("id", data.user.id)
-          .maybeSingle(),
-        client
-          .from("platform_roles")
-          .select("role")
-          .eq("user_id", data.user.id)
-          .maybeSingle(),
-      ]);
-      if (
-        account.data?.status === "active" &&
-        (ownRole.data?.role === "admin" || ownRole.data?.role === "moderator")
-      )
-        role = ownRole.data.role;
-    }
-    const done = privateResponse({ signedIn: Boolean(data.user), role });
-    response.cookies.getAll().forEach((c) => done.cookies.set(c));
-    return done;
+    const { data: user, error } = await client.auth.getUser();
+    if (error || !user.user) return response;
+    const [account, ownRole, factors, assurance] = await Promise.all([
+      client
+        .from("accounts")
+        .select("status")
+        .eq("id", user.user.id)
+        .maybeSingle(),
+      client
+        .from("platform_roles")
+        .select("role")
+        .eq("user_id", user.user.id)
+        .maybeSingle(),
+      client.auth.mfa.listFactors(),
+      client.auth.mfa.getAuthenticatorAssuranceLevel(),
+    ]);
+    const role =
+      account.data?.status === "active" &&
+      (ownRole.data?.role === "admin" || ownRole.data?.role === "moderator")
+        ? ownRole.data.role
+        : null;
+    const verifiedFactor = factors.data?.totp?.find(
+      (factor) => factor.status === "verified",
+    );
+    const verified = Boolean(verifiedFactor);
+    const mfa =
+      !role || factors.error || assurance.error
+        ? "denied"
+        : assurance.data?.currentLevel === "aal2" && verified
+          ? "ready"
+          : verified
+            ? "challenge"
+            : mayEnrollOperator(user.user.id)
+              ? "enroll"
+              : "denied";
+    return withCookies(
+      privateResponse({
+        signedIn: true,
+        role,
+        mfa,
+        factorId: mfa === "challenge" ? verifiedFactor?.id : null,
+      }),
+      response,
+    );
   } catch {
     return response;
   }
@@ -36,15 +73,13 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   const response = privateResponse({ ok: false }, 400);
-  if (request.headers.get("origin") !== "http://127.0.0.1:3001")
-    return response;
+  if (!exactOrigin(request)) return response;
   try {
     const body = await request.json();
     if (body?.op === "out") {
-      await requestClient(request, response).auth.signOut();
-      const done = privateResponse({ ok: true });
-      response.cookies.getAll().forEach((c) => done.cookies.set(c));
-      return done;
+      const { error } = await requestClient(request, response).auth.signOut();
+      if (error) return privateResponse({ ok: false }, 503);
+      return withCookies(privateResponse({ ok: true }), response);
     }
     if (
       body?.op !== "in" ||
@@ -57,10 +92,14 @@ export async function POST(request: NextRequest) {
     const { error } = await requestClient(
       request,
       response,
-    ).auth.signInWithPassword({ email: body.email, password: body.password });
-    const done = privateResponse({ ok: !error }, error ? 403 : 200);
-    response.cookies.getAll().forEach((c) => done.cookies.set(c));
-    return done;
+    ).auth.signInWithPassword({
+      email: body.email,
+      password: body.password,
+    });
+    return withCookies(
+      privateResponse({ ok: !error }, error ? 403 : 200),
+      response,
+    );
   } catch {
     return response;
   }
