@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-16 — TASK-035 layout contract
+
+Recorded the requested Calendar and Pals compact-control follow-on with a bounded UI contract and exact local source dependency. No application or hosted change in this documentation milestone.
+
 ## 2026-10-16 — TASK-034 reviewed local candidate
 
 Recorded remote-verified source candidate `70537ad702d536013e711d75e64578db34cdc4ce` for combined-chat unread/recent attention and similarity-ranked Pals, local SQL/build/browser/race and 1,000-profile benchmark evidence, fresh review corrections and remaining final gates. No unfinished application code was merged into canonical main or hosted environment.

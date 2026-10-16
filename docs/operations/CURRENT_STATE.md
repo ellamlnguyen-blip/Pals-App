@@ -1,5 +1,9 @@
 # Current State
 
+## 2026-10-16 — TASK-035 requested
+
+TASK-035 is a new bounded presentation follow-on from Calendar and Pals browser comments. Its contract is `tasks/active/TASK-035-calendar-pals-layout.md`, starting from canonical main `e15215d` with explicit reviewed TASK-034 local source dependency `70537ad`. No TASK-035 code or hosted change has been integrated. TASK-032/033/034 remain incomplete at recorded gates.
+
 ## 2026-10-16 — TASK-034 local candidate, gated
 
 Branch `agent/TASK-034-pals-chat-discovery` at remote-verified `70537ad702d536013e711d75e64578db34cdc4ce` holds the reviewed Chats attention and similarity-ranked Pals implementation plus its handoff/screenshots. Accepted ADR-0043 was implemented only against named disposable Supabase; three additive migrations applied/replayed, SQL suites 28/28, 11/11 and 21/21 passed. Full web build/TypeScript, focused UI checks, actual authenticated unread/recency/ack and safe-hidden-peer/cursor browser checks, desktop/narrow renders and a two-session People opt-out race passed. A rollback-only 1,000-profile first page took 220.189 ms locally. The two fresh-review P2 issues were corrected and re-reviewed. Broader chat races, repeated/larger performance, physical mobile and final sign-off remain. TASK-032/033 parent gates and application-main/hosted integration remain open; main still carries records only. See [status handoff](../../agents/handoffs/TASK-034-STATUS.md).
