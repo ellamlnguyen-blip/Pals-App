@@ -2,6 +2,7 @@
 
 Status: bounded source candidate, pending coordinator review and predecessor integration gates.
 Branch: `agent/TASK-039A-quiet-chat-ui` from `origin/main` with exact TASK-038 source `f04a4a39eda28718e06ac316a28af92f226e188a` merged at `b6007c359fecb0863296302af6c97974d5357e4d`.
+Publication receipt: task candidate `9c91f31024e37e58f1fb3a80493885ec5e2f95e7` and canonical `main` `55a6326bf96a32c0fa95edcd6109e81ce415769b` independently verified with `git ls-remote origin` on 2026-10-16. The later handoff receipt commit is reported to the coordinator separately; application-main integration remains gated.
 
 ## Outcome
 
