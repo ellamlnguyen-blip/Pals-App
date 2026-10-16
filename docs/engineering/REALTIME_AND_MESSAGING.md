@@ -4,6 +4,10 @@
 
 [ADR-0045](../../decisions/ADR-0045-friendship-only-direct-messaging.md) replaces the first-message request and independent request-origin consent model for local work. Current accepted friendship, readiness, same campus, bilateral People/DM gates and block precedence are required for each DM read/send and exact retry. First actual friend send creates a fresh generation; pending/nonfriend generations become privately terminal without deleting evidence. Unfriend and close end the generation; a later current-friend send creates a new one. Request RPCs and request notification destinations must be retired server-side before TASK-039C removes the UI. Historical TASK-014/033 and ADR-0042 text below describes the old candidate; migration and two-account verification remain pending, with no hosted enablement.
 
+## TASK-037 local correction
+
+Accepted ADR-0044 retires the web poll UI/API and authenticated execution of the four poll RPCs in an additive migration, retaining private evidence. Chats now separates Hangouts and Messages while walking the combined caller-bound attention cursor in bounded complete source pages. Empty category batches retain continuation. The TASK-033 poll description below records its earlier candidate behavior, not the current student-facing surface.
+
 ## TASK-033 reviewed local candidate
 
 Current source implements single-choice polls (question1–200;2–6 distinct options;one editable vote;creator close;five new polls/actor/conversation/hour) only under current joined Hangout or accepted DM generation access. Aggregates include only currently eligible voters and never expose a voter list. Friendship-origin DM access pauses without current friendship until independently accepted by the recipient; prior request-origin consent remains valid. Exact retries recheck access. Combined Chats mixes source-keyset batches with current peer photo/name and title/emoji. Backend migrations00100/00300/00500 and web source are local verified, unintegrated pending finalization. See TASK-033-LOCAL handoff for evidence and exclusions.
