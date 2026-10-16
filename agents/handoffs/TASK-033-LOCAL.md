@@ -29,3 +29,7 @@ Fresh final reviewer `final_integration_review_033` inspected exact d8eef34 and 
 ## Practical limits
 
 Combined inbox pages use source creation, not latest-message order, with source-keyset paging. More-than24-source paging and deterministic browser response-loss/account-switch timing were not newly exercised end-to-end; bounded helpers, source review and backend race tests cover their logic. Realtime, push and email are excluded. Reminder delivery is the next one-minute worker run within the one-hour window and rechecks current membership/source; not an exact wall-clock push guarantee. No fresh whole historical-suite/lint pass is claimed.
+
+## Remote publication receipt
+
+Reviewed application tree `d8eef34f227c5c04f6132a7744e6b9278be418fc` is unchanged in documentation-synchronized task candidate `c63992dedeaeae83eba1abcce6a3ec1274efb78f`; task branch pushed and independently remote verified. Documentation/evidence outcome `6e0f09e4ca15e40026dc4a4e21db4b623655f67d` and documentation-only canonical main `7acb3f6cbfe73cae21637c264166bc508353e006` were pushed and independently remote verified. This receipt and final cleaned inbox/settings screenshots follow that verified outcome. No application code was integrated into main, no hosted operation occurred, and TASK-032/033 remain incomplete pending finalization/sign-off and remaining release gates. The preview at localhost3035 remains on the final built candidate.
