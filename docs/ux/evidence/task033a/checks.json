@@ -1,0 +1,52 @@
+{
+  "applicationSha": "4df45ee827357b2a7d098554181e66374817282d",
+  "candidateSha": "61b4c421cea04bd9abe5322afdfb32ea89cb7ec8",
+  "desktop": [
+    1280,
+    720
+  ],
+  "narrow": [
+    375,
+    812
+  ],
+  "combinedListCount": 1,
+  "rows": 9,
+  "dmRows": 1,
+  "hangoutRows": 8,
+  "loadedPeerPhotos": 1,
+  "minimumRowHeight": 80,
+  "horizontalOverflow": false,
+  "headings": {
+    "Chats": {
+      "box": [
+        1,
+        1
+      ],
+      "clip": "rect(0px, 0px, 0px, 0px)"
+    },
+    "Inbox": {
+      "box": [
+        1,
+        1
+      ],
+      "clip": "rect(0px, 0px, 0px, 0px)"
+    }
+  },
+  "nativeSourceReads": "existing authorized persisted sources",
+  "rowNavigation": [
+    "Hangout composer available",
+    "DM pending management available"
+  ],
+  "productionWebpack": "passed",
+  "focusedTests": {
+    "passed": 13,
+    "failed": 0
+  },
+  "review": "preview privacy and page controls fixed; rendered CSS selector defect fixed",
+  "limits": [
+    "Page-local source creation order, not globally latest-message sorting",
+    "No new browser 24+ source pagination/account-transition/fault/device run",
+    "ADR0042 Proposed and pending explicit acceptance",
+    "No new backend schema, permissions, event jobs or hosted operation"
+  ]
+}

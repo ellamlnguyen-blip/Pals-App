@@ -1,5 +1,15 @@
 # Backlog
 
+## 2026-10-15 — ADR0042 accepted for local implementation
+
+Ella explicitly approved local implementation of chat polls, friend-or-request DM consent, co-host invitations, one-hour reminders and three independent default-off notification settings. ADR0042 is Accepted; TASK033D2/E backend contracts published for disjoint local work, then polls/jobs/UI after dependency review. Current parent033/032 and hosted/sign-off/application-main gates remain; no production action or successor.
+
+
+## 2026-10-15 — Combined chat inbox local candidate
+
+TASK-033A application4df45ee827357b2a7d098554181e66374817282d and candidate61b4c421cea04bd9abe5322afdfb32ea89cb7ec8 are reviewed, pushed and independently remote verified. Unified native-source chat inbox with names/protected photos/emoji and two visible heading removals is locally verified on1280desktop/375narrow. Fresh review/privacy/paging/CSS fixes, final production build and13 tests passed. Actual named-disposable join→chat read/send→freshAuth persistence→leave denial and combined API denial/no-store checks passed; only new fixture cancelled. Evidence task033a/handoff records page-local ordering and timing/device limits. ADR0042 is Proposed and awaiting explicit acceptance; polls/friend-derived DM/co-host invitation/one-hour reminder/three optional settings persistence are not implemented. Parent033/032 incomplete; no hosted action or successor.
+
+
 ## 2026-10-15 — Chat policy proposal ready
 
 TASK-033B source audit maps existing joined chat/social/message notifications and the missing polls/co-host invitation/reminder/optional activity persistence. Proposed ADR0042 records Ella’s friendship-or-accepted-request DM rule and one-hour reminder, with bounded poll privacy, invitation consent and default-off settings. It is not accepted; new schema/permissions remain pending explicit acceptance under AGENTS. StageA presentation proceeds independently; no hosted operation.

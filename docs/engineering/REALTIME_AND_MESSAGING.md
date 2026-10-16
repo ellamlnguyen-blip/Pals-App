@@ -1,5 +1,10 @@
 # Realtime and Messaging
 
+## Accepted local extension — 2026-10-15
+
+Accepted ADR0042 adds current-friend or independently request-consented DM authorization and single-choice polls under current conversation access. Polls and friend-origin consent require reviewed committed migrations and denial/retry/concurrency verification before UI integration. Existing blocks and source revocation remain authoritative. See [ADR0042](../../decisions/ADR-0042-chat-polls-notification-policy.md).
+
+
 ## Initial-release scope amendment — 2026-09-26
 
 [Accepted ADR-0025](../../decisions/ADR-0025-initial-mvp-scope.md) narrows the initial UNC release only. Existing refresh/polling Hangout chat and DMs are accepted initially with fresh access checks and accurate update expectations. Supabase Realtime remains a future delivery path; no raw channel publication, instant guarantee or backfill is implied. All membership/removal/block/server enforcement remains required. Hosted migration/release still needs separate authorization.

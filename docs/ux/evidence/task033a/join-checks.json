@@ -1,0 +1,9 @@
+{
+  "environment": "pals-task029-disposable",
+  "fixture": "5e3ab66c-489c-48e1-ae63-1efc875ae523",
+  "beforeJoinDenied": true,
+  "joinedRead": true,
+  "joinedSend": true,
+  "freshAuthPersistence": true,
+  "afterLeaveReadAndSendDenied": true
+}

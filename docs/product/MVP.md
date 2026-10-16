@@ -1,5 +1,10 @@
 # MVP Scope
 
+## Accepted local extension — 2026-10-15
+
+Accepted ADR0042 adds single-choice chat polls, friend-or-accepted-request DMs, co-host invitation consent, one-hour in-app reminders and three default-off activity notification categories to bounded local scope. These supersede the historical poll exclusion and request-only/immediate-promotion behavior below for this implementation; hosted release gates remain. See [ADR0042](../../decisions/ADR-0042-chat-polls-notification-policy.md).
+
+
 ## Current launch phase — open confirmed UNC MVP
 
 Accepted ADR-0028/0030 supersede the historical invite-only pilot below. Every active account with a confirmed current email on the exact UNC allowlist can enter immediately once the launch is enabled. No roster, separate enrollment approval, completed profile or primary photo is required. Include Hangouts/map and Calendar discovery, People/friendship, Hangout chat, DMs, in-app notifications, attendance and owner profile enrichment under existing source authorization and consent. Keep external analytics capture and large-Hangout safeguards off.
