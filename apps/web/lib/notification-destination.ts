@@ -22,10 +22,8 @@ export function notificationDestination(
         uuid.test(row.actor_id) &&
         row.target_id &&
         uuid.test(row.target_id)
-        ? { href: "/people/friends", label: "View friendships" }
+        ? { href: `/people/${row.actor_id}`, label: "View Pal" }
         : null;
-    case "dm_request":
-    case "dm_accepted":
     case "dm_message":
       return row.source_kind === "dm" &&
         row.actor_id &&
@@ -52,7 +50,46 @@ export function notificationDestination(
         uuid.test(row.target_id)
         ? { href: `/hangouts/saved/${row.target_id}`, label: "View Hangout" }
         : null;
+    case "campus_new_hangout":
+    case "friend_created_hangout":
+    case "friend_joined_hangout":
+      return row.source_kind === "hangout_activity" &&
+        row.source_id &&
+        uuid.test(row.source_id) &&
+        row.target_id &&
+        uuid.test(row.target_id)
+        ? { href: `/hangouts/saved/${row.target_id}`, label: "View Hangout" }
+        : null;
+    case "hangout_start_reminder":
+      return row.source_kind === "hangout_reminder" &&
+        row.source_id &&
+        uuid.test(row.source_id) &&
+        row.target_id &&
+        uuid.test(row.target_id)
+        ? { href: `/hangouts/saved/${row.target_id}`, label: "View Hangout" }
+        : null;
+    case "cohost_invitation":
+      return row.source_kind === "hangout_invitation" &&
+        row.source_id &&
+        uuid.test(row.source_id) &&
+        row.target_id &&
+        uuid.test(row.target_id)
+        ? { href: `/hangouts/saved/${row.target_id}`, label: "View Hangout" }
+        : null;
     default:
       return null;
   }
+}
+
+export function friendRequestFromNotification(row: NotificationRow) {
+  return row.label !== "Unavailable" &&
+    row.event_code === "friend_request" &&
+    row.source_kind === "friendship" &&
+    row.source_id &&
+    uuid.test(row.source_id) &&
+    row.target_id === row.source_id &&
+    row.actor_id &&
+    uuid.test(row.actor_id)
+    ? { peerId: row.actor_id, generationId: row.source_id }
+    : null;
 }

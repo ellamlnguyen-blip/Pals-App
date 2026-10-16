@@ -1,7 +1,6 @@
 import "server-only";
 import { notFound } from "next/navigation";
-import { parseAppEnvironment } from "@pals/config";
-import { authConfig } from "./config";
+import { studentFeaturesAvailable } from "./feature-runtime";
 import { requireAccess } from "./access";
 import type { SupabaseClient } from "@supabase/supabase-js";
 
@@ -20,10 +19,7 @@ export type OwnedHangout = {
   private_instructions: string;
 };
 export function localHangoutsAvailable() {
-  return (
-    parseAppEnvironment(process.env.APP_ENV) === "local" &&
-    authConfig().url === "http://127.0.0.1:54321"
-  );
+  return studentFeaturesAvailable();
 }
 export function requireLocalHangouts() {
   if (!localHangoutsAvailable()) notFound();

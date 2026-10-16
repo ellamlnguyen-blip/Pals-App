@@ -39,7 +39,9 @@ test("observed parent-row and recipient/gate races preserve recipients", async (
     update public.profiles set real_name='Notice race',major='Science',graduation_year=2028,bio='Local fixture',primary_photo_path=user_id::text||'/primary.png' where user_id in ('${host}','${peer}','${removed}');
     update private.hangout_feature_gate set enabled=true;
     update private.hangout_chat_feature_gate set enabled=true;
-    update private.notification_feature_gate set enabled=true;`);
+    update private.notification_feature_gate set enabled=true;
+    update private.pilot_availability set enabled=true;
+    update private.pilot_capabilities set enabled=true where key in ('onboarding','hangouts','hangout_chat','notifications');`);
   let hangout;
   try {
     hangout = sql(`begin; ${claims(host)} select public.create_hangout('51500000-0000-4000-8001-000000000011','Race',now()+interval '1 hour','Area',35,-79); commit;`).split("\n")[0];
@@ -75,6 +77,8 @@ test("observed parent-row and recipient/gate races preserve recipients", async (
     assert.equal(count("hangout_chat_message"), 2, "post-cancellation send creates no item");
     assert.equal(Number(sql(`select count(*) from private.hangout_messages m join private.hangout_conversations c on c.id=m.conversation_id where c.hangout_id='${hangout}' and m.author_id='${peer}'`)), 0);
   } finally {
+    sql(`update private.pilot_capabilities set enabled=false where key in ('onboarding','hangouts','hangout_chat','notifications');
+      update private.pilot_availability set enabled=false;`);
     const target = hangout ?? "00000000-0000-0000-0000-000000000000";
     sql(`update private.notification_feature_gate set enabled=false;
       update private.hangout_chat_feature_gate set enabled=false;
@@ -109,7 +113,9 @@ test("observed source-gate orders never create post-disable items", async () => 
       where user_id in ('${sourceHost}','${sourcePeer}');
     update private.hangout_feature_gate set enabled=true;
     update private.hangout_chat_feature_gate set enabled=true;
-    update private.notification_feature_gate set enabled=true;`);
+    update private.notification_feature_gate set enabled=true;
+    update private.pilot_availability set enabled=true;
+    update private.pilot_capabilities set enabled=true where key in ('onboarding','hangouts','hangout_chat','notifications');`);
   const sourceOn = () => sql("update private.hangout_feature_gate set enabled=true");
   const chatOn = () => sql("update private.hangout_chat_feature_gate set enabled=true");
   const create = () => {
@@ -160,6 +166,8 @@ test("observed source-gate orders never create post-disable items", async () => 
     await race("hb_send_before_chat_off", send(crypto.randomUUID()), "update private.hangout_chat_feature_gate set enabled=false;");
     assert.equal(count(chatId, "hangout_chat_message"), 1, "send holding chat gate commits first");
   } finally {
+    sql(`update private.pilot_capabilities set enabled=false where key in ('onboarding','hangouts','hangout_chat','notifications');
+      update private.pilot_availability set enabled=false;`);
     const ids = hangouts.length ? hangouts.map((id) => `'${id}'`).join(",") : "null";
     sql(`update private.notification_feature_gate set enabled=false;
       update private.hangout_chat_feature_gate set enabled=false;

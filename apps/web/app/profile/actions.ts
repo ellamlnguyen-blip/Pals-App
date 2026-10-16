@@ -6,12 +6,16 @@ import {
   photoExtension,
 } from "@pals/validation";
 import { ownerProfile } from "../../lib/owner-profile";
+import { accountName } from "../../lib/account-input";
+import { normalizeOwnerPhoto } from "../../lib/rich-peer-photo-image";
+import { validPhotoOrder } from "../../lib/owner-photo-order";
 
 export type ProfileResult = {
   error?: string;
   success?: string;
   revision?: number;
   cleanupNeeded?: boolean;
+  requiresRefresh?: boolean;
 };
 const conflict =
   "Your profile changed in another window. Reload the latest profile before saving again. Your entered text is still here.";
@@ -24,13 +28,19 @@ function expected(form: FormData) {
 export async function saveProfile(form: FormData): Promise<ProfileResult> {
   const { client, user, profile } = await ownerProfile();
   const revision = expected(form);
-  if (profile.revision !== revision) return { error: conflict };
-  const required = profileFields(form),
+  if (profile.revision !== revision)
+    return { error: conflict, requiresRefresh: true };
+  const name = accountName(form.get("real_name"));
+  if (!name) return { error: "Enter your real name, up to 100 characters." };
+  const detailsForm = new FormData();
+  for (const [key, value] of form) detailsForm.append(key, value);
+  detailsForm.set("real_name", name);
+  const required = profileFields(detailsForm, profile.bio),
     optional = optionalProfileFields(form);
   if (!required || !optional)
     return {
       error:
-        "Check your required fields and optional limits. Lists need unique items; each prompt needs both a question and answer. Instagram must be a handle, not a link.",
+        "Check your required fields and optional limits. A changed bio can have up to two sentences and 2,000 characters. Lists need unique items; each prompt needs both a question and answer. Instagram must be a handle, not a link.",
     };
   const { data, error } = await client
     .from("profiles")
@@ -44,14 +54,17 @@ export async function saveProfile(form: FormData): Promise<ProfileResult> {
       error:
         "Your profile couldn’t save. Your entered text is still here. Please try again.",
     };
-  if (!data) return { error: conflict };
+  if (!data) return { error: conflict, requiresRefresh: true };
   revalidatePath("/profile");
+  revalidatePath("/account");
+  revalidatePath("/hangouts");
   return { success: "Profile saved.", revision: data.revision };
 }
 export async function changePhoto(form: FormData): Promise<ProfileResult> {
   const { client, user, profile } = await ownerProfile();
   const revision = expected(form);
-  if (profile.revision !== revision) return { error: conflict };
+  if (profile.revision !== revision)
+    return { error: conflict, requiresRefresh: true };
   const slot = String(form.get("slot") ?? ""),
     operation = String(form.get("operation") ?? "");
   const extras: string[] = [...profile.additional_photo_paths];
@@ -84,11 +97,23 @@ export async function changePhoto(form: FormData): Promise<ProfileResult> {
         error:
           "This file isn’t a JPG, PNG or WebP image. Choose another photo.",
       };
-    path = `${user.id}/${crypto.randomUUID()}.${ext}`;
+    let normalized: Uint8Array;
+    try {
+      normalized = await normalizeOwnerPhoto(
+        bytes,
+        slot === "primary" ? "primary" : "extra",
+      );
+    } catch {
+      return {
+        error:
+          "That image couldn’t be processed. Choose a still JPG, PNG or WebP under 5 MB with enough detail, then try again.",
+      };
+    }
+    path = `${user.id}/${crypto.randomUUID()}.webp`;
     const { error } = await client.storage
       .from("profile-photos")
-      .upload(path, bytes, {
-        contentType: ext === "jpg" ? "image/jpeg" : `image/${ext}`,
+      .upload(path, normalized, {
+        contentType: "image/webp",
         upsert: false,
       });
     if (error) {
@@ -102,6 +127,7 @@ export async function changePhoto(form: FormData): Promise<ProfileResult> {
           "We couldn’t confirm the photo upload. This upload attempt did not update your profile. Choose the file again to retry.",
         cleanupNeeded:
           !!cleanup.error || !cleanup.data?.some((item) => item.name === path),
+        requiresRefresh: true,
       };
     }
   }
@@ -144,9 +170,41 @@ export async function changePhoto(form: FormData): Promise<ProfileResult> {
         ? conflict
         : "We couldn’t confirm whether the photo saved. Reload your profile to check the current photos before trying again.",
       cleanupNeeded,
+      requiresRefresh: true,
     };
   revalidatePath("/profile");
   return { success: "Photos saved.", revision: data.revision, cleanupNeeded };
+}
+export async function reorderPhotos(form: FormData): Promise<ProfileResult> {
+  const { client, user, profile } = await ownerProfile();
+  const revision = expected(form);
+  if (profile.revision !== revision)
+    return { error: conflict, requiresRefresh: true };
+  let paths: unknown;
+  try {
+    paths = JSON.parse(String(form.get("paths") ?? ""));
+  } catch {
+    return { error: "That photo order is invalid." };
+  }
+  const existing: string[] = profile.additional_photo_paths;
+  if (!validPhotoOrder(existing, paths))
+    return { error: "That photo order is invalid or unchanged." };
+  const { data, error } = await client
+    .from("profiles")
+    .update({ additional_photo_paths: paths })
+    .eq("user_id", user.id)
+    .eq("revision", revision)
+    .select("revision")
+    .maybeSingle();
+  if (error)
+    return {
+      error:
+        "We couldn’t confirm the photo order. Reload to check before retrying.",
+      requiresRefresh: true,
+    };
+  if (!data) return { error: conflict, requiresRefresh: true };
+  revalidatePath("/profile");
+  return { success: "Photo order saved.", revision: data.revision };
 }
 export async function cleanupPhotos(): Promise<ProfileResult> {
   const { client, user, profile } = await ownerProfile();
