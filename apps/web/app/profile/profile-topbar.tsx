@@ -15,26 +15,31 @@ export function ProfileTopbar({
 }: {
   back: string;
   backLabel: string;
-  children: ReactNode;
-  available: StudentDestinations;
-  attendanceAvailable: boolean;
+  children?: ReactNode;
+  available?: StudentDestinations;
+  attendanceAvailable?: boolean;
   action?: ReactNode;
 }) {
   return (
-    <nav className="profile-topbar" aria-label="Profile controls">
+    <nav
+      className={`profile-topbar${children ? "" : " profile-topbar--owner"}`}
+      aria-label="Profile controls"
+    >
       <a className="profile-back" href={back} aria-label={backLabel}>
         <ArrowLeftIcon size={25} weight="bold" aria-hidden="true" />
         <span>{backLabel.replace(/^Back to /, "")}</span>
       </a>
       <div className="profile-topbar-action">{action}</div>
-      <ProfileOptions>
-        {available.people && (
-          <div className="profile-menu-links">
-            <Link href="/people/privacy">Profile sharing</Link>
-          </div>
-        )}
-        {children}
-      </ProfileOptions>
+      {children && (
+        <ProfileOptions>
+          {available?.people && (
+            <div className="profile-menu-links">
+              <Link href="/people/privacy">Profile sharing</Link>
+            </div>
+          )}
+          {children}
+        </ProfileOptions>
+      )}
     </nav>
   );
 }

@@ -4,7 +4,6 @@ import Link from "next/link";
 import { CameraIcon } from "@phosphor-icons/react/dist/csr/Camera";
 import { PencilSimpleIcon } from "@phosphor-icons/react/dist/csr/PencilSimple";
 import { ProfileTopbar } from "./profile-topbar";
-import type { StudentDestinations } from "../student-shell";
 import { ProfileSummary } from "./profile-summary";
 import { validShortBio } from "@pals/validation";
 import { SignOutForm } from "../auth-change-signal";
@@ -47,15 +46,9 @@ function initialValues(profile: OwnerProfile) {
 }
 export function ProfileEditor({
   profile,
-  email,
-  peopleAvailable,
-  available,
   attendanceAvailable,
 }: {
   profile: OwnerProfile;
-  email: string;
-  peopleAvailable: boolean;
-  available: StudentDestinations;
   attendanceAvailable: boolean;
 }) {
   const router = useRouter();
@@ -450,8 +443,6 @@ export function ProfileEditor({
       <ProfileTopbar
         back="/hangouts"
         backLabel="Back to Hangouts"
-        available={available}
-        attendanceAvailable={attendanceAvailable}
         action={
           <button
             ref={editButton}
@@ -463,31 +454,7 @@ export function ProfileEditor({
             Edit profile
           </button>
         }
-      >
-        <p>
-          Your confirmed address on an approved UNC domain is Pals’ campus
-          access signal. Pals has not separately checked enrollment or identity.
-        </p>
-        <p>
-          {peopleAvailable
-            ? "Your selected text can appear in Pals after you opt in and meet its requirements. Photos, hometown and prompts are shared only if you separately turn on rich sharing; your email address and other private fields are not shown."
-            : "Only you can see these profile details and photos right now."}
-        </p>
-        {peopleAvailable && (
-          <>
-            <Link href="/people/privacy">
-              Preview and manage Pals and rich sharing
-            </Link>
-            <Link href="/notifications">Friend requests</Link>
-            <Link href="/people/privacy#relationships">
-              Manage unavailable Pals and requests
-            </Link>
-          </>
-        )}
-        <p className="help">
-          Your university and verified email are read-only: {email}
-        </p>
-      </ProfileTopbar>
+      />
       <div className="profile-hero">
         {profile.primary_photo_path || primaryRevision !== null ? (
           <OwnerDisplayPhoto

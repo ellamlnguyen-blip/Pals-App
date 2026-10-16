@@ -781,6 +781,9 @@
   grid-row: 1;
   margin-right: 62px;
 }
+.profile-topbar--owner .profile-topbar-action {
+  margin-right: 0;
+}
 .profile-topbar-action:empty {
   display: none;
 }
