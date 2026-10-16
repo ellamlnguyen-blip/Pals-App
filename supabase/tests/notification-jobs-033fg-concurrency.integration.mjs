@@ -9,7 +9,7 @@ if (!container || !container.includes("task029")) {
   throw new Error("Set PALS_TASK033_DB_CONTAINER to the named TASK-029 disposable database container");
 }
 const args = ["exec", "-i", container, "psql", "-X", "-qAt", "-U", "postgres", "-d", "postgres", "-v", "ON_ERROR_STOP=1"];
-const sql = (query) => execFileSync("docker", args, { input: query, encoding: "utf8" }).trim();
+const sql = (query) => execFileSync("docker", args, { input: query, encoding: "utf8", timeout: 20_000 }).trim();
 const host = "633f1000-0000-4000-8000-000000000001";
 const recipient = "633f1000-0000-4000-8000-000000000002";
 const hangout = "633f1000-0000-4000-8001-000000000001";
@@ -21,7 +21,7 @@ function session(name) {
   let output = "";
   child.stdout.on("data", (v) => { output += v; });
   child.stderr.on("data", (v) => { output += v; });
-  child.stdin.write(`set application_name='${name}';\n`);
+  child.stdin.write(`set application_name='${name}'; set statement_timeout='20s';\n`);
   return { child, send: (query) => child.stdin.write(`${query}\n`), output: () => output, done: once(child, "exit") };
 }
 async function until(check) {
@@ -103,17 +103,17 @@ test("source cancellation and recipient mute win before optional delivery", { ti
        where id='${reminderHangout}';`,
       `select private.run_notification_jobs(1);`);
     assert.equal(sql(`select count(*) from private.notification_items where source_id='${reminderOccurrence}'`), "0");
-    // A new source action is the only eligible action; hold its source row while
-    // the first worker owns the queue row, then observe the second worker skip it.
+    // A new source action is the only eligible action. Hold the recipient lock:
+    // the first worker owns the queue row while waiting, and the second skips it.
     sql(`update private.notification_preferences set enabled=true,enabled_at=now()-interval '1 hour'
       where recipient_id='${recipient}' and category='campus_new_hangout';
       update private.notification_reminder_occurrences set finished_at=clock_timestamp()
       where hangout_id='${reminderHangout}';
       update private.notification_actions set finished_at=null where id='${dualAction}';`);
-    const leader = session("jobs033fg_dual_source");
+    const leader = session("jobs033fg_dual_recipient");
     const first = session("jobs033fg_dual_first");
     try {
-      leader.send(`begin; select 1 from public.hangouts where id='${dualHangout}' for update; select 'held';`);
+      leader.send(`begin; select private.notification_lock_recipient('${recipient}'); select 'held';`);
       await until(() => leader.output().includes("held"));
       first.send("begin; select private.run_notification_jobs(1); select 'first_done'; commit;");
       await until(() => sql(`select count(*) from pg_stat_activity
