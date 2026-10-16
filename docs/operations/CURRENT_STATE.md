@@ -4,6 +4,8 @@
 
 The shared student header currently wraps its primary navigation below the logo and account icons at the user's 1088px Chats viewport. TASK-038 records the presentation-only correction to align those elements in one row where space permits, from canonical main `90cce96` and reviewed TASK-037 local source `8aa18c5`. No implementation or hosted change is yet integrated; predecessor release and application-main gates remain open.
 
+The TASK-038 candidate moves the shared header wrap point to 720px. Authenticated built-preview measurements confirm a single row at 1088, 900, 768 and 721px; 720 and 375px retain the phone wrap, with no page overflow. Build/TypeScript passed; screenshots and limits are on remote-verified `agent/TASK-038-header-row` at `f04a4a39eda28718e06ac316a28af92f226e188a`. Ella approved the exact GitHub destination after an automatic review rejection. TASK-038 remains incomplete behind predecessor release and application-main gates; main carries records only.
+
 ## 2026-10-16 — TASK-037 requested
 
 Ella's latest Chat screenshot correction reverses the unified inbox presentation and poll feature: separate Hangouts/Messages tabs, hide the visible Chats heading, use the Hangout title as its detail link, retire poll UI/API/authenticated RPC access while retaining private records. TASK-037 and accepted ADR-0044 record this bounded local change from main `8d74848` and exact TASK-036 source `1fac4f6`. No implementation or hosted change is yet integrated; earlier task gates remain open.

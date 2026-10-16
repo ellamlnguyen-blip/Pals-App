@@ -4,6 +4,8 @@
 
 Implement the single-row student header at the reported 1088px width and verify responsive fit, account controls, focus and overflow at desktop/tablet/phone widths. Publish the reviewed local task branch and status. Predecessor release and application-main gates remain before integration.
 
+Local implementation and responsive verification are complete at remote-verified `f04a4a39eda28718e06ac316a28af92f226e188a`: build/TypeScript passed, the header stays one row through 721px, phone layout wraps at 720px, and checked widths have no horizontal overflow. Resolve predecessor TASK-032/033/034/035/036/037 gates and reviewed application-main integration before marking complete. A limited-account session was not available for rendered QA; source-specific layout rules are unchanged.
+
 ## 2026-10-16 — TASK-037 verification and release gates
 
 Implement and review source-complete category tabs, accessible heading removal, Hangout-title details link and poll retirement. Verify mixed-source paging, old poll API/RPC denial, real desktop/phone rendering and source privacy. Publish a remote-verified task branch and local status. Parent TASK-032/033/034/035/036 gates remain before app-main/hosted integration.

@@ -4,6 +4,8 @@
 
 Ella asked for the Hangouts/Calendar/Pals navigation to share one header row with the logo and Chats/Notifications/profile buttons at 1088px. [Bounded contract](active/TASK-038-single-row-student-header.md) uses canonical main `90cce96` and exact reviewed local source `8aa18c5`. Presentation-only; predecessor TASK-032/033/034/035/036/037 release and application-main gates remain open. The coordinator publishes this contract before implementation dispatch.
 
+The local CSS candidate changes the shared header stacking threshold from 1100px to 720px. The disposable web build/TypeScript passed; authenticated Chats renders the logo, primary nav and account controls in one row at 1088/900/768/721px, then uses the existing phone wrap at 720/375px, without horizontal overflow. After Ella approved the exact GitHub destination, `agent/TASK-038-header-row` was independently remote verified at `f04a4a39eda28718e06ac316a28af92f226e188a`. [Status handoff](../agents/handoffs/TASK-038-STATUS.md) records evidence. Predecessor and application-main gates remain open, so TASK-038 is incomplete and its app code remains off main.
+
 ## 2026-10-16 — TASK-037 categorized Chats correction
 
 Ella revised the TASK-036 image request: Hangouts and Messages should be separate tabs; remove the visible Chats heading and polls; clicking the Hangout title should open details. [TASK-037 contract](active/TASK-037-chat-categories-poll-retirement.md) and [ADR-0044](../decisions/ADR-0044-chat-categories-poll-retirement.md) bound the local correction and poll grant retirement. Start from canonical main `8d74848` and exact TASK-036 app source `1fac4f6`. TASK-032/033/034/035/036 final gates remain open; no hosted or application-main change is inferred.
