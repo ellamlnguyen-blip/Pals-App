@@ -38,7 +38,9 @@ test("block wins against waiting accept and tears down while friendship gate is 
       bio='Local fixture',primary_photo_path=user_id::text||'/primary.png' where user_id in ('${a}','${b}');
     insert into private.people_preferences(account_id,opted_in) values ('${a}',true),('${b}',true);
     update private.people_feature_gate set enabled=true; update private.safety_feature_gate set enabled=true;
-    update private.friendship_feature_gate set enabled=true;`);
+    update private.friendship_feature_gate set enabled=true;
+    update private.pilot_availability set enabled=true;
+    update private.pilot_capabilities set enabled=true where key in ('onboarding','people','friendship');`);
   try {
     const generation = sql(`begin; ${claims(a)} select public.create_friend_request('${b}','14000000-0000-4000-8000-000000000099'); commit;`).split("\n").at(-1);
     const blocker = session("task012a_blocker"), waiter = session("task012a_accept_waiter");
@@ -72,8 +74,8 @@ test("block wins against waiting accept and tears down while friendship gate is 
     assert.equal(sql(`select count(*) from private.friendships where low_id='${a}' and high_id='${b}'`), "0");
     sql("delete from private.people_blocks");
 
-    // A revocation begun after the create check cannot commit ahead of the
-    // request: the eligibility rows stay share-locked until create commits.
+    // A profile-text visibility change begun after the create check cannot
+    // commit ahead of the request: the eligibility rows stay share-locked.
     const creator = session("task012a_create_holds_eligibility"), optOut = session("task012a_optout_waiter");
     try {
       creator.send(`begin; ${claims(a)} select public.create_friend_request('${b}','14000000-0000-4000-8000-000000000097'); select 'created';`);
@@ -120,16 +122,65 @@ test("block wins against waiting accept and tears down while friendship gate is 
     try {
       readyCreate.send(`begin; ${claims(a)} select public.create_friend_request('${b}','14000000-0000-4000-8000-000000000094'); select 'created';`);
       await until(() => readyCreate.output().includes("created"));
-      profileWriter.send(`begin; update public.profiles set primary_photo_path=null where user_id='${b}'; commit;`);
+      profileWriter.send(`begin; update public.profiles set bio=null where user_id='${b}'; commit;`);
       await waiting("task012a_profile_write_waiter");
       readyCreate.send("commit;"); readyCreate.child.stdin.end(); profileWriter.child.stdin.end();
       await readyCreate.done; await profileWriter.done;
-      assert.equal(sql(`select primary_photo_path is null from public.profiles where user_id='${b}'`), "t");
+      assert.equal(sql(`select bio is null from public.profiles where user_id='${b}'`), "t");
     } finally { readyCreate.child.kill(); profileWriter.child.kill(); }
+
+    // If text eligibility is revoked first, a concurrent request must wait for
+    // the profile row and observe the committed empty field in a fresh query.
+    sql(`delete from private.friendships where low_id='${a}' and high_id='${b}';
+      delete from private.friendship_create_requests where actor_id='${a}';`);
+    const profileRevoker = session("task012a_profile_text_revoker"), lateProfileCreate = session("task012a_profile_text_waiter");
+    try {
+      profileRevoker.send(`begin; update public.profiles set bio=null where user_id='${b}'; select 'profile_revoked';`);
+      await until(() => profileRevoker.output().includes("profile_revoked"));
+      lateProfileCreate.send(`begin; ${claims(a)} select public.create_friend_request('${b}','14000000-0000-4000-8000-000000000093'); commit;`);
+      await waiting("task012a_profile_text_waiter");
+      profileRevoker.send("commit;"); profileRevoker.child.stdin.end(); lateProfileCreate.child.stdin.end();
+      await profileRevoker.done; await lateProfileCreate.done;
+      assert.match(lateProfileCreate.output(), /Friendship unavailable/);
+      assert.equal(sql(`select count(*) from private.friendships where low_id='${a}' and high_id='${b}'`), "0");
+    } finally { profileRevoker.child.kill(); lateProfileCreate.child.kill(); }
+    sql(`update public.profiles set bio='Local fixture' where user_id='${b}';`);
+
+    // A new safety block also depends on current People visibility. Verify a
+    // profile edit that commits first denies the block after its lock wait.
+    const hideProfile = session("task012a_block_profile_revoker"), lateBlock = session("task012a_block_profile_waiter");
+    try {
+      hideProfile.send(`begin; update public.profiles set bio=null where user_id='${b}'; select 'hidden';`);
+      await until(() => hideProfile.output().includes("hidden"));
+      lateBlock.send(`begin; ${claims(a)} select public.set_safety_block('${b}',true); commit;`);
+      await waiting("task012a_block_profile_waiter");
+      hideProfile.send("commit;"); hideProfile.child.stdin.end(); lateBlock.child.stdin.end();
+      await hideProfile.done; await lateBlock.done;
+      assert.match(lateBlock.output(), /Safety operation unavailable/);
+      assert.equal(sql(`select count(*) from private.people_blocks where blocker_id='${a}' and blocked_id='${b}'`), "0");
+    } finally { hideProfile.child.kill(); lateBlock.child.kill(); }
+    sql(`update public.profiles set bio='Local fixture' where user_id='${b}';`);
+
+    // If the block has already passed its visibility check, the profile edit
+    // waits for the held profile tuple and commits only after the block.
+    const blockFirst = session("task012a_block_profile_holder"), profileAfterBlock = session("task012a_block_profile_waiter");
+    try {
+      blockFirst.send(`begin; ${claims(a)} select public.set_safety_block('${b}',true); select 'block_committed';`);
+      await until(() => blockFirst.output().includes("block_committed"));
+      profileAfterBlock.send(`begin; update public.profiles set bio=null where user_id='${b}'; commit;`);
+      await waiting("task012a_block_profile_waiter");
+      blockFirst.send("commit;"); blockFirst.child.stdin.end(); profileAfterBlock.child.stdin.end();
+      await blockFirst.done; await profileAfterBlock.done;
+      assert.equal(sql(`select count(*) from private.people_blocks where blocker_id='${a}' and blocked_id='${b}'`), "1");
+    } finally { blockFirst.child.kill(); profileAfterBlock.child.kill(); }
+    sql(`update public.profiles set bio='Local fixture' where user_id='${b}';
+      begin; ${claims(a)} select public.set_safety_block('${b}',false); commit;`);
 
     for (const isolation of ["repeatable read", "serializable"])
       assert.throws(() => sql(`begin isolation level ${isolation}; ${claims(a)} select * from public.list_friendships(); rollback;`), /People operation unavailable/);
   } finally {
+    sql(`update private.pilot_capabilities set enabled=false where key in ('onboarding','people','friendship');
+      update private.pilot_availability set enabled=false;`);
     sql(`update private.friendship_feature_gate set enabled=false;
       update private.people_feature_gate set enabled=false; update private.safety_feature_gate set enabled=false;
       delete from private.friendships where low_id in ('${a}','${b}') or high_id in ('${a}','${b}');

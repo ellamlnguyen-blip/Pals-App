@@ -30,7 +30,7 @@ export default async function AnalyticsPage() {
           <p>
             We may count onboarding, Hangout map and detail views, creating,
             joining, leaving or cancelling a Hangout, and visits to Calendar,
-            People profiles and Notifications. We may also count friend
+            Pals profiles and Notifications. We may also count friend
             requests, a first DM request and a Hangout chat send.
           </p>
           <p>

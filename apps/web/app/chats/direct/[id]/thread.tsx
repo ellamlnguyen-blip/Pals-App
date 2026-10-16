@@ -9,23 +9,33 @@ import {
   type AuthTransitionMessage,
 } from "../../../auth-transition";
 import { createDmAuthVerifier } from "../../dm-auth-verifier";
+import { recordThreadAttention } from "../../thread-attention";
 
 type Read = {
   kind: string;
   status?: DmStatus;
   messages?: DmMessage[];
   bodyAccess?: boolean;
+  peer?: { name: string; photoRevision: number | null } | null;
 };
-type Pending = { key: string; body: string; action: "reply" | "send" };
-export function DirectThread({ id, actor }: { id: string; actor: string }) {
+type Pending = {
+  key: string;
+  body: string;
+  action: "send";
+};
+export function DirectThread({
+  id,
+  actor,
+  onIdentityChange,
+}: {
+  id: string;
+  actor: string;
+  onIdentityChange: (
+    peer: { name: string; photoRevision: number | null } | null,
+  ) => void;
+}) {
   const [phase, setPhase] = useState<
-    | "loading"
-    | "ready"
-    | "paused"
-    | "waiting"
-    | "denied"
-    | "error"
-    | "unavailable"
+    "loading" | "ready" | "denied" | "error" | "unavailable"
   >("loading");
   const [status, setStatus] = useState<DmStatus | null>(null);
   const [messages, setMessages] = useState<DmMessage[]>([]);
@@ -35,6 +45,15 @@ export function DirectThread({ id, actor }: { id: string; actor: string }) {
   const [busy, setBusy] = useState(false);
   const [page, setPage] = useState(0);
   const [more, setMore] = useState(false);
+  const [maskedHeight, setMaskedHeight] = useState(0);
+  const [attention, setAttention] = useState<{
+    generation: string;
+    sequence: number | null;
+    ticket: number;
+    accepted: boolean;
+  } | null>(null);
+  const touched = useRef(false);
+  const threadRef = useRef<HTMLDivElement>(null);
   const ticket = useRef(0),
     cursor = useRef<number | null>(null),
     cursors = useRef<(number | null)[]>([null]);
@@ -47,43 +66,59 @@ export function DirectThread({ id, actor }: { id: string; actor: string }) {
     terminal = useRef(false);
   const api = `/api/dm/${id}`;
   const headers = useCallback(() => ({ "x-pals-dm-actor": actor }), [actor]);
-  const mask = useCallback((reason = "Checking direct chat access…") => {
-    ticket.current++;
-    masked.current = true;
-    fetching.current = false;
-    setMessages([]);
-    setStatus(null);
-    setDraft("");
-    setPending(null);
-    setPhase("loading");
-    setBusy(false);
-    setNote(reason);
-    cursor.current = null;
-    cursors.current = [null];
-    setPage(0);
-    setMore(false);
-  }, []);
-  const deny = useCallback((kind: "denied" | "unavailable" = "denied") => {
-    ticket.current++;
-    masked.current = true;
-    terminal.current = true;
-    fetching.current = false;
-    pendingRef.current = null;
-    draftRef.current = "";
-    setPending(null);
-    setDraft("");
-    setMessages([]);
-    setStatus(null);
-    setPhase(kind);
-    setBusy(false);
-    setNote(
-      kind === "denied"
-        ? "Direct chat access is unavailable."
-        : "This conversation is no longer available.",
-    );
-  }, []);
+  const mask = useCallback(
+    (reason = "Checking direct chat access…", preservePage = false) => {
+      setMaskedHeight(
+        preservePage ? (threadRef.current?.offsetHeight ?? 0) : 0,
+      );
+      ticket.current++;
+      masked.current = true;
+      onIdentityChange(null);
+      fetching.current = false;
+      setMessages([]);
+      setAttention(null);
+      setStatus(null);
+      setDraft("");
+      setPending(null);
+      setPhase("loading");
+      setBusy(false);
+      setNote(reason);
+      if (!preservePage) {
+        cursor.current = null;
+        cursors.current = [null];
+        setPage(0);
+      }
+      setMore(false);
+    },
+    [onIdentityChange],
+  );
+  const deny = useCallback(
+    (kind: "denied" | "unavailable" = "denied") => {
+      ticket.current++;
+      masked.current = true;
+      onIdentityChange(null);
+      terminal.current = true;
+      fetching.current = false;
+      pendingRef.current = null;
+      draftRef.current = "";
+      setPending(null);
+      setDraft("");
+      setMessages([]);
+      setAttention(null);
+      setStatus(null);
+      setPhase(kind);
+      setBusy(false);
+      setNote(
+        kind === "denied"
+          ? "Direct chat access is unavailable."
+          : "This conversation is no longer available.",
+      );
+      setMaskedHeight(0);
+    },
+    [onIdentityChange],
+  );
   const read = useCallback(
-    async (after: number | null, reveal = false) => {
+    async (after: number | null, reveal = false, mark = true) => {
       if (
         document.hidden ||
         transitions.current.size ||
@@ -128,6 +163,7 @@ export function DirectThread({ id, actor }: { id: string; actor: string }) {
         }
         if (
           reveal &&
+          !masked.current &&
           after !== null &&
           data.bodyAccess &&
           data.messages.length === 0
@@ -137,33 +173,40 @@ export function DirectThread({ id, actor }: { id: string; actor: string }) {
           return false;
         }
         setStatus(data.status);
-        if (!data.bodyAccess && data.status.direction !== "outgoing") {
-          pendingRef.current = null;
-          draftRef.current = "";
-          setPending(null);
-          setDraft("");
-        }
+
         setMessages(data.bodyAccess ? data.messages : []);
+        onIdentityChange(
+          data.peer && typeof data.peer.name === "string"
+            ? {
+                name: data.peer.name,
+                photoRevision:
+                  typeof data.peer.photoRevision === "number"
+                    ? data.peer.photoRevision
+                    : null,
+              }
+            : null,
+        );
+        if (mark && data.bodyAccess)
+          setAttention({
+            generation: data.status.generation_id,
+            sequence: data.messages.at(-1)?.sequence ?? null,
+            ticket: now,
+            accepted: data.status.state === "accepted",
+          });
+        else setAttention(null);
         setMore(data.bodyAccess && data.messages.length === 50);
         masked.current = false;
-        if (
-          data.status.state === "pending" &&
-          data.status.direction === "outgoing"
-        )
-          setPhase("waiting");
-        else setPhase(data.bodyAccess ? "ready" : "paused");
+        setMaskedHeight(0);
+        if (data.status.state !== "accepted" || !data.bodyAccess) {
+          deny("unavailable");
+          return false;
+        }
+        setPhase("ready");
         if (reveal) {
           setDraft(draftRef.current);
           setPending(pendingRef.current);
         }
-        setNote(
-          data.status.state === "pending" &&
-            data.status.direction === "outgoing"
-            ? "Waiting for their choice."
-            : data.bodyAccess
-              ? "Conversation checked."
-              : "Message access is paused.",
-        );
+        setNote("");
         return true;
       } catch {
         if (now === ticket.current && !document.hidden) {
@@ -176,7 +219,7 @@ export function DirectThread({ id, actor }: { id: string; actor: string }) {
         if (now === ticket.current) fetching.current = false;
       }
     },
-    [api, deny, headers, mask],
+    [api, deny, headers, mask, onIdentityChange],
   );
   useEffect(() => {
     const verify = createDmAuthVerifier({
@@ -201,11 +244,12 @@ export function DirectThread({ id, actor }: { id: string; actor: string }) {
     });
     const resume = () => {
       if (document.hidden || terminal.current) return;
-      mask();
+      touched.current = false;
+      mask("Checking direct chat access…", true);
       if (transitions.current.size)
         for (const [token, phase] of settled.current)
           void verify({ token, phase });
-      else void read(null, true);
+      else void read(cursor.current, true);
     };
     const transition = (message: AuthTransitionMessage) => {
       const decision = authTransitionDecision(transitions.current, message);
@@ -229,15 +273,11 @@ export function DirectThread({ id, actor }: { id: string; actor: string }) {
     };
     const visibility = () => {
       if (document.hidden) {
-        mask("Conversation hidden. Checking again on return.");
-        pendingRef.current = null;
-        draftRef.current = "";
+        mask("Conversation hidden. Checking again on return.", true);
       } else resume();
     };
     const pagehide = () => {
-      mask("Conversation hidden. Checking again on return.");
-      pendingRef.current = null;
-      draftRef.current = "";
+      mask("Conversation hidden. Checking again on return.", true);
     };
     resume();
     document.addEventListener("visibilitychange", visibility);
@@ -265,14 +305,32 @@ export function DirectThread({ id, actor }: { id: string; actor: string }) {
       channel.close();
     };
   }, [api, deny, headers, mask, read]);
+  useEffect(() => {
+    if (
+      !attention ||
+      phase !== "ready" ||
+      masked.current ||
+      document.hidden ||
+      transitions.current.size ||
+      ticket.current !== attention.ticket
+    )
+      return;
+    const shouldTouch = attention.accepted && !touched.current;
+    if (shouldTouch) touched.current = true;
+    void recordThreadAttention(
+      actor,
+      "dm",
+      attention.generation,
+      attention.sequence,
+      shouldTouch,
+    );
+  }, [actor, attention, phase]);
   async function navigate(next: number | null, index: number) {
     if (busy || !(await read(next, true))) return;
     cursor.current = next;
     setPage(index);
   }
-  async function mutate(
-    action: "accept" | "reply" | "ignore" | "withdraw" | "close" | "send",
-  ) {
+  async function mutate(action: "close" | "send") {
     if (
       !status ||
       busy ||
@@ -283,17 +341,18 @@ export function DirectThread({ id, actor }: { id: string; actor: string }) {
       return;
     const current = status;
     const body = pendingRef.current?.body ?? draftRef.current.trim();
-    if (["reply", "send"].includes(action) && (!body || body.length > 2000)) {
+    if (action === "send" && (!body || body.length > 2000)) {
       setNote("Write 1 to 2000 characters.");
       return;
     }
-    const item = ["reply", "send"].includes(action)
-      ? (pendingRef.current ?? {
-          key: crypto.randomUUID(),
-          body,
-          action: action as "reply" | "send",
-        })
-      : null;
+    const item =
+      action === "send"
+        ? (pendingRef.current ?? {
+            key: crypto.randomUUID(),
+            body,
+            action: "send",
+          })
+        : null;
     if (item && item.action !== action) {
       setNote("Finish the original retry before another message.");
       return;
@@ -308,7 +367,7 @@ export function DirectThread({ id, actor }: { id: string; actor: string }) {
     );
     const now = ticket.current;
     if (
-      !(await read(cursor.current)) ||
+      !(await read(cursor.current, false, false)) ||
       now !== ticket.current ||
       document.hidden
     ) {
@@ -320,14 +379,24 @@ export function DirectThread({ id, actor }: { id: string; actor: string }) {
       setBusy(false);
       return;
     }
-    if (
-      (action === "reply" || action === "send" || action === "accept") &&
-      phase !== "ready"
-    ) {
-      setNote("Message access is paused. Try again after eligibility returns.");
+    if (action === "send" && phase !== "ready") {
+      setNote("Message access changed. Reload before sending.");
       setBusy(false);
       return;
     }
+    const recheckAfterFailedMutation = async (
+      message: string,
+      clearRetry = false,
+    ) => {
+      if (clearRetry) {
+        pendingRef.current = null;
+        draftRef.current = "";
+      }
+      // A failed POST can follow a friendship or generation change after our
+      // preflight read. Conceal the old peer and bodies before any reread.
+      mask("Rechecking direct chat access…", true);
+      if (await read(null, true)) setNote(message);
+    };
     try {
       const response = await fetch(api, {
         method: "POST",
@@ -344,17 +413,20 @@ export function DirectThread({ id, actor }: { id: string; actor: string }) {
       const data = (await response.json()) as { kind: string };
       if (now !== ticket.current || document.hidden) return;
       if (data.kind === "denied") {
-        deny();
+        await recheckAfterFailedMutation(
+          "This action is unavailable now. Check the current conversation before trying again.",
+        );
         return;
       }
       if (data.kind === "stale" || data.kind === "conflict") {
-        setNote(
-          "Conversation changed or this retry differs. Reload before another action.",
+        await recheckAfterFailedMutation(
+          "Conversation changed or this retry differs. Check the current conversation before another action.",
+          true,
         );
         return;
       }
       if (data.kind !== "ok") {
-        setNote(
+        await recheckAfterFailedMutation(
           item
             ? "Outcome uncertain. Retry the same message after a fresh check."
             : "Outcome uncertain. Reload to check before another action.",
@@ -367,16 +439,21 @@ export function DirectThread({ id, actor }: { id: string; actor: string }) {
         draftRef.current = "";
         setDraft("");
       }
-      if (["ignore", "withdraw", "close"].includes(action)) {
+      if (action === "close") {
         deny("unavailable");
         return;
       }
-      mask("Checking updated conversation…");
-      if (await read(null, true))
-        setNote(action === "accept" ? "Request accepted." : "Message sent.");
+      const sentFromFullPage = action === "send" && messages.length === 50;
+      mask("Checking updated conversation…", action === "send");
+      if (await read(action === "send" ? cursor.current : null, true, false))
+        setNote(
+          sentFromFullPage
+            ? "Message sent. Load newer messages to see it."
+            : "Message sent.",
+        );
     } catch {
       if (now === ticket.current)
-        setNote(
+        await recheckAfterFailedMutation(
           item
             ? "Outcome uncertain. Retry the same message after a fresh check."
             : "Outcome uncertain. Reload to check before another action.",
@@ -386,7 +463,12 @@ export function DirectThread({ id, actor }: { id: string; actor: string }) {
     }
   }
   return (
-    <div className="chat-thread" aria-live="polite">
+    <div
+      className="chat-thread"
+      ref={threadRef}
+      style={maskedHeight ? { minHeight: maskedHeight } : undefined}
+      aria-live="polite"
+    >
       {phase === "loading" && <p role="status">Checking direct chat access…</p>}
       {(phase === "denied" || phase === "unavailable" || phase === "error") && (
         <div className="chat-empty">
@@ -404,187 +486,89 @@ export function DirectThread({ id, actor }: { id: string; actor: string }) {
               Try again
             </button>
           )}
-          <Link href="/chats">Back to Chats</Link>
+          <Link href="/people">Return to Pals</Link>
         </div>
       )}
-      {status &&
-        (phase === "ready" || phase === "waiting" || phase === "paused") && (
-          <>
-            <p className="dm-peer">
-              Peer ID <code>{id}</code>
-            </p>
-            {phase === "waiting" && (
-              <div className="chat-empty">
-                <h2>Waiting for their choice</h2>
-                <p>
-                  Your first message is in their Requests. You cannot send
-                  another unless they accept or reply.
-                </p>
-                <button
-                  className="quiet-button"
-                  disabled={busy}
-                  onClick={() => void mutate("withdraw")}
-                >
-                  Withdraw request
-                </button>
-              </div>
-            )}
-            {phase === "paused" && (
-              <div className="chat-empty">
-                <h2>Message access paused</h2>
-                <p>
-                  A current access condition changed. All message text,
-                  including your own, is hidden. Turning People sharing off
-                  pauses an accepted chat; access can resume if both people
-                  become eligible again. Ending it is permanent for this
-                  conversation.
-                </p>
-                <button
-                  className="quiet-button"
-                  disabled={busy}
-                  onClick={() =>
-                    void mutate(
-                      status.state === "accepted"
-                        ? "close"
-                        : status.direction === "incoming"
-                          ? "ignore"
-                          : "withdraw",
-                    )
-                  }
-                >
-                  {status.state === "accepted"
-                    ? "Close chat"
-                    : status.direction === "incoming"
-                      ? "Ignore request"
-                      : "Withdraw request"}
-                </button>
-              </div>
-            )}
-            {phase === "ready" && (
-              <>
-                <h2>
-                  {status.state === "pending" ? "Request" : "Conversation"}
-                </h2>
-                <ol className="chat-messages">
-                  {messages.map((message) => (
-                    <li
-                      key={message.message_id}
-                      className={message.mine ? "chat-mine" : ""}
-                    >
-                      <div className="chat-meta">
-                        <strong>{message.mine ? "You" : "Peer"}</strong>
-                        <time dateTime={message.created_at}>
-                          {new Date(message.created_at).toLocaleString()}
-                        </time>
-                      </div>
-                      <p>{message.body}</p>
-                    </li>
-                  ))}
-                </ol>
-                {status.state === "accepted" && (
-                  <div className="chat-page-actions">
-                    <button
-                      className="quiet-button"
-                      disabled={page === 0 || busy}
-                      onClick={() =>
-                        void navigate(cursors.current[page - 1], page - 1)
-                      }
-                    >
-                      Previous
-                    </button>
-                    <button
-                      className="quiet-button"
-                      disabled={!more || busy}
-                      onClick={() => {
-                        const next = messages.at(-1)?.sequence;
-                        if (next) {
-                          cursors.current[page + 1] = next;
-                          void navigate(next, page + 1);
-                        }
-                      }}
-                    >
-                      Load newer
-                    </button>
-                  </div>
-                )}
-                {status.state === "pending" && (
-                  <p>
-                    Accepting or replying opens a direct chat. Ignoring ends
-                    this request.
-                  </p>
-                )}
-                <div className="chat-composer">
-                  <label htmlFor="dm-draft">
-                    {status.state === "pending"
-                      ? "Reply and accept"
-                      : "Message"}
-                  </label>
-                  <textarea
-                    id="dm-draft"
-                    value={pending?.body ?? draft}
-                    disabled={busy || !!pending}
-                    maxLength={2000}
-                    onChange={(event) => {
-                      draftRef.current = event.target.value;
-                      setDraft(event.target.value);
-                    }}
-                  />
-                  <p className="help">
-                    Plain text · 1–2000 characters · Enter adds a line
-                  </p>
-                  <div className="chat-page-actions">
-                    {status.state === "pending" && (
-                      <button
-                        className="quiet-button"
-                        disabled={busy}
-                        onClick={() => void mutate("accept")}
-                      >
-                        Accept without reply
-                      </button>
-                    )}
-                    <button
-                      className="button"
-                      disabled={busy}
-                      onClick={() =>
-                        void mutate(
-                          status.state === "pending" ? "reply" : "send",
-                        )
-                      }
-                    >
-                      {pending
-                        ? "Retry same message"
-                        : status.state === "pending"
-                          ? "Reply and accept"
-                          : "Send message"}
-                    </button>
-                  </div>
+      {status && phase === "ready" && (
+        <>
+          <ol className="chat-messages">
+            {messages.map((message) => (
+              <li
+                key={message.message_id}
+                className={message.mine ? "chat-mine" : ""}
+              >
+                <div className="chat-meta">
+                  <strong>{message.mine ? "You" : "Peer"}</strong>
+                  <time dateTime={message.created_at}>
+                    {new Date(message.created_at).toLocaleString()}
+                  </time>
                 </div>
-                <div className="chat-page-actions dm-management">
-                  {status.state === "pending" ? (
-                    <button
-                      className="quiet-button"
-                      disabled={busy}
-                      onClick={() => void mutate("ignore")}
-                    >
-                      Ignore request
-                    </button>
-                  ) : (
-                    <button
-                      className="quiet-button"
-                      disabled={busy}
-                      onClick={() => void mutate("close")}
-                    >
-                      Close chat
-                    </button>
-                  )}
-                </div>
-              </>
-            )}
-          </>
-        )}
-      <p className="chat-status" role="status">
-        {note}
-      </p>
+                <p>{message.body}</p>
+              </li>
+            ))}
+          </ol>
+          <div className="chat-page-actions">
+            <button
+              className="quiet-button"
+              disabled={page === 0 || busy}
+              onClick={() => void navigate(cursors.current[page - 1], page - 1)}
+            >
+              Previous
+            </button>
+            <button
+              className="quiet-button"
+              disabled={!more || busy}
+              onClick={() => {
+                const next = messages.at(-1)?.sequence;
+                if (next) {
+                  cursors.current[page + 1] = next;
+                  void navigate(next, page + 1);
+                }
+              }}
+            >
+              Load newer
+            </button>
+          </div>
+          <div className="chat-composer">
+            <label className="sr-only" htmlFor="dm-draft">
+              Message
+            </label>
+            <textarea
+              id="dm-draft"
+              value={pending?.body ?? draft}
+              disabled={busy || !!pending}
+              maxLength={2000}
+              onChange={(event) => {
+                draftRef.current = event.target.value;
+                setDraft(event.target.value);
+              }}
+            />
+            <div className="chat-page-actions">
+              <button
+                className="button"
+                disabled={busy}
+                onClick={() => void mutate("send")}
+              >
+                {pending ? "Retry same message" : "Send message"}
+              </button>
+            </div>
+          </div>
+          <div className="chat-page-actions dm-management">
+            <button
+              className="quiet-button"
+              disabled={busy || !!pending}
+              onClick={() => void mutate("close")}
+            >
+              Close chat
+            </button>
+          </div>
+        </>
+      )}
+      {note && phase === "ready" && (
+        <p className="chat-status" role="status">
+          {note}
+        </p>
+      )}
     </div>
   );
 }

@@ -3,10 +3,23 @@ import { createServerClient } from "@supabase/ssr";
 import { cookies } from "next/headers";
 import { authConfig } from "./config";
 
-export async function supabase() {
+export async function supabase(signal?: AbortSignal) {
   const jar = await cookies();
   const config = authConfig();
   return createServerClient(config.url, config.key, {
+    ...(signal
+      ? {
+          global: {
+            fetch: (input: RequestInfo | URL, init?: RequestInit) =>
+              fetch(input, {
+                ...init,
+                signal: init?.signal
+                  ? AbortSignal.any([signal, init.signal])
+                  : signal,
+              }),
+          },
+        }
+      : {}),
     cookieOptions: {
       httpOnly: true,
       secure: config.secure,

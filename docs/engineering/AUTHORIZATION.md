@@ -2,7 +2,7 @@
 
 ## Accepted friendship-only DM local policy — 2026-10-16
 
-[ADR-0045](../../decisions/ADR-0045-friendship-only-direct-messaging.md) makes current accepted friendship a necessary DM authorization condition on all caller-bound reads, writes and retries. Request acceptance and independent consent cease to grant access; pending/nonfriend generations are retained privately as terminal evidence. The existing readiness, campus, bilateral People, DM gate, block, shared lock, RLS/no-client-grant and safety checks continue. TASK-039B must implement and test this via an additive disposable-local migration before TASK-039C removes request UI/routes. Older DM request rules below are historical where they conflict; acceptance alone changes no hosted permission.
+[ADR-0045](../../decisions/ADR-0045-friendship-only-direct-messaging.md) makes current accepted friendship a necessary DM authorization condition on all caller-bound reads, writes and retries. Request acceptance and independent consent cease to grant access; pending/nonfriend generations are retained privately as terminal evidence. The existing readiness, campus, bilateral People, DM gate, block, shared lock, RLS/no-client-grant and safety checks continue. TASK-039B has an additive disposable-local migration and focused authorization/race tests on its task branch; fresh security review is required before TASK-039C removes request UI/routes. Older DM request rules below are historical where they conflict; acceptance alone changes no hosted permission.
 
 ## 2026-10-05 launch staffing amendment
 
