@@ -1,5 +1,10 @@
 # NOW
 
+## 2026-10-15 — Combined chats, polls and notifications
+
+TASK-033 records the new requested chat/notification behavior. StageA combines existing authorized chat sources and removes two headings; StageB audits persistent polls/friend-DM/reminder/cohost/optional notification design for ProposedADR0042. Contracts tasks/active/TASK-033-chats-notifications.md and TASK-033A-combined-inbox.md. Existing TASK032 release gates and explicit ADR acceptance remain; no hosted action.
+
+
 ## 2026-10-15 — People profile cards local candidate
 
 TASK-032P11 shows circular protected primary photos (initials fallback) and requested identity details in whole-card native profile links; View profile text removed. App9ed5a7f529df567ba3edb3fa18300164f100202e and candidate1d1deb566e6599115e33d5e874d38e09a22f7a67 pushed and independently remote verified. Fresh review hidden-hydration finding fixed and confirmed; scoped checks/tests and final production webpack pass. Actual1280desktop/375narrow nooverflow, protected images loaded, whole-card fullprofile/back-focus and named disposable authorized200/no-store/anonymous+wrongrevision404 passed. Evidence/handoff TASK032P11 records exact limits. No data/schema/permission/hosted change. ParentTASK032 remains incomplete behind existing gates; no successor.
