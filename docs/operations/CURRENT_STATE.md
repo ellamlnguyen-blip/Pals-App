@@ -1,5 +1,10 @@
 # Current State
 
+## 2026-10-15 — DM and invitation local backend milestone
+
+Source4d524a03f92249e30bfd7991d3250e5293a2b15a is pushed/remote verified. Fresh reviews resolved old-create-retry consent and source-gate/campus revocation findings; committed00100/00200 migrations applied only named pals-task029-disposable with no reset. DM26/26 and cohost33/33 rollbackSQL pass, both isolated race harnesses pass. D2 harness corrected internal-functioncall tograntedunfriend. Poll/jobs backends underway; bounded D2U web integration now authorized from revieweddependency. Parent033/032 incomplete, no hosted action.
+
+
 ## 2026-10-15 — ADR0042 accepted for local implementation
 
 Ella explicitly approved local implementation of chat polls, friend-or-request DM consent, co-host invitations, one-hour reminders and three independent default-off notification settings. ADR0042 is Accepted; TASK033D2/E backend contracts published for disjoint local work, then polls/jobs/UI after dependency review. Current parent033/032 and hosted/sign-off/application-main gates remain; no production action or successor.
