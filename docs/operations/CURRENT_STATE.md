@@ -1,5 +1,9 @@
 # Current State
 
+## 2026-10-16 — TASK-039D browser gate bounded
+
+TASK-039D is a verification-only contract for exact reviewed TASK-039C source and TASK-039B migration on a separately owned disposable local Auth/API/browser stack. The existing 3035 preview and named shared/local stacks are excluded. No runtime or source result is implied by publishing this contract; TASK-039B/C and parent 039 remain incomplete.
+
 ## 2026-10-16 — TASK-039C web/API source reviewed, browser gate open
 
 Remote-verified `agent/TASK-039C-friendship-dm-web` at `8ceca20fdcc017e9aad4ede1bb000846744824f4` removes message-request UI/API paths and uses current friendship for DM entry, atop accepted ADR-0045 and the reviewed 039B server migration. A fresh independent review's three concrete stale-display/report-confirmation findings were fixed and re-reviewed. TypeScript, touched-source ESLint, eight focused tests and webpack production build passed. The active 3035 preview was untouched and is currently unreachable; no migrated two-account or 811px/375px candidate browser verification is claimed. The separately named 039B SQL fixture DB has no two-account Auth/API stack. [Review receipt](../../agents/handoffs/TASK-039C-REVIEW.md) records evidence. This main update is documentation only; app/schema source remains on task branches, TASK-039 and predecessors remain incomplete, and no hosted gate changed.

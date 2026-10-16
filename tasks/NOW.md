@@ -1,5 +1,9 @@
 # NOW
 
+## 2026-10-16 — TASK-039D isolated migrated browser verification contract
+
+[TASK-039D](active/TASK-039D-migrated-chat-browser-verification.md) bounds the remaining two-account and responsive Chats verification to a separately named disposable local stack using exact reviewed TASK-039C source `8ceca20fdcc017e9aad4ede1bb000846744824f4`. Existing 3035 and shared Supabase resources are excluded. Publish this contract before a fresh verification agent runs. TASK-039B/C and parent 039 stay incomplete; no hosted or application-main change is authorized.
+
 ## 2026-10-16 — TASK-039C reviewed web/API source milestone
 
 The request-free Chats, People and DM web/API candidate is on `agent/TASK-039C-friendship-dm-web` at independently verified `8ceca20fdcc017e9aad4ede1bb000846744824f4`. A fresh reviewer found three privacy/safety display issues; all were corrected and re-reviewed with no remaining source blocker. TypeScript, touched-source lint, eight focused tests and the webpack production build passed. The active 3035 preview was not migrated or changed and is currently unreachable from this session, so two-account friend/nonfriend and 811px/375px rendered checks remain. [Review receipt](../agents/handoffs/TASK-039C-REVIEW.md) records the exact findings and gates. TASK-039 and predecessors remain incomplete; application code stays off main.

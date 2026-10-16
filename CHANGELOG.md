@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-16 — TASK-039D migrated browser contract
+
+Bound the remaining friendship-only DM two-account and responsive browser gate to a separately owned disposable local stack. This documentation change has no runtime, application or hosted effect.
+
 ## 2026-10-16 — TASK-039C reviewed local web/API candidate
 
 Recorded remote-verified friendship-only DM web source at `8ceca20fdcc017e9aad4ede1bb000846744824f4` and fresh follow-up review of three corrected privacy/safety display findings. Static and production-build checks passed. Two-account migrated browser and responsive checks remain open; this canonical-main update contains documentation only.

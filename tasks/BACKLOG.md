@@ -1,5 +1,9 @@
 # Backlog
 
+## 2026-10-16 — TASK-039D acceptance gate
+
+Run the exact source and migration in a separately owned disposable Auth/API/browser preview, verify synthetic two-account friend and nonfriend access plus 811px/375px states, and record cleanup. A source-only build or schema-only SQL clone cannot close this gate. Parent TASK-039 and predecessor integration remain open.
+
 ## 2026-10-16 — TASK-039C migrated browser verification
 
 Use a separately owned disposable local Supabase/Auth/API preview with the exact committed 039B migration and 039C web source. Verify two actual accounts across friend first-send/history, nonfriend and pending/declined denial, unfriend/refriend generation, block, opt-out, old URL and notification neutrality. Render loading, empty, error and authorized states at 811px/375px; inspect composer accessibility and overflow. Preserve or snapshot any existing local preview data before changing its database or runtime. TASK-039B's separately named schema-only SQL fixture cannot serve these HTTP/browser flows; the prior 3035 preview is currently unreachable. Clean full migration-ledger and remaining server edge cases also remain before final persistence.
