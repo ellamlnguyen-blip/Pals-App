@@ -1,6 +1,6 @@
 # ADR-0043 — Owner-private chat attention and similarity-ranked Pals discovery
 
-Status: **Proposed; explicit Ella acceptance required before dependent schema, permission, or ranking implementation**
+Status: **Accepted for disposable-local implementation by Ella on 2026-10-15**
 Date: 2026-10-15
 Task: TASK-034B, under TASK-034
 Baseline: canonical main `6c984dd`; application dependency `c63992d` (TASK-033 candidate remains gated)
@@ -9,7 +9,7 @@ Baseline: canonical main `6c984dd`; application dependency `c63992d` (TASK-033 c
 
 Ella requests an unread indicator on each currently authorized chat, a combined inbox ordered globally by recent visible message or the owner's last use, and Pals discovery ordered by similarity of saved interests, graduation year, hometown, and major with **major and year filters only**. The existing `/api/chats` interleaves two source batches: `list_dm_inbox` orders DM generations by creation time and the Hangout participant query orders IDs; the web layer sorts only that bounded mixture. `browse_people` currently offers a name query and name/ID keyset. Message sequences are already server assigned and immutable within a DM generation or Hangout conversation. Hangout readers omit blocked authors; DM pending and accepted reads have different consent rules. Raw profile fields, including hometown, are owner-only; peer hometown requires the separate rich consent projection. Source code is not hosted persistence evidence.
 
-This changes the schema, authorization projections, and discovery behavior. The requested outcome authorizes this proposal, not acceptance of its policy. No hosted write, gate enablement, release, or application-main integration follows from acceptance.
+This changes the schema, authorization projections, and discovery behavior. Ella explicitly accepted this policy for disposable-local implementation on 2026-10-15. No hosted write, gate enablement, release, or application-main integration follows from acceptance.
 
 ## Proposed decision
 
@@ -53,4 +53,4 @@ Client-local read times cannot persist across devices or resist forged future ti
 
 ## Acceptance and rollout gates
 
-Ella must explicitly accept this **specific** proposed policy before attention/ranking backend implementation. Then publish two disjoint bounded contracts and perform fresh security review of migrations, RLS/grants, exact API replacement, cursor invalidation, hidden-source races, migration idempotency, upgrade compatibility, >24 pagination, and denied/allowed persistence. Disposable-local verification may follow reviewed committed migrations. Hosted application and final feature completion require Ella's separate final candidate sign-off, named target persistence/authorized-read evidence, application-main review/integration, and remote SHA verification under `AGENTS.md`.
+Ella accepted this **specific** policy for local implementation. Publish two disjoint bounded contracts before dispatch and perform fresh security review of migrations, RLS/grants, exact API replacement, cursor invalidation, hidden-source races, migration idempotency, upgrade compatibility, >24 pagination, and denied/allowed persistence. Disposable-local verification may follow reviewed committed migrations. Hosted application and final feature completion require Ella's separate final candidate sign-off, named target persistence/authorized-read evidence, application-main review/integration, and remote SHA verification under `AGENTS.md`.

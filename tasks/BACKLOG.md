@@ -6,6 +6,8 @@ New bounded follow-on: chat unread indicators/global recent use ordering, Pals n
 
 Dependent TASK-034 chat-attention and similarity backend stages remain undispatched until ADR-0043 is explicitly accepted. Their bounded contracts are in coordinator review; the Pals presentation stage can proceed independently.
 
+ADR-0043 is accepted for disposable-local work; C and D have moved to NOW as bounded active stages. Dependent chat/Pals frontend integration remains queued until their reviewed backend interfaces exist.
+
 ## 2026-10-15 — TASK-033 reviewed local implementation
 
 Source candidate `d8eef34f227c5c04f6132a7744e6b9278be418fc` is pushed and independently remote verified. All seven additive migrations applied only to named disposable;191 focused SQL checks and four concurrency harnesses passed. Full web build/TypeScript and four helper checks passed. Actual browser consent, polls, invitation and preference flows verified; real scheduled cron delivered exactly once across two runs. Final cross-stage review, desktop/375px/source-denial QA and scoped cleanup passed. Evidence is in `docs/ux/evidence/task033-local`; local candidate is ready for finalization/sign-off. [Local handoff](../agents/handoffs/TASK-033-LOCAL.md) records scope and limits. TASK-032/033 remain incomplete behind finalization/sign-off/application-main/hosted gates; no successor.
