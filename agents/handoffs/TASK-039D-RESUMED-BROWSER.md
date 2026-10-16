@@ -27,3 +27,7 @@ Browser sign-in occasionally redirected to sign-in on a later navigation while a
 The in-app test tab was closed and its temporary viewport override reset. The port-3039 Next process was stopped. `supabase stop --project-id pals-task039d-resume --no-backup` removed only the owned project and volumes; its empty network was removed. Follow-up Docker inspection found **no** `pals-task039d-resume` containers, volumes or network, and port 3039 had no listener. `pals-local`, TASK-028, TASK-029, user-open 3035 and hosted targets were not stopped, reset or migrated.
 
 TASK-039D should stay incomplete until a bounded follow-up diagnoses and reruns the Block confirmation UI, plus any desired controlled error-state check. TASK-039B edge-case tests, predecessor release gates, accepted-environment persistence, hosted sign-off and application-main integration remain separate gates. This handoff does not claim full browser acceptance or parent completion.
+
+## Publication receipt
+
+The handoff/evidence commit `9f4c64ee182332d86252dd7b4df36f0de130a616` was pushed to `origin/agent/TASK-039D-resumed-browser`; an independent `git ls-remote` returned that exact SHA. The canonical-main baseline remained `5df5763ee1d01158c825339acd8bd4481e31ce26` for this bounded branch. The documentation receipt commit that adds this paragraph requires its own remote verification and is reported to the coordinator separately.
