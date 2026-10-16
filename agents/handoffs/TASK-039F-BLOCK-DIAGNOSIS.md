@@ -7,3 +7,7 @@ The isolated Supabase project applied 52 migrations and supported two real synth
 Source review identified a possible focus/epoch race in `SafetyActions`, but there is no click-to-epoch trace. In keeping with the task contract, no speculative safety UI change was committed. A focused test, TypeScript/build after a fix, independent fix review, 811/375 dialog open/cancel/keyboard/exact-ID checks, and permission-revocation checks remain pending because there was no fix and no browser click.
 
 The task-owned web process and Supabase project were stopped; no owned container, volume, network or web listener remained. No shared or hosted target was touched. This branch contains only this incomplete handoff and its evidence. The coordinator should record the blocker on main and retain TASK-039D as incomplete. Before any further Block-source work, use a browser runtime whose client API request scope succeeds with the same synthetic actor, then instrument Block click, modal mount and epoch/visibility events. Standard speed was not exposed by this dispatch tool and was not verified.
+
+## Publication receipt
+
+The initial handoff/evidence commit `54e41ade21e13138956f9eb6ee7fd3b15576ca7a` was pushed to `origin/agent/TASK-039F-block-diagnosis`; independent `git ls-remote` returned the same SHA. This branch began from canonical-main SHA `2b583badc7e205ee9ccd462cc711e3921c6aca17`. This receipt update has its own subsequent commit and remote verification, reported to the coordinator. No code can be accepted or integrated from this incomplete diagnosis.
