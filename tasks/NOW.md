@@ -1,5 +1,10 @@
 # NOW
 
+## 2026-10-15 — Notification backend verified; Auth trigger correction
+
+FG00400 committed/appliedonlynameddisposable SQL43/43+racespassed; private schedule usesone-minutecron andcurrentoccurrenceids. RealAuthQA caughtEsubjecttriggerrecordfieldfailureonemailconfirmation; contractE nowboundsadditive00700fix/SQLregression, nooriginalmigrationrewrite. Noexistingstudentdataorhostedchanges; parentremainsincomplete.
+
+
 ## 2026-10-15 — Poll backend verified, web contracts ready
 
 TASK033C sourceee316f6 reviewed/appliednameddisposable SQL56/56+racespassed. Pollweb, cohostweb andnotificationactions/settings contracts published for dependency-ordered agents. D2Uwebunderway; FGjobsource fixing freshreview findings beforeDBapply. Parent033/032 incomplete; nohostedaction.
