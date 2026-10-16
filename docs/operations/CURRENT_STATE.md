@@ -1,5 +1,9 @@
 # Current State
 
+## 2026-10-16 — TASK-039E reviewed local repair
+
+The duplicate migration-version source repair is remote-verified on `agent/TASK-039E-migration-repair` at `ea9befb4068662956a4492ea0a607bd966afb109`. Clean full migration and all three historical-ledger disposable upgrades reached 52 unique versions with preserved fixture data; source review found no blocker to isolated TASK-039D verification. Task-owned runtime was cleaned. Neither this code nor any hosted/shared migration has been applied to canonical main or the shared preview. Targets with a ledger beyond the bridge require separate later-version reconciliation and target-specific authorization.
+
 ## 2026-10-16 — TASK-040 local owner profile menu source
 
 Owner `/profile` options trigger and its explanatory popup are removed in `agent/TASK-040-remove-profile-options` at independently remote-verified `04ac5440428413d77a08a80d5c7e396b1969e1d7`. Shared `ProfileTopbar` renders its options only when content is supplied; peer profile safety actions remain. TypeScript and production build passed. Authenticated 811px/375px rendering and prior application-main gates remain open, so this source is not integrated into canonical main or visible in the shared preview.

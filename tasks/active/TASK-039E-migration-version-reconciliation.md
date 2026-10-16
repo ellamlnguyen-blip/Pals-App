@@ -1,6 +1,6 @@
 # TASK-039E — Duplicate migration-version reconciliation
 
-Status: ready for disposable-local implementation after Ella explicitly accepted ADR-0046 on 2026-10-16. The canonical-main contract is published. Parent TASK-039D browser verification is blocked at the duplicate ledger version; TASK-039 and predecessors remain incomplete.
+Status: reviewed disposable-local source candidate on `agent/TASK-039E-migration-repair` at independently remote-verified `ea9befb4068662956a4492ea0a607bd966afb109`. Fresh source/security review found no blocker. Clean stack and three historical upgrades passed on task-owned resources; hosted/shared application, canonical-main code integration and resumed TASK-039D browser verification remain open. TASK-039 and predecessors remain incomplete.
 
 ## Scope after acceptance
 

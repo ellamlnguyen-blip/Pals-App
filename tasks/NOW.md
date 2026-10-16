@@ -1,5 +1,9 @@
 # NOW
 
+## 2026-10-16 — TASK-039E local migration repair reviewed
+
+Accepted ADR-0046's source correction is on `agent/TASK-039E-migration-repair` at independently remote-verified `ea9befb4068662956a4492ea0a607bd966afb109`. Its task-owned clean stack applied 52 unique versions; all three old-version states upgraded through the new bridge with synthetic Auth data preserved, matching function bodies and authenticated-only grants. Saved-mask actual-role checks passed 23/23 and attention/ack checks 10/10. Fresh exact-tip security/migration source review found no blocker; [review status](../agents/handoffs/TASK-039E-REVIEW.md) records its evidence limits. All task-owned containers/volumes were removed. TASK-039D may now resume only on an isolated stack using this exact reviewed source; hosted/shared application and application-main integration remain gated.
+
 ## 2026-10-16 — TASK-040 reviewed source; rendered gate open
 
 The owner `/profile` options trigger and popover are removed on `agent/TASK-040-remove-profile-options` at independently remote-verified `04ac5440428413d77a08a80d5c7e396b1969e1d7`. Coordinator source review confirmed the owner no longer supplies menu children while peer profile report/block controls remain. TypeScript, webpack build, focused lint and formatting passed. Authenticated 811px/375px owner and peer rendering remains open because the isolated worktree lacks a preview and shared 3035 is unreachable; [status handoff](../agents/handoffs/TASK-040-STATUS.md) records the gate. Application source stays off main pending predecessor integration.
