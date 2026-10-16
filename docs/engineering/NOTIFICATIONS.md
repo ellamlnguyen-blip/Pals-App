@@ -1,5 +1,10 @@
 # Notifications
 
+## Accepted local extension — 2026-10-15
+
+Accepted ADR0042 authorizes local co-host invitation notifications, one-hour backend reminders and three independent default-off preferences for campus new Hangouts, friend-created Hangouts and friend joins. Delivery is source-authorized, durable and bounded; no push/email/Realtime or hosted action is inferred. See [ADR0042](../../decisions/ADR-0042-chat-polls-notification-policy.md).
+
+
 ## Initial-release scope amendment — 2026-09-26
 
 [Accepted ADR-0025](../../decisions/ADR-0025-initial-mvp-scope.md) narrows the initial UNC release only. Existing notification inbox/preferences and refresh/polling behavior are accepted; Realtime, push and optional notification email are deferred. No new category wiring, instant delivery or missed-event backfill is inferred. Current source-event implementation and neutral unavailable destinations must be verified in rehearsal. Actual UNC Auth email verification/delivery and HTTPS callback remain required and are distinct from notification email.
