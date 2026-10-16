@@ -2,6 +2,8 @@
 
 Status: active, requested by Ella on 2026-10-16 from the attached Chats reference image. Canonical main baseline `1f365d92c17ac42bb2fe4a42c862c343855e0fee`; exact reviewed disposable-local application source dependency `287e3faba359dfd49c713abf1533efb06a6cb49d` on `agent/TASK-035-compact-controls`. TASK-032/033/034/035 remain incomplete at recorded signoff and release gates. No hosted change is in scope.
 
+Local milestone: `agent/TASK-036-chat-reference-ui` is pushed and independently remote verified at `1fac4f67a8cd8b57140eff60eaf8ba2c3923b7c7`. Build, focused tests, real desktop/mobile browser QA, handoff and screenshot evidence are complete within the available fixtures. Error/denied states could not be forced; existing permission/error paths remain unchanged. Parent and application-main gates keep TASK-036 active.
+
 ## Requested outcome
 
 Redesign the existing Chats index and direct/Hangout conversation pages toward the supplied image: blue Chats heading, a rounded split-pane shell, left chat navigation with prominent selected row and message-request access, and a right conversation pane with an identity header, Hangout detail strip when applicable, chat bubbles and a compact bottom composer. Use actual authorized chat rows, messages and Hangout details. The image's names, faces, counts, times and message text are illustrative, never fixtures or assumed private data. Keep the current icon header and Pals naming, which reflect later explicit instructions than the image's historical navigation.

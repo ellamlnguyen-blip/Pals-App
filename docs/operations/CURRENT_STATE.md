@@ -4,6 +4,8 @@
 
 TASK-036 is a bounded Chats presentation follow-on from Ella's supplied image. Its contract is `tasks/active/TASK-036-chat-reference-layout.md`, starting from canonical main `1f365d9` with reviewed disposable-local TASK-035 source dependency `287e3fa`. No TASK-036 code or hosted change has been integrated. TASK-032/033/034/035 remain incomplete at recorded gates.
 
+Local candidate `1fac4f67a8cd8b57140eff60eaf8ba2c3923b7c7` on `agent/TASK-036-chat-reference-ui` is independently remote verified. It renders a rounded desktop split pane, real combined conversations, selected row, Hangout detail strip and compact composer, with separate list/thread views on phones. Full production web build/TypeScript, eight focused tests and authenticated browser inspection at 1280/375px passed without overflow. The real fixture has an empty Hangout and pending direct request; the supplied image's sample data was not copied. The task branch contains UI handoff and screenshots. Parent and application-main/hosted gates remain open; main has status records only.
+
 ## 2026-10-16 — TASK-035 requested
 
 TASK-035 is a new bounded presentation follow-on from Calendar and Pals browser comments. Its contract is `tasks/active/TASK-035-calendar-pals-layout.md`, starting from canonical main `e15215d` with explicit reviewed TASK-034 local source dependency `70537ad`. No TASK-035 code or hosted change has been integrated. TASK-032/033/034 remain incomplete at recorded gates.

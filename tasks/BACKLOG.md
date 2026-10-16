@@ -4,6 +4,8 @@
 
 After bounded implementation, review the Chats index and both conversation routes at desktop/mobile, including real data, loading/denied states, send/poll controls, navigation, build/TypeScript and no overflow. Publish the task branch with a verified remote SHA and record local outcome on main. Parent TASK-032/033/034/035 signoff and application-main/hosted gates remain open.
 
+Local layout review and task-branch publication are complete at remote-verified `1fac4f67a8cd8b57140eff60eaf8ba2c3923b7c7`. The real empty Hangout, pending direct request, selected sidebar, mobile back path, draft-enabled Send control and visible poll control were checked; error/denied branches could not be forced with current fixtures. Remaining: resolve parent gates and review this candidate with accepted dependencies before application-main integration. No hosted change was made.
+
 ## 2026-10-16 — TASK-035 verification and integration gates
 
 After bounded implementation, verify actual 1280/767/375px Calendar and Pals layouts, native year/filter behavior, build/TypeScript, accessibility and no overflow. Review source and handoff, publish the task branch with remote SHA, then record local outcome on main. Parent TASK-032/033/034 and user sign-off/application-main/hosted gates remain separate and open.
