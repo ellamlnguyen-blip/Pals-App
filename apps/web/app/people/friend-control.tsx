@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { UserPlusIcon } from "@phosphor-icons/react/dist/csr/UserPlus";
 import { SafetyActions } from "../safety/safety-client";
 import { analytics } from "../../lib/analytics";
 import { friendAcceptanceConfirmed } from "../../lib/analytics-evidence";
@@ -36,7 +37,10 @@ export function FriendControl({
   canBlock,
   peerLabel,
   onClear,
+  onRelationshipChange,
   actor,
+  requestLabel = "Add friend",
+  presentation = "default",
 }: {
   peerId: string;
   initial: FriendshipResult;
@@ -44,7 +48,10 @@ export function FriendControl({
   canBlock: boolean;
   peerLabel: string;
   onClear?: () => void;
+  onRelationshipChange?: (relationship: Friendship | null) => void;
   actor?: string;
+  requestLabel?: string;
+  presentation?: "default" | "profile";
 }) {
   const [result, setResult] = useState(initial);
   const [busy, setBusy] = useState(false);
@@ -78,6 +85,7 @@ export function FriendControl({
   const apply = (next: FriendshipResult) => {
     if (!alive.current) return;
     setResult(next);
+    if (next.state === "known") onRelationshipChange?.(next.relationship);
     if (
       next.state === "unavailable" ||
       next.state === "unknown" ||
@@ -133,11 +141,18 @@ export function FriendControl({
   };
   const row = result.relationship;
   const disabled = busy || blocked || result.state !== "known";
+  const compactKnown =
+    presentation === "profile" && !blocked && result.state === "known";
   return (
     <div className="friend-control">
-      <p ref={status} tabIndex={-1} role="status">
-        <strong>{blocked ? "Checking current access" : label(row)}</strong> ·{" "}
-        {result.message}
+      <p
+        ref={status}
+        tabIndex={-1}
+        role="status"
+        className={compactKnown && !row ? "visually-hidden" : undefined}
+      >
+        <strong>{blocked ? "Checking current access" : label(row)}</strong>
+        {!compactKnown && <> · {result.message}</>}
       </p>
       {!blocked && result.state === "known" && (
         <div className="friend-actions">
@@ -147,9 +162,10 @@ export function FriendControl({
               disabled={disabled}
               onClick={() => run("create")}
             >
-              {requestKey
-                ? "Retry request with same key"
-                : "Send friend request"}
+              {presentation === "profile" && (
+                <UserPlusIcon size={20} weight="bold" aria-hidden="true" />
+              )}
+              {requestKey ? "Retry request with same key" : requestLabel}
             </button>
           )}
           {row?.state === "pending" && row.direction === "incoming" && (

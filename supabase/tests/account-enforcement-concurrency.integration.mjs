@@ -2,12 +2,17 @@ import assert from "node:assert/strict";
 import { execFileSync, spawn } from "node:child_process";
 import { once } from "node:events";
 import test from "node:test";
+import { localTotpOperator } from "./helpers/local-totp.mjs";
 
 // Disposable local overlapping SQL sessions. Final database reset removes
 // immutable sanction and audit fixtures.
 const args = ["exec", "-i", "supabase_db_pals-local", "psql", "-X", "-qAt",
   "-U", "postgres", "-d", "postgres", "-v", "ON_ERROR_STOP=1"];
 const sql = (input) => execFileSync("docker", args, { input, encoding: "utf8" }).trim();
+const status = JSON.parse(execFileSync(process.env.SUPABASE_CLI ?? "supabase",
+  ["status", "--output", "json"], { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] }));
+assert.equal(status.API_URL, "http://127.0.0.1:54321");
+const quote = (value) => `'${value.replaceAll("'", "''")}'`;
 const id = {
   operator: "53200000-0000-4000-8000-000000000001",
   reporter: "53200000-0000-4000-8000-000000000002",
@@ -28,8 +33,10 @@ const id = {
   report7: "53200000-0000-4000-8002-000000000007",
   report8: "53200000-0000-4000-8002-000000000008",
 };
+let operatorClaims;
 const claim = (user) => `set local role authenticated;
-  set local request.jwt.claims='{"sub":"${user}","role":"authenticated"}';`;
+  set local request.jwt.claims=${quote(JSON.stringify(user === id.operator ? operatorClaims :
+    { sub: user, role: "authenticated" }))};`;
 const sanction = (report, request, revision = 1) => `${claim(id.operator)}
   select * from public.apply_account_moderation_action('${report}',
     '${request}',${revision},'suspend','Local decision');`;
@@ -80,8 +87,11 @@ async function race(label, leaderSql, waiterSql, waiterFails) {
 test("sanctions serialize with live role, target status and direct profile writes", {
   concurrency: false, timeout: 120_000,
 }, async () => {
+  const operator = await localTotpOperator(status, (operatorId) =>
+    sql(`update auth.users set email_confirmed_at=now() where id=${quote(operatorId)}`));
+  id.operator = operator.id;
+  operatorClaims = operator.claims;
   sql(`insert into auth.users(id,email,email_confirmed_at) values
-    ('${id.operator}','b1-race-operator@unc.edu',now()),
     ('${id.reporter}','b1-race-reporter@unc.edu',now()),
     ('${id.first}','b1-race-first@unc.edu',now()),
     ('${id.second}','b1-race-second@unc.edu',now()),
@@ -116,8 +126,8 @@ test("sanctions serialize with live role, target status and direct profile write
       verification_email=(select email from auth.users where id=user_id)
       where user_id in ('${id.third}','${id.fourth}');
     insert into storage.objects(bucket_id,name,owner_id) values
-      ('profile-photos','${id.third}/third.png','${id.third}'),
-      ('profile-photos','${id.fourth}/fourth.png','${id.fourth}');
+      ('profile-photos','${id.third}/3333.png','${id.third}'),
+      ('profile-photos','${id.fourth}/4444.png','${id.fourth}');
     insert into private.friendships(low_id,high_id,requester_id,campus_id,
       generation_id,state) values
       ('${id.reporter}','${id.seventh}','${id.reporter}',
@@ -128,7 +138,9 @@ test("sanctions serialize with live role, target status and direct profile write
         '53200000-0000-4000-8005-000000000002','accepted');
     update private.moderation_feature_gate set enabled=true;
     update private.notification_feature_gate set enabled=true;
-    update private.friendship_feature_gate set enabled=true;`);
+    update private.friendship_feature_gate set enabled=true;
+    update private.pilot_availability set enabled=true;
+    update private.pilot_capabilities set enabled=true where key in ('onboarding','people','friendship','notifications');`);
   for (const [report, request] of [[id.report1, "53200000-0000-4000-8003-000000000001"],
     [id.report2, "53200000-0000-4000-8003-000000000002"],
     [id.report3, "53200000-0000-4000-8003-000000000008"],
@@ -167,16 +179,16 @@ test("sanctions serialize with live role, target status and direct profile write
     "53200000-0000-4000-8003-000000000010"),
   `${claim(id.third)} set local storage.allow_delete_query='true';
     delete from storage.objects where bucket_id='profile-photos'
-      and name='${id.third}/third.png';`, true);
+      and name='${id.third}/3333.png';`, true);
   assert.equal(sql(`select count(*) from storage.objects where bucket_id='profile-photos'
-    and name='${id.third}/third.png'`), "1", "sanction-first photo stays private");
+    and name='${id.third}/3333.png'`), "1", "sanction-first photo stays private");
   await race("storage_before_sanction", `${claim(id.fourth)}
     set local storage.allow_delete_query='true';
     delete from storage.objects where bucket_id='profile-photos'
-      and name='${id.fourth}/fourth.png';`,
+      and name='${id.fourth}/4444.png';`,
   sanction(id.report4, "53200000-0000-4000-8003-000000000011"), false);
   assert.equal(sql(`select count(*) from storage.objects where bucket_id='profile-photos'
-    and name='${id.fourth}/fourth.png'`), "0", "admitted photo delete commits first");
+    and name='${id.fourth}/4444.png'`), "0", "admitted photo delete commits first");
   await race("sanction_before_preference", sanction(id.report5,
     "53200000-0000-4000-8003-000000000014"),
   `${claim(id.fifth)} select public.set_notification_preference('messages',false);`, true);
@@ -214,4 +226,6 @@ test("sanctions serialize with live role, target status and direct profile write
   sql("update private.notification_feature_gate set enabled=false");
   sql("update private.friendship_feature_gate set enabled=false");
   sql("update private.moderation_feature_gate set enabled=false");
+  sql(`update private.pilot_capabilities set enabled=false where key in ('onboarding','people','friendship','notifications');
+    update private.pilot_availability set enabled=false;`);
 });
