@@ -78,7 +78,7 @@ export function CombinedInbox({ actor }: { actor: string }) {
     setMessage("Chats are unavailable. Your access may have changed.");
   }, [mask]);
   const read = useCallback(
-    async (page: string | null = null, index = 0) => {
+    async (page: string | null = null, index = 0, refreshes = 0) => {
       if (document.hidden || pendingTransitions.current.size || denied.current)
         return;
       attemptedCursor.current = page;
@@ -107,8 +107,8 @@ export function CombinedInbox({ actor }: { actor: string }) {
         }
         if (data.kind === "stale") {
           cursors.current = [null];
-          if (page) {
-            void read(null, 0);
+          if (refreshes < 1) {
+            void read(null, 0, refreshes + 1);
             return;
           }
         }

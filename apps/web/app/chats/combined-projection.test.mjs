@@ -45,7 +45,21 @@ test("opaque attention page preserves global server order and unread state", () 
   assert.equal(projectAttentionItem(parsed.items[1], null, null)?.emoji, "🌮");
 });
 
-test("invalid shape and missing fresh peer detail fail closed", () => {
+test("missing People detail keeps safe source metadata without label, photo or unread", () => {
+  const generic = projectAttentionItem(dm, null, 42);
+  assert.equal(generic?.kind, "dm");
+  assert.equal(generic?.name, null);
+  assert.equal(generic?.photoRevision, null);
+  assert.equal(generic?.hasUnread, false);
+  assert.equal(generic?.dm.generation_id, dm.source_id);
+  assert.equal(generic?.dm.first_body, null);
+  assert.equal(
+    projectAttentionItem(dm, { account_id: dm.peer_id }, 42)?.name,
+    null,
+  );
+});
+
+test("invalid shape and mismatched fresh peer detail fail closed", () => {
   assert.equal(
     parseAttentionPage({
       items: [{ ...dm, has_unread: 1 }],
@@ -58,7 +72,6 @@ test("invalid shape and missing fresh peer detail fail closed", () => {
     parseAttentionPage({ items: [dm], has_more: true, next_cursor: null }),
     null,
   );
-  assert.equal(projectAttentionItem(dm, null, null), null);
   assert.equal(
     projectAttentionItem(
       dm,
