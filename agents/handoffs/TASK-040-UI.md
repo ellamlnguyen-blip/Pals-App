@@ -22,4 +22,4 @@ Status: bounded local source candidate for coordinator review. TASK-040 remains 
 - Authenticated 811px and 375px rendered checks of owner and peer profiles remain. This worktree has no isolated Auth/API/browser preview, and the shared 3035 stack was deliberately untouched. Check back/Edit focus and overflow, peer report/block access, and the owner footer links in that preview.
 - Coordinator review, status publication and application-main integration remain. ADR-0046 acceptance was separately published on main after this task's baseline; TASK-039E migration reconciliation and TASK-039D browser evidence remain predecessor gates. TASK-039 and earlier release/hosted gates remain open.
 
-Task branch publication and independently checked remote SHA will be recorded in a follow-up receipt below.
+Initial task source and handoff commit `3ea8f4efcc534f2ad4ef2319d906778dbd91e4dc` was pushed to `origin/agent/TASK-040-remove-profile-options` and independently verified with `git ls-remote`. This publication receipt follows in a documentation-only commit; its remote SHA is reported to the coordinator after verification. Canonical main was not changed by this task agent.
