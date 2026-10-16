@@ -2,7 +2,7 @@
 
 ## 2026-10-16 — TASK-034 reviewed local candidate
 
-Recorded remote-verified source candidate `1067152498729dcd34ae2924b4cb76bac8200f98` for combined-chat unread/recent attention and similarity-ranked Pals, local SQL/build/browser/race evidence, fresh review corrections and remaining final gates. No unfinished application code was merged into canonical main or hosted environment.
+Recorded remote-verified source candidate `9cb68d584629d201a7b5a0bd78552f71d4df2c6b` for combined-chat unread/recent attention and similarity-ranked Pals, local SQL/build/browser/race and 1,000-profile benchmark evidence, fresh review corrections and remaining final gates. No unfinished application code was merged into canonical main or hosted environment.
 
 ## 2026-10-15 — TASK-034 disposable backend milestone
 

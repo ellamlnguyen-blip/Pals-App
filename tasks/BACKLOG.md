@@ -2,7 +2,7 @@
 
 ## 2026-10-16 — TASK-034 remaining acceptance gates
 
-The reviewed local source candidate is remote verified at `1067152498729dcd34ae2924b4cb76bac8200f98`. Finish representative large-campus performance and broader chat race evidence where practical, obtain final candidate sign-off and resolve TASK-032/033 dependency gates before reviewed application-main/hosted integration. The local milestone is not task completion; see [status handoff](../agents/handoffs/TASK-034-STATUS.md).
+The reviewed local source candidate is remote verified at `9cb68d584629d201a7b5a0bd78552f71d4df2c6b`. A rollback-only 1,000-profile first-page benchmark completed in 220.189 ms on disposable local; repeated/larger performance and broader chat race evidence remain. Obtain final candidate sign-off and resolve TASK-032/033 dependency gates before reviewed application-main/hosted integration. The local milestone is not task completion; see [status handoff](../agents/handoffs/TASK-034-STATUS.md).
 
 ## 2026-10-15 — TASK-034 dependent UI integration
 
