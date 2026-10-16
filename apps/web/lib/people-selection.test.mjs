@@ -4,21 +4,23 @@ import { peopleUrl, readSelection, safeReturn } from "./people-selection.ts";
 
 const peer = "11111111-1111-4111-8111-111111111111";
 
-test("Pals selection accepts only major, year and bounded cursor", () => {
+test("Pals selection accepts only major, year and opaque cursor", () => {
   const selection = readSelection({
     year: "2028",
     major: "Biology",
-    afterId: peer,
+    cursor: peer,
   });
   assert.deepEqual(selection, {
     year: "2028",
     major: "Biology",
-    afterId: peer,
+    cursor: peer,
   });
   assert.equal(
     peopleUrl(selection),
-    `/people?year=2028&major=Biology&afterId=${peer}`,
+    `/people?year=2028&major=Biology&cursor=${peer}`,
   );
+  assert.equal(readSelection({ afterId: peer }), null);
+  assert.equal(readSelection({ cursor: "arbitrary-offset" }), null);
   assert.equal(readSelection({ search: "Maya" }), null);
   assert.equal(readSelection({ year: "1800" }), null);
   assert.equal(readSelection({ major: "x".repeat(201) }), null);

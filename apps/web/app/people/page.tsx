@@ -5,8 +5,8 @@ import {
   peopleUrl,
   readSelection,
   requireLocalPeople,
-  type PeopleCard,
 } from "../../lib/people";
+import { parseSimilarPalsPage } from "../../lib/similar-pals-page";
 import "../hangouts/map.css";
 import "./people.css";
 import { FocusReturn } from "./focus-return";
@@ -52,15 +52,16 @@ export default async function PeoplePage({
         </section>
       </Frame>
     );
-  const { data, error } = await client.rpc("browse_people", {
-    p_search: null,
+  const { data, error } = await client.rpc("browse_similar_pals", {
     p_graduation_year: selection.year ? Number(selection.year) : null,
     p_major: selection.major || null,
-    p_after_id: selection.afterId || null,
+    p_cursor: selection.cursor || null,
     p_limit: 24,
   });
-  const cards = (data ?? []) as PeopleCard[];
+  const page = error ? null : parseSimilarPalsPage(data);
+  const cards = page?.items ?? [];
   const gateOff = error?.code === "42501";
+  const stale = !!selection.cursor && error?.code === "22023";
   const friendshipBadges = error
     ? {}
     : Object.fromEntries(
@@ -93,14 +94,11 @@ export default async function PeoplePage({
           return result.error ? null : result.data?.[0];
         },
       );
-  const next =
-    cards.length === 24
-      ? peopleUrl({
-          ...selection,
-          afterId: cards[23].account_id,
-        })
-      : null;
+  const next = page?.has_more
+    ? peopleUrl({ ...selection, cursor: page.next_cursor! })
+    : null;
   const current = peopleUrl(selection);
+  const firstPage = peopleUrl({ ...selection, cursor: "" });
   return (
     <Frame signedIn navigation>
       <FocusReturn
@@ -121,11 +119,17 @@ export default async function PeoplePage({
           </p>
           <Link href="/people/privacy">Manage your visibility</Link>
         </section>
-      ) : error ? (
+      ) : stale ? (
+        <section className="people-panel">
+          <h2>Pals changed</h2>
+          <p role="alert">Refresh the list to see who is available now.</p>
+          <Link href={firstPage}>Refresh Pals</Link>
+        </section>
+      ) : error || !page ? (
         <section className="people-panel">
           <h2>Couldn’t load Pals</h2>
           <p role="alert">Check your connection and try again.</p>
-          <Link href={current}>Retry</Link>
+          <Link href={firstPage}>Retry</Link>
         </section>
       ) : (
         <>
@@ -191,9 +195,9 @@ export default async function PeoplePage({
                   ))}
                 </ul>
               </PeopleCardPhotoBoundary>
-              {(selection.afterId || next) && (
+              {(selection.cursor || next) && (
                 <div className="people-pages">
-                  {selection.afterId && <Link href="/people">Start over</Link>}
+                  {selection.cursor && <Link href={firstPage}>Start over</Link>}
                   {next && (
                     <Link className="button" prefetch={false} href={next}>
                       Next page
@@ -205,16 +209,22 @@ export default async function PeoplePage({
           ) : (
             <section className="people-panel">
               <h2>
-                {selection.year || selection.major
+                {selection.cursor
+                  ? "No more Pals on this page"
+                  : selection.year || selection.major
                   ? "No Pals match"
                   : "No one is visible yet"}
               </h2>
               <p>
-                {selection.year || selection.major
+                {selection.cursor
+                  ? "The list may have changed since you started browsing."
+                  : selection.year || selection.major
                   ? "Try a different year or major."
                   : "Students appear here only after they choose to share their Pals profile."}
               </p>
-              <Link href="/people">Clear filters</Link>
+              <Link href={selection.cursor ? firstPage : "/people"}>
+                {selection.cursor ? "Refresh Pals" : "Clear filters"}
+              </Link>
             </section>
           )}
         </>

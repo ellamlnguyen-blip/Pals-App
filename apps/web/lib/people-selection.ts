@@ -4,37 +4,37 @@ export const peopleId =
 export type PeopleSelection = {
   year: string;
   major: string;
-  afterId: string;
+  cursor: string;
 };
 export function readSelection(
   params: Record<string, string | string[] | undefined>,
 ): PeopleSelection | null {
   if (
     Object.keys(params).some(
-      (key) => !["year", "major", "afterId"].includes(key),
+      (key) => !["year", "major", "cursor"].includes(key),
     )
   )
     return null;
-  const values = [params.year, params.major, params.afterId];
+  const values = [params.year, params.major, params.cursor];
   if (values.some((value) => Array.isArray(value))) return null;
   const year = String(params.year ?? ""),
     major = String(params.major ?? "");
-  const afterId = String(params.afterId ?? "");
+  const cursor = String(params.cursor ?? "");
   if (
     major.length > 200 ||
     (year !== "" &&
       (!/^\d{4}$/.test(year) || Number(year) < 1900 || Number(year) > 2200)) ||
-    (afterId !== "" && !peopleId.test(afterId))
+    (cursor !== "" && !peopleId.test(cursor))
   )
     return null;
-  return { year, major, afterId };
+  return { year, major, cursor };
 }
 export function peopleUrl(selection: PeopleSelection) {
   const query = new URLSearchParams();
   if (selection.year) query.set("year", selection.year);
   if (selection.major) query.set("major", selection.major);
-  if (selection.afterId) {
-    query.set("afterId", selection.afterId);
+  if (selection.cursor) {
+    query.set("cursor", selection.cursor);
   }
   return `/people${query.size ? `?${query}` : ""}`;
 }
