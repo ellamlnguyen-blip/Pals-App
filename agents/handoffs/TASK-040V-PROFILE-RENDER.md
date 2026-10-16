@@ -29,3 +29,7 @@ The task-owned Next preview, Supabase containers, volumes and network were stopp
 ## Remaining gates
 
 Coordinator review, shared-status publication and accepted application-main integration remain. TASK-039D and earlier predecessor/release gates remain open. This QA receipt does not authorize a hosted change or mark TASK-040 complete.
+
+## Publication receipt
+
+Source, handoff and screenshot commit `1f9021ecfe3334c5e7cdf6f87f0ca7eccbc997fc` was pushed to `origin/agent/TASK-040V-profile-render` and independently verified at that SHA. `origin/main` was independently verified at `5df5763ee1d01158c825339acd8bd4481e31ce26` before this receipt; no TASK-040V change was pushed to main. The final documentation-receipt tip is reported to the coordinator after its separate remote verification.
