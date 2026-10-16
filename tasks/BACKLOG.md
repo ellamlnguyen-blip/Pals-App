@@ -1,5 +1,10 @@
 # Backlog
 
+## 2026-10-15 — Chat policy proposal ready
+
+TASK-033B source audit maps existing joined chat/social/message notifications and the missing polls/co-host invitation/reminder/optional activity persistence. Proposed ADR0042 records Ella’s friendship-or-accepted-request DM rule and one-hour reminder, with bounded poll privacy, invitation consent and default-off settings. It is not accepted; new schema/permissions remain pending explicit acceptance under AGENTS. StageA presentation proceeds independently; no hosted operation.
+
+
 ## 2026-10-15 — Combined chats, polls and notifications
 
 TASK-033 records the new requested chat/notification behavior. StageA combines existing authorized chat sources and removes two headings; StageB audits persistent polls/friend-DM/reminder/cohost/optional notification design for ProposedADR0042. Contracts tasks/active/TASK-033-chats-notifications.md and TASK-033A-combined-inbox.md. Existing TASK032 release gates and explicit ADR acceptance remain; no hosted action.
