@@ -1,0 +1,23 @@
+--- apps/web/lib/safety.ts	2026-10-16 17:09:12
++++ /private/tmp/pals-task039f-owned/app/apps/web/lib/safety.ts	2026-10-16 17:15:30
+@@ -25,8 +25,9 @@
+
+ export async function safetyAccess(actor: string | null) {
+   try {
+-    if (!localSafetyAvailable() || !actor || !safetyId.test(actor)) return null;
++    if (!localSafetyAvailable() || !actor || !safetyId.test(actor)) { console.log("QA safety pre", localSafetyAvailable(), Boolean(actor), actor && safetyId.test(actor)); return null; }
+     const target = await access();
++    console.log("QA safety actor", actor, "session", target.user?.id, "state", target.state);
+     if (
+       !target.user ||
+       target.user.id !== actor ||
+@@ -34,7 +35,8 @@
+     )
+       return null;
+     return { client: target.client, user: target.user };
+-  } catch {
++  } catch (error) {
++    console.log("QA safety catch", String(error));
+     return null;
+   }
+ }

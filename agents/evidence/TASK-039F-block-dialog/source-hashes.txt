@@ -1,0 +1,5 @@
+0b92c1dea10c288b6c98cd22c4c00d89c6987dea0b8c4dfccf4d88ff2e750b6d  apps/web/app/safety/safety-client.tsx
+7da46d5edafc355919fa195f7380424d140757ed20df90b3097a78026636a1eb  apps/web/app/chats/direct/[id]/safety-boundary.tsx
+800fcef0ae81bba4775de7a999b905a99abda1ca3912f4df2c78bd80a974ebd5  apps/web/app/api/safety/route.ts
+96ee1b056dd6038a9e5d66c23d3692db8362a27b839360fbf786621e743268a0  apps/web/app/api/dm/[id]/route.ts
+babae80f981c6cceeea0ab156f3764ee03b56e8b03c6d322d65c8e5d22fdde2c  supabase/migrations/20261016000200_friendship_only_dm.sql

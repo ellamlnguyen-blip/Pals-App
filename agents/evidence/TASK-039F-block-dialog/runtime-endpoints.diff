@@ -1,0 +1,42 @@
+--- packages/config/src/index.ts	2026-10-16 17:08:59
++++ /private/tmp/pals-task039f-owned/app/packages/config/src/index.ts	2026-10-16 17:10:20
+@@ -34,7 +34,7 @@
+     if (
+       url.protocol !== "http:" ||
+       !["localhost", "127.0.0.1", "[::1]"].includes(url.hostname) ||
+-      url.port !== "54321"
++      url.port !== "55721"
+     )
+       throw new Error("Local Supabase must use loopback HTTP on port 54321.");
+   } else if (
+--- apps/web/lib/config.ts	2026-10-16 17:08:59
++++ /private/tmp/pals-task039f-owned/app/apps/web/lib/config.ts	2026-10-16 17:10:20
+@@ -21,7 +21,7 @@
+       throw new Error("Only a publishable or legacy anon key is permitted.");
+     }
+   }
+-  const origin = new URL(process.env.APP_ORIGIN ?? "http://127.0.0.1:3000");
++  const origin = new URL(process.env.APP_ORIGIN ?? "http://127.0.0.1:3049");
+   if (
+     origin.username ||
+     origin.password ||
+@@ -29,7 +29,7 @@
+     origin.search ||
+     origin.hash ||
+     (environment === "local"
+-      ? origin.origin !== "http://127.0.0.1:3000"
++      ? origin.origin !== "http://127.0.0.1:3049"
+       : origin.protocol !== "https:")
+   ) {
+     throw new Error(
+--- apps/web/lib/feature-runtime.ts	2026-10-16 17:09:12
++++ /private/tmp/pals-task039f-owned/app/apps/web/lib/feature-runtime.ts	2026-10-16 17:10:20
+@@ -12,7 +12,7 @@
+     const environment = parseAppEnvironment(process.env.APP_ENV);
+     const { url } = authConfig();
+     if (environment !== "local") return url.endsWith(".supabase.co");
+-    return url === "http://127.0.0.1:54321";
++    return url === "http://127.0.0.1:55721";
+   } catch {
+     return false;
+   }
