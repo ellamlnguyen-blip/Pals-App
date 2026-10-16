@@ -30,11 +30,11 @@ select set_config('request.jwt.claims',
 do $rate$
 begin
  for i in 1..11 loop
-  perform pg_sleep(1.05);
+  perform pg_sleep(0.15);
   perform public.list_my_chat_attention();
  end loop;
 end $rate$;
-select pg_sleep(1.05);
+select pg_sleep(0.15);
 select throws_ok($$select public.list_my_chat_attention()$$,'42501',null,
  'thirteenth snapshot creation in one minute is denied generically');
 reset role;
@@ -61,7 +61,7 @@ select is(jsonb_array_length(public.list_my_chat_attention()->'items'),0,
 reset role;
 select is((select rate_creation_count from private.chat_attention_snapshots
  where owner_id='534c1000-0000-4000-8000-000000000002'),1,
- 'second owner's persisted counter starts at one');
+ 'second owner persisted counter starts at one');
 -- Exercise the additive DDL replay shape without replacing the live RPC in
 -- this pgTAP transaction. Coordinator separately replays all of 01000.
 alter table private.chat_attention_snapshots
