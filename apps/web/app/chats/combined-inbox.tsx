@@ -47,7 +47,13 @@ function PeerAvatar({ row }: { row: Extract<CombinedRow, { kind: "dm" }> }) {
   );
 }
 
-export function CombinedInbox({ actor }: { actor: string }) {
+export function CombinedInbox({
+  actor,
+  selected,
+}: {
+  actor: string;
+  selected?: { kind: "hangout" | "dm"; id: string };
+}) {
   const [rows, setRows] = useState<CombinedRow[]>([]);
   const [phase, setPhase] = useState<"loading" | "ready" | "denied" | "error">(
     "loading",
@@ -216,8 +222,25 @@ export function CombinedInbox({ actor }: { actor: string }) {
       channel.close();
     };
   }, [actor, deny, mask, read]);
+  const requestCount = rows.filter(
+    (row) =>
+      row.kind === "dm" &&
+      row.dm.state === "pending" &&
+      row.dm.direction === "incoming",
+  ).length;
   return (
     <div className="combined-inbox" aria-live="polite">
+      <div className="chat-list-heading">
+        <h2>Conversations</h2>
+        <p>Hangouts and messages</p>
+      </div>
+      <p className="chat-list-switch">All conversations</p>
+      {phase === "ready" && requestCount > 0 && (
+        <p className="chat-request-cue">
+          {requestCount} message {requestCount === 1 ? "request" : "requests"}{" "}
+          on this page
+        </p>
+      )}
       {phase === "loading" && <p role="status">Checking chats…</p>}
       {(phase === "error" || phase === "denied") && (
         <div role="alert">
@@ -241,7 +264,20 @@ export function CombinedInbox({ actor }: { actor: string }) {
               if (row.kind === "hangout")
                 return (
                   <li key={`h-${row.id}`}>
-                    <Link href={`/chats/hangouts/${row.id}`} prefetch={false}>
+                    <Link
+                      href={`/chats/hangouts/${row.id}`}
+                      prefetch={false}
+                      className={
+                        selected?.kind === "hangout" && selected.id === row.id
+                          ? "is-selected"
+                          : undefined
+                      }
+                      aria-current={
+                        selected?.kind === "hangout" && selected.id === row.id
+                          ? "page"
+                          : undefined
+                      }
+                    >
                       <span
                         className="combined-avatar combined-emoji"
                         aria-hidden="true"
@@ -274,7 +310,20 @@ export function CombinedInbox({ actor }: { actor: string }) {
                     : "Message request · waiting for their choice";
               return (
                 <li key={`d-${dm.generation_id}`}>
-                  <Link href={`/chats/direct/${dm.peer_id}`} prefetch={false}>
+                  <Link
+                    href={`/chats/direct/${dm.peer_id}`}
+                    prefetch={false}
+                    className={
+                      selected?.kind === "dm" && selected.id === dm.peer_id
+                        ? "is-selected"
+                        : undefined
+                    }
+                    aria-current={
+                      selected?.kind === "dm" && selected.id === dm.peer_id
+                        ? "page"
+                        : undefined
+                    }
+                  >
                     <PeerAvatar row={row} />
                     <span className="combined-copy">
                       <strong>{row.name || "Person unavailable"}</strong>

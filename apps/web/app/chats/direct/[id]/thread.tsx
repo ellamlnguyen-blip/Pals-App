@@ -512,9 +512,6 @@ export function DirectThread({ id, actor }: { id: string; actor: string }) {
       {status &&
         (phase === "ready" || phase === "waiting" || phase === "paused") && (
           <>
-            <p className="dm-peer">
-              Peer ID <code>{id}</code>
-            </p>
             {phase === "waiting" && (
               <div className="chat-empty">
                 <h2>Waiting for their choice</h2>

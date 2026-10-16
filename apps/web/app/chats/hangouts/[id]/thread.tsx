@@ -20,7 +20,15 @@ type SendResult =
   | { kind: "denied" | "error" | "invalid" | "conflict" };
 type Pending = { key: string; body: string };
 
-export function Thread({ id, userId }: { id: string; userId: string }) {
+export function Thread({
+  id,
+  userId,
+  title,
+}: {
+  id: string;
+  userId: string;
+  title: string;
+}) {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [state, setState] = useState<"loading" | "ready" | "denied" | "error">(
     "loading",
@@ -471,9 +479,7 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
                     <strong>
                       {message.mine
                         ? "You"
-                        : (message.author_id ??
-                          message.author_label ??
-                          "Former participant")}
+                        : (message.author_label ?? "Participant")}
                     </strong>
                     <time dateTime={message.created_at}>
                       {new Date(message.created_at).toLocaleString("en-US", {
@@ -510,7 +516,7 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
             </div>
           )}
           <form
-            className="chat-composer"
+            className="chat-composer chat-composer-hangout"
             onSubmit={(event) => {
               event.preventDefault();
               void send();
@@ -527,24 +533,42 @@ export function Thread({ id, userId }: { id: string; userId: string }) {
                 draftRef.current = value;
               }}
               maxLength={2000}
-              rows={4}
+              rows={1}
               aria-describedby="chat-count chat-disclosure"
-              placeholder="What should everyone know?"
+              placeholder={`Message ${title}…`}
             />
             <div className="chat-compose-row">
               <span id="chat-count">
                 {draft.trim().length} / 2000 characters
               </span>
               <button
-                className="button"
+                className={`button${!sending && !pending ? " chat-send-icon" : ""}`}
                 disabled={sending || (!draft.trim() && !pending)}
                 type="submit"
               >
-                {sending
-                  ? "Sending…"
-                  : pending
-                    ? "Retry original message"
-                    : "Send message"}
+                {sending ? (
+                  "Sending…"
+                ) : pending ? (
+                  "Retry original message"
+                ) : (
+                  <>
+                    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                      <path
+                        d="M3 20 21 12 3 4l3 8-3 8Z"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                        strokeLinejoin="round"
+                      />
+                      <path
+                        d="M6 12h15"
+                        stroke="currentColor"
+                        strokeWidth="1.8"
+                        strokeLinecap="round"
+                      />
+                    </svg>
+                    <span className="sr-only">Send message</span>
+                  </>
+                )}
               </button>
             </div>
             <p id="chat-disclosure" className="help">

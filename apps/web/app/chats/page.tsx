@@ -22,10 +22,23 @@ export default async function ChatsPage() {
   return (
     <Frame signedIn navigation={account.state === "ready"}>
       <section className="chat-page" aria-labelledby="chats-title">
-        <h1 id="chats-title" className="sr-only">
+        <h1 id="chats-title" className="chat-page-title">
           Chats
         </h1>
-        <CombinedInbox key={account.user.id} actor={account.user.id} />
+        <div className="chat-shell">
+          <aside className="chat-sidebar" aria-label="Conversations">
+            <CombinedInbox key={account.user.id} actor={account.user.id} />
+          </aside>
+          <div className="chat-detail chat-detail-empty">
+            <div className="chat-selection-empty">
+              <span className="chat-selection-mark" aria-hidden="true">
+                ✦
+              </span>
+              <h2>Pick a conversation</h2>
+              <p>Choose a Hangout or message to make a plan together.</p>
+            </div>
+          </div>
+        </div>
       </section>
     </Frame>
   );
