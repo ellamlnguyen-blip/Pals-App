@@ -1,6 +1,6 @@
 # TASK-033D2 handoff — friendship or request-consented DM backend
 
-Status: source candidate for fresh security review; migration not applied, tests not run. No hosted or gate operation.
+Status: reviewed migration applied to named disposable DB by coordinator; scoped SQL 26/26 passed with rollback. The D2 concurrency harness then passed after correcting its unfriend call to the granted public wrapper. No hosted or gate operation.
 
 ## Scope and outcome
 
@@ -19,9 +19,8 @@ Status: source candidate for fresh security review; migration not applied, tests
 
 ## Review and verification still required
 
-1. Fresh security review of provenance constraints, lock order, same-statement reader authorization, exact retry, block teardown, and direct grants.
-2. Coordinator may apply the reviewed migration only to named `supabase_db_pals-task029-disposable` (API 55521 / DB 55522), with no reset. Run the scoped SQL test through that container with `psql -X -v ON_ERROR_STOP=1 -f supabase/tests/database/friendship_dm_consent.test.sql` and confirm its `finish()` result plus rollback. Do not run this against hosted or current shared fixtures.
-3. Run `PALS_D2_DB=supabase_db_pals-task029-disposable node supabase/tests/friendship-dm-consent-concurrency.integration.mjs` after the reviewed apply, with required disposable gates already enabled. The harness was syntax checked with `node --check`, but no race was executed by this worker because application awaits review.
-4. The notification stage must update its reader as above before complete end-to-end sign-off. Coordinator owns integration, remote SHAs and shared task records.
+1. Fresh security review identified an old `create_dm_request` exact retry gap; it was fixed and added to the reviewed D2 migration before application. The coordinator applied that migration to `supabase_db_pals-task029-disposable` (API 55521 / DB 55522) and reported the scoped transactional SQL test passed 26/26 with rollback.
+2. The first concurrency harness run timed out because it called the deliberately ungranted internal `transition_friendship` function under `authenticated`. The harness now calls the granted `public.unfriend` wrapper. `PALS_D2_DB=supabase_db_pals-task029-disposable node supabase/tests/friendship-dm-consent-concurrency.integration.mjs` passed after this test-only fix, covering opposing first sends, exact retry, unfriend-before-send/retry, consent-before-unfriend, and block-before-retry. Unique synthetic users were cleaned up; no gate setting was changed.
+3. The notification stage must update its reader as above before complete end-to-end sign-off. Coordinator owns integration, remote SHAs and shared task records.
 
-No branch was staged, committed or pushed by this worker.
+The coordinator committed reviewed D2 source as `6aba7fc`; this worker did not stage, commit or push the subsequent harness-only correction.

@@ -63,8 +63,8 @@ async function sendAfterUnfriend(generation,key) {
   const friendship=sql(`select generation_id from private.friendships where low_id=least('${a}'::uuid,'${b}'::uuid)
     and high_id=greatest('${a}'::uuid,'${b}'::uuid)`);
   const unf=open("d2_unfriend_first"), sender=open("d2_send_after_unfriend");
-  unf.send(`begin; ${claims(b)} select public.transition_friendship('${a}','${friendship}','unfriend'); select 'unfriend_held';`);
-  await until(()=>unf.out().includes("unfriend_held"));
+  unf.send(`begin; ${claims(b)} select public.unfriend('${a}','${friendship}'); select 'unfriend_held';`);
+  await until(()=> { if (unf.err()) throw new Error(`unfriend failed: ${unf.err()}`); return unf.out().includes("unfriend_held"); });
   sender.send(`${firstSend(a,b,randomUUID(),"Must pause")} commit;`);
   await waiting("d2_send_after_unfriend");
   unf.send("commit;"); unf.child.stdin.end(); sender.child.stdin.end();
@@ -90,7 +90,7 @@ async function consentThenUnfriend(generation,key) {
   const consent=open("d2_consent_first"), unf=open("d2_unfriend_after_consent");
   consent.send(`begin; ${claims(recipient)} select public.accept_friend_dm_consent('${initiator}','${generation}'); select 'consent_held';`);
   await until(()=>consent.out().includes("consent_held"));
-  unf.send(`begin; ${claims(b)} select public.transition_friendship('${a}','${friendship}','unfriend'); commit;`);
+  unf.send(`begin; ${claims(b)} select public.unfriend('${a}','${friendship}'); commit;`);
   await waiting("d2_unfriend_after_consent");
   consent.send("commit;"); consent.child.stdin.end(); unf.child.stdin.end();
   assert.equal(await consent.done,0,consent.err()); assert.equal(await unf.done,0,unf.err());
