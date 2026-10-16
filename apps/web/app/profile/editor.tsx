@@ -479,6 +479,9 @@ export function ProfileEditor({
               Preview and manage Pals and rich sharing
             </Link>
             <Link href="/notifications">Friend requests</Link>
+            <Link href="/people/privacy#relationships">
+              Manage unavailable Pals and requests
+            </Link>
           </>
         )}
         <p className="help">

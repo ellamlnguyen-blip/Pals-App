@@ -7,6 +7,7 @@ import { requireLocalPeople } from "../../../lib/people";
 import { Frame } from "../../components";
 import { PrivacyControls } from "./privacy-controls";
 import { RichPrivacyControls } from "./rich-privacy-controls";
+import { HiddenFriendships } from "./hidden-friendships";
 import "../../hangouts/map.css";
 import "../people.css";
 import "./rich-privacy.css";
@@ -262,6 +263,7 @@ export default async function PrivacyPage() {
           <p>Manage outbound blocks and retained Hangout reports in Safety.</p>
           <Link href="/safety">Open Safety</Link>
         </section>
+        <HiddenFriendships actor={user.id} />
       </div>
     </Frame>
   );

@@ -372,3 +372,38 @@ dialog code {
     width: 100%;
   }
 }
+
+.profile-relationship-management {
+  margin: 28px 0;
+  padding: 18px;
+  border: 1px solid var(--pals-line);
+  border-radius: var(--pals-radius-panel);
+  background: var(--pals-surface);
+}
+.profile-relationship-toggle {
+  min-height: 44px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--pals-profile-action);
+  font-weight: 800;
+  text-align: left;
+  cursor: pointer;
+}
+.profile-relationship-toggle:focus-visible {
+  outline: 3px solid var(--pals-focus);
+  outline-offset: 3px;
+}
+.profile-hidden-relationships {
+  margin: 16px 0;
+  padding: 0;
+  list-style: none;
+}
+.profile-hidden-relationships li {
+  padding: 16px 0;
+  border-top: 1px solid var(--pals-line);
+  overflow-wrap: anywhere;
+}
+.profile-hidden-relationships code {
+  user-select: all;
+}
