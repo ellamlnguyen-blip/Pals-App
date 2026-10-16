@@ -2,6 +2,8 @@
 
 Status: active. Ella's 2026-10-16 correction to the TASK-036 preview explicitly requests Hangouts and direct messages in separate tabs like the supplied image, removal of the visible Chats heading on that screen, removal of the poll feature, and navigation to Hangout details by clicking the Hangout name. Canonical baseline is main `8d748483af65cb78d79aab120628354e1613c788`; exact local UI dependency is `agent/TASK-036-chat-reference-ui` at `1fac4f67a8cd8b57140eff60eaf8ba2c3923b7c7`. TASK-032/033/034/035/036 parent gates remain open. No hosted operation or app-main integration is in scope.
 
+Local milestone: reviewed source candidate on `agent/TASK-037-chat-categories` is pushed and remote verified at `8aa18c5a8d8ee99d5d9164583c00bad432106720`. Build, focused tests, 1280/375px browser inspection and named disposable-local poll migration/pgTAP passed. [Coordinator status handoff](../../agents/handoffs/TASK-037-STATUS.md) records evidence. Task remains active until predecessor release gates and accepted application-main integration finish.
+
 ## Outcome and bounds
 
 - Keep the rounded desktop split pane and mobile list/thread navigation from TASK-036. Render accessible Hangouts and Messages tabs above the sidebar list; each shows only that category. Incoming message requests remain reachable from the Messages tab. Category paging must not silently omit items from the current authorized combined source snapshot or claim a global count from a page-local result. Preserve unread indicators and source activity order within each category.

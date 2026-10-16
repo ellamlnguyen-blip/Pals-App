@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-16 — TASK-037 reviewed local Chats correction
+
+Published remote-verified candidate `8aa18c5a8d8ee99d5d9164583c00bad432106720` with separate Hangouts/Messages controls, no visible Chats heading or poll UI/API, and Hangout-title details navigation. The additive poll grant revocation passed nine disposable-local checks; build/TypeScript, nine focused Node checks and 1280/375px browser review passed. The direct-header identity privacy finding was fixed and re-reviewed. Application code remains off main while predecessor and release gates remain open.
+
 ## 2026-10-16 — TASK-037 chat correction contract
 
 Recorded the user's revised Hangouts/Messages tabs, heading/link behavior and poll retirement as a bounded follow-on to TASK-036, with ADR-0044 for local poll grant revocation. No application or hosted change in this documentation milestone.

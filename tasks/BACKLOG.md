@@ -4,6 +4,8 @@
 
 Implement and review source-complete category tabs, accessible heading removal, Hangout-title details link and poll retirement. Verify mixed-source paging, old poll API/RPC denial, real desktop/phone rendering and source privacy. Publish a remote-verified task branch and local status. Parent TASK-032/033/034/035/036 gates remain before app-main/hosted integration.
 
+Local implementation, privacy review, build, 1280/375px browser checks and disposable-local poll revocation tests are complete at remote-verified `8aa18c5a8d8ee99d5d9164583c00bad432106720`. Remaining: predecessor TASK-032/033/034/035/036 release gates and reviewed application-main integration. No hosted change was made.
+
 ## 2026-10-16 — TASK-036 verification and integration gates
 
 After bounded implementation, review the Chats index and both conversation routes at desktop/mobile, including real data, loading/denied states, send/poll controls, navigation, build/TypeScript and no overflow. Publish the task branch with a verified remote SHA and record local outcome on main. Parent TASK-032/033/034/035 signoff and application-main/hosted gates remain open.

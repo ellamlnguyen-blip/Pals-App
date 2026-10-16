@@ -4,6 +4,8 @@
 
 Ella's latest Chat screenshot correction reverses the unified inbox presentation and poll feature: separate Hangouts/Messages tabs, hide the visible Chats heading, use the Hangout title as its detail link, retire poll UI/API/authenticated RPC access while retaining private records. TASK-037 and accepted ADR-0044 record this bounded local change from main `8d74848` and exact TASK-036 source `1fac4f6`. No implementation or hosted change is yet integrated; earlier task gates remain open.
 
+The reviewed local candidate is remote verified at `8aa18c5a8d8ee99d5d9164583c00bad432106720` on `agent/TASK-037-chat-categories`. The split Chats UI now separates Hangouts and Messages, hides the redundant visible heading, opens Hangout details from its name and has no poll surface. The additive poll RPC revocation passed nine checks on the named disposable database, retaining private rows. Web build/TypeScript, nine focused Node tests, authenticated 1280/375px browser checks and fresh privacy re-review of the direct identity header passed. [Status handoff](../../agents/handoffs/TASK-037-STATUS.md) records evidence. TASK-032/033/034/035/036 release and application-main gates remain open; main holds records only.
+
 ## 2026-10-16 — TASK-036 requested
 
 TASK-036 is a bounded Chats presentation follow-on from Ella's supplied image. Its contract is `tasks/active/TASK-036-chat-reference-layout.md`, starting from canonical main `1f365d9` with reviewed disposable-local TASK-035 source dependency `287e3fa`. No TASK-036 code or hosted change has been integrated. TASK-032/033/034/035 remain incomplete at recorded gates.
