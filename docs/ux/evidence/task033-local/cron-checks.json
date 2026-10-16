@@ -1,0 +1,50 @@
+{
+  "kind": "TASK-033FG scheduled cron proof",
+  "environment": "supabase_db_pals-task029-disposable",
+  "manualWorkerInvocation": false,
+  "createdAt": "2026-10-16T01:49:11.187Z",
+  "jobId": 1,
+  "preRunId": 20,
+  "fixture": {
+    "hostId": "6e90d837-2bb2-44cf-aa61-58b57c62d5eb",
+    "recipientId": "234fbe1b-d125-4559-95a8-54e14c023fd2",
+    "hangoutId": "9632c5f2-06f9-4a2e-aa9b-37d1b3218f5d",
+    "occurrenceId": "6cf1fb99-254a-4faf-ac8c-408a3060166f",
+    "scheduleRevision": 1,
+    "startsAt": "2026-10-16 02:34:11.746+00",
+    "participantState": "joined"
+  },
+  "firstRun": {
+    "runid": 21,
+    "status": "succeeded",
+    "startTime": "2026-10-16 01:50:00.025688+00"
+  },
+  "recipientNotification": {
+    "id": "c5432d4a-1ae5-4d4e-8bc8-8e26cfb08dd7",
+    "eventCode": "hangout_start_reminder",
+    "sourceKind": "hangout_reminder",
+    "sourceId": "6cf1fb99-254a-4faf-ac8c-408a3060166f",
+    "targetId": "9632c5f2-06f9-4a2e-aa9b-37d1b3218f5d",
+    "label": "Hangout starts soon",
+    "readable": true
+  },
+  "secondRun": {
+    "runid": 22,
+    "status": "succeeded",
+    "startTime": "2026-10-16 01:51:00.030468+00"
+  },
+  "recipientReminderCountAfterSecondRun": 1,
+  "verifiedAt": "2026-10-16T01:51:13.261Z",
+  "cleanup": {
+    "remainingHangouts": 0,
+    "remainingUsers": 0,
+    "remainingNotificationItems": 0,
+    "remainingActions": 0,
+    "remainingOccurrences": 0
+  },
+  "cleanupRecovery": {
+    "resolved": true,
+    "initialForeignKeyError": "hangout_create_requests reference",
+    "completedAt": "2026-10-16T01:51:37.057Z"
+  }
+}

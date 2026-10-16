@@ -1,5 +1,9 @@
 # Realtime and Messaging
 
+## TASK-033 reviewed local candidate
+
+Current source implements single-choice polls (question1–200;2–6 distinct options;one editable vote;creator close;five new polls/actor/conversation/hour) only under current joined Hangout or accepted DM generation access. Aggregates include only currently eligible voters and never expose a voter list. Friendship-origin DM access pauses without current friendship until independently accepted by the recipient; prior request-origin consent remains valid. Exact retries recheck access. Combined Chats mixes source-keyset batches with current peer photo/name and title/emoji. Backend migrations00100/00300/00500 and web source are local verified, unintegrated pending finalization. See TASK-033-LOCAL handoff for evidence and exclusions.
+
 ## Accepted local extension — 2026-10-15
 
 Accepted ADR0042 adds current-friend or independently request-consented DM authorization and single-choice polls under current conversation access. Polls and friend-origin consent require reviewed committed migrations and denial/retry/concurrency verification before UI integration. Existing blocks and source revocation remain authoritative. See [ADR0042](../../decisions/ADR-0042-chat-polls-notification-policy.md).
