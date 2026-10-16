@@ -24,6 +24,12 @@
   gap: 2rem;
   padding-bottom: 4rem;
 }
+.hangout-editor--new {
+  grid-template-columns: minmax(0, 720px);
+}
+.hangout-editor--new .hangout-editor-actions {
+  grid-column: 1;
+}
 .hangout-editor-main,
 .hangout-editor-area {
   min-width: 0;

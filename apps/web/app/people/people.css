@@ -47,6 +47,7 @@
 .people-grid a {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 0.3rem;
   min-height: 11rem;
   padding: 1.5rem;
@@ -60,15 +61,35 @@
 .people-grid a:hover {
   border-color: var(--pals-accent);
 }
+.people-grid a:focus-visible {
+  outline: 3px solid var(--pals-accent);
+  outline-offset: 3px;
+}
+.people-card-photo {
+  display: grid;
+  place-items: center;
+  width: 4.5rem;
+  height: 4.5rem;
+  margin-bottom: 0.45rem;
+  overflow: hidden;
+  border-radius: 50%;
+  background: var(--pals-surface);
+  color: var(--pals-accent);
+  flex: none;
+}
+.people-card-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.people-card-photo-fallback {
+  font-size: 1.35rem;
+  font-weight: 900;
+}
 .people-card-name {
   font-size: 1.35rem;
   font-weight: 900;
   line-height: 1.2;
-}
-.people-card-cta {
-  margin-top: auto;
-  color: var(--pals-accent);
-  font-weight: 800;
 }
 .people-pages {
   display: flex;
