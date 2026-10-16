@@ -6,6 +6,7 @@ import { Thread } from "./thread";
 import { SafetyActions } from "../../../safety/safety-client";
 import { CombinedInbox } from "../../combined-inbox";
 import { pinCue } from "../../../hangouts/saved/pin-cue";
+import { formatHangoutDateTime } from "../../chat-date";
 import "../../../hangouts/map.css";
 import "../../chat.css";
 
@@ -78,7 +79,6 @@ export default async function ThreadPage({
                   })}
                 </span>
                 <div>
-                  <p>Hangout chat</p>
                   <h2 id="thread-title">
                     <Link href={`/hangouts/saved/${id}`}>{record.title}</Link>
                   </h2>
@@ -88,12 +88,7 @@ export default async function ThreadPage({
             <div className="chat-hangout-strip">
               <span>
                 <time dateTime={record.starts_at}>
-                  {new Intl.DateTimeFormat("en-US", {
-                    dateStyle: "medium",
-                    timeStyle: "short",
-                    timeZone: "America/New_York",
-                  }).format(new Date(record.starts_at))}{" "}
-                  ET
+                  {formatHangoutDateTime(record.starts_at)}
                 </time>
                 <span aria-hidden="true"> · </span>
                 {record.public_place}

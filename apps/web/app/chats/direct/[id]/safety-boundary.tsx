@@ -52,7 +52,6 @@ export function DirectSafetyBoundary({
             )}
           </span>
           <div>
-            <p>Messages</p>
             <h2 id="direct-title">{peer?.name || "Direct chat"}</h2>
           </div>
         </div>

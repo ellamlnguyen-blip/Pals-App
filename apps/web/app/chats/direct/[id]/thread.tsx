@@ -218,14 +218,7 @@ export function DirectThread({
           setDraft(draftRef.current);
           setPending(pendingRef.current);
         }
-        setNote(
-          data.status.state === "pending" &&
-            data.status.direction === "outgoing"
-            ? "Waiting for their choice."
-            : data.bodyAccess
-              ? "Conversation checked."
-              : "Message access is paused.",
-        );
+        setNote("");
         return true;
       } catch {
         if (now === ticket.current && !document.hidden) {
@@ -548,7 +541,9 @@ export function DirectThread({
                 </p>
                 {status.friend_send_available && (
                   <div className="chat-composer">
-                    <label htmlFor="dm-friend-draft">Message as Pals</label>
+                    <label className="sr-only" htmlFor="dm-friend-draft">
+                      Message as Pals
+                    </label>
                     <textarea
                       id="dm-friend-draft"
                       value={pending?.body ?? draft}
@@ -681,7 +676,7 @@ export function DirectThread({
                   </p>
                 )}
                 <div className="chat-composer">
-                  <label htmlFor="dm-draft">
+                  <label className="sr-only" htmlFor="dm-draft">
                     {status.state === "pending"
                       ? "Reply and accept"
                       : "Message"}
@@ -696,9 +691,6 @@ export function DirectThread({
                       setDraft(event.target.value);
                     }}
                   />
-                  <p className="help">
-                    Plain text · 1–2000 characters · Enter adds a line
-                  </p>
                   <div className="chat-page-actions">
                     {status.state === "pending" && (
                       <button
@@ -750,9 +742,12 @@ export function DirectThread({
             )}
           </>
         )}
-      <p className="chat-status" role="status">
-        {note}
-      </p>
+      {note &&
+        (phase === "ready" || phase === "waiting" || phase === "paused") && (
+          <p className="chat-status" role="status">
+            {note}
+          </p>
+        )}
     </div>
   );
 }

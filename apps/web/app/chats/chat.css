@@ -665,12 +665,32 @@
 }
 .chat-detail .chat-composer-hangout textarea {
   grid-column: 1;
-  grid-row: 2;
+  grid-row: 1;
 }
 .chat-detail .chat-composer-hangout .chat-compose-row {
   grid-column: 2;
-  grid-row: 2;
+  grid-row: 1;
   display: block;
+}
+.chat-privacy {
+  grid-column: 1 / -1;
+  color: var(--pals-muted);
+  font-size: 0.78rem;
+}
+.chat-privacy summary {
+  width: fit-content;
+  min-height: 32px;
+  cursor: pointer;
+  color: var(--pals-accent);
+  font-weight: 800;
+}
+.chat-privacy summary:focus-visible {
+  outline: 2px solid var(--pals-focus);
+  outline-offset: 2px;
+}
+.chat-privacy p {
+  max-width: 60ch;
+  margin: 0.35rem 0 0;
 }
 .chat-detail .chat-composer-hangout #chat-count {
   position: absolute;

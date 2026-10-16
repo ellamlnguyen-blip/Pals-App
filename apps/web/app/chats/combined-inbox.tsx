@@ -318,7 +318,6 @@ export function CombinedInbox({
                       </span>
                       <span className="combined-copy">
                         <strong>{row.title}</strong>
-                        <small>Hangout</small>
                       </span>
                       {row.hasUnread && (
                         <span
@@ -334,12 +333,6 @@ export function CombinedInbox({
                   </li>
                 );
               const { dm } = row;
-              const description =
-                dm.state === "accepted"
-                  ? "Direct chat"
-                  : dm.direction === "incoming"
-                    ? "Message request · review before replying"
-                    : "Message request · waiting for their choice";
               return (
                 <li key={`d-${dm.generation_id}`}>
                   <Link
@@ -359,7 +352,6 @@ export function CombinedInbox({
                     <PeerAvatar row={row} />
                     <span className="combined-copy">
                       <strong>{row.name || "Person unavailable"}</strong>
-                      <small>{description}</small>
                     </span>
                     {row.hasUnread && (
                       <span

@@ -167,7 +167,7 @@ export function Thread({
           visible.current = true;
           setState("ready");
           setMaskedHeight(0);
-          setStatus(data.messages.length ? "Chat ready." : "No messages yet.");
+          setStatus("");
         } else {
           setMessages(data.messages);
           setAttention(
@@ -463,11 +463,7 @@ export function Thread({
       {state === "ready" && (
         <>
           <h2>Conversation</h2>
-          {messages.length === 0 ? (
-            <p className="chat-empty">
-              No messages yet. Start coordinating the plan.
-            </p>
-          ) : (
+          {messages.length > 0 && (
             <ol className="chat-messages">
               {messages.map((message) => (
                 <li
@@ -521,7 +517,9 @@ export function Thread({
               void send();
             }}
           >
-            <label htmlFor="chat-message">Message</label>
+            <label className="sr-only" htmlFor="chat-message">
+              Message
+            </label>
             <textarea
               id="chat-message"
               ref={composerRef}
@@ -533,7 +531,7 @@ export function Thread({
               }}
               maxLength={2000}
               rows={1}
-              aria-describedby="chat-count chat-disclosure"
+              aria-describedby="chat-count"
               placeholder={`Message ${title}…`}
             />
             <div className="chat-compose-row">
@@ -570,12 +568,15 @@ export function Thread({
                 )}
               </button>
             </div>
-            <p id="chat-disclosure" className="help">
-              Future eligible joiners can read chat history. Confirmed blocks
-              can end shared Hangout attendance and hide messages from blocked
-              peers. Open a person’s profile or Safety to review and confirm a
-              block.
-            </p>
+            <details className="chat-privacy">
+              <summary>Chat privacy</summary>
+              <p>
+                Future eligible joiners can read chat history. Confirmed blocks
+                can end shared Hangout attendance and hide messages from blocked
+                peers. Open a person’s profile or Safety to review and confirm a
+                block.
+              </p>
+            </details>
             {pending && (
               <p className="help">
                 Retry uses the original text, even if you changed this draft.
@@ -584,9 +585,11 @@ export function Thread({
           </form>
         </>
       )}
-      <p className="chat-status" role="status" aria-live="polite">
-        {status}
-      </p>
+      {status && (
+        <p className="chat-status" role="status" aria-live="polite">
+          {status}
+        </p>
+      )}
     </div>
   );
 }
