@@ -5,6 +5,8 @@ import { requireLocalHangouts } from "./hangouts";
 import {
   UNC_BOUNDS,
   validSavedHangoutId,
+  validPeriodMask,
+  selectedSavedStart,
   sameVisiblePage,
   type Bounds,
   type SavedFilter,
@@ -78,7 +80,11 @@ export async function querySaved(bounds: Bounds, filters: SavedFilter) {
   if (
     !validBounds(bounds) ||
     !filters ||
-    !["upcoming", "all"].includes(filters.time) ||
+    !(
+      filters.time === "upcoming" ||
+      filters.time === "all" ||
+      validPeriodMask(filters.time)
+    ) ||
     !["any", "open"].includes(filters.joining)
   )
     return {
@@ -128,7 +134,15 @@ export async function querySaved(bounds: Bounds, filters: SavedFilter) {
     !verified ||
     initial.epoch !== verified.epoch ||
     initial.ranking_mode !== verified.ranking_mode ||
-    JSON.stringify(initial.pins) !== JSON.stringify(verified.pins)
+    JSON.stringify(initial.pins) !== JSON.stringify(verified.pins) ||
+    verified.pins.some(
+      (pin) =>
+        !selectedSavedStart(
+          filters.time,
+          new Date(cutoff),
+          new Date(pin.starts_at),
+        ),
+    )
   )
     return {
       kind: "error" as const,

@@ -48,7 +48,9 @@ export function MembershipControl({
     <div className="saved-action">
       {allowed ? (
         <button
-          className="button"
+          className={
+            intent === "leave" ? "button saved-leave-button" : "button"
+          }
           disabled={pending || needsReload}
           onClick={() => {
             setMessage("");

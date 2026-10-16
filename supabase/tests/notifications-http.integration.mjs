@@ -44,7 +44,10 @@ test("real Auth/PostgREST notification boundary and social transitions", async (
       insert into private.people_preferences(account_id,opted_in) values ('${a.id}',true),('${b.id}',true);
       update private.people_feature_gate set enabled=true;
       update private.friendship_feature_gate set enabled=true;
-      update private.dm_feature_gate set enabled=true;`);
+      update private.dm_feature_gate set enabled=true;
+      update private.pilot_availability set enabled=true;
+      update private.pilot_capabilities set enabled=true
+        where key in ('onboarding','people','friendship','dm','notifications');`);
     assert.equal((await rpc("/rest/v1/rpc/list_notifications", a.token)).body.code, "42501");
     const sourceOff = await rpc("/rest/v1/rpc/create_friend_request", a.token,
       { p_target_id: b.id, p_request_id: crypto.randomUUID() });
@@ -117,6 +120,9 @@ test("real Auth/PostgREST notification boundary and social transitions", async (
       update private.dm_feature_gate set enabled=false;
       update private.friendship_feature_gate set enabled=false;
       update private.people_feature_gate set enabled=false;
+      update private.pilot_capabilities set enabled=false
+        where key in ('onboarding','people','friendship','dm','notifications');
+      update private.pilot_availability set enabled=false;
       set dm.allow_fixture_cleanup='true';
       delete from private.dm_retries where actor_id in (${ids});
       delete from private.dm_messages where author_id in (${ids});
