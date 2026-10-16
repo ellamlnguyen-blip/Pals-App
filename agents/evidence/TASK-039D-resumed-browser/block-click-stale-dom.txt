@@ -1,0 +1,45 @@
+{
+  "blockButton": [
+    {
+      "ariaExpanded": null,
+      "disabled": false
+    }
+  ],
+  "dialogCount": 0,
+  "openDialogCount": 0
+}
+- link "Skip to content":
+  - /url: "#main"
+- banner:
+  - link "Pals home":
+    - /url: /hangouts
+    - img "Pals"
+  - navigation "Primary":
+    - link "Hangouts":
+      - /url: /hangouts
+    - link "Calendar":
+      - /url: /calendar
+    - link "Pals":
+      - /url: /people
+  - link "Chats":
+    - /url: /chats
+  - link "Notifications, unread updates":
+    - /url: /notifications
+  - link "Your profile":
+    - /url: /profile
+    - generic: P
+- main:
+  - region "Chats":
+    - heading "Chats" [level=1]
+    - link "← All chats":
+      - /url: /chats?category=dm
+    - generic: ✉
+    - heading "Direct chat" [level=2]
+    - heading "Direct chat unavailable" [level=2]
+    - paragraph: This conversation is no longer available.
+    - link "Return to Pals":
+      - /url: /people
+    - button "Block this account" [active]
+    - button "Report this account"
+- button "Open Next.js Dev Tools":
+- alert

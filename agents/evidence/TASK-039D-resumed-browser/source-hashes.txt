@@ -1,0 +1,6 @@
+babae80f981c6cceeea0ab156f3764ee03b56e8b03c6d322d65c8e5d22fdde2c  supabase/migrations/20261016000200_friendship_only_dm.sql  (runtime copy identical)
+ddc07dad097c35e6fe0b40c8cacaa09d5157d45feab3bc0c1a31b75a43aaa6b0  supabase/migrations/20261016000300_migration_version_reconciliation.sql  (runtime copy identical)
+03c910a646e35b6c55f5525d1cf720fee2a70a7fcfa74f4a0f98cf669cc0c7db  apps/web/app/api/dm/route.ts  (runtime copy identical)
+96ee1b056dd6038a9e5d66c23d3692db8362a27b839360fbf786621e743268a0  apps/web/app/api/dm/[id]/route.ts  (runtime copy identical)
+7dc09f901c9b4583eb750eb053b076d98df2ce20bf6d27b9b84f3edad27b282b  apps/web/app/chats/direct/[id]/thread.tsx  (runtime copy identical)
+7da46d5edafc355919fa195f7380424d140757ed20df90b3097a78026636a1eb  apps/web/app/chats/direct/[id]/safety-boundary.tsx  (runtime copy identical)

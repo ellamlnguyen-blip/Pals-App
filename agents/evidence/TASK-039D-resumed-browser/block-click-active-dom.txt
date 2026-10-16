@@ -1,0 +1,51 @@
+{
+  "blockButton": [
+    {
+      "ariaExpanded": null,
+      "disabled": false
+    }
+  ],
+  "dialogCount": 0,
+  "openDialogCount": 0
+}
+- link "Skip to content":
+  - /url: "#main"
+- banner:
+  - link "Pals home":
+    - /url: /hangouts
+    - img "Pals"
+  - navigation "Primary":
+    - link "Hangouts":
+      - /url: /hangouts
+    - link "Calendar":
+      - /url: /calendar
+    - link "Pals":
+      - /url: /people
+  - link "Chats":
+    - /url: /chats
+  - link "Notifications, unread updates":
+    - /url: /notifications
+  - link "Your profile":
+    - /url: /profile
+    - generic: P
+- main:
+  - region "Chats":
+    - heading "Chats" [level=1]
+    - link "← All chats":
+      - /url: /chats?category=dm
+    - generic: CQ
+    - heading "Cora QA" [level=2]
+    - list:
+      - strong: You
+      - time: 10/16/2026, 5:03:42 PM
+      - paragraph: Active safety check
+    - button "Previous" [disabled]
+    - button "Load newer" [disabled]
+    - generic: Message
+    - textbox "Message"
+    - button "Send message"
+    - button "Close chat"
+    - button "Block this account" [active]
+    - button "Report this account"
+- button "Open Next.js Dev Tools":
+- alert
