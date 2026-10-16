@@ -1,5 +1,10 @@
 # NOW
 
+## 2026-10-15 — Poll and notification worker contracts
+
+Accepted ADR0042 implementation proceeds through TASK033C poll persistence after D2 consent review, and TASK033FG durable pg_cron reminder/activity delivery after E notification integration review. Contracts bound schema/auth/queue/rate/privacy/tests; no hosted change or parent completion.
+
+
 ## 2026-10-15 — ADR0042 accepted for local implementation
 
 Ella explicitly approved local implementation of chat polls, friend-or-request DM consent, co-host invitations, one-hour reminders and three independent default-off notification settings. ADR0042 is Accepted; TASK033D2/E backend contracts published for disjoint local work, then polls/jobs/UI after dependency review. Current parent033/032 and hosted/sign-off/application-main gates remain; no production action or successor.
