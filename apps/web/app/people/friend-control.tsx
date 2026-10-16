@@ -37,6 +37,7 @@ export function FriendControl({
   canBlock,
   peerLabel,
   onClear,
+  onRelationshipChange,
   actor,
   requestLabel = "Add friend",
   presentation = "default",
@@ -47,6 +48,7 @@ export function FriendControl({
   canBlock: boolean;
   peerLabel: string;
   onClear?: () => void;
+  onRelationshipChange?: (relationship: Friendship | null) => void;
   actor?: string;
   requestLabel?: string;
   presentation?: "default" | "profile";
@@ -83,6 +85,7 @@ export function FriendControl({
   const apply = (next: FriendshipResult) => {
     if (!alive.current) return;
     setResult(next);
+    if (next.state === "known") onRelationshipChange?.(next.relationship);
     if (
       next.state === "unavailable" ||
       next.state === "unknown" ||

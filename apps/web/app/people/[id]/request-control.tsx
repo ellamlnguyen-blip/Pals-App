@@ -7,19 +7,21 @@ import {
   AUTH_TRANSITION_CHANNEL,
   AUTH_TRANSITION_EVENT,
 } from "../../auth-transition";
-type Pending = { key: string; body: string };
+type Pending = { key: string; body: string; mode: "friend" | "request" };
 export type PeerDmState = "accepted" | "pending" | "none" | "unknown";
 export function RequestControl({
   peerId,
   actor,
   state,
+  friends,
   onSent,
   onUnavailable,
 }: {
   peerId: string;
   actor: string;
   state: PeerDmState;
-  onSent: () => void;
+  friends: boolean;
+  onSent: (mode: "friend" | "request") => void;
   onUnavailable: () => void;
 }) {
   const [draft, setDraft] = useState(""),
@@ -69,11 +71,21 @@ export function RequestControl({
       setNote("Write 1 to 2000 characters.");
       return;
     }
-    const item = current.current ?? { key: crypto.randomUUID(), body };
+    const item = current.current ?? {
+      key: crypto.randomUUID(),
+      body,
+      mode: friends ? ("friend" as const) : ("request" as const),
+    };
     current.current = item;
     setPending(item);
     setBusy(true);
-    setNote(pending ? "Checking before retry…" : "Sending one request…");
+    setNote(
+      pending
+        ? "Checking before retry…"
+        : item.mode === "friend"
+          ? "Sending first message…"
+          : "Sending one request…",
+    );
     const now = ticket.current;
     try {
       const response = await fetch("/api/dm", {
@@ -89,23 +101,32 @@ export function RequestControl({
       const data = (await response.json()) as { kind: string };
       if (now !== ticket.current || document.hidden) return;
       if (data.kind === "ok") {
-        if (firstRequestConfirmed(!!pending, data.kind))
+        if (
+          item.mode === "request" &&
+          firstRequestConfirmed(!!pending, data.kind)
+        )
           void analytics.capture("dm_request_sent");
         current.current = null;
         setPending(null);
         setDraft("");
         setSent(true);
-        onSent();
-        setNote("Request sent. They can accept, reply or ignore it.");
+        onSent(item.mode);
+        setNote(
+          item.mode === "friend"
+            ? "Message sent. Your direct chat is ready."
+            : "Request sent. They can accept, reply or ignore it.",
+        );
       } else if (data.kind === "denied") {
         hide();
         setNote(
-          "Request unavailable. This person or your access may have changed.",
+          "Message unavailable. This person or your access may have changed.",
         );
       } else if (data.kind === "conflict")
         setNote(
           "This retry differs from the original request. Reload before another action.",
         );
+      else if (data.kind === "stale")
+        setNote("Friendship changed. Reload before sending this message.");
       else
         setNote(
           "Outcome uncertain. Retry the exact same message after a fresh eligibility check.",
@@ -142,7 +163,9 @@ export function RequestControl({
             ? "A first-message request is active. Open it to see its current status and available actions."
             : viewState === "unknown"
               ? "We couldn’t confirm the current request status. Reload before starting a new message."
-              : "One first message goes to their Requests. You cannot keep chatting unless they accept or reply. They can ignore it."}
+              : friends
+                ? "As current Pals, you can start a direct chat with your first message. Current access is checked when you send."
+                : "One first message goes to their Requests. You cannot keep chatting unless they accept or reply. They can ignore it."}
       </p>
       {viewState === "accepted" || viewState === "pending" ? (
         <Link href={`/chats/direct/${peerId}`}>
@@ -168,7 +191,11 @@ export function RequestControl({
             disabled={busy}
             onClick={() => void send()}
           >
-            {pending ? "Retry same request" : "Send request"}
+            {pending
+              ? "Retry same message"
+              : friends
+                ? "Send message"
+                : "Send request"}
           </button>
         </>
       )}

@@ -44,6 +44,10 @@ export function PersonView({
   const [cleared, setCleared] = useState(false),
     [message, setMessage] = useState("");
   const [dmState, setDmState] = useState<PeerDmState>(initialDmState);
+  const [friends, setFriends] = useState(
+    friendship.state === "known" &&
+      friendship.relationship?.state === "accepted",
+  );
   const [selectedPhoto, setSelectedPhoto] = useState<{
     slot: RichPeopleDetail["photo_slots"][number];
     label: string;
@@ -266,6 +270,9 @@ export function PersonView({
           onClear={() =>
             clear("People access changed. Reload to check this profile.")
           }
+          onRelationshipChange={(relationship) =>
+            setFriends(relationship?.state === "accepted")
+          }
         />
         {dmState === "accepted" || dmState === "pending" ? (
           <Link
@@ -369,7 +376,10 @@ export function PersonView({
         peerId={detail.account_id}
         actor={actor}
         state={dmState}
-        onSent={() => setDmState("pending")}
+        friends={friends}
+        onSent={(mode) =>
+          setDmState(mode === "friend" ? "accepted" : "pending")
+        }
         onUnavailable={() => {
           setDmState("unknown");
           clear(
