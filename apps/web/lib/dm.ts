@@ -7,7 +7,7 @@ export type DmStatus = {
   peer_id: string;
   generation_id: string;
   direction: "incoming" | "outgoing";
-  state: "pending" | "accepted";
+  state: "accepted";
 };
 export type DmMessage = {
   message_id: string;

@@ -2,6 +2,9 @@ begin;
 create extension if not exists pgtap with schema extensions;
 set search_path=public,extensions;
 select no_plan();
+-- Historical fixture runs under the open-UNC release switches, locally only.
+update private.pilot_availability set enabled=true where singleton;
+update private.pilot_capabilities set enabled=true where key in ('onboarding','hangouts','hangout_chat','people');
 insert into auth.users(id,email,email_confirmed_at)
 select ('50000000-0000-4000-8000-'||lpad(n::text,12,'0'))::uuid,'task005-'||n||'@unc.edu',now() from generate_series(1,8) n;
 insert into storage.objects(bucket_id,name,owner_id)
@@ -89,8 +92,9 @@ select set_config('request.jwt.claims','{"sub":"50000000-0000-4000-8000-00000000
 select is((select count(*) from public.hangouts),0::bigint,'unconfirmed reader denied');
 select throws_ok($$select public.join_hangout(pg_temp.hid())$$,'42501',null,'unconfirmed join denied');
 select set_config('request.jwt.claims','{"sub":"50000000-0000-4000-8000-000000000008","role":"authenticated"}',true);
-select is((select count(*) from public.hangouts),0::bigint,'missing photo reader denied');
-select throws_ok($$select public.join_hangout(pg_temp.hid())$$,'42501',null,'missing photo join denied');
+select is((select count(*) from public.hangouts),1::bigint,'confirmed UNC reader needs no photo');
+select lives_ok($$select public.join_hangout(pg_temp.hid())$$,'confirmed UNC joins without photo');
+select lives_ok($$select public.leave_hangout(pg_temp.hid())$$,'incomplete-profile peer may leave');
 select set_config('request.jwt.claims','{"sub":"50000000-0000-4000-8000-000000000004","role":"authenticated"}',true);
 select is((select count(*) from public.hangouts),0::bigint,'banned moderator reader denied');
 select throws_ok($$select public.join_hangout(pg_temp.hid())$$,'42501',null,'banned moderator join denied');
@@ -110,12 +114,12 @@ select is((select instructions from public.hangout_private_locations),'New secre
 select throws_ok($$select public.edit_hangout(pg_temp.hid(),2,'Partial edit',pg_temp.st(),'Area',35,-79,p_private_instructions=>'FORCE_ROLLBACK')$$,'P0001',null,'private failure aborts edit transaction');
 select is((select title from public.hangouts),'Edited','failed private edit rolls back public title');
 select is((select revision from public.hangouts),2::bigint,'failed private edit rolls back revision');
-select throws_ok($$select public.edit_hangout(pg_temp.hid(),1,'Stale',pg_temp.st(),'Area',35,-79,p_private_instructions=>'Stale secret')$$,'40001',null,'stale edit rejected');
+select throws_ok($$select public.edit_hangout(pg_temp.hid(),1,'Stale',pg_temp.st(),'Area',35,-79,p_private_instructions=>'Stale secret')$$,'PT409',null,'stale edit rejected');
 select is((select instructions from public.hangout_private_locations),'New secret','stale edit leaves private unchanged');
 select throws_ok($$select public.edit_hangout(pg_temp.hid(),2,'Invalid',pg_temp.st(),'Area',35,-79,p_private_instructions=>repeat('s',2001))$$,'22023',null,'invalid private edit rejected');
 select is((select title from public.hangouts),'Edited','failed edit leaves public unchanged');
 select is(public.set_hangout_joining(pg_temp.hid(),2,'closed'),3::bigint,'host closes joining with CAS');
-select throws_ok($$select public.set_hangout_joining(pg_temp.hid(),2,'open')$$,'40001',null,'stale lifecycle write denied');
+select throws_ok($$select public.set_hangout_joining(pg_temp.hid(),2,'open')$$,'PT409',null,'stale lifecycle write denied');
 select set_config('request.jwt.claims','{"sub":"50000000-0000-4000-8000-000000000002","role":"authenticated"}',true);
 select is((select count(*) from public.hangouts),1::bigint,'ready campus sees public hangout');
 select is((select count(*) from public.hangout_private_locations),0::bigint,'nonmember private denied');
@@ -131,7 +135,7 @@ reset role;
 update public.accounts set status='suspended' where id='50000000-0000-4000-8000-000000000001';
 set local role authenticated;
 select set_config('request.jwt.claims','{"sub":"50000000-0000-4000-8000-000000000002","role":"authenticated"}',true);
-select is((select count(account_id) from public.hangout_participants),1::bigint,'public roster hides no-longer-ready host');
+select is((select count(account_id) from public.hangout_participants),0::bigint,'suspended host hides entire Hangout source');
 reset role;
 update public.accounts set status='active' where id='50000000-0000-4000-8000-000000000001';
 set local role authenticated;

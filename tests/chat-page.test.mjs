@@ -38,7 +38,11 @@ test("visible chat paging makes one bounded request per page and can return", as
     cursors[0],
     fetcher,
   );
-  assert.equal(calls.length, 1, "a visible poll does not walk later pages");
+  assert.equal(
+    calls.length,
+    1,
+    "a visible chat refresh does not walk later pages",
+  );
   assert.equal(first.data.messages.length, 50);
   assert.equal(first.data.messages.at(-1).sequence, 50);
   assert.equal(calls[0].options.headers["x-pals-chat-actor"], "actor-id");
