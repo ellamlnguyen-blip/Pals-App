@@ -1,0 +1,166 @@
+.account-page {
+  max-width: 760px;
+  min-width: 0;
+  margin: 0 auto 72px;
+  padding: 28px 18px;
+  color: var(--pals-ink);
+  font-family: var(--pals-font);
+}
+.account-back {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  color: var(--pals-profile-action);
+  font-weight: 800;
+  text-decoration: none;
+}
+.account-heading {
+  display: block;
+  min-height: 0;
+  margin: 22px 0 30px;
+  border-bottom: 0;
+}
+.account-heading h1 {
+  margin: 0;
+  color: var(--pals-accent);
+  font: 800 clamp(2.4rem, 7vw, 3.6rem)/1.08 var(--pals-font-display);
+}
+.account-heading p {
+  margin: 8px 0 0;
+  color: var(--pals-muted);
+}
+.account-sections {
+  display: grid;
+  gap: 28px;
+}
+.account-concealed {
+  margin: 0;
+  color: var(--pals-muted);
+  font-weight: 700;
+}
+.account-section {
+  padding: clamp(20px, 5vw, 30px);
+  border: 1px solid var(--pals-line);
+  border-radius: var(--pals-radius-panel);
+  background: var(--pals-surface-raised);
+  box-shadow: var(--pals-panel-shadow);
+}
+.account-section h2 {
+  margin: 0;
+  font: 800 1.55rem/1.2 var(--pals-font-display);
+}
+.account-section > p {
+  max-width: 58ch;
+  margin: 8px 0 20px;
+  color: var(--pals-muted);
+  line-height: 1.5;
+}
+.account-section form {
+  display: grid;
+  gap: 10px;
+  max-width: 500px;
+}
+.account-section label {
+  margin-top: 7px;
+  font-weight: 800;
+}
+.account-section input {
+  box-sizing: border-box;
+  width: 100%;
+  min-height: 46px;
+  border: 1px solid #a6bed0;
+  border-radius: var(--pals-input-radius);
+  padding: 10px 13px;
+  color: var(--pals-ink);
+  background: white;
+  font: 600 1rem var(--pals-font);
+}
+.account-section input:focus-visible,
+.account-section button:focus-visible,
+.account-back:focus-visible {
+  outline: 3px solid var(--pals-focus);
+  outline-offset: 3px;
+}
+.account-section button {
+  justify-self: start;
+  min-height: 44px;
+  margin-top: 9px;
+  padding: 9px 20px;
+  border: 0;
+  border-radius: 12px;
+  color: white;
+  background: var(--pals-profile-action);
+  font: 800 1rem var(--pals-font-display);
+  cursor: pointer;
+}
+.account-section button:disabled {
+  opacity: 0.62;
+  cursor: wait;
+}
+.account-section .account-code-button {
+  margin-top: 0;
+  border: 1px solid var(--pals-profile-action);
+  color: var(--pals-profile-action);
+  background: white;
+}
+.account-reauth {
+  margin-top: 8px;
+}
+.account-reauth summary {
+  width: fit-content;
+  color: var(--pals-profile-action);
+  font-weight: 800;
+  cursor: pointer;
+}
+.account-reauth[open] {
+  display: grid;
+  gap: 10px;
+}
+.account-reauth p {
+  margin: 4px 0 0;
+  color: var(--pals-muted);
+}
+.account-feedback {
+  margin: 5px 0 0;
+  font-weight: 700;
+  line-height: 1.45;
+}
+.account-feedback.error {
+  color: var(--pals-error);
+}
+.account-feedback.success {
+  color: var(--pals-success);
+}
+.account-section .account-email-fact {
+  display: grid;
+  gap: 1px;
+  margin: 12px 0;
+  overflow-wrap: anywhere;
+  color: var(--pals-ink);
+}
+.account-email-fact strong {
+  font-size: 0.9rem;
+}
+.account-email-fact.pending {
+  padding: 10px 13px;
+  border-radius: 10px;
+  background: var(--pals-accent-soft);
+}
+.account-notification-entry {
+  margin-top: 28px;
+}
+.account-notification-entry a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--pals-profile-action);
+  font-weight: 800;
+}
+@media (max-width: 390px) {
+  .account-page {
+    padding-inline: 14px;
+  }
+  .account-section {
+    padding: 18px;
+  }
+}

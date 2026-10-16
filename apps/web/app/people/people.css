@@ -13,9 +13,7 @@
 }
 .people-filters {
   display: grid;
-  grid-template-columns:
-    minmax(10rem, 2fr) repeat(2, minmax(8rem, 1fr))
-    auto auto;
+  grid-template-columns: repeat(2, minmax(8rem, 1fr)) auto auto;
   align-items: end;
   gap: 1rem;
   padding: var(--pals-space-6);
@@ -47,6 +45,7 @@
 .people-grid a {
   display: flex;
   flex-direction: column;
+  align-items: flex-start;
   gap: 0.3rem;
   min-height: 11rem;
   padding: 1.5rem;
@@ -60,15 +59,44 @@
 .people-grid a:hover {
   border-color: var(--pals-accent);
 }
+.people-grid a:focus-visible {
+  outline: 3px solid var(--pals-accent);
+  outline-offset: 3px;
+}
+.people-card-photo {
+  display: grid;
+  place-items: center;
+  width: 4.5rem;
+  height: 4.5rem;
+  margin-bottom: 0.45rem;
+  overflow: hidden;
+  border-radius: 50%;
+  background: var(--pals-surface);
+  color: var(--pals-accent);
+  flex: none;
+}
+.people-card-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.people-card-photo-fallback {
+  font-size: 1.35rem;
+  font-weight: 900;
+}
 .people-card-name {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
   font-size: 1.35rem;
   font-weight: 900;
   line-height: 1.2;
 }
-.people-card-cta {
-  margin-top: auto;
-  color: var(--pals-accent);
-  font-weight: 800;
+.people-friendship-badge {
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  color: var(--pals-profile-action);
 }
 .people-pages {
   display: flex;
@@ -205,9 +233,6 @@ dialog code {
   .people-filters {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
-  .people-filters label:first-child {
-    grid-column: 1/-1;
-  }
   .people-heading {
     align-items: start;
   }
@@ -224,7 +249,6 @@ dialog code {
   .people-detail-body {
     grid-template-columns: minmax(0, 1fr);
   }
-  .people-filters label:first-child,
   .people-detail-body section:first-child {
     grid-column: auto;
   }
@@ -347,4 +371,39 @@ dialog code {
   .dm-request .button {
     width: 100%;
   }
+}
+
+.profile-relationship-management {
+  margin: 28px 0;
+  padding: 18px;
+  border: 1px solid var(--pals-line);
+  border-radius: var(--pals-radius-panel);
+  background: var(--pals-surface);
+}
+.profile-relationship-toggle {
+  min-height: 44px;
+  border: 0;
+  padding: 0;
+  background: transparent;
+  color: var(--pals-profile-action);
+  font-weight: 800;
+  text-align: left;
+  cursor: pointer;
+}
+.profile-relationship-toggle:focus-visible {
+  outline: 3px solid var(--pals-focus);
+  outline-offset: 3px;
+}
+.profile-hidden-relationships {
+  margin: 16px 0;
+  padding: 0;
+  list-style: none;
+}
+.profile-hidden-relationships li {
+  padding: 16px 0;
+  border-top: 1px solid var(--pals-line);
+  overflow-wrap: anywhere;
+}
+.profile-hidden-relationships code {
+  user-select: all;
 }
