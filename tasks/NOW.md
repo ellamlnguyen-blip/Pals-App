@@ -1,5 +1,9 @@
 # NOW
 
+## 2026-10-16 — ADR-0046 accepted for TASK-039E local repair
+
+Ella explicitly accepted [ADR-0046](../decisions/ADR-0046-duplicate-local-migration-version-reconciliation.md) for disposable-local implementation. [TASK-039E](active/TASK-039E-migration-version-reconciliation.md) may repair the duplicate migration version and run its clean-stack and upgrade-matrix checks on task-owned resources. This acceptance does not apply migrations to hosted/shared databases or complete TASK-039D; its browser and permission verification remains blocked until the repair passes independent review.
+
 ## 2026-10-16 — TASK-040 owner Profile options removal
 
 Ella asked to remove the `Profile options` button and its whole explanatory popover from her own `/profile` page. [TASK-040](active/TASK-040-remove-owner-profile-options.md) keeps the back/Edit controls and peer-profile report/block menu. Existing Pals visibility, Notifications, Safety and Account routes remain available through their other entry points. The exact reviewed local UI source dependency is TASK-039C `8ceca20fdcc017e9aad4ede1bb000846744824f4`. This contract changes no app code or pending ADR-0046 decision; earlier integration/release gates remain.

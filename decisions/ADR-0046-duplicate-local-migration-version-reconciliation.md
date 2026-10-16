@@ -1,6 +1,6 @@
 # ADR-0046 — Reconcile duplicate local migration version
 
-Status: Proposed
+Status: Accepted for disposable-local implementation
 Date: 2026-10-16
 
 ## Context
@@ -9,7 +9,7 @@ The independently published TASK-031A `20261014000100_saved_hangout_period_masks
 
 This is not merely a filename issue for existing databases. Some may record version `20261014000100` for either function set; a currently observed disposable TASK-029 database records that version and has both function sets. Version alone does not prove which body ran. Rewriting ledger rows or deleting private application data would be unsafe.
 
-## Proposed local decision
+## Local decision
 
 Keep the earlier published Hangout mask migration's version and bytes intact. Remove the later duplicate-version notification-attention file from the active migration directory while retaining its exact source identity in Git history. Add one new, later reconciliation migration **after** `20261016000200_friendship_only_dm.sql`. It must create or repair notification acknowledgment, reassert the exact current friend-aware notification-attention body and grants from the friendship-only migration, and reassert the authorized saved-Hangout period-mask body and grants. Use idempotent function replacement where signatures permit. Do not edit existing ledger rows or erase data.
 
@@ -28,4 +28,4 @@ Renaming the later file to an older unused timestamp makes a clean stack start b
 
 ## Acceptance
 
-Requires Ella's explicit acceptance under AGENTS.md because this changes committed migration identities and upgrade behavior. Until accepted, only read-only investigation, a bounded proposal and reversible task-owned analysis may proceed; do not implement the source correction or apply it to any database.
+Ella explicitly accepted local implementation on 2026-10-16. The task may now edit committed migration source and test against task-owned disposable databases under the constraints above. This acceptance does not authorize hosted or shared-stack application, application-main integration, or completion of TASK-039D without its verification evidence.

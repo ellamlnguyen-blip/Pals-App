@@ -6,7 +6,7 @@ Remove only the owner profile options trigger/popup; preserve peer safety and ex
 
 ## 2026-10-16 — TASK-039E migration identity decision and verification
 
-Resolve the two `20261014000100` files only after explicit ADR-0046 acceptance. Verify clean ledger plus upgrades from Hangout-only, notification-only and both-body states; preserve data and grants. Until then TASK-039D cannot run the exact committed stack or claim browser QA.
+ADR-0046 received explicit acceptance for disposable-local implementation on 2026-10-16. Resolve the two `20261014000100` files on TASK-039E, then verify clean ledger plus upgrades from Hangout-only, notification-only and both-body states while preserving data and grants. TASK-039D cannot claim browser QA until the reviewed correction is available and its own checks run.
 
 ## 2026-10-16 — TASK-039D acceptance gate
 

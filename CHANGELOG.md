@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-16 — ADR-0046 accepted for disposable-local repair
+
+Recorded Ella's explicit acceptance of the duplicate migration-version reconciliation and activated TASK-039E. No source migration or database was changed by this documentation milestone; hosted/shared application and TASK-039D browser verification remain gated.
+
 ## 2026-10-16 — TASK-040 owner profile menu contract
 
 Bound Ella's owner-only Profile options removal to a presentation task that preserves peer report/block and existing safety/visibility destinations. Documentation only; application and hosted state are unchanged.
