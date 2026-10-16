@@ -1442,3 +1442,7 @@ Record meaningful product, architecture, schema, safety, and release changes—n
 - Chose web-first delivery followed by Expo iOS/Android.
 - Chose Supabase, Mapbox, Vercel, PostHog, monorepo, migration-only schema changes.
 - Introduced ADR, task-contract, handoff, and current-state systems for agent coordination.
+# 2026-10-15
+
+- Accepted ADR-0043 for disposable-local implementation after Ella's explicit review; published TASK-034C/D backend contracts and remote-verified the TASK-034A presentation milestone.
+- Proposed ADR-0043 for private chat unread/recent activity and similarity-ranked Pals discovery. Recorded TASK-034A presentation review readiness; no dependent schema or hosted application change.

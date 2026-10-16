@@ -4,6 +4,10 @@
 
 New bounded follow-on: chat unread indicators/global recent use ordering, Pals naming, owner-relative friend/pending symbols, major/year-only filters and profile-similarity ranking. TASK-034A uses existing authorized data; TASK-034B audits and prepares a concrete Proposed ADR before new persistence/ranking implementation. Local source dependency c63992d; parents032/033 remain incomplete, no hosted or application-main authorization inferred. Coordinator publishes contracts before fresh GPT-6 Sol medium agent dispatch.
 
+TASK-034A's local source awaits coordinator build/render review. ADR-0043 is Proposed after independent privacy/feasibility review; no TASK-034 schema migration has been implemented or applied. TASK-032/033 remain incomplete at their existing finalization gates.
+
+TASK-034A presentation is locally built and desktop/mobile rendered on the named disposable preview; source milestone `54f4fc6f3c2935d9d082bfa8d31d672d901afee9` is remote verified. ADR-0043 was explicitly accepted for local implementation; new C/D contracts are published. No TASK-034 migration has yet been implemented/applied, and no hosted or application-main integration occurred. TASK-032/033 finalization gates remain.
+
 ## 2026-10-15 — TASK-033 reviewed local implementation
 
 Source candidate `d8eef34f227c5c04f6132a7744e6b9278be418fc` is pushed and independently remote verified. All seven additive migrations applied only to named disposable;191 focused SQL checks and four concurrency harnesses passed. Full web build/TypeScript and four helper checks passed. Actual browser consent, polls, invitation and preference flows verified; real scheduled cron delivered exactly once across two runs. Final cross-stage review, desktop/375px/source-denial QA and scoped cleanup passed. Evidence is in `docs/ux/evidence/task033-local`; local candidate is ready for finalization/sign-off. [Local handoff](../../agents/handoffs/TASK-033-LOCAL.md) records scope and limits. TASK-032/033 remain incomplete behind finalization/sign-off/application-main/hosted gates; no successor.
