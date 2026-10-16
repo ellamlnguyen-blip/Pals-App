@@ -4,6 +4,10 @@
 
 Recorded the requested Calendar and Pals compact-control follow-on with a bounded UI contract and exact local source dependency. No application or hosted change in this documentation milestone.
 
+## 2026-10-16 — TASK-035 reviewed local UI candidate
+
+Published remote-verified task branch `287e3faba359dfd49c713abf1533efb06a6cb49d` with compact Calendar controls, a Pals side filter and year dropdown, a local handoff, and 1280/767/375px screenshot evidence. Production web build/TypeScript and focused browser interaction checks passed. Application code remains off main while TASK-032/033/034 and integration gates are open.
+
 ## 2026-10-16 — TASK-034 reviewed local candidate
 
 Recorded remote-verified source candidate `70537ad702d536013e711d75e64578db34cdc4ce` for combined-chat unread/recent attention and similarity-ranked Pals, local SQL/build/browser/race and 1,000-profile benchmark evidence, fresh review corrections and remaining final gates. No unfinished application code was merged into canonical main or hosted environment.

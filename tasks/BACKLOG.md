@@ -4,6 +4,8 @@
 
 After bounded implementation, verify actual 1280/767/375px Calendar and Pals layouts, native year/filter behavior, build/TypeScript, accessibility and no overflow. Review source and handoff, publish the task branch with remote SHA, then record local outcome on main. Parent TASK-032/033/034 and user sign-off/application-main/hosted gates remain separate and open.
 
+Local verification and remote task-branch publication are complete at `287e3faba359dfd49c713abf1533efb06a6cb49d`. Remaining: resolve parent TASK-032/033/034 signoff and release gates, then review TASK-035 with those accepted dependencies before application-main integration. No hosted change was made.
+
 ## 2026-10-16 — TASK-034 remaining acceptance gates
 
 The reviewed local source candidate is remote verified at `70537ad702d536013e711d75e64578db34cdc4ce`. A rollback-only 1,000-profile first-page benchmark completed in 220.189 ms on disposable local; repeated/larger performance and broader chat race evidence remain. Obtain final candidate sign-off and resolve TASK-032/033 dependency gates before reviewed application-main/hosted integration. The local milestone is not task completion; see [status handoff](../agents/handoffs/TASK-034-STATUS.md).

@@ -2,6 +2,8 @@
 
 Status: active, explicitly requested by Ella on 2026-10-16 from local browser comments. Canonical baseline `e15215d17d291ebfd2dac14847b75ba4e0747a28`; exact reviewed disposable-local application dependency `70537ad702d536013e711d75e64578db34cdc4ce` on `agent/TASK-034-pals-chat-discovery`. TASK-032/033/034 remain incomplete at their recorded release/application-main gates. No hosted change is in scope.
 
+Local candidate: reviewed and pushed on `agent/TASK-035-compact-controls` at remote-verified `287e3faba359dfd49c713abf1533efb06a6cb49d`. Build/TypeScript, 1280/767/375px browser rendering, focused interactions and no narrow page overflow passed. Still active until accepted parent dependencies and application-main integration gates resolve; see `agents/handoffs/TASK-035-STATUS.md`.
+
 ## Requested outcome
 
 - Calendar: remove the visible page `Calendar` h1. At the shown narrow desktop/tablet width, compact the category legend and Day/Week/Month tabs so they sit on opposite sides of the centered date range in one row, with visible breathing room around the range. Keep previous/Today/next and the date picker usable below. At phone width, adapt without overflow or clipped controls; retain accessible Calendar page name and legend/view semantics.
