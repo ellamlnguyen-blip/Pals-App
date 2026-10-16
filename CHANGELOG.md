@@ -1,5 +1,9 @@
 # Changelog
 
+## 2026-10-16 — TASK-039D resumed QA and Block diagnosis contract
+
+Recorded the isolated migrated friendship-only DM browser results and the unresolved Block confirmation dialog failure. Bounded TASK-039F for reproduction and a minimal safety UI correction only if proven. This canonical-main publication is documentation only.
+
 ## 2026-10-16 — TASK-040 authenticated render evidence
 
 Recorded isolated owner/peer 811px and 375px browser QA and task-owned cleanup at `c90c87449e6793a92cc370cb56a37a83b22a8bbc`. The owner options menu is absent; peer safety actions remain. This main update contains documentation only; application integration remains gated.

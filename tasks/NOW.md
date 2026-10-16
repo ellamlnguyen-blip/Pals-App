@@ -1,5 +1,9 @@
 # NOW
 
+## 2026-10-16 — TASK-039D browser gate open; TASK-039F bounded diagnosis
+
+Resumed isolated TASK-039D used the reviewed 52-version migration stack and real synthetic Auth. Friend-only DM creation/read, pending/declined denial, unfriend/refriend generation retirement, block/People opt-out API denial, stale URL masking, neutral legacy notifications, responsive thread rendering and Hangout chat regression passed. On active/stale DM and peer profile, an enabled Block button click left no confirmation dialog in the DOM. [TASK-039D status](../agents/handoffs/TASK-039D-RESUMED-STATUS.md) records its independently remote-verified branch `agent/TASK-039D-resumed-browser` at `1ec016379fef388ad24429b6853a03ff3022b440`; owned runtime was cleaned. [TASK-039F](active/TASK-039F-block-dialog-verification.md) bounds diagnosis and a minimal correction only if a source defect is proven. TASK-039D/039, TASK-040 integration and predecessor gates remain incomplete.
+
 ## 2026-10-16 — TASK-040 authenticated profile rendering passed
 
 The owner-menu removal passed real authenticated 811px/375px rendering on isolated `agent/TASK-040V-profile-render` at independently remote-verified `c90c87449e6793a92cc370cb56a37a83b22a8bbc`. Owner Back/Edit remain focusable with no options DOM or horizontal overflow; the peer 44px options menu still exposes report/block, and Privacy/Safety links remain reachable. Four durable synthetic screenshots and cleanup are recorded in [QA status](../agents/handoffs/TASK-040V-STATUS.md). Application source remains on reviewed TASK-040 task branches; predecessor integration gates still prevent canonical-main source merge and shared-preview visibility.

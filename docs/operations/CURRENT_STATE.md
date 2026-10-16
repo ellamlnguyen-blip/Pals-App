@@ -1,5 +1,9 @@
 # Current State
 
+## 2026-10-16 — TASK-039D resumed browser evidence and Block gap
+
+Resumed TASK-039D's isolated Auth/browser run passed the core friendship-only DM and Hangout chat paths on reviewed migration source, with real 811px/375px renders and neutral stale URLs. The enabled Block action did not leave a confirmation dialog in active/stale chat or peer profile in that browser run; source cause is undetermined. TASK-039D remains incomplete. Remote-verified `agent/TASK-039D-resumed-browser` is `1ec016379fef388ad24429b6853a03ff3022b440`; all owned runtime was cleaned. TASK-039F bounds diagnosis and retest; no shared/hosted state or main application source changed.
+
 ## 2026-10-16 — TASK-040 authenticated profile QA passed
 
 Isolated browser QA at 811px and 375px confirmed the owner `/profile` options control and popup are absent, Back/Edit remain keyboard accessible, no horizontal overflow occurs, and the peer report/block menu remains. QA branch `agent/TASK-040V-profile-render` is independently remote-verified at `c90c87449e6793a92cc370cb56a37a83b22a8bbc`; synthetic screenshots are committed there. Task-owned preview/DB were cleaned. Canonical main and user-open 3035 still do not contain the task's application source, pending predecessor integration gates.
