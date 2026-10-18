@@ -18,4 +18,4 @@ Status: bounded local candidate for coordinator review. TASK-041 remains incompl
 ## Remaining gates
 
 - Review this branch and, if accepted, publish the status on main, integrate with reviewed predecessors, and verify the remote main SHA. TASK-040 and earlier predecessor integration/release gates remain open. No hosted backend operation was needed or performed for this presentation/focus change.
-- Task-branch publication and independent remote SHA verification are reported to the coordinator separately after push. No canonical-main push was performed here.
+- Publication receipt: the first task source/handoff push was independently verified on `origin/agent/TASK-041-owner-photos` at `75da7bd4d0e3abcc9df04b470e78ef423cc79cb2`; `origin/main` was independently verified at `3dbe60a347d669e998b720463d8703934935f8a5`. This receipt commit's final branch SHA is reported to the coordinator after its own independent verification. No canonical-main push was performed here.
