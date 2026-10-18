@@ -36,9 +36,12 @@ async function assertGate(response, path) {
     assert.equal(response.headers.get("location"), path);
   else {
     const html = await response.text();
+    const streamedRedirects = [...html.matchAll(/url=[^\"'\s<>]+/g)]
+      .map((match) => match[0]);
     assert.ok(
       html.includes(`url=${path}`),
-      `streamed response redirects to ${path}`,
+      `streamed response redirects to ${path}; status=${response.status}; ` +
+        `observed=${streamedRedirects.slice(0, 3).join(",") || "none"}`,
     );
     assert.ok(
       !html.includes("These are development examples"),
@@ -129,6 +132,9 @@ async function signup(instance, suffix) {
   return { email, password, id: data.user.id, callback };
 }
 test("real confirmation, SSR callback, RLS and private photo ownership", async () => {
+  // Model the explicitly enabled staging MVP. Defaults remain closed after
+  // every local database reset; this fixture opens only the features it uses.
+  sql("update private.pilot_availability set enabled=true; update private.pilot_capabilities set enabled=true where key=any(array['onboarding','hangouts','hangout_chat','calendar','people','friendship','dm','notifications','attendance','optional_profile','extra_photos']);");
   const owner = client(),
     peer = client();
   try {
@@ -150,11 +156,19 @@ test("real confirmation, SSR callback, RLS and private photo ownership", async (
         owner.jar.set(pair.slice(0, at), pair.slice(at + 1));
         assert.match(cookie, /httponly/i);
       }
-      const blocked = await fetch("http://127.0.0.1:3000/hangouts", {
+      const hangouts = await fetch("http://127.0.0.1:3000/hangouts", {
         headers: { Cookie: owner.header() },
         redirect: "manual",
       });
-      await assertGate(blocked, "/onboarding");
+      await assertGate(hangouts, "/hangouts/saved");
+      const discovery = await fetch(
+        "http://127.0.0.1:3000/hangouts/saved",
+        {
+          headers: { Cookie: owner.header() },
+          redirect: "manual",
+        },
+      );
+      assert.equal(discovery.status, 200);
       const anon = await fetch("http://127.0.0.1:3000/hangouts", {
         redirect: "manual",
       });
@@ -189,7 +203,20 @@ test("real confirmation, SSR callback, RLS and private photo ownership", async (
         null,
       );
     }
-    assert.equal((await owner.auth.rpc("get_access_state")).data, "onboarding");
+    assert.equal((await owner.auth.rpc("get_access_state")).data, "ready");
+    const initialProfile = await owner.auth
+      .from("profiles")
+      .select("real_name,primary_photo_path")
+      .eq("user_id", a.id)
+      .single();
+    assert.equal(initialProfile.error, null);
+    assert.equal(initialProfile.data.real_name, null);
+    assert.equal(initialProfile.data.primary_photo_path, null);
+    assert.equal(
+      sql(`select count(*) from private.pilot_account_admission where account_id='${a.id}'`).trim(),
+      "0",
+      "confirmed UNC access requires no pilot roster row",
+    );
     assert.equal(
       (await owner.auth.from("platform_roles").select()).data.length,
       0,
@@ -283,10 +310,15 @@ test("real confirmation, SSR callback, RLS and private photo ownership", async (
         headers: { Cookie: owner.header() },
         redirect: "manual",
       });
-      assert.equal(mapResponse.status, 200);
-      const mapHtml = await mapResponse.text();
-      assert.ok(mapHtml.includes("Hangouts around UNC"));
-      assert.ok(mapHtml.includes("These are development examples"));
+      await assertGate(mapResponse, "/hangouts/saved");
+      const savedResponse = await fetch(
+        "http://127.0.0.1:3000/hangouts/saved",
+        { headers: { Cookie: owner.header() } },
+      );
+      assert.equal(savedResponse.status, 200);
+      const savedHtml = await savedResponse.text();
+      assert.ok(savedHtml.includes("Meet up."));
+      assert.ok(savedHtml.includes("Make it happen."));
       assert.equal(
         (
           await fetch("http://127.0.0.1:3000/profile/photo", {
@@ -296,7 +328,7 @@ test("real confirmation, SSR callback, RLS and private photo ownership", async (
         200,
       );
     }
-    await hangoutHttpChecks(owner, peer, a, b, sql, png, url, key);
+    await hangoutHttpChecks(owner, peer, a, b, sql, url, key);
     await peopleHttpChecks(owner, peer, a, b, sql, png, url, key);
     await friendshipActionChecks(owner, peer, a, b, png, sql);
     await hangoutActionChecks(owner, peer, a, b, png, sql);
@@ -348,5 +380,6 @@ test("real confirmation, SSR callback, RLS and private photo ownership", async (
         `delete from auth.users where id='${id}' and email like 'task003-%@live.unc.edu'`,
       );
     }
+    sql("update private.pilot_availability set enabled=false; update private.pilot_capabilities set enabled=false;");
   }
 });

@@ -8,6 +8,7 @@ import { chatAccess, readChat } from "../../../../lib/chat";
 import { SafetyActions } from "../../../safety/safety-client";
 import "../../create.css";
 import "../saved.css";
+import "./detail.css";
 import { AnalyticsView } from "../../../analytics-view";
 import {
   HostDetailBoundary,
@@ -15,6 +16,11 @@ import {
   PrivateDetail,
 } from "./host-joining-control";
 import { ManagementControls } from "./management-controls";
+import { PublicPlaceMap } from "./public-place-map";
+import { CalendarBlankIcon } from "@phosphor-icons/react/dist/ssr/CalendarBlank";
+import { MapPinIcon } from "@phosphor-icons/react/dist/ssr/MapPin";
+import { readRosterIdentities } from "./roster-identities";
+import { sameVisiblePage } from "../../../../lib/saved-hangouts-types";
 
 export const dynamic = "force-dynamic";
 export const revalidate = 0;
@@ -24,7 +30,7 @@ export default async function SavedDetailPage({
   params: Promise<{ id: string }>;
 }) {
   requireLocalHangouts();
-  await requireAccess("ready");
+  const { client, user } = await requireAccess("ready");
   const { id } = await params;
   let result = await readSavedDetail(id);
   let chat: Awaited<ReturnType<typeof readChat>> | null = null;
@@ -39,16 +45,45 @@ export default async function SavedDetailPage({
       chatUserId = chatCaller.user.id;
       chat = await readChat(chatCaller.client, id);
     }
-    // Chat reads are separate requests and can be slow. Keep the sensitive
-    // detail/role/roster check last before rendering either source.
+    // Chat and detail are separate sources. Recheck detail last.
     result = await readSavedDetail(id);
+  }
+  let identities = {};
+  if (result.kind === "ok" && user?.id !== result.userId)
+    result = { kind: "changed" };
+  if (
+    result.kind === "ok" &&
+    result.record.status === "published" &&
+    user?.id === result.userId
+  ) {
+    const before = result;
+    identities = await readRosterIdentities(
+      client,
+      before.roster,
+      result.userId,
+    );
+    const after = await readSavedDetail(id);
+    if (after.kind !== "ok") result = after;
+    else if (
+      after.userId !== before.userId ||
+      JSON.stringify(after.record) !== JSON.stringify(before.record) ||
+      after.ownState !== before.ownState ||
+      after.ownRole !== before.ownRole ||
+      after.rosterMore !== before.rosterMore ||
+      after.instructions !== before.instructions ||
+      after.assignmentsMore !== before.assignmentsMore ||
+      JSON.stringify(after.assignments) !==
+        JSON.stringify(before.assignments) ||
+      !sameVisiblePage(before.roster, after.roster)
+    )
+      result = { kind: "changed" };
+    else result = after;
   }
   if (result.kind !== "ok")
     return (
       <Frame signedIn navigation>
-        <div className="saved-detail">
-          <Link href="/hangouts/saved">← Saved Hangouts</Link>
-          <p className="badge">Saved Hangout · local only</p>
+        <div className="saved-detail pals-detail">
+          <Link href="/hangouts/saved">← Hangouts</Link>
           <h1>
             {result.kind === "missing"
               ? "Hangout not found"
@@ -68,77 +103,89 @@ export default async function SavedDetailPage({
   const { record, ownState, roster, instructions } = result;
   const cancelled = record.status === "cancelled";
   const joined = ownState === "joined" || ownState === "host";
+  const token = process.env.NEXT_PUBLIC_MAPBOX_TOKEN?.startsWith("pk.")
+    ? process.env.NEXT_PUBLIC_MAPBOX_TOKEN
+    : "";
+  const latitude = record.public_latitude;
+  const longitude = record.public_longitude;
   return (
     <Frame signedIn navigation>
       <AnalyticsView event="hangout_detail_viewed" />
       <HostDetailBoundary key={`${id}:${record.revision}`}>
-        <div className="saved-detail">
-          <Link href="/hangouts/saved">← Saved Hangouts</Link>
-          <p className="badge">Saved Hangout · local only</p>
-          <h1>{record.title}</h1>
-          <SafetyActions
-            actor={result.userId}
-            target={{ mode: "hangout", id }}
-          />
-          <p className="saved-detail-state">
-            {cancelled
-              ? "Cancelled"
-              : ownState === "removed"
-                ? "You were removed"
-                : ownState === "host"
-                  ? "You host this plan"
-                  : ownState === "joined"
-                    ? "You're joined"
-                    : ownState === "left"
-                      ? "You left this plan"
-                      : record.joining_state === "closed"
-                        ? "Joining is closed"
-                        : "Open to join"}
-          </p>
-          {joined && !cancelled && (
-            <section className="saved-chat-entry">
-              <h2>Coordinate together</h2>
-              {chatUserId === result.userId && chat?.kind === "ok" ? (
-                <Link className="button" href={`/chats/hangouts/${id}`}>
-                  Open Hangout chat
-                </Link>
+        <div className="saved-detail pals-detail">
+          <div className="pals-detail-top">
+            <Link href="/hangouts/saved">← Hangouts</Link>
+            <SafetyActions
+              actor={result.userId}
+              target={{ mode: "hangout", id }}
+            />
+          </div>
+          <div className="pals-detail-grid">
+            <div className="pals-detail-plan">
+              <h1>{record.title}</h1>
+              <p className="saved-detail-state">
+                {cancelled
+                  ? "Cancelled"
+                  : ownState === "removed"
+                    ? "You were removed"
+                    : ownState === "host"
+                      ? "You host this plan"
+                      : ownState === "joined"
+                        ? "You’re joined"
+                        : ownState === "left"
+                          ? "You left this plan"
+                          : record.joining_state === "closed"
+                            ? "Joining is closed"
+                            : "Open to join"}
+              </p>
+              {!cancelled ? (
+                <ManagementControls
+                  key={record.revision}
+                  id={id}
+                  revision={record.revision}
+                  actorId={result.userId}
+                  role={
+                    result.ownRole === "host" || result.ownRole === "cohost"
+                      ? result.ownRole
+                      : null
+                  }
+                  roster={roster}
+                  identities={identities}
+                  rosterMore={result.rosterMore}
+                  assignments={result.assignments}
+                  assignmentsMore={result.assignmentsMore}
+                />
               ) : (
-                <p>Chat unavailable right now.</p>
+                <p className="pals-detail-muted">
+                  The current attendee list is unavailable after cancellation.
+                </p>
               )}
-            </section>
-          )}
-          <div className="saved-detail-grid">
-            <section>
-              {(result.ownRole === "host" || result.ownRole === "cohost") &&
-                !cancelled && (
-                  <HostJoiningControl
-                    id={id}
-                    revision={record.revision}
-                    joining={record.joining_state}
-                    largeState={
-                      result.ownRole === "host" ? result.largeState : null
-                    }
-                  />
-                )}
-              <h2>The plan</h2>
-              <p>{record.description || "No description added."}</p>
-              <dl>
-                <dt>Starts · UNC campus time</dt>
-                <dd>{format(record.starts_at)}</dd>
-                {record.ends_at && (
-                  <>
-                    <dt>Ends · UNC campus time</dt>
-                    <dd>{format(record.ends_at)}</dd>
-                  </>
-                )}
-                <dt>Approximate public area</dt>
-                <dd>
-                  {record.public_place}
-                  {record.campus_zone ? ` · ${record.campus_zone}` : ""}
-                </dd>
-                <dt>Host account ID</dt>
-                <dd className="saved-id">{record.host_id}</dd>
-              </dl>
+              <div className="pals-detail-time">
+                <CalendarBlankIcon
+                  aria-hidden="true"
+                  className="pals-detail-icon"
+                  weight="regular"
+                />
+                <div>
+                  <strong>{format(record.starts_at)}</strong>
+                  {record.ends_at && <span>Ends {format(record.ends_at)}</span>}
+                  <small>UNC campus time</small>
+                </div>
+              </div>
+              <p className="pals-detail-description">
+                {record.description || "No description added."}
+              </p>
+              {!cancelled && joined && (
+                <section className="pals-detail-chat" aria-label="Hangout chat">
+                  {chatUserId === result.userId && chat?.kind === "ok" ? (
+                    <Link className="button" href={`/chats/hangouts/${id}`}>
+                      Open Hangout chat
+                    </Link>
+                  ) : (
+                    <p>Chat unavailable right now.</p>
+                  )}
+                </section>
+              )}
               {(!cancelled || (ownState === "joined" && cancelled)) && (
                 <MembershipControl
                   key={`${id}:${ownState}`}
@@ -154,55 +201,91 @@ export default async function SavedDetailPage({
                   Cancellation closed this plan and its private instructions.
                 </p>
               )}
-            </section>
-            <aside>
-              {cancelled ? (
-                <p>The current roster is unavailable after cancellation.</p>
-              ) : (
-                <ManagementControls
-                  key={record.revision}
-                  id={id}
-                  revision={record.revision}
-                  actorId={result.userId}
-                  role={
-                    result.ownRole === "host" || result.ownRole === "cohost"
-                      ? result.ownRole
-                      : null
-                  }
-                  roster={roster}
-                  rosterMore={result.rosterMore}
-                  assignments={result.assignments}
-                  assignmentsMore={result.assignmentsMore}
-                />
+              {(result.ownRole === "host" || result.ownRole === "cohost") &&
+                !cancelled && (
+                  <HostJoiningControl
+                    id={id}
+                    revision={record.revision}
+                    joining={record.joining_state}
+                    largeState={
+                      result.ownRole === "host" ? result.largeState : null
+                    }
+                  />
+                )}
+              {ownState === "host" && joined && !cancelled && (
+                <PrivateDetail>
+                  <section className="saved-private">
+                    <h2>Private meeting instructions</h2>
+                    <p>
+                      {instructions ||
+                        "The host has not added private instructions."}
+                    </p>
+                    <p className="help">
+                      While this Hangout stays published, joined members can
+                      read these instructions even after its scheduled end.
+                      Access ends if you leave, are removed, lose account
+                      readiness or the host cancels.
+                    </p>
+                  </section>
+                </PrivateDetail>
               )}
+            </div>
+            <aside
+              className="pals-detail-place"
+              aria-labelledby="pals-detail-place-title"
+            >
+              <div className="pals-detail-place-heading">
+                <MapPinIcon
+                  className="pals-detail-pin"
+                  aria-hidden="true"
+                  weight="fill"
+                />
+                <div>
+                  <h2 id="pals-detail-place-title">{record.public_place}</h2>
+                  <p>
+                    {record.campus_zone ? `${record.campus_zone} · ` : ""}
+                    Approximate public area
+                  </p>
+                </div>
+              </div>
+              <PublicPlaceMap
+                token={token}
+                latitude={latitude}
+                longitude={longitude}
+                place={record.public_place}
+              />
+              <a
+                className="pals-detail-map-link"
+                href={`https://www.openstreetmap.org/?mlat=${encodeURIComponent(latitude)}&mlon=${encodeURIComponent(longitude)}#map=16/${encodeURIComponent(latitude)}/${encodeURIComponent(longitude)}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Open approximate area in map ↗
+              </a>
+              <p className="pals-detail-map-note">
+                This pin marks the public area, not anyone’s live location.
+                Joined members may have separate private meeting instructions.
+              </p>
             </aside>
           </div>
-          {ownState === "host" && joined && !cancelled && (
-            <PrivateDetail>
-              <section className="saved-private">
-                <h2>Private meeting instructions</h2>
-                <p>
-                  {instructions ||
-                    "The host has not added private instructions."}
-                </p>
-                <p className="help">
-                  While this Hangout stays published, joined members can read
-                  these instructions even after its scheduled end. Access ends
-                  if you leave, are removed, lose account readiness or the host
-                  cancels.
-                </p>
-              </section>
-            </PrivateDetail>
-          )}
         </div>
       </HostDetailBoundary>
     </Frame>
   );
 }
 function format(value: string) {
-  return new Date(value).toLocaleString("en-US", {
-    timeZone: "America/New_York",
-    dateStyle: "full",
-    timeStyle: "short",
-  });
+  const date = new Date(value);
+  const options = { timeZone: "America/New_York" };
+  const day = new Intl.DateTimeFormat("en-US", {
+    ...options,
+    weekday: "short",
+    month: "short",
+    day: "numeric",
+  }).format(date);
+  const time = new Intl.DateTimeFormat("en-US", {
+    ...options,
+    hour: "numeric",
+    minute: "2-digit",
+  }).format(date);
+  return `${day} · ${time}`;
 }

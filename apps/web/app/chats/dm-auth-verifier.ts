@@ -41,7 +41,7 @@ export function createDmAuthVerifier({
           if (pending.has(token)) void verify({ token, phase });
       }
     } catch {
-      // An uncertain account probe must leave request text masked.
+      // An uncertain account probe must leave conversation text masked.
     }
   };
   return verify;
