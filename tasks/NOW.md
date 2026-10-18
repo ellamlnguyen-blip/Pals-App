@@ -1,5 +1,9 @@
 # NOW
 
+## 2026-10-18 — TASK-041 owner photo gallery layout
+
+Ella requested the owner profile's photo grid immediately under the bio, with the visible `Photos` heading and `Edit photos (Optional)` control removed. [TASK-041](active/TASK-041-owner-photo-gallery-layout.md) bounds the local UI and focus adjustment. It depends on reviewed TASK-040 source `04ac5440428413d77a08a80d5c7e396b1969e1d7`; TASK-040 and predecessor application-main gates remain open.
+
 ## 2026-10-16 — TASK-039F diagnosis could not reach Block click
 
 The first bounded Block retest did not reach a click: its isolated browser's client safety/DM API requests denied with a request-scope cookie error, although server-rendered profile and caller-bound synthetic Auth projections worked. It made no source fix. [TASK-039F status](../agents/handoffs/TASK-039F-STATUS.md) records the independently verified handoff branch `agent/TASK-039F-block-diagnosis` at `3cfd3952fa6b2ba70ba6acca860110c7a81062a5` and complete task-owned cleanup. A valid browser runtime and click/epoch trace are still required before attributing TASK-039D's zero-dialog observation to source or harness; TASK-039D/039 and integration gates remain open.
