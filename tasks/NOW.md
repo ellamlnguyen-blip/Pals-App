@@ -1,5 +1,9 @@
 # NOW
 
+## 2026-10-18 — TASK-042 map controls reviewed locally
+
+The [TASK-042 status](../agents/handoffs/TASK-042-STATUS.md) records independently remote-verified `agent/TASK-042-map-controls` at `f7343aff9a4546a453b0070e4ae2b866394c474c`. Exact CSS rendered at 527px and 375px with a 30px gap between home/locate and zoom controls, and at 1280px with a 54px gap; keyboard and no-overflow checks passed. The local preview is available on `/hangouts/saved`. TASK-041 and predecessor application-main gates remain open, so TASK-042 code is not integrated into main and the task remains incomplete.
+
 ## 2026-10-18 — TASK-042 saved map control spacing
 
 Ella reported the Back to UNC/Locate me pair overlapping Mapbox zoom buttons on the saved Hangouts map at phone width. [TASK-042](active/TASK-042-saved-map-control-spacing.md) bounds a local layout-only fix against reviewed source `agent/TASK-041-owner-photos` at `19cf4505a3723b7d714bbf121e1bc404b62c21bf`. TASK-041 and predecessor application-main gates remain open.
