@@ -1,5 +1,9 @@
 # NOW
 
+## 2026-10-18 — TASK-041 local profile gallery candidate reviewed
+
+The [TASK-041 status](../agents/handoffs/TASK-041-STATUS.md) records the reviewed and independently remote-verified source branch `agent/TASK-041-owner-photos` at `19cf4505a3723b7d714bbf121e1bc404b62c21bf`. Exact source rendered in the signed-in 527px preview and 1280px layout check, with per-photo dialog and focus verified. The local preview is open on `/profile`. TASK-040 and predecessor application-main gates remain open, so TASK-041 code stays on its task branch and the task is incomplete.
+
 ## 2026-10-18 — TASK-041 owner photo gallery layout
 
 Ella requested the owner profile's photo grid immediately under the bio, with the visible `Photos` heading and `Edit photos (Optional)` control removed. [TASK-041](active/TASK-041-owner-photo-gallery-layout.md) bounds the local UI and focus adjustment. It depends on reviewed TASK-040 source `04ac5440428413d77a08a80d5c7e396b1969e1d7`; TASK-040 and predecessor application-main gates remain open.

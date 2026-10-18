@@ -1,0 +1,9 @@
+# TASK-041 coordinator review and preview status
+
+2026-10-18. The bounded owner photo gallery change on `agent/TASK-041-owner-photos` is reviewed and independently remote verified at `19cf4505a3723b7d714bbf121e1bc404b62c21bf`. The implementation source is `d76714a3cb43e865a7833b1e65cc2e149d5b7b94`. It merges exact reviewed TASK-040 source `04ac5440428413d77a08a80d5c7e396b1969e1d7`. The branch contains only the bounded profile source change and its handoff after that dependency merge.
+
+The owner gallery now follows the bio without visible `Photos` or `Edit photos (Optional)` controls. The gallery has an accessible name, retains individual photo actions, and sends focus to an available photo action after a photo operation. No backend, persistence, sharing, or authorization behavior changed.
+
+The source branch passed Prettier, touched-file ESLint, web TypeScript, and webpack production build. Coordinator copied the two changed source files byte for byte into the isolated 3035 preview runtime, rebuilt successfully, and inspected the authenticated Maya profile at 527px: no removed heading/button; four photo actions; photo grid 22px after the bio with no horizontal overflow. Opening extra photo 1 showed View/Replace/Reposition/Delete; closing returned focus to its photo button. At 1280px, document scroll width equaled client width and the same 22px bio-to-grid spacing held. Visual proof: `/private/tmp/pals-task041-profile-preview.png`. The local preview remains open on `/profile` and uses disposable local data.
+
+The UI change is accepted for local preview. TASK-040 and earlier predecessor application-main gates remain open. Therefore TASK-041's application source is not integrated into canonical main, and TASK-041 remains incomplete under the project Definition of Done. This status-only record does not change that gate or authorize hosted operations.
