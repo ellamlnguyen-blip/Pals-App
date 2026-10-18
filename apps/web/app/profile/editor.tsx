@@ -59,7 +59,7 @@ export function ProfileEditor({
   const pendingAuth = useRef(new Set<string>());
   const [concealed, setConcealed] = useState(false);
   const gallery = useRef<HTMLDivElement>(null);
-  const editPhotosButton = useRef<HTMLButtonElement>(null);
+  const [photoFocusRequest, setPhotoFocusRequest] = useState(0);
   const detailStatus = useRef<HTMLDivElement>(null);
   const editButton = useRef<HTMLButtonElement>(null);
   const editPanel = useRef<HTMLDivElement>(null);
@@ -141,6 +141,26 @@ export function ProfileEditor({
     file?: File;
     replacing?: boolean;
   } | null>(null);
+  useEffect(() => {
+    if (!photoFocusRequest || concealedRef.current || pending || cropTarget)
+      return;
+    const frame = requestAnimationFrame(() => {
+      const trigger = photoTrigger.current;
+      const next =
+        trigger?.isConnected &&
+        gallery.current?.contains(trigger) &&
+        !trigger.disabled
+          ? trigger
+          : gallery.current?.querySelector<HTMLButtonElement>(
+              ".profile-photo-trigger:not(:disabled), .profile-gallery-empty:not(:disabled)",
+            );
+      if (next) {
+        next.focus();
+        setPhotoFocusRequest(0);
+      }
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [photoFocusRequest, galleryPaths, galleryRevision, pending, cropTarget]);
   const [dragIndex, setDragIndex] = useState<number | null>(null);
   const [primaryRevision, setPrimaryRevision] = useState<number | null>(null);
   useEffect(() => {
@@ -229,16 +249,8 @@ export function ProfileEditor({
       ?.querySelector<HTMLInputElement>("#real_name")
       ?.focus({ preventScroll: true });
   }, [editing]);
-  function openPhotos() {
-    const firstPhoto =
-      gallery.current?.querySelector<HTMLButtonElement>("button");
-    firstPhoto?.scrollIntoView({
-      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
-        ? "auto"
-        : "smooth",
-      block: "center",
-    });
-    firstPhoto?.focus({ preventScroll: true });
+  function focusPhotoAction() {
+    setPhotoFocusRequest((request) => request + 1);
   }
   function selectPhoto(
     slot: string,
@@ -389,8 +401,7 @@ export function ProfileEditor({
         if (result.revision !== undefined) setRevision(result.revision);
         done?.(result);
         router.refresh();
-        if (!result.error && label.includes("photo"))
-          editPhotosButton.current?.focus();
+        if (label.includes("photo")) focusPhotoAction();
         if (label === "Saving your profile…") detailStatus.current?.focus();
       } catch {
         if (!mayApply(epoch)) return;
@@ -517,6 +528,7 @@ export function ProfileEditor({
             setCleanupNeeded(result.cleanupNeeded);
           router.refresh();
           signalPhotoChange();
+          if (cropTarget?.slot !== "primary") focusPhotoAction();
         }}
       />
       <dialog
@@ -615,7 +627,6 @@ export function ProfileEditor({
                           }
                           skipPhotoFocusRestore.current = true;
                           photoDialog.current?.close();
-                          editPhotosButton.current?.focus();
                           movePhoto(from, to);
                         }}
                       >
@@ -664,16 +675,7 @@ export function ProfileEditor({
           {feedback.success}
         </p>
       )}
-      <section
-        className="profile-gallery-section"
-        aria-labelledby="profile-gallery-heading"
-      >
-        <div className="profile-gallery-heading">
-          <h2 id="profile-gallery-heading">Photos</h2>
-          <button ref={editPhotosButton} type="button" onClick={openPhotos}>
-            Edit photos <span>(Optional)</span>
-          </button>
-        </div>
+      <section className="profile-gallery-section" aria-label="Your photos">
         <div className="profile-gallery" ref={gallery}>
           {Array.from({ length: 4 }, (_, index) => {
             const occupied = index < galleryPaths.length;
