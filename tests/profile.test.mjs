@@ -43,3 +43,16 @@ test("optional bounds, duplicates and prompt pairs fail before write", () => {
     1000,
   );
 });
+test("hometown is self-declared, trimmed, nullable, and Unicode bounded", () => {
+  assert.equal(fields({ hometown: "  Durham, NC  " }).hometown, "Durham, NC");
+  assert.equal(fields({ hometown: "\u00a0 \t " }).hometown, null);
+  assert.equal(
+    fields({ hometown: "🌎".repeat(100) }).hometown,
+    "🌎".repeat(100),
+  );
+  assert.equal(fields({ hometown: "🌎".repeat(101) }), null);
+  assert.ok(
+    !Object.hasOwn(fields(), "hometown"),
+    "an older form cannot clear an unsent value",
+  );
+});

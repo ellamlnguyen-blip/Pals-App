@@ -115,7 +115,7 @@
 }
 .discovery-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 310px;
+  grid-template-columns: minmax(0, 1fr) 280px;
   gap: 1.5rem;
   align-items: start;
 }
@@ -129,10 +129,10 @@
   margin-bottom: 0.75rem;
 }
 .map-frame {
-  height: clamp(420px, 61dvh, 720px);
+  height: clamp(420px, 75dvh, 780px);
   position: relative;
   isolation: isolate;
-  border-radius: var(--pals-radius);
+  border-radius: var(--pals-radius-panel);
   border: 1px solid var(--pals-line);
   overflow: hidden;
   background: var(--pals-surface);
@@ -207,7 +207,9 @@
   font-family: system-ui, sans-serif;
 }
 .discovery-rail {
-  padding-top: 0.5rem;
+  padding: 20px;
+  border: 1px solid var(--pals-line);
+  border-radius: var(--pals-radius-panel);
   min-width: 0;
 }
 .discovery-rail > h2 {
